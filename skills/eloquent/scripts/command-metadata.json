@@ -19,6 +19,10 @@
     "description": "Improve resume layout, structure, readability, and ATS-safe formatting.",
     "argumentHint": "[resume]"
   },
+  "templates": {
+    "description": "Choose proven resume templates for DOCX, PDF, and HTML output while balancing visual polish, ATS safety, and maintainability.",
+    "argumentHint": "[role or preferred format]"
+  },
   "sections": {
     "description": "Build or improve resume summaries, skills sections, experience sections, education, and supplemental sections.",
     "argumentHint": "[section or role target]"

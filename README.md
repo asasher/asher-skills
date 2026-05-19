@@ -43,6 +43,7 @@ eloquent compile
 eloquent bullets
 eloquent analyze-job
 eloquent tailor
+eloquent templates
 eloquent cover-letter
 eloquent interview
 eloquent salary
@@ -68,6 +69,7 @@ Natural requests route to the nearest subcommand:
 | `bullets` | Achievement-focused resume bullet rewriting |
 | `quantify` | Credible metrics, scale, and impact discovery |
 | `format` | Resume layout, readability, and ATS-safe structure |
+| `templates` | Proven resume templates for DOCX, PDF, and HTML output |
 | `sections` | Summaries, skills, experience, education, and extra sections |
 | `analyze-job` | Job description analysis, fit scoring, and application strategy |
 | `tailor` | Job-specific resume customization |

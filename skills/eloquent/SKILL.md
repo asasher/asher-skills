@@ -46,6 +46,7 @@ Default delivery, when the user does not specify, is DOCX plus ATS-safe PDF. Ask
 | `bullets` | Resume Optimization | Rewrite weak bullets into achievement-focused statements | [reference/bullets.md](reference/bullets.md) |
 | `quantify` | Resume Optimization | Find credible metrics and impact numbers | [reference/quantify.md](reference/quantify.md) |
 | `format` | Resume Optimization | Improve resume layout, readability, and ATS-safe structure | [reference/format.md](reference/format.md) |
+| `templates` | Resume Optimization | Choose proven resume templates for DOCX, PDF, and HTML delivery | [reference/templates.md](reference/templates.md) |
 | `sections` | Resume Optimization | Build summaries, skills, experience, education, and supplemental sections | [reference/sections.md](reference/sections.md) |
 | `analyze-job` | Job Search Strategy | Parse a job description, score fit, identify gaps, and decide whether to apply | [reference/analyze-job.md](reference/analyze-job.md) |
 | `tailor` | Job Search Strategy | Customize a resume for a specific posting while staying truthful | [reference/tailor.md](reference/tailor.md) |
