@@ -39,6 +39,7 @@ Invoke the single skill directly or ask naturally:
 
 ```text
 eloquent ats
+eloquent compile
 eloquent bullets
 eloquent analyze-job
 eloquent tailor
@@ -51,6 +52,7 @@ Natural requests route to the nearest subcommand:
 
 ```text
 "Optimize this resume for ATS."
+"Make me a resume from scratch."
 "Rewrite these bullets for a senior product role."
 "Here is a job description and my resume. Should I apply?"
 "Tailor my resume for this posting."
@@ -61,6 +63,7 @@ Natural requests route to the nearest subcommand:
 
 | Command | Purpose |
 |---|---|
+| `compile` | Guided resume creation from raw material to delivery files |
 | `ats` | ATS compatibility, parsing risk, keywords, and formatting |
 | `bullets` | Achievement-focused resume bullet rewriting |
 | `quantify` | Credible metrics, scale, and impact discovery |

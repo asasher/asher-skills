@@ -26,10 +26,22 @@ Ask only for missing inputs relevant to the command:
 - Existing LinkedIn, portfolio, reference, or offer details
 - Output format: bullets, rewritten section, full document, checklist, script, or comparison table
 
+## Document Workflow
+
+For full resume creation, use Markdown as the source of truth. Draft, revise, tailor, and approve the resume in Markdown first. Treat PDF, DOCX, HTML, and plain text as generated delivery artifacts.
+
+Default delivery, when the user does not specify, is DOCX plus ATS-safe PDF. Ask for a different delivery target only at the delivery gate:
+
+1. DOCX + ATS-safe PDF, recommended.
+2. Markdown only.
+3. HTML + PDF.
+4. Plain text for job portals.
+
 ## Commands
 
 | Command | Category | Description | Reference |
 |---|---|---|---|
+| `compile` | Guided Workflow | Create a resume end-to-end from raw career material to approved Markdown and delivery files | [reference/compile.md](reference/compile.md) |
 | `ats` | Resume Optimization | Check ATS compatibility, parsing risk, keywords, and formatting | [reference/ats.md](reference/ats.md) |
 | `bullets` | Resume Optimization | Rewrite weak bullets into achievement-focused statements | [reference/bullets.md](reference/bullets.md) |
 | `quantify` | Resume Optimization | Find credible metrics and impact numbers | [reference/quantify.md](reference/quantify.md) |
@@ -55,13 +67,13 @@ Ask only for missing inputs relevant to the command:
 
 1. **No argument**: show the command menu grouped by category, then show the Common Workflows list as quick-start hints. Ask which workflow or command the user wants to run.
 2. **First word matches a command**: load the matching reference and follow it. Everything after the command name is the target.
-3. **First word does not match**: infer the best command from the user's request, state the inferred command, load its reference, and proceed.
+3. **First word does not match**: infer the best command from the user's request, state the inferred command, load its reference, and proceed. If the user asks to create, make, build, draft, or start a resume without naming a command, infer `compile`.
 4. **Compound requests**: load references in workflow order, not all at once. For example: `analyze-job` before `tailor`, `tailor` before `cover-letter`, `bullets` before `ats` when rewriting content first.
 
 ## Common Workflows
 
-- Scratch resume for a specific job: `analyze-job` -> `sections` -> `bullets` -> `quantify` -> `format` -> `ats` -> `tailor` -> `cover-letter`.
-- Scratch master resume: `sections` -> `bullets` -> `quantify` -> `format` -> `ats` -> `versions`.
+- Scratch resume for a specific job: `compile` orchestrates `analyze-job` -> `sections` -> `bullets` -> `quantify` -> `format` -> `ats` -> `tailor` -> delivery.
+- Scratch master resume: `compile` orchestrates `sections` -> `bullets` -> `quantify` -> `format` -> `ats` -> delivery -> `versions`.
 - Full application pass: `analyze-job` -> `tailor` -> `ats` -> `cover-letter`.
 - Resume refresh: `sections` -> `bullets` -> `quantify` -> `format` -> `ats`.
 - Interview package: `analyze-job` -> `interview` -> `references`.

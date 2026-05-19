@@ -1,4 +1,8 @@
 {
+  "compile": {
+    "description": "Guided end-to-end resume creation from raw career material to approved Markdown and delivery files.",
+    "argumentHint": "[target role or job description]"
+  },
   "ats": {
     "description": "Check ATS compatibility, keyword match, parsing risk, and formatting issues.",
     "argumentHint": "[resume] [job description]"
