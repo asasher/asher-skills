@@ -1,11 +1,11 @@
 ---
-name: resume-skills
+name: eloquent
 description: Use when the user wants help with resumes, CVs, ATS optimization, resume bullets, job description analysis, resume tailoring, cover letters, LinkedIn profiles, interview prep, salary negotiation, offer comparison, references, portfolios, academic CVs, executive resumes, technical resumes, creative resumes, career changes, or resume version management. Provides one entry point with subcommands that load focused reference guidance only when needed.
 argument-hint: "[command] [target]"
 user-invocable: true
 ---
 
-Career document and job-search workflows through one command surface. Load the narrow reference file for the requested task, preserve truthfulness, and produce usable artifacts.
+Eloquent career document and job-search workflows through one command surface. Load the narrow reference file for the requested task, preserve truthfulness, and produce usable artifacts.
 
 ## Core Rules
 
@@ -75,6 +75,7 @@ Map legacy skill names and natural wording to the command table:
 - `academic-cv-builder` -> `academic-cv`
 - `creative-portfolio-resume` -> `creative`
 - `career-changer-translator` -> `career-change`
+- `resume-skills` -> `eloquent`
 
 ## Routing
 

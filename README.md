@@ -1,11 +1,11 @@
-# Asher Skills
+# Eloquent
 
-One installable career-development skill for AI coding agents. It consolidates the former multi-skill ResumeSkills content into a single entry point, `resume-skills`, with focused subcommands.
+One installable career-development skill for AI coding agents. It consolidates the former multi-skill ResumeSkills content into a single entry point, `eloquent`, with focused subcommands.
 
 ## Structure
 
 ```text
-skills/resume-skills/
+skills/eloquent/
 +-- SKILL.md
 +-- agents/
 |   `-- openai.yaml
@@ -24,13 +24,13 @@ skills/resume-skills/
 Install globally:
 
 ```bash
-npx skills add asasher/asher-skills -g -y
+npx skills add asasher/eloquent -g -y
 ```
 
 Install in the current project:
 
 ```bash
-npx skills add asasher/asher-skills -y
+npx skills add asasher/eloquent -y
 ```
 
 ## Usage
@@ -38,13 +38,13 @@ npx skills add asasher/asher-skills -y
 Invoke the single skill directly or ask naturally:
 
 ```text
-resume-skills ats
-resume-skills bullets
-resume-skills analyze-job
-resume-skills tailor
-resume-skills cover-letter
-resume-skills interview
-resume-skills salary
+eloquent ats
+eloquent bullets
+eloquent analyze-job
+eloquent tailor
+eloquent cover-letter
+eloquent interview
+eloquent salary
 ```
 
 Natural requests route to the nearest subcommand:
