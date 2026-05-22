@@ -1,4 +1,13 @@
-# Eloquent
+# Asher Skills
+
+Installable single-entrypoint skills for AI coding agents.
+
+## Skills
+
+- **Eloquent**: career documents, resumes, job search, interviews, and negotiation through `eloquent`.
+- **Small Bets**: community-led founder strategy, validation, MVPs, early customers, pricing, growth, and values through `smallbets`.
+
+## Eloquent
 
 One installable career-development skill for AI coding agents. It turns career material into clear, persuasive resumes, CVs, profiles, letters, interview stories, and negotiation scripts through a single entry point, `eloquent`.
 
@@ -94,6 +103,40 @@ The skill follows the same broad shape as `impeccable`: one entrypoint, a comman
 ## Credits
 
 The career workflow reference content is adapted from [Paramchoudhary/ResumeSkills](https://github.com/Paramchoudhary/ResumeSkills).
+
+## Small Bets
+
+One installable founder-strategy skill based on the command set from [slavingia/skills](https://github.com/slavingia/skills). It turns The Minimalist Entrepreneur style workflows into a single entry point, `smallbets`, with focused references loaded only when needed.
+
+### Structure
+
+```text
+skills/smallbets/
++-- SKILL.md
++-- agents/
+|   `-- openai.yaml
++-- reference/
+|   +-- find-community.md
+|   +-- validate.md
+|   `-- ...
+`-- scripts/
+    `-- command-metadata.json
+```
+
+### Usage
+
+```text
+smallbets find-community
+smallbets validate
+smallbets mvp
+smallbets processize
+smallbets first-customers
+smallbets pricing
+smallbets marketing
+smallbets grow
+smallbets values
+smallbets review
+```
 
 ## License
 

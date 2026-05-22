@@ -1,0 +1,42 @@
+{
+  "find-community": {
+    "description": "Identify and evaluate communities the founder already belongs to and problems worth serving.",
+    "argumentHint": "[background, interests, or communities]"
+  },
+  "validate": {
+    "description": "Validate a business idea through customer pain, existing workarounds, manual delivery, and willingness to pay.",
+    "argumentHint": "[business idea]"
+  },
+  "mvp": {
+    "description": "Define the smallest useful product or service that can be shipped quickly and improved from feedback.",
+    "argumentHint": "[product idea or scope]"
+  },
+  "processize": {
+    "description": "Turn an idea into a manual-first service process before writing code or automating.",
+    "argumentHint": "[product idea]"
+  },
+  "first-customers": {
+    "description": "Create a one-by-one sales plan for reaching the first 100 customers.",
+    "argumentHint": "[product, community, or channel]"
+  },
+  "pricing": {
+    "description": "Set initial prices, compare pricing models, and design simple price tests.",
+    "argumentHint": "[product, costs, or customer value]"
+  },
+  "marketing": {
+    "description": "Build a content and audience plan after early customer proof.",
+    "argumentHint": "[product, audience, or channel]"
+  },
+  "grow": {
+    "description": "Evaluate spending, hiring, fundraising, runway, and scaling through profitable growth.",
+    "argumentHint": "[decision, numbers, or growth plan]"
+  },
+  "values": {
+    "description": "Define company values and operating culture before hiring or scaling the team.",
+    "argumentHint": "[company, team, or culture goals]"
+  },
+  "review": {
+    "description": "Review a business decision or strategy through small-bet founder principles.",
+    "argumentHint": "[decision or plan]"
+  }
+}
