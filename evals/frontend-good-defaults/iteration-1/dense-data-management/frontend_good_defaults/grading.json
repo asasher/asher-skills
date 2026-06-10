@@ -1,0 +1,39 @@
+{
+  "eval_id": "dense-data-management",
+  "configuration": "frontend_good_defaults",
+  "expected_output": "A dense but readable admin surface with table-first information architecture, strong hierarchy, right-aligned numeric data, restrained cards/borders, and clear selected-row/detail behavior.",
+  "output_path": "evals/frontend-good-defaults/iteration-1/dense-data-management/frontend_good_defaults/outputs",
+  "assertions": [
+    {
+      "assertion": "The primary surface is a subscriber table or list with search/filter controls and a selected detail panel.",
+      "status": "PASS",
+      "evidence": "Primary surface is a subscriber table/list with search/filter controls and a selected detail panel."
+    },
+    {
+      "assertion": "Numeric values such as MRR are right-aligned or otherwise easy to compare.",
+      "status": "PASS",
+      "evidence": "MRR/numeric columns use right-aligned/numeric classes such as .right, .numeric, .number, or .money."
+    },
+    {
+      "assertion": "The layout uses utility labels and data hierarchy rather than decorative explanatory copy.",
+      "status": "PASS",
+      "evidence": "Uses operator labels, filters, row data, and detail hierarchy rather than marketing or decorative explanatory copy."
+    },
+    {
+      "assertion": "Badges, tags, and colors are sparse and functional rather than applied to every status-like field.",
+      "status": "PASS",
+      "evidence": "Status/tag styling is functional and tied to subscriber attributes or detail metadata; no badge applied to every table field."
+    },
+    {
+      "assertion": "The design uses constrained spacing, typography, border, radius, and color systems rather than one-off values.",
+      "status": "PASS",
+      "evidence": "CSS defines constrained grids, modest radii, clear table spacing, media queries, and consistent colors rather than one-off decorative styling."
+    },
+    {
+      "assertion": "The screen includes long-content behavior or realistic row density without becoming cramped or unreadable.",
+      "status": "PASS",
+      "evidence": "Includes realistic row density, responsive media queries, empty/no-match behavior, and long text handling in tables/details."
+    }
+  ],
+  "summary": "6/6 assertions passed."
+}

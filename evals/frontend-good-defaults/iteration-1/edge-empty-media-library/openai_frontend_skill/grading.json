@@ -1,0 +1,39 @@
+{
+  "eval_id": "edge-empty-media-library",
+  "configuration": "openai_frontend_skill",
+  "expected_output": "A first-run media library screen that does not fake content, hides irrelevant controls, clearly guides upload, handles drag/drop and failure states, and uses restrained layout.",
+  "output_path": "evals/frontend-good-defaults/iteration-1/edge-empty-media-library/openai_frontend_skill/outputs",
+  "assertions": [
+    {
+      "assertion": "The output does not show fake uploaded media, fake thumbnails, fake usage graphs, or fake activity.",
+      "status": "PASS",
+      "evidence": "No fake thumbnails, fake media grid, fake usage graph, fake activity feed, or placeholder gallery appears."
+    },
+    {
+      "assertion": "The empty state names what is empty and gives a clear primary upload action.",
+      "status": "PASS",
+      "evidence": "The empty state explicitly names that there are no files and provides a primary upload/choose-files action."
+    },
+    {
+      "assertion": "Filters, sort controls, bulk actions, and tabs that would do nothing while empty are absent or disabled with a clear reason.",
+      "status": "PASS",
+      "evidence": "Controls that would be irrelevant while empty are absent, hidden, or disabled: clear queue/remove completed/search/filter/bulk actions are not active."
+    },
+    {
+      "assertion": "The drag-and-drop region has stable dimensions and does not depend on oversized rounded cards or decorative gradients.",
+      "status": "PASS",
+      "evidence": "Drag/drop area has stable dimensions and restrained styling; no decorative gradient hero/card treatment is used."
+    },
+    {
+      "assertion": "The file failure state explains what happened and how to recover.",
+      "status": "PASS",
+      "evidence": "Failure handling includes unsupported/oversized/interrupted upload copy plus retry/remove/dismiss recovery actions."
+    },
+    {
+      "assertion": "The design remains useful and readable on mobile.",
+      "status": "PASS",
+      "evidence": "Responsive media queries support mobile layouts and stacked controls/drop zones."
+    }
+  ],
+  "summary": "6/6 assertions passed."
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Bare Minimum UX"
+  short_description: "Asher's baseline UX standards"
+  default_prompt: "Use $bare-minimum-ux to review this app for baseline UX expectations."
+
+policy:
+  allow_implicit_invocation: true

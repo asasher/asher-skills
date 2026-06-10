@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Frontend Good Defaults Evals</title>
+    <style>
+      :root {
+        --bg: #fbfaf7;
+        --surface: #fffdf8;
+        --text: #25221c;
+        --muted: #6f695f;
+        --border: #e6dfd2;
+        --border-strong: #cbc0ae;
+        --accent: #8b5a2b;
+        --accent-soft: #f0e5d7;
+        --success: #2f6842;
+        --warning: #8a5a18;
+        --danger: #96362f;
+        --frame-height: 720px;
+        --sidebar-width: 256px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Aptos", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: var(--accent);
+      }
+
+      button,
+      select {
+        min-height: 32px;
+        border: 1px solid var(--border-strong);
+        border-radius: 6px;
+        background: var(--surface);
+        color: var(--text);
+        font: inherit;
+      }
+
+      button {
+        padding: 0 10px;
+        cursor: pointer;
+      }
+
+      button:hover,
+      select:hover {
+        border-color: var(--accent);
+      }
+
+      button:focus-visible,
+      select:focus-visible,
+      a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      select {
+        width: 100%;
+        padding: 0 30px 0 9px;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+
+      .topbar {
+        min-height: 56px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 24px;
+        align-items: center;
+        padding: 10px 16px 10px 20px;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 16px;
+        line-height: 1.25;
+        font-weight: 650;
+        letter-spacing: 0;
+      }
+
+      .subtle {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .top-links {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .top-actions {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .workspace {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: var(--sidebar-width) 6px minmax(0, 1fr);
+      }
+
+      .workspace.sidebar-collapsed {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .sidebar {
+        min-height: 0;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr);
+        background: #f7f3ec;
+        overflow: hidden;
+      }
+
+      .workspace.sidebar-collapsed .sidebar,
+      .workspace.sidebar-collapsed .sidebar-resizer {
+        display: none;
+      }
+
+      .sidebar-resizer {
+        cursor: col-resize;
+        background: var(--bg);
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+      }
+
+      .sidebar-resizer:hover,
+      .sidebar-resizer:focus-visible,
+      .is-resizing .sidebar-resizer {
+        background: var(--accent-soft);
+      }
+
+      .sidebar-section {
+        display: grid;
+        gap: 8px;
+        padding: 14px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .sidebar-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .sidebar-collapse {
+        min-height: 28px;
+        padding: 0 8px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .field-label {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .score-list {
+        display: grid;
+        gap: 6px;
+      }
+
+      .score-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .score-value {
+        color: var(--text);
+        font-weight: 650;
+      }
+
+      .scenario-list {
+        min-height: 0;
+        overflow: auto;
+        padding: 8px 0;
+      }
+
+      .scenario-button {
+        width: 100%;
+        min-height: 46px;
+        display: block;
+        padding: 8px 14px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: var(--text);
+        text-align: left;
+      }
+
+      .scenario-button + .scenario-button {
+        margin-top: 0;
+      }
+
+      .scenario-button:hover {
+        background: #f0ebe2;
+      }
+
+      .scenario-button[aria-current="true"] {
+        background: #ebe1d4;
+      }
+
+      .scenario-button[aria-current="true"] .scenario-name {
+        color: var(--accent);
+      }
+
+      .scenario-name {
+        display: block;
+        font-weight: 650;
+      }
+
+      .scenario-score {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .main {
+        min-width: 0;
+        min-height: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+      }
+
+      .scenario-header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 16px;
+        align-items: start;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+      }
+
+      h2 {
+        font-size: 15px;
+        line-height: 1.3;
+        font-weight: 650;
+        letter-spacing: 0;
+      }
+
+      .prompt {
+        max-width: 960px;
+        margin-top: 4px;
+        color: var(--muted);
+      }
+
+      .controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .viewport-size {
+        width: 136px;
+      }
+
+      .layout-size {
+        width: 124px;
+      }
+
+      .frame-size {
+        width: 104px;
+      }
+
+      .output-grid {
+        min-width: 0;
+        min-height: 0;
+        overflow-x: auto;
+        background: #efe9df;
+      }
+
+      .output-grid[data-layout="columns"] {
+        display: grid;
+        grid-template-columns:
+          var(--output-col-0, minmax(360px, 1fr))
+          6px
+          var(--output-col-1, minmax(360px, 1fr))
+          6px
+          var(--output-col-2, minmax(360px, 1fr));
+      }
+
+      .output-grid[data-layout="rows"] {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-content: start;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      .output {
+        min-width: 0;
+        display: grid;
+        grid-template-rows: auto auto auto;
+        background: var(--surface);
+      }
+
+      .output-grid[data-layout="columns"] .output {
+        min-width: 0;
+      }
+
+      .output-grid[data-layout="rows"] .output {
+        border-bottom: 1px solid var(--border-strong);
+      }
+
+      .output-grid[data-layout="rows"] .output:last-of-type {
+        border-bottom: 0;
+      }
+
+      .output-resizer {
+        background: #efe9df;
+      }
+
+      .output-grid[data-layout="columns"] .output-resizer {
+        cursor: col-resize;
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+      }
+
+      .output-grid[data-layout="rows"] .output-resizer {
+        height: 6px;
+        cursor: default;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .output-resizer:hover,
+      .output-resizer:focus-visible,
+      .is-resizing .output-resizer {
+        background: var(--accent-soft);
+      }
+
+      .output-header {
+        min-height: 54px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        padding: 9px 12px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      h3 {
+        font-size: 13px;
+        line-height: 1.25;
+        font-weight: 650;
+        letter-spacing: 0;
+      }
+
+      .output-meta {
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .open-link {
+        min-height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border-strong);
+        border-radius: 6px;
+        padding: 0 9px;
+        color: var(--text);
+        font-size: 12px;
+      }
+
+      .open-link:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .passed {
+        color: var(--success);
+        font-weight: 650;
+      }
+
+      .partial {
+        color: var(--warning);
+        font-weight: 650;
+      }
+
+      .failed {
+        color: var(--danger);
+        font-weight: 650;
+      }
+
+      .failures {
+        border-bottom: 1px solid var(--border);
+        background: #fff8ee;
+      }
+
+      .failures[hidden] {
+        display: none;
+      }
+
+      details {
+        padding: 8px 12px;
+      }
+
+      summary {
+        cursor: pointer;
+        color: var(--danger);
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .failure-list {
+        margin: 8px 0 0;
+        padding-left: 18px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .failure-list li + li {
+        margin-top: 6px;
+      }
+
+      .preview {
+        overflow: hidden;
+        resize: vertical;
+        background: #ffffff;
+      }
+
+      .preview-inner {
+        transform-origin: top left;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        display: block;
+        border: 0;
+        background: #ffffff;
+      }
+
+      @media (max-width: 980px) {
+        .topbar,
+        .scenario-header {
+          grid-template-columns: 1fr;
+        }
+
+        .top-links,
+        .top-actions,
+        .controls {
+          justify-content: flex-start;
+          flex-wrap: wrap;
+        }
+
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          border-right: 0;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-resizer {
+          display: none;
+        }
+
+        .scenario-list {
+          display: flex;
+          gap: 0;
+          overflow-x: auto;
+          padding: 8px 0;
+        }
+
+        .scenario-button {
+          min-width: 220px;
+        }
+
+        .output-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          overflow-x: visible;
+        }
+
+        .output {
+          min-width: 0;
+          border-right: 0;
+          border-bottom: 1px solid var(--border-strong);
+        }
+
+        .output-resizer {
+          display: none;
+        }
+
+        .output:last-child {
+          border-bottom: 0;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .topbar,
+        .scenario-header {
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+
+        .top-actions,
+        .top-links {
+          display: grid;
+          width: 100%;
+          gap: 8px;
+        }
+
+        .top-actions {
+          grid-template-columns: 1fr;
+        }
+
+        .top-links {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .top-links a {
+          min-height: 30px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid var(--border);
+          border-radius: 6px;
+          background: var(--surface);
+        }
+
+        .controls {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          width: 100%;
+        }
+
+        .controls button,
+        .controls select {
+          width: 100%;
+        }
+
+        .viewport-size,
+        .layout-size,
+        .frame-size {
+          grid-column: 1 / -1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <h1>Frontend Good Defaults Evals</h1>
+          <p class="subtle">Iteration output comparison</p>
+        </div>
+        <div class="top-actions">
+          <button id="sidebar-toggle" data-sidebar-toggle type="button" aria-controls="eval-sidebar" aria-expanded="true">Hide sidebar</button>
+          <nav class="top-links" aria-label="Eval files">
+            <a href="frontend-good-defaults/iteration-1/summary.md">Summary</a>
+            <a href="frontend-good-defaults/iteration-1/benchmark.json">Benchmark</a>
+            <a href="frontend-good-defaults/evals.json">Spec</a>
+          </nav>
+        </div>
+      </header>
+
+      <div class="workspace">
+        <aside class="sidebar" id="eval-sidebar" aria-label="Eval navigation">
+          <section class="sidebar-section">
+            <div class="sidebar-head">
+              <label class="field-label" for="iteration-select">Iteration</label>
+              <button class="sidebar-collapse" data-sidebar-toggle type="button" aria-controls="eval-sidebar" aria-expanded="true">Collapse</button>
+            </div>
+            <select id="iteration-select"></select>
+          </section>
+
+          <section class="sidebar-section">
+            <div class="field-label">Totals</div>
+            <div class="score-list" id="score-list"></div>
+          </section>
+
+          <nav class="scenario-list" id="scenario-list" aria-label="Scenarios"></nav>
+        </aside>
+
+        <div class="sidebar-resizer" id="sidebar-resizer" role="separator" aria-label="Resize sidebar" aria-orientation="vertical" tabindex="0"></div>
+
+        <section class="main">
+          <header class="scenario-header">
+            <div>
+              <h2 id="scenario-title">Internal Workspace Reset</h2>
+              <p class="prompt" id="scenario-prompt">Select a scenario to compare outputs.</p>
+            </div>
+            <div class="controls">
+              <button id="prev-button" type="button">Previous</button>
+              <button id="next-button" type="button">Next</button>
+              <select class="viewport-size" id="viewport-select" aria-label="Viewport width">
+                <option value="fit">Fit column</option>
+                <option value="1440">Desktop 1440</option>
+                <option value="1024">Laptop 1024</option>
+                <option value="768">Tablet 768</option>
+                <option value="390">Mobile 390</option>
+              </select>
+              <select class="layout-size" id="layout-select" aria-label="Output layout">
+                <option value="auto">Auto layout</option>
+                <option value="columns">Columns</option>
+                <option value="rows">Rows</option>
+              </select>
+              <select class="frame-size" id="height-select" aria-label="Frame height">
+                <option value="720">720 px</option>
+                <option value="900">900 px</option>
+                <option value="1100">1100 px</option>
+              </select>
+              <button id="reset-size-button" type="button">Reset sizes</button>
+            </div>
+          </header>
+
+          <section class="output-grid" id="output-grid" aria-label="Skill outputs"></section>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const CONFIGS = [
+        {
+          id: "frontend_good_defaults",
+          label: "Frontend Good Defaults",
+          source: "Local skill",
+        },
+        {
+          id: "uncodixfy",
+          label: "Uncodixfy",
+          source: "GitHub baseline",
+        },
+        {
+          id: "openai_frontend_skill",
+          label: "OpenAI Frontend Skill",
+          source: "OpenAI baseline",
+        },
+      ];
+
+      const DATA = {
+        iterations: [
+          {
+            id: "iteration-1",
+            label: "Iteration 1",
+            root: "frontend-good-defaults/iteration-1",
+            aggregate: {
+              frontend_good_defaults: { passed: 29, total: 30, passRate: "96.7%" },
+              uncodixfy: { passed: 27, total: 30, passRate: "90.0%" },
+              openai_frontend_skill: { passed: 28, total: 30, passRate: "93.3%" },
+            },
+            evals: [
+              {
+                id: "internal-workspace-reset",
+                label: "Internal Workspace Reset",
+                prompt:
+                  "Build a single-page internal workflow app for a support team to triage incoming refund requests. It should have a queue, filters, request details, notes, and approve/deny actions. Use realistic sample data, but do not fake charts or analytics.",
+                scores: {
+                  frontend_good_defaults: { passed: 6, total: 6, failures: [] },
+                  uncodixfy: {
+                    passed: 5,
+                    total: 6,
+                    failures: [
+                      "Uses badge groups heavily for status, priority, reason, channel, amount, and attachments, which reads as badge/pill overload.",
+                    ],
+                  },
+                  openai_frontend_skill: { passed: 6, total: 6, failures: [] },
+                },
+              },
+              {
+                id: "image-led-landing-page",
+                label: "Image-Led Landing Page",
+                prompt:
+                  "Create a landing page for 'Rook House', a small design-forward hotel in Porto. The first screen should make the hotel feel specific and bookable. Use strong imagery or generate an asset if needed. Keep it tasteful and avoid generic startup SaaS copy.",
+                scores: {
+                  frontend_good_defaults: { passed: 6, total: 6, failures: [] },
+                  uncodixfy: { passed: 6, total: 6, failures: [] },
+                  openai_frontend_skill: { passed: 6, total: 6, failures: [] },
+                },
+              },
+              {
+                id: "dense-data-management",
+                label: "Dense Data Management",
+                prompt:
+                  "Design an admin screen for managing paid newsletter subscribers. It needs search, segment filters, subscriber rows with plan, renewal date, MRR, status, and a detail panel for the selected subscriber. Assume operators use this daily.",
+                scores: {
+                  frontend_good_defaults: { passed: 6, total: 6, failures: [] },
+                  uncodixfy: { passed: 6, total: 6, failures: [] },
+                  openai_frontend_skill: { passed: 6, total: 6, failures: [] },
+                },
+              },
+              {
+                id: "existing-design-system-adherence",
+                label: "Existing Design System Adherence",
+                prompt:
+                  "Given these existing tokens, build a settings page for team billing: --bg:#fbfaf7; --surface:#fffdf8; --text:#25221c; --muted:#6f695f; --border:#e6dfd2; --accent:#8b5a2b; radius:6px; spacing:4px scale. Do not introduce a new brand palette. Include plan summary, payment method, invoices, and cancel-plan flow.",
+                scores: {
+                  frontend_good_defaults: {
+                    passed: 5,
+                    total: 6,
+                    failures: [
+                      "Focus and disabled states are present, but no explicit billing form error or invalid state is implemented beyond native required fields or disabled confirmation gates.",
+                    ],
+                  },
+                  uncodixfy: {
+                    passed: 4,
+                    total: 6,
+                    failures: [
+                      "The initial cancel entry action uses a danger treatment before confirmation, making the destructive action too prominent.",
+                      "Focus and disabled states are present, but no explicit billing form error or invalid state is implemented beyond native required fields or disabled confirmation gates.",
+                    ],
+                  },
+                  openai_frontend_skill: {
+                    passed: 4,
+                    total: 6,
+                    failures: [
+                      "The initial cancel entry action uses a danger treatment before confirmation, making the destructive action too prominent.",
+                      "Focus and disabled states are present, but no explicit billing form error or invalid state is implemented beyond native required fields or disabled confirmation gates.",
+                    ],
+                  },
+                },
+              },
+              {
+                id: "edge-empty-media-library",
+                label: "Edge Empty Media Library",
+                prompt:
+                  "Create the first-run empty state for a media library product. The user has no uploaded files yet. Include upload, drag-and-drop, file type limits, and what happens if a file fails. Do not show fake media thumbnails.",
+                scores: {
+                  frontend_good_defaults: { passed: 6, total: 6, failures: [] },
+                  uncodixfy: { passed: 6, total: 6, failures: [] },
+                  openai_frontend_skill: { passed: 6, total: 6, failures: [] },
+                },
+              },
+            ],
+          },
+        ],
+      };
+
+      const state = {
+        iterationId: DATA.iterations[0].id,
+        evalId: DATA.iterations[0].evals[0].id,
+        viewportWidth: "fit",
+        layoutMode: "auto",
+        frameHeight: 720,
+        sidebarCollapsed: false,
+        sidebarWidth: 256,
+        outputColumnWidths: null,
+      };
+
+      const workspace = document.querySelector(".workspace");
+      const sidebar = document.getElementById("eval-sidebar");
+      const iterationSelect = document.getElementById("iteration-select");
+      const sidebarToggle = document.getElementById("sidebar-toggle");
+      const sidebarToggleButtons = document.querySelectorAll("[data-sidebar-toggle]");
+      const sidebarResizer = document.getElementById("sidebar-resizer");
+      const scoreList = document.getElementById("score-list");
+      const scenarioList = document.getElementById("scenario-list");
+      const scenarioTitle = document.getElementById("scenario-title");
+      const scenarioPrompt = document.getElementById("scenario-prompt");
+      const outputGrid = document.getElementById("output-grid");
+      const prevButton = document.getElementById("prev-button");
+      const nextButton = document.getElementById("next-button");
+      const viewportSelect = document.getElementById("viewport-select");
+      const layoutSelect = document.getElementById("layout-select");
+      const heightSelect = document.getElementById("height-select");
+      const resetSizeButton = document.getElementById("reset-size-button");
+
+      function currentIteration() {
+        return DATA.iterations.find((iteration) => iteration.id === state.iterationId);
+      }
+
+      function currentEval() {
+        return currentIteration().evals.find((item) => item.id === state.evalId);
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function scoreClass(score) {
+        if (score.passed === score.total) return "passed";
+        if (score.passed > 0) return "partial";
+        return "failed";
+      }
+
+      function outputPath(iteration, evalId, configId) {
+        return `${iteration.root}/${evalId}/${configId}/outputs/index.html`;
+      }
+
+      function resolvedLayout() {
+        if (state.layoutMode !== "auto") return state.layoutMode;
+        if (state.viewportWidth === "fit") return "columns";
+        return Number(state.viewportWidth) >= 768 ? "rows" : "columns";
+      }
+
+      function applyShellState() {
+        workspace.classList.toggle("sidebar-collapsed", state.sidebarCollapsed);
+        sidebar.hidden = state.sidebarCollapsed;
+        sidebarResizer.hidden = state.sidebarCollapsed;
+        document.documentElement.style.setProperty("--sidebar-width", `${state.sidebarWidth}px`);
+        sidebarToggle.textContent = state.sidebarCollapsed ? "Show sidebar" : "Hide sidebar";
+        sidebarToggleButtons.forEach((button) => {
+          if (button !== sidebarToggle) button.textContent = "Collapse";
+          button.setAttribute("aria-expanded", String(!state.sidebarCollapsed));
+        });
+      }
+
+      function applyOutputColumnWidths() {
+        CONFIGS.forEach((_, index) => {
+          const width = state.outputColumnWidths?.[index];
+          if (width) {
+            outputGrid.style.setProperty(`--output-col-${index}`, `${Math.round(width)}px`);
+          } else {
+            outputGrid.style.removeProperty(`--output-col-${index}`);
+          }
+        });
+      }
+
+      function lockOutputColumnWidths() {
+        const widths = [...outputGrid.querySelectorAll(".output")].map((output) => {
+          return Math.max(280, Math.round(output.getBoundingClientRect().width));
+        });
+        state.outputColumnWidths = widths;
+        applyOutputColumnWidths();
+      }
+
+      function renderIterationOptions() {
+        iterationSelect.innerHTML = DATA.iterations
+          .map((iteration) => {
+            return `<option value="${escapeHtml(iteration.id)}">${escapeHtml(iteration.label)}</option>`;
+          })
+          .join("");
+        iterationSelect.value = state.iterationId;
+      }
+
+      function renderScores() {
+        const aggregate = currentIteration().aggregate;
+        scoreList.innerHTML = CONFIGS.map((config) => {
+          const score = aggregate[config.id];
+          return `
+            <div class="score-row">
+              <span>${escapeHtml(config.label)}</span>
+              <span class="score-value">${score.passed}/${score.total}</span>
+            </div>
+          `;
+        }).join("");
+      }
+
+      function renderScenarioList() {
+        const iteration = currentIteration();
+        scenarioList.innerHTML = iteration.evals
+          .map((item) => {
+            const totalPassed = CONFIGS.reduce((sum, config) => sum + item.scores[config.id].passed, 0);
+            const totalAssertions = CONFIGS.reduce((sum, config) => sum + item.scores[config.id].total, 0);
+            const active = item.id === state.evalId;
+            return `
+              <button class="scenario-button" type="button" data-eval-id="${escapeHtml(item.id)}" aria-current="${active}">
+                <span class="scenario-name">${escapeHtml(item.label)}</span>
+                <span class="scenario-score">${totalPassed}/${totalAssertions} assertions</span>
+              </button>
+            `;
+          })
+          .join("");
+      }
+
+      function renderOutputs() {
+        const iteration = currentIteration();
+        const item = currentEval();
+        outputGrid.dataset.layout = resolvedLayout();
+        outputGrid.innerHTML = CONFIGS.map((config, index) => {
+          const score = item.scores[config.id];
+          const failures = score.failures || [];
+          const path = outputPath(iteration, item.id, config.id);
+          const failureText = failures.length === 1 ? "1 failed assertion" : `${failures.length} failed assertions`;
+          const failureMarkup = failures.length
+            ? `
+              <div class="failures">
+                <details>
+                  <summary>${failureText}</summary>
+                  <ul class="failure-list">
+                    ${failures.map((failure) => `<li>${escapeHtml(failure)}</li>`).join("")}
+                  </ul>
+                </details>
+              </div>
+            `
+            : `<div class="failures" hidden></div>`;
+
+          const resizer =
+            index < CONFIGS.length - 1
+              ? `<div class="output-resizer" data-output-resizer="${index}" role="separator" aria-label="Resize output sections" aria-orientation="vertical" tabindex="0"></div>`
+              : "";
+
+          return `
+            <article class="output">
+              <header class="output-header">
+                <div>
+                  <h3>${escapeHtml(config.label)}</h3>
+                  <p class="output-meta">
+                    <span class="${scoreClass(score)}">${score.passed}/${score.total}</span>
+                    ${escapeHtml(config.source)}
+                  </p>
+                </div>
+                <a class="open-link" href="${escapeHtml(path)}" target="_blank" rel="noreferrer">Open</a>
+              </header>
+              ${failureMarkup}
+              <div class="preview">
+                <div class="preview-inner">
+                  <iframe src="${escapeHtml(path)}" title="${escapeHtml(config.label)} output for ${escapeHtml(item.label)}"></iframe>
+                </div>
+              </div>
+            </article>
+            ${resizer}
+          `;
+        }).join("");
+        applyOutputColumnWidths();
+      }
+
+      function syncPreviewSize() {
+        const fixedWidth = state.viewportWidth === "fit" ? null : Number(state.viewportWidth);
+        document.querySelectorAll(".preview").forEach((preview) => {
+          const inner = preview.querySelector(".preview-inner");
+          const iframe = preview.querySelector("iframe");
+          const availableWidth = preview.clientWidth;
+
+          if (!fixedWidth || !availableWidth) {
+            preview.style.height = `${state.frameHeight}px`;
+            inner.style.width = "100%";
+            inner.style.height = `${state.frameHeight}px`;
+            inner.style.marginLeft = "0";
+            inner.style.transform = "none";
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            return;
+          }
+
+          const scale = Math.min(1, availableWidth / fixedWidth);
+          const scaledWidth = fixedWidth * scale;
+          inner.style.width = `${fixedWidth}px`;
+          inner.style.height = `${state.frameHeight}px`;
+          inner.style.marginLeft = `${Math.max(0, (availableWidth - scaledWidth) / 2)}px`;
+          inner.style.transform = `scale(${scale})`;
+          iframe.style.width = "100%";
+          iframe.style.height = "100%";
+          preview.style.height = `${Math.ceil(state.frameHeight * scale)}px`;
+        });
+      }
+
+      function syncOutputResizers() {
+        const orientation = resolvedLayout() === "columns" ? "vertical" : "horizontal";
+        document.querySelectorAll(".output-resizer").forEach((resizer) => {
+          resizer.setAttribute("aria-orientation", orientation);
+          resizer.tabIndex = orientation === "vertical" ? 0 : -1;
+        });
+      }
+
+      function updateUrl() {
+        const params = new URLSearchParams(window.location.search);
+        params.set("iteration", state.iterationId);
+        params.set("eval", state.evalId);
+        params.set("viewport", state.viewportWidth);
+        params.set("layout", state.layoutMode);
+        params.set("height", String(state.frameHeight));
+        params.set("sidebar", state.sidebarCollapsed ? "collapsed" : "expanded");
+        params.set("sidebarWidth", String(state.sidebarWidth));
+        window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
+      }
+
+      function render() {
+        const item = currentEval();
+        scenarioTitle.textContent = item.label;
+        scenarioPrompt.textContent = item.prompt;
+        document.documentElement.style.setProperty("--frame-height", `${state.frameHeight}px`);
+        viewportSelect.value = state.viewportWidth;
+        layoutSelect.value = state.layoutMode;
+        heightSelect.value = String(state.frameHeight);
+
+        applyShellState();
+        renderIterationOptions();
+        renderScores();
+        renderScenarioList();
+        renderOutputs();
+        syncOutputResizers();
+        syncPreviewSize();
+        updateUrl();
+      }
+
+      function setEvalByOffset(offset) {
+        const iteration = currentIteration();
+        const currentIndex = iteration.evals.findIndex((item) => item.id === state.evalId);
+        const nextIndex = (currentIndex + offset + iteration.evals.length) % iteration.evals.length;
+        state.evalId = iteration.evals[nextIndex].id;
+        render();
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      let activeResize = null;
+
+      sidebarResizer.addEventListener("pointerdown", (event) => {
+        if (state.sidebarCollapsed) return;
+        event.preventDefault();
+        activeResize = {
+          type: "sidebar",
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startWidth: state.sidebarWidth,
+        };
+        sidebarResizer.setPointerCapture(event.pointerId);
+        document.body.classList.add("is-resizing");
+      });
+
+      sidebarResizer.addEventListener("keydown", (event) => {
+        if (state.sidebarCollapsed || !["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+        event.preventDefault();
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        state.sidebarWidth = clamp(state.sidebarWidth + direction * 16, 184, 420);
+        applyShellState();
+        syncPreviewSize();
+        updateUrl();
+      });
+
+      outputGrid.addEventListener("pointerdown", (event) => {
+        const resizer = event.target.closest("[data-output-resizer]");
+        if (!resizer || resolvedLayout() !== "columns") return;
+        event.preventDefault();
+        lockOutputColumnWidths();
+        activeResize = {
+          type: "output",
+          pointerId: event.pointerId,
+          index: Number(resizer.dataset.outputResizer),
+          startX: event.clientX,
+          widths: [...state.outputColumnWidths],
+        };
+        resizer.setPointerCapture(event.pointerId);
+        document.body.classList.add("is-resizing");
+      });
+
+      outputGrid.addEventListener("keydown", (event) => {
+        const resizer = event.target.closest("[data-output-resizer]");
+        if (!resizer || resolvedLayout() !== "columns" || !["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+        event.preventDefault();
+        if (!state.outputColumnWidths) lockOutputColumnWidths();
+        const index = Number(resizer.dataset.outputResizer);
+        const widths = [...state.outputColumnWidths];
+        const combined = widths[index] + widths[index + 1];
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const left = clamp(widths[index] + direction * 16, 280, combined - 280);
+        widths[index] = left;
+        widths[index + 1] = combined - left;
+        state.outputColumnWidths = widths;
+        applyOutputColumnWidths();
+        syncPreviewSize();
+        updateUrl();
+      });
+
+      document.addEventListener("pointermove", (event) => {
+        if (!activeResize) return;
+        event.preventDefault();
+
+        if (activeResize.type === "sidebar") {
+          const nextWidth = activeResize.startWidth + event.clientX - activeResize.startX;
+          state.sidebarWidth = clamp(nextWidth, 184, 420);
+          applyShellState();
+          syncPreviewSize();
+          return;
+        }
+
+        if (activeResize.type === "output") {
+          const index = activeResize.index;
+          const delta = event.clientX - activeResize.startX;
+          const leftStart = activeResize.widths[index];
+          const rightStart = activeResize.widths[index + 1];
+          const combined = leftStart + rightStart;
+          const left = clamp(leftStart + delta, 280, combined - 280);
+          state.outputColumnWidths = [...activeResize.widths];
+          state.outputColumnWidths[index] = left;
+          state.outputColumnWidths[index + 1] = combined - left;
+          applyOutputColumnWidths();
+          syncPreviewSize();
+        }
+      });
+
+      document.addEventListener("pointerup", () => {
+        if (!activeResize) return;
+        activeResize = null;
+        document.body.classList.remove("is-resizing");
+        updateUrl();
+      });
+
+      iterationSelect.addEventListener("change", (event) => {
+        state.iterationId = event.target.value;
+        state.evalId = currentIteration().evals[0].id;
+        render();
+      });
+
+      scenarioList.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-eval-id]");
+        if (!button) return;
+        state.evalId = button.dataset.evalId;
+        render();
+      });
+
+      prevButton.addEventListener("click", () => setEvalByOffset(-1));
+      nextButton.addEventListener("click", () => setEvalByOffset(1));
+      sidebarToggleButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          state.sidebarCollapsed = !state.sidebarCollapsed;
+          render();
+        });
+      });
+      viewportSelect.addEventListener("change", (event) => {
+        state.viewportWidth = event.target.value;
+        render();
+      });
+      layoutSelect.addEventListener("change", (event) => {
+        state.layoutMode = event.target.value;
+        render();
+      });
+      heightSelect.addEventListener("change", (event) => {
+        state.frameHeight = Number(event.target.value);
+        render();
+      });
+      resetSizeButton.addEventListener("click", () => {
+        state.sidebarWidth = 256;
+        state.outputColumnWidths = null;
+        applyOutputColumnWidths();
+        render();
+      });
+      window.addEventListener("resize", syncPreviewSize);
+
+      const params = new URLSearchParams(window.location.search);
+      const requestedIteration = params.get("iteration");
+      const requestedEval = params.get("eval");
+      const requestedViewport = params.get("viewport");
+      const requestedLayout = params.get("layout");
+      const requestedHeight = params.get("height");
+      const requestedSidebar = params.get("sidebar");
+      const requestedSidebarWidth = params.get("sidebarWidth");
+      if (requestedIteration && DATA.iterations.some((iteration) => iteration.id === requestedIteration)) {
+        state.iterationId = requestedIteration;
+      }
+      if (requestedEval && currentIteration().evals.some((item) => item.id === requestedEval)) {
+        state.evalId = requestedEval;
+      }
+      if (requestedViewport && ["fit", "1440", "1024", "768", "390"].includes(requestedViewport)) {
+        state.viewportWidth = requestedViewport;
+      }
+      if (requestedLayout && ["auto", "columns", "rows"].includes(requestedLayout)) {
+        state.layoutMode = requestedLayout;
+      }
+      if (requestedHeight && ["720", "900", "1100"].includes(requestedHeight)) {
+        state.frameHeight = Number(requestedHeight);
+      }
+      if (requestedSidebar === "collapsed" || requestedSidebar === "expanded") {
+        state.sidebarCollapsed = requestedSidebar === "collapsed";
+      }
+      if (requestedSidebarWidth && !Number.isNaN(Number(requestedSidebarWidth))) {
+        state.sidebarWidth = clamp(Number(requestedSidebarWidth), 184, 420);
+      }
+
+      render();
+    </script>
+  </body>
+</html>

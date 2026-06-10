@@ -1,143 +1,49 @@
 # Asher Skills
 
-Installable single-entrypoint skills for AI coding agents.
-
-## Skills
-
-- **Eloquent**: career documents, resumes, job search, interviews, and negotiation through `eloquent`.
-- **Small Bets**: community-led founder strategy, validation, MVPs, early customers, pricing, growth, and values through `smallbets`.
-
-## Eloquent
-
-One installable career-development skill for AI coding agents. It turns career material into clear, persuasive resumes, CVs, profiles, letters, interview stories, and negotiation scripts through a single entry point, `eloquent`.
-
-## Structure
-
-```text
-skills/eloquent/
-+-- SKILL.md
-+-- agents/
-|   `-- openai.yaml
-+-- reference/
-|   +-- ats.md
-|   +-- bullets.md
-|   `-- ...
-`-- scripts/
-    `-- command-metadata.json
-```
-
-`SKILL.md` is the only trigger surface. The detailed workflows live in `reference/` and are loaded only when the matching subcommand is used.
+Skills that I made or that I like. This is a single repo that I can use to install these skills in other places.
 
 ## Install
 
 Install globally:
 
 ```bash
-npx skills add asasher/eloquent -g -y
+npx skills add <repo-url> --skill <skill-name> -g
 ```
 
 Install in the current project:
 
 ```bash
-npx skills add asasher/eloquent -y
+npx skills add <repo-url> --skill <skill-name> -y
 ```
 
-## Usage
+## Skills I Like
 
-Invoke the single skill directly or ask naturally:
+### Project
+```bash
+## Almost always
+npx impeccable skills install
+npx skills add cyxzdev/Uncodixfy
+npx skills add https://github.com/vercel-labs/agent-browser --skill agent-browser
+npx skills add https://github.com/agentmail-to/agentmail-skills --skill agentmail portless
+npx skills add https://github.com/greptileai/skills --skill greploop
+npx skills@latest add mattpocock/skills --skill tdd
 
-```text
-eloquent ats
-eloquent compile
-eloquent bullets
-eloquent analyze-job
-eloquent tailor
-eloquent templates
-eloquent cover-letter
-eloquent interview
-eloquent salary
+## Depending on the deployment setup
+npx skills add https://github.com/railwayapp/railway-skills --skill use-railway
+npx skills add https://github.com/vercel/vercel --skill vercel-cli
+npx skills add https://github.com/get-convex/agent-skills
 ```
 
-Natural requests route to the nearest subcommand:
+### Global
 
-```text
-"Optimize this resume for ATS."
-"Make me a resume from scratch."
-"Rewrite these bullets for a senior product role."
-"Here is a job description and my resume. Should I apply?"
-"Tailor my resume for this posting."
-"Write a cover letter for this role."
+```bash
+npx skills add cyxzdev/Uncodixfy -g
+npx skills add https://github.com/vercel-labs/agent-browser --skill agent-browser portless -g
+npx skills add https://github.com/agentmail-to/agentmail-skills --skill agentmail -g
+npx skills@latest add mattpocock/skills --skill caveman diagnose grill-me improve-codebase-architecture prototype zoom-out teach -g
+npx skills add https://github.com/greptileai/skills --skill greploop -g
+npx skills add https://github.com/railwayapp/railway-skills --skill use-railway -g
+npx skills add https://github.com/vercel/vercel --skill vercel-cli -g
+npx skills add https://github.com/davis7dotsh/better-context --skill btca-local -g
+npx skills add run-llama/llamaparse-agent-skills --skill liteparse -g
 ```
-
-## Commands
-
-| Command | Purpose |
-|---|---|
-| `compile` | Guided resume creation from raw material to delivery files |
-| `ats` | ATS compatibility, parsing risk, keywords, and formatting |
-| `bullets` | Achievement-focused resume bullet rewriting |
-| `quantify` | Credible metrics, scale, and impact discovery |
-| `format` | Resume layout, readability, and ATS-safe structure |
-| `templates` | Proven resume templates for DOCX, PDF, and HTML output |
-| `sections` | Summaries, skills, experience, education, and extra sections |
-| `analyze-job` | Job description analysis, fit scoring, and application strategy |
-| `tailor` | Job-specific resume customization |
-| `versions` | Master resume and tailored version management |
-| `cover-letter` | Personalized cover letters |
-| `linkedin` | LinkedIn profile optimization |
-| `portfolio-case-study` | Portfolio case studies from resume/project material |
-| `references` | Professional reference lists and prep notes |
-| `interview` | STAR stories, likely questions, and interview prep |
-| `salary` | Compensation research and negotiation scripts |
-| `compare-offers` | Side-by-side offer comparison |
-| `tech` | Technical resumes for SWE, PM, data, DevOps, and related roles |
-| `executive` | VP, C-suite, board, and senior leadership resumes |
-| `academic-cv` | Academic CVs for faculty, research, postdoc, and teaching roles |
-| `creative` | Creative resumes balanced with ATS compatibility |
-| `career-change` | Transferable skill translation for career pivots |
-
-## Design
-
-The skill follows the same broad shape as `impeccable`: one entrypoint, a command table, routing rules, detailed command references, and command metadata. This keeps activation predictable and avoids installing twenty separate skills for related resume workflows.
-
-## Credits
-
-The career workflow reference content is adapted from [Paramchoudhary/ResumeSkills](https://github.com/Paramchoudhary/ResumeSkills).
-
-## Small Bets
-
-One installable founder-strategy skill based on the command set from [slavingia/skills](https://github.com/slavingia/skills). It turns The Minimalist Entrepreneur style workflows into a single entry point, `smallbets`, with focused references loaded only when needed.
-
-### Structure
-
-```text
-skills/smallbets/
-+-- SKILL.md
-+-- agents/
-|   `-- openai.yaml
-+-- reference/
-|   +-- find-community.md
-|   +-- validate.md
-|   `-- ...
-`-- scripts/
-    `-- command-metadata.json
-```
-
-### Usage
-
-```text
-smallbets find-community
-smallbets validate
-smallbets mvp
-smallbets processize
-smallbets first-customers
-smallbets pricing
-smallbets marketing
-smallbets grow
-smallbets values
-smallbets review
-```
-
-## License
-
-MIT. See [LICENSE](LICENSE).

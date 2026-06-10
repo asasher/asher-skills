@@ -1,0 +1,1243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subscriber Admin</title>
+  <style>
+    :root {
+      --bg: #f3f2ed;
+      --rail: #ece9e1;
+      --surface: #ffffff;
+      --surface-soft: #f8f7f2;
+      --selected: #ede7dc;
+      --line: #ded9cc;
+      --line-strong: #c9c1b0;
+      --text: #221f1a;
+      --muted: #6f685c;
+      --muted-2: #8b8375;
+      --active: #27704e;
+      --warn: #986519;
+      --danger: #aa3d32;
+      --focus: #77613a;
+      --button: #26231d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Aptos", "IBM Plex Sans", sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 220px minmax(560px, 1fr) 360px;
+      height: 100vh;
+      min-height: 640px;
+    }
+
+    .sidebar {
+      min-width: 0;
+      border-right: 1px solid var(--line);
+      background: var(--rail);
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product {
+      padding: 8px 10px 14px;
+      font-size: 15px;
+      font-weight: 680;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav button {
+      width: 100%;
+      height: 34px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      background: transparent;
+      color: #3a352c;
+      text-align: left;
+      padding: 0 10px;
+    }
+
+    .nav button:hover {
+      background: #f5f2eb;
+    }
+
+    .nav button[aria-current="page"] {
+      background: #fbfaf7;
+      border-color: var(--line);
+      color: var(--text);
+      font-weight: 620;
+    }
+
+    .sidebar-meta {
+      margin-top: auto;
+      border-top: 1px solid var(--line);
+      padding: 12px 10px 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .main {
+      display: grid;
+      grid-template-rows: auto auto auto 1fr;
+      min-width: 0;
+      background: var(--surface);
+    }
+
+    .page-bar {
+      min-height: 56px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 20px;
+      background: var(--surface);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 18px;
+      line-height: 1.25;
+      font-weight: 680;
+    }
+
+    .summary {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .toolbar {
+      border-bottom: 1px solid var(--line);
+      background: var(--surface-soft);
+      padding: 12px 20px;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .search-input,
+    .select-input {
+      height: 34px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0 10px;
+    }
+
+    .select-input {
+      min-width: 138px;
+      padding: 0 28px 0 10px;
+    }
+
+    .search-input:focus,
+    .select-input:focus,
+    .segment-button:focus-visible,
+    .btn:focus-visible,
+    tr:focus-visible {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 2px rgba(119, 97, 58, 0.18);
+      outline: none;
+    }
+
+    .segments {
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+      display: flex;
+      gap: 4px;
+      padding: 9px 20px;
+      overflow-x: auto;
+    }
+
+    .segment-button {
+      height: 30px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      background: transparent;
+      color: #3d382f;
+      padding: 0 10px;
+      white-space: nowrap;
+    }
+
+    .segment-button:hover {
+      background: var(--surface-soft);
+    }
+
+    .segment-button.is-active {
+      background: var(--selected);
+      border-color: var(--line);
+      font-weight: 620;
+    }
+
+    .table-wrap {
+      min-height: 0;
+      overflow: auto;
+      background: var(--surface);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
+    }
+
+    th,
+    td {
+      text-align: left;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      height: 32px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 10px;
+    }
+
+    tbody td {
+      height: 50px;
+      border-bottom: 1px solid var(--line);
+      padding: 6px 10px;
+      vertical-align: middle;
+      overflow: hidden;
+    }
+
+    tbody tr {
+      background: var(--surface);
+    }
+
+    tbody tr:hover {
+      background: #faf9f5;
+    }
+
+    tbody tr.is-selected {
+      background: var(--selected);
+    }
+
+    .subscriber-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #d4cab9;
+      border-radius: 50%;
+      background: #e2dbce;
+      color: #312a20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      font-size: 12px;
+      font-weight: 680;
+    }
+
+    .identity,
+    .cell-stack {
+      min-width: 0;
+    }
+
+    .name,
+    .primary-line {
+      color: var(--text);
+      font-weight: 590;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .email,
+    .secondary-line {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .money,
+    .number {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status {
+      font-weight: 620;
+    }
+
+    .status-active {
+      color: var(--active);
+    }
+
+    .status-past-due {
+      color: var(--danger);
+    }
+
+    .status-canceling,
+    .status-paused {
+      color: var(--warn);
+    }
+
+    .empty {
+      padding: 28px 20px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail {
+      min-width: 0;
+      border-left: 1px solid var(--line);
+      background: var(--surface);
+      overflow: auto;
+    }
+
+    .detail-head {
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .detail-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .detail h2 {
+      font-size: 17px;
+      line-height: 1.25;
+      font-weight: 680;
+    }
+
+    .detail-subline {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      word-break: break-word;
+    }
+
+    .detail-status {
+      flex: 0 0 auto;
+      padding-top: 2px;
+      font-size: 13px;
+    }
+
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      height: 32px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text);
+      padding: 0 10px;
+    }
+
+    .btn:hover {
+      background: var(--surface-soft);
+    }
+
+    .btn-primary {
+      background: var(--button);
+      border-color: var(--button);
+      color: #fffdf8;
+    }
+
+    .btn-primary:hover {
+      background: #343026;
+    }
+
+    .detail-section {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-section h3 {
+      margin-bottom: 10px;
+      font-size: 13px;
+      line-height: 1.3;
+      font-weight: 680;
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr);
+      gap: 8px 12px;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .kv dt {
+      color: var(--muted);
+    }
+
+    .kv dd {
+      min-width: 0;
+      margin: 0;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .note-box {
+      width: 100%;
+      min-height: 88px;
+      resize: vertical;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      padding: 9px 10px;
+      background: var(--surface-soft);
+      color: var(--text);
+      line-height: 1.4;
+      outline: none;
+    }
+
+    .note-box:focus {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 2px rgba(119, 97, 58, 0.18);
+    }
+
+    .activity {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .activity li {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .activity time {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (max-width: 1180px) {
+      .app {
+        grid-template-columns: 192px minmax(500px, 1fr) 330px;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr 138px 138px;
+      }
+    }
+
+    @media (max-width: 920px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        height: auto;
+        min-height: 100vh;
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .detail {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .select-input {
+        width: 100%;
+      }
+
+      .table-wrap {
+        max-height: 560px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Primary">
+      <div class="product">Letterdesk</div>
+      <nav class="nav">
+        <button type="button">Overview</button>
+        <button type="button" aria-current="page">Subscribers</button>
+        <button type="button">Segments</button>
+        <button type="button">Billing</button>
+        <button type="button">Issues</button>
+        <button type="button">Settings</button>
+      </nav>
+      <div class="sidebar-meta">
+        Production workspace<br>
+        Updated Jun 10, 2026
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="page-bar">
+        <h1>Subscribers</h1>
+        <div class="summary" id="summary">Loading subscribers</div>
+      </header>
+
+      <section class="toolbar" aria-label="Subscriber controls">
+        <div class="field">
+          <label for="search">Search</label>
+          <input class="search-input" id="search" type="search" placeholder="Name, email, company, plan">
+        </div>
+        <div class="field">
+          <label for="planFilter">Plan</label>
+          <select class="select-input" id="planFilter">
+            <option value="All">All plans</option>
+            <option value="Monthly Pro">Monthly Pro</option>
+            <option value="Annual Pro">Annual Pro</option>
+            <option value="Team">Team</option>
+            <option value="Patron">Patron</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="statusFilter">Status</label>
+          <select class="select-input" id="statusFilter">
+            <option value="All">All statuses</option>
+            <option value="Active">Active</option>
+            <option value="Past due">Past due</option>
+            <option value="Canceling">Canceling</option>
+            <option value="Paused">Paused</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="segments" aria-label="Segment filters">
+        <button class="segment-button is-active" type="button" data-segment="All">All segments</button>
+        <button class="segment-button" type="button" data-segment="Founders">Founders</button>
+        <button class="segment-button" type="button" data-segment="Operators">Operators</button>
+        <button class="segment-button" type="button" data-segment="Investors">Investors</button>
+        <button class="segment-button" type="button" data-segment="Teams">Teams</button>
+        <button class="segment-button" type="button" data-segment="Renewing soon">Renewing soon</button>
+      </section>
+
+      <section class="table-wrap" aria-label="Subscriber list">
+        <table>
+          <colgroup>
+            <col style="width: 29%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+            <col style="width: 16%">
+            <col style="width: 10%">
+            <col style="width: 15%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Subscriber</th>
+              <th scope="col">Segment</th>
+              <th scope="col">Plan</th>
+              <th scope="col">Renewal</th>
+              <th scope="col" class="number">MRR</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="subscriberRows"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <aside class="detail" aria-label="Selected subscriber">
+      <div id="detailPanel"></div>
+    </aside>
+  </div>
+
+  <script>
+    const subscribers = [
+      {
+        id: "sub_1001",
+        name: "Mara Chen",
+        email: "mara.chen@northstarops.com",
+        company: "Northstar Ops",
+        initials: "MC",
+        segment: "Founders",
+        plan: "Annual Pro",
+        renewal: "2026-07-14",
+        mrr: 42,
+        status: "Active",
+        seats: 1,
+        joined: "2024-11-06",
+        payment: "Visa ending 4242",
+        invoices: "Paid May 28, 2026",
+        source: "Referral from Friday Brief",
+        notes: "Wants receipts copied to finance@northstarops.com. Reads every Monday issue.",
+        activity: [
+          ["Jun 9", "Updated billing contact"],
+          ["May 28", "Invoice paid for Annual Pro"],
+          ["May 18", "Opened renewal reminder"]
+        ]
+      },
+      {
+        id: "sub_1002",
+        name: "Gideon Park",
+        email: "gpark@sampleyard.io",
+        company: "Sampleyard",
+        initials: "GP",
+        segment: "Operators",
+        plan: "Team",
+        renewal: "2026-06-21",
+        mrr: 96,
+        status: "Active",
+        seats: 6,
+        joined: "2025-02-19",
+        payment: "Mastercard ending 8104",
+        invoices: "Paid Jun 1, 2026",
+        source: "Podcast sponsorship",
+        notes: "Team owner asked about adding finance and lifecycle marketing readers.",
+        activity: [
+          ["Jun 7", "Added two team seats"],
+          ["Jun 1", "Invoice paid for Team"],
+          ["May 25", "Downloaded subscriber export"]
+        ]
+      },
+      {
+        id: "sub_1003",
+        name: "Alicia Morton",
+        email: "alicia@northledger.capital",
+        company: "Northledger Capital",
+        initials: "AM",
+        segment: "Investors",
+        plan: "Patron",
+        renewal: "2026-08-02",
+        mrr: 64,
+        status: "Active",
+        seats: 1,
+        joined: "2023-09-14",
+        payment: "Amex ending 3005",
+        invoices: "Paid May 2, 2026",
+        source: "Enterprise forward",
+        notes: "High-signal reader. Often replies with corrections before publish window closes.",
+        activity: [
+          ["Jun 4", "Replied to paid issue"],
+          ["May 2", "Invoice paid for Patron"],
+          ["Apr 17", "Changed email address"]
+        ]
+      },
+      {
+        id: "sub_1004",
+        name: "Nikhil Rao",
+        email: "nikhil.rao@buildlane.co",
+        company: "Buildlane",
+        initials: "NR",
+        segment: "Founders",
+        plan: "Monthly Pro",
+        renewal: "2026-06-18",
+        mrr: 24,
+        status: "Past due",
+        seats: 1,
+        joined: "2025-08-03",
+        payment: "Visa ending 1178",
+        invoices: "Failed Jun 4, 2026",
+        source: "Search",
+        notes: "Card retry scheduled. Keep access until June 13 because of recent support thread.",
+        activity: [
+          ["Jun 8", "Second card retry failed"],
+          ["Jun 4", "Invoice payment failed"],
+          ["May 4", "Invoice paid for Monthly Pro"]
+        ]
+      },
+      {
+        id: "sub_1005",
+        name: "Priya Iyer",
+        email: "priya@ledgerhaus.com",
+        company: "Ledgerhaus",
+        initials: "PI",
+        segment: "Teams",
+        plan: "Team",
+        renewal: "2026-09-12",
+        mrr: 128,
+        status: "Active",
+        seats: 8,
+        joined: "2024-04-27",
+        payment: "Bank debit",
+        invoices: "Paid May 12, 2026",
+        source: "Team migration campaign",
+        notes: "Uses shared inbox alias. Support requests usually come from the operations lead.",
+        activity: [
+          ["Jun 6", "Invited support@ledgerhaus.com"],
+          ["May 12", "Invoice paid for Team"],
+          ["Apr 30", "Renewal terms viewed"]
+        ]
+      },
+      {
+        id: "sub_1006",
+        name: "Sam Ruiz",
+        email: "sam@routecraft.dev",
+        company: "Routecraft",
+        initials: "SR",
+        segment: "Operators",
+        plan: "Annual Pro",
+        renewal: "2026-06-29",
+        mrr: 42,
+        status: "Canceling",
+        seats: 1,
+        joined: "2025-06-29",
+        payment: "Visa ending 0891",
+        invoices: "Paid Jun 29, 2025",
+        source: "Launch discount",
+        notes: "Cancelation reason says team moved to internal research digest.",
+        activity: [
+          ["Jun 10", "Cancelation scheduled for renewal"],
+          ["Jun 2", "Opened cancelation flow"],
+          ["May 19", "Clicked competitor analysis issue"]
+        ]
+      },
+      {
+        id: "sub_1007",
+        name: "Helena Brooks",
+        email: "helena@clearviewhealth.co",
+        company: "Clearview Health",
+        initials: "HB",
+        segment: "Teams",
+        plan: "Team",
+        renewal: "2026-07-03",
+        mrr: 160,
+        status: "Active",
+        seats: 10,
+        joined: "2024-12-03",
+        payment: "Mastercard ending 4450",
+        invoices: "Paid Jun 3, 2026",
+        source: "Sales-assisted import",
+        notes: "Needs invoice PDFs attached to every renewal notification.",
+        activity: [
+          ["Jun 3", "Invoice paid for Team"],
+          ["May 27", "Seat count increased to 10"],
+          ["May 4", "Opened team analytics report"]
+        ]
+      },
+      {
+        id: "sub_1008",
+        name: "Jon Bell",
+        email: "jon@grainstudio.com",
+        company: "Grain Studio",
+        initials: "JB",
+        segment: "Founders",
+        plan: "Monthly Pro",
+        renewal: "2026-06-12",
+        mrr: 24,
+        status: "Active",
+        seats: 1,
+        joined: "2026-01-12",
+        payment: "Visa ending 7021",
+        invoices: "Paid May 12, 2026",
+        source: "Newsletter referral",
+        notes: "Renewing this week. Open rate has dropped since April.",
+        activity: [
+          ["Jun 5", "Opened renewal reminder"],
+          ["May 12", "Invoice paid for Monthly Pro"],
+          ["Apr 28", "Skipped two paid issues"]
+        ]
+      },
+      {
+        id: "sub_1009",
+        name: "Mina Okafor",
+        email: "mina@policyforge.org",
+        company: "Policy Forge",
+        initials: "MO",
+        segment: "Investors",
+        plan: "Annual Pro",
+        renewal: "2026-10-05",
+        mrr: 42,
+        status: "Paused",
+        seats: 1,
+        joined: "2024-10-05",
+        payment: "Visa ending 9230",
+        invoices: "Paid Oct 5, 2025",
+        source: "Public report citation",
+        notes: "Paused delivery during sabbatical. Billing remains active through annual term.",
+        activity: [
+          ["Jun 1", "Paused email delivery"],
+          ["May 21", "Changed delivery address"],
+          ["Apr 3", "Shared issue with two colleagues"]
+        ]
+      },
+      {
+        id: "sub_1010",
+        name: "Theo Williams",
+        email: "theo@havenworks.com",
+        company: "Haven Works",
+        initials: "TW",
+        segment: "Operators",
+        plan: "Monthly Pro",
+        renewal: "2026-06-16",
+        mrr: 24,
+        status: "Past due",
+        seats: 1,
+        joined: "2025-11-16",
+        payment: "Mastercard ending 6519",
+        invoices: "Failed Jun 6, 2026",
+        source: "Reader invite",
+        notes: "Email bounced once last month. Verify before manual outreach.",
+        activity: [
+          ["Jun 9", "Card retry failed"],
+          ["Jun 6", "Invoice payment failed"],
+          ["May 16", "Invoice paid for Monthly Pro"]
+        ]
+      },
+      {
+        id: "sub_1011",
+        name: "Camille Durand",
+        email: "camille@ateliermetrics.fr",
+        company: "Atelier Metrics",
+        initials: "CD",
+        segment: "Teams",
+        plan: "Team",
+        renewal: "2026-11-20",
+        mrr: 80,
+        status: "Active",
+        seats: 5,
+        joined: "2025-11-20",
+        payment: "SEPA debit",
+        invoices: "Paid May 20, 2026",
+        source: "Community bundle",
+        notes: "European billing address. VAT ID is validated.",
+        activity: [
+          ["Jun 8", "Updated VAT profile"],
+          ["May 20", "Invoice paid for Team"],
+          ["May 6", "Added analyst seat"]
+        ]
+      },
+      {
+        id: "sub_1012",
+        name: "Ethan Holloway",
+        email: "ethan@driftline.ai",
+        company: "Driftline AI",
+        initials: "EH",
+        segment: "Founders",
+        plan: "Patron",
+        renewal: "2026-12-01",
+        mrr: 64,
+        status: "Active",
+        seats: 1,
+        joined: "2023-12-01",
+        payment: "Amex ending 0190",
+        invoices: "Paid Jun 1, 2026",
+        source: "Founder community",
+        notes: "Pays at patron tier mainly for archives and private briefings.",
+        activity: [
+          ["Jun 1", "Invoice paid for Patron"],
+          ["May 22", "Downloaded archive bundle"],
+          ["May 10", "Opened private briefing"]
+        ]
+      },
+      {
+        id: "sub_1013",
+        name: "Rhea Sato",
+        email: "rhea@kestrel.energy",
+        company: "Kestrel Energy",
+        initials: "RS",
+        segment: "Investors",
+        plan: "Annual Pro",
+        renewal: "2026-07-22",
+        mrr: 42,
+        status: "Active",
+        seats: 1,
+        joined: "2024-07-22",
+        payment: "Visa ending 5688",
+        invoices: "Paid Jul 22, 2025",
+        source: "Industry report",
+        notes: "Heavy archive reader. Interested in energy-sector tagging.",
+        activity: [
+          ["Jun 7", "Saved archive search"],
+          ["May 31", "Opened sector digest"],
+          ["May 22", "Referred one subscriber"]
+        ]
+      },
+      {
+        id: "sub_1014",
+        name: "Owen Patel",
+        email: "owen@maplequarter.com",
+        company: "Maple Quarter",
+        initials: "OP",
+        segment: "Operators",
+        plan: "Monthly Pro",
+        renewal: "2026-06-25",
+        mrr: 24,
+        status: "Active",
+        seats: 1,
+        joined: "2026-02-25",
+        payment: "Visa ending 6044",
+        invoices: "Paid May 25, 2026",
+        source: "LinkedIn post",
+        notes: "Reads on mobile. No support history.",
+        activity: [
+          ["Jun 9", "Opened mobile issue"],
+          ["May 25", "Invoice paid for Monthly Pro"],
+          ["May 11", "Clicked pricing teardown"]
+        ]
+      },
+      {
+        id: "sub_1015",
+        name: "Leah Kim",
+        email: "leah@foundrynine.com",
+        company: "Foundry Nine",
+        initials: "LK",
+        segment: "Teams",
+        plan: "Team",
+        renewal: "2026-06-30",
+        mrr: 112,
+        status: "Canceling",
+        seats: 7,
+        joined: "2025-06-30",
+        payment: "Bank debit",
+        invoices: "Paid Jun 30, 2025",
+        source: "Sales-assisted import",
+        notes: "Finance requested export of historical invoices before plan ends.",
+        activity: [
+          ["Jun 10", "Cancelation confirmed by owner"],
+          ["Jun 8", "Exported invoices"],
+          ["May 30", "Renewal reminder opened"]
+        ]
+      },
+      {
+        id: "sub_1016",
+        name: "Daniel Foster",
+        email: "daniel@copperbench.com",
+        company: "Copper Bench",
+        initials: "DF",
+        segment: "Renewing soon",
+        plan: "Annual Pro",
+        renewal: "2026-06-15",
+        mrr: 42,
+        status: "Active",
+        seats: 1,
+        joined: "2024-06-15",
+        payment: "Mastercard ending 7733",
+        invoices: "Paid Jun 15, 2025",
+        source: "Archive preview",
+        notes: "Renewal in five days. Last opened paid issue on June 2.",
+        activity: [
+          ["Jun 10", "Renewal reminder delivered"],
+          ["Jun 2", "Opened paid issue"],
+          ["May 15", "Invoice preview generated"]
+        ]
+      }
+    ];
+
+    const state = {
+      query: "",
+      segment: "All",
+      plan: "All",
+      status: "All",
+      selectedId: "sub_1002"
+    };
+
+    const rowsEl = document.querySelector("#subscriberRows");
+    const detailEl = document.querySelector("#detailPanel");
+    const summaryEl = document.querySelector("#summary");
+    const searchEl = document.querySelector("#search");
+    const planEl = document.querySelector("#planFilter");
+    const statusEl = document.querySelector("#statusFilter");
+    const segmentButtons = Array.from(document.querySelectorAll(".segment-button"));
+
+    const money = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0
+    });
+
+    const dateFormat = new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function displayDate(value) {
+      return dateFormat.format(new Date(`${value}T00:00:00`));
+    }
+
+    function statusClass(status) {
+      return `status-${status.toLowerCase().replace(/\s+/g, "-")}`;
+    }
+
+    function filteredSubscribers() {
+      const query = state.query.trim().toLowerCase();
+      return subscribers.filter((subscriber) => {
+        const haystack = [
+          subscriber.name,
+          subscriber.email,
+          subscriber.company,
+          subscriber.segment,
+          subscriber.plan,
+          subscriber.status
+        ].join(" ").toLowerCase();
+
+        const matchesQuery = !query || haystack.includes(query);
+        const matchesSegment = state.segment === "All" || subscriber.segment === state.segment;
+        const matchesPlan = state.plan === "All" || subscriber.plan === state.plan;
+        const matchesStatus = state.status === "All" || subscriber.status === state.status;
+
+        return matchesQuery && matchesSegment && matchesPlan && matchesStatus;
+      });
+    }
+
+    function renderSummary(rows) {
+      const mrr = rows.reduce((sum, subscriber) => sum + subscriber.mrr, 0);
+      const pastDue = rows.filter((subscriber) => subscriber.status === "Past due").length;
+      const canceling = rows.filter((subscriber) => subscriber.status === "Canceling").length;
+      summaryEl.textContent = `${rows.length} shown · ${money.format(mrr)} MRR · ${pastDue} past due · ${canceling} canceling`;
+    }
+
+    function renderRows(rows) {
+      if (!rows.length) {
+        rowsEl.innerHTML = `<tr><td class="empty" colspan="6">No subscribers match the current filters.</td></tr>`;
+        return;
+      }
+
+      rowsEl.innerHTML = rows.map((subscriber) => {
+        const selected = subscriber.id === state.selectedId ? " is-selected" : "";
+        return `
+          <tr class="${selected}" data-id="${escapeHtml(subscriber.id)}" tabindex="0">
+            <td>
+              <div class="subscriber-cell">
+                <div class="avatar" aria-hidden="true">${escapeHtml(subscriber.initials)}</div>
+                <div class="identity">
+                  <div class="name">${escapeHtml(subscriber.name)}</div>
+                  <div class="email">${escapeHtml(subscriber.email)}</div>
+                </div>
+              </div>
+            </td>
+            <td>${escapeHtml(subscriber.segment)}</td>
+            <td>
+              <div class="cell-stack">
+                <div class="primary-line">${escapeHtml(subscriber.plan)}</div>
+                <div class="secondary-line">${subscriber.seats} ${subscriber.seats === 1 ? "seat" : "seats"}</div>
+              </div>
+            </td>
+            <td>
+              <div class="cell-stack">
+                <div class="primary-line">${displayDate(subscriber.renewal)}</div>
+                <div class="secondary-line">${escapeHtml(subscriber.company)}</div>
+              </div>
+            </td>
+            <td class="money">${money.format(subscriber.mrr)}</td>
+            <td><div class="status ${statusClass(subscriber.status)}">${escapeHtml(subscriber.status)}</div></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderDetail(selected) {
+      if (!selected) {
+        detailEl.innerHTML = `
+          <div class="detail-head">
+            <h2>No subscriber selected</h2>
+            <p class="detail-subline">Select a row to view account details.</p>
+          </div>
+        `;
+        return;
+      }
+
+      detailEl.innerHTML = `
+        <div class="detail-head">
+          <div class="detail-title-row">
+            <div>
+              <h2>${escapeHtml(selected.name)}</h2>
+              <p class="detail-subline">${escapeHtml(selected.email)}</p>
+              <p class="detail-subline">${escapeHtml(selected.company)}</p>
+            </div>
+            <div class="detail-status status ${statusClass(selected.status)}">${escapeHtml(selected.status)}</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" type="button">Open account</button>
+            <button class="btn" type="button">Email</button>
+            <button class="btn" type="button">Record note</button>
+          </div>
+        </div>
+
+        <section class="detail-section">
+          <h3>Subscription</h3>
+          <dl class="kv">
+            <dt>Plan</dt>
+            <dd>${escapeHtml(selected.plan)}</dd>
+            <dt>MRR</dt>
+            <dd>${money.format(selected.mrr)}</dd>
+            <dt>Seats</dt>
+            <dd>${selected.seats}</dd>
+            <dt>Renewal</dt>
+            <dd>${displayDate(selected.renewal)}</dd>
+            <dt>Joined</dt>
+            <dd>${displayDate(selected.joined)}</dd>
+            <dt>Segment</dt>
+            <dd>${escapeHtml(selected.segment)}</dd>
+          </dl>
+        </section>
+
+        <section class="detail-section">
+          <h3>Billing</h3>
+          <dl class="kv">
+            <dt>Payment</dt>
+            <dd>${escapeHtml(selected.payment)}</dd>
+            <dt>Latest invoice</dt>
+            <dd>${escapeHtml(selected.invoices)}</dd>
+            <dt>Acquisition</dt>
+            <dd>${escapeHtml(selected.source)}</dd>
+          </dl>
+        </section>
+
+        <section class="detail-section">
+          <h3>Operator notes</h3>
+          <textarea class="note-box" aria-label="Operator notes">${escapeHtml(selected.notes)}</textarea>
+        </section>
+
+        <section class="detail-section">
+          <h3>Recent activity</h3>
+          <ul class="activity">
+            ${selected.activity.map(([date, text]) => `
+              <li>
+                <time>${escapeHtml(date)}</time>
+                <div>${escapeHtml(text)}</div>
+              </li>
+            `).join("")}
+          </ul>
+        </section>
+      `;
+    }
+
+    function render() {
+      const rows = filteredSubscribers();
+      if (rows.length && !rows.some((subscriber) => subscriber.id === state.selectedId)) {
+        state.selectedId = rows[0].id;
+      }
+
+      const selected = subscribers.find((subscriber) => subscriber.id === state.selectedId);
+      renderSummary(rows);
+      renderRows(rows);
+      renderDetail(rows.length ? selected : null);
+    }
+
+    searchEl.addEventListener("input", (event) => {
+      state.query = event.target.value;
+      render();
+    });
+
+    planEl.addEventListener("change", (event) => {
+      state.plan = event.target.value;
+      render();
+    });
+
+    statusEl.addEventListener("change", (event) => {
+      state.status = event.target.value;
+      render();
+    });
+
+    segmentButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        state.segment = button.dataset.segment;
+        segmentButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+        render();
+      });
+    });
+
+    rowsEl.addEventListener("click", (event) => {
+      const row = event.target.closest("tr[data-id]");
+      if (!row) return;
+      state.selectedId = row.dataset.id;
+      render();
+    });
+
+    rowsEl.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const row = event.target.closest("tr[data-id]");
+      if (!row) return;
+      event.preventDefault();
+      state.selectedId = row.dataset.id;
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

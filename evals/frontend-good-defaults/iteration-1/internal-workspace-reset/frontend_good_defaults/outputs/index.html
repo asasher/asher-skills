@@ -1,0 +1,1536 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Refund Triage</title>
+  <style>
+    :root {
+      --bg: #f4f3ef;
+      --surface: #fffefa;
+      --surface-2: #ebe9e1;
+      --surface-3: #f8f7f2;
+      --text: #202522;
+      --text-2: #4f5a54;
+      --muted: #707a73;
+      --border: #d9d5ca;
+      --border-strong: #c5bfb2;
+      --accent: #0f766e;
+      --accent-hover: #0b625c;
+      --accent-soft: #d8eee9;
+      --danger: #a83f35;
+      --danger-soft: #f5ded9;
+      --warning: #8f5c10;
+      --warning-soft: #f7e7c8;
+      --success: #24724d;
+      --success-soft: #dceee3;
+      --disabled: #a5aba6;
+      --shadow: 0 6px 20px rgba(31, 35, 32, 0.12);
+      --radius: 8px;
+      --topbar: 58px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Aptos", "SF Pro Text", "Helvetica Neue", sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled,
+    select:disabled,
+    textarea:disabled {
+      cursor: not-allowed;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(15, 118, 110, 0.24);
+      outline-offset: 2px;
+    }
+
+    .app {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: var(--topbar);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      min-width: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .save-state {
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .mobile-tabs {
+      display: none;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 6px;
+      gap: 4px;
+    }
+
+    .mobile-tabs button {
+      flex: 1;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-2);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-weight: 600;
+    }
+
+    .mobile-tabs button[aria-selected="true"] {
+      color: var(--text);
+      background: var(--surface-2);
+      border-color: var(--border);
+    }
+
+    .workspace {
+      height: calc(100dvh - var(--topbar));
+      display: grid;
+      grid-template-columns: minmax(320px, 390px) minmax(420px, 1fr) minmax(290px, 340px);
+      min-height: 0;
+    }
+
+    .pane {
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+    }
+
+    .queue-pane,
+    .detail-pane {
+      border-right: 1px solid var(--border);
+    }
+
+    .pane-header {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .pane-title {
+      min-width: 0;
+    }
+
+    .pane-title h2 {
+      font-size: 15px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .pane-title p {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .btn {
+      min-height: 34px;
+      border: 1px solid var(--border-strong);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--text);
+      padding: 6px 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 650;
+      transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--surface-3);
+      border-color: #aaa397;
+    }
+
+    .btn.primary {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .btn.primary:hover:not(:disabled) {
+      border-color: var(--accent-hover);
+      background: var(--accent-hover);
+    }
+
+    .btn.danger {
+      color: var(--danger);
+      border-color: #d3a59d;
+      background: var(--surface);
+    }
+
+    .btn.danger:hover:not(:disabled) {
+      background: var(--danger-soft);
+      border-color: #c98e84;
+    }
+
+    .btn.tertiary {
+      border-color: transparent;
+      background: transparent;
+      color: var(--text-2);
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+
+    .btn.tertiary:hover:not(:disabled) {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .btn:disabled {
+      color: var(--disabled);
+      border-color: var(--border);
+      background: #f0eee8;
+    }
+
+    .filters {
+      padding: 12px 16px;
+      display: grid;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-3);
+      flex-shrink: 0;
+    }
+
+    .field {
+      display: grid;
+      gap: 4px;
+    }
+
+    .field > label,
+    .field > span {
+      color: var(--text-2);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .control,
+    textarea {
+      width: 100%;
+      min-height: 34px;
+      border: 1px solid var(--border-strong);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--text);
+      padding: 7px 9px;
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .control::placeholder,
+    textarea::placeholder {
+      color: #8a918b;
+    }
+
+    .queue-list {
+      min-height: 0;
+      overflow: auto;
+      background: var(--surface);
+    }
+
+    .request-row {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      color: inherit;
+      text-align: left;
+      padding: 12px 16px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .request-row:hover,
+    .request-row[aria-current="true"] {
+      background: #f6f4ed;
+    }
+
+    .request-row[aria-current="true"] {
+      box-shadow: inset 3px 0 0 var(--accent);
+    }
+
+    .row-main {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .customer {
+      min-width: 0;
+    }
+
+    .customer strong,
+    .note-author strong {
+      display: block;
+      color: var(--text);
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .customer span,
+    .row-meta,
+    .detail-muted,
+    .note-meta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .amount {
+      color: var(--text);
+      font-weight: 750;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .row-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .status.needs-review,
+    .status.waiting-on-customer {
+      background: var(--warning-soft);
+      border-color: #e4c27d;
+      color: #654105;
+    }
+
+    .status.ready-to-approve,
+    .status.approved {
+      background: var(--success-soft);
+      border-color: #aacfb9;
+      color: #1f5f42;
+    }
+
+    .status.escalated {
+      background: var(--danger-soft);
+      border-color: #d8aaa2;
+      color: #793028;
+    }
+
+    .status.denied {
+      background: #ece8e2;
+      border-color: #cfc8bb;
+      color: #5c564d;
+    }
+
+    .empty-state,
+    .loading-state {
+      padding: 28px 16px;
+      color: var(--text-2);
+    }
+
+    .empty-state h3,
+    .loading-state h3 {
+      margin-bottom: 6px;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
+    .loading-line {
+      height: 10px;
+      margin-top: 14px;
+      border-radius: 5px;
+      background: linear-gradient(90deg, #e6e1d6, #f4f1e9, #e6e1d6);
+      background-size: 180% 100%;
+      animation: load 1s linear infinite;
+    }
+
+    .loading-line.short {
+      width: 62%;
+    }
+
+    @keyframes load {
+      from { background-position: 0 0; }
+      to { background-position: -180% 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    .detail-scroll,
+    .notes-scroll {
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .detail-scroll {
+      padding: 16px;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .request-heading {
+      display: grid;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+    }
+
+    .request-heading-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .request-heading h2 {
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 750;
+    }
+
+    .request-id {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .detail-item {
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface-3);
+    }
+
+    .detail-label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .detail-value {
+      color: var(--text);
+      font-weight: 650;
+      overflow-wrap: anywhere;
+    }
+
+    .detail-section {
+      display: grid;
+      gap: 8px;
+    }
+
+    .detail-section h3,
+    .notes-panel h3 {
+      font-size: 14px;
+      line-height: 1.25;
+      font-weight: 750;
+    }
+
+    .facts {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text-2);
+    }
+
+    .facts li + li {
+      margin-top: 5px;
+    }
+
+    .policy-box,
+    .alert-box,
+    .decision-box {
+      border-radius: var(--radius);
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      background: var(--surface-3);
+      display: grid;
+      gap: 6px;
+    }
+
+    .policy-box strong,
+    .alert-box strong,
+    .decision-box strong {
+      font-weight: 750;
+    }
+
+    .alert-box.error {
+      background: var(--danger-soft);
+      border-color: #d7a199;
+      color: #64302a;
+    }
+
+    .alert-box.warning {
+      background: var(--warning-soft);
+      border-color: #dfbc76;
+      color: #634309;
+    }
+
+    .decision-box {
+      background: var(--success-soft);
+      border-color: #adcdb9;
+      color: #1f5f42;
+    }
+
+    .review-actions {
+      margin-top: 2px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface-3);
+      display: grid;
+      gap: 10px;
+    }
+
+    .review-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .disabled-reason {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .notes-panel {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .note-form {
+      display: grid;
+      gap: 8px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .note-form .btn {
+      justify-self: end;
+    }
+
+    .note-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .note {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .note:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .note-author {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .note p {
+      color: var(--text-2);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(32, 37, 34, 0.42);
+      z-index: 20;
+    }
+
+    .modal-backdrop[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .modal {
+      width: min(520px, 100%);
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .modal h2 {
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .modal p {
+      color: var(--text-2);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1180px) {
+      .workspace {
+        grid-template-columns: minmax(300px, 340px) minmax(360px, 1fr) minmax(270px, 300px);
+      }
+    }
+
+    @media (max-width: 1020px) {
+      :root {
+        --topbar: 56px;
+      }
+
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .brand {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .subtitle {
+        max-width: 54vw;
+      }
+
+      .save-state {
+        display: none;
+      }
+
+      .mobile-tabs {
+        display: flex;
+      }
+
+      .workspace {
+        height: calc(100dvh - var(--topbar) - 47px);
+        grid-template-columns: 1fr;
+      }
+
+      .pane {
+        display: none;
+      }
+
+      .workspace[data-mobile-view="queue"] .queue-pane,
+      .workspace[data-mobile-view="detail"] .detail-pane,
+      .workspace[data-mobile-view="notes"] .notes-pane {
+        display: flex;
+      }
+
+      .queue-pane,
+      .detail-pane {
+        border-right: 0;
+      }
+
+      .field-row,
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .request-heading-top {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar-actions .btn {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .detail-scroll,
+      .notes-panel {
+        padding: 12px;
+      }
+
+      .review-actions-row,
+      .modal-actions {
+        flex-direction: column;
+      }
+
+      .review-actions-row .btn,
+      .modal-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <h1>Refund triage</h1>
+        <p class="subtitle">Support operations queue for June 10, 2026</p>
+      </div>
+      <div class="topbar-actions">
+        <span class="save-state" id="saveState">All changes saved</span>
+        <button class="btn" type="button" id="refreshButton">Refresh queue</button>
+      </div>
+    </header>
+
+    <nav class="mobile-tabs" aria-label="Workspace sections">
+      <button type="button" data-mobile-target="queue" aria-selected="true">Queue</button>
+      <button type="button" data-mobile-target="detail" aria-selected="false">Details</button>
+      <button type="button" data-mobile-target="notes" aria-selected="false">Notes</button>
+    </nav>
+
+    <main class="workspace" id="workspace" data-mobile-view="queue">
+      <section class="pane queue-pane" aria-label="Refund request queue">
+        <div class="pane-header">
+          <div class="pane-title">
+            <h2>Queue</h2>
+            <p id="queueCount">8 requests</p>
+          </div>
+          <button class="btn tertiary" type="button" id="clearFilters">Clear</button>
+        </div>
+
+        <form class="filters" id="filters">
+          <div class="field">
+            <label for="searchInput">Search</label>
+            <input class="control" id="searchInput" type="search" autocomplete="off" placeholder="Customer, order, request ID">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="statusFilter">Status</label>
+              <select class="control" id="statusFilter">
+                <option value="all">All statuses</option>
+                <option value="Needs review">Needs review</option>
+                <option value="Ready to approve">Ready to approve</option>
+                <option value="Waiting on customer">Waiting on customer</option>
+                <option value="Escalated">Escalated</option>
+                <option value="Approved">Approved</option>
+                <option value="Denied">Denied</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="riskFilter">Risk</label>
+              <select class="control" id="riskFilter">
+                <option value="all">All risk levels</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="reasonFilter">Reason</label>
+            <select class="control" id="reasonFilter">
+              <option value="all">All reasons</option>
+              <option value="Duplicate charge">Duplicate charge</option>
+              <option value="Cancellation window">Cancellation window</option>
+              <option value="Service outage">Service outage</option>
+              <option value="Product not received">Product not received</option>
+              <option value="Chargeback risk">Chargeback risk</option>
+            </select>
+          </div>
+        </form>
+
+        <div class="queue-list" id="queueList" tabindex="-1"></div>
+      </section>
+
+      <section class="pane detail-pane" aria-label="Selected refund request details">
+        <div class="pane-header">
+          <div class="pane-title">
+            <h2>Request details</h2>
+            <p id="detailSubhead">Select a request to review</p>
+          </div>
+        </div>
+        <div class="detail-scroll" id="detailPanel"></div>
+      </section>
+
+      <aside class="pane notes-pane" aria-label="Internal notes and customer context">
+        <div class="pane-header">
+          <div class="pane-title">
+            <h2>Notes</h2>
+            <p id="notesSubhead">Internal timeline</p>
+          </div>
+        </div>
+        <div class="notes-scroll">
+          <div class="notes-panel" id="notesPanel"></div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="decisionModal" aria-hidden="true" role="presentation">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div>
+        <h2 id="modalTitle">Approve refund?</h2>
+        <p id="modalText">Confirm this decision before updating the request.</p>
+      </div>
+      <div class="field hidden" id="denyReasonField">
+        <label for="denyReason">Denial reason</label>
+        <select class="control" id="denyReason">
+          <option value="Outside policy window">Outside policy window</option>
+          <option value="Item already fulfilled">Item already fulfilled</option>
+          <option value="Insufficient documentation">Insufficient documentation</option>
+          <option value="Duplicate request">Duplicate request</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="decisionNote">Internal note</label>
+        <textarea id="decisionNote" placeholder="Optional context for the audit trail"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" type="button" id="cancelDecision">Cancel</button>
+        <button class="btn primary" type="button" id="confirmDecision">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const requests = [
+      {
+        id: "RF-49218",
+        status: "Ready to approve",
+        customer: "Mina Carvalho",
+        email: "mina.carvalho@example.com",
+        orderId: "ORD-778291",
+        product: "Annual workspace plan",
+        amount: 128.40,
+        reason: "Duplicate charge",
+        risk: "Low",
+        requestedAt: "Jun 10, 2026 08:24",
+        dueBy: "Today 14:00",
+        payment: "Visa ending 1142",
+        region: "Portugal",
+        owner: "Maya S.",
+        policy: "Eligible: duplicate invoice was issued within the last 24 hours.",
+        facts: [
+          "Second invoice matches the same workspace, plan, and billing period.",
+          "No prior refunds or credits on this account.",
+          "Customer has a paid account since March 2024."
+        ],
+        customerMessage: "I was charged twice when the annual renewal went through this morning. The bank shows both charges as posted.",
+        notes: [
+          { author: "Billing sync", time: "08:31", body: "Matched duplicate processor event ch_8WQ14 and ch_8WQ15." },
+          { author: "Maya S.", time: "08:43", body: "Verified that only one subscription renewal is active." }
+        ]
+      },
+      {
+        id: "RF-49211",
+        status: "Needs review",
+        customer: "Jordan Ellis",
+        email: "jordan.ellis@example.com",
+        orderId: "ORD-778102",
+        product: "Starter plan monthly",
+        amount: 29.00,
+        reason: "Cancellation window",
+        risk: "Medium",
+        requestedAt: "Jun 10, 2026 07:52",
+        dueBy: "Today 16:00",
+        payment: "Mastercard ending 8041",
+        region: "United States",
+        owner: "Unassigned",
+        policy: "Review needed: cancellation was submitted 33 minutes after the renewal receipt.",
+        facts: [
+          "Customer opened the account 19 days ago.",
+          "Cancellation request and refund request came from the account owner.",
+          "Workspace has used 8 of 10 included seats this cycle."
+        ],
+        customerMessage: "I meant to cancel before renewal but missed the email. We have not used the renewed month yet.",
+        notes: [
+          { author: "Triage bot", time: "08:04", body: "Refund window is close enough for manual review." }
+        ]
+      },
+      {
+        id: "RF-49198",
+        status: "Escalated",
+        customer: "Asha Raman",
+        email: "asha.raman@example.com",
+        orderId: "ORD-777882",
+        product: "Equipment deposit",
+        amount: 465.00,
+        reason: "Product not received",
+        risk: "High",
+        requestedAt: "Jun 9, 2026 18:10",
+        dueBy: "Today 12:30",
+        payment: "Amex ending 9045",
+        region: "United Kingdom",
+        owner: "Fraud review",
+        policy: "Escalated: shipment is marked delivered but customer reports non-receipt.",
+        facts: [
+          "Carrier photo shows delivery to a reception desk.",
+          "Customer has one prior non-receipt refund in the last 60 days.",
+          "Order value is above the automatic approval limit."
+        ],
+        customerMessage: "The courier marked this delivered, but my office reception has no package for me.",
+        actionBlocker: "Fraud review owns this request. Approval and denial are disabled until escalation is closed.",
+        notes: [
+          { author: "Noah P.", time: "Jun 9 18:46", body: "Asked logistics for the carrier GPS scan and signature image." },
+          { author: "Fraud review", time: "09:12", body: "Do not decide until delivery evidence is attached." }
+        ]
+      },
+      {
+        id: "RF-49184",
+        status: "Waiting on customer",
+        customer: "Priya Shah",
+        email: "priya.shah@example.com",
+        orderId: "ORD-777613",
+        product: "Team add-on seats",
+        amount: 84.00,
+        reason: "Cancellation window",
+        risk: "Low",
+        requestedAt: "Jun 9, 2026 15:28",
+        dueBy: "Jun 11, 2026 09:00",
+        payment: "Visa ending 2209",
+        region: "Canada",
+        owner: "Leon V.",
+        policy: "Waiting: customer needs to confirm which team seats should remain active.",
+        facts: [
+          "Two added seats were removed, but three are still active.",
+          "Account owner and requester are different users.",
+          "No processor alerts on the payment."
+        ],
+        customerMessage: "We reduced headcount and need a refund for the extra seats.",
+        notes: [
+          { author: "Leon V.", time: "Jun 9 16:05", body: "Asked account owner to confirm the seat count change." }
+        ]
+      },
+      {
+        id: "RF-49177",
+        status: "Needs review",
+        customer: "Nolan Mercer",
+        email: "nolan.mercer@example.com",
+        orderId: "ORD-777540",
+        product: "Professional services setup",
+        amount: 350.00,
+        reason: "Service outage",
+        risk: "Medium",
+        requestedAt: "Jun 9, 2026 13:44",
+        dueBy: "Today 17:30",
+        payment: "Bank transfer",
+        region: "Australia",
+        owner: "Maya S.",
+        policy: "Review needed: outage credit may apply, but setup work was partially completed.",
+        facts: [
+          "Incident INC-2406 affected the setup portal for 47 minutes.",
+          "Consultant completed discovery call and account mapping.",
+          "Customer is asking for a full refund, not a credit."
+        ],
+        customerMessage: "The setup portal was down during our booked window, so we could not complete onboarding as planned.",
+        notes: [
+          { author: "Incident link", time: "Jun 9 14:12", body: "Confirmed customer tenant was in the affected region." }
+        ],
+        syncIssue: "Service credit calculator timed out. Retry before approving a partial refund."
+      },
+      {
+        id: "RF-49163",
+        status: "Ready to approve",
+        customer: "Ben Ortiz",
+        email: "ben.ortiz@example.com",
+        orderId: "ORD-777412",
+        product: "API usage overage",
+        amount: 18.73,
+        reason: "Duplicate charge",
+        risk: "Low",
+        requestedAt: "Jun 9, 2026 10:02",
+        dueBy: "Jun 11, 2026 10:00",
+        payment: "Visa ending 6110",
+        region: "United States",
+        owner: "Noah P.",
+        policy: "Eligible: metered usage was reprocessed after an invoice retry.",
+        facts: [
+          "Usage correction has already posted to the ledger.",
+          "Refund amount matches the duplicate metered line item.",
+          "Customer has no open disputes."
+        ],
+        customerMessage: "The overage line appeared twice after I updated the card.",
+        notes: [
+          { author: "Noah P.", time: "Jun 9 10:36", body: "Ledger correction and refund amount match." }
+        ]
+      },
+      {
+        id: "RF-49142",
+        status: "Approved",
+        customer: "Sofia Nguyen",
+        email: "sofia.nguyen@example.com",
+        orderId: "ORD-777029",
+        product: "Workshop ticket",
+        amount: 199.00,
+        reason: "Cancellation window",
+        risk: "Low",
+        requestedAt: "Jun 8, 2026 21:19",
+        dueBy: "Completed",
+        payment: "Mastercard ending 0122",
+        region: "Singapore",
+        owner: "Leon V.",
+        policy: "Approved: cancellation was inside the 48 hour ticket window.",
+        facts: [
+          "Seat was released back to inventory.",
+          "No materials were shipped.",
+          "Refund receipt was sent to the customer."
+        ],
+        customerMessage: "I can no longer attend the workshop because my flight changed.",
+        decision: "Approved by Leon V. on Jun 9, 2026 at 09:18.",
+        notes: [
+          { author: "Leon V.", time: "Jun 9 09:18", body: "Approved full refund under the workshop cancellation policy." }
+        ]
+      },
+      {
+        id: "RF-49119",
+        status: "Denied",
+        customer: "Marcus Reed",
+        email: "marcus.reed@example.com",
+        orderId: "ORD-776806",
+        product: "Digital template pack",
+        amount: 49.00,
+        reason: "Chargeback risk",
+        risk: "High",
+        requestedAt: "Jun 8, 2026 12:06",
+        dueBy: "Completed",
+        payment: "Visa ending 7304",
+        region: "United States",
+        owner: "Maya S.",
+        policy: "Denied: digital product was downloaded and the refund window had expired.",
+        facts: [
+          "Template pack was downloaded from two IP addresses.",
+          "Refund request came 41 days after purchase.",
+          "Customer opened a card dispute after support explained the policy."
+        ],
+        customerMessage: "I do not want this anymore and need the charge reversed.",
+        decision: "Denied by Maya S. on Jun 8, 2026 at 13:02.",
+        notes: [
+          { author: "Maya S.", time: "Jun 8 13:02", body: "Denied after confirming download history and expired refund window." }
+        ]
+      }
+    ];
+
+    const state = {
+      selectedId: requests[0].id,
+      filters: {
+        search: "",
+        status: "all",
+        reason: "all",
+        risk: "all"
+      },
+      pendingAction: null
+    };
+
+    const els = {
+      workspace: document.getElementById("workspace"),
+      queueList: document.getElementById("queueList"),
+      queueCount: document.getElementById("queueCount"),
+      detailSubhead: document.getElementById("detailSubhead"),
+      detailPanel: document.getElementById("detailPanel"),
+      notesSubhead: document.getElementById("notesSubhead"),
+      notesPanel: document.getElementById("notesPanel"),
+      filters: document.getElementById("filters"),
+      searchInput: document.getElementById("searchInput"),
+      statusFilter: document.getElementById("statusFilter"),
+      reasonFilter: document.getElementById("reasonFilter"),
+      riskFilter: document.getElementById("riskFilter"),
+      clearFilters: document.getElementById("clearFilters"),
+      refreshButton: document.getElementById("refreshButton"),
+      saveState: document.getElementById("saveState"),
+      modal: document.getElementById("decisionModal"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalText: document.getElementById("modalText"),
+      decisionNote: document.getElementById("decisionNote"),
+      denyReasonField: document.getElementById("denyReasonField"),
+      denyReason: document.getElementById("denyReason"),
+      cancelDecision: document.getElementById("cancelDecision"),
+      confirmDecision: document.getElementById("confirmDecision")
+    };
+
+    function money(value) {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      }).format(value);
+    }
+
+    function statusClass(status) {
+      return status.toLowerCase().replaceAll(" ", "-");
+    }
+
+    function selectedRequest() {
+      return requests.find((request) => request.id === state.selectedId) || requests[0];
+    }
+
+    function filteredRequests() {
+      const query = state.filters.search.trim().toLowerCase();
+      return requests.filter((request) => {
+        const matchesQuery = !query || [
+          request.id,
+          request.customer,
+          request.email,
+          request.orderId,
+          request.product,
+          request.reason
+        ].join(" ").toLowerCase().includes(query);
+
+        const matchesStatus = state.filters.status === "all" || request.status === state.filters.status;
+        const matchesReason = state.filters.reason === "all" || request.reason === state.filters.reason;
+        const matchesRisk = state.filters.risk === "all" || request.risk === state.filters.risk;
+        return matchesQuery && matchesStatus && matchesReason && matchesRisk;
+      });
+    }
+
+    function renderQueue() {
+      const results = filteredRequests();
+      els.queueCount.textContent = `${results.length} ${results.length === 1 ? "request" : "requests"}`;
+
+      if (!results.length) {
+        els.queueList.innerHTML = `
+          <div class="empty-state">
+            <h3>No refund requests match these filters</h3>
+            <p>Clear the filters or search a different customer, order, or request ID.</p>
+          </div>
+        `;
+        return;
+      }
+
+      els.queueList.innerHTML = results.map((request) => `
+        <button class="request-row" type="button" data-request-id="${request.id}" aria-current="${request.id === state.selectedId}">
+          <div class="row-main">
+            <div class="customer">
+              <strong>${request.customer}</strong>
+              <span>${request.orderId} - ${request.reason}</span>
+            </div>
+            <div class="amount">${money(request.amount)}</div>
+          </div>
+          <div class="row-meta">
+            <span class="status ${statusClass(request.status)}">${request.status}</span>
+            <span>${request.risk} risk</span>
+            <span>Due ${request.dueBy}</span>
+          </div>
+        </button>
+      `).join("");
+    }
+
+    function renderDetail() {
+      const request = selectedRequest();
+      const isClosed = request.status === "Approved" || request.status === "Denied";
+      const hasBlocker = Boolean(request.actionBlocker || request.syncIssue);
+      const disabledReason = request.actionBlocker || request.syncIssue || (isClosed ? "This request already has a final decision." : "");
+
+      els.detailSubhead.textContent = `${request.id} - ${request.customer}`;
+      els.detailPanel.innerHTML = `
+        <div class="request-heading">
+          <div class="request-heading-top">
+            <div>
+              <p class="request-id">${request.id}</p>
+              <h2>${request.customer}</h2>
+              <p class="detail-muted">${request.email}</p>
+            </div>
+            <span class="status ${statusClass(request.status)}">${request.status}</span>
+          </div>
+          <p>${request.customerMessage}</p>
+        </div>
+
+        ${request.syncIssue ? `
+          <div class="alert-box error" role="alert">
+            <strong>Policy check failed</strong>
+            <p>${request.syncIssue}</p>
+            <button class="btn" type="button" id="retryPolicy">Retry policy check</button>
+          </div>
+        ` : ""}
+
+        ${request.actionBlocker ? `
+          <div class="alert-box warning" role="status">
+            <strong>Decision locked</strong>
+            <p>${request.actionBlocker}</p>
+          </div>
+        ` : ""}
+
+        ${request.decision ? `
+          <div class="decision-box" role="status">
+            <strong>Final decision</strong>
+            <p>${request.decision}</p>
+          </div>
+        ` : ""}
+
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">Refund amount</span>
+            <span class="detail-value">${money(request.amount)}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Payment</span>
+            <span class="detail-value">${request.payment}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Requested</span>
+            <span class="detail-value">${request.requestedAt}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Owner</span>
+            <span class="detail-value">${request.owner}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Product</span>
+            <span class="detail-value">${request.product}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Region</span>
+            <span class="detail-value">${request.region}</span>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Policy readout</h3>
+          <div class="policy-box">
+            <strong>${request.policy}</strong>
+            <p class="detail-muted">Reason: ${request.reason}. Risk: ${request.risk}.</p>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Review facts</h3>
+          <ul class="facts">
+            ${request.facts.map((fact) => `<li>${fact}</li>`).join("")}
+          </ul>
+        </div>
+
+        <div class="review-actions">
+          <div class="review-actions-row">
+            <button class="btn primary" type="button" id="approveButton" ${isClosed || hasBlocker ? "disabled" : ""}>Approve refund</button>
+            <button class="btn danger" type="button" id="denyButton" ${isClosed || Boolean(request.actionBlocker) ? "disabled" : ""}>Deny refund</button>
+            <button class="btn" type="button" id="requestInfoButton" ${isClosed ? "disabled" : ""}>Request info</button>
+          </div>
+          <p class="disabled-reason">${disabledReason}</p>
+        </div>
+      `;
+    }
+
+    function renderNotes() {
+      const request = selectedRequest();
+      els.notesSubhead.textContent = `${request.notes.length} ${request.notes.length === 1 ? "entry" : "entries"} for ${request.id}`;
+      els.notesPanel.innerHTML = `
+        <form class="note-form" id="noteForm">
+          <div class="field">
+            <label for="noteText">Add internal note</label>
+            <textarea id="noteText" placeholder="Add what you checked, customer context, or next step"></textarea>
+          </div>
+          <button class="btn primary" type="submit">Add note</button>
+        </form>
+        <div class="note-list">
+          ${request.notes.map((note) => `
+            <article class="note">
+              <div class="note-author">
+                <strong>${note.author}</strong>
+                <span class="note-meta">${note.time}</span>
+              </div>
+              <p>${note.body}</p>
+            </article>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function render() {
+      renderQueue();
+      renderDetail();
+      renderNotes();
+    }
+
+    function markSaving() {
+      els.saveState.textContent = "Saving...";
+      window.setTimeout(() => {
+        els.saveState.textContent = "All changes saved";
+      }, 450);
+    }
+
+    function addNote(request, body, author = "You") {
+      const now = new Date();
+      request.notes.unshift({
+        author,
+        time: now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+        body
+      });
+      markSaving();
+    }
+
+    function openDecision(action) {
+      const request = selectedRequest();
+      state.pendingAction = action;
+      els.decisionNote.value = "";
+      els.denyReasonField.classList.toggle("hidden", action !== "deny");
+      els.confirmDecision.classList.toggle("danger", action === "deny");
+      els.confirmDecision.classList.toggle("primary", action !== "deny");
+
+      if (action === "approve") {
+        els.modalTitle.textContent = "Approve refund?";
+        els.modalText.textContent = `${money(request.amount)} will be refunded to ${request.payment}.`;
+        els.confirmDecision.textContent = "Approve refund";
+      } else {
+        els.modalTitle.textContent = "Deny refund?";
+        els.modalText.textContent = "Record the policy reason before closing this request.";
+        els.confirmDecision.textContent = "Deny refund";
+      }
+
+      els.modal.setAttribute("aria-hidden", "false");
+      els.decisionNote.focus();
+    }
+
+    function closeDecision() {
+      state.pendingAction = null;
+      els.modal.setAttribute("aria-hidden", "true");
+    }
+
+    function confirmDecision() {
+      const request = selectedRequest();
+      const now = new Date();
+      const stamp = now.toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+      const note = els.decisionNote.value.trim();
+
+      if (state.pendingAction === "approve") {
+        request.status = "Approved";
+        request.decision = `Approved by you on ${stamp}.`;
+        addNote(request, note || `Approved ${money(request.amount)} refund to ${request.payment}.`);
+      }
+
+      if (state.pendingAction === "deny") {
+        const reason = els.denyReason.value;
+        request.status = "Denied";
+        request.decision = `Denied by you on ${stamp}. Reason: ${reason}.`;
+        addNote(request, note || `Denied refund. Reason: ${reason}.`);
+      }
+
+      closeDecision();
+      render();
+    }
+
+    els.queueList.addEventListener("click", (event) => {
+      const row = event.target.closest("[data-request-id]");
+      if (!row) return;
+      state.selectedId = row.dataset.requestId;
+      render();
+      if (window.matchMedia("(max-width: 1020px)").matches) {
+        setMobileView("detail");
+      }
+    });
+
+    els.filters.addEventListener("input", () => {
+      state.filters.search = els.searchInput.value;
+      state.filters.status = els.statusFilter.value;
+      state.filters.reason = els.reasonFilter.value;
+      state.filters.risk = els.riskFilter.value;
+      renderQueue();
+    });
+
+    els.clearFilters.addEventListener("click", () => {
+      els.searchInput.value = "";
+      els.statusFilter.value = "all";
+      els.reasonFilter.value = "all";
+      els.riskFilter.value = "all";
+      state.filters = { search: "", status: "all", reason: "all", risk: "all" };
+      renderQueue();
+      els.searchInput.focus();
+    });
+
+    els.detailPanel.addEventListener("click", (event) => {
+      const request = selectedRequest();
+
+      if (event.target.id === "approveButton") {
+        openDecision("approve");
+      }
+
+      if (event.target.id === "denyButton") {
+        openDecision("deny");
+      }
+
+      if (event.target.id === "requestInfoButton") {
+        request.status = "Waiting on customer";
+        addNote(request, "Requested additional information from the customer before a final refund decision.");
+        render();
+      }
+
+      if (event.target.id === "retryPolicy") {
+        event.target.disabled = true;
+        event.target.textContent = "Retrying...";
+        window.setTimeout(() => {
+          request.syncIssue = "";
+          request.policy = "Review needed: service credit calculator returned a partial-credit recommendation.";
+          addNote(request, "Retried policy check. Calculator returned partial-credit recommendation.");
+          render();
+        }, 650);
+      }
+    });
+
+    els.notesPanel.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const textarea = event.target.querySelector("#noteText");
+      const body = textarea.value.trim();
+      if (!body) {
+        textarea.focus();
+        return;
+      }
+      addNote(selectedRequest(), body);
+      renderNotes();
+      textarea.focus();
+    });
+
+    els.refreshButton.addEventListener("click", () => {
+      els.refreshButton.disabled = true;
+      els.queueList.innerHTML = `
+        <div class="loading-state" role="status">
+          <h3>Refreshing queue</h3>
+          <p>Checking the latest refund request state.</p>
+          <div class="loading-line"></div>
+          <div class="loading-line short"></div>
+        </div>
+      `;
+      window.setTimeout(() => {
+        els.refreshButton.disabled = false;
+        els.saveState.textContent = "Queue refreshed just now";
+        renderQueue();
+      }, 700);
+    });
+
+    els.cancelDecision.addEventListener("click", closeDecision);
+    els.confirmDecision.addEventListener("click", confirmDecision);
+    els.modal.addEventListener("click", (event) => {
+      if (event.target === els.modal) closeDecision();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && els.modal.getAttribute("aria-hidden") === "false") {
+        closeDecision();
+      }
+    });
+
+    function setMobileView(view) {
+      els.workspace.dataset.mobileView = view;
+      document.querySelectorAll("[data-mobile-target]").forEach((button) => {
+        button.setAttribute("aria-selected", String(button.dataset.mobileTarget === view));
+      });
+    }
+
+    document.querySelectorAll("[data-mobile-target]").forEach((button) => {
+      button.addEventListener("click", () => setMobileView(button.dataset.mobileTarget));
+    });
+
+    render();
+  </script>
+</body>
+</html>

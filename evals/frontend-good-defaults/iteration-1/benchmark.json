@@ -1,0 +1,149 @@
+{
+  "iteration": 1,
+  "methodology": "Generated each eval/configuration in isolated subagents, then graded generated files against observable assertions.",
+  "configs": {
+    "frontend_good_defaults": {
+      "passed": 29,
+      "total": 30,
+      "pass_rate": 0.9667
+    },
+    "uncodixfy": {
+      "passed": 27,
+      "total": 30,
+      "pass_rate": 0.9
+    },
+    "openai_frontend_skill": {
+      "passed": 28,
+      "total": 30,
+      "pass_rate": 0.9333
+    }
+  },
+  "by_eval": {
+    "internal-workspace-reset": {
+      "frontend_good_defaults": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "uncodixfy": {
+        "passed": 5,
+        "total": 6,
+        "failures": [
+          {
+            "assertion": "The design avoids generic AI UI patterns: glass panels, glow blobs, gradient-orb backgrounds, oversized radii, pill overload, fake charts, decorative 'live' badges, and ornamental section copy.",
+            "status": "FAIL",
+            "evidence": "Uses .badge groups heavily for status, priority, reason, channel, amount, and attachments around lines 1277-1322, which reads as badge/pill overload despite avoiding charts/glass."
+          }
+        ]
+      },
+      "openai_frontend_skill": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      }
+    },
+    "image-led-landing-page": {
+      "frontend_good_defaults": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "uncodixfy": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "openai_frontend_skill": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      }
+    },
+    "dense-data-management": {
+      "frontend_good_defaults": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "uncodixfy": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "openai_frontend_skill": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      }
+    },
+    "existing-design-system-adherence": {
+      "frontend_good_defaults": {
+        "passed": 5,
+        "total": 6,
+        "failures": [
+          {
+            "assertion": "Focus, disabled, and error states are represented for billing actions or forms.",
+            "status": "FAIL",
+            "evidence": "Focus and disabled states are present, but no explicit billing form error/invalid state or visible error message is implemented beyond native required fields or disabled confirmation gates."
+          }
+        ]
+      },
+      "uncodixfy": {
+        "passed": 4,
+        "total": 6,
+        "failures": [
+          {
+            "assertion": "The cancel-plan action is visible but not styled as the dominant action until a confirmation step.",
+            "status": "FAIL",
+            "evidence": "The initial cancel entry action uses a danger treatment before confirmation (.danger/.btn-danger on Start/Cancel plan), making the destructive action too prominent before the modal confirmation step."
+          },
+          {
+            "assertion": "Focus, disabled, and error states are represented for billing actions or forms.",
+            "status": "FAIL",
+            "evidence": "Focus and disabled states are present, but no explicit billing form error/invalid state or visible error message is implemented beyond native required fields or disabled confirmation gates."
+          }
+        ]
+      },
+      "openai_frontend_skill": {
+        "passed": 4,
+        "total": 6,
+        "failures": [
+          {
+            "assertion": "The cancel-plan action is visible but not styled as the dominant action until a confirmation step.",
+            "status": "FAIL",
+            "evidence": "The initial cancel entry action uses a danger treatment before confirmation (.danger/.btn-danger on Start/Cancel plan), making the destructive action too prominent before the modal confirmation step."
+          },
+          {
+            "assertion": "Focus, disabled, and error states are represented for billing actions or forms.",
+            "status": "FAIL",
+            "evidence": "Focus and disabled states are present, but no explicit billing form error/invalid state or visible error message is implemented beyond native required fields or disabled confirmation gates."
+          }
+        ]
+      }
+    },
+    "edge-empty-media-library": {
+      "frontend_good_defaults": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "uncodixfy": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "openai_frontend_skill": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      }
+    }
+  },
+  "patterns": [
+    "frontend_good_defaults had the highest assertion pass rate and was strongest on design-token adherence and destructive-action hierarchy.",
+    "All configurations performed well on landing pages, dense data surfaces, and first-run media empty states in this sample.",
+    "The recurring weakness across all configurations was explicit billing form error-state modeling.",
+    "Uncodixfy still suppressed many AI-UI patterns, but one refund-triage output overused badge/pill treatment for routine metadata.",
+    "OpenAI frontend skill produced the most art-directed hotel page, but was less strict about destructive-action prominence in app settings."
+  ]
+}
