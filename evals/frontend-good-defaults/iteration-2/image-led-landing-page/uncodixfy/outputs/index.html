@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rook House, Porto</title>
+  <meta name="description" content="Rook House is a small design-forward hotel in Porto with ten rooms, a courtyard breakfast, and direct booking.">
+  <style>
+    :root {
+      --paper: #f7f3ee;
+      --ink: #20201d;
+      --muted: #68635c;
+      --line: #d9d0c5;
+      --panel: #fffaf4;
+      --terracotta: #9f503a;
+      --olive: #566347;
+      --charcoal: #171714;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 84svh;
+      color: #fffaf4;
+      background: var(--charcoal);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(18, 17, 14, 0.42);
+      pointer-events: none;
+    }
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      min-height: 84svh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 22px 32px 28px;
+      max-width: 1380px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 650;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: rgba(255, 250, 244, 0.88);
+      font-size: 15px;
+    }
+
+    .nav a {
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+    }
+
+    .nav a:hover {
+      border-bottom-color: currentColor;
+    }
+
+    .hero-copy {
+      align-self: end;
+      max-width: 760px;
+      padding-bottom: 28px;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      max-width: 720px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(48px, 8vw, 104px);
+      line-height: 0.93;
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      margin: 0;
+      max-width: 620px;
+      font-size: clamp(18px, 2vw, 24px);
+      color: rgba(255, 250, 244, 0.92);
+    }
+
+    .booking {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 1px;
+      background: rgba(255, 250, 244, 0.92);
+      border: 1px solid rgba(255, 250, 244, 0.8);
+      border-radius: 8px;
+      overflow: hidden;
+      color: var(--ink);
+      max-width: 980px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      padding: 13px 14px 12px;
+      background: var(--panel);
+      min-width: 0;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      outline: none;
+      min-height: 28px;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      box-shadow: inset 0 -1px 0 var(--terracotta);
+    }
+
+    .book-button {
+      border: 0;
+      background: var(--terracotta);
+      color: #fffaf4;
+      padding: 0 24px;
+      min-width: 164px;
+      cursor: pointer;
+    }
+
+    .book-button:hover {
+      background: #874330;
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 48px;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 34px 32px 54px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .overview h2,
+    .rooms h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.05;
+      font-weight: 520;
+      letter-spacing: 0;
+    }
+
+    .overview p {
+      margin: 14px 0 0;
+      max-width: 720px;
+      color: #423d37;
+      font-size: 18px;
+    }
+
+    .facts {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .facts li {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .facts strong {
+      color: var(--ink);
+      font-weight: 560;
+      text-align: right;
+    }
+
+    .rooms {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 44px 32px 64px;
+    }
+
+    .rooms-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .rooms-head p {
+      margin: 0;
+      max-width: 400px;
+      color: var(--muted);
+    }
+
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .room {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .room-photo {
+      aspect-ratio: 4 / 3;
+      background: #cfc3b4;
+    }
+
+    .room-body {
+      padding: 15px;
+    }
+
+    .room-body h3 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      font-weight: 560;
+    }
+
+    .room-body p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .rate {
+      margin-top: 14px;
+      color: var(--olive);
+      font-weight: 600;
+    }
+
+    @media (max-width: 840px) {
+      .hero,
+      .hero-inner {
+        min-height: 88svh;
+      }
+
+      .hero-inner {
+        padding: 18px 18px 22px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .nav {
+        gap: 14px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .hero-copy {
+        padding-bottom: 20px;
+      }
+
+      .booking {
+        grid-template-columns: 1fr;
+      }
+
+      .book-button {
+        min-height: 52px;
+      }
+
+      .overview,
+      .rooms-head {
+        grid-template-columns: 1fr;
+      }
+
+      .overview {
+        gap: 28px;
+        padding: 30px 20px 44px;
+      }
+
+      .rooms {
+        padding: 36px 20px 48px;
+      }
+
+      .rooms-head {
+        display: grid;
+        align-items: start;
+      }
+
+      .room-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .nav a:nth-child(2),
+      .nav a:nth-child(3) {
+        display: none;
+      }
+
+      .brand {
+        font-size: 20px;
+      }
+
+      h1 {
+        font-size: 52px;
+      }
+
+      .intro {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" aria-label="Rook House booking">
+      <picture class="hero-image">
+        <source srcset="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1800&q=82" media="(min-width: 760px)">
+        <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=900&q=82" alt="Porto houses rising above the Douro river at dusk">
+      </picture>
+
+      <div class="hero-inner">
+        <header class="topbar" aria-label="Site navigation">
+          <a class="brand" href="#">Rook House</a>
+          <nav class="nav">
+            <a href="#rooms">Rooms</a>
+            <a href="#house">The house</a>
+            <a href="#porto">Porto</a>
+            <a href="#book">Book</a>
+          </nav>
+        </header>
+
+        <div class="hero-copy">
+          <h1>Rook House</h1>
+          <p class="intro">Ten quiet rooms in Cedofeita, with granite stairs, Portuguese oak, and breakfast served in the courtyard before the city warms up.</p>
+        </div>
+
+        <form class="booking" id="book" action="#" method="get">
+          <div class="field">
+            <label for="arrival">Arrival</label>
+            <input id="arrival" name="arrival" type="date" value="2026-07-17">
+          </div>
+          <div class="field">
+            <label for="departure">Departure</label>
+            <input id="departure" name="departure" type="date" value="2026-07-20">
+          </div>
+          <div class="field">
+            <label for="guests">Guests</label>
+            <select id="guests" name="guests">
+              <option>2 adults</option>
+              <option>1 adult</option>
+              <option>2 adults, 1 child</option>
+              <option>3 adults</option>
+            </select>
+          </div>
+          <button class="book-button" type="submit">Check rooms</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="overview" id="house">
+      <div>
+        <h2>A restored merchant house, kept small on purpose.</h2>
+        <p>Rook House sits between Rua de Cedofeita galleries and the old clerks' cafes near Carmo. Rooms are simple and tactile: linen curtains, cork floors, hand-thrown lamps, and windows that open to tiled roofs.</p>
+      </div>
+      <ul class="facts" aria-label="Hotel details">
+        <li><span>Rooms</span><strong>10</strong></li>
+        <li><span>Neighbourhood</span><strong>Cedofeita</strong></li>
+        <li><span>Walk to Clerigos</span><strong>8 minutes</strong></li>
+        <li><span>Breakfast</span><strong>Courtyard table</strong></li>
+      </ul>
+    </section>
+
+    <section class="rooms" id="rooms">
+      <div class="rooms-head">
+        <h2>Rooms ready for late trains and slow mornings.</h2>
+        <p>Each room is booked directly with the house. Rates include breakfast, filtered water, and a printed Porto map marked by the staff.</p>
+      </div>
+      <div class="room-grid">
+        <article class="room">
+          <div class="room-photo">
+            <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=700&q=80" alt="Calm hotel room with linen bedding and warm daylight">
+          </div>
+          <div class="room-body">
+            <h3>House Room</h3>
+            <p>Courtyard-facing room with a queen bed and walk-in shower.</p>
+            <div class="rate">from EUR 165</div>
+          </div>
+        </article>
+        <article class="room">
+          <div class="room-photo">
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=700&q=80" alt="Design hotel sitting area with wooden furniture">
+          </div>
+          <div class="room-body">
+            <h3>Corner Room</h3>
+            <p>Two tall windows, reading chair, and a street view toward Cedofeita.</p>
+            <div class="rate">from EUR 210</div>
+          </div>
+        </article>
+        <article class="room">
+          <div class="room-photo">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=700&q=80" alt="Quiet suite interior with natural materials">
+          </div>
+          <div class="room-body">
+            <h3>Rook Suite</h3>
+            <p>Top-floor space with a separate sitting room and tiled roof views.</p>
+            <div class="rate">from EUR 285</div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

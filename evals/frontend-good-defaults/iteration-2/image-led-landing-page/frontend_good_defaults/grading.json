@@ -1,0 +1,39 @@
+{
+  "eval_id": "image-led-landing-page",
+  "configuration": "frontend_good_defaults",
+  "expected_output": "A visually strong, image-led hotel landing page with brand-first hierarchy, full-bleed or dominant hero media, concise section narrative, clear booking action, and tasteful responsive behavior.",
+  "output_path": "evals/frontend-good-defaults/iteration-2/image-led-landing-page/frontend_good_defaults/outputs",
+  "assertions": [
+    {
+      "assertion": "The first viewport makes 'Rook House' unmistakable as the primary brand or place signal.",
+      "status": "PASS",
+      "evidence": "Rook House is visible in the first viewport navigation at outputs/index.html:764 and the hero copy identifies the Porto hotel at 775-780."
+    },
+    {
+      "assertion": "The hero uses one dominant visual anchor that plausibly represents the hotel, location, rooms, hospitality, or booking experience.",
+      "status": "PASS",
+      "evidence": "The hero uses a dominant generated Porto-building visual embedded as a data SVG background at outputs/index.html:92-95."
+    },
+    {
+      "assertion": "Hero text is not placed inside a decorative card and does not rely on a generic split-screen dashboard/mockup composition.",
+      "status": "PASS",
+      "evidence": "Hero copy sits directly over the media in .hero-copy at outputs/index.html:773-780; the booking panel is separate and the layout is not a dashboard/mockup split."
+    },
+    {
+      "assertion": "The page has a coherent narrative sequence such as hero, proof/context, rooms or experience detail, and final booking CTA.",
+      "status": "PASS",
+      "evidence": "The page flows from hero/booking to house context, rooms, Porto context, and final booking CTA at outputs/index.html:824, 846, 881, and 894-895."
+    },
+    {
+      "assertion": "Copy is specific to a boutique hotel in Porto and avoids generic SaaS/startup phrasing.",
+      "status": "PASS",
+      "evidence": "Copy is specific to Porto and the hotel: Rua de Cedofeita appears at outputs/index.html:780 and the house/courtyard details at 824."
+    },
+    {
+      "assertion": "Text over media has a stable tonal area or overlay treatment that preserves contrast on desktop and mobile.",
+      "status": "PASS",
+      "evidence": "Text-over-media contrast is handled by dark overlays in the hero background at outputs/index.html:92-95 and the bottom fade at 100-106."
+    }
+  ],
+  "summary": "6/6 assertions passed."
+}

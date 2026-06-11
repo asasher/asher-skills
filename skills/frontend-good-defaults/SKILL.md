@@ -1,13 +1,13 @@
 ---
 name: frontend-good-defaults
-description: "Use whenever designing, implementing, reviewing, or polishing frontend UI for web or app surfaces, including HTML/CSS, React, Vue, Svelte, landing pages, dashboards, internal tools, prototypes, demos, and games. This is a self-contained visual-design reset for agents: it blocks generic AI UI patterns and uses a ShadCN-inspired, framework-agnostic baseline for hierarchy, layout, typography, semantic tokens, components, motion, states, and verification."
+description: "Use whenever designing, implementing, reviewing, or polishing frontend UI for web or app surfaces, including HTML/CSS, React, Vue, Svelte, landing pages, dashboards, internal tools, prototypes, demos, and games. This is a self-contained visual-design reset for agents: it blocks generic AI UI patterns and uses a framework-agnostic baseline for hierarchy, layout, typography, semantic tokens, components, motion, states, and verification."
 ---
 
 # Frontend Good Defaults
 
 This skill is a reset. Use it to stop the usual AI-generated UI habits before writing or reviewing frontend code. The goal is not decoration. The goal is a useful, deliberate interface that looks like a competent product designer shaped it.
 
-ShadCN UI is the default taste reference: semantic tokens, composable primitives, accessible states, neutral surfaces, clear variants, and source-code ownership. Use that visual and structural baseline without assuming React, Tailwind, or any specific implementation unless the project already uses them.
+The default taste reference is restrained product UI: semantic tokens, composable primitives, accessible states, neutral surfaces, clear variants, and source-code ownership. Use that visual and structural baseline without assuming React, Tailwind, or any specific implementation unless the project already uses them.
 
 ## Priority Order
 
@@ -27,17 +27,17 @@ Do not invent a new visual language when the project already has one. Do not use
 - Use product language. Never include design commentary, prompt language, or text explaining the UI's visual choices inside the interface.
 - Verify the result in a browser or screenshot at desktop and mobile sizes before calling it done.
 
-## ShadCN Baseline
+## Component Baseline
 
-- Prefer ShadCN-style component anatomy: small composable primitives, predictable variants, semantic tokens, keyboard-accessible behavior, and local ownership of component code.
-- If the project already uses ShadCN or a similar system, read its config, tokens, installed components, aliases, icon set, and primitives before inventing styles.
+- Prefer clear component anatomy: small composable primitives, predictable variants, semantic tokens, keyboard-accessible behavior, and local ownership of component code.
+- If the project already uses a component system, read its config, tokens, installed components, aliases, icon set, and primitives before inventing styles.
 - If it does not, emulate the pattern, not the React code: use semantic CSS/custom-property tokens, accessible HTML, and the closest framework-native primitive library.
 - Use token pairs: `background/foreground`, `card/card-foreground`, `popover/popover-foreground`, `primary/primary-foreground`, `secondary/secondary-foreground`, `muted/muted-foreground`, `accent/accent-foreground`, `destructive/destructive-foreground`, plus `border`, `input`, `ring`, `radius`, and sidebar tokens when needed.
 - Start from neutral base colors such as neutral, stone, zinc, taupe, olive, or mist. Let one restrained primary token do most of the action work.
 - Model states explicitly: hover, focus-visible ring, active/selected, disabled, loading, empty, invalid/error, destructive confirmation, and reduced-motion.
 - Use established primitive families when available: dialog/alert dialog, dropdown/menu, popover, tooltip, command palette, tabs, accordion/collapsible, sidebar, resizable panels, scroll area, field/input group, table/data table, skeleton, empty state, toast.
 - Keep variants consistent across implementations: button `default`, `secondary`, `outline`, `ghost`, `destructive`, `link`; size `sm`, `default`, `lg`, `icon`.
-- Treat framework ports as first-class. React ShadCN is not required; Vue, Svelte, plain HTML/CSS, Web Components, or native platform components should still follow the same anatomy, tokens, and states.
+- Treat framework ports as first-class. Vue, Svelte, plain HTML/CSS, Web Components, or native platform components should still follow the same anatomy, tokens, and states.
 
 ## First Pass
 
@@ -125,7 +125,7 @@ Landing pages need composition, not component soup. The first viewport should id
 ## Color
 
 - Use existing project colors first.
-- If no palette exists, define ShadCN-style semantic tokens before styling: background, foreground, card, popover, primary, secondary, muted, accent, destructive, border, input, ring, radius, and matching foreground tokens.
+- If no palette exists, define semantic tokens before styling: background, foreground, card, popover, primary, secondary, muted, accent, destructive, border, input, ring, radius, and matching foreground tokens.
 - Prefer calm neutral bases with one restrained primary token. Avoid default blue as the first instinct unless the product already owns blue.
 - Avoid one-note palettes: all purple, all beige, all dark slate, all blue-black, all brown/orange, or all neon.
 - Do not rely on five random hex codes. UI needs semantic colors for text, backgrounds, borders, controls, focus, hover, active, disabled, and invalid states.
@@ -209,7 +209,7 @@ Fallback seed direction when no project colors exist: use a neutral/stone/zinc a
 - No fake charts, fake percentages, fake activity feeds, fake quotas, fake progress bars, or fake "live" badges.
 - No nav badges, status dots, trend colors, or tag soup unless the data and behavior are real.
 - No card-like sidebar/nav rows with full borders, rounded boxes, or thick active stripes for routine navigation.
-- No "ShadCN-inspired" styling that only copies rounded boxes and borders while skipping semantic tokens, accessible states, and component anatomy.
+- No component styling that only copies rounded boxes and borders while skipping semantic tokens, accessible states, and component anatomy.
 - No custom dropdowns, dialogs, tabs, comboboxes, sidebars, or resizable panels that lack keyboard behavior, focus management, and real state.
 - No ornamental labels like "live pulse", "control room", "operator checklist", "night shift", or similar invented product voice unless the user asked for that voice.
 - No overpadded dead space just to look expensive.

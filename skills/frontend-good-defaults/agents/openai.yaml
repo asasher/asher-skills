@@ -1,7 +1,7 @@
 interface:
   display_name: "Frontend Good Defaults"
-  short_description: "ShadCN-inspired defaults for frontend UI"
-  default_prompt: "Use $frontend-good-defaults to design and implement this frontend with ShadCN-inspired, framework-agnostic visual and component defaults."
+  short_description: "Framework-agnostic defaults for frontend UI"
+  default_prompt: "Use $frontend-good-defaults to design and implement this frontend with framework-agnostic visual and component defaults."
 
 policy:
   allow_implicit_invocation: true

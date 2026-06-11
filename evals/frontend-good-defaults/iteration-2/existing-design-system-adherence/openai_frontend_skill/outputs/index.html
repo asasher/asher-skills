@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Team Billing Settings</title>
+    <style>
+      :root {
+        --bg: #fbfaf7;
+        --surface: #fffdf8;
+        --text: #25221c;
+        --muted: #6f695f;
+        --border: #e6dfd2;
+        --accent: #8b5a2b;
+        --radius: 6px;
+        --space-1: 4px;
+        --space-2: 8px;
+        --space-3: 12px;
+        --space-4: 16px;
+        --space-5: 20px;
+        --space-6: 24px;
+        --space-8: 32px;
+        --space-10: 40px;
+        --space-12: 48px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background:
+          linear-gradient(180deg, rgba(255, 253, 248, 0.92), rgba(251, 250, 247, 0) 340px),
+          var(--bg);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        display: grid;
+        grid-template-columns: 232px minmax(0, 1fr);
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        height: 100vh;
+        padding: var(--space-8) var(--space-6);
+        border-right: 1px solid var(--border);
+        background: rgba(255, 253, 248, 0.72);
+      }
+
+      .team-mark {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        margin-bottom: var(--space-10);
+      }
+
+      .mark {
+        display: grid;
+        width: 32px;
+        height: 32px;
+        place-items: center;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 750;
+      }
+
+      .team-name {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 720;
+        line-height: 1.2;
+      }
+
+      .team-meta {
+        margin: 2px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .nav {
+        display: grid;
+        gap: var(--space-1);
+      }
+
+      .nav a {
+        display: flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 0 var(--space-3);
+        border-radius: var(--radius);
+        color: var(--muted);
+        font-size: 13px;
+        text-decoration: none;
+        transition: background 160ms ease, color 160ms ease;
+      }
+
+      .nav a:hover,
+      .nav a[aria-current="page"] {
+        background: var(--surface);
+        color: var(--text);
+      }
+
+      .main {
+        min-width: 0;
+        padding: var(--space-8) clamp(var(--space-5), 5vw, 64px) var(--space-12);
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-6);
+        padding-bottom: var(--space-8);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .eyebrow {
+        margin: 0 0 var(--space-2);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 680;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 0;
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 760;
+        line-height: 1.04;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin-bottom: var(--space-2);
+        font-size: 18px;
+        font-weight: 720;
+        line-height: 1.25;
+      }
+
+      h3 {
+        margin-bottom: var(--space-1);
+        font-size: 14px;
+        font-weight: 720;
+      }
+
+      .summary {
+        max-width: 580px;
+        margin: var(--space-3) 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 36px;
+        padding: 0 var(--space-4);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 680;
+        text-decoration: none;
+        transition: border-color 160ms ease, color 160ms ease, transform 160ms ease;
+      }
+
+      .button:hover {
+        border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+        color: var(--accent);
+        transform: translateY(-1px);
+      }
+
+      .button.primary {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: var(--surface);
+      }
+
+      .button.danger {
+        color: var(--accent);
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+        gap: var(--space-10);
+        margin-top: var(--space-10);
+      }
+
+      .stack {
+        display: grid;
+        gap: var(--space-8);
+        align-content: start;
+      }
+
+      .section {
+        animation: rise-in 460ms ease both;
+      }
+
+      .section:nth-child(2) {
+        animation-delay: 80ms;
+      }
+
+      .section:nth-child(3) {
+        animation-delay: 150ms;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: var(--space-5);
+        margin-bottom: var(--space-4);
+      }
+
+      .section-note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .plan-panel,
+      .method-panel,
+      .cancel-panel {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+
+      .plan-panel {
+        overflow: hidden;
+      }
+
+      .plan-hero {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: var(--space-5);
+        padding: var(--space-6);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .plan-title {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        margin-bottom: var(--space-2);
+      }
+
+      .plan-title strong {
+        font-size: 22px;
+        line-height: 1.15;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 22px;
+        padding: 0 var(--space-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .price {
+        text-align: right;
+      }
+
+      .price strong {
+        display: block;
+        font-size: 26px;
+        line-height: 1;
+      }
+
+      .price span,
+      .plan-copy,
+      .metric span,
+      .invoice-meta,
+      .method-detail,
+      .cancel-copy {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .plan-copy {
+        max-width: 460px;
+        margin-bottom: 0;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .metric {
+        padding: var(--space-5) var(--space-6);
+        border-right: 1px solid var(--border);
+      }
+
+      .metric:last-child {
+        border-right: 0;
+      }
+
+      .metric strong {
+        display: block;
+        margin-bottom: var(--space-1);
+        font-size: 18px;
+      }
+
+      .usage {
+        padding: var(--space-6);
+      }
+
+      .usage-top {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--space-5);
+        margin-bottom: var(--space-3);
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .meter {
+        height: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--bg);
+      }
+
+      .meter span {
+        display: block;
+        width: 68%;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--accent);
+        animation: meter-fill 700ms ease both;
+      }
+
+      .method-panel {
+        padding: var(--space-5);
+      }
+
+      .method-main {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-4);
+      }
+
+      .card-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+      }
+
+      .card-chip {
+        width: 44px;
+        height: 28px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background:
+          linear-gradient(90deg, transparent 47%, var(--border) 47% 53%, transparent 53%),
+          var(--bg);
+      }
+
+      .method-detail {
+        margin: 0;
+      }
+
+      .invoice-list {
+        border-top: 1px solid var(--border);
+      }
+
+      .invoice {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        gap: var(--space-4);
+        min-height: 58px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .invoice:last-child {
+        border-bottom: 0;
+      }
+
+      .invoice-title {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .invoice-meta {
+        margin: var(--space-1) 0 0;
+      }
+
+      .invoice-amount {
+        font-size: 14px;
+        font-weight: 720;
+      }
+
+      .invoice a {
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 680;
+        text-decoration: none;
+      }
+
+      .cancel-panel {
+        padding: var(--space-5);
+      }
+
+      .cancel-copy {
+        margin-bottom: var(--space-5);
+      }
+
+      .cancel-steps {
+        display: grid;
+        gap: var(--space-3);
+        margin-bottom: var(--space-5);
+      }
+
+      .step {
+        display: grid;
+        grid-template-columns: 24px 1fr;
+        gap: var(--space-3);
+        align-items: start;
+      }
+
+      .step-index {
+        display: grid;
+        width: 24px;
+        height: 24px;
+        place-items: center;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 750;
+      }
+
+      .step p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .cancel-form {
+        display: none;
+        padding-top: var(--space-5);
+        border-top: 1px solid var(--border);
+      }
+
+      .cancel-panel[data-open="true"] .cancel-form {
+        display: grid;
+        gap: var(--space-4);
+        animation: reveal 180ms ease both;
+      }
+
+      label {
+        display: grid;
+        gap: var(--space-2);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 680;
+      }
+
+      input {
+        min-height: 38px;
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--bg);
+        color: var(--text);
+        padding: 0 var(--space-3);
+      }
+
+      input:focus {
+        border-color: var(--accent);
+        outline: 2px solid color-mix(in srgb, var(--accent) 18%, transparent);
+      }
+
+      .fine-print {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      @keyframes rise-in {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes meter-fill {
+        from {
+          width: 0;
+        }
+        to {
+          width: 68%;
+        }
+      }
+
+      @keyframes reveal {
+        from {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 940px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: static;
+          height: auto;
+          padding: var(--space-5);
+          border-right: 0;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .team-mark {
+          margin-bottom: var(--space-4);
+        }
+
+        .nav {
+          display: flex;
+          overflow-x: auto;
+          padding-bottom: var(--space-1);
+        }
+
+        .nav a {
+          white-space: nowrap;
+        }
+
+        .main {
+          padding: var(--space-6) var(--space-5) var(--space-10);
+        }
+
+        .content {
+          grid-template-columns: 1fr;
+          gap: var(--space-8);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .topbar,
+        .section-head,
+        .plan-hero,
+        .method-main {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .topbar,
+        .section-head,
+        .method-main {
+          display: flex;
+        }
+
+        .plan-hero {
+          grid-template-columns: 1fr;
+        }
+
+        .price {
+          text-align: left;
+        }
+
+        .metrics,
+        .invoice {
+          grid-template-columns: 1fr;
+        }
+
+        .metric {
+          border-right: 0;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .metric:last-child {
+          border-bottom: 0;
+        }
+
+        .invoice {
+          gap: var(--space-2);
+          padding: var(--space-4) 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar" aria-label="Settings navigation">
+        <div class="team-mark">
+          <div class="mark" aria-hidden="true">AL</div>
+          <div>
+            <p class="team-name">Atlas Labs</p>
+            <p class="team-meta">Team settings</p>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="#">Profile</a>
+          <a href="#">Members</a>
+          <a href="#" aria-current="page">Billing</a>
+          <a href="#">Security</a>
+          <a href="#">Integrations</a>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Billing</p>
+            <h1>Team billing settings</h1>
+            <p class="summary">Manage the current plan, payment method, invoices, and cancellation for the Atlas Labs workspace.</p>
+          </div>
+          <div class="button-row" aria-label="Billing actions">
+            <a class="button" href="#invoices">View invoices</a>
+            <button class="button primary" type="button">Change plan</button>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="stack">
+            <section class="section" aria-labelledby="plan-heading">
+              <div class="section-head">
+                <div>
+                  <h2 id="plan-heading">Plan summary</h2>
+                  <p class="section-note">Renews on July 1, 2026 for 24 active seats.</p>
+                </div>
+              </div>
+
+              <div class="plan-panel">
+                <div class="plan-hero">
+                  <div>
+                    <div class="plan-title">
+                      <strong>Business</strong>
+                      <span class="badge">Annual</span>
+                    </div>
+                    <p class="plan-copy">Includes shared projects, audit history, priority support, and workspace administration.</p>
+                  </div>
+                  <div class="price" aria-label="Monthly plan price">
+                    <strong>$432</strong>
+                    <span>per month</span>
+                  </div>
+                </div>
+
+                <div class="metrics" aria-label="Plan usage">
+                  <div class="metric">
+                    <strong>24</strong>
+                    <span>active seats</span>
+                  </div>
+                  <div class="metric">
+                    <strong>30</strong>
+                    <span>seat limit</span>
+                  </div>
+                  <div class="metric">
+                    <strong>$18</strong>
+                    <span>per seat</span>
+                  </div>
+                </div>
+
+                <div class="usage">
+                  <div class="usage-top">
+                    <span>Seat usage</span>
+                    <strong>24 of 30</strong>
+                  </div>
+                  <div class="meter" aria-hidden="true"><span></span></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" aria-labelledby="invoices-heading" id="invoices">
+              <div class="section-head">
+                <div>
+                  <h2 id="invoices-heading">Invoices</h2>
+                  <p class="section-note">Recent invoices are available for accounting and reimbursement.</p>
+                </div>
+                <button class="button" type="button">Download all</button>
+              </div>
+
+              <div class="invoice-list" aria-label="Invoice history">
+                <article class="invoice">
+                  <div>
+                    <p class="invoice-title">Invoice #AL-1048</p>
+                    <p class="invoice-meta">June 1, 2026 · Paid</p>
+                  </div>
+                  <span class="invoice-amount">$432.00</span>
+                  <a href="#" aria-label="Download invoice AL-1048">Download</a>
+                </article>
+                <article class="invoice">
+                  <div>
+                    <p class="invoice-title">Invoice #AL-1047</p>
+                    <p class="invoice-meta">May 1, 2026 · Paid</p>
+                  </div>
+                  <span class="invoice-amount">$432.00</span>
+                  <a href="#" aria-label="Download invoice AL-1047">Download</a>
+                </article>
+                <article class="invoice">
+                  <div>
+                    <p class="invoice-title">Invoice #AL-1046</p>
+                    <p class="invoice-meta">April 1, 2026 · Paid</p>
+                  </div>
+                  <span class="invoice-amount">$414.00</span>
+                  <a href="#" aria-label="Download invoice AL-1046">Download</a>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <aside class="stack" aria-label="Billing details">
+            <section class="section" aria-labelledby="payment-heading">
+              <div class="section-head">
+                <div>
+                  <h2 id="payment-heading">Payment method</h2>
+                  <p class="section-note">Used for subscription renewals and seat changes.</p>
+                </div>
+              </div>
+              <div class="method-panel">
+                <div class="method-main">
+                  <div class="card-brand">
+                    <div class="card-chip" aria-hidden="true"></div>
+                    <div>
+                      <h3>Visa ending in 4242</h3>
+                      <p class="method-detail">Expires 08/2028 · Billing contact finance@atlas.example</p>
+                    </div>
+                  </div>
+                  <button class="button" type="button">Update</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" aria-labelledby="cancel-heading">
+              <div class="section-head">
+                <div>
+                  <h2 id="cancel-heading">Cancel plan</h2>
+                  <p class="section-note">Cancellation takes effect at the end of the current billing period.</p>
+                </div>
+              </div>
+              <div class="cancel-panel" id="cancelPanel" data-open="false">
+                <p class="cancel-copy">The workspace keeps Business features until July 1, 2026. After that, paid seats are removed and retained data becomes read-only.</p>
+                <div class="cancel-steps" aria-label="Cancellation steps">
+                  <div class="step">
+                    <span class="step-index">1</span>
+                    <p>Review seat access and export any invoice records needed by finance.</p>
+                  </div>
+                  <div class="step">
+                    <span class="step-index">2</span>
+                    <p>Confirm the workspace name before scheduling cancellation.</p>
+                  </div>
+                </div>
+                <button class="button danger" id="cancelToggle" type="button" aria-expanded="false" aria-controls="cancelForm">Start cancellation</button>
+                <form class="cancel-form" id="cancelForm">
+                  <label>
+                    Workspace name
+                    <input type="text" placeholder="Atlas Labs" autocomplete="off">
+                  </label>
+                  <p class="fine-print">A confirmation email will be sent to the billing contact before the plan is cancelled.</p>
+                  <div class="button-row">
+                    <button class="button primary" type="button">Schedule cancellation</button>
+                    <button class="button" id="cancelClose" type="button">Keep plan</button>
+                  </div>
+                </form>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const panel = document.querySelector("#cancelPanel");
+      const toggle = document.querySelector("#cancelToggle");
+      const close = document.querySelector("#cancelClose");
+
+      function setCancelOpen(isOpen) {
+        panel.dataset.open = String(isOpen);
+        toggle.setAttribute("aria-expanded", String(isOpen));
+        toggle.textContent = isOpen ? "Cancellation details open" : "Start cancellation";
+      }
+
+      toggle.addEventListener("click", () => setCancelOpen(panel.dataset.open !== "true"));
+      close.addEventListener("click", () => setCancelOpen(false));
+    </script>
+  </body>
+</html>

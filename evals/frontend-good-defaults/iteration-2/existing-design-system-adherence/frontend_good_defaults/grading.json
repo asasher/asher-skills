@@ -1,0 +1,39 @@
+{
+  "eval_id": "existing-design-system-adherence",
+  "configuration": "frontend_good_defaults",
+  "expected_output": "A settings page that follows the supplied tokens, avoids inventing a new palette, handles billing sections with clear hierarchy, and treats cancellation as a careful secondary/destructive flow.",
+  "output_path": "evals/frontend-good-defaults/iteration-2/existing-design-system-adherence/frontend_good_defaults/outputs",
+  "assertions": [
+    {
+      "assertion": "The output uses the provided colors, radius, and spacing direction as the primary visual system.",
+      "status": "PASS",
+      "evidence": "The provided tokens are copied into CSS variables at outputs/index.html:9-15, with related semantic extensions for destructive/error at 33-34."
+    },
+    {
+      "assertion": "The output does not introduce an unrelated blue, purple, neon, glass, or gradient-heavy palette.",
+      "status": "PASS",
+      "evidence": "The output stays in the supplied warm neutral/accent palette; no unrelated blue, purple, neon, glass, or heavy gradient palette appears."
+    },
+    {
+      "assertion": "Billing sections are organized as settings/product UI, not as a marketing landing page.",
+      "status": "PASS",
+      "evidence": "The layout is a settings page with sidebar navigation and billing header at outputs/index.html:588-609, not a marketing landing page."
+    },
+    {
+      "assertion": "The cancel-plan action is visible but not styled as the dominant action until a confirmation step.",
+      "status": "PASS",
+      "evidence": "Start cancellation is an outline action at outputs/index.html:760-765; destructive styling appears on Confirm cancellation in the alert dialog at 794."
+    },
+    {
+      "assertion": "Invoices are presented in a scannable table or list with dates and amounts easy to compare.",
+      "status": "PASS",
+      "evidence": "Invoices are a scannable table with dates and right-aligned amounts at outputs/index.html:667-701."
+    },
+    {
+      "assertion": "Focus, disabled, and error states are represented for billing actions or forms.",
+      "status": "FAIL",
+      "evidence": "Focus and error states are present at outputs/index.html:233-236 and 743-744, but no disabled state or disabled control is represented anywhere in the billing UI."
+    }
+  ],
+  "summary": "5/6 assertions passed."
+}

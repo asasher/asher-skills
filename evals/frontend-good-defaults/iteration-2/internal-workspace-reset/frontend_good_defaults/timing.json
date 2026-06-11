@@ -1,0 +1,16 @@
+{
+  "eval_id": "internal-workspace-reset",
+  "configuration": "frontend_good_defaults",
+  "started_at": "2026-06-10T23:22:08Z",
+  "ended_at": "2026-06-10T23:28:50Z",
+  "duration_seconds": 402,
+  "exit_status": 124,
+  "timed_out": true,
+  "interrupted_after_output": true,
+  "output_created": true,
+  "note": "Child generated outputs/index.html, then optional browser/Puppeteer verification hung and was manually terminated.",
+  "clean_flags": [
+    "--ignore-user-config",
+    "--ignore-rules"
+  ]
+}

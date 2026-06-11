@@ -1,0 +1,39 @@
+{
+  "eval_id": "internal-workspace-reset",
+  "configuration": "frontend_good_defaults",
+  "expected_output": "A runnable frontend app focused on the triage workspace, with utility copy, realistic queue/detail interactions, clear action hierarchy, responsive layout, and no dashboard hero or decorative AI-UI patterns.",
+  "output_path": "evals/frontend-good-defaults/iteration-2/internal-workspace-reset/frontend_good_defaults/outputs",
+  "assertions": [
+    {
+      "assertion": "The first viewport is the working support queue or request-detail workflow, not a marketing hero, executive summary, or card-only KPI dashboard.",
+      "status": "PASS",
+      "evidence": "The first working surface is the refund queue and selected detail pane: queue markup begins at outputs/index.html:650 and details at outputs/index.html:684, with no hero/KPI dashboard first."
+    },
+    {
+      "assertion": "The UI includes realistic triage controls: queue/list, filters or search, selected request details, notes/context, and approve/deny actions.",
+      "status": "PASS",
+      "evidence": "Includes search/status/reason filters at outputs/index.html:659-679, selected details/actions at 684-724, notes at 713-725, and approve/deny controls at 691-692."
+    },
+    {
+      "assertion": "The design avoids generic AI UI patterns: glass panels, glow blobs, gradient-orb backgrounds, oversized radii, pill overload, fake charts, decorative 'live' badges, and ornamental section copy.",
+      "status": "PASS",
+      "evidence": "The source uses a neutral operational layout and no fake chart/KPI/canvas terms; the visible structure is queue/detail/notes rather than decorative dashboard content."
+    },
+    {
+      "assertion": "Primary, secondary, tertiary, and destructive actions are visually distinct without making destructive actions dominant before confirmation.",
+      "status": "PASS",
+      "evidence": "Approve is a default button and Deny starts as outline at outputs/index.html:691-692; destructive styling is applied only to the dialog confirm for denial at 1008-1009."
+    },
+    {
+      "assertion": "The output includes useful empty/loading/error or disabled states for the triage workflow.",
+      "status": "PASS",
+      "evidence": "States are modeled: initial loading text at outputs/index.html:655, empty-filter state at 906-912, disabled decision buttons at 985-986, and note validation error at 1055-1056."
+    },
+    {
+      "assertion": "The layout remains usable at desktop and mobile widths without clipped text, overlapping controls, or a sidebar that collapses into an undifferentiated long stack.",
+      "status": "PASS",
+      "evidence": "Responsive rules collapse panes and manage overflow at outputs/index.html:571-619, including horizontal toolbar overflow at 600 and single-column detail flow at 619."
+    }
+  ],
+  "summary": "6/6 assertions passed."
+}

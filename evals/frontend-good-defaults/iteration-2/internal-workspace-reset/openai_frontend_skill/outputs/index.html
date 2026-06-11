@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Refund Triage Workspace</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f5f1;
+      --panel: #fffcf6;
+      --panel-muted: #f0eee8;
+      --ink: #1d211f;
+      --muted: #686d67;
+      --line: #dedbd2;
+      --line-strong: #c7c2b7;
+      --accent: #0f7f5c;
+      --accent-ink: #ffffff;
+      --danger: #b5483b;
+      --warning: #9a6b08;
+      --blue: #315f8e;
+      --shadow: 0 18px 60px rgba(36, 32, 24, .10);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,0) 220px),
+        var(--bg);
+      color: var(--ink);
+      min-height: 100svh;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 100svh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px 28px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(246, 245, 241, .88);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 240px;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--ink);
+      color: #f7f3e8;
+      font-weight: 750;
+      letter-spacing: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .presence {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(15, 127, 92, .12);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 260px minmax(420px, 1fr) minmax(360px, 480px);
+      min-height: 0;
+    }
+
+    aside, .queue, .details {
+      min-width: 0;
+    }
+
+    aside {
+      border-right: 1px solid var(--line);
+      padding: 22px 18px;
+    }
+
+    .queue {
+      border-right: 1px solid var(--line);
+      padding: 22px 0;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      min-height: 0;
+    }
+
+    .details {
+      padding: 22px 24px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+      min-height: 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #4b504b;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .filter-group {
+      padding: 15px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .filter-group:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .filter-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .search {
+      width: 100%;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.62);
+      color: var(--ink);
+      padding: 0 10px;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .search:focus, select:focus, textarea:focus {
+      border-color: rgba(15, 127, 92, .55);
+      box-shadow: 0 0 0 3px rgba(15, 127, 92, .12);
+      background: #fff;
+    }
+
+    select {
+      width: 100%;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.62);
+      color: var(--ink);
+      padding: 0 9px;
+      outline: none;
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .segmented button,
+    .quick-filter {
+      min-height: 34px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: transparent;
+      color: #3d423e;
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+
+    .segmented button:hover,
+    .quick-filter:hover,
+    .row:hover {
+      transform: translateY(-1px);
+    }
+
+    .segmented button.active,
+    .quick-filter.active {
+      background: #e3f0ea;
+      border-color: rgba(15, 127, 92, .34);
+      color: #0c5f46;
+    }
+
+    .quick-list {
+      display: grid;
+      gap: 7px;
+    }
+
+    .quick-filter {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      text-align: left;
+    }
+
+    .workload {
+      display: grid;
+      gap: 11px;
+      padding-top: 4px;
+    }
+
+    .workload div {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .workload strong {
+      color: var(--ink);
+      font-weight: 650;
+    }
+
+    .queue-head {
+      padding: 0 22px 14px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .queue-head h2 {
+      margin: 0;
+      font-size: 23px;
+      letter-spacing: 0;
+    }
+
+    .queue-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .sort-line {
+      padding: 0 22px 14px;
+      display: grid;
+      grid-template-columns: 1.2fr .7fr .65fr .75fr;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .rows {
+      overflow: auto;
+      min-height: 0;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1.2fr .7fr .65fr .75fr;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      min-height: 76px;
+      padding: 13px 22px;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      color: inherit;
+      text-align: left;
+      transition: background .18s ease, transform .18s ease, box-shadow .18s ease;
+      position: relative;
+    }
+
+    .row.active {
+      background: rgba(255, 252, 246, .82);
+      box-shadow: inset 3px 0 0 var(--accent);
+    }
+
+    .row strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+      font-weight: 680;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .row span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .amount {
+      font-variant-numeric: tabular-nums;
+      font-weight: 650;
+    }
+
+    .pill {
+      display: inline-grid;
+      place-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 99px;
+      background: var(--panel-muted);
+      color: #4b504b;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .pill.high { background: #f7e5df; color: var(--danger); }
+    .pill.medium { background: #f3ead5; color: var(--warning); }
+    .pill.low { background: #e3ebf3; color: var(--blue); }
+    .pill.approved { background: #e3f0ea; color: #0c5f46; }
+    .pill.denied { background: #f0dfdd; color: var(--danger); }
+
+    .detail-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-top h2 {
+      margin: 0 0 7px;
+      font-size: 25px;
+      letter-spacing: 0;
+    }
+
+    .detail-top p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .detail-body {
+      overflow: auto;
+      min-height: 0;
+      padding-right: 4px;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px 22px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .fact label {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 5px;
+    }
+
+    .fact strong {
+      font-size: 14px;
+      font-weight: 680;
+    }
+
+    .detail-section {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-section h3 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    .detail-section p {
+      margin: 0;
+      color: #3f4641;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .event {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .event time {
+      color: var(--muted);
+    }
+
+    .event strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 13px;
+    }
+
+    .event span {
+      color: var(--muted);
+    }
+
+    .notes {
+      display: grid;
+      gap: 10px;
+    }
+
+    .note {
+      padding-left: 12px;
+      border-left: 2px solid var(--line-strong);
+    }
+
+    .note strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 13px;
+    }
+
+    .note p {
+      color: #3f4641;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .decision {
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(246,245,241,0), var(--bg) 20%);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 82px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.68);
+      color: var(--ink);
+      padding: 10px;
+      outline: none;
+      line-height: 1.45;
+    }
+
+    .decision-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .primary, .danger-btn {
+      min-height: 40px;
+      border-radius: var(--radius);
+      font-weight: 700;
+      transition: transform .18s ease, filter .18s ease, opacity .18s ease;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+
+    .danger-btn {
+      background: #f2e2df;
+      color: var(--danger);
+    }
+
+    .primary:hover, .danger-btn:hover {
+      transform: translateY(-1px);
+      filter: saturate(1.05);
+    }
+
+    .primary:disabled, .danger-btn:disabled {
+      opacity: .46;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translate(-50%, 20px);
+      background: #20231f;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 99px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s ease, transform .22s ease;
+      z-index: 40;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .empty {
+      padding: 28px 22px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 1120px) {
+      main {
+        grid-template-columns: 220px minmax(360px, 1fr);
+      }
+
+      .details {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--line);
+        padding-bottom: 28px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      header {
+        align-items: start;
+        flex-direction: column;
+        padding: 16px;
+      }
+
+      main {
+        display: block;
+      }
+
+      aside {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding: 16px;
+      }
+
+      .queue {
+        border-right: 0;
+      }
+
+      .sort-line,
+      .row {
+        grid-template-columns: 1fr .6fr;
+      }
+
+      .sort-line span:nth-child(3),
+      .sort-line span:nth-child(4),
+      .row > div:nth-child(3),
+      .row > div:nth-child(4) {
+        display: none;
+      }
+
+      .facts {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-top {
+        display: block;
+      }
+
+      .detail-top .pill {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true">RT</div>
+        <div>
+          <h1>Refund Triage</h1>
+          <p>Support operations workspace</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="presence" aria-hidden="true"></span>
+        <span id="headerStatus">6 open requests</span>
+      </div>
+    </header>
+
+    <main>
+      <aside aria-label="Filters">
+        <div class="section-title">
+          <h2>Filters</h2>
+          <span class="count" id="filterCount">6 shown</span>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="search">Search</label>
+          <input class="search" id="search" type="search" placeholder="Customer, order, reason">
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Risk</span>
+          <div class="segmented" id="riskFilters">
+            <button class="active" data-risk="all" type="button">All</button>
+            <button data-risk="high" type="button">High</button>
+            <button data-risk="medium" type="button">Medium</button>
+            <button data-risk="low" type="button">Low</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="status">Status</label>
+          <select id="status">
+            <option value="open">Open</option>
+            <option value="approved">Approved</option>
+            <option value="denied">Denied</option>
+            <option value="all">All statuses</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Queue views</span>
+          <div class="quick-list" id="quickFilters">
+            <button class="quick-filter active" data-view="all" type="button"><span>All requests</span><strong id="allCount">0</strong></button>
+            <button class="quick-filter" data-view="expedite" type="button"><span>Expedite</span><strong id="expediteCount">0</strong></button>
+            <button class="quick-filter" data-view="policy" type="button"><span>Policy review</span><strong id="policyCount">0</strong></button>
+          </div>
+        </div>
+
+        <div class="filter-group workload">
+          <div><span>Oldest open</span><strong id="oldestOpen">0h</strong></div>
+          <div><span>Selected value</span><strong id="selectedValue">$0.00</strong></div>
+          <div><span>Assigned team</span><strong>Tier 2</strong></div>
+        </div>
+      </aside>
+
+      <section class="queue" aria-label="Refund request queue">
+        <div class="queue-head">
+          <div>
+            <h2>Incoming requests</h2>
+            <p id="queueSummary">Sorted by risk and waiting time</p>
+          </div>
+        </div>
+        <div class="sort-line" aria-hidden="true">
+          <span>Customer</span>
+          <span>Amount</span>
+          <span>Risk</span>
+          <span>Wait</span>
+        </div>
+        <div class="rows" id="rows"></div>
+      </section>
+
+      <section class="details" aria-label="Selected request details">
+        <div class="detail-top">
+          <div>
+            <h2 id="detailName">Select a request</h2>
+            <p id="detailSub">Customer details and refund context appear here.</p>
+          </div>
+          <span class="pill" id="detailStatus">Open</span>
+        </div>
+
+        <div class="detail-body">
+          <div class="facts" id="facts"></div>
+          <div class="detail-section">
+            <h3>Customer reason</h3>
+            <p id="reason"></p>
+          </div>
+          <div class="detail-section">
+            <h3>Policy context</h3>
+            <p id="policy"></p>
+          </div>
+          <div class="detail-section">
+            <h3>Order activity</h3>
+            <div class="timeline" id="timeline"></div>
+          </div>
+          <div class="detail-section">
+            <h3>Internal notes</h3>
+            <div class="notes" id="notes"></div>
+          </div>
+        </div>
+
+        <div class="decision">
+          <label class="filter-label" for="noteInput">Add triage note</label>
+          <textarea id="noteInput" placeholder="Summarize the decision rationale or next step"></textarea>
+          <div class="decision-row">
+            <button class="primary" id="approveBtn" type="button">Approve refund</button>
+            <button class="danger-btn" id="denyBtn" type="button">Deny request</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const requests = [
+      {
+        id: "RR-10482",
+        customer: "Maya Chen",
+        email: "maya.chen@example.com",
+        order: "ORD-77142",
+        product: "Annual Pro Plan",
+        amount: 249.00,
+        risk: "high",
+        waitHours: 19,
+        status: "open",
+        tags: ["expedite", "policy"],
+        reason: "Customer reports the plan renewed after a cancellation attempt made through mobile support chat.",
+        policy: "Renewal refund window is 14 days. This request is inside window, but cancellation evidence needs review because the account used Pro features after renewal.",
+        events: [
+          ["Jun 10, 09:18", "Renewal charged", "$249.00 invoice created for annual plan."],
+          ["Jun 10, 11:44", "Customer contact", "Asked for cancellation confirmation from prior chat."],
+          ["Jun 11, 03:05", "Usage check", "Two exports completed after renewal timestamp."]
+        ],
+        notes: [
+          ["A. Patel", "Mobile chat transcript mentions cancellation intent but no agent confirmation."],
+          ["N. Rivera", "Customer has one prior goodwill credit from March."]
+        ]
+      },
+      {
+        id: "RR-10481",
+        customer: "Jon Bell",
+        email: "jon.bell@example.com",
+        order: "ORD-77091",
+        product: "Marketplace Template Pack",
+        amount: 39.00,
+        risk: "low",
+        waitHours: 7,
+        status: "open",
+        tags: [],
+        reason: "Purchased the wrong template pack and has not downloaded any files.",
+        policy: "Digital goods are refundable within 48 hours if no assets were downloaded. Eligibility checks pass.",
+        events: [
+          ["Jun 10, 20:12", "Purchase completed", "Template pack paid by card."],
+          ["Jun 10, 20:16", "Refund requested", "Customer selected wrong item reason."],
+          ["Jun 10, 20:17", "Download check", "No file access recorded."]
+        ],
+        notes: [
+          ["S. Okafor", "Straightforward approval; no exception needed."]
+        ]
+      },
+      {
+        id: "RR-10479",
+        customer: "Lena Ortiz",
+        email: "lena.ortiz@example.com",
+        order: "ORD-76988",
+        product: "Team Seats x 8",
+        amount: 640.00,
+        risk: "medium",
+        waitHours: 26,
+        status: "open",
+        tags: ["policy"],
+        reason: "Team downsized after purchase and wants a partial refund for five unused seats.",
+        policy: "Seat reductions are credited from the next billing cycle unless sales approves a mid-cycle exception.",
+        events: [
+          ["Jun 9, 06:30", "Seats added", "Eight seats purchased by workspace owner."],
+          ["Jun 9, 18:02", "Admin change", "Five invites revoked before acceptance."],
+          ["Jun 10, 05:49", "Request opened", "Customer asked for same-cycle refund."]
+        ],
+        notes: [
+          ["M. Singh", "Three seats are active; five were never accepted."],
+          ["D. Brooks", "Route to sales if customer asks for cash refund instead of account credit."]
+        ]
+      },
+      {
+        id: "RR-10475",
+        customer: "Harper Wilson",
+        email: "harper.wilson@example.com",
+        order: "ORD-76855",
+        product: "One-time Data Import",
+        amount: 129.00,
+        risk: "high",
+        waitHours: 31,
+        status: "open",
+        tags: ["expedite"],
+        reason: "Customer says the import failed and blocked a launch deadline.",
+        policy: "Service refunds require failure confirmation from import logs. Job shows partial completion with validation errors from customer-provided CSV.",
+        events: [
+          ["Jun 8, 23:20", "Import started", "12,404 rows submitted."],
+          ["Jun 9, 00:03", "Validation stopped", "2,118 rows rejected for missing IDs."],
+          ["Jun 10, 02:36", "Escalation added", "Launch deadline noted by CSM."]
+        ],
+        notes: [
+          ["T. Morgan", "Technical failure not confirmed; likely malformed source file."],
+          ["C. Alvarez", "CSM asked support to respond before end of shift."]
+        ]
+      },
+      {
+        id: "RR-10470",
+        customer: "Owen Grant",
+        email: "owen.grant@example.com",
+        order: "ORD-76690",
+        product: "Monthly Starter Plan",
+        amount: 19.00,
+        risk: "low",
+        waitHours: 11,
+        status: "approved",
+        tags: [],
+        reason: "Duplicate account created during signup.",
+        policy: "Duplicate first-month subscriptions can be refunded after confirming neither account used paid-only features.",
+        events: [
+          ["Jun 9, 19:04", "Signup completed", "Starter plan activated."],
+          ["Jun 9, 19:22", "Duplicate found", "Same card and organization domain."],
+          ["Jun 10, 07:11", "Refund approved", "No paid-only feature usage."]
+        ],
+        notes: [
+          ["J. Kim", "Approved and linked duplicate accounts for cleanup."]
+        ]
+      },
+      {
+        id: "RR-10468",
+        customer: "Priya Nair",
+        email: "priya.nair@example.com",
+        order: "ORD-76421",
+        product: "Consulting Session",
+        amount: 300.00,
+        risk: "medium",
+        waitHours: 44,
+        status: "denied",
+        tags: ["policy"],
+        reason: "Customer missed the scheduled consulting session and requested a refund.",
+        policy: "Booked sessions are refundable up to 24 hours before start time. Meeting room logs show consultant attended and waited 18 minutes.",
+        events: [
+          ["Jun 7, 14:00", "Session scheduled", "Calendar invite accepted."],
+          ["Jun 8, 14:18", "No-show recorded", "Consultant closed session notes."],
+          ["Jun 9, 10:32", "Refund denied", "Outside cancellation policy."]
+        ],
+        notes: [
+          ["E. Moreno", "Denied per policy; offered one-time reschedule credit."]
+        ]
+      }
+    ];
+
+    const state = {
+      search: "",
+      risk: "all",
+      status: "open",
+      view: "all",
+      selectedId: "RR-10482"
+    };
+
+    const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+    const rowsEl = document.getElementById("rows");
+    const factsEl = document.getElementById("facts");
+    const timelineEl = document.getElementById("timeline");
+    const notesEl = document.getElementById("notes");
+    const noteInput = document.getElementById("noteInput");
+    const toast = document.getElementById("toast");
+
+    function filteredRequests() {
+      const term = state.search.trim().toLowerCase();
+      return requests
+        .filter(item => state.status === "all" || item.status === state.status)
+        .filter(item => state.risk === "all" || item.risk === state.risk)
+        .filter(item => state.view === "all" || item.tags.includes(state.view))
+        .filter(item => !term || [item.customer, item.email, item.order, item.product, item.reason].join(" ").toLowerCase().includes(term))
+        .sort((a, b) => {
+          const riskWeight = { high: 3, medium: 2, low: 1 };
+          return riskWeight[b.risk] - riskWeight[a.risk] || b.waitHours - a.waitHours;
+        });
+    }
+
+    function renderQueue() {
+      const items = filteredRequests();
+      document.getElementById("filterCount").textContent = `${items.length} shown`;
+      document.getElementById("queueSummary").textContent = items.length ? "Sorted by risk and waiting time" : "No requests match the current filters";
+      rowsEl.innerHTML = "";
+
+      if (!items.length) {
+        rowsEl.innerHTML = '<div class="empty">No refund requests match these filters.</div>';
+        renderDetails(null);
+        return;
+      }
+
+      if (!items.some(item => item.id === state.selectedId)) {
+        state.selectedId = items[0].id;
+      }
+
+      for (const item of items) {
+        const row = document.createElement("button");
+        row.className = `row ${item.id === state.selectedId ? "active" : ""}`;
+        row.type = "button";
+        row.setAttribute("aria-pressed", String(item.id === state.selectedId));
+        row.innerHTML = `
+          <div><strong>${item.customer}</strong><span>${item.id} · ${item.product}</span></div>
+          <div><strong class="amount">${money.format(item.amount)}</strong><span>${item.order}</span></div>
+          <div><span class="pill ${item.risk}">${item.risk}</span></div>
+          <div><strong>${item.waitHours}h</strong><span>${item.status}</span></div>
+        `;
+        row.addEventListener("click", () => {
+          state.selectedId = item.id;
+          render();
+        });
+        rowsEl.appendChild(row);
+      }
+
+      renderDetails(requests.find(item => item.id === state.selectedId));
+    }
+
+    function renderDetails(item) {
+      const disabled = !item || item.status !== "open";
+      document.getElementById("approveBtn").disabled = disabled;
+      document.getElementById("denyBtn").disabled = disabled;
+      noteInput.disabled = !item;
+
+      if (!item) {
+        document.getElementById("detailName").textContent = "No request selected";
+        document.getElementById("detailSub").textContent = "Adjust filters to return queue results.";
+        document.getElementById("detailStatus").textContent = "Empty";
+        factsEl.innerHTML = "";
+        timelineEl.innerHTML = "";
+        notesEl.innerHTML = "";
+        document.getElementById("reason").textContent = "";
+        document.getElementById("policy").textContent = "";
+        return;
+      }
+
+      document.getElementById("detailName").textContent = item.customer;
+      document.getElementById("detailSub").textContent = `${item.id} · ${item.email}`;
+      const status = document.getElementById("detailStatus");
+      status.textContent = item.status;
+      status.className = `pill ${item.status}`;
+      document.getElementById("selectedValue").textContent = money.format(item.amount);
+      factsEl.innerHTML = [
+        ["Order", item.order],
+        ["Product", item.product],
+        ["Refund amount", money.format(item.amount)],
+        ["Risk", item.risk],
+        ["Wait time", `${item.waitHours} hours`],
+        ["Tags", item.tags.length ? item.tags.join(", ") : "None"]
+      ].map(([label, value]) => `<div class="fact"><label>${label}</label><strong>${value}</strong></div>`).join("");
+      document.getElementById("reason").textContent = item.reason;
+      document.getElementById("policy").textContent = item.policy;
+      timelineEl.innerHTML = item.events.map(([time, title, body]) => `
+        <div class="event"><time>${time}</time><div><strong>${title}</strong><span>${body}</span></div></div>
+      `).join("");
+      notesEl.innerHTML = item.notes.map(([author, body]) => `
+        <div class="note"><strong>${author}</strong><p>${body}</p></div>
+      `).join("");
+    }
+
+    function renderCounts() {
+      const openItems = requests.filter(item => item.status === "open");
+      document.getElementById("headerStatus").textContent = `${openItems.length} open requests`;
+      document.getElementById("allCount").textContent = requests.length;
+      document.getElementById("expediteCount").textContent = requests.filter(item => item.tags.includes("expedite")).length;
+      document.getElementById("policyCount").textContent = requests.filter(item => item.tags.includes("policy")).length;
+      document.getElementById("oldestOpen").textContent = `${Math.max(...openItems.map(item => item.waitHours))}h`;
+    }
+
+    function renderControls() {
+      document.querySelectorAll("#riskFilters button").forEach(button => {
+        button.classList.toggle("active", button.dataset.risk === state.risk);
+      });
+      document.querySelectorAll("#quickFilters button").forEach(button => {
+        button.classList.toggle("active", button.dataset.view === state.view);
+      });
+    }
+
+    function render() {
+      renderCounts();
+      renderControls();
+      renderQueue();
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function decide(status) {
+      const item = requests.find(entry => entry.id === state.selectedId);
+      if (!item || item.status !== "open") return;
+      const note = noteInput.value.trim() || (status === "approved" ? "Approved after triage review." : "Denied after triage review.");
+      item.status = status;
+      item.notes.unshift(["You", note]);
+      item.events.push([
+        "Now",
+        status === "approved" ? "Refund approved" : "Refund denied",
+        note
+      ]);
+      noteInput.value = "";
+      showToast(`${item.id} ${status}`);
+      render();
+    }
+
+    document.getElementById("search").addEventListener("input", event => {
+      state.search = event.target.value;
+      render();
+    });
+
+    document.getElementById("status").addEventListener("change", event => {
+      state.status = event.target.value;
+      render();
+    });
+
+    document.getElementById("riskFilters").addEventListener("click", event => {
+      const button = event.target.closest("button[data-risk]");
+      if (!button) return;
+      state.risk = button.dataset.risk;
+      render();
+    });
+
+    document.getElementById("quickFilters").addEventListener("click", event => {
+      const button = event.target.closest("button[data-view]");
+      if (!button) return;
+      state.view = button.dataset.view;
+      render();
+    });
+
+    document.getElementById("approveBtn").addEventListener("click", () => decide("approved"));
+    document.getElementById("denyBtn").addEventListener("click", () => decide("denied"));
+
+    render();
+  </script>
+</body>
+</html>

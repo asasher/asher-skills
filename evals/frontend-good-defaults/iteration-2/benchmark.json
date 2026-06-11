@@ -1,0 +1,156 @@
+{
+  "iteration": 2,
+  "methodology": "Generated each eval/configuration via clean codex exec sessions with --ignore-user-config and --ignore-rules, then statically graded generated HTML against observable assertions. Browser automation was intentionally kept out of child runs after one verification hang.",
+  "configs": {
+    "frontend_good_defaults": {
+      "passed": 29,
+      "total": 30,
+      "pass_rate": 0.9667
+    },
+    "uncodixfy": {
+      "passed": 26,
+      "total": 30,
+      "pass_rate": 0.8667
+    },
+    "openai_frontend_skill": {
+      "passed": 28,
+      "total": 30,
+      "pass_rate": 0.9333
+    }
+  },
+  "by_eval": {
+    "internal-workspace-reset": {
+      "frontend_good_defaults": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "uncodixfy": {
+        "passed": 5,
+        "total": 6,
+        "failures": [
+          {
+            "assertion": "Primary, secondary, tertiary, and destructive actions are visually distinct without making destructive actions dominant before confirmation.",
+            "status": "FAIL",
+            "evidence": "The initial decision area renders a filled primary approve button and a danger Deny refund button at outputs/index.html:888-889, and both call setDecision directly at 908-912 with no confirmation step."
+          }
+        ]
+      },
+      "openai_frontend_skill": {
+        "passed": 5,
+        "total": 6,
+        "failures": [
+          {
+            "assertion": "Primary, secondary, tertiary, and destructive actions are visually distinct without making destructive actions dominant before confirmation.",
+            "status": "FAIL",
+            "evidence": "Deny request is styled as a danger button in the primary detail actions at outputs/index.html:742-743 and immediately calls decide(\"denied\") at 1070-1071, without a confirmation step."
+          }
+        ]
+      }
+    },
+    "image-led-landing-page": {
+      "frontend_good_defaults": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "uncodixfy": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "openai_frontend_skill": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      }
+    },
+    "dense-data-management": {
+      "frontend_good_defaults": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "uncodixfy": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "openai_frontend_skill": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      }
+    },
+    "existing-design-system-adherence": {
+      "frontend_good_defaults": {
+        "passed": 5,
+        "total": 6,
+        "failures": [
+          {
+            "assertion": "Focus, disabled, and error states are represented for billing actions or forms.",
+            "status": "FAIL",
+            "evidence": "Focus and error states are present at outputs/index.html:233-236 and 743-744, but no disabled state or disabled control is represented anywhere in the billing UI."
+          }
+        ]
+      },
+      "uncodixfy": {
+        "passed": 4,
+        "total": 6,
+        "failures": [
+          {
+            "assertion": "The cancel-plan action is visible but not styled as the dominant action until a confirmation step.",
+            "status": "FAIL",
+            "evidence": "The main cancellation section renders a danger-styled Cancel at period end button at outputs/index.html:585-587 rather than keeping the destructive treatment for a confirmation step."
+          },
+          {
+            "assertion": "Focus, disabled, and error states are represented for billing actions or forms.",
+            "status": "FAIL",
+            "evidence": "Only a focus style is present at outputs/index.html:358; there is no disabled state and no explicit invalid/error billing form state."
+          }
+        ]
+      },
+      "openai_frontend_skill": {
+        "passed": 5,
+        "total": 6,
+        "failures": [
+          {
+            "assertion": "Focus, disabled, and error states are represented for billing actions or forms.",
+            "status": "FAIL",
+            "evidence": "A focus style exists at outputs/index.html:532, but no disabled state or explicit invalid/error billing form state is represented."
+          }
+        ]
+      }
+    },
+    "edge-empty-media-library": {
+      "frontend_good_defaults": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      },
+      "uncodixfy": {
+        "passed": 5,
+        "total": 6,
+        "failures": [
+          {
+            "assertion": "Filters, sort controls, bulk actions, and tabs that would do nothing while empty are absent or disabled with a clear reason.",
+            "status": "FAIL",
+            "evidence": "The empty library still renders active view tabs for All files, Images, Video, and Audio at outputs/index.html:539-543 instead of hiding or disabling controls that do nothing while empty."
+          }
+        ]
+      },
+      "openai_frontend_skill": {
+        "passed": 6,
+        "total": 6,
+        "failures": []
+      }
+    }
+  },
+  "patterns": [
+    "frontend_good_defaults again led the benchmark at 29/30, but the billing eval still exposes a missing disabled-state example.",
+    "The post-iteration-1 patch did improve billing error-state modeling for frontend_good_defaults: the generated billing form now includes an explicit invalid ZIP-code path.",
+    "Both baseline support-triage outputs made destructive denial actions directly available without a confirmation step.",
+    "Uncodixfy regressed on the empty media-library edge case by showing active view tabs before any media exists.",
+    "OpenAI frontend skill remained strong on the hotel landing page and dense data/admin surfaces, but still missed explicit billing disabled/error state coverage."
+  ]
+}

@@ -1,0 +1,1134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subscriber Admin</title>
+  <style>
+    :root {
+      --background: #f6f5f2;
+      --foreground: #191917;
+      --card: #ffffff;
+      --card-foreground: #191917;
+      --popover: #ffffff;
+      --popover-foreground: #191917;
+      --primary: #1f2a24;
+      --primary-foreground: #ffffff;
+      --secondary: #ece9e3;
+      --secondary-foreground: #24231f;
+      --muted: #eeece7;
+      --muted-foreground: #6b6860;
+      --accent: #dfe9df;
+      --accent-foreground: #18261d;
+      --destructive: #a03f35;
+      --destructive-foreground: #ffffff;
+      --border: #dedbd3;
+      --input: #cfcac0;
+      --ring: #6d7f70;
+      --radius: 8px;
+      --shadow: 0 1px 2px rgb(24 24 20 / 0.06), 0 8px 24px rgb(24 24 20 / 0.05);
+      color-scheme: light;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--foreground);
+      font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 232px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--border);
+      background: #fbfaf7;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 2px;
+    }
+
+    .nav a {
+      color: var(--muted-foreground);
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .nav a:hover {
+      background: var(--muted);
+      color: var(--foreground);
+    }
+
+    .nav a[aria-current="page"] {
+      background: var(--secondary);
+      color: var(--foreground);
+      font-weight: 650;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .sidebar-footer strong {
+      display: block;
+      color: var(--foreground);
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+
+    .main {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .topbar {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 24px;
+      background: var(--background);
+      border-bottom: 1px solid var(--border);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .topbar p {
+      margin: 2px 0 0;
+      color: var(--muted-foreground);
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .button {
+      min-height: 36px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 7px 12px;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      font-weight: 650;
+    }
+
+    .button:hover {
+      background: #151d18;
+    }
+
+    .button.secondary {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    .button.secondary:hover {
+      background: #e1ddd5;
+    }
+
+    .button.outline {
+      background: transparent;
+      color: var(--foreground);
+      border-color: var(--border);
+    }
+
+    .button.outline:hover {
+      background: var(--muted);
+    }
+
+    .workspace {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(620px, 1fr) 360px;
+    }
+
+    .list-pane {
+      min-width: 0;
+      padding: 16px 0 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .toolbar {
+      padding: 0 24px 14px;
+      display: grid;
+      grid-template-columns: minmax(220px, 360px) minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label,
+    .filter-label {
+      color: var(--muted-foreground);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid var(--input);
+      border-radius: var(--radius);
+      background: var(--card);
+      color: var(--foreground);
+      padding: 8px 34px 8px 12px;
+    }
+
+    .search-wrap input::placeholder {
+      color: #88847c;
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted-foreground);
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .clear-search:hover {
+      background: var(--muted);
+      color: var(--foreground);
+    }
+
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .segmented {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      padding: 3px;
+      min-height: 38px;
+    }
+
+    .segmented button {
+      min-height: 30px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted-foreground);
+      padding: 5px 9px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .segmented button:hover {
+      color: var(--foreground);
+      background: var(--muted);
+    }
+
+    .segmented button[aria-pressed="true"] {
+      color: var(--accent-foreground);
+      background: var(--accent);
+    }
+
+    select {
+      min-height: 38px;
+      border: 1px solid var(--input);
+      border-radius: var(--radius);
+      background: var(--card);
+      color: var(--foreground);
+      padding: 7px 30px 7px 10px;
+    }
+
+    .summary-line {
+      color: var(--muted-foreground);
+      font-size: 13px;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .table-shell {
+      min-height: 0;
+      border-top: 1px solid var(--border);
+      background: var(--card);
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    caption {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 12px;
+      vertical-align: middle;
+      text-align: left;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #fbfaf8;
+      color: var(--muted-foreground);
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 1px 0 var(--border);
+    }
+
+    td {
+      color: var(--card-foreground);
+      height: 58px;
+    }
+
+    tr.subscriber-row {
+      cursor: pointer;
+    }
+
+    tr.subscriber-row:hover td {
+      background: #f8f7f3;
+    }
+
+    tr.subscriber-row.is-selected td {
+      background: #eef3ed;
+      box-shadow: inset 3px 0 0 var(--ring);
+    }
+
+    .subscriber-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .avatar {
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      background: var(--secondary);
+      color: #3e3b34;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .primary-text {
+      min-width: 0;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .secondary-text {
+      min-width: 0;
+      color: var(--muted-foreground);
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .plan-stack {
+      display: grid;
+      gap: 1px;
+    }
+
+    .num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th.num {
+      text-align: right;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 24px;
+      border-radius: 7px;
+      padding: 2px 7px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .status.active {
+      color: #23613d;
+      background: #e9f3eb;
+      border-color: #cce1d1;
+    }
+
+    .status.trial {
+      color: #5d4f18;
+      background: #f6efd0;
+      border-color: #e7d98d;
+    }
+
+    .status.past-due {
+      color: #8a332d;
+      background: #f7e6e3;
+      border-color: #e7c6c1;
+    }
+
+    .status.paused {
+      color: #5f5a50;
+      background: #ebe8e1;
+      border-color: #d8d2c6;
+    }
+
+    .detail-pane {
+      min-width: 0;
+      border-left: 1px solid var(--border);
+      background: #fbfaf7;
+      padding: 18px;
+      overflow: auto;
+    }
+
+    .detail-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .detail-head {
+      padding: 18px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      gap: 14px;
+    }
+
+    .detail-person {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .detail-person .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    .detail-person h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .detail-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .detail-section {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-section:last-child {
+      border-bottom: 0;
+    }
+
+    .detail-section h3 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .facts {
+      display: grid;
+      gap: 8px;
+    }
+
+    .fact {
+      display: grid;
+      grid-template-columns: 122px minmax(0, 1fr);
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .fact span:first-child {
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .fact span:last-child {
+      min-width: 0;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .note {
+      margin: 0;
+      color: var(--muted-foreground);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .event {
+      display: grid;
+      gap: 2px;
+      padding-left: 12px;
+      border-left: 2px solid var(--border);
+    }
+
+    .event strong {
+      font-size: 13px;
+    }
+
+    .event span {
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+
+    .empty {
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--muted-foreground);
+    }
+
+    .empty strong {
+      display: block;
+      color: var(--foreground);
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    @media (max-width: 1120px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-pane {
+        border-left: 0;
+        border-top: 1px solid var(--border);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 16px;
+      }
+
+      .actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .toolbar {
+        padding: 0 16px 12px;
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+
+      .summary-line {
+        text-align: left;
+      }
+
+      .filters {
+        align-items: stretch;
+      }
+
+      .segmented {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      select {
+        width: 100%;
+      }
+
+      th,
+      td {
+        padding: 9px 10px;
+      }
+
+      .table-shell {
+        max-height: none;
+      }
+
+      table {
+        min-width: 720px;
+      }
+
+      .detail-pane {
+        padding: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .button,
+      .nav a,
+      .segmented button,
+      tr.subscriber-row td,
+      .clear-search {
+        transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Admin navigation">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">N</div>
+        Northstar Letter
+      </div>
+      <nav class="nav">
+        <a href="#">Overview</a>
+        <a href="#" aria-current="page">Subscribers</a>
+        <a href="#">Issues</a>
+        <a href="#">Payments</a>
+        <a href="#">Segments</a>
+        <a href="#">Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <strong>Daily operator view</strong>
+        4,812 paid subscribers
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>Paid subscribers</h1>
+          <p>Manage plans, renewals, billing state, and support notes.</p>
+        </div>
+        <div class="actions" aria-label="Page actions">
+          <button class="button secondary" type="button">Export CSV</button>
+          <button class="button" type="button">Add subscriber</button>
+        </div>
+      </header>
+
+      <section class="workspace" aria-label="Subscriber management workspace">
+        <div class="list-pane">
+          <div class="toolbar">
+            <div class="field">
+              <label for="search">Search subscribers</label>
+              <div class="search-wrap">
+                <input id="search" type="search" autocomplete="off" placeholder="Name, email, company">
+                <button class="clear-search" type="button" aria-label="Clear search" hidden>&times;</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="filter-label" id="segment-label">Segment filters</div>
+              <div class="filters" aria-labelledby="segment-label">
+                <div class="segmented" role="group" aria-label="Subscriber status">
+                  <button type="button" data-status="all" aria-pressed="true">All</button>
+                  <button type="button" data-status="active" aria-pressed="false">Active</button>
+                  <button type="button" data-status="trial" aria-pressed="false">Trial</button>
+                  <button type="button" data-status="past-due" aria-pressed="false">Past due</button>
+                  <button type="button" data-status="paused" aria-pressed="false">Paused</button>
+                </div>
+                <select id="plan-filter" aria-label="Filter by plan">
+                  <option value="all">All plans</option>
+                  <option value="Pro Annual">Pro Annual</option>
+                  <option value="Pro Monthly">Pro Monthly</option>
+                  <option value="Team Annual">Team Annual</option>
+                  <option value="Student">Student</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="summary-line" id="summary">0 subscribers</div>
+          </div>
+
+          <div class="table-shell">
+            <table>
+              <caption>Paid newsletter subscribers</caption>
+              <thead>
+                <tr>
+                  <th style="width: 31%;">Subscriber</th>
+                  <th style="width: 17%;">Plan</th>
+                  <th style="width: 16%;">Renewal</th>
+                  <th class="num" style="width: 12%;">MRR</th>
+                  <th style="width: 14%;">Status</th>
+                  <th style="width: 10%;">Segment</th>
+                </tr>
+              </thead>
+              <tbody id="subscriber-body"></tbody>
+            </table>
+            <div class="empty" id="empty-state" hidden>
+              <strong>No matching subscribers</strong>
+              Adjust the search or segment filters.
+            </div>
+          </div>
+        </div>
+
+        <aside class="detail-pane" aria-label="Selected subscriber detail">
+          <div class="detail-card" id="detail-card"></div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const subscribers = [
+      {
+        id: "sub_1048",
+        name: "Maya Chen",
+        email: "maya.chen@northpier.co",
+        company: "North Pier Capital",
+        plan: "Team Annual",
+        renewal: "Jul 01, 2026",
+        mrr: 189,
+        status: "active",
+        segment: "Team",
+        payment: "Visa ending 8842",
+        joined: "Feb 14, 2024",
+        seats: "8 seats",
+        notes: "Procurement contact prefers annual invoices sent two weeks before renewal.",
+        events: ["Invoice paid on Jun 01", "Seat count changed from 6 to 8", "Opened June renewal notice"]
+      },
+      {
+        id: "sub_1019",
+        name: "Jon Bell",
+        email: "jon@brighttable.io",
+        company: "Brighttable",
+        plan: "Pro Annual",
+        renewal: "Jun 18, 2026",
+        mrr: 49,
+        status: "active",
+        segment: "Founder",
+        payment: "Mastercard ending 1409",
+        joined: "Aug 29, 2023",
+        seats: "1 seat",
+        notes: "Asked to keep invoices under company name for bookkeeping.",
+        events: ["Renewal reminder sent", "Downloaded annual invoice", "Clicked pricing update"]
+      },
+      {
+        id: "sub_1162",
+        name: "Renee Wallace",
+        email: "renee.wallace@example.com",
+        company: "Independent",
+        plan: "Pro Monthly",
+        renewal: "Jun 12, 2026",
+        mrr: 9,
+        status: "past-due",
+        segment: "Creator",
+        payment: "Card declined Jun 10",
+        joined: "Nov 03, 2025",
+        seats: "1 seat",
+        notes: "Retry window is open. Avoid manual cancellation until support thread closes.",
+        events: ["Payment failed", "Dunning email sent", "Support replied to card update request"]
+      },
+      {
+        id: "sub_1087",
+        name: "Omar Haddad",
+        email: "omar@fieldline.agency",
+        company: "Fieldline Agency",
+        plan: "Pro Annual",
+        renewal: "Aug 03, 2026",
+        mrr: 49,
+        status: "paused",
+        segment: "Agency",
+        payment: "Amex ending 0221",
+        joined: "Jan 18, 2025",
+        seats: "1 seat",
+        notes: "Paused after team restructuring. Follow up before August renewal.",
+        events: ["Subscription paused", "Cancellation reason saved", "Retention offer sent"]
+      },
+      {
+        id: "sub_1204",
+        name: "Priya Shah",
+        email: "priya@signalworks.dev",
+        company: "SignalWorks",
+        plan: "Team Annual",
+        renewal: "Sep 22, 2026",
+        mrr: 249,
+        status: "active",
+        segment: "Team",
+        payment: "ACH debit",
+        joined: "Mar 09, 2024",
+        seats: "12 seats",
+        notes: "High-engagement account. Finance owner changed in May.",
+        events: ["Finance contact updated", "Team report exported", "Opened 11 of last 12 issues"]
+      },
+      {
+        id: "sub_1221",
+        name: "Elliot Marsh",
+        email: "elliot@papertrail.studio",
+        company: "Papertrail Studio",
+        plan: "Student",
+        renewal: "Jun 25, 2026",
+        mrr: 5,
+        status: "trial",
+        segment: "Student",
+        payment: "No payment method",
+        joined: "Jun 04, 2026",
+        seats: "1 seat",
+        notes: "Trial converts after student verification review.",
+        events: ["Student document uploaded", "Trial started", "Welcome issue opened"]
+      },
+      {
+        id: "sub_1135",
+        name: "Anika Meyer",
+        email: "anika@urbanledger.com",
+        company: "Urban Ledger",
+        plan: "Pro Monthly",
+        renewal: "Jul 09, 2026",
+        mrr: 19,
+        status: "active",
+        segment: "Analyst",
+        payment: "Visa ending 6138",
+        joined: "Apr 27, 2025",
+        seats: "1 seat",
+        notes: "Monthly subscriber with frequent issue saves and low support volume.",
+        events: ["Plan upgraded from student", "Saved premium archive", "Payment succeeded"]
+      },
+      {
+        id: "sub_1188",
+        name: "Caleb Ortiz",
+        email: "caleb@junction.media",
+        company: "Junction Media",
+        plan: "Pro Annual",
+        renewal: "Oct 11, 2026",
+        mrr: 49,
+        status: "active",
+        segment: "Editor",
+        payment: "Mastercard ending 3320",
+        joined: "Oct 11, 2024",
+        seats: "1 seat",
+        notes: "Uses subscriber exports for editorial research every Friday.",
+        events: ["Annual invoice paid", "Exported archive index", "Referred one subscriber"]
+      },
+      {
+        id: "sub_1197",
+        name: "Nadia Brooks",
+        email: "nadia@commonroom.org",
+        company: "Common Room",
+        plan: "Pro Monthly",
+        renewal: "Jun 16, 2026",
+        mrr: 19,
+        status: "past-due",
+        segment: "Nonprofit",
+        payment: "Card declined Jun 09",
+        joined: "Jul 30, 2025",
+        seats: "1 seat",
+        notes: "Discount approved last year. Check eligibility before changing plan.",
+        events: ["Payment retry scheduled", "Discount note viewed", "Invoice email bounced once"]
+      }
+    ];
+
+    const body = document.querySelector("#subscriber-body");
+    const detailCard = document.querySelector("#detail-card");
+    const search = document.querySelector("#search");
+    const clearSearch = document.querySelector(".clear-search");
+    const planFilter = document.querySelector("#plan-filter");
+    const statusButtons = [...document.querySelectorAll("[data-status]")];
+    const summary = document.querySelector("#summary");
+    const emptyState = document.querySelector("#empty-state");
+
+    const state = {
+      status: "all",
+      plan: "all",
+      query: "",
+      selectedId: subscribers[0].id
+    };
+
+    function statusLabel(status) {
+      return {
+        active: "Active",
+        trial: "Trial",
+        "past-due": "Past due",
+        paused: "Paused"
+      }[status];
+    }
+
+    function initials(name) {
+      return name.split(" ").map(part => part[0]).join("").slice(0, 2).toUpperCase();
+    }
+
+    function money(value) {
+      return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
+    }
+
+    function filteredSubscribers() {
+      const query = state.query.trim().toLowerCase();
+      return subscribers.filter(subscriber => {
+        const matchesStatus = state.status === "all" || subscriber.status === state.status;
+        const matchesPlan = state.plan === "all" || subscriber.plan === state.plan;
+        const haystack = `${subscriber.name} ${subscriber.email} ${subscriber.company} ${subscriber.segment}`.toLowerCase();
+        const matchesQuery = !query || haystack.includes(query);
+        return matchesStatus && matchesPlan && matchesQuery;
+      });
+    }
+
+    function renderRows(rows) {
+      body.innerHTML = "";
+      rows.forEach(subscriber => {
+        const tr = document.createElement("tr");
+        tr.className = "subscriber-row";
+        tr.tabIndex = 0;
+        tr.dataset.id = subscriber.id;
+        tr.setAttribute("aria-selected", subscriber.id === state.selectedId ? "true" : "false");
+        if (subscriber.id === state.selectedId) tr.classList.add("is-selected");
+        tr.innerHTML = `
+          <td>
+            <div class="subscriber-cell">
+              <div class="avatar" aria-hidden="true">${initials(subscriber.name)}</div>
+              <div>
+                <div class="primary-text">${subscriber.name}</div>
+                <div class="secondary-text">${subscriber.email}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="plan-stack">
+              <span class="primary-text">${subscriber.plan}</span>
+              <span class="secondary-text">${subscriber.seats}</span>
+            </div>
+          </td>
+          <td><span class="primary-text">${subscriber.renewal}</span></td>
+          <td class="num"><strong>${money(subscriber.mrr)}</strong></td>
+          <td><span class="status ${subscriber.status}">${statusLabel(subscriber.status)}</span></td>
+          <td><span class="secondary-text">${subscriber.segment}</span></td>
+        `;
+        tr.addEventListener("click", () => selectSubscriber(subscriber.id));
+        tr.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectSubscriber(subscriber.id);
+          }
+        });
+        body.appendChild(tr);
+      });
+    }
+
+    function renderDetail(subscriber) {
+      if (!subscriber) {
+        detailCard.innerHTML = `
+          <div class="detail-section">
+            <h2>No subscriber selected</h2>
+            <p class="note">Select a subscriber row to view billing and account details.</p>
+          </div>
+        `;
+        return;
+      }
+
+      detailCard.innerHTML = `
+        <div class="detail-head">
+          <div class="detail-person">
+            <div class="avatar" aria-hidden="true">${initials(subscriber.name)}</div>
+            <div>
+              <h2>${subscriber.name}</h2>
+              <div class="secondary-text">${subscriber.email}</div>
+            </div>
+          </div>
+          <span class="status ${subscriber.status}">${statusLabel(subscriber.status)}</span>
+          <div class="detail-actions">
+            <button class="button secondary" type="button">Email</button>
+            <button class="button outline" type="button">Edit plan</button>
+          </div>
+        </div>
+        <div class="detail-section">
+          <h3>Subscription</h3>
+          <div class="facts">
+            <div class="fact"><span>Plan</span><span>${subscriber.plan}</span></div>
+            <div class="fact"><span>Renewal date</span><span>${subscriber.renewal}</span></div>
+            <div class="fact"><span>MRR</span><span>${money(subscriber.mrr)}</span></div>
+            <div class="fact"><span>Seats</span><span>${subscriber.seats}</span></div>
+            <div class="fact"><span>Segment</span><span>${subscriber.segment}</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <h3>Billing</h3>
+          <div class="facts">
+            <div class="fact"><span>Payment</span><span>${subscriber.payment}</span></div>
+            <div class="fact"><span>Joined</span><span>${subscriber.joined}</span></div>
+            <div class="fact"><span>Account</span><span>${subscriber.company}</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <h3>Operator note</h3>
+          <p class="note">${subscriber.notes}</p>
+        </div>
+        <div class="detail-section">
+          <h3>Recent activity</h3>
+          <div class="timeline">
+            ${subscriber.events.map(event => `<div class="event"><strong>${event}</strong><span>${subscriber.name}</span></div>`).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function selectSubscriber(id) {
+      state.selectedId = id;
+      render();
+    }
+
+    function render() {
+      const rows = filteredSubscribers();
+      if (rows.length && !rows.some(row => row.id === state.selectedId)) {
+        state.selectedId = rows[0].id;
+      }
+
+      renderRows(rows);
+      renderDetail(rows.find(row => row.id === state.selectedId) || null);
+
+      const totalMrr = rows.reduce((sum, subscriber) => sum + subscriber.mrr, 0);
+      summary.textContent = `${rows.length} subscriber${rows.length === 1 ? "" : "s"} · ${money(totalMrr)} MRR`;
+      emptyState.hidden = rows.length !== 0;
+      clearSearch.hidden = state.query.length === 0;
+    }
+
+    search.addEventListener("input", event => {
+      state.query = event.target.value;
+      render();
+    });
+
+    clearSearch.addEventListener("click", () => {
+      search.value = "";
+      state.query = "";
+      search.focus();
+      render();
+    });
+
+    planFilter.addEventListener("change", event => {
+      state.plan = event.target.value;
+      render();
+    });
+
+    statusButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        state.status = button.dataset.status;
+        statusButtons.forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+        render();
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>

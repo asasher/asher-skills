@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rook House | Design-forward hotel in Porto</title>
+  <meta name="description" content="Rook House is a small design-forward hotel in Porto with fourteen rooms, a courtyard breakfast, and direct booking.">
+  <style>
+    :root {
+      --ink: #171512;
+      --paper: #f6f1e8;
+      --paper-deep: #e6d7c2;
+      --line: rgba(23, 21, 18, 0.18);
+      --blue: #1f5f73;
+      --blue-deep: #123f4d;
+      --white: #fffaf1;
+      --shadow: 0 24px 70px rgba(15, 18, 18, 0.18);
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(246, 241, 232, 0.92), rgba(246, 241, 232, 1) 64rem),
+        var(--paper);
+      font-family: var(--sans);
+      text-rendering: geometricPrecision;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .hero {
+      min-height: 100svh;
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      align-items: stretch;
+      overflow: clip;
+      color: var(--white);
+      background: #172326;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -2rem;
+      z-index: -2;
+      background-image:
+        linear-gradient(90deg, rgba(12, 13, 12, 0.62) 0%, rgba(12, 13, 12, 0.34) 36%, rgba(12, 13, 12, 0.08) 68%),
+        linear-gradient(0deg, rgba(12, 13, 12, 0.52), rgba(12, 13, 12, 0.06) 44%),
+        url("https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=2200&q=86");
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.035);
+      animation: image-settle 1400ms cubic-bezier(.2, .7, .1, 1) both;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 18% 46%, rgba(255, 246, 226, 0.2), transparent 25rem),
+        linear-gradient(180deg, transparent 72%, rgba(15, 17, 16, 0.72));
+      pointer-events: none;
+    }
+
+    .nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: clamp(1rem, 2.8vw, 2rem) clamp(1.1rem, 4vw, 4rem);
+      letter-spacing: 0.02em;
+      animation: rise 760ms 120ms cubic-bezier(.2, .7, .1, 1) both;
+    }
+
+    .mark {
+      display: flex;
+      align-items: center;
+      gap: 0.62rem;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .mark span:first-child {
+      width: 2rem;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 250, 241, 0.55);
+      font-family: var(--serif);
+      font-size: 1.1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(1rem, 3vw, 2.1rem);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: rgba(255, 250, 241, 0.86);
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-block: 0.35rem;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 220ms ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a:focus-visible::after {
+      transform: scaleX(1);
+    }
+
+    .hero-content {
+      width: min(100%, 1720px);
+      margin: 0 auto;
+      padding: clamp(6.4rem, 12vh, 10rem) clamp(1.1rem, 4vw, 4rem) clamp(1.1rem, 3vw, 2.6rem);
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(17rem, 0.48fr);
+      gap: clamp(2rem, 6vw, 6rem);
+      align-items: end;
+    }
+
+    .hero-copy {
+      max-width: 48rem;
+      align-self: center;
+      padding-top: 6vh;
+    }
+
+    .kicker {
+      margin: 0 0 1.2rem;
+      font-size: clamp(0.75rem, 1vw, 0.86rem);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(255, 250, 241, 0.76);
+      animation: rise 760ms 210ms cubic-bezier(.2, .7, .1, 1) both;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(4.7rem, 13vw, 15rem);
+      line-height: 0.78;
+      letter-spacing: 0;
+      font-weight: 500;
+      animation: rise 820ms 300ms cubic-bezier(.2, .7, .1, 1) both;
+    }
+
+    .hero-copy p {
+      width: min(32rem, 100%);
+      margin: clamp(1.4rem, 3vw, 2.4rem) 0 0;
+      font-size: clamp(1.02rem, 1.55vw, 1.36rem);
+      line-height: 1.45;
+      color: rgba(255, 250, 241, 0.88);
+      animation: rise 820ms 390ms cubic-bezier(.2, .7, .1, 1) both;
+    }
+
+    .booking {
+      align-self: end;
+      justify-self: end;
+      width: min(25rem, 100%);
+      padding: 1rem;
+      color: var(--ink);
+      background: rgba(255, 250, 241, 0.92);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      animation: rise 820ms 520ms cubic-bezier(.2, .7, .1, 1) both;
+    }
+
+    .booking-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: baseline;
+      padding: 0.2rem 0.2rem 0.9rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .booking-title strong {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 500;
+    }
+
+    .booking-title span {
+      color: rgba(23, 21, 18, 0.62);
+      font-size: 0.8rem;
+    }
+
+    .booking-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .field {
+      min-width: 0;
+      padding: 0.85rem 0.2rem;
+      border-right: 1px solid var(--line);
+    }
+
+    .field:nth-child(2n) {
+      border-right: 0;
+      padding-left: 0.95rem;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(23, 21, 18, 0.56);
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      min-height: 2rem;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: var(--ink);
+      outline: 0;
+    }
+
+    .booking button,
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3.15rem;
+      padding: 0 1.25rem;
+      border: 1px solid var(--blue-deep);
+      border-radius: 0;
+      background: var(--blue-deep);
+      color: var(--white);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 190ms ease, background 190ms ease, color 190ms ease;
+    }
+
+    .booking button {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .booking button:hover,
+    .booking button:focus-visible,
+    .cta:hover,
+    .cta:focus-visible {
+      transform: translateY(-2px);
+      background: var(--blue);
+    }
+
+    main {
+      overflow: clip;
+    }
+
+    section {
+      padding: clamp(4rem, 9vw, 8rem) clamp(1.1rem, 4vw, 4rem);
+    }
+
+    .section-inner {
+      width: min(100%, 1380px);
+      margin: 0 auto;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(18rem, 0.52fr);
+      gap: clamp(2rem, 7vw, 6rem);
+      align-items: start;
+    }
+
+    .intro h2,
+    .detail h2,
+    .final h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(2.4rem, 5.8vw, 6.3rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .intro p {
+      margin: 0;
+      font-size: clamp(1rem, 1.25vw, 1.18rem);
+      line-height: 1.7;
+      color: rgba(23, 21, 18, 0.72);
+    }
+
+    .facts {
+      margin-top: clamp(2rem, 4vw, 3.5rem);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .fact {
+      padding: 1.2rem 1.1rem 1.2rem 0;
+      border-right: 1px solid var(--line);
+    }
+
+    .fact:last-child {
+      border-right: 0;
+      padding-left: 1.1rem;
+    }
+
+    .fact strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-family: var(--serif);
+      font-size: clamp(1.65rem, 3vw, 2.8rem);
+      font-weight: 500;
+    }
+
+    .fact span {
+      color: rgba(23, 21, 18, 0.62);
+      font-size: 0.88rem;
+    }
+
+    .media-band {
+      padding-top: 0;
+    }
+
+    .wide-photo {
+      min-height: clamp(24rem, 62vw, 52rem);
+      background-image:
+        linear-gradient(180deg, rgba(11, 16, 17, 0.04), rgba(11, 16, 17, 0.26)),
+        url("https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=2200&q=86");
+      background-size: cover;
+      background-position: center 42%;
+      position: relative;
+      transform: translateZ(0);
+    }
+
+    .wide-photo::after {
+      content: "Rua das Flores, Porto";
+      position: absolute;
+      left: clamp(1rem, 3vw, 2rem);
+      bottom: clamp(1rem, 3vw, 2rem);
+      color: var(--white);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .detail {
+      background: #162528;
+      color: var(--white);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: minmax(16rem, 0.48fr) minmax(0, 0.86fr);
+      gap: clamp(2rem, 7vw, 6rem);
+      align-items: center;
+    }
+
+    .portrait {
+      min-height: clamp(27rem, 46vw, 44rem);
+      background-image:
+        linear-gradient(180deg, rgba(11, 16, 17, 0), rgba(11, 16, 17, 0.14)),
+        url("https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=1200&q=86");
+      background-size: cover;
+      background-position: center;
+      position: sticky;
+      top: 1.5rem;
+    }
+
+    .detail-copy p {
+      max-width: 38rem;
+      margin: 1.5rem 0 2.2rem;
+      color: rgba(255, 250, 241, 0.74);
+      font-size: clamp(1rem, 1.35vw, 1.22rem);
+      line-height: 1.7;
+    }
+
+    .amenities {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+      border-top: 1px solid rgba(255, 250, 241, 0.2);
+      border-bottom: 1px solid rgba(255, 250, 241, 0.2);
+    }
+
+    .amenities span {
+      padding: 1rem 1rem 1rem 0;
+      border-bottom: 1px solid rgba(255, 250, 241, 0.16);
+      color: rgba(255, 250, 241, 0.78);
+    }
+
+    .amenities span:nth-child(2n) {
+      padding-left: 1rem;
+      border-left: 1px solid rgba(255, 250, 241, 0.16);
+    }
+
+    .amenities span:nth-last-child(-n + 2) {
+      border-bottom: 0;
+    }
+
+    .final {
+      min-height: 72svh;
+      display: grid;
+      align-items: center;
+      background:
+        linear-gradient(90deg, rgba(246, 241, 232, 0.98), rgba(246, 241, 232, 0.84) 50%, rgba(246, 241, 232, 0.24)),
+        url("https://images.unsplash.com/photo-1529290130-4ca3753253ae?auto=format&fit=crop&w=2000&q=86");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .final p {
+      max-width: 32rem;
+      margin: 1.3rem 0 2rem;
+      font-size: clamp(1rem, 1.3vw, 1.2rem);
+      line-height: 1.65;
+      color: rgba(23, 21, 18, 0.7);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.1rem clamp(1.1rem, 4vw, 4rem);
+      border-top: 1px solid var(--line);
+      color: rgba(23, 21, 18, 0.62);
+      font-size: 0.82rem;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes image-settle {
+      from {
+        transform: scale(1.09);
+        filter: saturate(0.86);
+      }
+      to {
+        transform: scale(1.035);
+        filter: saturate(1);
+      }
+    }
+
+    @supports (animation-timeline: view()) {
+      .wide-photo {
+        animation: photo-depth linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+
+      @keyframes photo-depth {
+        from {
+          background-position: center 30%;
+        }
+        to {
+          background-position: center 58%;
+        }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .nav {
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        gap: 0.75rem;
+        font-size: 0.7rem;
+      }
+
+      .nav-links a:nth-child(2) {
+        display: none;
+      }
+
+      .hero-content,
+      .intro,
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-content {
+        min-height: 100svh;
+        padding-top: 5.8rem;
+      }
+
+      .hero-copy {
+        align-self: end;
+        padding-top: 13vh;
+      }
+
+      h1 {
+        font-size: clamp(4.8rem, 24vw, 8.8rem);
+      }
+
+      .booking {
+        justify-self: stretch;
+      }
+
+      .facts,
+      .amenities {
+        grid-template-columns: 1fr;
+      }
+
+      .fact,
+      .fact:last-child,
+      .amenities span,
+      .amenities span:nth-child(2n) {
+        padding-left: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .detail .amenities span {
+        border-bottom-color: rgba(255, 250, 241, 0.16);
+      }
+
+      .fact:last-child,
+      .amenities span:last-child {
+        border-bottom: 0;
+      }
+
+      .portrait {
+        position: relative;
+        top: auto;
+        min-height: 24rem;
+      }
+
+      .final {
+        background:
+          linear-gradient(180deg, rgba(246, 241, 232, 0.96), rgba(246, 241, 232, 0.86) 52%, rgba(246, 241, 232, 0.58)),
+          url("https://images.unsplash.com/photo-1529290130-4ca3753253ae?auto=format&fit=crop&w=1400&q=84");
+        background-position: center;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .nav-links a:first-child {
+        display: none;
+      }
+
+      .hero::before {
+        background-position: 61% center;
+      }
+
+      .hero-copy p {
+        font-size: 1rem;
+      }
+
+      .booking {
+        padding: 0.85rem;
+      }
+
+      .booking-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field,
+      .field:nth-child(2n) {
+        padding-left: 0.2rem;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      footer {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" id="top">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="mark" href="#top" aria-label="Rook House home">
+        <span>R</span>
+        <span>Rook House</span>
+      </a>
+      <div class="nav-links">
+        <a href="#rooms">Rooms</a>
+        <a href="#house">House</a>
+        <a href="#book">Reserve</a>
+      </div>
+    </nav>
+
+    <div class="hero-content">
+      <div class="hero-copy">
+        <p class="kicker">Fourteen rooms near Sao Bento</p>
+        <h1>Rook<br>House</h1>
+        <p>A small Porto hotel in a restored merchant house, made for slow mornings, blue-tile light, and dinners you can walk to.</p>
+      </div>
+
+      <form class="booking" id="book" action="#" aria-label="Check availability">
+        <div class="booking-title">
+          <strong>Stay in Porto</strong>
+          <span>from EUR 185</span>
+        </div>
+        <div class="booking-grid">
+          <div class="field">
+            <label for="arrival">Arrival</label>
+            <input id="arrival" name="arrival" type="date" value="2026-07-18">
+          </div>
+          <div class="field">
+            <label for="departure">Departure</label>
+            <input id="departure" name="departure" type="date" value="2026-07-21">
+          </div>
+          <div class="field">
+            <label for="guests">Guests</label>
+            <select id="guests" name="guests">
+              <option>2 guests</option>
+              <option>1 guest</option>
+              <option>3 guests</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="room">Room</label>
+            <select id="room" name="room">
+              <option>Atelier room</option>
+              <option>Garden room</option>
+              <option>Top-floor suite</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit">Check availability</button>
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" id="rooms" aria-labelledby="rooms-title">
+      <div class="section-inner intro">
+        <div>
+          <h2 id="rooms-title">A quiet base between the river and the old station.</h2>
+          <div class="facts" aria-label="Hotel details">
+            <div class="fact">
+              <strong>14</strong>
+              <span>rooms, each with Portuguese linen and oak desks</span>
+            </div>
+            <div class="fact">
+              <strong>08:00</strong>
+              <span>courtyard breakfast with fruit, queijo, and coffee</span>
+            </div>
+            <div class="fact">
+              <strong>6 min</strong>
+              <span>walk to Sao Bento and the Douro viewpoint</span>
+            </div>
+          </div>
+        </div>
+        <p>Rook House keeps the useful parts of a grand hotel and leaves the rest out. The rooms are calm, the lobby is a working salon, and the staff know which tile shops, wine bars, and small restaurants are worth your evening.</p>
+      </div>
+    </section>
+
+    <section class="media-band" aria-label="Porto street view">
+      <div class="wide-photo"></div>
+    </section>
+
+    <section class="detail" id="house" aria-labelledby="house-title">
+      <div class="section-inner detail-grid">
+        <div class="portrait" aria-hidden="true"></div>
+        <div class="detail-copy">
+          <h2 id="house-title">Old stone, new rooms, nothing overpolished.</h2>
+          <p>The house pairs original shutters and stair rails with handmade lamps, wool rugs, marble washstands, and a small honesty bar stocked with vinho verde and late-night tonic.</p>
+          <div class="amenities" aria-label="Amenities">
+            <span>Courtyard breakfast</span>
+            <span>Walkable restaurant list</span>
+            <span>Local ceramics in every room</span>
+            <span>Rain showers and heated stone floors</span>
+            <span>Direct booking concierge</span>
+            <span>No resort fee</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" aria-labelledby="reserve-title">
+      <div class="section-inner">
+        <h2 id="reserve-title">Porto is better from a smaller house.</h2>
+        <p>Reserve direct for breakfast included, flexible arrival notes, and a room matched to the kind of trip you are planning.</p>
+        <a class="cta" href="#book">Choose dates</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Rook House, Rua das Flores 118, Porto</span>
+    <span>hello@rookhouse.pt · +351 22 000 0188</span>
+  </footer>
+</body>
+</html>

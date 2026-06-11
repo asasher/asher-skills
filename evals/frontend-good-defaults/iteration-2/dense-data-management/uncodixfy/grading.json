@@ -1,0 +1,39 @@
+{
+  "eval_id": "dense-data-management",
+  "configuration": "uncodixfy",
+  "expected_output": "A dense but readable admin surface with table-first information architecture, strong hierarchy, right-aligned numeric data, restrained cards/borders, and clear selected-row/detail behavior.",
+  "output_path": "evals/frontend-good-defaults/iteration-2/dense-data-management/uncodixfy/outputs",
+  "assertions": [
+    {
+      "assertion": "The primary surface is a subscriber table or list with search/filter controls and a selected detail panel.",
+      "status": "PASS",
+      "evidence": "Primary surface is a table/list with search/select filters and selected-subscriber detail at outputs/index.html:555-602."
+    },
+    {
+      "assertion": "Numeric values such as MRR are right-aligned or otherwise easy to compare.",
+      "status": "PASS",
+      "evidence": "The MRR column uses .number with right alignment and tabular numerals at outputs/index.html:317-319 and 917."
+    },
+    {
+      "assertion": "The layout uses utility labels and data hierarchy rather than decorative explanatory copy.",
+      "status": "PASS",
+      "evidence": "The screen is dominated by table headers, subscriber rows, and detail facts rather than decorative explanatory text."
+    },
+    {
+      "assertion": "Badges, tags, and colors are sparse and functional rather than applied to every status-like field.",
+      "status": "PASS",
+      "evidence": "Badges are sparse and functional: status appears in row and detail contexts at outputs/index.html:918 and 942."
+    },
+    {
+      "assertion": "The design uses constrained spacing, typography, border, radius, and color systems rather than one-off values.",
+      "status": "PASS",
+      "evidence": "Tokens for background, surface, border, text, and radius are defined at outputs/index.html:9-23 and reused."
+    },
+    {
+      "assertion": "The screen includes long-content behavior or realistic row density without becoming cramped or unreadable.",
+      "status": "PASS",
+      "evidence": "The table container uses overflow at outputs/index.html:237-239, and responsive rules reflow the layout at 470-496."
+    }
+  ],
+  "summary": "6/6 assertions passed."
+}

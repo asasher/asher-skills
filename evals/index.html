@@ -595,8 +595,8 @@
         <div class="top-actions">
           <button id="sidebar-toggle" data-sidebar-toggle type="button" aria-controls="eval-sidebar" aria-expanded="true">Hide sidebar</button>
           <nav class="top-links" aria-label="Eval files">
-            <a href="frontend-good-defaults/iteration-1/summary.md">Summary</a>
-            <a href="frontend-good-defaults/iteration-1/benchmark.json">Benchmark</a>
+            <a href="frontend-good-defaults/iteration-2/summary.md">Summary</a>
+            <a href="frontend-good-defaults/iteration-2/benchmark.json">Benchmark</a>
             <a href="frontend-good-defaults/evals.json">Spec</a>
           </nav>
         </div>
@@ -678,6 +678,110 @@
 
       const DATA = {
         iterations: [
+          {
+            id: "iteration-2",
+            label: "Iteration 2",
+            root: "frontend-good-defaults/iteration-2",
+            aggregate: {
+              frontend_good_defaults: { passed: 29, total: 30, passRate: "96.7%" },
+              uncodixfy: { passed: 26, total: 30, passRate: "86.7%" },
+              openai_frontend_skill: { passed: 28, total: 30, passRate: "93.3%" },
+            },
+            evals: [
+              {
+                id: "internal-workspace-reset",
+                label: "Internal Workspace Reset",
+                prompt:
+                  "Build a single-page internal workflow app for a support team to triage incoming refund requests. It should have a queue, filters, request details, notes, and approve/deny actions. Use realistic sample data, but do not fake charts or analytics.",
+                scores: {
+                  frontend_good_defaults: { passed: 6, total: 6, failures: [] },
+                  uncodixfy: {
+                    passed: 5,
+                    total: 6,
+                    failures: [
+                      "The initial decision area renders a filled primary approve button and a danger Deny refund button without a confirmation step.",
+                    ],
+                  },
+                  openai_frontend_skill: {
+                    passed: 5,
+                    total: 6,
+                    failures: [
+                      "Deny request is styled as a danger button and immediately calls the denied decision handler without confirmation.",
+                    ],
+                  },
+                },
+              },
+              {
+                id: "image-led-landing-page",
+                label: "Image-Led Landing Page",
+                prompt:
+                  "Create a landing page for 'Rook House', a small design-forward hotel in Porto. The first screen should make the hotel feel specific and bookable. Use strong imagery or generate an asset if needed. Keep it tasteful and avoid generic startup SaaS copy.",
+                scores: {
+                  frontend_good_defaults: { passed: 6, total: 6, failures: [] },
+                  uncodixfy: { passed: 6, total: 6, failures: [] },
+                  openai_frontend_skill: { passed: 6, total: 6, failures: [] },
+                },
+              },
+              {
+                id: "dense-data-management",
+                label: "Dense Data Management",
+                prompt:
+                  "Design an admin screen for managing paid newsletter subscribers. It needs search, segment filters, subscriber rows with plan, renewal date, MRR, status, and a detail panel for the selected subscriber. Assume operators use this daily.",
+                scores: {
+                  frontend_good_defaults: { passed: 6, total: 6, failures: [] },
+                  uncodixfy: { passed: 6, total: 6, failures: [] },
+                  openai_frontend_skill: { passed: 6, total: 6, failures: [] },
+                },
+              },
+              {
+                id: "existing-design-system-adherence",
+                label: "Existing Design System Adherence",
+                prompt:
+                  "Given these existing tokens, build a settings page for team billing: --bg:#fbfaf7; --surface:#fffdf8; --text:#25221c; --muted:#6f695f; --border:#e6dfd2; --accent:#8b5a2b; radius:6px; spacing:4px scale. Do not introduce a new brand palette. Include plan summary, payment method, invoices, and cancel-plan flow.",
+                scores: {
+                  frontend_good_defaults: {
+                    passed: 5,
+                    total: 6,
+                    failures: [
+                      "Focus and error states are present, but no disabled state or disabled control is represented in the billing UI.",
+                    ],
+                  },
+                  uncodixfy: {
+                    passed: 4,
+                    total: 6,
+                    failures: [
+                      "The main cancellation section renders a danger-styled Cancel at period end button before a confirmation step.",
+                      "Only a focus style is present; there is no disabled state and no explicit invalid/error billing form state.",
+                    ],
+                  },
+                  openai_frontend_skill: {
+                    passed: 5,
+                    total: 6,
+                    failures: [
+                      "A focus style exists, but no disabled state or explicit invalid/error billing form state is represented.",
+                    ],
+                  },
+                },
+              },
+              {
+                id: "edge-empty-media-library",
+                label: "Edge Empty Media Library",
+                prompt:
+                  "Create the first-run empty state for a media library product. The user has no uploaded files yet. Include upload, drag-and-drop, file type limits, and what happens if a file fails. Do not show fake media thumbnails.",
+                scores: {
+                  frontend_good_defaults: { passed: 6, total: 6, failures: [] },
+                  uncodixfy: {
+                    passed: 5,
+                    total: 6,
+                    failures: [
+                      "The empty library still renders active view tabs for All files, Images, Video, and Audio.",
+                    ],
+                  },
+                  openai_frontend_skill: { passed: 6, total: 6, failures: [] },
+                },
+              },
+            ],
+          },
           {
             id: "iteration-1",
             label: "Iteration 1",

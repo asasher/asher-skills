@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Refund Review</title>
+  <style>
+    :root {
+      --bg: #f7f7f4;
+      --panel: #ffffff;
+      --panel-2: #f1f1ed;
+      --line: #d9d8d1;
+      --line-strong: #c8c6bd;
+      --text: #24231f;
+      --muted: #6e6a60;
+      --muted-2: #8b877c;
+      --accent: #315f4c;
+      --accent-dark: #24493a;
+      --warning: #9a5a16;
+      --danger: #9b2f2f;
+      --ok: #2f6b4f;
+      --focus: rgba(49, 95, 76, .18);
+      --row: #fbfbf9;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Aptos, "Helvetica Neue", sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 248px minmax(360px, 1fr) minmax(380px, 500px);
+    }
+
+    .sidebar {
+      background: #efeee8;
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+    }
+
+    .product {
+      margin-bottom: 28px;
+    }
+
+    .product h1 {
+      font-size: 18px;
+      line-height: 1.2;
+      margin: 0 0 4px;
+      font-weight: 650;
+    }
+
+    .product p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 4px;
+      margin-bottom: 28px;
+    }
+
+    .nav button {
+      width: 100%;
+      min-height: 36px;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background: #e4e2da;
+    }
+
+    .count {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .filter-group {
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .filter-group h2 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      background: var(--panel);
+      color: var(--text);
+      padding: 8px 9px;
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--focus);
+    }
+
+    .main,
+    .detail {
+      min-width: 0;
+      padding: 20px;
+    }
+
+    .main {
+      border-right: 1px solid var(--line);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .toolbar h2,
+    .detail-title h2 {
+      font-size: 20px;
+      line-height: 1.25;
+      margin: 0 0 3px;
+      font-weight: 650;
+    }
+
+    .toolbar p,
+    .detail-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .sort {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .sort label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .sort select {
+      border: 1px solid var(--line-strong);
+      background: var(--panel);
+      border-radius: 7px;
+      padding: 7px 28px 7px 9px;
+      color: var(--text);
+      outline: none;
+    }
+
+    .queue {
+      display: grid;
+      gap: 8px;
+    }
+
+    .request-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--row);
+      padding: 12px;
+    }
+
+    .request-row:hover {
+      border-color: var(--line-strong);
+      background: var(--panel);
+    }
+
+    .request-row.selected {
+      border-color: var(--accent);
+      box-shadow: inset 3px 0 0 var(--accent);
+      background: var(--panel);
+    }
+
+    .row-top {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .customer {
+      font-weight: 650;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .row-reason {
+      margin: 0;
+      color: #3d3b34;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .row-meta {
+      margin-top: 8px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .amount {
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      border-radius: 6px;
+      padding: 2px 7px;
+      border: 1px solid var(--line-strong);
+      background: var(--panel-2);
+      color: #3e3b35;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .badge.pending {
+      border-color: #d2b98f;
+      background: #fbf0dc;
+      color: #6c430a;
+    }
+
+    .badge.review {
+      border-color: #c9bda2;
+      background: #f6eddc;
+      color: #654a1d;
+    }
+
+    .badge.approved {
+      border-color: #aac6b8;
+      background: #e8f3ed;
+      color: var(--ok);
+    }
+
+    .badge.denied {
+      border-color: #d7b2ae;
+      background: #f7e8e6;
+      color: var(--danger);
+    }
+
+    .badge.risk-high {
+      border-color: #d5aaa7;
+      background: #f6e5e3;
+      color: var(--danger);
+    }
+
+    .badge.risk-medium {
+      border-color: #d2b98f;
+      background: #fbf0dc;
+      color: var(--warning);
+    }
+
+    .empty {
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 22px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .detail {
+      background: var(--panel);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 16px;
+    }
+
+    .detail-title {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 16px;
+    }
+
+    .detail-scroll {
+      min-height: 0;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .section {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section:first-child {
+      padding-top: 0;
+    }
+
+    .section h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .fact {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 10px;
+      background: #fbfbf9;
+      min-width: 0;
+    }
+
+    .fact span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .fact strong {
+      display: block;
+      font-weight: 650;
+      overflow-wrap: anywhere;
+    }
+
+    .decision-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #3d3b34;
+    }
+
+    .decision-list li + li {
+      margin-top: 6px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .note {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fbfbf9;
+      padding: 10px;
+    }
+
+    .note-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .note p {
+      margin: 0;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .button {
+      min-height: 38px;
+      border-radius: 7px;
+      padding: 8px 10px;
+      border: 1px solid var(--line-strong);
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    .button:hover {
+      background: var(--panel-2);
+    }
+
+    .button.primary {
+      border-color: var(--accent-dark);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .button.primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .button.danger {
+      border-color: #8e2c2c;
+      color: #8e2c2c;
+    }
+
+    .button.danger:hover {
+      background: #f8e9e7;
+    }
+
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+    }
+
+    @media (max-width: 1120px) {
+      .app {
+        grid-template-columns: 220px minmax(320px, 1fr);
+      }
+
+      .detail {
+        grid-column: 2;
+        border-top: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        display: block;
+      }
+
+      .sidebar,
+      .main,
+      .detail {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toolbar,
+      .detail-title {
+        display: grid;
+      }
+
+      .facts {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="product">
+        <h1>Refund Review</h1>
+        <p>Support operations</p>
+      </div>
+
+      <nav class="nav" aria-label="Queue status">
+        <button class="active" type="button" data-status-filter="all">All requests <span class="count" id="countAll">0</span></button>
+        <button type="button" data-status-filter="Pending">Pending <span class="count" id="countPending">0</span></button>
+        <button type="button" data-status-filter="Needs review">Needs review <span class="count" id="countReview">0</span></button>
+        <button type="button" data-status-filter="Approved">Approved <span class="count" id="countApproved">0</span></button>
+        <button type="button" data-status-filter="Denied">Denied <span class="count" id="countDenied">0</span></button>
+      </nav>
+
+      <div class="filter-group">
+        <h2>Filters</h2>
+        <div class="field">
+          <label for="search">Search</label>
+          <input id="search" type="search" placeholder="Name, email, order, reason">
+        </div>
+        <div class="field">
+          <label for="riskFilter">Risk</label>
+          <select id="riskFilter">
+            <option value="all">All risk levels</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="assigneeFilter">Assignee</label>
+          <select id="assigneeFilter">
+            <option value="all">Anyone</option>
+            <option value="Maya Patel">Maya Patel</option>
+            <option value="Jon Bell">Jon Bell</option>
+            <option value="Unassigned">Unassigned</option>
+          </select>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="toolbar">
+        <div>
+          <h2>Incoming requests</h2>
+          <p id="queueSummary">0 visible</p>
+        </div>
+        <div class="sort">
+          <label for="sortBy">Sort</label>
+          <select id="sortBy">
+            <option value="newest">Newest first</option>
+            <option value="amount">Highest amount</option>
+            <option value="risk">Highest risk</option>
+          </select>
+        </div>
+      </div>
+      <div class="queue" id="queue"></div>
+    </main>
+
+    <section class="detail" aria-live="polite">
+      <div class="detail-title">
+        <div>
+          <h2 id="detailCustomer">Select a request</h2>
+          <p id="detailSubtitle">Review the customer history and decision notes.</p>
+        </div>
+        <span class="badge" id="detailStatus">No selection</span>
+      </div>
+
+      <div class="detail-scroll" id="detailBody"></div>
+    </section>
+  </div>
+
+  <script>
+    const requests = [
+      {
+        id: "RF-10482",
+        order: "ORD-72941",
+        customer: "Priya Menon",
+        email: "priya.menon@example.com",
+        amount: 128.40,
+        currency: "USD",
+        status: "Pending",
+        risk: "Low",
+        assignee: "Maya Patel",
+        received: "2026-06-11T08:24:00",
+        reason: "Customer returned unworn shoes after sizing issue. Carrier scan confirms delivery to warehouse.",
+        policy: "Eligible within 30-day apparel return window.",
+        history: "3 orders, no prior refunds, account opened Sep 2024.",
+        payment: "Visa ending 2841",
+        signals: ["Return tracking delivered", "Original order fulfilled on time", "No account risk flags"],
+        notes: [
+          { author: "Maya Patel", time: "09:02", text: "Warehouse intake photo shows item and original packaging." }
+        ]
+      },
+      {
+        id: "RF-10481",
+        order: "ORD-72890",
+        customer: "Elliot Cruz",
+        email: "elliot.cruz@example.com",
+        amount: 549.00,
+        currency: "USD",
+        status: "Needs review",
+        risk: "High",
+        assignee: "Jon Bell",
+        received: "2026-06-11T07:48:00",
+        reason: "Customer reports laptop stand never arrived, but carrier marked package delivered at front desk.",
+        policy: "High-value delivery dispute requires proof review before refund.",
+        history: "5 orders, 2 delivery disputes in last 90 days.",
+        payment: "Mastercard ending 6110",
+        signals: ["High-value item", "Repeat delivery dispute", "Carrier photo available"],
+        notes: [
+          { author: "Jon Bell", time: "08:15", text: "Asked customer for building front desk confirmation." },
+          { author: "Fraud Ops", time: "08:31", text: "Pattern is similar to two prior claims from same address." }
+        ]
+      },
+      {
+        id: "RF-10480",
+        order: "ORD-72877",
+        customer: "Nadia Wallace",
+        email: "nadia.wallace@example.com",
+        amount: 86.25,
+        currency: "USD",
+        status: "Pending",
+        risk: "Medium",
+        assignee: "Unassigned",
+        received: "2026-06-10T18:12:00",
+        reason: "Subscription renewal charged after cancellation attempt. Customer shared cancellation confirmation email.",
+        policy: "Eligible when cancellation was submitted before renewal cutoff.",
+        history: "Subscriber since Jan 2025, one billing credit issued in 2025.",
+        payment: "Amex ending 9013",
+        signals: ["Cancellation email timestamp before renewal", "Renewal charge settled", "No chargeback opened"],
+        notes: [
+          { author: "Billing Queue", time: "18:40", text: "Cancellation confirmation ID matches account event log." }
+        ]
+      },
+      {
+        id: "RF-10479",
+        order: "ORD-72840",
+        customer: "Marcus King",
+        email: "marcus.king@example.com",
+        amount: 42.18,
+        currency: "USD",
+        status: "Approved",
+        risk: "Low",
+        assignee: "Maya Patel",
+        received: "2026-06-10T15:36:00",
+        reason: "Damaged ceramic mug. Customer uploaded photos showing cracked handle on arrival.",
+        policy: "Eligible for refund when damage is documented within 7 days of delivery.",
+        history: "12 orders, no prior support escalations.",
+        payment: "Visa ending 0388",
+        signals: ["Photos attached", "Reported same day as delivery", "Low-cost replacement unavailable"],
+        notes: [
+          { author: "Maya Patel", time: "16:03", text: "Approved refund because replacement inventory is depleted." }
+        ]
+      },
+      {
+        id: "RF-10478",
+        order: "ORD-72796",
+        customer: "Hannah Ko",
+        email: "hannah.ko@example.com",
+        amount: 219.99,
+        currency: "USD",
+        status: "Denied",
+        risk: "Medium",
+        assignee: "Jon Bell",
+        received: "2026-06-10T12:10:00",
+        reason: "Requested refund for headphones purchased 74 days ago. Product is functioning but customer no longer needs it.",
+        policy: "Outside 45-day electronics return window.",
+        history: "2 orders, no prior refunds.",
+        payment: "PayPal",
+        signals: ["Outside policy window", "No defect reported", "No warranty claim opened"],
+        notes: [
+          { author: "Jon Bell", time: "12:44", text: "Denied under return policy and offered warranty troubleshooting." }
+        ]
+      },
+      {
+        id: "RF-10477",
+        order: "ORD-72775",
+        customer: "Samira Haddad",
+        email: "samira.haddad@example.com",
+        amount: 312.70,
+        currency: "USD",
+        status: "Needs review",
+        risk: "High",
+        assignee: "Unassigned",
+        received: "2026-06-10T10:05:00",
+        reason: "Customer says skincare bundle caused irritation and asks for full refund without returning opened items.",
+        policy: "Opened consumables require specialist approval unless safety report is filed.",
+        history: "First order, account created day of purchase.",
+        payment: "Visa ending 7742",
+        signals: ["First-order refund", "Opened consumable goods", "Safety claim not yet filed"],
+        notes: [
+          { author: "Support Intake", time: "10:22", text: "Requested batch numbers and photos of product labels." }
+        ]
+      }
+    ];
+
+    const state = {
+      status: "all",
+      search: "",
+      risk: "all",
+      assignee: "all",
+      sort: "newest",
+      selectedId: requests[0].id
+    };
+
+    const queue = document.getElementById("queue");
+    const detailBody = document.getElementById("detailBody");
+    const detailCustomer = document.getElementById("detailCustomer");
+    const detailSubtitle = document.getElementById("detailSubtitle");
+    const detailStatus = document.getElementById("detailStatus");
+    const queueSummary = document.getElementById("queueSummary");
+
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD"
+    });
+
+    function statusClass(status) {
+      if (status === "Approved") return "approved";
+      if (status === "Denied") return "denied";
+      if (status === "Needs review") return "review";
+      return "pending";
+    }
+
+    function riskClass(risk) {
+      if (risk === "High") return "risk-high";
+      if (risk === "Medium") return "risk-medium";
+      return "";
+    }
+
+    function renderCounts() {
+      document.getElementById("countAll").textContent = requests.length;
+      document.getElementById("countPending").textContent = requests.filter((item) => item.status === "Pending").length;
+      document.getElementById("countReview").textContent = requests.filter((item) => item.status === "Needs review").length;
+      document.getElementById("countApproved").textContent = requests.filter((item) => item.status === "Approved").length;
+      document.getElementById("countDenied").textContent = requests.filter((item) => item.status === "Denied").length;
+    }
+
+    function filteredRequests() {
+      const search = state.search.trim().toLowerCase();
+      const riskRank = { High: 3, Medium: 2, Low: 1 };
+      return requests
+        .filter((item) => state.status === "all" || item.status === state.status)
+        .filter((item) => state.risk === "all" || item.risk === state.risk)
+        .filter((item) => state.assignee === "all" || item.assignee === state.assignee)
+        .filter((item) => {
+          if (!search) return true;
+          const haystack = [item.id, item.order, item.customer, item.email, item.reason, item.status, item.assignee].join(" ").toLowerCase();
+          return haystack.includes(search);
+        })
+        .sort((a, b) => {
+          if (state.sort === "amount") return b.amount - a.amount;
+          if (state.sort === "risk") return riskRank[b.risk] - riskRank[a.risk] || new Date(b.received) - new Date(a.received);
+          return new Date(b.received) - new Date(a.received);
+        });
+    }
+
+    function renderQueue() {
+      const visible = filteredRequests();
+      queueSummary.textContent = `${visible.length} visible`;
+      queue.innerHTML = "";
+
+      if (!visible.length) {
+        queue.innerHTML = '<div class="empty">No refund requests match the current filters.</div>';
+        return;
+      }
+
+      if (!visible.some((item) => item.id === state.selectedId)) {
+        state.selectedId = visible[0].id;
+      }
+
+      visible.forEach((item) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `request-row ${item.id === state.selectedId ? "selected" : ""}`;
+        button.dataset.id = item.id;
+        button.innerHTML = `
+          <div>
+            <div class="row-top">
+              <span class="customer">${item.customer}</span>
+              <span class="muted">${item.id}</span>
+              <span class="badge ${statusClass(item.status)}">${item.status}</span>
+              <span class="badge ${riskClass(item.risk)}">${item.risk} risk</span>
+            </div>
+            <p class="row-reason">${item.reason}</p>
+            <div class="row-meta">
+              <span>${item.order}</span>
+              <span>${item.assignee}</span>
+              <span>${formatReceived(item.received)}</span>
+            </div>
+          </div>
+          <div class="amount">${formatter.format(item.amount)}</div>
+        `;
+        button.addEventListener("click", () => {
+          state.selectedId = item.id;
+          render();
+        });
+        queue.appendChild(button);
+      });
+    }
+
+    function formatReceived(value) {
+      const date = new Date(value);
+      return date.toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+    }
+
+    function renderDetail() {
+      const item = requests.find((request) => request.id === state.selectedId);
+      if (!item) {
+        detailCustomer.textContent = "Select a request";
+        detailSubtitle.textContent = "Review the customer history and decision notes.";
+        detailStatus.textContent = "No selection";
+        detailStatus.className = "badge";
+        detailBody.innerHTML = "";
+        return;
+      }
+
+      detailCustomer.textContent = item.customer;
+      detailSubtitle.textContent = `${item.id} · ${item.order} · ${item.email}`;
+      detailStatus.textContent = item.status;
+      detailStatus.className = `badge ${statusClass(item.status)}`;
+
+      detailBody.innerHTML = `
+        <div class="section">
+          <h3>Request details</h3>
+          <div class="facts">
+            <div class="fact"><span>Refund amount</span><strong>${formatter.format(item.amount)}</strong></div>
+            <div class="fact"><span>Risk</span><strong>${item.risk}</strong></div>
+            <div class="fact"><span>Payment</span><strong>${item.payment}</strong></div>
+            <div class="fact"><span>Assignee</span><strong>${item.assignee}</strong></div>
+            <div class="fact"><span>Received</span><strong>${formatReceived(item.received)}</strong></div>
+            <div class="fact"><span>Policy</span><strong>${item.policy}</strong></div>
+          </div>
+        </div>
+        <div class="section">
+          <h3>Customer reason</h3>
+          <p>${item.reason}</p>
+        </div>
+        <div class="section">
+          <h3>Account history</h3>
+          <p>${item.history}</p>
+        </div>
+        <div class="section">
+          <h3>Decision signals</h3>
+          <ul class="decision-list">
+            ${item.signals.map((signal) => `<li>${signal}</li>`).join("")}
+          </ul>
+        </div>
+        <div class="section">
+          <h3>Notes</h3>
+          <div class="timeline" id="notesList">
+            ${item.notes.map((note) => `
+              <article class="note">
+                <div class="note-head"><span>${note.author}</span><span>${note.time}</span></div>
+                <p>${note.text}</p>
+              </article>
+            `).join("")}
+          </div>
+          <form id="noteForm" class="field" style="margin-top:12px">
+            <label for="noteText">Add note</label>
+            <textarea id="noteText" placeholder="Write a clear decision note"></textarea>
+            <button class="button" type="submit">Add note</button>
+          </form>
+        </div>
+        <div class="section">
+          <h3>Decision</h3>
+          <div class="actions">
+            <button class="button primary" type="button" id="approveButton" ${item.status === "Approved" ? "disabled" : ""}>Approve refund</button>
+            <button class="button danger" type="button" id="denyButton" ${item.status === "Denied" ? "disabled" : ""}>Deny refund</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("noteForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const input = document.getElementById("noteText");
+        const value = input.value.trim();
+        if (!value) return;
+        item.notes.push({
+          author: "You",
+          time: new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }),
+          text: value
+        });
+        input.value = "";
+        renderDetail();
+      });
+
+      document.getElementById("approveButton").addEventListener("click", () => setDecision(item, "Approved"));
+      document.getElementById("denyButton").addEventListener("click", () => setDecision(item, "Denied"));
+    }
+
+    function setDecision(item, status) {
+      item.status = status;
+      item.notes.push({
+        author: "You",
+        time: new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }),
+        text: status === "Approved" ? "Approved refund from review workspace." : "Denied refund from review workspace."
+      });
+      render();
+    }
+
+    function bindControls() {
+      document.querySelectorAll("[data-status-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.status = button.dataset.statusFilter;
+          document.querySelectorAll("[data-status-filter]").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          render();
+        });
+      });
+
+      document.getElementById("search").addEventListener("input", (event) => {
+        state.search = event.target.value;
+        render();
+      });
+
+      document.getElementById("riskFilter").addEventListener("change", (event) => {
+        state.risk = event.target.value;
+        render();
+      });
+
+      document.getElementById("assigneeFilter").addEventListener("change", (event) => {
+        state.assignee = event.target.value;
+        render();
+      });
+
+      document.getElementById("sortBy").addEventListener("change", (event) => {
+        state.sort = event.target.value;
+        render();
+      });
+    }
+
+    function render() {
+      renderCounts();
+      renderQueue();
+      renderDetail();
+    }
+
+    bindControls();
+    render();
+  </script>
+</body>
+</html>
