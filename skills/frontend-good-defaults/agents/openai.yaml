@@ -1,7 +1,0 @@
-interface:
-  display_name: "Frontend Good Defaults"
-  short_description: "Framework-agnostic defaults for frontend UI"
-  default_prompt: "Use $frontend-good-defaults to design and implement this frontend with framework-agnostic visual and component defaults."
-
-policy:
-  allow_implicit_invocation: true
