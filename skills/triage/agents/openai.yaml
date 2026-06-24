@@ -1,2 +1,7 @@
+interface:
+  display_name: "Triage"
+  short_description: "Route GitHub issues through a per-issue dev loop to reviewed PRs"
+  default_prompt: "Use $triage to triage the open issues in this repo."
+
 policy:
   allow_implicit_invocation: false

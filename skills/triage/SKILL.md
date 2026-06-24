@@ -1,43 +1,54 @@
 ---
 name: triage
-description: Orchestrates GitHub issue triage by creating one Codex issue thread per issue.
+description: Routes open GitHub issues through a per-issue development loop (classify, then fix/plan/implement/refactor, verify, PR, adversarial review); subcommands also run standalone.
+argument-hint: "[command] [issue, PR, or target]"
+user-invocable: true
 disable-model-invocation: true
 ---
 
 # Triage
 
-Triage is queue orchestration. Keep this thread focused on discovering the issue queue, creating issue threads, and reporting handoff state. Do not solve the issues in this thread.
+Triage sorts each open issue by type and routes it through the matching development loop, one issue at a time, ending at a reviewed PR. This file is the command surface; each subcommand loads its own contract from `reference/` only when it runs.
 
-## Steps
+## File locations
 
-1. Build the queue.
-   - If the user named issue numbers or URLs, use exactly those issues.
-   - Otherwise, fetch every open GitHub issue in the current repo with no labels.
-   - Completion criterion: the queue contains every in-scope issue URL exactly once, or the user is told that the queue is empty.
+This skill's files fall into two kinds, by where they live:
 
-2. Check labels.
-   - The worker threads need these labels: `bug`, `enhancement`, `refactor`, and `needs-info`.
-   - Create missing labels when the available GitHub tools can do so; otherwise record the missing labels as blockers for the worker threads.
-   - Completion criterion: each required label is either available or has an explicit blocker.
+- **Bundled reference** — files under this skill's own `reference/` and `templates/`. They ship with the skill and are present wherever it is installed. Do not look for them in the target repo.
+- **Project playbook** — files under `docs/agents/` in the target repo. They hold how this codebase does each step, and are created by `triage setup`.
 
-3. Create one issue thread per queue item.
-   - Use a new Codex thread in its own worktree under this project for each issue.
-   - Title each thread `triage #<issue-number>: <issue-title>`.
-   - Prompt each thread with the issue URL and the full instructions from `ISSUE_THREAD_INSTRUCTIONS.md`.
-   - Do not batch multiple issues into one issue thread.
-   - Completion criterion: every queued issue has a created thread id, pending worktree id, or explicit creation blocker.
+A subcommand's contract is a bundled reference; the conventions it needs are a project playbook. If a required playbook is missing, stop and tell the user to run `triage setup`; do not improvise the step or substitute a bundled file.
 
-4. Report the handoff table in this triage thread.
-   - Include issue number, title, URL, created thread or pending worktree id, and blocker if any.
-   - Stop after handoff unless the user explicitly asks this thread to monitor the issue threads.
-   - Completion criterion: every queued issue appears in the handoff table with a terminal handoff state.
+## Commands
 
-## Context Pointers
+| Command | Role | Bundled reference | Project playbook |
+|---|---|---|---|
+| `run` (default) | Build the issue queue, dispatch one issue thread per issue, report handoff | `reference/run.md`, `reference/issue-loop.md` | — |
+| `setup` | Scaffold playbooks into `docs/agents/`; offer matching external skills | `reference/setup.md`, `templates/` | writes them |
+| `diagnose` | Bug branch: reproduce, fix, confirm the failing path passes | `reference/diagnose.md` | `docs/agents/diagnosing-bugs.md` + `environment.md` |
+| `plan` | Enhancement branch: produce a reviewable plan, stop at the approval gate | `reference/plan.md` | `docs/agents/planning.md` |
+| `implement` | Build an approved plan | `reference/implement.md` | `docs/agents/implementing.md` + `environment.md` |
+| `refactor` | Behavior-preserving change locked by tests | `reference/refactor.md` | `docs/agents/refactoring.md` |
+| `verify` | Run the repo's checks and capture evidence | `reference/verify.md` | `docs/agents/verifying.md` + `environment.md` |
+| `adversarial-review` | Reviewer ⇆ fixer subagents on a PR until LGTM or cap | `reference/adversarial-review.md` | `docs/agents/pr-reviewer.md`, `docs/agents/pr-fixer.md` + `environment.md` |
 
-- `ISSUE_THREAD_INSTRUCTIONS.md`: required worker prompt for each issue thread.
-- `ADVERSARIAL_REVIEW_INSTRUCTIONS.md`: loaded only by an issue thread after it has created a PR.
+`docs/agents/environment.md` is the shared playbook: branch model, base branch, where and how to run, authenticate, and test the app, and which tools are available. Any subcommand that builds a branch, runs, or tests the app reads it alongside its own step playbook.
+
+## Routing
+
+1. **No argument** → run the orchestration in `reference/run.md`. Show the command table first so the user can redirect.
+2. **First word matches a command** → load that bundled reference and follow it. Everything after the command name is the target (an issue number/URL, PR, branch, or path).
+3. **First word does not match** → infer the closest command, state the inferred command, then load its reference and proceed.
+
+Every subcommand works the same whether a human types it or the loop reaches it: it resolves to the same bundled reference.
+
+## Core rules
+
+- The `run` thread orchestrates only. It discovers the queue and dispatches; it does not solve issues. Solving happens inside issue threads.
+- Apply exactly one primary classification per issue: `bug`, `enhancement`, `refactor`, or `needs-info`.
+- A subcommand reads exactly one playbook path. The playbook decides whether to defer to an installed skill — the subcommand never branches on skill availability itself.
 
 ## Glossary
 
-- Triage thread: this Codex app thread, where the issue queue is discovered and dispatched.
-- Issue thread: one Codex app thread created to classify and handle one GitHub issue.
+- **Run thread**: the orchestrator thread where the queue is discovered and dispatched.
+- **Issue thread**: one thread created to take a single issue through the loop to a PR.

@@ -1,0 +1,34 @@
+{
+  "run": {
+    "description": "Build the issue queue and dispatch one issue thread per issue, then report the handoff table.",
+    "argumentHint": "[issue numbers or URLs, or empty for all unlabeled]"
+  },
+  "setup": {
+    "description": "Scaffold the project playbooks into docs/agents/ and offer to install matching external skills.",
+    "argumentHint": "[none]"
+  },
+  "diagnose": {
+    "description": "Reproduce, locate, and fix a bug, confirming the failing path passes.",
+    "argumentHint": "[issue number, URL, or bug description]"
+  },
+  "plan": {
+    "description": "Decide whether an enhancement needs a plan, write it, and stop at the approval gate.",
+    "argumentHint": "[issue number, URL, or feature]"
+  },
+  "implement": {
+    "description": "Build an approved plan or an agreed small enhancement.",
+    "argumentHint": "[plan path or issue]"
+  },
+  "refactor": {
+    "description": "Make a behavior-preserving change locked by tests.",
+    "argumentHint": "[module, surface, or issue]"
+  },
+  "verify": {
+    "description": "Run the repo's checks and capture evidence for a branch or PR.",
+    "argumentHint": "[branch or PR]"
+  },
+  "adversarial-review": {
+    "description": "Run reviewer and fixer subagents on a PR until LGTM or the iteration cap.",
+    "argumentHint": "[PR number or URL]"
+  }
+}
