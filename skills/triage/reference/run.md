@@ -10,7 +10,7 @@ This is the orchestrator. Keep this thread focused on discovering the issue queu
 
 2. Build the queue.
    - If the user named issue numbers or URLs, use exactly those.
-   - Otherwise, fetch every open GitHub issue in the current repo with no labels.
+   - Otherwise, fetch every open GitHub issue in the current repo with no labels that doesn't depend on another open issue.
    - Completion criterion: the queue holds every in-scope issue URL exactly once, or the user is told the queue is empty.
 
 3. Check labels.
