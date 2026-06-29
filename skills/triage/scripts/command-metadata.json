@@ -1,10 +1,14 @@
 {
+  "groom": {
+    "description": "Triage the backlog with the human: classify work-type, clarify, resolve dependencies, and label which issues are ready for the agent.",
+    "argumentHint": "[issue numbers or URLs, or empty for the whole open backlog]"
+  },
   "run": {
-    "description": "Build the issue queue and dispatch one issue thread per issue, then report the handoff table.",
-    "argumentHint": "[issue numbers or URLs, or empty for all unlabeled]"
+    "description": "Queue every ready-for-agent, unblocked issue and dispatch one issue thread each, then report the handoff table.",
+    "argumentHint": "[issue numbers or URLs, or empty for all ready-for-agent]"
   },
   "setup": {
-    "description": "Scaffold the project playbooks into docs/agents/ and offer to install matching external skills.",
+    "description": "Scaffold playbooks, provision GitHub role labels, choose parallel/sequential and scaffold worktree isolation, identify seed/checks, and verify readiness.",
     "argumentHint": "[none]"
   },
   "diagnose": {
@@ -24,7 +28,11 @@
     "argumentHint": "[module, surface, or issue]"
   },
   "verify": {
-    "description": "Run the repo's checks and capture evidence for a branch or PR.",
+    "description": "Run the checks and verify behavior against acceptance criteria, looping fixes until they pass or cap.",
+    "argumentHint": "[branch or PR]"
+  },
+  "evidence": {
+    "description": "Capture human-facing proof once verification converges, indexed by the PR body.",
     "argumentHint": "[branch or PR]"
   },
   "adversarial-review": {

@@ -18,4 +18,4 @@ Read `docs/agents/diagnosing-bugs.md` for this repo's reproduction and debugging
    - Apply the fix per the playbook's conventions. Re-run the failing path and confirm it now passes.
    - Completion criterion: the previously failing path passes, and no check the playbook requires has regressed.
 
-Standalone with a PR intended: continue to `reference/verify.md`.
+Standalone with a PR intended: continue to `reference/verify.md`, then `reference/evidence.md`.

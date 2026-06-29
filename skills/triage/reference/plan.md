@@ -12,7 +12,8 @@ Read `docs/agents/planning.md` for this repo's plan format, location, plan-size 
 
 2. Write the plan.
    - Produce the plan in the format and location the playbook specifies. Cover what the playbook requires (typically: user stories, definition of done, evidence required, implementation outline, risks, test plan).
-   - Completion criterion: the plan exists in the specified location and meets the playbook's checklist.
+   - State the definition of done as explicit, testable acceptance criteria — each something the verify loop can check pass/fail against a running app. These are the contract `reference/verify.md` and `reference/evidence.md` consume downstream.
+   - Completion criterion: the plan exists in the specified location, meets the playbook's checklist, and its acceptance criteria are individually checkable.
 
 3. Stop at the approval gate.
    - Wait for human approval before implementation. If approval changes scope, update the plan before coding.

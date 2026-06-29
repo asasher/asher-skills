@@ -14,4 +14,4 @@ Read `docs/agents/implementing.md` for this repo's commit style and code convent
    - Branch per `environment.md`; commit per `implementing.md`, so the work is reviewable.
    - Completion criterion: the work sits on a correctly named branch off the right base, with commits that match the repo's style.
 
-Standalone with a PR intended: continue to `reference/verify.md`.
+Standalone with a PR intended: continue to `reference/verify.md`, then `reference/evidence.md`.

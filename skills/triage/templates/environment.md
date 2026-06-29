@@ -1,6 +1,6 @@
 # Playbook: Environment
 
-> Project playbook for this repo. Shared — read by any triage subskill that builds a branch, runs, or tests the app (`implement`, `verify`, `diagnose`, the PR step, the review fixer). Tailor every section to this codebase.
+> Project playbook for this repo. Shared — read by any triage subskill that builds a branch, runs, or tests the app (`implement`, `verify`, `evidence`, `diagnose`, the PR step, the review fixer) and by `run` for the parallelism verdict. Tailor every section to this codebase. `setup` fills the isolation, seed, and parallelism sections from its audit.
 
 ## Branching & deploys
 
@@ -9,20 +9,38 @@
 - What a PR produces: _<e.g. a preview deployment per PR, or nothing>_.
 - What a merge produces: _<e.g. merge to staging → staging deployment; promotion path to production>_.
 
-## Where to test
-
-- _<e.g. test locally only; do not test against the preview>_ / _<e.g. manual testing on staging after merge>_.
-
 ## Running locally
 
-- Start the app: _<command>_.
-- Ports / URLs: _<add yours>_.
+- Start the full dev stack: _<command>_.
+- Services that come up: _<e.g. web, API, Postgres, redis, object store>_.
+- Ports / URLs / hostnames: _<add yours; note if a shared proxy with `*.localhost` hostnames is used>_.
+
+## Worktree isolation
+
+> Set by `setup` per `reference/worktree-isolation.md`.
+
+- Regime: _<local-isolatable | cloud-singleton>_.
+- How to bring up an **isolated** stack for one worktree: _<the derived-env command / hook, or "main checkout only">_.
+- Shared singletons that cannot be isolated locally: _<e.g. one managed deployment, one auth tenant, one inbox; or "none">_.
+
+## Seed data
+
+- Seed regime: _<real seed command | load-from-dataset | none — drive the app>_.
+- Command (if any): _<e.g. `pnpm dev:seed`, or the dataset-load command>_.
+- What a freshly seeded stack contains, and how to reach a feature-exercising state when there is no seed: _<add yours>_.
 
 ## Authenticating for testing
 
-- Auth model: _<e.g. email magic-link, OAuth, username+password, API token>_.
-- How an agent gets a session: _<e.g. trigger a magic link → read it from the agentmail inbox → open the link with agent-browser>_.
-- Test accounts / where credentials live: _<env vars or secrets store; never hardcode>_.
+- Auth model: _<e.g. email magic-link/OTP, OAuth, username+password, API token>_.
+- How an agent mints a session: _<e.g. trigger an OTP → read it from the agentmail inbox → open the link with agent-browser>_.
+- Test accounts / where credentials live: _<env vars or secrets store; never hardcode, never echo `.env`>_.
+
+## Parallelism verdict
+
+> Read by `run` before dispatch.
+
+- Verdict: _<parallel-safe | serialize-verification>_.
+- If serialized, the shared resource that forces it: _<add yours>_.
 
 ## Tools available
 

@@ -18,4 +18,4 @@ Read `docs/agents/refactoring.md` for this repo's test framework and refactoring
    - Verify no user-facing behavior shifted beyond the intended structural change.
    - Completion criterion: the diff is structural only, or any behavior change is explicitly called out and justified.
 
-Standalone with a PR intended: continue to `reference/verify.md`.
+Standalone with a PR intended: continue to `reference/verify.md`, then `reference/evidence.md`.
