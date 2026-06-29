@@ -4,7 +4,7 @@ Target: the open issue backlog, or a named subset. The interactive pre-flight ph
 
 Read `docs/agents/triage-policy.md` for this repo's label-role mapping, how it records dependencies, and the readiness-decision rule. If it is missing, report a setup gap and stop.
 
-This phase is human-in-the-loop: the agent proposes, the human confirms. The agent may apply the `needs-info`, `ready-for-human`, and exclusion roles on its own; it applies `ready-for-agent` only to issues the human confirms in the shortlist.
+This phase is human-in-the-loop: the agent proposes and may self-apply any role except `ready-for-agent`, which it applies only to issues the human confirms (step 5).
 
 ## Steps
 

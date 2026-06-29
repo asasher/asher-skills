@@ -1,6 +1,6 @@
 {
   "groom": {
-    "description": "Triage the backlog with the human: classify work-type, clarify, resolve dependencies, and label which issues are ready for the agent.",
+    "description": "Triage the backlog with the human: classify work-type, clarify, resolve dependencies/supersession, label readiness.",
     "argumentHint": "[issue numbers or URLs, or empty for the whole open backlog]"
   },
   "run": {

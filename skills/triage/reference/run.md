@@ -1,6 +1,6 @@
 # Run — Queue Orchestration
 
-This is the orchestrator. Keep this thread focused on discovering the issue queue, dispatching issue threads, and reporting handoff state. Do not solve issues here.
+This is the orchestrator: discover the queue, dispatch issue threads, report handoff. Do not solve issues here.
 
 ## Steps
 
