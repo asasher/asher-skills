@@ -56,7 +56,7 @@ never pushed — so neither side ever sees the other's floor. This is the firewa
 
 ## The turn loop (every shared-file write follows this)
 
-1. `git pull --rebase` (get the other side's latest move).
+1. `git pull --rebase` **on a clean tree, before you edit anything** (get the other side's latest move).
 2. Read `state.json`. If `turn` ≠ me → it's not my turn: report status to my human, offer to keep polling
    (re-pull on an interval) or stop. Do **not** write shared files.
 3. If `turn` == me → do my move (per the calling subcommand): update `canvas.json`, write
@@ -66,6 +66,12 @@ never pushed — so neither side ever sees the other's floor. This is the firewa
    **Never** stage `private/`.
 5. `git add` → `git commit` → `git pull --rebase` → `git push`. If push is rejected, `git pull --rebase`
    and push again (someone's move landed first; re-read state and reconcile before retrying your move).
+
+**Ordering rule (don't skip):** `git pull --rebase` **aborts if the working tree is dirty** ("cannot pull with
+rebase: you have unstaged changes"). So the only safe order is: pull *first* on a clean tree (step 1) → edit
+(step 3) → **commit** (step 5) → *then* the pre-push pull → push. Never run `pull --rebase` after you've edited
+but before you've committed. (If you must, `git pull --rebase --autostash`.) This is the single most common way
+a turn breaks, especially for an agent following "pull before pushing" too literally.
 
 Because only the side whose `turn` it is writes shared files, steps 1–5 never truly collide; the rebase is a
 safety net, not the mechanism.
