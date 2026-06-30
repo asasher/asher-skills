@@ -1,6 +1,6 @@
 # Triage
 
-Grooms the GitHub backlog with you — classify, clarify, resolve dependencies, and label which issues are ready — then runs each ready-for-agent issue through a per-issue development loop: the matching branch (diagnose / plan → implement / refactor), a build⇆verify loop against acceptance criteria, evidence capture, a PR, and an adversarial review until LGTM. One installable skill with a single command surface; each subcommand also runs standalone.
+Groom the GitHub backlog with the human, then run each ready-for-agent issue through the issue loop to a reviewed PR. Subcommands also run standalone.
 
 ## File locations
 

@@ -15,19 +15,17 @@ A repo can be local-isolatable for its DB yet still depend on a shared external 
 
 Look for each; every hit is a collision point to report:
 
-- **Fixed container names** — `container_name:` in compose. Two stacks can't both create `local_db`. (ducttape: `local_db`/`local_sftp`; metis: `metis-postgres`.)
-- **Hardcoded host ports** — fixed `HOST:CONTAINER` ports in compose, `.env`, or app config. Second stack fails to bind. (ducttape pg `5692`; metis pg `5302`, redis `6379`, qstash `8081`.)
+- **Fixed container names** — `container_name:` in compose. Two stacks can't both create the same named container.
+- **Hardcoded host ports** — fixed `HOST:CONTAINER` ports in compose, `.env`, or app config. Second stack fails to bind.
 - **No compose project namespace** — no `name:` / `COMPOSE_PROJECT_NAME`, so containers, volumes, and networks aren't namespaced per worktree.
 - **Single shared datastore URL** — one `DATABASE_URL` / Redis URL reused across worktrees, so they read and write the same data even when ports differ.
 - **Shared dev proxy hostnames** — a single proxy (e.g. portless on `:1355`) with hostnames hardcoded in `package.json`/`.env` (`app.<name>.localhost`). Worktrees claim the same route. Isolate by per-worktree subdomain, not by moving the proxy port.
 - **Hardcoded shared cloud IDs** — a pinned managed-deployment id or hosted auth tenant key (e.g. a Convex deployment, a Clerk instance) shared by every worktree. This is the cloud-singleton signal.
-- **Copy-without-remap setup** — a worktree setup script that copies `.env*` into the new worktree but rewrites nothing. Present-but-insufficient: it makes every worktree point at the same resources. (metis, integrations-v2, ducttape all do this.)
+- **Copy-without-remap setup** — a worktree setup script that copies `.env*` into the new worktree but rewrites nothing. Present-but-insufficient: it makes every worktree point at the same resources.
 
 ## Detect an existing solution before scaffolding
 
 A repo may already isolate. Signs: a script that derives a per-worktree suffix and a port band from the worktree path, sets `COMPOSE_PROJECT_NAME=<project>-<suffix>`, rewrites datastore URLs and proxy subdomains, and creates per-worktree state dirs — wired to a worktree-create hook so it applies automatically, ideally with tests and an orphan reaper. If found and sound, record "parallel-safe" and defer to it; scaffold nothing.
-
-(pipelines is the reference: `scripts/worktree-env.ts` derives the suffix from `sha256(gitDir)` into a high port band, namespaces compose, rewrites URLs, keeps the one shared portless proxy isolated by subdomain, reaps orphans, and is applied by a `.claude` worktree-create hook.)
 
 ## Scaffold pattern (local-isolatable regime, on approval)
 
