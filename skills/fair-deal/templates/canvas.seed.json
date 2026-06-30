@@ -1,0 +1,23 @@
+{
+  "meta": { "app": "fair-deal-canvas", "version": 2, "exportedAt": "" },
+  "fields": {
+    "partyA": "", "partyB": "", "deal": "", "date": "",
+    "b9_goalA": "", "b9_goalB": "", "b9_batnaA": "", "b9_batnaB": "",
+    "b9_winA": "", "b9_winB": "", "b9_align": "", "b9_notes": "",
+    "biz_customer": "", "biz_offer": "", "biz_channel": "", "biz_edge": "",
+    "ns_metric": "", "ns_track": "", "biz_notes": "",
+    "b1_notes": "", "b2_notes": "",
+    "b5_vehicle": "", "b5_alloc": "", "b5_vest": "", "b5_notes": "",
+    "b4": "", "b4_notes": "",
+    "b6_notes": "", "b7_notes": "",
+    "b8_valmethod": "", "b8_valdetail": "", "b8_leaving": "", "b8_stuck": "", "b8_exit": "", "b8_notes": "",
+    "b10_fail": "", "b10_prevent": "", "b10_notes": ""
+  },
+  "tables": {
+    "t1": [],
+    "t2": [],
+    "t6": [],
+    "t7a": [],
+    "t7b": []
+  }
+}

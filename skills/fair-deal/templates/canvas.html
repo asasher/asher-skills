@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Fair Deal Canvas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     THE FAIR DEAL CANVAS — web-app authoring + clean print export
+     Design language: Swiss structure · Muji calm · warm clay accent
+     ============================================================ */
+  :root{
+    --ink:#26211c; --ink-soft:#4a443c; --paper:#faf8f3; --bg:#e9e4da;
+    --grey:#8a8175; --hair:#e3ddd0; --rule:#2a2520;
+    --accent:#b4552d; --accent-2:#cf6f43;
+    --prop:#2f7d72; --clar:#b07d1a; --cont:#6b5b95;
+    --fieldbg:#fffdf9; --fieldfocus:#fbf3ea;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+    font-family:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 1;}
+
+  /* ---------- toolbar ---------- */
+  .toolbar{position:sticky;top:0;z-index:60;background:var(--ink);
+    display:flex;align-items:center;gap:14px;padding:11px 26px;}
+  .toolbar .brand{color:#f3ece2;font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-right:auto}
+  .toolbar .brand span{color:var(--accent-2)}
+  .toolbar button{font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+    padding:8px 16px;border:1px solid #6f675d;background:transparent;color:#f3ece2;cursor:pointer;border-radius:6px;transition:.12s}
+  .toolbar button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .toolbar button:hover{background:#3a342d}
+  .toolbar button.primary:hover{background:var(--accent-2);border-color:var(--accent-2)}
+  .saved{color:#9a9186;font-size:10px;letter-spacing:.12em;text-transform:uppercase;min-width:84px;text-align:right}
+
+  /* ---------- section nav ---------- */
+  .nav{position:sticky;top:47px;z-index:55;background:var(--paper);border-bottom:1px solid var(--hair);
+    display:flex;gap:6px;flex-wrap:wrap;padding:9px 26px;justify-content:center}
+  .nav a{font-size:11px;font-weight:700;color:var(--grey);text-decoration:none;width:26px;height:26px;
+    display:flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid transparent}
+  .nav a:hover{color:var(--accent);border-color:var(--hair);background:#fff}
+
+  .app{max-width:980px;margin:26px auto 60px;padding:0 22px}
+
+  /* ---------- masthead ---------- */
+  .masthead{background:var(--paper);border:1px solid var(--hair);border-radius:12px;padding:30px 32px;margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(60,48,34,.04)}
+  .mast-mark{font-size:10px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;color:var(--grey)}
+  .mast-mark .n{color:var(--accent)}
+  h1{font-size:46px;line-height:1;font-weight:800;letter-spacing:-.035em;margin:8px 0 0}
+  h1 em{font-style:normal;color:var(--accent)}
+  .subtitle{font-size:14.5px;color:var(--ink-soft);max-width:60ch;margin:14px 0 22px}
+  .subtitle b{font-weight:700;color:var(--ink)}
+  .mast-fields{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0 22px;border-top:1px solid var(--hair);padding-top:16px}
+  .ff{display:flex;flex-direction:column;padding-bottom:2px}
+  .ff label{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);margin-bottom:5px}
+  .ff input{font-family:inherit;font-size:15px;font-weight:600;color:var(--ink);border:0;border-bottom:1.5px solid var(--hair);
+    background:transparent;padding:3px 0;outline:none;width:100%;transition:border-color .12s}
+  .ff input:focus{border-color:var(--accent)}
+  .ff input::placeholder{color:#c4bcae;font-weight:400}
+
+  /* ---------- how-to + lenses ---------- */
+  .howto{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;
+    background:#f4eee3;border:1px solid var(--hair);border-radius:12px;padding:16px 20px;margin-bottom:16px}
+  .howto .lab{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);white-space:nowrap;padding-top:2px}
+  .howto p{margin:0;font-size:13.5px;line-height:1.6;color:var(--ink-soft)}
+  .howto p b{font-weight:700;color:var(--ink)}
+
+  .lenses{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+  .lens{background:var(--paper);border:1px solid var(--hair);border-radius:12px;padding:16px 18px}
+  .lens .ln{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+  .lens.prop .ln{color:var(--prop)} .lens.clar .ln{color:var(--clar)} .lens.cont .ln{color:var(--cont)}
+  .lens h3{font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0 0 6px}
+  .lens p{margin:0;font-size:12.5px;line-height:1.5;color:var(--ink-soft)}
+
+  /* ---------- in-card subhead (e.g. "what good looks like") ---------- */
+  .subhead{margin:14px 0 12px;font-size:10px;font-weight:800;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center}
+
+  /* ---------- section cards ---------- */
+  .sec{background:var(--paper);border:1px solid var(--hair);border-radius:12px;padding:22px 24px 20px;margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(60,48,34,.04);scroll-margin-top:96px}
+  .sec .head{display:flex;align-items:flex-start;gap:14px;margin-bottom:6px}
+  .sec .num{font-size:30px;font-weight:800;line-height:.85;letter-spacing:-.04em;color:var(--accent);flex:none;min-width:36px}
+  .sec .htext{flex:1}
+  .sec .title{font-size:18px;font-weight:700;letter-spacing:-.02em;line-height:1.15;display:flex;align-items:center;gap:8px}
+  .sec .lenstag{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-top:3px}
+  .sec.prop .lenstag{color:var(--prop)} .sec.clar .lenstag{color:var(--clar)} .sec.cont .lenstag{color:var(--cont)}
+  .sec .desc{font-size:13px;line-height:1.55;color:var(--ink-soft);margin:6px 0 14px;max-width:88ch}
+  .sec .desc b{font-weight:700;color:var(--ink)}
+
+  /* ---------- tooltips (examples) ---------- */
+  .tip{position:relative;display:inline-flex;vertical-align:middle;margin-left:5px}
+  .tip>.ti{width:15px;height:15px;border-radius:50%;border:1px solid var(--grey);color:var(--grey);
+    font-size:10px;font-weight:700;font-style:normal;display:flex;align-items:center;justify-content:center;cursor:help}
+  .tip>.tb{position:absolute;left:-8px;top:140%;z-index:40;width:300px;max-width:74vw;background:var(--ink);color:#f1e9de;
+    font-size:12px;line-height:1.55;font-weight:400;text-transform:none;letter-spacing:0;padding:11px 13px;border-radius:9px;
+    box-shadow:0 8px 26px rgba(0,0,0,.28);opacity:0;visibility:hidden;transform:translateY(-3px);transition:.13s}
+  .tip:hover>.tb,.tip:focus-within>.tb{opacity:1;visibility:visible;transform:none}
+  .tip>.tb b{color:#fff;font-weight:700}
+  .tip>.tb .ex{display:block;margin-top:4px}
+
+  /* ---------- generic inputs ---------- */
+  textarea.ta,input.ti-txt,select.sel{font-family:inherit;font-size:13px;color:var(--ink);
+    background:var(--fieldbg);border:1px solid var(--hair);border-radius:8px;padding:9px 11px;outline:none;width:100%;transition:.12s}
+  textarea.ta{resize:none;line-height:1.55;min-height:62px;display:block}
+  textarea.ta:focus,input.ti-txt:focus,select.sel:focus{border-color:var(--accent);background:var(--fieldfocus)}
+  select.sel{cursor:pointer;-webkit-appearance:none;appearance:none;
+    background-image:linear-gradient(45deg,transparent 50%,var(--grey) 50%),linear-gradient(135deg,var(--grey) 50%,transparent 50%);
+    background-position:calc(100% - 16px) 52%,calc(100% - 11px) 52%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:30px}
+  .fieldlabel{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin:0 0 5px;display:block}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px}
+  .field{margin-bottom:12px}
+
+  /* ---------- editable tables ---------- */
+  .tbl{margin:2px 0 6px}
+  .trow{display:grid;gap:8px;align-items:center;margin-bottom:7px}
+  .trow.thead{margin-bottom:6px}
+  .tlab{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);padding:0 2px}
+  .tcell input.cin,.tcell select.cin{font-family:inherit;font-size:12.5px;color:var(--ink);background:var(--fieldbg);
+    border:1px solid var(--hair);border-radius:7px;padding:7px 9px;outline:none;width:100%}
+  .tcell select.cin{cursor:pointer}
+  .tcell input.cin:focus,.tcell select.cin:focus{border-color:var(--accent);background:var(--fieldfocus)}
+  .chk{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-soft);white-space:nowrap}
+  .chk input{accent-color:var(--accent);width:15px;height:15px}
+  .trm{display:flex;justify-content:center}
+  .rm{border:0;background:transparent;color:#bdb4a6;cursor:pointer;padding:4px;border-radius:5px;line-height:0}
+  .rm:hover{color:var(--accent);background:#f4eee3}
+  .rm svg{width:15px;height:15px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
+  .addrow{font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--accent);
+    background:transparent;border:1px dashed var(--hair);border-radius:7px;padding:7px 12px;cursor:pointer;margin-top:2px}
+  .addrow:hover{border-color:var(--accent);background:#f4eee3}
+
+  /* ---------- disclosure helper ---------- */
+  .disc{margin:0 0 12px;border:1px solid var(--hair);border-radius:8px;background:#f4eee3}
+  .disc>summary{cursor:pointer;list-style:none;padding:9px 12px;font-size:10px;font-weight:800;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:9px}
+  .disc>summary::-webkit-details-marker{display:none}
+  .disc>summary::before{content:"";width:6px;height:6px;border-top:2px solid var(--accent);border-right:2px solid var(--accent);
+    transform:rotate(45deg);transition:transform .15s;flex:none}
+  .disc[open]>summary::before{transform:rotate(135deg)}
+  .disc .body{padding:0 13px 12px;font-size:12px;line-height:1.6;color:var(--ink-soft)}
+  .disc .body b{font-weight:700;color:var(--ink)}
+  .ladder{display:block;margin:6px 0;font-weight:700;color:var(--ink)}
+  .ladder b{color:var(--accent)}
+
+  /* ---------- ordered reference (money flow) ---------- */
+  .ref{margin:0 0 12px;padding:0;list-style:none;counter-reset:s;border:1px solid var(--hair);border-radius:8px;overflow:hidden}
+  .ref li{position:relative;padding:9px 12px 9px 40px;font-size:12.5px;line-height:1.4;color:var(--ink-soft);border-top:1px solid var(--hair);background:#fcfaf5}
+  .ref li:first-child{border-top:0}
+  .ref li::before{counter-increment:s;content:counter(s,decimal-leading-zero);position:absolute;left:13px;top:9px;font-size:11px;font-weight:800;color:var(--accent)}
+  .ref li b{font-weight:700;color:var(--ink)}
+
+  /* ---------- vehicle guidance (the split) ---------- */
+  .guide{font-size:12.5px;line-height:1.6;color:var(--ink-soft);background:#f4eee3;border:1px solid var(--hair);
+    border-radius:8px;padding:12px 14px;margin:0 0 14px;display:none}
+  .guide.on{display:block}
+  .guide b{font-weight:700;color:var(--ink)}
+
+  .notes{margin-top:6px}
+  .notes .fieldlabel{color:var(--grey)}
+
+  /* ---------- reading states ---------- */
+  .reading{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:6px 0 16px}
+  .r{background:var(--paper);border:1px solid var(--hair);border-radius:12px;padding:16px 18px}
+  .r .rnum{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);margin-bottom:8px;display:flex;align-items:center;gap:9px}
+  .r .bar{width:24px;height:6px;display:inline-block;border-radius:3px}
+  .r.talk .bar{background:var(--ink)} .r.pilot .bar{background:var(--grey)} .r.ready .bar{background:var(--accent)}
+  .r h4{font-size:16px;font-weight:700;letter-spacing:-.02em;margin:0 0 7px}
+  .r p{margin:0;font-size:12px;line-height:1.5;color:var(--ink-soft)}
+  .r .act{margin-top:9px;font-weight:700;color:var(--ink);font-size:12px}
+
+  /* ---------- agreement CTA ---------- */
+  .agreement{background:var(--paper);border:1px solid var(--hair);border-radius:12px;padding:20px 24px;margin:18px 0 16px}
+  .agreement h4{margin:0 0 6px;font-size:16px;font-weight:700;letter-spacing:-.02em}
+  .agreement p{margin:0 0 14px;font-size:12.5px;line-height:1.55;color:var(--ink-soft);max-width:92ch}
+  .agreement p b{color:var(--ink);font-weight:700}
+  .agbtns{display:flex;gap:10px;flex-wrap:wrap}
+  .agbtns button{font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.04em;padding:10px 18px;
+    border-radius:8px;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:#fff;transition:.12s}
+  .agbtns button.alt{background:transparent;color:var(--accent)}
+  .agbtns button:hover{background:var(--accent-2);border-color:var(--accent-2);color:#fff}
+
+  .foot{font-size:10.5px;line-height:1.6;color:var(--grey);max-width:120ch;margin-top:10px}
+  .foot b{color:var(--ink);font-weight:700} .foot i{font-style:italic}
+  .seclabel{display:flex;align-items:center;gap:14px;margin:30px 0 14px}
+  .seclabel .t{font-size:11px;font-weight:800;letter-spacing:.22em;text-transform:uppercase}
+  .seclabel::after{content:"";flex:1;height:1.5px;background:var(--rule)}
+
+  /* ============ PRINT EXPORT (separate, generated) ============ */
+  .printout{display:none}
+  @media print{
+    @page{size:A4 portrait;margin:13mm}
+    html,body{background:#fff;font-size:11px}
+    .toolbar,.nav,.app{display:none !important}
+    .printout{display:block;color:#111;max-width:none}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .po-mast{border-bottom:2px solid #1a1a1a;padding-bottom:8px;margin-bottom:12px}
+    .po-mast h1{font-size:26px;margin:0 0 4px}
+    .po-meta{font-size:11px;color:#444}
+    .po-meta b{color:#111}
+    .po-sec{break-inside:avoid;page-break-inside:avoid;margin:0 0 12px;padding:0 0 10px;border-bottom:1px solid #ddd}
+    .po-h{font-size:13px;font-weight:800;margin:0 0 5px;color:#111}
+    .po-h .pn{color:#b4552d;margin-right:7px}
+    .po-h .pl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-left:8px}
+    .po-row{font-size:11px;line-height:1.5;color:#222;padding:1px 0}
+    .po-row .k{font-weight:700;color:#111}
+    .po-empty{font-size:10.5px;color:#aaa;font-style:italic}
+    .po-notes{font-size:10.5px;color:#555;margin-top:3px}
+  }
+  /* ---------- glossary: progressive-disclosure term tooltips ---------- */
+  .gt{position:relative;border-bottom:1px dotted var(--grey);cursor:help;outline:none}
+  .gt>.gtb{position:absolute;left:0;top:150%;z-index:60;width:286px;max-width:74vw;background:var(--ink);color:#f1e9de;
+    font-size:11.5px;line-height:1.5;font-weight:400;letter-spacing:0;text-transform:none;text-align:left;padding:9px 11px;
+    border-radius:8px;box-shadow:0 8px 26px rgba(0,0,0,.22);opacity:0;visibility:hidden;transform:translateY(-3px);
+    transition:.13s;pointer-events:none;white-space:normal}
+  .gt:hover>.gtb,.gt:focus>.gtb,.gt:focus-within>.gtb{opacity:1;visibility:visible;transform:none}
+  .gt>.gtb b{color:#fff;font-weight:700}
+  .gt>.gtb .ex{display:block;margin-top:5px;color:#d8cdbe;font-style:italic}
+  /* glossary panel (collapsed by default) */
+  .glossbox{background:var(--paper);border:1px solid var(--hair);border-radius:12px;margin:0 0 18px;padding:0 18px}
+  .glossbox>summary{cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--grey);padding:14px 0;list-style:none}
+  .glossbox>summary::-webkit-details-marker{display:none}
+  .glossbox>summary::before{content:"\25B8  ";color:var(--accent)}
+  .glossbox[open]>summary::before{content:"\25BE  "}
+  .glossdl{columns:2;column-gap:32px;padding:2px 0 18px;font-size:12px;line-height:1.5}
+  .glossdl .g{break-inside:avoid;margin:0 0 11px}
+  .glossdl dt{font-weight:700;color:var(--ink)}
+  .glossdl dd{margin:1px 0 0;color:var(--ink-soft)}
+  .glossdl dd .ex{display:block;color:var(--grey);font-style:italic;margin-top:1px}
+  @media(max-width:640px){.glossdl{columns:1}}
+  @media print{.glossbox{display:none !important}}
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <div class="brand">The Fair Deal <span>Canvas</span></div>
+    <span class="saved" id="saved"></span>
+    <button onclick="exportJSON()">Export JSON</button>
+    <button onclick="importClick()">Import JSON</button>
+    <button onclick="window.print()" class="primary">Print / PDF</button>
+    <button onclick="clearAll()">Clear</button>
+  </div>
+  <input type="file" id="importfile" accept="application/json,.json" hidden>
+  <nav class="nav" id="nav"></nav>
+
+  <!-- ===================== AUTHORING APP ===================== -->
+  <div class="app">
+
+    <!-- masthead -->
+    <div class="masthead">
+      <div class="mast-mark">Planning Canvas <span class="n">/</span> for any deal</div>
+      <h1>The Fair Deal <em>Canvas</em></h1>
+      <p class="subtitle">A planning canvas for any deal — partnership, co-founder, client, JV, advisory. Fill it <b>together</b>; the right structure falls out as you go.</p>
+      <div class="mast-fields">
+        <div class="ff"><label>Party A</label><input data-k="partyA" placeholder="Name / side"></div>
+        <div class="ff"><label>Party B</label><input data-k="partyB" placeholder="Name / side"></div>
+        <div class="ff"><label>Deal</label><input data-k="deal" placeholder="What it is"></div>
+        <div class="ff"><label>Date</label><input data-k="date" placeholder="YYYY-MM-DD"></div>
+      </div>
+    </div>
+
+    <!-- how to -->
+    <div class="howto">
+      <div class="lab">How to use</div>
+      <p>Work through the sections in order — each answer sets up the next. Where something is hard to fill or you don’t yet agree, that’s a real term to settle now — while it’s cheap. A blank field is information, not a failure. Nothing here is a test of trust; it’s the structure both sides will rely on. Your answers save automatically in this browser.</p>
+    </div>
+
+    <!-- plain-english glossary (progressive disclosure) -->
+    <details class="glossbox" id="glossbox">
+      <summary>New to the jargon? Plain-English glossary — vesting, SAFE, waterfall &amp; more</summary>
+      <div class="glossdl" id="glossdl"></div>
+    </details>
+
+    <!-- lenses -->
+    <div class="lenses">
+      <div class="lens prop"><div class="ln">Lens 01</div><h3>Proportion</h3><p>Reward tracks what each side brings — and follows the lasting value, not just the hours.</p></div>
+      <div class="lens clar"><div class="ln">Lens 02</div><h3>Clarity</h3><p>Everything is named, priced, and agreed up front — clear to both, not assumed.</p></div>
+      <div class="lens cont"><div class="ln">Lens 03</div><h3>Continuity</h3><p>If the deal ends or changes, each side keeps something fair and can carry on.</p></div>
+    </div>
+
+    <div class="seclabel"><span class="t">The Canvas</span></div>
+
+    <!-- ===== 1 · GOALS (direction first) ===== -->
+    <section class="sec prop" id="s1">
+      <div class="head"><div class="num">1</div><div class="htext">
+        <div class="title">Goals, alternatives &amp; alignment<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+          Start here — your real <b>goal</b> frames everything below. It’s what you want <i>out of</i> this, and it’s often different from the other side’s (that’s fine — write both, then design the deal so each is met). Your <b>BATNA</b> is your walk-away; the deal should beat it for both. The <b>“I win when”</b> lines and the goals should be compatible; if they conflict, adjust the structure, not the trust.</span></span></div>
+        <div class="lenstag">Proportion</div></div></div>
+      <p class="desc">Name what each side truly wants out of this (often different — that’s good), the best alternative if there’s no deal, and what winning looks like. <b>Compatible-but-different goals are the sign of a great deal</b> — you can design terms that serve both.</p>
+      <div class="pair">
+        <div class="field"><label class="fieldlabel" id="lbl-goalA">Party A — true goal (why I’m here)</label>
+          <textarea class="ta" data-k="b9_goalA" placeholder="What I really want out of this venture"></textarea></div>
+        <div class="field"><label class="fieldlabel" id="lbl-goalB">Party B — true goal (why I’m here)</label>
+          <textarea class="ta" data-k="b9_goalB" placeholder="What they really want out of this venture"></textarea></div>
+      </div>
+      <div class="pair">
+        <div class="field"><label class="fieldlabel" id="lbl-batnaA">Party A — best alternative if no deal</label>
+          <textarea class="ta" data-k="b9_batnaA" placeholder="e.g. build solo, sell to others, take them on as a paying client"></textarea></div>
+        <div class="field"><label class="fieldlabel" id="lbl-batnaB">Party B — best alternative if no deal</label>
+          <textarea class="ta" data-k="b9_batnaB" placeholder="e.g. hire it out, partner with someone else"></textarea></div>
+      </div>
+      <div class="pair">
+        <div class="field"><label class="fieldlabel" id="lbl-winA">Party A — “I win when ___”</label>
+          <input class="ti-txt" data-k="b9_winA" placeholder="Finish the sentence"></div>
+        <div class="field"><label class="fieldlabel" id="lbl-winB">Party B — “I win when ___”</label>
+          <input class="ti-txt" data-k="b9_winB" placeholder="Finish the sentence"></div>
+      </div>
+      <div class="field"><label class="fieldlabel">Do the goals fit together?</label>
+        <select class="sel" data-k="b9_align">
+          <option value="">— choose —</option>
+          <option>Aligned — same direction</option>
+          <option>Compatible but different — design for both</option>
+          <option>Conflicting — adjust the structure</option>
+        </select></div>
+      <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b9_notes" placeholder="Anything deal-specific…"></textarea></div>
+    </section>
+
+    <!-- ===== 2 · THE BUSINESS ===== -->
+    <section class="sec clar" id="s2">
+      <div class="head"><div class="num">2</div><div class="htext">
+        <div class="title">The business<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+          Define just enough of the business to make the deal fair — especially the <b>channel</b> and the <b>edge</b>, which are the durable moat (they feed sections 4 &amp; 8). A party’s own business that buys is a <b>customer at market terms</b>, like any other.</span></span></div>
+        <div class="lenstag">Clarity</div></div></div>
+      <p class="desc">Who it’s for, what they buy, how they’re reached, and why it wins.</p>
+      <div class="field"><label class="fieldlabel">Customer / niche — who exactly, and the painful problem</label>
+        <textarea class="ta" data-k="biz_customer" placeholder="The specific person + their problem. Worth pursuing if you can genuinely help them and they’ll pay. (A party’s own business counts as a customer here, at market terms.)"></textarea></div>
+      <div class="field"><label class="fieldlabel">Offer &amp; price — the promise and the number</label>
+        <textarea class="ta" data-k="biz_offer" placeholder="What they buy, the outcome promised, and the price."></textarea>
+        <details class="disc" style="margin-top:8px"><summary>Strengthen the offer — the value equation</summary><div class="body">
+          Make it easy to say yes (Hormozi’s value equation):
+          <span class="ladder"><b>value = (dream outcome × perceived likelihood) ÷ (time delay × effort)</b></span>
+          Raise the top, lower the bottom. Then stack: a <b>bonus</b> (solve the next objection), a <b>guarantee</b> (reverse the risk), and real <b>scarcity / urgency</b> (a genuine limit, never invented). Name it so the promise is unmistakable.
+        </div></details></div>
+      <div class="field"><label class="fieldlabel">Channel — how they’re reached, and who owns it</label>
+        <textarea class="ta" data-k="biz_channel" placeholder="How customers find you (content, referrals, ads, an email list, a marketplace). Note who owns the channel — it’s usually the moat."></textarea></div>
+      <div class="field"><label class="fieldlabel">Edge — why this wins / what’s hard to copy</label>
+        <textarea class="ta" data-k="biz_edge" placeholder="The unfair advantage: distribution, proprietary data, brand, speed, taste — something a competitor (or an AI) can’t easily reproduce."></textarea></div>
+
+      <div class="subhead">What good looks like<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+        <b>North Star:</b> the one number that proves this is genuinely working — a value metric, not a vanity one (paying customers / MRR / engaged subscribers, never follower counts).
+        <span class="ex"><b>e.g.</b> a services business → MRR; a teaching / audience business → engaged email subscribers; this deal → external (non-partner) paying customers; a marketplace → transactions a week.</span></span></span></div>
+      <div class="pair">
+        <div class="field" style="margin:0"><label class="fieldlabel">North Star — the one number that proves it’s working</label>
+          <input class="ti-txt" data-k="ns_metric" placeholder="e.g. external paying customers · MRR · engaged subscribers"></div>
+        <div class="field" style="margin:0"><label class="fieldlabel">On track if… (a weekly leading signal)</label>
+          <input class="ti-txt" data-k="ns_track" placeholder="e.g. 5 sales conversations / week · 1 published piece / week"></div>
+      </div>
+
+      <div class="notes" style="margin-top:14px"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="biz_notes" placeholder="Anything else about the business…"></textarea></div>
+    </section>
+
+    <!-- ===== 3 · WHY A PARTNERSHIP ===== -->
+    <section class="sec prop" id="s3">
+      <div class="head"><div class="num">3</div><div class="htext">
+        <div class="title">Why this is a partnership<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+          <b>Match each contribution to the right instrument:</b>
+          <span class="ex"><b>Pre-existing asset</b> (you already own it) → license it to the venture or have it valued; it stays yours (section 8). Don’t fold it in as “co-building.” e.g. “the system I already built,” “my customer list.”</span>
+          <span class="ex"><b>One-off task</b> → a fee. e.g. “build the website,” “write the launch copy.”</span>
+          <span class="ex"><b>Ongoing role</b> → a salary / retainer. e.g. “run ops ~10h/week.”</span>
+          <span class="ex"><b>Co-building the uncertain</b> → a share. e.g. “we’re both inventing the product, finding the first customers, and carrying the risk — no one knows yet if it sells.”</span>
+        </span></span></div>
+        <div class="lenstag">Proportion</div></div></div>
+      <p class="desc">What does each side bring that the other would otherwise have to buy or build? Tag each as a <b>pre-existing asset</b>, a <b>task</b>, a <b>role</b>, or <b>co-building the uncertain</b> — each is paid differently, and only co-building is what a share is for. One row per distinct involvement: split a person into two rows if they bring an asset they own <i>and</i> co-found.</p>
+      <div class="tbl" id="tbl-t1"></div>
+      <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b1_notes" placeholder="Anything deal-specific…"></textarea></div>
+    </section>
+
+    <!-- ===== 4 · CONTRIBUTIONS: DURABILITY & LEVERAGE ===== -->
+    <section class="sec prop" id="s4">
+      <div class="head"><div class="num">4</div><div class="htext">
+        <div class="title">Contributions: durability &amp; leverage</div>
+        <div class="lenstag">Proportion</div></div></div>
+      <p class="desc">Tag each contribution on <b>two axes</b> — <b>durability</b> (how long its value lasts → sets the lasting share in section 5) and <b>leverage</b> (how much it scales → what’s worth growing). They’re often different, and that gap is the point. <b>Ownership on a breakup is settled separately, in section 8.</b></p>
+      <details class="disc"><summary>Durability &amp; leverage — how to tag a contribution</summary><div class="body">
+        Two different questions about each contribution. <b>Don’t conflate them.</b>
+        <span style="display:block;margin-top:7px"><b>Durability</b> — how long the value lasts / how hard to copy (the moat). <i>Sets who keeps a lasting share.</i> Most durable first:</span>
+        <span class="ladder"><b>distribution › brand &amp; relationships › proprietary data › systems &amp; judgment › code / content › capital › labour</b></span>
+        AI pushes <b>code &amp; generic content down</b> (near-free to produce) and <b>distribution, data &amp; judgment up</b>.
+        <span style="display:block;margin-top:7px"><b>Leverage</b> — how much it scales without more input (Naval’s ladder). <i>Tells you what to grow, not who to reward.</i></span>
+        <span class="ladder"><b>labour (1:1) ‹ capital ‹ code ‹ media (scales while you sleep)</b></span>
+        <span style="display:block;margin-top:7px"><b>The takeaway:</b> reward the durable end; grow the high-leverage end — they’re usually different things. Software is the classic case: <b>high leverage, low durability</b> → build the business around it, but the lasting share goes to whoever owns the distribution, data, and brand.</span>
+        <span style="display:block;margin-top:7px"><b>Worked example:</b> “a system I built” → durability: <i>systems &amp; judgment</i>; leverage: <i>high</i>. &nbsp; “a list of 2,000 buyers” → durability: <i>distribution</i> (top); leverage: <i>medium</i>. &nbsp; “running support” → durability: <i>labour</i>; leverage: <i>low</i>.</span>
+      </div></details>
+      <div class="tbl" id="tbl-t2"></div>
+      <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b2_notes" placeholder="Anything deal-specific…"></textarea></div>
+    </section>
+
+    <!-- ===== 5 · SETTING THE SPLIT ===== -->
+    <section class="sec prop" id="s5">
+      <div class="head"><div class="num">5</div><div class="htext">
+        <div class="title">Setting the split<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+          <b>A common default:</b> contributions are paid at market rate through section 6; a <b>share</b> on top is earned over time.
+          <span class="ex"><b>Reverse vesting</b> (typical: 4 years, 1-year cliff): you each receive your shares/units now, but the company can buy back the <b>unearned</b> part if someone leaves early — so generosity on day one is safe.</span>
+        </span></span></div>
+        <div class="lenstag">Proportion</div></div></div>
+      <p class="desc">Peg numbers to objective standards (market rate, hours, capital at risk). Reward the durable end (section 4). Pick the vehicle, then set who holds what and how a share is earned.</p>
+      <div class="field"><label class="fieldlabel">Vehicle</label>
+        <select class="sel" data-k="b5_vehicle">
+          <option value="">— choose —</option>
+          <option>Handshake / contract only</option>
+          <option>LLC</option>
+          <option>Company (Ltd / corp)</option>
+          <option>Partnership</option>
+        </select></div>
+      <div class="guide" id="b5guide"></div>
+      <div class="pair">
+        <div class="field"><label class="fieldlabel">Who holds what at formation</label>
+          <textarea class="ta" data-k="b5_alloc" placeholder="e.g. A 60% / B 40% of units; capital tracked in capital accounts"></textarea></div>
+        <div class="field"><label class="fieldlabel">How a share is earned (vesting)</label>
+          <textarea class="ta" data-k="b5_vest" placeholder="e.g. 4-year vest, 1-year cliff, reverse vesting on the units above"></textarea></div>
+      </div>
+      <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b5_notes" placeholder="Anything deal-specific…"></textarea></div>
+    </section>
+
+    <!-- ===== 6 · HOW MONEY FLOWS ===== -->
+    <section class="sec clar" id="s6">
+      <div class="head"><div class="num">6</div><div class="htext">
+        <div class="title">How money flows</div>
+        <div class="lenstag">Clarity</div></div></div>
+      <p class="desc">Money is paid in this order, each line with its reason:</p>
+      <ol class="ref">
+        <li><b>Direct costs</b> of doing the work</li>
+        <li><b>Tax</b> set aside</li>
+        <li><b>Market-rate pay</b> for each contribution (from section 4)</li>
+        <li><b>Remaining profit</b>, split per section 5</li>
+      </ol>
+      <div class="field"><label class="fieldlabel">The specifics for this deal</label>
+        <textarea class="ta" data-k="b4" placeholder="Actual cost categories, tax % set aside, who is paid what at step 3, how often profit is distributed…"></textarea></div>
+      <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b4_notes" placeholder="Anything deal-specific…"></textarea></div>
+    </section>
+
+    <!-- ===== 7 · WHO DECIDES ===== -->
+    <section class="sec clar" id="s7">
+      <div class="head"><div class="num">7</div><div class="htext">
+        <div class="title">Who decides what<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+          <b>“Both sign”</b> marks a reserved matter — a decision big enough that neither side makes it alone. The rows below are a starting list; edit, add, or remove.
+        </span></span></div>
+        <div class="lenstag">Clarity</div></div></div>
+      <p class="desc">One accountable owner per area. Tick the decisions big enough to need both signatures.</p>
+      <div class="tbl" id="tbl-t6"></div>
+      <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b6_notes" placeholder="Anything deal-specific…"></textarea></div>
+    </section>
+
+    <!-- ===== 8 · WHAT EACH OWNS ===== -->
+    <section class="sec cont" id="s8">
+      <div class="head"><div class="num">8</div><div class="htext">
+        <div class="title">What each owns<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+          <b>Brought in</b> = pre-existing IP, brand, customers, data, tools — stays its owner’s, licensed to the venture.
+          <span class="ex"><b>Made together</b> = created during the deal — owned by the venture, with a licence back so each can keep working.</span>
+        </span></span></div>
+        <div class="lenstag">Continuity</div></div></div>
+      <p class="desc">Separate what each side <b>brought in</b> from what you <b>make together</b>. A right to use is not ownership.</p>
+      <label class="fieldlabel">Brought in — stays its owner’s, licensed to the venture</label>
+      <div class="tbl" id="tbl-t7a"></div>
+      <label class="fieldlabel" style="margin-top:12px">Made together — owned by the venture, licensed back</label>
+      <div class="tbl" id="tbl-t7b"></div>
+      <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b7_notes" placeholder="Anything deal-specific…"></textarea></div>
+    </section>
+
+    <!-- ===== 9 · HOW IT CAN END ===== -->
+    <section class="sec cont" id="s9">
+      <div class="head"><div class="num">9</div><div class="htext">
+        <div class="title">How it can end or change</div>
+        <div class="lenstag">Continuity</div></div></div>
+      <p class="desc">Settle the ending while it’s cheap — written before entry.</p>
+      <div class="pair">
+        <div class="field"><label class="fieldlabel">How a share is valued</label>
+          <select class="sel" data-k="b8_valmethod">
+            <option value="">— choose —</option>
+            <option>A set number, refreshed periodically</option>
+            <option>A formula (e.g. multiple of profit)</option>
+            <option>A neutral appraiser</option>
+          </select></div>
+        <div class="field"><label class="fieldlabel">Valuation detail</label>
+          <input class="ti-txt" data-k="b8_valdetail" placeholder="e.g. 2× trailing-12-month profit"></div>
+      </div>
+      <div class="field"><label class="fieldlabel">Leaving<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+          A common split: <b>no-fault</b> departure (illness, life change) → fair value for the earned share; <b>for-cause</b> (fraud, serious breach) → reduced — but each side always keeps what it genuinely earned.</span></span></label>
+        <textarea class="ta" data-k="b8_leaving" placeholder="What a leaver is paid, for no-fault vs for-cause…"></textarea></div>
+      <div class="field"><label class="fieldlabel">If you get stuck (deadlock ladder)</label>
+        <input class="ti-txt" data-k="b8_stuck" placeholder="talk within [X] days → mediate → arbitrate → buyout → orderly wind-up"></div>
+      <div class="field"><label class="fieldlabel">On exit</label>
+        <textarea class="ta" data-k="b8_exit" placeholder="Who keeps customers, brand, data (with an export copy); any “please step back” is paid for…"></textarea></div>
+      <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b8_notes" placeholder="Anything deal-specific…"></textarea></div>
+    </section>
+
+    <!-- ===== 10 · PREMORTEM ===== -->
+    <section class="sec cont" id="s10">
+      <div class="head"><div class="num">10</div><div class="htext">
+        <div class="title">Premortem — imagine it failed<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+          <b>Premortem</b> (Gary Klein): picture it’s a year on and the deal went badly, then explain <i>why</i>. Imagining a <i>certain</i> failure surfaces risks that “what could go wrong?” never does — optimism hides them.</span></span></div>
+        <div class="lenstag">Continuity</div></div></div>
+      <p class="desc">It’s twelve months from now and this went badly. Write the story of <b>why</b> — then turn each cause into something to watch for or prevent.</p>
+      <div class="field"><label class="fieldlabel">It failed because…</label>
+        <textarea class="ta" data-k="b10_fail" placeholder="Honest failure modes — drifted apart, no customers, one side over-carried, IP got muddy, resentment, the moat went to the wrong person…"></textarea></div>
+      <div class="field"><label class="fieldlabel">So we’ll watch for / prevent…</label>
+        <textarea class="ta" data-k="b10_prevent" placeholder="An early signal for each risk, and the term or habit that defuses it"></textarea></div>
+      <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b10_notes" placeholder="Anything deal-specific…"></textarea></div>
+    </section>
+
+    <!-- reading -->
+    <div class="seclabel"><span class="t">Reading the Canvas · Three States</span></div>
+    <div class="reading">
+      <div class="r talk"><div class="rnum"><span class="bar"></span>State 01</div><h4>Keep talking</h4>
+        <p>Fields are blank or you don’t yet agree. These are the real terms — settle them before anything is signed.</p><p class="act">→ Work the open fields together.</p></div>
+      <div class="r pilot"><div class="rnum"><span class="bar"></span>State 02</div><h4>Pilot first</h4>
+        <p>The shape is clear but unproven — demand, fit, or how you work together. Test it on narrow, time-boxed terms.</p><p class="act">→ Sign a short pilot memo, then revisit.</p></div>
+      <div class="r ready"><div class="rnum"><span class="bar"></span>State 03</div><h4>Ready to formalize</h4>
+        <p>Every field is filled and agreed, pegged to objective standards, with endings written before entry.</p><p class="act">→ Convert to the Agreement Memo, then a lawyer.</p></div>
+    </div>
+
+    <!-- agreement: generate from the canvas -->
+    <div class="agreement">
+      <h4>Turn this into an agreement</h4>
+      <p>When the canvas reads <b>Ready</b>, draft a plain-English deal memo from everything above. The prompt — an agreement skeleton plus your answers — is <b>copied to your clipboard</b> and your <b>desktop app</b> opens with it prefilled (Claude caps the prefill at ~14k characters; paste from the clipboard if it’s clipped). It’s a business-terms draft, <b>not legal advice</b> — have a lawyer formalize it.</p>
+      <div class="agbtns">
+        <button onclick="draftIn('claude')">Draft in Claude</button>
+        <button class="alt" onclick="draftIn('codex')">Draft in Codex</button>
+      </div>
+    </div>
+
+    <p class="foot">The Fair Deal Canvas · a shared planning tool, filled together. Pair with the private <b>Solo Prep Sheet</b> and the <b>Agreement Memo</b> (the output). Draws on the Business Model / Lean Canvas, Hormozi’s value equation, Slicing Pie, 7 Powers, the leverage ladder, YC vesting, JV term sheets, <i>Getting to Yes</i>, and the premortem. Business-structure guidance, not legal advice.</p>
+  </div>
+
+  <!-- ===================== PRINT EXPORT (generated) ===================== -->
+  <div class="printout" id="printout"></div>
+
+<script>
+  var KEY = "fairDealCanvas.app2";
+
+  /* ---- table configs ---- */
+  var TABLES = {
+    t1:{cols:[
+      {k:"what",t:"text",h:"What they bring",ph:"An asset, a task, a role, or co-building"},
+      {k:"by",t:"sel",h:"By",opts:["Party A","Party B"],w:"110px"},
+      {k:"kind",t:"sel",h:"So it's paid as…",opts:["Pre-existing asset → license / value","One-off task → fee","Ongoing role → salary","Co-building → share"],w:"234px"}
+    ]},
+    t2:{cols:[
+      {k:"what",t:"text",h:"Contribution",ph:"What's contributed"},
+      {k:"by",t:"sel",h:"By",opts:["Party A","Party B"],w:"108px"},
+      {k:"dur",t:"sel",h:"Durability → the lasting share",opts:["Distribution / audience","Brand & relationships","Proprietary data","Systems & judgment","Code / content","Capital","Labour / one-off"],w:"212px"},
+      {k:"lev",t:"sel",h:"Leverage → what to grow",opts:["High (scales freely)","Medium (buys scale)","Low (1:1 effort)"],w:"166px"}
+    ]},
+    t6:{cols:[
+      {k:"area",t:"text",h:"Decision area",ph:"Decision area"},
+      {k:"owner",t:"sel",h:"Accountable",opts:["Party A","Party B","Both"],w:"130px"},
+      {k:"reserved",t:"chk",h:"Reserved",label:"Both sign",w:"110px"}
+    ]},
+    t7a:{cols:[
+      {k:"asset",t:"text",h:"Asset",ph:"IP, brand, customers, data, tool…"},
+      {k:"owner",t:"sel",h:"Owner",opts:["Party A","Party B"],w:"110px"},
+      {k:"right",t:"text",h:"Venture's right",ph:"e.g. licence to use",w:"1fr"}
+    ]},
+    t7b:{cols:[
+      {k:"asset",t:"text",h:"Made together",ph:"Software, configs, playbooks, data…"},
+      {k:"owned",t:"text",h:"Owned by",ph:"the venture",w:"150px"},
+      {k:"lic",t:"sel",h:"Licence back to",opts:["Both","Party A","Party B","—"],w:"140px"}
+    ]}
+  };
+
+  var SEED = {
+    t6:[ "Pricing","Hiring & firing","Spend over a set amount","Product / roadmap","Customer contracts",
+         "Brand & messaging","Taking on debt","Fundraising / new owners","Changing the split","Selling or closing"
+       ].map(function(a){return {area:a,owner:"",reserved:(a==="Changing the split"||a==="Selling or closing"||a==="Taking on debt")};})
+  };
+
+  var VEHICLE = {
+    "Handshake / contract only":"<b>No entity.</b> Put the profit-share % and responsibilities in a written contract. With no shares to vest, “earned over time” becomes <b>milestones</b> — the share only locks in as agreed results land.",
+    "LLC":"<b>Members hold units</b> per an operating agreement. A common default: you each receive units at formation subject to <b>reverse vesting</b> (e.g. 4-yr, 1-yr cliff) — the LLC can buy back unearned units if someone leaves early. Capital goes into <b>capital accounts</b>; profit is distributed after the section-6 waterfall.",
+    "Company (Ltd / corp)":"<b>Founders receive shares now</b>, on <b>reverse vesting</b> (e.g. 4-yr, 1-yr cliff); later joiners vest forward. Cash investment usually comes in via a <b>SAFE</b> or priced round rather than the founder split.",
+    "Partnership":"<b>Partners share profit</b> per the partnership agreement. Define capital contributions, drawings, and how a partner’s share is <b>valued and bought out</b> on exit (ties to section 9)."
+  };
+
+  var state = load();
+
+  function load(){
+    var d; try{ d = JSON.parse(localStorage.getItem(KEY)); }catch(e){ d=null; }
+    if(!d) d = {};
+    if(!d.fields) d.fields = {};
+    if(!d.tables) d.tables = {};
+    Object.keys(TABLES).forEach(function(tid){
+      if(!Array.isArray(d.tables[tid]) || !d.tables[tid].length){
+        d.tables[tid] = SEED[tid] ? SEED[tid].slice() : [emptyRow(tid)];
+      }
+    });
+    return d;
+  }
+  function emptyRow(tid){ var r={}; TABLES[tid].cols.forEach(function(c){ r[c.k]= c.t==="chk"?false:""; }); return r; }
+
+  var savedEl = document.getElementById("saved"), st;
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} savedEl.textContent="Saved"; clearTimeout(st); st=setTimeout(function(){savedEl.textContent="";},1300); }
+
+  function esc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  /* show entered party names in dropdowns while keeping a stable stored value */
+  var PARTY_TABLES = ["t1","t2","t6","t7a","t7b"];
+  function pdisp(op){ if(op==="Party A") return state.fields.partyA||"Party A"; if(op==="Party B") return state.fields.partyB||"Party B"; return op; }
+
+  function tmplOf(tid){ return TABLES[tid].cols.map(function(c){return c.w||"1fr";}).join(" ")+" 30px"; }
+
+  function cell(tid,i,c,val){
+    if(c.t==="text") return '<input class="cin" type="text" data-tid="'+tid+'" data-i="'+i+'" data-col="'+c.k+'" placeholder="'+esc(c.ph||"")+'" value="'+esc(val)+'">';
+    if(c.t==="sel"){ var o='<option value="">—</option>'+c.opts.map(function(op){return '<option value="'+esc(op)+'"'+(op===val?" selected":"")+'>'+esc(pdisp(op))+'</option>';}).join(""); return '<select class="cin" data-tid="'+tid+'" data-i="'+i+'" data-col="'+c.k+'">'+o+'</select>'; }
+    if(c.t==="chk") return '<label class="chk"><input type="checkbox" data-tid="'+tid+'" data-i="'+i+'" data-col="'+c.k+'"'+(val?" checked":"")+'> '+esc(c.label||"")+'</label>';
+    return "";
+  }
+  function renderTable(tid){
+    var cfg=TABLES[tid], host=document.getElementById("tbl-"+tid); if(!host) return;
+    var tmpl=tmplOf(tid), rows=state.tables[tid];
+    var html='<div class="trow thead" style="grid-template-columns:'+tmpl+'">'+cfg.cols.map(function(c){return '<div class="tlab">'+esc(c.h)+'</div>';}).join("")+'<div></div></div>';
+    html+=rows.map(function(r,i){
+      return '<div class="trow" style="grid-template-columns:'+tmpl+'">'+
+        cfg.cols.map(function(c){return '<div class="tcell">'+cell(tid,i,c,r[c.k])+'</div>';}).join("")+
+        '<div class="tcell trm"><button class="rm" data-rm="'+tid+'" data-i="'+i+'" title="Remove" aria-label="Remove row"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg></button></div></div>';
+    }).join("");
+    html+='<button class="addrow" data-add="'+tid+'">+ Add</button>';
+    host.innerHTML=html;
+  }
+  Object.keys(TABLES).forEach(renderTable);
+
+  /* ---- bind static fields ---- */
+  var fields = Array.prototype.slice.call(document.querySelectorAll("[data-k]"));
+  fields.forEach(function(el){
+    var k=el.getAttribute("data-k");
+    if(state.fields[k]!=null) el.value=state.fields[k];
+  });
+
+  function autosize(){ document.querySelectorAll("textarea.ta").forEach(function(el){ el.style.height="auto"; el.style.height=Math.max(el.scrollHeight,62)+"px"; }); }
+
+  /* ---- events ---- */
+  document.addEventListener("input", function(e){
+    var el=e.target;
+    if(el.dataset && el.dataset.tid!=null && el.dataset.col){ var v=el.type==="checkbox"?el.checked:el.value; state.tables[el.dataset.tid][+el.dataset.i][el.dataset.col]=v; save(); return; }
+    if(el.dataset && el.dataset.k){ state.fields[el.dataset.k]=el.value; if(el.tagName==="TEXTAREA"){el.style.height="auto";el.style.height=Math.max(el.scrollHeight,62)+"px";} reflectLabels(); if(el.dataset.k==="partyA"||el.dataset.k==="partyB") PARTY_TABLES.forEach(renderTable); save(); }
+  });
+  document.addEventListener("change", function(e){
+    var el=e.target;
+    if(el.dataset && el.dataset.tid!=null && el.dataset.col){ var v=el.type==="checkbox"?el.checked:el.value; state.tables[el.dataset.tid][+el.dataset.i][el.dataset.col]=v; save(); return; }
+    if(el.dataset && el.dataset.k){ state.fields[el.dataset.k]=el.value; if(el.dataset.k==="b5_vehicle") vehicleGuide(); save(); }
+  });
+  document.addEventListener("click", function(e){
+    var a=e.target.closest("[data-add]"); if(a){ var t=a.getAttribute("data-add"); state.tables[t].push(emptyRow(t)); renderTable(t); save(); return; }
+    var r=e.target.closest("[data-rm]"); if(r){ var t2=r.getAttribute("data-rm"),i=+r.getAttribute("data-i"); state.tables[t2].splice(i,1); if(!state.tables[t2].length) state.tables[t2].push(emptyRow(t2)); renderTable(t2); save(); }
+  });
+
+  function vehicleGuide(){ var g=document.getElementById("b5guide"); var v=state.fields.b5_vehicle; if(v && VEHICLE[v]){ g.innerHTML=VEHICLE[v]; g.classList.add("on"); } else { g.classList.remove("on"); g.innerHTML=""; } }
+  function reflectLabels(){
+    var a=state.fields.partyA, b=state.fields.partyB;
+    setL("lbl-goalA",(a||"Party A")+" — true goal (why I’m here)");
+    setL("lbl-goalB",(b||"Party B")+" — true goal (why I’m here)");
+    setL("lbl-batnaA",(a||"Party A")+" — best alternative if no deal");
+    setL("lbl-batnaB",(b||"Party B")+" — best alternative if no deal");
+    setL("lbl-winA",(a||"Party A")+" — “I win when ___”");
+    setL("lbl-winB",(b||"Party B")+" — “I win when ___”");
+  }
+  function setL(id,txt){ var el=document.getElementById(id); if(el) el.textContent=txt; }
+
+  /* ---- nav ---- */
+  (function(){ var n=document.getElementById("nav"); var h=""; for(var i=1;i<=10;i++) h+='<a href="#s'+i+'">'+i+'</a>'; n.innerHTML=h; })();
+
+  function clearAll(){
+    if(!confirm("Clear every field on this canvas? This cannot be undone.")) return;
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    state = load();
+    fields.forEach(function(el){ var k=el.getAttribute("data-k"); el.value = state.fields[k]!=null?state.fields[k]:""; });
+    Object.keys(TABLES).forEach(renderTable);
+    vehicleGuide(); reflectLabels(); autosize(); save();
+  }
+  window.clearAll = clearAll;
+
+  /* ---- export / import raw JSON (versionable, e.g. commit per deal) ---- */
+  function slug(s){ return (s==null?"":String(s)).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,48); }
+  function download(name,text){ var a=document.createElement("a"); var url=URL.createObjectURL(new Blob([text],{type:"application/json"})); a.href=url; a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(url); a.remove();},0); }
+  function exportJSON(){
+    var out={meta:{app:"fair-deal-canvas",version:2,exportedAt:new Date().toISOString()},fields:state.fields,tables:state.tables};
+    var base=slug(state.fields.deal) || (slug(state.fields.partyA)+(state.fields.partyB?"-"+slug(state.fields.partyB):""));
+    base=base.replace(/^-+|-+$/g,"");
+    download("fair-deal-canvas"+(base?"-"+base:"")+".json", JSON.stringify(out,null,2));
+    savedEl.textContent="Exported"; clearTimeout(st); st=setTimeout(function(){savedEl.textContent="";},1500);
+  }
+  window.exportJSON=exportJSON;
+  function applyImport(d){
+    state.fields = (d&&d.fields&&typeof d.fields==="object") ? d.fields : {};
+    state.tables = (d&&d.tables&&typeof d.tables==="object") ? d.tables : {};
+    Object.keys(TABLES).forEach(function(tid){ if(!Array.isArray(state.tables[tid])||!state.tables[tid].length) state.tables[tid]=SEED[tid]?SEED[tid].slice():[emptyRow(tid)]; });
+    fields.forEach(function(el){ var k=el.getAttribute("data-k"); el.value = state.fields[k]!=null?state.fields[k]:""; });
+    Object.keys(TABLES).forEach(renderTable); vehicleGuide(); reflectLabels(); autosize(); save();
+  }
+  function importClick(){ document.getElementById("importfile").click(); }
+  window.importClick=importClick;
+  document.getElementById("importfile").addEventListener("change", function(e){
+    var f=e.target.files&&e.target.files[0]; e.target.value="";
+    if(!f) return;
+    if(!confirm("Replace the current canvas with “"+f.name+"”?\nExport first if you want to keep what’s here.")) return;
+    var r=new FileReader();
+    r.onload=function(){ try{ var d=JSON.parse(r.result); if(!d||typeof d!=="object") throw 0; applyImport(d); savedEl.textContent="Imported"; clearTimeout(st); st=setTimeout(function(){savedEl.textContent="";},1500); }catch(err){ alert("Could not read that file — is it a Fair Deal Canvas JSON export?"); } };
+    r.readAsText(f);
+  });
+
+  /* ---- draft the agreement (Layer 3 = a button on the canvas) ---- */
+  var AGREEMENT_TEMPLATE = [
+    "1. Parties & purpose — who is in, the vehicle (entity or contract-only), and what the deal is for.",
+    "2. The business — customer/niche, offer & price, channel, edge.",
+    "3. Contributions — each side's inputs, valued at market, with how each is paid (pre-existing asset = licensed/valued; task = fee; role = salary; co-building = share).",
+    "4. How money flows — direct costs → tax → market-rate pay → remaining profit, with the split.",
+    "5. The split & vesting — vehicle, who holds what at formation, how a share vests.",
+    "6. Decisions & reserved matters — one accountable owner per area; what needs both signatures.",
+    "7. Ownership — background (brought in, stays its owner's, licensed to the venture) vs foreground (made together, owned by the venture, licensed back); customers, brand, data.",
+    "8. How it can end or change — valuation method, leaver terms, deadlock ladder, exit asset split, any restriction (paid for).",
+    "9. Goals & alignment — each side's goal, and that the deal beats each side's alternative.",
+    "10. Risks watched — from the premortem.",
+    "11. Legal step — business terms only; convert to formal documents before relying on it."
+  ].join("\n");
+
+  function fv(k){ var v=state.fields[k]; return v&&String(v).trim()?String(v).trim():""; }
+  function nm(v){ return v==="Party A"?(state.fields.partyA||"Party A"):v==="Party B"?(state.fields.partyB||"Party B"):v; }
+  function li(label,k){ var v=fv(k); return v?("- "+label+": "+v+"\n"):""; }
+  function liv(label,v){ return v?("- "+label+": "+v+"\n"):""; }
+  function tbl(tid){ var cfg=TABLES[tid],out=""; state.tables[tid].forEach(function(r){ var p=cfg.cols.map(function(c){var v=r[c.k]; if(c.t==="chk")return v?(c.label||c.h):""; if(v&&String(v).trim())return c.h+": "+nm(v); return "";}).filter(Boolean); if(p.length)out+="  - "+p.join("; ")+"\n"; }); return out; }
+
+  function buildCanvasMd(){
+    var f=state.fields, s="";
+    s+="Parties: "+(f.partyA||"Party A")+" / "+(f.partyB||"Party B")+"\n";
+    s+="Deal: "+(f.deal||"—")+"   Date: "+(f.date||"—")+"\n\n";
+    s+="## 1. Goals, alternatives & alignment\n";
+    s+=li((f.partyA||"Party A")+" goal","b9_goalA")+li((f.partyB||"Party B")+" goal","b9_goalB");
+    s+=li((f.partyA||"Party A")+" alternative","b9_batnaA")+li((f.partyB||"Party B")+" alternative","b9_batnaB");
+    s+=li((f.partyA||"Party A")+" wins when","b9_winA")+li((f.partyB||"Party B")+" wins when","b9_winB");
+    s+=li("Goals fit","b9_align")+li("Notes","b9_notes");
+    s+="\n## 2. The business\n";
+    s+=li("Customer / niche","biz_customer")+li("Offer & price","biz_offer")+li("Channel","biz_channel")+li("Edge","biz_edge");
+    s+=li("North Star","ns_metric")+li("On track if","ns_track")+li("Notes","biz_notes");
+    s+="\n## 3. Why this is a partnership\n"+tbl("t1")+li("Notes","b1_notes");
+    s+="\n## 4. Contributions: durability & leverage\n"+tbl("t2")+li("Notes","b2_notes");
+    s+="\n## 5. Setting the split\n"+li("Vehicle","b5_vehicle")+li("Holdings at formation","b5_alloc")+li("Vesting","b5_vest")+li("Notes","b5_notes");
+    s+="\n## 6. How money flows\n"+li("Specifics","b4")+li("Notes","b4_notes");
+    s+="\n## 7. Who decides what\n"+tbl("t6")+li("Notes","b6_notes");
+    s+="\n## 8. What each owns\n";
+    var ba=tbl("t7a"), mt=tbl("t7b");
+    if(ba) s+="Brought in:\n"+ba; if(mt) s+="Made together:\n"+mt; s+=li("Notes","b7_notes");
+    s+="\n## 9. How it can end or change\n"+liv("Valuation",[fv("b8_valmethod"),fv("b8_valdetail")].filter(Boolean).join(" — "))+li("Leaving","b8_leaving")+li("If stuck","b8_stuck")+li("On exit","b8_exit")+li("Notes","b8_notes");
+    s+="\n## 10. Premortem\n"+li("Failed because","b10_fail")+li("Watch / prevent","b10_prevent")+li("Notes","b10_notes");
+    return s;
+  }
+  function buildAgreementPrompt(){
+    return "Turn this filled Fair Deal Canvas into a clear, plain-English deal memo that two partners can read and agree, then hand to a lawyer. Business terms only — not legal advice. Use the section skeleton below; fill each part from the canvas; where something isn't specified, write [ ] so it's easy to complete. Keep it neutral and concise.\n\n# Agreement skeleton\n"+AGREEMENT_TEMPLATE+"\n\n# The filled canvas\n"+buildCanvasMd();
+  }
+  function copyText(t){
+    try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t); return; } }catch(e){}
+    var ta=document.createElement("textarea"); ta.value=t; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); }catch(e){} ta.remove();
+  }
+  function openScheme(url){ var a=document.createElement("a"); a.href=url; a.style.display="none"; document.body.appendChild(a); a.click(); setTimeout(function(){a.remove();},120); }
+  function draftIn(tool){
+    var p=buildAgreementPrompt();
+    copyText(p);
+    var enc=encodeURIComponent(p);
+    // desktop-app deep links: claude:// and codex:// open the installed apps with the prompt prefilled
+    var url = tool==="claude" ? ("claude://claude.ai/new?q="+enc) : ("codex://threads/new?prompt="+enc);
+    openScheme(url);
+    savedEl.textContent="Prompt copied"; clearTimeout(st); st=setTimeout(function(){savedEl.textContent="";},2600);
+  }
+  window.draftIn=draftIn;
+
+  /* ---- print export (generated, separate format) ---- */
+  function pname(v){ if(v==="Party A") return state.fields.partyA||"Party A"; if(v==="Party B") return state.fields.partyB||"Party B"; return v; }
+  function tableHasData(tid){ return state.tables[tid].some(function(r){ return TABLES[tid].cols.some(function(c){ var v=r[c.k]; return c.t==="chk"?v:(v&&String(v).trim()); }); }); }
+  function poTable(tid){
+    var cfg=TABLES[tid], out="";
+    state.tables[tid].forEach(function(r){
+      var parts=cfg.cols.map(function(c){ var v=r[c.k]; if(c.t==="chk") return v?("<b>"+esc(c.label||c.h)+"</b>"):""; if(v&&String(v).trim()) return '<span class="k">'+esc(c.h)+':</span> '+esc(pname(v)); return ""; }).filter(Boolean);
+      if(parts.length) out+='<div class="po-row">'+parts.join(" &nbsp;·&nbsp; ")+'</div>';
+    });
+    return out;
+  }
+  function poField(k){ var v=state.fields[k]; return (v&&String(v).trim())?esc(v):""; }
+  function poRow(label,val){ return val?'<div class="po-row"><span class="k">'+esc(label)+':</span> '+val+'</div>':""; }
+  function poSec(n,title,lens,body){ var has=body&&body.replace(/\s/g,"").length; return '<div class="po-sec"><div class="po-h"><span class="pn">'+n+'</span>'+esc(title)+'<span class="pl">'+lens+'</span></div>'+(has?body:'<div class="po-empty">— not yet filled —</div>')+poNotes(n)+'</div>'; }
+  function poNotes(n){ var map={1:"b9_notes",2:"biz_notes",3:"b1_notes",4:"b2_notes",5:"b5_notes",6:"b4_notes",7:"b6_notes",8:"b7_notes",9:"b8_notes",10:"b10_notes"}; var v=poField(map[n]); return v?'<div class="po-notes">Notes: '+v+'</div>':""; }
+
+  function buildPrintout(){
+    var f=state.fields;
+    var meta='<div class="po-meta"><b>'+esc(f.partyA||"Party A")+'</b> &nbsp;/&nbsp; <b>'+esc(f.partyB||"Party B")+'</b> &nbsp;&nbsp; Deal: <b>'+esc(f.deal||"—")+'</b> &nbsp;&nbsp; Date: <b>'+esc(f.date||"—")+'</b></div>';
+    var html='<div class="po-mast"><h1>The Fair Deal Canvas</h1>'+meta+'</div>';
+    html+=poSec("1","Goals, alternatives & alignment","Proportion", poRow((f.partyA||"Party A")+" goal",poField("b9_goalA"))+poRow((f.partyB||"Party B")+" goal",poField("b9_goalB"))+poRow((f.partyA||"Party A")+" alternative",poField("b9_batnaA"))+poRow((f.partyB||"Party B")+" alternative",poField("b9_batnaB"))+poRow((f.partyA||"Party A")+" wins when",poField("b9_winA"))+poRow((f.partyB||"Party B")+" wins when",poField("b9_winB"))+poRow("Goals fit?",poField("b9_align")));
+    html+=poSec("2","The business","Clarity", poRow("Customer / niche",poField("biz_customer"))+poRow("Offer & price",poField("biz_offer"))+poRow("Channel",poField("biz_channel"))+poRow("Edge",poField("biz_edge")));
+    var nsbody=poRow("North Star",poField("ns_metric"))+poRow("On track if",poField("ns_track"));
+    if(nsbody) html+='<div class="po-sec"><div class="po-h">What good looks like</div>'+nsbody+'</div>';
+    html+=poSec("3","Why this is a partnership","Proportion", poTable("t1"));
+    html+=poSec("4","Contributions: durability & leverage","Proportion", poTable("t2"));
+    html+=poSec("5","Setting the split","Proportion", poRow("Vehicle",poField("b5_vehicle"))+poRow("Holdings at formation",poField("b5_alloc"))+poRow("Vesting",poField("b5_vest")));
+    html+=poSec("6","How money flows","Clarity", poRow("Specifics",poField("b4")));
+    html+=poSec("7","Who decides what","Clarity", poTable("t6"));
+    html+=poSec("8","What each owns","Continuity", (tableHasData("t7a")?'<div class="po-row"><span class="k">Brought in</span></div>'+poTable("t7a"):"")+(tableHasData("t7b")?'<div class="po-row"><span class="k">Made together</span></div>'+poTable("t7b"):""));
+    html+=poSec("9","How it can end or change","Continuity", poRow("Valuation",[poField("b8_valmethod"),poField("b8_valdetail")].filter(Boolean).join(" — "))+poRow("Leaving",poField("b8_leaving"))+poRow("If stuck",poField("b8_stuck"))+poRow("On exit",poField("b8_exit")));
+    html+=poSec("10","Premortem — imagine it failed","Continuity", poRow("Failed because",poField("b10_fail"))+poRow("Watch / prevent",poField("b10_prevent")));
+    document.getElementById("printout").innerHTML=html;
+  }
+  window.addEventListener("beforeprint", buildPrintout);
+
+  /* ===================== PLAIN-ENGLISH GLOSSARY =====================
+     Definitions written for people who don't know business jargon. Each is
+     shown two ways: (1) a collapsible panel under "How to use", and (2) a
+     hover/tap tooltip on the first time each term appears in the canvas text. */
+  var GLOSS = {
+    "BATNA":["Your backup plan if this deal doesn't happen — your Best Alternative To a Negotiated Agreement. It's your real leverage: you only need a deal that beats it.","e.g. “if we don't partner, I'll just hire a freelancer.”"],
+    "Vesting":["Earning your share gradually over time instead of getting it all on day one. Protects both sides — someone who leaves early doesn't keep a stake they never earned.","e.g. a 4-year vest = you earn 1/4 of your share for each year you stay."],
+    "Cliff":["A minimum time you must stay before you earn ANY share. A 1-year cliff means leave before 12 months and you get nothing; pass it and your first chunk lands at once. A trial period for ownership.",""],
+    "Reverse vesting":["You get all your shares up front, but the company can buy back the part you haven't earned yet if you leave early. Same result as normal vesting, set up the other way round — common for founders.",""],
+    "Acceleration":["A clause that makes unvested shares vest immediately when something specific happens — usually the company being sold. “Single-trigger” = on sale; “double-trigger” = on sale AND you're let go.",""],
+    "Equity":["Actual ownership of the company — a slice of the whole business and its future sale value. The heaviest, hardest-to-undo way to reward someone.",""],
+    "Profit-share":["A right to a percentage of profits without owning the company. Lighter than equity — you share the upside but there's no stake anyone has to buy back.",""],
+    "SAFE":["Simple Agreement for Future Equity — a lightweight way an investor puts in cash now for shares later (at the price of your next funding round). Lets you take money without valuing the company today.",""],
+    "Priced round":["Raising investment by selling shares at an agreed company valuation right now — unlike a SAFE, which delays setting the price.",""],
+    "Capital account":["A running tally, per partner, of the cash each has put in and taken out. Keeps “who contributed money” separate from “who owns what share.”",""],
+    "Waterfall":["The agreed order money is paid out each period: costs first, then tax, then everyone's market-rate pay, then leftover profit gets split. Like water filling buckets top to bottom.",""],
+    "Market rate":["What something would cost or sell for between strangers — a salary, a service, the business itself. Anchoring to it keeps numbers objective, not “what feels fair to a friend.”",""],
+    "Background IP":["Anything a side already owned before the deal — existing code, brand, customer list, data. It stays theirs; the venture only gets permission (a licence) to use it.",""],
+    "Foreground IP":["Anything created together during the deal. Usually owned by the venture, with each side licensed to keep using it.",""],
+    "Licence":["Permission to use something without owning it. A “licence-back” = the venture owns what you built together but lets you keep using it too. A right to use is not ownership.",""],
+    "Work-for-hire":["The default legal rule that things an employee makes on the job belong to the employer — even with no contract. Why a handshake “50%” on software you build as someone's employee may not actually be yours unless it's written down.",""],
+    "Reserved matters":["The short list of big decisions that need BOTH sides to sign off (selling, taking on debt, changing the split). Everything else has one accountable owner who can just decide.",""],
+    "Good leaver / bad leaver":["Two ways of leaving with different payouts. No-fault/good (illness, life change) → fair value for what you've earned. For-cause/bad (fraud, serious breach) → reduced — but each side always keeps what it genuinely earned.",""],
+    "Deadlock ladder":["An agreed sequence for breaking a stalemate: talk → mediator → binding arbitration → one side buys the other out → wind down. Set up front so a fight has a path, not a cliff.",""],
+    "Mediation":["A neutral outsider helps both sides reach their own agreement. Non-binding — they can't force a result.",""],
+    "Arbitration":["A neutral outsider hears both sides and makes a binding decision, like a private judge. Faster and more private than court.",""],
+    "Buyout":["One side pays the other a fair price to take full ownership and part ways.",""],
+    "Shotgun clause":["A tie-breaker: one partner names a price; the other must either sell at it or buy the first out at it. Discourages low-balling, but tends to favour whoever has more cash.",""],
+    "Non-compete":["A promise not to start or join a competing business for a set time. Should be narrow, time-boxed, and paid for — never imposed for free.",""],
+    "Non-solicit":["A promise not to poach the other side's customers or staff for a set time.",""],
+    "Garden leave":["Being paid during a period you're kept out of the market (e.g. after leaving) — the “paid for” part of a fair non-compete.",""],
+    "Durability":["How long a contribution keeps paying off after the work stops, and how hard it is to copy. Distribution, brand, data and judgment are durable; one-off labour and generic code aren't. This sets the lasting share.",""],
+    "Leverage":["How much a contribution scales without more effort. Code and media work while you sleep (high); hands-on labour doesn't (low). Tells you what to GROW — not who deserves a lasting share.",""],
+    "Moat":["Something that stops competitors copying you — a loyal audience, exclusive data, a trusted brand. What makes the business hard to replicate.",""],
+    "North Star":["The single number that best shows the business is really working (e.g. paying customers, not page views). Pick a value metric, not a vanity one.",""],
+    "Vehicle":["The legal form the deal takes — a handshake/contract, an LLC, a company, or a partnership. It decides how shares, money and exits work.",""],
+    "LLC":["Limited Liability Company — a flexible business whose owners (“members”) hold “units” and share profits per an operating agreement, with protection for their personal assets.",""],
+    "Operating agreement":["The rulebook of an LLC — who owns what, who decides what, how profits and exits work.",""],
+    "Transfer pricing":["The price one part of a business charges another for using its tools or services — so a partner's own business using the venture's software is paid for, not silently free.",""],
+    "RACI":["A simple way to give each decision one accountable owner (plus who's responsible, consulted, informed) so nothing falls between two people.",""],
+    "Term sheet":["A short, plain summary of the key deal terms, agreed before lawyers draft the long contract.",""],
+    "Cap table":["The list of who owns what percentage of a company. “Keeping it clean” means avoiding lots of tiny or messy stakes that scare off future investors.",""],
+    "Dilution":["When new shares are issued, everyone's existing percentage shrinks. Not always bad — a smaller slice of a bigger pie.",""],
+    "Preferred return":["A return paid to whoever put in capital BEFORE profits are split — to compensate for their money being at risk. “8% preferred” = they get their money back plus 8% first.",""],
+    "Premortem":["Imagining the deal has already failed a year from now and writing why — which surfaces risks that “what could go wrong?” never does.",""]
+  };
+  /* phrases that map to each glossary key (case-insensitive unless cs:true) */
+  var GLOSS_ALIASES = {
+    "Vesting":["vesting","vests","vest"],"Reverse vesting":["reverse vesting","reverse-vesting"],
+    "Cliff":["cliff"],"Acceleration":["acceleration","accelerate","accelerated"],
+    "Equity":["equity"],"Profit-share":["profit-share","profit share","profit-sharing"],
+    "SAFE":[{p:"SAFE",cs:true}],"Priced round":["priced round"],
+    "Capital account":["capital account","capital accounts"],"Waterfall":["waterfall"],
+    "Market rate":["market rate","market-rate","fair-market value","fair market value","fair value"],
+    "Background IP":["background IP","background"],"Foreground IP":["foreground IP","foreground"],
+    "Licence":["licence-back","license-back","licensed back","licence","license","licensed"],
+    "Work-for-hire":["work-for-hire","work for hire"],
+    "Reserved matters":["reserved matters","reserved"],
+    "Good leaver / bad leaver":["good leaver","bad leaver","no-fault","for-cause","leaver"],
+    "Deadlock ladder":["deadlock ladder","deadlock"],"Mediation":["mediation","mediate"],
+    "Arbitration":["arbitration","arbitrate"],"Buyout":["buyout","buy-out","bought out"],
+    "Shotgun clause":["shotgun"],"Non-compete":["non-compete","noncompete"],
+    "Non-solicit":["non-solicit","non-solicitation"],"Garden leave":["garden leave"],
+    "Durability":["durability","durable"],"Leverage":["leverage"],
+    "Moat":["unfair advantage","moat"],"North Star":["north star"],"Vehicle":["vehicle"],
+    "LLC":[{p:"LLC",cs:true}],"Operating agreement":["operating agreement"],
+    "Transfer pricing":["transfer pricing","internal rate"],"RACI":[{p:"RACI",cs:true}],
+    "Term sheet":["term sheet","term sheets"],"Cap table":["cap table"],
+    "Dilution":["dilution","dilutive","diluted","dilute"],"Preferred return":["preferred return"],
+    "Premortem":["premortem","pre-mortem"]
+  };
+
+  function gEsc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  function reEsc(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
+
+  /* build the collapsible panel */
+  function buildGlossary(){
+    var host=document.getElementById("glossdl"); if(!host) return;
+    var keys=Object.keys(GLOSS).sort(function(a,b){return a.toLowerCase()<b.toLowerCase()?-1:1;});
+    host.innerHTML=keys.map(function(k){
+      var g=GLOSS[k];
+      return '<div class="g"><dt>'+gEsc(k)+'</dt><dd>'+gEsc(g[0])+(g[1]?'<span class="ex">'+gEsc(g[1])+'</span>':'')+'</dd></div>';
+    }).join("");
+  }
+
+  /* build the longest-phrase-first match list */
+  var GTERMS=(function(){
+    var list=[];
+    Object.keys(GLOSS_ALIASES).forEach(function(key){
+      GLOSS_ALIASES[key].forEach(function(a){
+        var p=typeof a==="string"?a:a.p, cs=typeof a==="object"&&a.cs;
+        list.push({key:key,phrase:p,len:p.length,re:new RegExp("\\b"+reEsc(p)+"\\b",cs?"":"i")});
+      });
+    });
+    return list.sort(function(a,b){return b.len-a.len;});
+  })();
+
+  function gtFilter(root){
+    return { acceptNode:function(n){
+      if(!n.nodeValue||!/\S/.test(n.nodeValue)) return NodeFilter.FILTER_REJECT;
+      var p=n.parentNode;
+      while(p&&p!==root.parentNode){
+        var t=p.nodeName;
+        if(t==="INPUT"||t==="TEXTAREA"||t==="SELECT"||t==="OPTION"||t==="BUTTON"||t==="SCRIPT"||t==="STYLE") return NodeFilter.FILTER_REJECT;
+        var c=p.classList;
+        if(c&&(c.contains("gt")||c.contains("gtb")||c.contains("tb")||c.contains("ti")||c.contains("tbl")||c.contains("nav")||c.contains("glossbox"))) return NodeFilter.FILTER_REJECT;
+        if(p.id&&p.id.indexOf("lbl-")===0) return NodeFilter.FILTER_REJECT;
+        p=p.parentNode;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    }};
+  }
+  function gtNodes(root){ var f=gtFilter(root),w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,f),a=[]; while(w.nextNode())a.push(w.currentNode); return a; }
+
+  function gtWrap(node,index,len,key){
+    var mid=node.splitText(index); mid.splitText(len);
+    var g=GLOSS[key], span=document.createElement("span");
+    span.className="gt"; span.setAttribute("tabindex","0"); span.textContent=mid.nodeValue;
+    var tb=document.createElement("span"); tb.className="gtb";
+    tb.innerHTML="<b>"+gEsc(key)+"</b> · "+gEsc(g[0])+(g[1]?'<span class="ex">'+gEsc(g[1])+'</span>':'');
+    span.appendChild(tb); mid.parentNode.replaceChild(span,mid);
+  }
+
+  /* wrap the first occurrence of each term within root (terms already in `used` are skipped) */
+  function decorateGlossary(root,used){
+    if(!root) return;
+    GTERMS.forEach(function(term){
+      if(used.has(term.key)) return;
+      var nodes=gtNodes(root);
+      for(var i=0;i<nodes.length;i++){
+        var node=nodes[i]; term.re.lastIndex=0; var m=term.re.exec(node.nodeValue);
+        if(m){ gtWrap(node,m.index,m[0].length,term.key); used.add(term.key); break; }
+      }
+    });
+  }
+
+  buildGlossary();
+  vehicleGuide(); reflectLabels(); autosize();
+  decorateGlossary(document.querySelector(".app"), new Set());
+  /* re-decorate the vehicle guide each time it re-renders (it holds SAFE, reverse vesting, units…) */
+  (function(){ var _vg=vehicleGuide; vehicleGuide=function(){ _vg.apply(this,arguments); decorateGlossary(document.getElementById("b5guide"), new Set()); }; })();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# Fair Deal — the private scratchpad is NEVER committed.
+# It holds each partner's floor, BATNA, benchmarks, and raw reservations.
+private/
+
+# noise
+.DS_Store
+node_modules/
+.env
+*.log

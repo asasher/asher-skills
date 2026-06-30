@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "parties": { "A": "", "B": "" },
+  "phase": "interview",
+  "ready_to_negotiate": { "A": false, "B": false },
+  "turn": "A",
+  "round": 0,
+  "round_cap": 12,
+  "accepted": { "A": false, "B": false },
+  "last_move": { "by": "", "at": "", "summary": "" }
+}
