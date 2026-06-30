@@ -419,13 +419,15 @@
           <input class="ti-txt" data-k="ns_track" placeholder="e.g. 5 sales conversations / week · 1 published piece / week"></div>
       </div>
 
-      <div class="subhead">Two questions a handshake skips<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
-        Both real-world deals this canvas was tested on hid the <b>same two</b> issues. Tick either to reveal what to do — both surfaced repeatedly and quietly subsidise one side when left unsaid.</span></span></div>
+      <div class="subhead">Questions a handshake skips<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+        The things a handshake quietly skips until they bite. Tick any that apply to reveal what to do — each one shapes a fair split or a clean exit.</span></span></div>
       <div class="flags">
         <label class="flagq"><input type="checkbox" data-k="flag_employed"> Is one party also employed by the other?</label>
         <div class="flaghint" id="hint_employed">Use <b>two separate contracts</b> so neither role absorbs the other. Watch <b>work-for-hire</b>: IP you build as an employee defaults to the employer unless the deal says otherwise.</div>
         <label class="flagq"><input type="checkbox" data-k="flag_internaluse"> Will a partner’s own business use what’s built?</label>
         <div class="flaghint" id="hint_internaluse">Price it at an <b>internal / transfer rate</b> so it runs through the waterfall (section 6). <b>Free-by-default hides a subsidy</b> to one side.</div>
+        <label class="flagq"><input type="checkbox" data-k="flag_keyperson"> Will the venture run on one founder’s delivery skill?</label>
+        <div class="flaghint" id="hint_keyperson"><b>Document and systematize the delivery</b> so it isn’t trapped in one head. Founder-dependent delivery caps scale and makes that founder hard to release — a <b>key-person risk</b> that bears on the split (sections 4–5) and the leaver terms (section 9).</div>
       </div>
 
       <div class="subhead">How we'll reach customers<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
@@ -814,7 +816,7 @@
     if(el.dataset && el.dataset.k){ state.fields[el.dataset.k]=setField(el);
       if(el.dataset.k==="b5_vehicle") vehicleGuide();
       if(el.dataset.k==="dealShape") applyShape();
-      if(/^flag_/.test(el.dataset.k)) updateFlags();
+      if(/^flag_/.test(el.dataset.k)){ updateFlags(); renderGtmWire(); }
       if(/^st_s/.test(el.dataset.k)) rollupReading();
       if(gtmKey(el.dataset.k)) renderGtmWire();
       save(); }
@@ -917,6 +919,7 @@
     s+=li("North Star","ns_metric")+li("On track if","ns_track");
     if(state.fields.flag_employed) s+="- Flag — one party is also employed by the other: use two separate contracts; watch work-for-hire (IP built as an employee defaults to the employer).\n";
     if(state.fields.flag_internaluse) s+="- Flag — a partner’s own business will use what’s built: price it at an internal rate so it runs through the waterfall; free-by-default hides a subsidy.\n";
+    if(state.fields.flag_keyperson) s+="- Flag — the venture runs on one founder’s delivery skill: document and systematize it (key-person risk that bears on the split and the leaver terms).\n";
     if(fv("gtm_primary")) s+="- Reach customers: "+fv("gtm_primary")+(fv("gtm_owner")?" (channel owner: "+nm(fv("gtm_owner"))+")":"")+(fv("gtm_commitment")?"; commitment: "+fv("gtm_commitment"):"")+"\n";
     var getters=[["get_referrals","referrals"],["get_team","a team we hire"],["get_specialists","paid specialists"],["get_partners","commission partners"]].filter(function(g){return state.fields[g[0]];}).map(function(g){return g[1];});
     if(getters.length) s+="- Grow reach via: "+getters.join(", ")+"\n";
@@ -981,7 +984,7 @@
     var meta='<div class="po-meta"><b>'+esc(f.partyA||"Party A")+'</b> &nbsp;/&nbsp; <b>'+esc(f.partyB||"Party B")+'</b> &nbsp;&nbsp; Deal: <b>'+esc(f.deal||"—")+'</b> &nbsp;&nbsp; Date: <b>'+esc(f.date||"—")+'</b></div>';
     var html='<div class="po-mast"><h1>The Fair Deal Canvas</h1>'+meta+'</div>';
     html+=poSec("1","Goals, alternatives & alignment","Proportion", poRow((f.partyA||"Party A")+" goal",poField("b9_goalA"))+poRow((f.partyB||"Party B")+" goal",poField("b9_goalB"))+poRow((f.partyA||"Party A")+" alternative",poField("b9_batnaA"))+poRow((f.partyB||"Party B")+" alternative",poField("b9_batnaB"))+poRow((f.partyA||"Party A")+" wins when",poField("b9_winA"))+poRow((f.partyB||"Party B")+" wins when",poField("b9_winB"))+poRow("Goals fit?",poField("b9_align")));
-    var flagrows=(state.fields.flag_employed?'<div class="po-row"><span class="k">Flag:</span> one party is also employed by the other → two separate contracts; watch work-for-hire.</div>':"")+(state.fields.flag_internaluse?'<div class="po-row"><span class="k">Flag:</span> a partner’s own business will use what’s built → price at an internal rate through the waterfall.</div>':"");
+    var flagrows=(state.fields.flag_employed?'<div class="po-row"><span class="k">Flag:</span> one party is also employed by the other → two separate contracts; watch work-for-hire.</div>':"")+(state.fields.flag_internaluse?'<div class="po-row"><span class="k">Flag:</span> a partner’s own business will use what’s built → price at an internal rate through the waterfall.</div>':"")+(state.fields.flag_keyperson?'<div class="po-row"><span class="k">Flag:</span> the venture runs on one founder’s delivery skill → document/systematize it (key-person risk; bears on split &amp; leaver terms).</div>':"");
     var gettersP=[["get_referrals","referrals"],["get_team","a team we hire"],["get_specialists","paid specialists"],["get_partners","commission partners"]].filter(function(g){return state.fields[g[0]];}).map(function(g){return g[1];}).join(", ");
     var gtmrows=poRow("Reach customers",[poField("gtm_primary"),(poField("gtm_owner")?"owner: "+esc(pname(state.fields.gtm_owner)):"")].filter(Boolean).join(" — "))+poRow("Commitment",poField("gtm_commitment"))+poRow("Grow reach via",gettersP?esc(gettersP):"")+poRow("Funding",[poField("fund_needed"),poField("fund_kind"),(poField("fund_who")?"who: "+esc(pname(state.fields.fund_who)):"")].filter(Boolean).join(" — "));
     html+=poSec("2","The business","Clarity", poRow("Customer / niche",poField("biz_customer"))+poRow("Offer & price",poField("biz_offer"))+poRow("Channel",poField("biz_channel"))+poRow("Edge",poField("biz_edge"))+flagrows+gtmrows);
@@ -1193,6 +1196,7 @@
   function updateFlags(){
     var e=document.getElementById("hint_employed"); if(e) e.classList.toggle("on", !!state.fields.flag_employed);
     var u=document.getElementById("hint_internaluse"); if(u) u.classList.toggle("on", !!state.fields.flag_internaluse);
+    var kp=document.getElementById("hint_keyperson"); if(kp) kp.classList.toggle("on", !!state.fields.flag_keyperson);
   }
 
   /* ---- auto-derived canvas reading from per-section status (open / pilot / agreed) ---- */
@@ -1237,6 +1241,7 @@
       if(/Equity/.test(f.fund_kind||"")) out.push(["warn", "Equity means <b>dilution</b> — every founder's share shrinks and investors may get control rights. Settle the founder split (section 5) and reserved matters (section 7) before you raise."]);
       if(/Debt/.test(f.fund_kind||"")) out.push(["note", "Debt is repaid off the top — put it in the <b>waterfall (section 6)</b> ahead of the profit split, and don't let repayment quietly fall on one founder."]);
     }
+    if(f.flag_keyperson) out.push(["note", "Delivery rests on one founder: <b>systematizing it</b> turns low-durability labour into a durable system (section 4), and sets up the <b>leaver terms (section 9)</b> and a premortem note (section 10) for the key-person risk."]);
     if(!out.length){ host.classList.remove("on"); host.innerHTML=""; return; }
     host.classList.add("on");
     host.innerHTML='<div class="kshd">How this shapes the fair deal</div>'+out.map(function(o){ return '<div class="gw '+o[0]+'">'+o[1]+'</div>'; }).join("");

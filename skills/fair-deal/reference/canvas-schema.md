@@ -26,6 +26,7 @@ and write it during interview and negotiation. Keep it valid at all times.
 - Box 2: `biz_customer`, `biz_offer`, `biz_channel`, `biz_edge`, `ns_metric`, `ns_track`, `biz_notes`
   - `flag_employed` (bool) — one party is also employed by the other → use two separate contracts; watch work-for-hire
   - `flag_internaluse` (bool) — a partner's own business will use what's built → price it at an internal rate through the waterfall
+  - `flag_keyperson` (bool) — the venture runs on one founder's delivery skill → document/systematize it; key-person risk that bears on the split (Box 4/5) and leaver terms (Box 9)
   - **How we'll reach customers** (go-to-market):
     - `gtm_primary` ∈ "Reach out to people who already know us — 1:1" | "Publish content to an audience we build — broadcast" | "Reach out to strangers directly (cold) — 1:1" | "Pay to broadcast to strangers (ads)"
     - `gtm_owner` ∈ "Party A" | "Party B" | "Both" — who owns/runs the channel. **Whoever owns it holds the most durable contribution**; tag them "Distribution / audience" in `t2` so the keystone split reflects it.

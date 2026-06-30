@@ -6,7 +6,7 @@
     "b9_winA": "", "b9_winB": "", "b9_align": "", "b9_notes": "",
     "biz_customer": "", "biz_offer": "", "biz_channel": "", "biz_edge": "",
     "ns_metric": "", "ns_track": "", "biz_notes": "",
-    "flag_employed": false, "flag_internaluse": false,
+    "flag_employed": false, "flag_internaluse": false, "flag_keyperson": false,
     "gtm_primary": "", "gtm_owner": "", "gtm_commitment": "",
     "get_referrals": false, "get_team": false, "get_specialists": false, "get_partners": false,
     "fund_needed": "", "fund_kind": "", "fund_who": "",

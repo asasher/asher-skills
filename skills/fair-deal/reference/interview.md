@@ -30,9 +30,19 @@ Cover, roughly in this order:
      or other people's (debt they repay, or equity that dilutes). Default to self-/customer-funded; if they'll
      raise, capture who provides the capital — it's a contribution (Box 3), may earn a preferred return in the
      waterfall (Box 6), and taking it on is a reserved matter (Box 7).
-3. **What each side brings** (Box 3) — and, privately, what they think the *other* side brings.
+3. **What each side brings** (Box 3) — and, privately, what they think the *other* side brings. Walk the
+   **three engines every business runs on, and who carries each** — it's the fastest way to surface a missing
+   or lopsided contribution:
+   - **Traffic** — who fills the funnel with leads (the reach/channel from Box 2; most durable).
+   - **Systems** — who builds the "plumbing" that converts leads → customers and runs ops (durable *systems &
+     judgment*, and foreground IP for Box 8).
+   - **Skills / delivery** — who actually fulfils the work. Ask the key question: **is delivery dependent on
+     one founder?** If yes, it's low-durability *and* a key-person risk (tick the Box 2 flag) — push toward
+     documenting/systematizing it, and reflect it in the split and the leaver terms.
 4. **Contributions by durability & leverage** (Box 4, the keystone) — help them see which of their
    contributions compound (distribution, brand, data, judgment) vs. are paid once (labour, generic code).
+   Tag each of the three engines above: traffic/distribution sits high, systems mid-high, raw delivery low
+   until it's systematized.
 5. **The numbers** (Box 5/6) — desired split, instrument, and — **privately** — their floor and the benchmark
    behind each ask. This is the most sensitive part; reassure them it stays private.
 6. **Ownership, decisions, endings, risks** (Boxes 7–10) — what must stay theirs, what they must control, what
