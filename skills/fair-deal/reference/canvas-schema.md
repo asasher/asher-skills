@@ -26,6 +26,15 @@ and write it during interview and negotiation. Keep it valid at all times.
 - Box 2: `biz_customer`, `biz_offer`, `biz_channel`, `biz_edge`, `ns_metric`, `ns_track`, `biz_notes`
   - `flag_employed` (bool) — one party is also employed by the other → use two separate contracts; watch work-for-hire
   - `flag_internaluse` (bool) — a partner's own business will use what's built → price it at an internal rate through the waterfall
+  - **How we'll reach customers** (go-to-market):
+    - `gtm_primary` ∈ "Reach out to people who already know us — 1:1" | "Publish content to an audience we build — broadcast" | "Reach out to strangers directly (cold) — 1:1" | "Pay to broadcast to strangers (ads)"
+    - `gtm_owner` ∈ "Party A" | "Party B" | "Both" — who owns/runs the channel. **Whoever owns it holds the most durable contribution**; tag them "Distribution / audience" in `t2` so the keystone split reflects it.
+    - `gtm_commitment` (str) — the consistent effort (e.g. "100 outreaches/day")
+    - `get_referrals`, `get_team`, `get_specialists`, `get_partners` (bool) — who'll bring in customers as the venture grows
+  - **How we'll fund it** (whose money):
+    - `fund_needed` ∈ "No — we self-fund (savings / reinvested profit / customers pay up front)" | "Yes — we need outside capital to start"
+    - `fund_kind` ∈ "Debt — a loan we repay (no ownership given up)" | "Equity — investors get ownership (dilution)" | "A mix of debt and equity"  (only when raising)
+    - `fund_who` ∈ "Party A" | "Party B" | "Both" | "Outside" — who puts the money in. Capital is a contribution: feeds `t1`/`t2` (section 3/4), a preferred return in the waterfall (`b4`, section 6), and the reserved-matters list (`t6`, section 7).
 - Box 3 notes: `b1_notes` · Box 4 notes: `b2_notes`
 - Box 5: `b5_alloc`, `b5_vest`, `b5_notes`
   - `b5_vehicle` ∈ "Handshake / contract only" | "LLC" | "Company (Ltd / corp)" | "Partnership"

@@ -14,7 +14,9 @@ terms only; **not legal advice**.
 2. Write `AGREEMENT.md` from it, section by section, each stating a **mechanism neutrally** (the order of
    payments, how a price is set, who holds what) — not anyone's motive. Use this skeleton:
    1. **Parties & purpose** — who's in, the vehicle, what the deal is for.
-   2. **The business** — customer, offer & price, channel, edge.
+   2. **The business** — customer, offer & price, channel, edge; how customers are reached (and **who owns
+      the channel**); and how the venture is funded (whose money — self/customer-funded, or raised as debt or
+      equity — and who provides it).
    3. **Contributions & durability** — each side's inputs, tagged and valued at market; reward weighted to
       lasting value.
    4. **How money flows** — the waterfall: costs → tax → market-rate pay → remaining profit split.

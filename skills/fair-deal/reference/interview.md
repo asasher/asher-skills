@@ -20,7 +20,16 @@ Cover, roughly in this order:
 1. **True goal & alternative** (Box 1) — what they really want out of this; what they'd do if the deal didn't
    happen (their BATNA); "I win when ___". Probe gently for the real motivation behind the stated one.
 2. **The business** (Box 2) — customer, offer & price, channel (who owns it), edge. Flag if a party's own
-   business will be a customer (it must be priced, not free).
+   business will be a customer (it must be priced, not free). Then cover two things that shape the *fair deal*,
+   not just the business:
+   - **How we'll reach customers** — the one primary engine (people who already know us / content to an
+     audience we build / cold outreach to strangers / paid ads), and crucially **who owns that channel**:
+     the channel owner holds the most durable contribution, so make sure they're tagged *Distribution* in
+     Box 4 (it drives the split). Ask about the consistent effort they'll commit to it.
+   - **How we'll fund it** — whose money: their own (savings / reinvested profit / customers paying up front)
+     or other people's (debt they repay, or equity that dilutes). Default to self-/customer-funded; if they'll
+     raise, capture who provides the capital — it's a contribution (Box 3), may earn a preferred return in the
+     waterfall (Box 6), and taking it on is a reserved matter (Box 7).
 3. **What each side brings** (Box 3) — and, privately, what they think the *other* side brings.
 4. **Contributions by durability & leverage** (Box 4, the keystone) — help them see which of their
    contributions compound (distribution, brand, data, judgment) vs. are paid once (labour, generic code).

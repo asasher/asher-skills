@@ -256,6 +256,15 @@
   .kok{font-size:12px;line-height:1.5;color:var(--prop);margin-top:9px}
   .tagset{display:flex;flex-wrap:wrap;gap:5px 12px}
   .tagset .chk{white-space:nowrap}
+  .gtmwire{display:none;border:1px solid var(--hair);border-radius:10px;background:#fcfaf5;padding:12px 14px;margin:4px 0 2px}
+  .gtmwire.on{display:block}
+  .gtmwire .kshd{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .gtmwire .gw{font-size:12.5px;line-height:1.5;padding:7px 11px;border-radius:7px;margin-top:6px}
+  .gtmwire .gw b{color:var(--ink)}
+  .gtmwire .gw.note{color:var(--ink-soft);background:#f4eee3;border-left:3px solid var(--grey)}
+  .gtmwire .gw.ok{color:var(--prop);background:#eef4f1;border-left:3px solid var(--prop)}
+  .gtmwire .gw.warn{color:#7a3b1c;background:#f6e6da;border-left:3px solid var(--accent)}
+  .gtmwire .gw.warn b{color:#5e2c12}
   .flags{display:flex;flex-direction:column;gap:7px;margin:6px 0 12px}
   .flagq{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer}
   .flagq input{accent-color:var(--accent);width:16px;height:16px;flex:none}
@@ -418,6 +427,62 @@
         <label class="flagq"><input type="checkbox" data-k="flag_internaluse"> Will a partner’s own business use what’s built?</label>
         <div class="flaghint" id="hint_internaluse">Price it at an <b>internal / transfer rate</b> so it runs through the waterfall (section 6). <b>Free-by-default hides a subsidy</b> to one side.</div>
       </div>
+
+      <div class="subhead">How we'll reach customers<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+        Two questions decide a channel: <b>who</b> you contact (people who already know us, or strangers) and <b>how many at once</b> (one at a time, or broadcast to many). Pick the <b>one</b> primary engine to start and go deep before adding others. <b>Whoever owns the channel holds the most durable contribution</b> — it feeds the split in sections 4 &amp; 8.</span></span></div>
+      <div class="pair">
+        <div class="field"><label class="fieldlabel">Primary way we'll reach customers</label>
+          <select class="sel" data-k="gtm_primary">
+            <option value="">— choose the main engine —</option>
+            <option>Reach out to people who already know us — 1:1</option>
+            <option>Publish content to an audience we build — broadcast</option>
+            <option>Reach out to strangers directly (cold) — 1:1</option>
+            <option>Pay to broadcast to strangers (ads)</option>
+          </select></div>
+        <div class="field"><label class="fieldlabel">Who owns / runs that channel</label>
+          <select class="sel" data-k="gtm_owner">
+            <option value="">— choose —</option>
+            <option value="Party A">Party A</option>
+            <option value="Party B">Party B</option>
+            <option value="Both">Both</option>
+          </select></div>
+      </div>
+      <div class="field"><label class="fieldlabel">The commitment — how much, how often (consistency beats cleverness)</label>
+        <input class="ti-txt" data-k="gtm_commitment" placeholder="e.g. 100 outreaches/day · 1 post/day · $100/day on ads — and for how long"></div>
+      <div class="field"><label class="fieldlabel">As we grow, who'll bring in customers for us? (optional)</label>
+        <div class="tagset">
+          <label class="chk"><input type="checkbox" data-k="get_referrals"> Happy customers (referrals)</label>
+          <label class="chk"><input type="checkbox" data-k="get_team"> A team we hire</label>
+          <label class="chk"><input type="checkbox" data-k="get_specialists"> Specialists we pay</label>
+          <label class="chk"><input type="checkbox" data-k="get_partners"> Partners on commission</label>
+        </div></div>
+
+      <div class="subhead">How we'll fund it<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+        For your own venture it comes down to <b>whose money</b>: <b>your own</b> (savings, reinvested profit, or customers paying up front) or <b>other people's</b> — raised as <b>debt</b> (a loan you repay, no ownership given up) or <b>equity</b> (investors get a share). Self-funding keeps control but is slower; raising buys speed but costs ownership or repayment. The cheapest capital is usually a paying customer. Who puts money in, and how, feeds sections 3, 6 &amp; 7.</span></span></div>
+      <div class="pair">
+        <div class="field"><label class="fieldlabel">Does the venture need outside money to start?</label>
+          <select class="sel" data-k="fund_needed">
+            <option value="">— choose —</option>
+            <option>No — we self-fund (savings / reinvested profit / customers pay up front)</option>
+            <option>Yes — we need outside capital to start</option>
+          </select></div>
+        <div class="field"><label class="fieldlabel">If raising — other people's money, as what?</label>
+          <select class="sel" data-k="fund_kind">
+            <option value="">— n/a or choose —</option>
+            <option>Debt — a loan we repay (no ownership given up)</option>
+            <option>Equity — investors get ownership (dilution)</option>
+            <option>A mix of debt and equity</option>
+          </select></div>
+      </div>
+      <div class="field"><label class="fieldlabel">Who puts the money in?</label>
+        <select class="sel" data-k="fund_who">
+          <option value="">— choose —</option>
+          <option value="Party A">Party A</option>
+          <option value="Party B">Party B</option>
+          <option value="Both">Both</option>
+          <option value="Outside">An outside lender / investor</option>
+        </select></div>
+      <div class="gtmwire" id="gtmwire"></div>
 
       <div class="notes" style="margin-top:14px"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="biz_notes" placeholder="Anything else about the business…"></textarea></div>
     </section>
@@ -735,21 +800,23 @@
   function setTag(el){ var row=state.tables[el.dataset.tid][+el.dataset.i]; var o=(row[el.dataset.col]&&typeof row[el.dataset.col]==="object")?row[el.dataset.col]:{}; o[el.dataset.tag]=el.checked; row[el.dataset.col]=o; }
   function setCell(el){ var v=el.type==="checkbox"?el.checked:el.value; state.tables[el.dataset.tid][+el.dataset.i][el.dataset.col]=v; }
   function setField(el){ return el.type==="checkbox"?el.checked:el.value; }
+  function gtmKey(k){ return /^(gtm_|fund_|get_)/.test(k); }
   document.addEventListener("input", function(e){
     var el=e.target;
     if(el.dataset && el.dataset.tag && el.dataset.tid!=null){ setTag(el); renderKeystone(); save(); return; }
-    if(el.dataset && el.dataset.tid!=null && el.dataset.col){ setCell(el); renderKeystone(); save(); return; }
-    if(el.dataset && el.dataset.k){ state.fields[el.dataset.k]=setField(el); if(el.tagName==="TEXTAREA"){el.style.height="auto";el.style.height=Math.max(el.scrollHeight,62)+"px";} reflectLabels(); if(el.dataset.k==="partyA"||el.dataset.k==="partyB") PARTY_TABLES.forEach(renderTable); if(el.dataset.k==="b5_alloc") renderKeystone(); save(); }
+    if(el.dataset && el.dataset.tid!=null && el.dataset.col){ setCell(el); renderKeystone(); renderGtmWire(); save(); return; }
+    if(el.dataset && el.dataset.k){ state.fields[el.dataset.k]=setField(el); if(el.tagName==="TEXTAREA"){el.style.height="auto";el.style.height=Math.max(el.scrollHeight,62)+"px";} reflectLabels(); if(el.dataset.k==="partyA"||el.dataset.k==="partyB"){ PARTY_TABLES.forEach(renderTable); renderGtmWire(); } if(el.dataset.k==="b5_alloc") renderKeystone(); if(gtmKey(el.dataset.k)) renderGtmWire(); save(); }
   });
   document.addEventListener("change", function(e){
     var el=e.target;
     if(el.dataset && el.dataset.tag && el.dataset.tid!=null){ setTag(el); renderKeystone(); save(); return; }
-    if(el.dataset && el.dataset.tid!=null && el.dataset.col){ setCell(el); renderKeystone(); save(); return; }
+    if(el.dataset && el.dataset.tid!=null && el.dataset.col){ setCell(el); renderKeystone(); renderGtmWire(); save(); return; }
     if(el.dataset && el.dataset.k){ state.fields[el.dataset.k]=setField(el);
       if(el.dataset.k==="b5_vehicle") vehicleGuide();
       if(el.dataset.k==="dealShape") applyShape();
       if(/^flag_/.test(el.dataset.k)) updateFlags();
       if(/^st_s/.test(el.dataset.k)) rollupReading();
+      if(gtmKey(el.dataset.k)) renderGtmWire();
       save(); }
   });
   document.addEventListener("click", function(e){
@@ -766,8 +833,12 @@
     setL("lbl-batnaB",(b||"Party B")+" — best alternative if no deal");
     setL("lbl-winA",(a||"Party A")+" — “I win when ___”");
     setL("lbl-winB",(b||"Party B")+" — “I win when ___”");
+    setPartyOpt("gtm_owner"); setPartyOpt("fund_who");
   }
   function setL(id,txt){ var el=document.getElementById(id); if(el) el.textContent=txt; }
+  /* show the entered party names in a field-level select's options (value stays "Party A"/"Party B") */
+  function setPartyOpt(key){ var sel=document.querySelector('select[data-k="'+key+'"]'); if(!sel) return;
+    Array.prototype.forEach.call(sel.options,function(o){ if(o.value==="Party A")o.text=state.fields.partyA||"Party A"; else if(o.value==="Party B")o.text=state.fields.partyB||"Party B"; }); }
 
   /* ---- nav ---- */
   (function(){ var n=document.getElementById("nav"); var h=""; for(var i=1;i<=10;i++) h+='<a href="#s'+i+'">'+i+'</a>'; n.innerHTML=h; })();
@@ -814,7 +885,7 @@
   /* ---- draft the agreement (Layer 3 = a button on the canvas) ---- */
   var AGREEMENT_TEMPLATE = [
     "1. Parties & purpose — who is in, the vehicle (entity or contract-only), and what the deal is for.",
-    "2. The business — customer/niche, offer & price, channel, edge.",
+    "2. The business — customer/niche, offer & price, channel, edge; how customers are reached (and who owns the channel); how the venture is funded (whose money — self/customer-funded or raised as debt/equity — and who provides it).",
     "3. Contributions — each side's inputs, valued at market, with how each is paid (pre-existing asset = licensed/valued; task = fee; role = salary; co-building = share).",
     "4. How money flows — direct costs → tax → market-rate pay → remaining profit, with the split.",
     "5. The split & vesting — vehicle, who holds what at formation, how a share vests.",
@@ -846,6 +917,10 @@
     s+=li("North Star","ns_metric")+li("On track if","ns_track");
     if(state.fields.flag_employed) s+="- Flag — one party is also employed by the other: use two separate contracts; watch work-for-hire (IP built as an employee defaults to the employer).\n";
     if(state.fields.flag_internaluse) s+="- Flag — a partner’s own business will use what’s built: price it at an internal rate so it runs through the waterfall; free-by-default hides a subsidy.\n";
+    if(fv("gtm_primary")) s+="- Reach customers: "+fv("gtm_primary")+(fv("gtm_owner")?" (channel owner: "+nm(fv("gtm_owner"))+")":"")+(fv("gtm_commitment")?"; commitment: "+fv("gtm_commitment"):"")+"\n";
+    var getters=[["get_referrals","referrals"],["get_team","a team we hire"],["get_specialists","paid specialists"],["get_partners","commission partners"]].filter(function(g){return state.fields[g[0]];}).map(function(g){return g[1];});
+    if(getters.length) s+="- Grow reach via: "+getters.join(", ")+"\n";
+    if(fv("fund_needed")) s+="- Funding: "+fv("fund_needed")+(fv("fund_kind")?" — "+fv("fund_kind"):"")+(fv("fund_who")?" (who puts it in: "+nm(fv("fund_who"))+")":"")+"\n";
     s+=li("Notes","biz_notes");
     s+="\n## 3. Why this is a partnership\n"+tbl("t1")+li("Notes","b1_notes");
     s+="\n## 4. Contributions: durability & leverage\n"+tbl("t2")+li("Notes","b2_notes");
@@ -907,7 +982,9 @@
     var html='<div class="po-mast"><h1>The Fair Deal Canvas</h1>'+meta+'</div>';
     html+=poSec("1","Goals, alternatives & alignment","Proportion", poRow((f.partyA||"Party A")+" goal",poField("b9_goalA"))+poRow((f.partyB||"Party B")+" goal",poField("b9_goalB"))+poRow((f.partyA||"Party A")+" alternative",poField("b9_batnaA"))+poRow((f.partyB||"Party B")+" alternative",poField("b9_batnaB"))+poRow((f.partyA||"Party A")+" wins when",poField("b9_winA"))+poRow((f.partyB||"Party B")+" wins when",poField("b9_winB"))+poRow("Goals fit?",poField("b9_align")));
     var flagrows=(state.fields.flag_employed?'<div class="po-row"><span class="k">Flag:</span> one party is also employed by the other → two separate contracts; watch work-for-hire.</div>':"")+(state.fields.flag_internaluse?'<div class="po-row"><span class="k">Flag:</span> a partner’s own business will use what’s built → price at an internal rate through the waterfall.</div>':"");
-    html+=poSec("2","The business","Clarity", poRow("Customer / niche",poField("biz_customer"))+poRow("Offer & price",poField("biz_offer"))+poRow("Channel",poField("biz_channel"))+poRow("Edge",poField("biz_edge"))+flagrows);
+    var gettersP=[["get_referrals","referrals"],["get_team","a team we hire"],["get_specialists","paid specialists"],["get_partners","commission partners"]].filter(function(g){return state.fields[g[0]];}).map(function(g){return g[1];}).join(", ");
+    var gtmrows=poRow("Reach customers",[poField("gtm_primary"),(poField("gtm_owner")?"owner: "+esc(pname(state.fields.gtm_owner)):"")].filter(Boolean).join(" — "))+poRow("Commitment",poField("gtm_commitment"))+poRow("Grow reach via",gettersP?esc(gettersP):"")+poRow("Funding",[poField("fund_needed"),poField("fund_kind"),(poField("fund_who")?"who: "+esc(pname(state.fields.fund_who)):"")].filter(Boolean).join(" — "));
+    html+=poSec("2","The business","Clarity", poRow("Customer / niche",poField("biz_customer"))+poRow("Offer & price",poField("biz_offer"))+poRow("Channel",poField("biz_channel"))+poRow("Edge",poField("biz_edge"))+flagrows+gtmrows);
     var nsbody=poRow("North Star",poField("ns_metric"))+poRow("On track if",poField("ns_track"));
     if(nsbody) html+='<div class="po-sec"><div class="po-h">What good looks like</div>'+nsbody+'</div>';
     html+=poSec("3","Why this is a partnership","Proportion", poTable("t1"));
@@ -1144,7 +1221,28 @@
     rn.innerHTML='<span class="rdot '+s3+'"></span> This canvas reads: <b>'+label+'</b>. '+note;
   }
 
-  function refreshDerived(){ renderSectionStatus(); applyShape(); updateFlags(); renderKeystone(); rollupReading(); }
+  /* ---- go-to-market + funding → how they shape the fair deal ---- */
+  function renderGtmWire(){
+    var host=document.getElementById("gtmwire"); if(!host) return;
+    var f=state.fields, aN=f.partyA||"Party A", bN=f.partyB||"Party B";
+    var nm=function(v){ return v==="Party A"?aN:v==="Party B"?bN:v; };
+    var out=[];
+    if(f.gtm_owner==="Party A"||f.gtm_owner==="Party B"){
+      var hasDist=state.tables.t2.some(function(r){ return r.by===f.gtm_owner && r.dur==="Distribution / audience"; });
+      if(hasDist) out.push(["ok", "The channel owner ("+esc(nm(f.gtm_owner))+") is tagged with <b>Distribution</b> in section 4 — the durability-weighted split reflects that moat."]);
+      else out.push(["warn", esc(nm(f.gtm_owner))+" owns the customer channel, but section 4 has no <b>Distribution / audience</b> contribution for them — so the split won't reflect the moat. Add it in section 4."]);
+    }
+    if(/^Yes/.test(f.fund_needed||"")){
+      out.push(["note", "Outside money is a contribution: record <b>who puts in capital</b> in section 3, decide whether it earns a <b>preferred return</b> before the profit split (section 6), and note that taking it on is a <b>reserved matter</b> (section 7)."]);
+      if(/Equity/.test(f.fund_kind||"")) out.push(["warn", "Equity means <b>dilution</b> — every founder's share shrinks and investors may get control rights. Settle the founder split (section 5) and reserved matters (section 7) before you raise."]);
+      if(/Debt/.test(f.fund_kind||"")) out.push(["note", "Debt is repaid off the top — put it in the <b>waterfall (section 6)</b> ahead of the profit split, and don't let repayment quietly fall on one founder."]);
+    }
+    if(!out.length){ host.classList.remove("on"); host.innerHTML=""; return; }
+    host.classList.add("on");
+    host.innerHTML='<div class="kshd">How this shapes the fair deal</div>'+out.map(function(o){ return '<div class="gw '+o[0]+'">'+o[1]+'</div>'; }).join("");
+  }
+
+  function refreshDerived(){ renderSectionStatus(); applyShape(); updateFlags(); renderKeystone(); renderGtmWire(); rollupReading(); }
 
   /* ---- collapsed-section reveal: click a collapsed section's head to show/hide it ---- */
   document.addEventListener("click", function(e){ var hd=e.target.closest(".head"); if(hd){ var sec=hd.parentElement; if(sec&&sec.classList.contains("collapsed")){ sec.classList.toggle("revealed"); } } });
