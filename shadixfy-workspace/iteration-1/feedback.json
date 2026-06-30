@@ -1,0 +1,15 @@
+{
+  "_review": "Human/agent visual review of iteration 1. Empty string = output looked right. Focus is whether shadixfy specifically lands the shadcn idiom (not just generic anti-Codex calm, which uncodixfy also achieves).",
+  "dashboard/claude/no_skill": "Textbook Codex UI: gradient logo blob, gradient New Report/Upgrade buttons, cyan/purple donut, gradient progress bars, glow area chart, sidebar Upgrade CTA. The baseline we're beating.",
+  "dashboard/claude/uncodixfy": "Big improvement but it's uncodixfy's OWN taste: calm DARK Linear-ish theme, single muted purple accent. Anti-Codex, yes; shadcn, no.",
+  "dashboard/claude/shadixfy": "On target: light neutral shadcn look — bordered cards, black primary Export button, monochrome chart, real status badges (Trial outline / Active solid / Past due destructive), avatar initials, user switcher at sidebar foot. Reads as shadcn dashboard-01. ONE miss: used backdrop-blur on the sticky top bar (failed the no-glass assertion).",
+  "dashboard/codex/no_skill": "",
+  "dashboard/codex/uncodixfy": "",
+  "dashboard/codex/shadixfy": "On target and agent-consistent with the Claude version: light neutral shadcn idiom, hairline-bordered metric strip, monochrome chart, icon-nav sidebar + user at foot. Slightly more minimal (no colored status badges).",
+  "settings-form/claude/shadixfy": "Clean shadcn settings: labels above inputs, sober toggles, black Save button, neutral palette. Good.",
+  "pricing/claude/shadixfy": "",
+  "_iteration_candidates": [
+    "Sticky-header backdrop-blur: shadixfy/claude used backdrop-blur on the sticky top bar, which the skill's anti-glass rule bans but which is a legit shadcn pattern (bg-background/80 + backdrop-blur). Decide: (a) add an explicit carve-out in the skill for sticky headers, or (b) tighten the rule to forbid it everywhere. Either way the assertion and the skill should agree.",
+    "Mechanical assertions don't distinguish shadixfy from uncodixfy (both ~1.0) because they test anti-Codex hygiene, not shadcn conformance. Add shadcn-specific auto-checks for iteration 2: uses hsl(var(--token)) / CSS custom properties for color, neutral base (zinc/neutral/stone) detected, presence of shadcn-style components (badge/card/border tokens). That will turn the visual edge into a measurable one."
+  ]
+}

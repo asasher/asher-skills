@@ -1,0 +1,5 @@
+Built the single-file pricing page at [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.Ed8HO3Ck4M/index.html).
+
+It includes the short header, monthly/annual toggle, Free/Pro/Team pricing cards, and a feature comparison table. No build step or external image hosts; Tailwind and Google Fonts are loaded from CDNs as requested.
+
+Verified the inline script syntax with Node.

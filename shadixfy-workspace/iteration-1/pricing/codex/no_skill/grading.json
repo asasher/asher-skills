@@ -1,0 +1,67 @@
+{
+  "eval_id": "pricing",
+  "html_present": true,
+  "assertion_results": [
+    {
+      "text": "An index.html file is produced and renders without errors",
+      "manual": true,
+      "passed": null,
+      "evidence": "manual review (visual/structural)"
+    },
+    {
+      "text": "No gradient text on the headline and no gradient hero background",
+      "manual": false,
+      "passed": false,
+      "evidence": "found: radial-gradient, linear-gradient"
+    },
+    {
+      "text": "No glassmorphism (backdrop-filter: blur) on the tier cards",
+      "manual": false,
+      "passed": false,
+      "evidence": "found: backdrop-blur"
+    },
+    {
+      "text": "Tier cards are differentiated by border/background and one is emphasized without a glow or colored shadow",
+      "manual": false,
+      "passed": true,
+      "evidence": "no oversized shadow detected (heuristic)"
+    },
+    {
+      "text": "Largest border-radius on cards/buttons is <= 16px and cards are not heavily pill-shaped",
+      "manual": false,
+      "passed": true,
+      "evidence": "max non-full radius ~8px (rounded-md, rounded-lg); rounded-full uses: 2"
+    },
+    {
+      "text": "The primary/accent color is neutral or a single restrained hue (not blue/indigo/cyan)",
+      "manual": false,
+      "passed": true,
+      "evidence": "no obvious blue/indigo/cyan accent utilities (heuristic — confirm visually)"
+    },
+    {
+      "text": "No random glows, blur haze, or conic-gradient decoration",
+      "manual": false,
+      "passed": false,
+      "evidence": "found: radial-gradient, linear-gradient"
+    },
+    {
+      "text": "Body font is Geist or a system stack, not Inter/Roboto/Segoe UI",
+      "manual": false,
+      "passed": false,
+      "evidence": "banned font(s): inter"
+    },
+    {
+      "text": "The recommended-tier emphasis is conveyed with hierarchy (border/weight/label), not a saturated gradient or shadow bloom",
+      "manual": true,
+      "passed": null,
+      "evidence": "manual review (visual/structural)"
+    }
+  ],
+  "summary": {
+    "auto_passed": 3,
+    "auto_failed": 4,
+    "auto_total": 7,
+    "auto_pass_rate": 0.429,
+    "manual_pending": 2
+  }
+}

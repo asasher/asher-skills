@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+            colors: {
+              ink: "#17211d",
+              moss: "#2f6f4e",
+              clay: "#b75d3c",
+              flax: "#d8b45d",
+              mist: "#eef3f0",
+            },
+            boxShadow: {
+              panel: "0 24px 70px rgba(23, 33, 29, 0.10)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 18% 0%, rgba(216, 180, 93, 0.22), transparent 30rem),
+          linear-gradient(135deg, #f8faf7 0%, #eef3f0 45%, #f7f0eb 100%);
+      }
+
+      input,
+      textarea,
+      button {
+        font: inherit;
+      }
+
+      .focus-ring:focus-visible {
+        outline: 3px solid rgba(47, 111, 78, 0.28);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body class="font-sans text-ink antialiased">
+    <main class="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8">
+      <section class="grid flex-1 gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+        <aside class="rounded-lg border border-white/70 bg-white/[0.72] p-5 shadow-panel backdrop-blur">
+          <div class="flex items-center gap-4">
+            <div
+              id="avatarInitials"
+              class="grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-moss text-lg font-extrabold text-white shadow-sm"
+              aria-hidden="true"
+            >
+              MC
+            </div>
+            <div class="min-w-0">
+              <p id="sidebarName" class="truncate text-base font-bold">Maya Chen</p>
+              <p id="sidebarEmail" class="truncate text-sm text-ink/60">maya.chen@example.com</p>
+            </div>
+          </div>
+
+          <nav class="mt-7 grid gap-1 text-sm font-semibold" aria-label="Settings sections">
+            <a class="rounded-md px-3 py-2 text-moss transition hover:bg-mist focus-ring" href="#profile">Profile</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 transition hover:bg-mist focus-ring" href="#password">Password</a>
+            <a class="rounded-md px-3 py-2 text-ink/70 transition hover:bg-mist focus-ring" href="#notifications"
+              >Notifications</a
+            >
+          </nav>
+        </aside>
+
+        <form
+          id="settingsForm"
+          class="overflow-hidden rounded-lg border border-white/80 bg-white/[0.88] shadow-panel backdrop-blur"
+          novalidate
+        >
+          <header class="border-b border-ink/10 px-5 py-5 sm:px-8">
+            <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p class="text-sm font-bold uppercase tracking-[0.14em] text-clay">Account</p>
+                <h1 class="mt-1 text-3xl font-extrabold tracking-normal text-ink sm:text-4xl">Settings</h1>
+              </div>
+              <p id="saveStatus" class="min-h-6 text-sm font-medium text-ink/60" aria-live="polite"></p>
+            </div>
+          </header>
+
+          <div class="divide-y divide-ink/10">
+            <section id="profile" class="grid gap-6 px-5 py-7 sm:px-8 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div>
+                <h2 class="text-lg font-bold">Profile</h2>
+                <p class="mt-2 text-sm leading-6 text-ink/60">Name, email, and public bio.</p>
+              </div>
+
+              <div class="grid gap-5">
+                <div class="grid gap-5 sm:grid-cols-2">
+                  <label class="grid gap-2">
+                    <span class="text-sm font-semibold text-ink/80">Full name</span>
+                    <input
+                      id="fullName"
+                      name="fullName"
+                      type="text"
+                      autocomplete="name"
+                      required
+                      class="focus-ring h-12 rounded-md border border-ink/20 bg-white px-3 text-base text-ink shadow-sm transition placeholder:text-ink/40 hover:border-ink/25"
+                      placeholder="Full name"
+                    />
+                  </label>
+
+                  <label class="grid gap-2">
+                    <span class="text-sm font-semibold text-ink/80">Email address</span>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autocomplete="email"
+                      required
+                      class="focus-ring h-12 rounded-md border border-ink/20 bg-white px-3 text-base text-ink shadow-sm transition placeholder:text-ink/40 hover:border-ink/25"
+                      placeholder="name@example.com"
+                    />
+                  </label>
+                </div>
+
+                <label class="grid gap-2">
+                  <span class="text-sm font-semibold text-ink/80">Bio</span>
+                  <textarea
+                    id="bio"
+                    name="bio"
+                    maxlength="180"
+                    rows="5"
+                    class="focus-ring min-h-32 resize-y rounded-md border border-ink/20 bg-white px-3 py-3 text-base leading-6 text-ink shadow-sm transition placeholder:text-ink/40 hover:border-ink/25"
+                    placeholder="Short bio"
+                  ></textarea>
+                  <span class="flex justify-end text-xs font-medium text-ink/60">
+                    <span id="bioCount">0</span>/180
+                  </span>
+                </label>
+              </div>
+            </section>
+
+            <section id="password" class="grid gap-6 px-5 py-7 sm:px-8 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div>
+                <h2 class="text-lg font-bold">Password</h2>
+                <p class="mt-2 text-sm leading-6 text-ink/60">Change your sign-in password.</p>
+              </div>
+
+              <div class="grid gap-5">
+                <label class="grid gap-2">
+                  <span class="text-sm font-semibold text-ink/80">Current password</span>
+                  <input
+                    id="currentPassword"
+                    name="currentPassword"
+                    type="password"
+                    autocomplete="current-password"
+                    class="focus-ring h-12 rounded-md border border-ink/20 bg-white px-3 text-base text-ink shadow-sm transition placeholder:text-ink/40 hover:border-ink/25"
+                    placeholder="Current password"
+                  />
+                </label>
+
+                <div class="grid gap-5 sm:grid-cols-2">
+                  <label class="grid gap-2">
+                    <span class="text-sm font-semibold text-ink/80">New password</span>
+                    <input
+                      id="newPassword"
+                      name="newPassword"
+                      type="password"
+                      autocomplete="new-password"
+                      minlength="8"
+                      class="focus-ring h-12 rounded-md border border-ink/20 bg-white px-3 text-base text-ink shadow-sm transition placeholder:text-ink/40 hover:border-ink/25"
+                      placeholder="At least 8 characters"
+                    />
+                  </label>
+
+                  <label class="grid gap-2">
+                    <span class="text-sm font-semibold text-ink/80">Confirm password</span>
+                    <input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type="password"
+                      autocomplete="new-password"
+                      minlength="8"
+                      class="focus-ring h-12 rounded-md border border-ink/20 bg-white px-3 text-base text-ink shadow-sm transition placeholder:text-ink/40 hover:border-ink/25"
+                      placeholder="Confirm password"
+                    />
+                  </label>
+                </div>
+
+                <p id="passwordError" class="min-h-5 text-sm font-semibold text-clay" aria-live="polite"></p>
+              </div>
+            </section>
+
+            <section id="notifications" class="grid gap-6 px-5 py-7 sm:px-8 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div>
+                <h2 class="text-lg font-bold">Notifications</h2>
+                <p class="mt-2 text-sm leading-6 text-ink/60">Email and product alerts.</p>
+              </div>
+
+              <fieldset class="grid gap-3">
+                <legend class="sr-only">Notification preferences</legend>
+
+                <label
+                  class="flex min-h-20 items-center justify-between gap-4 rounded-md border border-ink/10 bg-white px-4 py-3 shadow-sm"
+                >
+                  <span class="min-w-0">
+                    <span class="block text-sm font-bold text-ink">Security alerts</span>
+                    <span class="block text-sm leading-5 text-ink/60">New sign-ins and account changes.</span>
+                  </span>
+                  <span class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center">
+                    <input id="securityAlerts" name="securityAlerts" type="checkbox" class="peer sr-only" />
+                    <span
+                      class="h-7 w-12 rounded-full bg-ink/[0.18] transition peer-checked:bg-moss peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-moss/30"
+                    ></span>
+                    <span
+                      class="absolute left-1 h-5 w-5 rounded-full bg-white shadow-sm transition peer-checked:translate-x-5"
+                      aria-hidden="true"
+                    ></span>
+                  </span>
+                </label>
+
+                <label
+                  class="flex min-h-20 items-center justify-between gap-4 rounded-md border border-ink/10 bg-white px-4 py-3 shadow-sm"
+                >
+                  <span class="min-w-0">
+                    <span class="block text-sm font-bold text-ink">Product updates</span>
+                    <span class="block text-sm leading-5 text-ink/60">Feature releases and workspace changes.</span>
+                  </span>
+                  <span class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center">
+                    <input id="productUpdates" name="productUpdates" type="checkbox" class="peer sr-only" />
+                    <span
+                      class="h-7 w-12 rounded-full bg-ink/[0.18] transition peer-checked:bg-moss peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-moss/30"
+                    ></span>
+                    <span
+                      class="absolute left-1 h-5 w-5 rounded-full bg-white shadow-sm transition peer-checked:translate-x-5"
+                      aria-hidden="true"
+                    ></span>
+                  </span>
+                </label>
+
+                <label
+                  class="flex min-h-20 items-center justify-between gap-4 rounded-md border border-ink/10 bg-white px-4 py-3 shadow-sm"
+                >
+                  <span class="min-w-0">
+                    <span class="block text-sm font-bold text-ink">Billing notices</span>
+                    <span class="block text-sm leading-5 text-ink/60">Receipts, invoices, and plan renewals.</span>
+                  </span>
+                  <span class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center">
+                    <input id="billingNotices" name="billingNotices" type="checkbox" class="peer sr-only" />
+                    <span
+                      class="h-7 w-12 rounded-full bg-ink/[0.18] transition peer-checked:bg-moss peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-moss/30"
+                    ></span>
+                    <span
+                      class="absolute left-1 h-5 w-5 rounded-full bg-white shadow-sm transition peer-checked:translate-x-5"
+                      aria-hidden="true"
+                    ></span>
+                  </span>
+                </label>
+
+                <label
+                  class="flex min-h-20 items-center justify-between gap-4 rounded-md border border-ink/10 bg-white px-4 py-3 shadow-sm"
+                >
+                  <span class="min-w-0">
+                    <span class="block text-sm font-bold text-ink">Monthly digest</span>
+                    <span class="block text-sm leading-5 text-ink/60">Usage summary and team activity.</span>
+                  </span>
+                  <span class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center">
+                    <input id="monthlyDigest" name="monthlyDigest" type="checkbox" class="peer sr-only" />
+                    <span
+                      class="h-7 w-12 rounded-full bg-ink/[0.18] transition peer-checked:bg-moss peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-moss/30"
+                    ></span>
+                    <span
+                      class="absolute left-1 h-5 w-5 rounded-full bg-white shadow-sm transition peer-checked:translate-x-5"
+                      aria-hidden="true"
+                    ></span>
+                  </span>
+                </label>
+              </fieldset>
+            </section>
+          </div>
+
+          <footer
+            class="sticky bottom-0 z-10 flex flex-col-reverse gap-3 border-t border-ink/10 bg-white/[0.92] px-5 py-4 backdrop-blur sm:flex-row sm:justify-end sm:px-8"
+          >
+            <button
+              id="cancelButton"
+              type="button"
+              class="focus-ring inline-flex h-11 items-center justify-center gap-2 rounded-md border border-ink/20 bg-white px-4 text-sm font-bold text-ink transition hover:border-clay/50 hover:bg-clay/10"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="focus-ring inline-flex h-11 items-center justify-center gap-2 rounded-md bg-moss px-5 text-sm font-bold text-white shadow-sm transition hover:bg-[#285f43]"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z" />
+                <path d="M17 21v-8H7v8" />
+                <path d="M7 3v5h8" />
+              </svg>
+              Save changes
+            </button>
+          </footer>
+        </form>
+      </section>
+    </main>
+
+    <script>
+      const storageKey = "account-settings-demo";
+      const defaults = {
+        fullName: "Maya Chen",
+        email: "maya.chen@example.com",
+        bio: "Operations lead focused on customer systems, clean handoffs, and practical tooling.",
+        securityAlerts: true,
+        productUpdates: true,
+        billingNotices: true,
+        monthlyDigest: false,
+      };
+
+      const form = document.getElementById("settingsForm");
+      const fullName = document.getElementById("fullName");
+      const email = document.getElementById("email");
+      const bio = document.getElementById("bio");
+      const bioCount = document.getElementById("bioCount");
+      const saveStatus = document.getElementById("saveStatus");
+      const passwordError = document.getElementById("passwordError");
+      const cancelButton = document.getElementById("cancelButton");
+      const sidebarName = document.getElementById("sidebarName");
+      const sidebarEmail = document.getElementById("sidebarEmail");
+      const avatarInitials = document.getElementById("avatarInitials");
+      const passwordFields = ["currentPassword", "newPassword", "confirmPassword"].map((id) =>
+        document.getElementById(id)
+      );
+      const toggleIds = ["securityAlerts", "productUpdates", "billingNotices", "monthlyDigest"];
+
+      let savedState = loadState();
+
+      function loadState() {
+        try {
+          return { ...defaults, ...JSON.parse(localStorage.getItem(storageKey)) };
+        } catch {
+          return { ...defaults };
+        }
+      }
+
+      function stateFromForm() {
+        return {
+          fullName: fullName.value.trim(),
+          email: email.value.trim(),
+          bio: bio.value.trim(),
+          securityAlerts: document.getElementById("securityAlerts").checked,
+          productUpdates: document.getElementById("productUpdates").checked,
+          billingNotices: document.getElementById("billingNotices").checked,
+          monthlyDigest: document.getElementById("monthlyDigest").checked,
+        };
+      }
+
+      function applyState(state) {
+        fullName.value = state.fullName;
+        email.value = state.email;
+        bio.value = state.bio;
+        toggleIds.forEach((id) => {
+          document.getElementById(id).checked = Boolean(state[id]);
+        });
+        passwordFields.forEach((field) => {
+          field.value = "";
+        });
+        updateProfileSummary();
+        updateBioCount();
+        passwordError.textContent = "";
+      }
+
+      function updateBioCount() {
+        bioCount.textContent = bio.value.length;
+      }
+
+      function getInitials(value) {
+        const parts = value
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean)
+          .slice(0, 2);
+        return parts.map((part) => part[0].toUpperCase()).join("") || "AC";
+      }
+
+      function updateProfileSummary() {
+        sidebarName.textContent = fullName.value.trim() || "Account user";
+        sidebarEmail.textContent = email.value.trim() || "email@example.com";
+        avatarInitials.textContent = getInitials(fullName.value);
+      }
+
+      function validatePasswordChange() {
+        const [currentPassword, newPassword, confirmPassword] = passwordFields;
+        const values = passwordFields.map((field) => field.value);
+        const hasPasswordChange = values.some(Boolean);
+
+        passwordError.textContent = "";
+        if (!hasPasswordChange) return true;
+
+        if (values.some((value) => !value)) {
+          passwordError.textContent = "Complete all password fields to change your password.";
+          return false;
+        }
+
+        if (newPassword.value.length < 8) {
+          passwordError.textContent = "New password must be at least 8 characters.";
+          return false;
+        }
+
+        if (newPassword.value !== confirmPassword.value) {
+          passwordError.textContent = "New password and confirmation do not match.";
+          return false;
+        }
+
+        currentPassword.value = "";
+        newPassword.value = "";
+        confirmPassword.value = "";
+        return true;
+      }
+
+      function setStatus(message) {
+        saveStatus.textContent = message;
+        window.clearTimeout(setStatus.timer);
+        setStatus.timer = window.setTimeout(() => {
+          saveStatus.textContent = "";
+        }, 3500);
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!form.reportValidity() || !validatePasswordChange()) return;
+
+        savedState = stateFromForm();
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(savedState));
+          setStatus("Saved locally.");
+        } catch {
+          setStatus("Saved for this session.");
+        }
+        updateProfileSummary();
+      });
+
+      cancelButton.addEventListener("click", () => {
+        applyState(savedState);
+        setStatus("Changes reverted.");
+      });
+
+      fullName.addEventListener("input", updateProfileSummary);
+      email.addEventListener("input", updateProfileSummary);
+      bio.addEventListener("input", updateBioCount);
+
+      applyState(savedState);
+    </script>
+  </body>
+</html>

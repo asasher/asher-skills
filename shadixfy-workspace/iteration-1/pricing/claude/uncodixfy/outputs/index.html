@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pricing — Pinion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg:      '#18181b',
+          surface: '#1f1f23',
+          line:    '#2e2e33',
+          line2:   '#3a3a40',
+          text:    '#e7e7e9',
+          muted:   '#9a9aa2',
+          faint:   '#6e6e76',
+          accent:  '#7d9a6e',
+        },
+        fontFamily: {
+          sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'monospace'],
+        },
+        borderRadius: {
+          DEFAULT: '8px',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; }
+  .price-num { font-feature-settings: "tnum"; }
+</style>
+</head>
+<body class="bg-bg text-text font-sans antialiased">
+
+  <div class="mx-auto max-w-[1100px] px-6">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between border-b border-line py-5">
+      <div class="flex items-center gap-2.5">
+        <span class="inline-block h-5 w-5 rounded-[5px] border border-line2 bg-surface"></span>
+        <span class="text-sm font-medium tracking-tight">Pinion</span>
+      </div>
+      <nav class="hidden items-center gap-6 text-sm text-muted sm:flex">
+        <a href="#" class="hover:text-text">Docs</a>
+        <a href="#" class="hover:text-text">Changelog</a>
+        <a href="#" class="text-text">Pricing</a>
+      </nav>
+      <a href="#" class="rounded border border-line2 px-3 py-1.5 text-sm font-medium text-text hover:border-faint">Sign in</a>
+    </header>
+
+    <!-- Title row -->
+    <section class="border-b border-line py-10">
+      <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div class="max-w-md">
+          <h1 class="text-2xl font-semibold tracking-tight">Pricing</h1>
+          <p class="mt-2 text-sm leading-relaxed text-muted">
+            Per-seat plans for the CLI, build cache, and deploy runners. Switch or cancel anytime.
+          </p>
+        </div>
+
+        <!-- Monthly / Annual toggle -->
+        <div class="inline-flex items-center gap-3">
+          <div class="inline-flex rounded border border-line2 bg-surface p-0.5 text-sm">
+            <button id="btn-monthly" type="button"
+              class="rounded-[6px] px-3 py-1.5 font-medium text-text">Monthly</button>
+            <button id="btn-annual" type="button"
+              class="rounded-[6px] px-3 py-1.5 font-medium text-muted hover:text-text">Annual</button>
+          </div>
+          <span class="text-xs text-faint">2 months free annually</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tier cards -->
+    <section class="grid gap-px border-b border-line bg-line sm:grid-cols-3">
+      <!-- Free -->
+      <div class="flex flex-col bg-bg p-6">
+        <div>
+          <h2 class="text-sm font-semibold">Free</h2>
+          <p class="mt-1 text-sm text-muted">For solo projects and trying things out.</p>
+        </div>
+        <div class="mt-5 flex items-baseline gap-1">
+          <span class="price-num text-3xl font-semibold tracking-tight">$0</span>
+          <span class="text-sm text-faint">/seat / mo</span>
+        </div>
+        <a href="#" class="mt-5 rounded border border-line2 py-2 text-center text-sm font-medium text-text hover:border-faint">
+          Get started
+        </a>
+        <ul class="mt-6 space-y-2.5 text-sm text-muted">
+          <li class="flex gap-2.5"><span class="text-faint">—</span>1 member</li>
+          <li class="flex gap-2.5"><span class="text-faint">—</span>500 build minutes / mo</li>
+          <li class="flex gap-2.5"><span class="text-faint">—</span>Community support</li>
+        </ul>
+      </div>
+
+      <!-- Pro -->
+      <div class="flex flex-col bg-bg p-6">
+        <div>
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-semibold">Pro</h2>
+            <span class="rounded border border-line2 px-1.5 py-0.5 text-xs text-muted">Popular</span>
+          </div>
+          <p class="mt-1 text-sm text-muted">For developers shipping regularly.</p>
+        </div>
+        <div class="mt-5 flex items-baseline gap-1">
+          <span class="price-num text-3xl font-semibold tracking-tight" data-monthly="$12" data-annual="$10">$12</span>
+          <span class="text-sm text-faint">/seat / mo</span>
+        </div>
+        <a href="#" class="mt-5 rounded bg-text py-2 text-center text-sm font-medium text-bg hover:bg-white">
+          Start Pro
+        </a>
+        <ul class="mt-6 space-y-2.5 text-sm text-muted">
+          <li class="flex gap-2.5"><span class="text-faint">—</span>Up to 5 members</li>
+          <li class="flex gap-2.5"><span class="text-faint">—</span>5,000 build minutes / mo</li>
+          <li class="flex gap-2.5"><span class="text-faint">—</span>Remote build cache</li>
+          <li class="flex gap-2.5"><span class="text-faint">—</span>Email support</li>
+        </ul>
+      </div>
+
+      <!-- Team -->
+      <div class="flex flex-col bg-bg p-6">
+        <div>
+          <h2 class="text-sm font-semibold">Team</h2>
+          <p class="mt-1 text-sm text-muted">For teams that need controls and scale.</p>
+        </div>
+        <div class="mt-5 flex items-baseline gap-1">
+          <span class="price-num text-3xl font-semibold tracking-tight" data-monthly="$28" data-annual="$23">$28</span>
+          <span class="text-sm text-faint">/seat / mo</span>
+        </div>
+        <a href="#" class="mt-5 rounded border border-line2 py-2 text-center text-sm font-medium text-text hover:border-faint">
+          Start Team
+        </a>
+        <ul class="mt-6 space-y-2.5 text-sm text-muted">
+          <li class="flex gap-2.5"><span class="text-faint">—</span>Unlimited members</li>
+          <li class="flex gap-2.5"><span class="text-faint">—</span>20,000 build minutes / mo</li>
+          <li class="flex gap-2.5"><span class="text-faint">—</span>SSO &amp; audit log</li>
+          <li class="flex gap-2.5"><span class="text-faint">—</span>Priority support</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Feature comparison -->
+    <section class="py-10">
+      <h2 class="text-sm font-semibold text-muted">Compare plans</h2>
+
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full min-w-[640px] border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-line2 text-left">
+              <th class="w-2/5 py-3 pr-4 font-medium text-muted">Feature</th>
+              <th class="py-3 px-4 font-medium">Free</th>
+              <th class="py-3 px-4 font-medium">Pro</th>
+              <th class="py-3 px-4 font-medium">Team</th>
+            </tr>
+          </thead>
+          <tbody class="text-muted">
+            <tr class="border-b border-line">
+              <td class="py-3 pr-4 text-text">Team members</td>
+              <td class="price-num py-3 px-4">1</td>
+              <td class="price-num py-3 px-4">5</td>
+              <td class="price-num py-3 px-4">Unlimited</td>
+            </tr>
+            <tr class="border-b border-line">
+              <td class="py-3 pr-4 text-text">Build minutes / mo</td>
+              <td class="price-num py-3 px-4">500</td>
+              <td class="price-num py-3 px-4">5,000</td>
+              <td class="price-num py-3 px-4">20,000</td>
+            </tr>
+            <tr class="border-b border-line">
+              <td class="py-3 pr-4 text-text">Concurrent runners</td>
+              <td class="price-num py-3 px-4">1</td>
+              <td class="price-num py-3 px-4">4</td>
+              <td class="price-num py-3 px-4">16</td>
+            </tr>
+            <tr class="border-b border-line">
+              <td class="py-3 pr-4 text-text">Remote build cache</td>
+              <td class="py-3 px-4 text-faint">—</td>
+              <td class="py-3 px-4">Included</td>
+              <td class="py-3 px-4">Included</td>
+            </tr>
+            <tr class="border-b border-line">
+              <td class="py-3 pr-4 text-text">Log retention</td>
+              <td class="py-3 px-4">7 days</td>
+              <td class="py-3 px-4">30 days</td>
+              <td class="py-3 px-4">90 days</td>
+            </tr>
+            <tr class="border-b border-line">
+              <td class="py-3 pr-4 text-text">SSO / SAML</td>
+              <td class="py-3 px-4 text-faint">—</td>
+              <td class="py-3 px-4 text-faint">—</td>
+              <td class="py-3 px-4">Included</td>
+            </tr>
+            <tr class="border-b border-line">
+              <td class="py-3 pr-4 text-text">Audit log</td>
+              <td class="py-3 px-4 text-faint">—</td>
+              <td class="py-3 px-4 text-faint">—</td>
+              <td class="py-3 px-4">Included</td>
+            </tr>
+            <tr class="border-b border-line">
+              <td class="py-3 pr-4 text-text">Support</td>
+              <td class="py-3 px-4">Community</td>
+              <td class="py-3 px-4">Email</td>
+              <td class="py-3 px-4">Priority</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-4 text-text">SLA</td>
+              <td class="py-3 px-4 text-faint">—</td>
+              <td class="py-3 px-4 text-faint">—</td>
+              <td class="py-3 px-4">99.9%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="flex flex-col gap-2 border-t border-line py-6 text-sm text-faint sm:flex-row sm:items-center sm:justify-between">
+      <span>Prices in USD, excluding tax.</span>
+      <div class="flex gap-5">
+        <a href="#" class="hover:text-muted">Contact sales</a>
+        <a href="#" class="hover:text-muted">FAQ</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    (function () {
+      var monthly = document.getElementById('btn-monthly');
+      var annual = document.getElementById('btn-annual');
+      var prices = document.querySelectorAll('[data-monthly]');
+
+      var active = 'text-text';
+      var inactive = 'text-muted';
+
+      function set(period) {
+        var isMonthly = period === 'monthly';
+        prices.forEach(function (el) {
+          el.textContent = el.getAttribute(isMonthly ? 'data-monthly' : 'data-annual');
+        });
+        monthly.classList.toggle('bg-surface', false);
+        monthly.classList.toggle(active, isMonthly);
+        monthly.classList.toggle(inactive, !isMonthly);
+        annual.classList.toggle(active, !isMonthly);
+        annual.classList.toggle(inactive, isMonthly);
+        monthly.classList.toggle('bg-line', isMonthly);
+        annual.classList.toggle('bg-line', !isMonthly);
+      }
+
+      monthly.addEventListener('click', function () { set('monthly'); });
+      annual.addEventListener('click', function () { set('annual'); });
+      set('monthly');
+    })();
+  </script>
+
+</body>
+</html>

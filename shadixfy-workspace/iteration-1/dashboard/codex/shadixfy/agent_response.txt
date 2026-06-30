@@ -1,0 +1,3 @@
+Built [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.7NMZZnwKKe/index.html) in the current directory.
+
+It’s a single browser-openable file with Tailwind CDN, Geist fonts, shadcn-style CSS tokens, fixed sidebar, top bar, compact metrics, inline SVG chart, and recent activity list. No build step or external image assets are needed.

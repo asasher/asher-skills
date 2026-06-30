@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Geist", "sans-serif"],
+              mono: ["Geist Mono", "monospace"],
+            },
+            colors: {
+              border: "hsl(var(--border))",
+              input: "hsl(var(--input))",
+              ring: "hsl(var(--ring))",
+              background: "hsl(var(--background))",
+              foreground: "hsl(var(--foreground))",
+              primary: {
+                DEFAULT: "hsl(var(--primary))",
+                foreground: "hsl(var(--primary-foreground))",
+              },
+              secondary: {
+                DEFAULT: "hsl(var(--secondary))",
+                foreground: "hsl(var(--secondary-foreground))",
+              },
+              destructive: {
+                DEFAULT: "hsl(var(--destructive))",
+                foreground: "hsl(var(--destructive-foreground))",
+              },
+              muted: {
+                DEFAULT: "hsl(var(--muted))",
+                foreground: "hsl(var(--muted-foreground))",
+              },
+              accent: {
+                DEFAULT: "hsl(var(--accent))",
+                foreground: "hsl(var(--accent-foreground))",
+              },
+              popover: {
+                DEFAULT: "hsl(var(--popover))",
+                foreground: "hsl(var(--popover-foreground))",
+              },
+              card: {
+                DEFAULT: "hsl(var(--card))",
+                foreground: "hsl(var(--card-foreground))",
+              },
+            },
+            borderRadius: {
+              lg: "var(--radius)",
+              md: "calc(var(--radius) - 2px)",
+              sm: "calc(var(--radius) - 4px)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 10% 3.9%;
+        --radius: 0.5rem;
+      }
+
+      * {
+        border-color: hsl(var(--border));
+      }
+
+      body {
+        background: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-family: "Geist", sans-serif;
+      }
+
+      .focus-ring:focus-visible {
+        outline: 2px solid hsl(var(--ring));
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-background text-foreground antialiased">
+    <main class="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+      <header class="flex flex-col gap-6 border-b pb-8 md:flex-row md:items-end md:justify-between">
+        <div class="max-w-2xl">
+          <h1 class="text-3xl font-semibold tracking-normal sm:text-4xl">Pricing</h1>
+          <p class="mt-3 text-base leading-7 text-muted-foreground">
+            Start free, then upgrade when your projects need more automation, history, and team controls.
+          </p>
+        </div>
+
+        <div class="inline-flex w-fit rounded-lg bg-muted p-1" role="group" aria-label="Billing period">
+          <button
+            type="button"
+            class="billing-toggle focus-ring rounded-md bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-colors"
+            data-billing="monthly"
+            aria-pressed="true"
+          >
+            Monthly
+          </button>
+          <button
+            type="button"
+            class="billing-toggle focus-ring rounded-md px-4 py-2 text-sm font-medium text-muted-foreground transition-colors"
+            data-billing="annual"
+            aria-pressed="false"
+          >
+            Annual
+          </button>
+        </div>
+      </header>
+
+      <section aria-label="Plans" class="grid gap-4 md:grid-cols-3">
+        <article class="flex min-h-[27rem] flex-col rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+          <div>
+            <h2 class="text-xl font-semibold">Free</h2>
+            <p class="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">
+              For individual developers testing workflows and small side projects.
+            </p>
+          </div>
+          <div class="mt-6">
+            <div class="flex items-baseline gap-2">
+              <span class="text-4xl font-semibold">$0</span>
+              <span class="text-sm text-muted-foreground">/ month</span>
+            </div>
+          </div>
+          <a
+            href="#"
+            class="focus-ring mt-6 inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            Start free
+          </a>
+          <ul class="mt-6 space-y-3 text-sm">
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>3 projects</span>
+            </li>
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>1,000 automation runs per month</span>
+            </li>
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>7-day activity history</span>
+            </li>
+          </ul>
+        </article>
+
+        <article class="flex min-h-[27rem] flex-col rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-semibold">Pro</h2>
+              <p class="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">
+                For developers shipping production tools and scheduled jobs.
+              </p>
+            </div>
+            <span class="rounded-md border bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">Popular</span>
+          </div>
+          <div class="mt-6">
+            <div class="flex items-baseline gap-2">
+              <span class="price text-4xl font-semibold" data-monthly="$19" data-annual="$15">$19</span>
+              <span class="billing-label text-sm text-muted-foreground">/ month</span>
+            </div>
+            <p class="annual-note mt-2 hidden text-sm text-muted-foreground">Billed annually at $180.</p>
+          </div>
+          <a
+            href="#"
+            class="focus-ring mt-6 inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Upgrade to Pro
+          </a>
+          <ul class="mt-6 space-y-3 text-sm">
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>Unlimited personal projects</span>
+            </li>
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>25,000 automation runs per month</span>
+            </li>
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>90-day activity history</span>
+            </li>
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>CLI access and webhooks</span>
+            </li>
+          </ul>
+        </article>
+
+        <article class="flex min-h-[27rem] flex-col rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+          <div>
+            <h2 class="text-xl font-semibold">Team</h2>
+            <p class="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">
+              For teams that need shared environments, reviews, and admin controls.
+            </p>
+          </div>
+          <div class="mt-6">
+            <div class="flex items-baseline gap-2">
+              <span class="price text-4xl font-semibold" data-monthly="$49" data-annual="$39">$49</span>
+              <span class="billing-label text-sm text-muted-foreground">/ month</span>
+            </div>
+            <p class="annual-note mt-2 hidden text-sm text-muted-foreground">Billed annually at $468.</p>
+          </div>
+          <a
+            href="#"
+            class="focus-ring mt-6 inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            Contact sales
+          </a>
+          <ul class="mt-6 space-y-3 text-sm">
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>Unlimited team projects</span>
+            </li>
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>100,000 automation runs per month</span>
+            </li>
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>1-year activity history</span>
+            </li>
+            <li class="flex gap-3">
+              <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m20 6-11 11-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>SAML SSO and audit log</span>
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <section aria-labelledby="comparison-heading" class="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="border-b p-6">
+          <h2 id="comparison-heading" class="text-xl font-semibold">Feature comparison</h2>
+          <p class="mt-2 text-sm leading-6 text-muted-foreground">
+            Compare usage limits, collaboration controls, and support across plans.
+          </p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[44rem] text-sm">
+            <thead>
+              <tr class="border-b">
+                <th scope="col" class="w-[34%] px-6 py-4 text-left font-medium text-muted-foreground">Feature</th>
+                <th scope="col" class="px-6 py-4 text-left font-medium">Free</th>
+                <th scope="col" class="px-6 py-4 text-left font-medium">Pro</th>
+                <th scope="col" class="px-6 py-4 text-left font-medium">Team</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b hover:bg-muted/50">
+                <th scope="row" class="px-6 py-4 text-left font-medium">Projects</th>
+                <td class="px-6 py-4 text-muted-foreground">3</td>
+                <td class="px-6 py-4 text-muted-foreground">Unlimited personal</td>
+                <td class="px-6 py-4 text-muted-foreground">Unlimited team</td>
+              </tr>
+              <tr class="border-b hover:bg-muted/50">
+                <th scope="row" class="px-6 py-4 text-left font-medium">Automation runs</th>
+                <td class="px-6 py-4 text-muted-foreground">1,000 / month</td>
+                <td class="px-6 py-4 text-muted-foreground">25,000 / month</td>
+                <td class="px-6 py-4 text-muted-foreground">100,000 / month</td>
+              </tr>
+              <tr class="border-b hover:bg-muted/50">
+                <th scope="row" class="px-6 py-4 text-left font-medium">Activity history</th>
+                <td class="px-6 py-4 text-muted-foreground">7 days</td>
+                <td class="px-6 py-4 text-muted-foreground">90 days</td>
+                <td class="px-6 py-4 text-muted-foreground">1 year</td>
+              </tr>
+              <tr class="border-b hover:bg-muted/50">
+                <th scope="row" class="px-6 py-4 text-left font-medium">Environments</th>
+                <td class="px-6 py-4 text-muted-foreground">Development</td>
+                <td class="px-6 py-4 text-muted-foreground">Development, staging, production</td>
+                <td class="px-6 py-4 text-muted-foreground">Custom with approvals</td>
+              </tr>
+              <tr class="border-b hover:bg-muted/50">
+                <th scope="row" class="px-6 py-4 text-left font-medium">Integrations</th>
+                <td class="px-6 py-4 text-muted-foreground">GitHub</td>
+                <td class="px-6 py-4 text-muted-foreground">GitHub, Slack, webhooks</td>
+                <td class="px-6 py-4 text-muted-foreground">GitHub, Slack, webhooks, API</td>
+              </tr>
+              <tr class="border-b hover:bg-muted/50">
+                <th scope="row" class="px-6 py-4 text-left font-medium">Access control</th>
+                <td class="px-6 py-4 text-muted-foreground">Single user</td>
+                <td class="px-6 py-4 text-muted-foreground">Single user</td>
+                <td class="px-6 py-4 text-muted-foreground">Roles, SAML SSO, audit log</td>
+              </tr>
+              <tr class="hover:bg-muted/50">
+                <th scope="row" class="px-6 py-4 text-left font-medium">Support</th>
+                <td class="px-6 py-4 text-muted-foreground">Community</td>
+                <td class="px-6 py-4 text-muted-foreground">Email</td>
+                <td class="px-6 py-4 text-muted-foreground">Priority</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const toggles = document.querySelectorAll(".billing-toggle");
+      const prices = document.querySelectorAll(".price");
+      const billingLabels = document.querySelectorAll(".billing-label");
+      const annualNotes = document.querySelectorAll(".annual-note");
+
+      function setBilling(period) {
+        toggles.forEach((toggle) => {
+          const selected = toggle.dataset.billing === period;
+          toggle.setAttribute("aria-pressed", String(selected));
+          toggle.classList.toggle("bg-background", selected);
+          toggle.classList.toggle("text-foreground", selected);
+          toggle.classList.toggle("shadow-sm", selected);
+          toggle.classList.toggle("text-muted-foreground", !selected);
+        });
+
+        prices.forEach((price) => {
+          price.textContent = price.dataset[period];
+        });
+
+        billingLabels.forEach((label) => {
+          label.textContent = period === "annual" ? "/ month, billed annually" : "/ month";
+        });
+
+        annualNotes.forEach((note) => {
+          note.classList.toggle("hidden", period !== "annual");
+        });
+      }
+
+      toggles.forEach((toggle) => {
+        toggle.addEventListener("click", () => setBilling(toggle.dataset.billing));
+      });
+
+      setBilling("monthly");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --background: 0 0% 100%;            --foreground: 240 10% 3.9%;
+      --card: 0 0% 100%;                  --card-foreground: 240 10% 3.9%;
+      --popover: 0 0% 100%;               --popover-foreground: 240 10% 3.9%;
+      --primary: 240 5.9% 10%;            --primary-foreground: 0 0% 98%;
+      --secondary: 240 4.8% 95.9%;        --secondary-foreground: 240 5.9% 10%;
+      --muted: 240 4.8% 95.9%;            --muted-foreground: 240 3.8% 46.1%;
+      --accent: 240 4.8% 95.9%;           --accent-foreground: 240 5.9% 10%;
+      --destructive: 0 84.2% 60.2%;       --destructive-foreground: 0 0% 98%;
+      --border: 240 5.9% 90%;             --input: 240 5.9% 90%;
+      --ring: 240 10% 3.9%;               --radius: 0.5rem;
+    }
+    .dark {
+      --background: 240 10% 3.9%;         --foreground: 0 0% 98%;
+      --card: 240 10% 3.9%;               --card-foreground: 0 0% 98%;
+      --popover: 240 10% 3.9%;            --popover-foreground: 0 0% 98%;
+      --primary: 0 0% 98%;                --primary-foreground: 240 5.9% 10%;
+      --secondary: 240 3.7% 15.9%;        --secondary-foreground: 0 0% 98%;
+      --muted: 240 3.7% 15.9%;            --muted-foreground: 240 5% 64.9%;
+      --accent: 240 3.7% 15.9%;           --accent-foreground: 0 0% 98%;
+      --destructive: 0 62.8% 30.6%;       --destructive-foreground: 0 0% 98%;
+      --border: 240 3.7% 15.9%;           --input: 240 3.7% 15.9%;
+      --ring: 240 4.9% 83.9%;
+    }
+    * { border-color: hsl(var(--border)); }
+    body { font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; }
+  </style>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['Geist Mono', 'ui-monospace', 'monospace'],
+          },
+          borderRadius: {
+            lg: 'var(--radius)',
+            md: 'calc(var(--radius) - 2px)',
+            sm: 'calc(var(--radius) - 4px)',
+          },
+          colors: {
+            background: 'hsl(var(--background))',
+            foreground: 'hsl(var(--foreground))',
+            card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
+            popover: { DEFAULT: 'hsl(var(--popover))', foreground: 'hsl(var(--popover-foreground))' },
+            primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+            secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
+            muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+            accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
+            destructive: { DEFAULT: 'hsl(var(--destructive))', foreground: 'hsl(var(--destructive-foreground))' },
+            border: 'hsl(var(--border))',
+            input: 'hsl(var(--input))',
+            ring: 'hsl(var(--ring))',
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-background text-foreground antialiased">
+  <div class="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
+
+    <!-- Page header -->
+    <div class="mb-8 flex items-start justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight">Account settings</h1>
+        <p class="mt-1 text-sm text-muted-foreground">Manage your profile, password, and notification preferences.</p>
+      </div>
+      <button id="theme-toggle" type="button"
+        class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border bg-transparent text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        aria-label="Toggle theme">
+        <svg class="hidden h-[18px] w-[18px] dark:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="block h-[18px] w-[18px] dark:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </div>
+
+    <form id="settings-form" class="space-y-6">
+
+      <!-- Profile -->
+      <section class="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h2 class="text-lg font-semibold leading-none tracking-tight">Profile</h2>
+          <p class="text-sm text-muted-foreground">This information may be displayed publicly.</p>
+        </div>
+        <div class="space-y-5 p-6 pt-0">
+          <div class="space-y-2">
+            <label for="name" class="text-sm font-medium leading-none">Name</label>
+            <input id="name" name="name" type="text" value="Ada Lovelace" autocomplete="name"
+              class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
+          </div>
+          <div class="space-y-2">
+            <label for="email" class="text-sm font-medium leading-none">Email</label>
+            <input id="email" name="email" type="email" value="ada@example.com" autocomplete="email"
+              class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
+            <p class="text-sm text-muted-foreground">We'll send a confirmation if you change this.</p>
+          </div>
+          <div class="space-y-2">
+            <label for="bio" class="text-sm font-medium leading-none">Bio</label>
+            <textarea id="bio" name="bio" rows="4" placeholder="Tell us a little about yourself"
+              class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">Mathematician and writer, working on analytical engines.</textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Password -->
+      <section class="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h2 class="text-lg font-semibold leading-none tracking-tight">Password</h2>
+          <p class="text-sm text-muted-foreground">Use at least 8 characters. Leave blank to keep your current password.</p>
+        </div>
+        <div class="space-y-5 p-6 pt-0">
+          <div class="space-y-2">
+            <label for="current-password" class="text-sm font-medium leading-none">Current password</label>
+            <input id="current-password" name="current-password" type="password" autocomplete="current-password"
+              class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
+          </div>
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div class="space-y-2">
+              <label for="new-password" class="text-sm font-medium leading-none">New password</label>
+              <input id="new-password" name="new-password" type="password" autocomplete="new-password"
+                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
+            </div>
+            <div class="space-y-2">
+              <label for="confirm-password" class="text-sm font-medium leading-none">Confirm password</label>
+              <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password"
+                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Notifications -->
+      <section class="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h2 class="text-lg font-semibold leading-none tracking-tight">Notifications</h2>
+          <p class="text-sm text-muted-foreground">Choose what you want to be notified about.</p>
+        </div>
+        <div class="divide-y p-6 pt-0">
+
+          <div class="flex items-center justify-between gap-4 py-4 first:pt-0">
+            <div class="space-y-0.5 pr-2">
+              <p class="text-sm font-medium leading-none">Product updates</p>
+              <p class="text-sm text-muted-foreground">News about features and improvements.</p>
+            </div>
+            <button type="button" role="switch" aria-checked="true" data-toggle data-on="true"
+              class="peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[on=true]:bg-primary data-[on=false]:bg-input">
+              <span class="pointer-events-none block h-4 w-4 rounded-full bg-background shadow-sm ring-0 transition-transform data-[on=true]:translate-x-4 data-[on=false]:translate-x-0" data-thumb data-on="true"></span>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between gap-4 py-4">
+            <div class="space-y-0.5 pr-2">
+              <p class="text-sm font-medium leading-none">Security alerts</p>
+              <p class="text-sm text-muted-foreground">New sign-ins and password changes.</p>
+            </div>
+            <button type="button" role="switch" aria-checked="true" data-toggle data-on="true"
+              class="peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[on=true]:bg-primary data-[on=false]:bg-input">
+              <span class="pointer-events-none block h-4 w-4 rounded-full bg-background shadow-sm ring-0 transition-transform data-[on=true]:translate-x-4 data-[on=false]:translate-x-0" data-thumb data-on="true"></span>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between gap-4 py-4">
+            <div class="space-y-0.5 pr-2">
+              <p class="text-sm font-medium leading-none">Marketing emails</p>
+              <p class="text-sm text-muted-foreground">Tips, offers, and occasional surveys.</p>
+            </div>
+            <button type="button" role="switch" aria-checked="false" data-toggle data-on="false"
+              class="peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[on=true]:bg-primary data-[on=false]:bg-input">
+              <span class="pointer-events-none block h-4 w-4 rounded-full bg-background shadow-sm ring-0 transition-transform data-[on=true]:translate-x-4 data-[on=false]:translate-x-0" data-thumb data-on="false"></span>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-end gap-3">
+        <button type="reset"
+          class="inline-flex h-9 items-center justify-center rounded-md border border-input bg-transparent px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+          Cancel
+        </button>
+        <button type="submit"
+          class="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+          Save changes
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    // Switches
+    document.querySelectorAll('[data-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var on = btn.getAttribute('data-on') !== 'true';
+        btn.setAttribute('data-on', String(on));
+        btn.setAttribute('aria-checked', String(on));
+        var thumb = btn.querySelector('[data-thumb]');
+        if (thumb) thumb.setAttribute('data-on', String(on));
+      });
+    });
+
+    // Cancel: restore default switch states after native reset
+    document.getElementById('settings-form').addEventListener('reset', function () {
+      var defaults = ['true', 'true', 'false'];
+      document.querySelectorAll('[data-toggle]').forEach(function (btn, i) {
+        btn.setAttribute('data-on', defaults[i]);
+        btn.setAttribute('aria-checked', defaults[i]);
+        var thumb = btn.querySelector('[data-thumb]');
+        if (thumb) thumb.setAttribute('data-on', defaults[i]);
+      });
+    });
+
+    // Save (demo only)
+    document.getElementById('settings-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn = e.submitter;
+      if (!btn) return;
+      var original = btn.textContent;
+      btn.textContent = 'Saved';
+      btn.disabled = true;
+      setTimeout(function () { btn.textContent = original; btn.disabled = false; }, 1200);
+    });
+  </script>
+</body>
+</html>

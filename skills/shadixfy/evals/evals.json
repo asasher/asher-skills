@@ -1,0 +1,57 @@
+{
+  "skill_name": "shadixfy",
+  "notes": "Each eval is built as a single self-contained index.html (Tailwind via CDN + Google Fonts allowed, no build step) so every run is uniformly screenshottable. Assertions are written to be checkable from the produced HTML/CSS source and/or the rendered screenshot. Mechanical assertions (radius, gradients, blur, fonts, token usage) are auto-graded by scripts/grade.mjs; visual assertions are for the LLM/human review pass.",
+  "conditions": ["no_skill", "uncodixfy", "shadixfy"],
+  "agents": ["claude", "codex"],
+  "evals": [
+    {
+      "id": "dashboard",
+      "prompt": "Build an analytics dashboard for a SaaS product called \"Northstar\". It should have a left sidebar with navigation, a top bar, a few key metrics, a chart area, and a recent-activity list. Make it a single self-contained index.html I can open directly in a browser — you may load Tailwind from the CDN and fonts from Google Fonts, but no build step and no external image hosts. Write the file as index.html in the current directory.",
+      "expected_output": "A clean, restrained dashboard that reads as a real product surface (think shadcn/ui): neutral palette, hairline borders separating surfaces, modest radii and shadows, no hero block, no gradient/glass decoration, metrics shown soberly rather than as a glossy KPI grid.",
+      "assertions": [
+        "An index.html file is produced and renders without errors",
+        "No CSS gradient (linear-gradient/radial-gradient/conic-gradient) is used as a background on the page, sidebar, cards, or metric tiles",
+        "No glassmorphism: no backdrop-filter: blur() on panels or the sidebar",
+        "Largest border-radius on cards/sidebar/buttons is <= 16px (no rounded-2xl/3xl everywhere)",
+        "No box-shadow with blur radius > 24px and no colored (non-black/neutral) shadow",
+        "The primary/accent color is neutral or a single restrained hue, not a blue/indigo/cyan brand pop",
+        "No hero section or large decorative headline block inside the dashboard",
+        "No eyebrow/kicker labels (uppercase + letter-spacing) above headings",
+        "Body font is Geist or a system stack, not Inter/Roboto/Segoe UI",
+        "Surfaces are differentiated by background token + 1px border, not by floating detached panels"
+      ]
+    },
+    {
+      "id": "settings-form",
+      "prompt": "Build an account settings page with sections for Profile (name, email, bio), Password change, and Notification preferences (a few toggles), plus Save/Cancel actions. Make it a single self-contained index.html I can open directly in a browser — Tailwind from the CDN and Google Fonts are fine, but no build step and no external image hosts. Write the file as index.html in the current directory.",
+      "expected_output": "A standard, legible settings form: labels above inputs, real focus states, sober section separation, consistent spacing, and unobtrusive Save/Cancel buttons. No floating labels, no gradient buttons, no decorative section notes.",
+      "assertions": [
+        "An index.html file is produced and renders without errors",
+        "Each input has a visible label positioned above (or clearly beside) it; no placeholder-only fields and no floating/morphing labels",
+        "Inputs have a visible focus state (focus ring or border change)",
+        "Buttons use solid/outline fills, not gradient backgrounds, and are not full-width pills",
+        "No CSS gradient used as a background anywhere on the page",
+        "Largest border-radius on inputs/cards/buttons is <= 16px",
+        "The primary/accent color is neutral or a single restrained hue (not blue/indigo/cyan)",
+        "Body font is Geist or a system stack, not Inter/Roboto/Segoe UI",
+        "No decorative mini-notes or eyebrow labels explaining what each section does"
+      ]
+    },
+    {
+      "id": "pricing",
+      "prompt": "Build a pricing page for a developer tool with three tiers (Free, Pro, Team), a short header, a monthly/annual toggle, and a feature comparison area. Make it a single self-contained index.html I can open directly in a browser — Tailwind from the CDN and Google Fonts are fine, but no build step and no external image hosts. Write the file as index.html in the current directory.",
+      "expected_output": "A calm, trustworthy pricing page in the shadcn idiom: a plain headline (no gradient text), three bordered tier cards with one subtly emphasized recommended tier, a simple toggle, and honest feature lists. No gradient hero, no glassmorphism, no glow.",
+      "assertions": [
+        "An index.html file is produced and renders without errors",
+        "No gradient text on the headline and no gradient hero background",
+        "No glassmorphism (backdrop-filter: blur) on the tier cards",
+        "Tier cards are differentiated by border/background and one is emphasized without a glow or colored shadow",
+        "Largest border-radius on cards/buttons is <= 16px and cards are not heavily pill-shaped",
+        "The primary/accent color is neutral or a single restrained hue (not blue/indigo/cyan)",
+        "No random glows, blur haze, or conic-gradient decoration",
+        "Body font is Geist or a system stack, not Inter/Roboto/Segoe UI",
+        "The recommended-tier emphasis is conveyed with hierarchy (border/weight/label), not a saturated gradient or shadow bloom"
+      ]
+    }
+  ]
+}

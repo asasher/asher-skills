@@ -1,0 +1,3 @@
+Created [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.vZK1aG3Q4J/index.html) as a single direct-open page.
+
+It includes Profile, Password, Notification toggles, and Save/Cancel actions. Cancel resets the form, Save prevents static-page navigation. No dev server is needed; just open the HTML file in a browser.

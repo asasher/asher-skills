@@ -1,0 +1,3 @@
+Created the standalone dashboard at [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.VXQMAPgF7O/index.html).
+
+It includes the Northstar sidebar, top bar, metrics, canvas chart, recent activity, account table, and acquisition panel. No build step or server is needed; you can open the file directly in a browser. I also checked the inline JavaScript with `node --check`.

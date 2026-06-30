@@ -1,0 +1,82 @@
+{
+  "iteration": "1",
+  "agents": [
+    "claude",
+    "codex"
+  ],
+  "conditions": [
+    "no_skill",
+    "uncodixfy",
+    "shadixfy"
+  ],
+  "by_agent": {
+    "claude": {
+      "conditions": {
+        "no_skill": {
+          "auto_pass_rate": 0.365,
+          "duration_ms": 90204,
+          "total_tokens": 72499,
+          "n_graded": 3
+        },
+        "uncodixfy": {
+          "auto_pass_rate": 1,
+          "duration_ms": 72190,
+          "total_tokens": 66212,
+          "n_graded": 3
+        },
+        "shadixfy": {
+          "auto_pass_rate": 0.952,
+          "duration_ms": 87423,
+          "total_tokens": 73389,
+          "n_graded": 3
+        }
+      },
+      "delta_vs_no_skill": {
+        "uncodixfy": {
+          "auto_pass_rate": 0.635,
+          "duration_ms": -18014,
+          "total_tokens": -6287
+        },
+        "shadixfy": {
+          "auto_pass_rate": 0.587,
+          "duration_ms": -2781,
+          "total_tokens": 890
+        }
+      }
+    },
+    "codex": {
+      "conditions": {
+        "no_skill": {
+          "auto_pass_rate": 0.556,
+          "duration_ms": 203785,
+          "total_tokens": 64349,
+          "n_graded": 3
+        },
+        "uncodixfy": {
+          "auto_pass_rate": 1,
+          "duration_ms": 165612,
+          "total_tokens": 51988,
+          "n_graded": 3
+        },
+        "shadixfy": {
+          "auto_pass_rate": 1,
+          "duration_ms": 169602,
+          "total_tokens": 61665,
+          "n_graded": 3
+        }
+      },
+      "delta_vs_no_skill": {
+        "uncodixfy": {
+          "auto_pass_rate": 0.444,
+          "duration_ms": -38173,
+          "total_tokens": -12361
+        },
+        "shadixfy": {
+          "auto_pass_rate": 0.444,
+          "duration_ms": -34183,
+          "total_tokens": -2684
+        }
+      }
+    }
+  }
+}

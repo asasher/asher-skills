@@ -1,0 +1,4 @@
+# derived / heavy eval artifacts
+dashboard.html
+run_all.log
+**/agent_response.stderr.log

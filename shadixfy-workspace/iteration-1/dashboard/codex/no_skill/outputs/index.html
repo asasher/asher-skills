@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Northstar Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+            boxShadow: {
+              panel: "0 18px 42px rgba(35, 43, 67, 0.08)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      body {
+        font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(62, 178, 153, 0.16), transparent 32rem),
+          linear-gradient(135deg, #f7f8fb 0%, #eef3f7 42%, #f7f5f0 100%);
+      }
+
+      .nav-item[aria-current="page"] {
+        background: #242a36;
+        color: #ffffff;
+        box-shadow: 0 10px 22px rgba(36, 42, 54, 0.16);
+      }
+
+      #linePath,
+      #areaPath,
+      .data-point {
+        transition: all 220ms ease;
+      }
+
+      .focus-ring:focus-visible {
+        outline: 3px solid rgba(47, 125, 246, 0.35);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen text-[#242a36] antialiased">
+    <div class="flex min-h-screen">
+      <aside
+        id="sidebar"
+        class="fixed inset-y-0 left-0 z-40 w-[18rem] -translate-x-full border-r border-[#dfe5ea] bg-white/95 px-4 py-5 shadow-panel backdrop-blur transition-transform duration-200 ease-out lg:static lg:translate-x-0 lg:shadow-none"
+      >
+        <div class="flex h-full flex-col">
+          <div class="flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 rounded-lg focus-ring" aria-label="Northstar home">
+              <span class="grid h-10 w-10 place-items-center rounded-lg bg-[#242a36]">
+                <svg viewBox="0 0 24 24" aria-hidden="true" class="h-6 w-6 text-white">
+                  <path fill="currentColor" d="M12 2.25 14.46 9l7.04 3-7.04 3L12 21.75 9.54 15 2.5 12l7.04-3L12 2.25Z" />
+                </svg>
+              </span>
+              <div>
+                <p class="text-base font-extrabold leading-tight">Northstar</p>
+                <p class="text-xs font-medium text-[#707989]">Analytics Suite</p>
+              </div>
+            </a>
+            <button id="closeSidebar" class="focus-ring rounded-lg p-2 text-[#707989] hover:bg-[#f1f4f7] lg:hidden" type="button" aria-label="Close navigation">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M18 6 6 18" />
+              </svg>
+            </button>
+          </div>
+
+          <nav class="mt-8 space-y-1" aria-label="Primary navigation">
+            <a class="nav-item flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-[#5f6877] transition hover:bg-[#f1f4f7] hover:text-[#242a36] focus-ring" href="#" aria-current="page">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 13h6V4H4v9Zm10 7h6V4h-6v16ZM4 20h6v-3H4v3Z" />
+              </svg>
+              Dashboard
+            </a>
+            <a class="nav-item flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-[#5f6877] transition hover:bg-[#f1f4f7] hover:text-[#242a36] focus-ring" href="#">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19V5m0 14h16M8 16v-5m4 5V8m4 8v-7m4 7v-3" />
+              </svg>
+              Reports
+            </a>
+            <a class="nav-item flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-[#5f6877] transition hover:bg-[#f1f4f7] hover:text-[#242a36] focus-ring" href="#">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11a4 4 0 1 0-8 0m8 0a4 4 0 0 1-8 0m8 0h3a2 2 0 0 1 2 2v3a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-3a2 2 0 0 1 2-2h3" />
+              </svg>
+              Customers
+            </a>
+            <a class="nav-item flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-[#5f6877] transition hover:bg-[#f1f4f7] hover:text-[#242a36] focus-ring" href="#">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v18M6 7h9.5a3.5 3.5 0 0 1 0 7H8.5a3.5 3.5 0 0 0 0 7H18" />
+              </svg>
+              Revenue
+            </a>
+            <a class="nav-item flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-[#5f6877] transition hover:bg-[#f1f4f7] hover:text-[#242a36] focus-ring" href="#">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+              </svg>
+              Workflows
+            </a>
+          </nav>
+
+          <div class="mt-8 rounded-lg border border-[#dfe5ea] bg-[#f8fafb] p-4">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-bold uppercase text-[#707989]">Plan Usage</p>
+              <span class="rounded-md bg-[#dff7ed] px-2 py-1 text-xs font-bold text-[#12775e]">78%</span>
+            </div>
+            <div class="mt-4 h-2 rounded-full bg-[#dde5e8]">
+              <div class="h-2 w-[78%] rounded-full bg-[#2fb59a]"></div>
+            </div>
+            <p class="mt-3 text-sm font-medium text-[#5f6877]">9.4M tracked events this month</p>
+          </div>
+
+          <div class="mt-auto border-t border-[#dfe5ea] pt-5">
+            <button class="focus-ring flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left hover:bg-[#f1f4f7]" type="button">
+              <span class="grid h-10 w-10 place-items-center rounded-lg bg-[#ffe6bf] text-sm font-extrabold text-[#9b5b00]">AK</span>
+              <span class="min-w-0">
+                <span class="block truncate text-sm font-bold">Avery Kim</span>
+                <span class="block truncate text-xs font-medium text-[#707989]">Growth Lead</span>
+              </span>
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="ml-auto h-5 w-5 text-[#707989]">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <div id="overlay" class="fixed inset-0 z-30 hidden bg-[#1a1f29]/35 backdrop-blur-sm lg:hidden"></div>
+
+      <main class="flex min-w-0 flex-1 flex-col">
+        <header class="sticky top-0 z-20 border-b border-[#dfe5ea] bg-white/90 backdrop-blur-xl">
+          <div class="flex min-h-16 items-center gap-3 px-4 sm:px-6 lg:px-8">
+            <button id="openSidebar" class="focus-ring rounded-lg p-2 text-[#5f6877] hover:bg-[#f1f4f7] lg:hidden" type="button" aria-label="Open navigation">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+
+            <div class="min-w-0">
+              <p class="text-xs font-bold uppercase text-[#707989]">Workspace</p>
+              <h1 class="truncate text-lg font-extrabold sm:text-xl">Product Analytics</h1>
+            </div>
+
+            <div class="ml-auto hidden min-w-[18rem] items-center rounded-lg border border-[#dfe5ea] bg-white px-3 py-2 shadow-sm md:flex">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="mr-2 h-4 w-4 shrink-0 text-[#707989]">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
+              </svg>
+              <input class="w-full bg-transparent text-sm font-medium outline-none placeholder:text-[#9199a6]" placeholder="Search customers, cohorts, reports" aria-label="Search" />
+            </div>
+
+            <button class="focus-ring hidden items-center gap-2 rounded-lg border border-[#dfe5ea] bg-white px-3 py-2 text-sm font-bold text-[#3c4554] shadow-sm transition hover:border-[#cbd4dc] hover:bg-[#f8fafb] sm:flex" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="h-4 w-4">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />
+              </svg>
+              Last 30 days
+            </button>
+            <button class="focus-ring grid h-10 w-10 place-items-center rounded-lg border border-[#dfe5ea] bg-white text-[#3c4554] shadow-sm transition hover:bg-[#f8fafb]" type="button" aria-label="Notifications">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Zm-8 13h4" />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+          <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Key metrics">
+            <article class="rounded-lg border border-[#dfe5ea] bg-white p-5 shadow-panel">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-sm font-semibold text-[#707989]">Monthly Recurring Revenue</p>
+                  <p class="mt-2 text-3xl font-extrabold">$482.7K</p>
+                </div>
+                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#e8f1ff] text-[#2f6fe4]">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v18M6 7h9.5a3.5 3.5 0 0 1 0 7H8.5a3.5 3.5 0 0 0 0 7H18" />
+                  </svg>
+                </span>
+              </div>
+              <div class="mt-5 flex items-center gap-2">
+                <span class="rounded-md bg-[#dff7ed] px-2 py-1 text-xs font-extrabold text-[#12775e]">+12.4%</span>
+                <span class="text-sm font-medium text-[#707989]">vs. previous period</span>
+              </div>
+            </article>
+
+            <article class="rounded-lg border border-[#dfe5ea] bg-white p-5 shadow-panel">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-sm font-semibold text-[#707989]">Active Accounts</p>
+                  <p class="mt-2 text-3xl font-extrabold">18,240</p>
+                </div>
+                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#e1f7f1] text-[#17836c]">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2m14-10a4 4 0 1 0-8 0 4 4 0 0 0 8 0Zm4 10v-2a4 4 0 0 0-3-3.87m0-9.26a4 4 0 0 1 0 7.75" />
+                  </svg>
+                </span>
+              </div>
+              <div class="mt-5 flex items-center gap-2">
+                <span class="rounded-md bg-[#dff7ed] px-2 py-1 text-xs font-extrabold text-[#12775e]">+8.1%</span>
+                <span class="text-sm font-medium text-[#707989]">1,312 net adds</span>
+              </div>
+            </article>
+
+            <article class="rounded-lg border border-[#dfe5ea] bg-white p-5 shadow-panel">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-sm font-semibold text-[#707989]">Net Revenue Retention</p>
+                  <p class="mt-2 text-3xl font-extrabold">118.6%</p>
+                </div>
+                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#fff0d5] text-[#a26300]">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 17 6-6 4 4 7-8m0 0h-5m5 0v5" />
+                  </svg>
+                </span>
+              </div>
+              <div class="mt-5 flex items-center gap-2">
+                <span class="rounded-md bg-[#dff7ed] px-2 py-1 text-xs font-extrabold text-[#12775e]">+3.2 pts</span>
+                <span class="text-sm font-medium text-[#707989]">expansion led</span>
+              </div>
+            </article>
+
+            <article class="rounded-lg border border-[#dfe5ea] bg-white p-5 shadow-panel">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-sm font-semibold text-[#707989]">Gross Churn</p>
+                  <p class="mt-2 text-3xl font-extrabold">2.8%</p>
+                </div>
+                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#ffe5e8] text-[#c73f54]">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20V10m0 0 4 4m-4-4-4 4M4 4h16" />
+                  </svg>
+                </span>
+              </div>
+              <div class="mt-5 flex items-center gap-2">
+                <span class="rounded-md bg-[#ffe5e8] px-2 py-1 text-xs font-extrabold text-[#a73143]">+0.4 pts</span>
+                <span class="text-sm font-medium text-[#707989]">watch segment</span>
+              </div>
+            </article>
+          </section>
+
+          <section class="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_24rem]">
+            <article class="rounded-lg border border-[#dfe5ea] bg-white p-5 shadow-panel">
+              <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <p class="text-sm font-semibold text-[#707989]">Revenue Trend</p>
+                  <h2 class="mt-1 text-xl font-extrabold">Acquisition and expansion revenue</h2>
+                </div>
+                <div class="inline-flex w-fit rounded-lg border border-[#dfe5ea] bg-[#f8fafb] p-1">
+                  <button class="range-button focus-ring rounded-md bg-white px-3 py-1.5 text-sm font-bold text-[#242a36] shadow-sm" type="button" data-range="month">Month</button>
+                  <button class="range-button focus-ring rounded-md px-3 py-1.5 text-sm font-bold text-[#707989]" type="button" data-range="quarter">Quarter</button>
+                  <button class="range-button focus-ring rounded-md px-3 py-1.5 text-sm font-bold text-[#707989]" type="button" data-range="year">Year</button>
+                </div>
+              </div>
+
+              <div class="mt-8 overflow-x-auto">
+                <div class="min-w-[46rem]">
+                  <div class="relative h-[21rem] rounded-lg border border-[#dfe5ea] bg-[#fbfcfd] p-5">
+                    <div class="absolute inset-x-5 top-5 bottom-12 flex flex-col justify-between text-xs font-bold text-[#9aa3ae]" aria-hidden="true">
+                      <div class="flex items-center gap-3"><span class="w-10 text-right">$600K</span><span class="h-px flex-1 bg-[#e4e9ee]"></span></div>
+                      <div class="flex items-center gap-3"><span class="w-10 text-right">$450K</span><span class="h-px flex-1 bg-[#e4e9ee]"></span></div>
+                      <div class="flex items-center gap-3"><span class="w-10 text-right">$300K</span><span class="h-px flex-1 bg-[#e4e9ee]"></span></div>
+                      <div class="flex items-center gap-3"><span class="w-10 text-right">$150K</span><span class="h-px flex-1 bg-[#e4e9ee]"></span></div>
+                    </div>
+
+                    <svg class="absolute left-[4.25rem] right-5 top-8 h-[15.5rem] w-[calc(100%-5.5rem)] overflow-visible" viewBox="0 0 640 210" preserveAspectRatio="none" role="img" aria-label="Line chart showing recurring revenue growth">
+                      <defs>
+                        <linearGradient id="areaFill" x1="0" x2="0" y1="0" y2="1">
+                          <stop offset="0%" stop-color="#2fb59a" stop-opacity="0.24" />
+                          <stop offset="100%" stop-color="#2fb59a" stop-opacity="0" />
+                        </linearGradient>
+                      </defs>
+                      <path id="areaPath" d="M0,172 C48,158 72,162 112,145 C154,128 178,124 224,118 C270,111 296,89 336,84 C382,78 414,97 448,78 C493,53 526,51 560,43 C594,35 616,27 640,19 L640,210 L0,210 Z" fill="url(#areaFill)" />
+                      <path id="linePath" d="M0,172 C48,158 72,162 112,145 C154,128 178,124 224,118 C270,111 296,89 336,84 C382,78 414,97 448,78 C493,53 526,51 560,43 C594,35 616,27 640,19" fill="none" stroke="#2fb59a" stroke-linecap="round" stroke-width="4" />
+                      <path d="M0,188 C58,176 86,170 112,168 C156,164 188,150 224,142 C266,133 298,137 336,121 C379,104 414,106 448,94 C493,79 526,73 560,66 C590,60 615,53 640,46" fill="none" stroke="#d38a18" stroke-dasharray="8 8" stroke-linecap="round" stroke-width="3" />
+                      <g fill="#ffffff" stroke="#2fb59a" stroke-width="4">
+                        <circle class="data-point" cx="112" cy="145" r="6" />
+                        <circle class="data-point" cx="224" cy="118" r="6" />
+                        <circle class="data-point" cx="336" cy="84" r="6" />
+                        <circle class="data-point" cx="448" cy="78" r="6" />
+                        <circle class="data-point" cx="560" cy="43" r="6" />
+                        <circle class="data-point" cx="640" cy="19" r="6" />
+                      </g>
+                    </svg>
+
+                    <div class="absolute bottom-5 left-[4.25rem] right-5 grid grid-cols-6 text-center text-xs font-bold text-[#707989]">
+                      <span>Jan</span>
+                      <span>Feb</span>
+                      <span>Mar</span>
+                      <span>Apr</span>
+                      <span>May</span>
+                      <span>Jun</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-5 grid gap-4 border-t border-[#dfe5ea] pt-5 sm:grid-cols-3 sm:divide-x sm:divide-[#dfe5ea]">
+                <div class="sm:pr-4">
+                  <p class="text-xs font-bold uppercase text-[#707989]">Pipeline</p>
+                  <p class="mt-2 text-lg font-extrabold">$1.84M</p>
+                </div>
+                <div class="sm:px-4">
+                  <p class="text-xs font-bold uppercase text-[#707989]">Win Rate</p>
+                  <p class="mt-2 text-lg font-extrabold">31.2%</p>
+                </div>
+                <div class="sm:pl-4">
+                  <p class="text-xs font-bold uppercase text-[#707989]">Payback</p>
+                  <p class="mt-2 text-lg font-extrabold">9.6 mo</p>
+                </div>
+              </div>
+            </article>
+
+            <aside class="rounded-lg border border-[#dfe5ea] bg-white p-5 shadow-panel" aria-label="Recent activity">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <p class="text-sm font-semibold text-[#707989]">Recent Activity</p>
+                  <h2 class="mt-1 text-xl font-extrabold">Account signals</h2>
+                </div>
+                <button class="focus-ring flex items-center gap-2 rounded-lg border border-[#dfe5ea] bg-white px-3 py-2 text-sm font-bold text-[#3c4554] transition hover:bg-[#f8fafb]" type="button">
+                  View all
+                  <svg viewBox="0 0 24 24" aria-hidden="true" class="h-4 w-4">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6-6" />
+                  </svg>
+                </button>
+              </div>
+
+              <ol class="mt-6 space-y-5">
+                <li class="flex gap-3">
+                  <span class="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#e1f7f1] text-[#17836c]">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 12 5 5L20 7" />
+                    </svg>
+                  </span>
+                  <div class="min-w-0">
+                    <p class="text-sm font-bold">Helio Labs upgraded to Business</p>
+                    <p class="mt-1 text-sm font-medium leading-5 text-[#707989]">$18.4K expansion booked by Mina Patel.</p>
+                    <p class="mt-2 text-xs font-bold uppercase text-[#9aa3ae]">12 min ago</p>
+                  </div>
+                </li>
+                <li class="flex gap-3">
+                  <span class="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#fff0d5] text-[#a26300]">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m0 4h.01M10.3 3.9 2.9 17a2 2 0 0 0 1.7 3h14.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+                    </svg>
+                  </span>
+                  <div class="min-w-0">
+                    <p class="text-sm font-bold">Trial activation dipped in EMEA</p>
+                    <p class="mt-1 text-sm font-medium leading-5 text-[#707989]">Onboarding completion is 6.8 pts below target.</p>
+                    <p class="mt-2 text-xs font-bold uppercase text-[#9aa3ae]">46 min ago</p>
+                  </div>
+                </li>
+                <li class="flex gap-3">
+                  <span class="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#e8f1ff] text-[#2f6fe4]">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19V5m0 14h16M8 16v-5m4 5V8m4 8v-7m4 7v-3" />
+                    </svg>
+                  </span>
+                  <div class="min-w-0">
+                    <p class="text-sm font-bold">New cohort report is ready</p>
+                    <p class="mt-1 text-sm font-medium leading-5 text-[#707989]">Retention curves refreshed for 1,842 accounts.</p>
+                    <p class="mt-2 text-xs font-bold uppercase text-[#9aa3ae]">2 hr ago</p>
+                  </div>
+                </li>
+                <li class="flex gap-3">
+                  <span class="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#ffe5e8] text-[#c73f54]">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+                      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20V10m0 0 4 4m-4-4-4 4M4 4h16" />
+                    </svg>
+                  </span>
+                  <div class="min-w-0">
+                    <p class="text-sm font-bold">Churn risk detected for NovaCRM</p>
+                    <p class="mt-1 text-sm font-medium leading-5 text-[#707989]">Seat utilization fell below 42% for three weeks.</p>
+                    <p class="mt-2 text-xs font-bold uppercase text-[#9aa3ae]">4 hr ago</p>
+                  </div>
+                </li>
+              </ol>
+            </aside>
+          </section>
+
+          <section class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(20rem,0.45fr)]">
+            <article class="rounded-lg border border-[#dfe5ea] bg-white p-5 shadow-panel">
+              <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p class="text-sm font-semibold text-[#707989]">Top Segments</p>
+                  <h2 class="mt-1 text-xl font-extrabold">Growth by customer profile</h2>
+                </div>
+                <button class="focus-ring flex w-fit items-center gap-2 rounded-lg bg-[#242a36] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#343b49]" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" class="h-4 w-4">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" />
+                  </svg>
+                  Export CSV
+                </button>
+              </div>
+              <div class="mt-6 overflow-x-auto rounded-lg border border-[#dfe5ea]">
+                <table class="min-w-full divide-y divide-[#dfe5ea]">
+                  <thead class="bg-[#f8fafb]">
+                    <tr>
+                      <th class="px-4 py-3 text-left text-xs font-extrabold uppercase text-[#707989]">Segment</th>
+                      <th class="px-4 py-3 text-left text-xs font-extrabold uppercase text-[#707989]">ARR</th>
+                      <th class="hidden px-4 py-3 text-left text-xs font-extrabold uppercase text-[#707989] sm:table-cell">Accounts</th>
+                      <th class="px-4 py-3 text-left text-xs font-extrabold uppercase text-[#707989]">Health</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#dfe5ea] bg-white">
+                    <tr>
+                      <td class="px-4 py-4 text-sm font-bold">Mid-market SaaS</td>
+                      <td class="px-4 py-4 text-sm font-semibold text-[#3c4554]">$1.92M</td>
+                      <td class="hidden px-4 py-4 text-sm font-semibold text-[#3c4554] sm:table-cell">584</td>
+                      <td class="px-4 py-4"><span class="rounded-md bg-[#dff7ed] px-2 py-1 text-xs font-extrabold text-[#12775e]">Strong</span></td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-4 text-sm font-bold">Enterprise Ops</td>
+                      <td class="px-4 py-4 text-sm font-semibold text-[#3c4554]">$1.46M</td>
+                      <td class="hidden px-4 py-4 text-sm font-semibold text-[#3c4554] sm:table-cell">118</td>
+                      <td class="px-4 py-4"><span class="rounded-md bg-[#fff0d5] px-2 py-1 text-xs font-extrabold text-[#a26300]">Watch</span></td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-4 text-sm font-bold">Developer Tools</td>
+                      <td class="px-4 py-4 text-sm font-semibold text-[#3c4554]">$940K</td>
+                      <td class="hidden px-4 py-4 text-sm font-semibold text-[#3c4554] sm:table-cell">431</td>
+                      <td class="px-4 py-4"><span class="rounded-md bg-[#e8f1ff] px-2 py-1 text-xs font-extrabold text-[#2f6fe4]">Growing</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="rounded-lg border border-[#dfe5ea] bg-white p-5 shadow-panel">
+              <p class="text-sm font-semibold text-[#707989]">Funnel</p>
+              <h2 class="mt-1 text-xl font-extrabold">Activation path</h2>
+              <div class="mt-6 space-y-5">
+                <div>
+                  <div class="flex items-center justify-between text-sm font-bold">
+                    <span>Signup to workspace</span>
+                    <span>84%</span>
+                  </div>
+                  <div class="mt-2 h-3 rounded-full bg-[#e5eaef]"><div class="h-3 w-[84%] rounded-full bg-[#2f6fe4]"></div></div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between text-sm font-bold">
+                    <span>Workspace to invite</span>
+                    <span>67%</span>
+                  </div>
+                  <div class="mt-2 h-3 rounded-full bg-[#e5eaef]"><div class="h-3 w-[67%] rounded-full bg-[#2fb59a]"></div></div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between text-sm font-bold">
+                    <span>Invite to paid</span>
+                    <span>38%</span>
+                  </div>
+                  <div class="mt-2 h-3 rounded-full bg-[#e5eaef]"><div class="h-3 w-[38%] rounded-full bg-[#d38a18]"></div></div>
+                </div>
+              </div>
+            </article>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      const openSidebar = document.getElementById("openSidebar");
+      const closeSidebar = document.getElementById("closeSidebar");
+      const rangeButtons = document.querySelectorAll(".range-button");
+      const linePath = document.getElementById("linePath");
+      const areaPath = document.getElementById("areaPath");
+      const dataPoints = document.querySelectorAll(".data-point");
+
+      const paths = {
+        month: {
+          line: "M0,172 C48,158 72,162 112,145 C154,128 178,124 224,118 C270,111 296,89 336,84 C382,78 414,97 448,78 C493,53 526,51 560,43 C594,35 616,27 640,19",
+          area: "M0,172 C48,158 72,162 112,145 C154,128 178,124 224,118 C270,111 296,89 336,84 C382,78 414,97 448,78 C493,53 526,51 560,43 C594,35 616,27 640,19 L640,210 L0,210 Z",
+          points: [
+            [112, 145],
+            [224, 118],
+            [336, 84],
+            [448, 78],
+            [560, 43],
+            [640, 19],
+          ],
+        },
+        quarter: {
+          line: "M0,151 C52,143 77,125 112,122 C158,118 179,136 224,104 C267,73 297,86 336,79 C377,72 411,61 448,59 C494,55 526,35 560,39 C596,43 615,31 640,28",
+          area: "M0,151 C52,143 77,125 112,122 C158,118 179,136 224,104 C267,73 297,86 336,79 C377,72 411,61 448,59 C494,55 526,35 560,39 C596,43 615,31 640,28 L640,210 L0,210 Z",
+          points: [
+            [112, 122],
+            [224, 104],
+            [336, 79],
+            [448, 59],
+            [560, 39],
+            [640, 28],
+          ],
+        },
+        year: {
+          line: "M0,188 C52,176 76,181 112,165 C153,147 183,139 224,129 C263,119 299,103 336,101 C374,99 413,84 448,73 C492,59 525,53 560,37 C594,21 618,18 640,16",
+          area: "M0,188 C52,176 76,181 112,165 C153,147 183,139 224,129 C263,119 299,103 336,101 C374,99 413,84 448,73 C492,59 525,53 560,37 C594,21 618,18 640,16 L640,210 L0,210 Z",
+          points: [
+            [112, 165],
+            [224, 129],
+            [336, 101],
+            [448, 73],
+            [560, 37],
+            [640, 16],
+          ],
+        },
+      };
+
+      function showSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        overlay.classList.remove("hidden");
+      }
+
+      function hideSidebar() {
+        sidebar.classList.add("-translate-x-full");
+        overlay.classList.add("hidden");
+      }
+
+      openSidebar.addEventListener("click", showSidebar);
+      closeSidebar.addEventListener("click", hideSidebar);
+      overlay.addEventListener("click", hideSidebar);
+
+      rangeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          rangeButtons.forEach((item) => {
+            item.classList.remove("bg-white", "text-[#242a36]", "shadow-sm");
+            item.classList.add("text-[#707989]");
+          });
+          button.classList.add("bg-white", "text-[#242a36]", "shadow-sm");
+          button.classList.remove("text-[#707989]");
+
+          const next = paths[button.dataset.range];
+          linePath.setAttribute("d", next.line);
+          areaPath.setAttribute("d", next.area);
+          dataPoints.forEach((point, index) => {
+            point.setAttribute("cx", next.points[index][0]);
+            point.setAttribute("cy", next.points[index][1]);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

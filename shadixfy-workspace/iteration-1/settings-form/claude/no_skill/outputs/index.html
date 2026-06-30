@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Settings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc',
+              400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    /* Toggle switch */
+    .toggle input:checked + .track { background-color: #4f46e5; }
+    .toggle input:checked + .track .dot { transform: translateX(1.25rem); }
+    .toggle input:focus-visible + .track { box-shadow: 0 0 0 3px rgba(99,102,241,.35); }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 py-5 flex items-center gap-4">
+        <div class="h-11 w-11 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-semibold text-lg shadow-sm select-none">
+          AA
+        </div>
+        <div>
+          <h1 class="text-xl font-semibold text-slate-900">Account Settings</h1>
+          <p class="text-sm text-slate-500">Manage your profile, security, and notifications.</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Status banner -->
+    <div id="statusBanner" class="hidden max-w-3xl mx-auto px-4 sm:px-6 mt-4">
+      <div class="rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 text-sm flex items-center gap-2">
+        <svg class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 011.4-1.4l3.3 3.29 6.8-6.79a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>
+        <span id="statusText">Settings saved.</span>
+      </div>
+    </div>
+
+    <form id="settingsForm" class="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6" novalidate>
+
+      <!-- Profile -->
+      <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100">
+          <h2 class="text-base font-semibold text-slate-900">Profile</h2>
+          <p class="text-sm text-slate-500 mt-0.5">This information may be visible to other users.</p>
+        </div>
+        <div class="px-6 py-5 space-y-5">
+          <div>
+            <label for="name" class="block text-sm font-medium text-slate-700 mb-1.5">Name</label>
+            <input id="name" name="name" type="text" autocomplete="name" value="Asher Anjum"
+              class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition" />
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-slate-700 mb-1.5">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" value="as.asher.anjum@gmail.com"
+              class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition" />
+            <p id="emailError" class="hidden text-xs text-red-600 mt-1.5">Please enter a valid email address.</p>
+          </div>
+          <div>
+            <label for="bio" class="block text-sm font-medium text-slate-700 mb-1.5">Bio</label>
+            <textarea id="bio" name="bio" rows="4" maxlength="280"
+              placeholder="Tell us a little about yourself…"
+              class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition resize-y">Building things on the web.</textarea>
+            <p class="text-xs text-slate-400 mt-1.5"><span id="bioCount">0</span>/280 characters</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Password -->
+      <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100">
+          <h2 class="text-base font-semibold text-slate-900">Change password</h2>
+          <p class="text-sm text-slate-500 mt-0.5">Use at least 8 characters. Leave blank to keep your current password.</p>
+        </div>
+        <div class="px-6 py-5 space-y-5">
+          <div>
+            <label for="currentPassword" class="block text-sm font-medium text-slate-700 mb-1.5">Current password</label>
+            <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password"
+              class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition" />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="newPassword" class="block text-sm font-medium text-slate-700 mb-1.5">New password</label>
+              <input id="newPassword" name="newPassword" type="password" autocomplete="new-password"
+                class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition" />
+            </div>
+            <div>
+              <label for="confirmPassword" class="block text-sm font-medium text-slate-700 mb-1.5">Confirm new password</label>
+              <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password"
+                class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition" />
+            </div>
+          </div>
+          <p id="passwordError" class="hidden text-xs text-red-600">Passwords must match and be at least 8 characters.</p>
+        </div>
+      </section>
+
+      <!-- Notifications -->
+      <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100">
+          <h2 class="text-base font-semibold text-slate-900">Notification preferences</h2>
+          <p class="text-sm text-slate-500 mt-0.5">Choose what you want to hear about.</p>
+        </div>
+        <div class="px-6 py-2 divide-y divide-slate-100">
+          <!-- Toggle row template -->
+          <div class="flex items-center justify-between py-4">
+            <div class="pr-4">
+              <p class="text-sm font-medium text-slate-800">Product updates</p>
+              <p class="text-xs text-slate-500 mt-0.5">News about features and improvements.</p>
+            </div>
+            <label class="toggle relative inline-flex items-center cursor-pointer flex-shrink-0">
+              <input type="checkbox" name="notifyProduct" class="sr-only peer" checked />
+              <span class="track w-11 h-6 bg-slate-300 rounded-full transition-colors duration-200 flex items-center">
+                <span class="dot h-5 w-5 bg-white rounded-full shadow ml-0.5 transition-transform duration-200"></span>
+              </span>
+            </label>
+          </div>
+
+          <div class="flex items-center justify-between py-4">
+            <div class="pr-4">
+              <p class="text-sm font-medium text-slate-800">Security alerts</p>
+              <p class="text-xs text-slate-500 mt-0.5">Important alerts about your account security.</p>
+            </div>
+            <label class="toggle relative inline-flex items-center cursor-pointer flex-shrink-0">
+              <input type="checkbox" name="notifySecurity" class="sr-only peer" checked />
+              <span class="track w-11 h-6 bg-slate-300 rounded-full transition-colors duration-200 flex items-center">
+                <span class="dot h-5 w-5 bg-white rounded-full shadow ml-0.5 transition-transform duration-200"></span>
+              </span>
+            </label>
+          </div>
+
+          <div class="flex items-center justify-between py-4">
+            <div class="pr-4">
+              <p class="text-sm font-medium text-slate-800">Marketing emails</p>
+              <p class="text-xs text-slate-500 mt-0.5">Tips, offers, and the occasional newsletter.</p>
+            </div>
+            <label class="toggle relative inline-flex items-center cursor-pointer flex-shrink-0">
+              <input type="checkbox" name="notifyMarketing" class="sr-only peer" />
+              <span class="track w-11 h-6 bg-slate-300 rounded-full transition-colors duration-200 flex items-center">
+                <span class="dot h-5 w-5 bg-white rounded-full shadow ml-0.5 transition-transform duration-200"></span>
+              </span>
+            </label>
+          </div>
+
+          <div class="flex items-center justify-between py-4">
+            <div class="pr-4">
+              <p class="text-sm font-medium text-slate-800">Weekly digest</p>
+              <p class="text-xs text-slate-500 mt-0.5">A summary of your activity every Monday.</p>
+            </div>
+            <label class="toggle relative inline-flex items-center cursor-pointer flex-shrink-0">
+              <input type="checkbox" name="notifyDigest" class="sr-only peer" checked />
+              <span class="track w-11 h-6 bg-slate-300 rounded-full transition-colors duration-200 flex items-center">
+                <span class="dot h-5 w-5 bg-white rounded-full shadow ml-0.5 transition-transform duration-200"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-end gap-3 pt-1">
+        <button type="button" id="cancelBtn"
+          class="px-4 py-2.5 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 shadow-sm hover:bg-slate-50 focus:ring-2 focus:ring-slate-200 outline-none transition">
+          Cancel
+        </button>
+        <button type="submit"
+          class="px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-brand-600 shadow-sm hover:bg-brand-700 focus:ring-2 focus:ring-brand-300 outline-none transition">
+          Save changes
+        </button>
+      </div>
+    </form>
+
+    <footer class="max-w-3xl mx-auto px-4 sm:px-6 pb-10 text-center text-xs text-slate-400">
+      Changes are stored locally in this demo and are not sent anywhere.
+    </footer>
+  </div>
+
+  <script>
+    const form = document.getElementById('settingsForm');
+    const bio = document.getElementById('bio');
+    const bioCount = document.getElementById('bioCount');
+    const emailInput = document.getElementById('email');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const newPassword = document.getElementById('newPassword');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const banner = document.getElementById('statusBanner');
+    const statusText = document.getElementById('statusText');
+
+    // Snapshot of initial values so Cancel can restore them.
+    const initialState = captureState();
+
+    function captureState() {
+      const data = {};
+      new FormData(form).forEach((v, k) => { data[k] = v; });
+      // Checkboxes only appear in FormData when checked — record them explicitly.
+      form.querySelectorAll('input[type="checkbox"]').forEach(cb => { data[cb.name] = cb.checked; });
+      return data;
+    }
+
+    function updateBioCount() {
+      bioCount.textContent = bio.value.length;
+    }
+    bio.addEventListener('input', updateBioCount);
+    updateBioCount();
+
+    function showBanner(message) {
+      statusText.textContent = message;
+      banner.classList.remove('hidden');
+      banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      clearTimeout(showBanner._t);
+      showBanner._t = setTimeout(() => banner.classList.add('hidden'), 3500);
+    }
+
+    function validate() {
+      let ok = true;
+
+      const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim());
+      emailError.classList.toggle('hidden', emailValid);
+      emailInput.classList.toggle('border-red-400', !emailValid);
+      if (!emailValid) ok = false;
+
+      // Password is optional; validate only if the user typed a new one.
+      const wantsPwChange = newPassword.value || confirmPassword.value;
+      const pwValid = !wantsPwChange ||
+        (newPassword.value.length >= 8 && newPassword.value === confirmPassword.value);
+      passwordError.classList.toggle('hidden', pwValid);
+      newPassword.classList.toggle('border-red-400', !pwValid);
+      confirmPassword.classList.toggle('border-red-400', !pwValid);
+      if (!pwValid) ok = false;
+
+      return ok;
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validate()) {
+        const firstError = form.querySelector('.border-red-400');
+        if (firstError) firstError.focus();
+        return;
+      }
+      // In a real app you'd POST captureState() here.
+      // Clear the password fields after a successful "save".
+      newPassword.value = '';
+      confirmPassword.value = '';
+      document.getElementById('currentPassword').value = '';
+      showBanner('Your settings have been saved.');
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      Object.entries(initialState).forEach(([name, value]) => {
+        const field = form.elements[name];
+        if (!field) return;
+        if (field.type === 'checkbox') field.checked = value;
+        else field.value = value;
+      });
+      // Reset password fields and validation styling.
+      ['currentPassword', 'newPassword', 'confirmPassword'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      emailError.classList.add('hidden');
+      passwordError.classList.add('hidden');
+      form.querySelectorAll('.border-red-400').forEach(el => el.classList.remove('border-red-400'));
+      updateBioCount();
+      showBanner('Changes discarded.');
+    });
+  </script>
+</body>
+</html>

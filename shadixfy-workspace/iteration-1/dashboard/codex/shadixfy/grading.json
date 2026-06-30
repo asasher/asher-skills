@@ -1,0 +1,73 @@
+{
+  "eval_id": "dashboard",
+  "html_present": true,
+  "assertion_results": [
+    {
+      "text": "An index.html file is produced and renders without errors",
+      "manual": true,
+      "passed": null,
+      "evidence": "manual review (visual/structural)"
+    },
+    {
+      "text": "No CSS gradient (linear-gradient/radial-gradient/conic-gradient) is used as a background on the page, sidebar, cards, or metric tiles",
+      "manual": false,
+      "passed": true,
+      "evidence": "no gradient backgrounds detected"
+    },
+    {
+      "text": "No glassmorphism: no backdrop-filter: blur() on panels or the sidebar",
+      "manual": false,
+      "passed": true,
+      "evidence": "no backdrop blur detected"
+    },
+    {
+      "text": "Largest border-radius on cards/sidebar/buttons is <= 16px (no rounded-2xl/3xl everywhere)",
+      "manual": false,
+      "passed": true,
+      "evidence": "max non-full radius ~8px (rounded-sm, rounded-md, rounded-lg); rounded-full uses: 5"
+    },
+    {
+      "text": "No box-shadow with blur radius > 24px and no colored (non-black/neutral) shadow",
+      "manual": false,
+      "passed": true,
+      "evidence": "max non-full radius ~8px (rounded-sm, rounded-md, rounded-lg); rounded-full uses: 5"
+    },
+    {
+      "text": "The primary/accent color is neutral or a single restrained hue, not a blue/indigo/cyan brand pop",
+      "manual": false,
+      "passed": true,
+      "evidence": "no obvious blue/indigo/cyan accent utilities (heuristic — confirm visually)"
+    },
+    {
+      "text": "No hero section or large decorative headline block inside the dashboard",
+      "manual": true,
+      "passed": null,
+      "evidence": "manual review (visual/structural)"
+    },
+    {
+      "text": "No eyebrow/kicker labels (uppercase + letter-spacing) above headings",
+      "manual": false,
+      "passed": true,
+      "evidence": "no eyebrow kicker pattern detected (heuristic)"
+    },
+    {
+      "text": "Body font is Geist or a system stack, not Inter/Roboto/Segoe UI",
+      "manual": false,
+      "passed": true,
+      "evidence": "Geist referenced"
+    },
+    {
+      "text": "Surfaces are differentiated by background token + 1px border, not by floating detached panels",
+      "manual": true,
+      "passed": null,
+      "evidence": "manual review (visual/structural)"
+    }
+  ],
+  "summary": {
+    "auto_passed": 7,
+    "auto_failed": 0,
+    "auto_total": 7,
+    "auto_pass_rate": 1,
+    "manual_pending": 3
+  }
+}

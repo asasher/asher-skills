@@ -1,0 +1,3 @@
+Created [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.JP1C6483Od/index.html).
+
+It includes the three pricing tiers, monthly/annual toggle with live price updates, responsive pricing cards, and a feature comparison area. No build step or local server is needed; you can open the file directly in a browser.

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forge — Pricing</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            ink: '#0a0a0f',
+            panel: '#13131c',
+            edge: '#23232f',
+            brand: {
+              400: '#7c8cff',
+              500: '#5b6cff',
+              600: '#4453e6',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { -webkit-font-smoothing: antialiased; }
+    .glow { box-shadow: 0 0 0 1px rgba(91,108,255,0.4), 0 20px 60px -20px rgba(91,108,255,0.45); }
+    .grid-bg {
+      background-image:
+        radial-gradient(60% 50% at 50% 0%, rgba(91,108,255,0.16), transparent 70%),
+        linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 100% 100%, 40px 40px, 40px 40px;
+    }
+  </style>
+</head>
+<body class="bg-ink text-slate-200 font-sans antialiased">
+
+  <!-- ===== Header ===== -->
+  <header class="grid-bg border-b border-edge">
+    <nav class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="h-8 w-8 rounded-lg bg-brand-500 grid place-items-center font-mono font-bold text-white">F</div>
+        <span class="font-semibold text-white tracking-tight">Forge</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-8 text-sm text-slate-400">
+        <a href="#" class="hover:text-white transition">Docs</a>
+        <a href="#" class="hover:text-white transition">Changelog</a>
+        <a href="#pricing" class="hover:text-white transition">Pricing</a>
+        <a href="#" class="px-3.5 py-1.5 rounded-lg bg-white/5 border border-edge text-white hover:bg-white/10 transition">Sign in</a>
+      </div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-6 pt-12 pb-16 text-center">
+      <span class="inline-flex items-center gap-2 text-xs font-medium text-brand-400 bg-brand-500/10 border border-brand-500/20 rounded-full px-3 py-1 mb-5">
+        <span class="h-1.5 w-1.5 rounded-full bg-brand-400"></span>
+        v3.0 is here
+      </span>
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+        Ship faster with Forge
+      </h1>
+      <p class="mt-4 text-lg text-slate-400">
+        The CI &amp; deploy pipeline built for developers. Start free, scale when you're ready. No credit card required.
+      </p>
+    </div>
+  </header>
+
+  <!-- ===== Pricing ===== -->
+  <main id="pricing" class="max-w-6xl mx-auto px-6 -mt-8 pb-24">
+
+    <!-- Billing toggle -->
+    <div class="flex items-center justify-center gap-4 mb-12">
+      <span id="lbl-monthly" class="text-sm font-medium text-white">Monthly</span>
+      <button id="billing-toggle" role="switch" aria-checked="false" aria-label="Toggle annual billing"
+              class="relative h-7 w-12 rounded-full bg-white/10 border border-edge transition-colors">
+        <span id="knob" class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-brand-500 shadow transition-transform"></span>
+      </button>
+      <span id="lbl-annual" class="text-sm font-medium text-slate-400">
+        Annual
+        <span class="ml-1 text-xs text-emerald-400 font-semibold">Save 20%</span>
+      </span>
+    </div>
+
+    <!-- Tier cards -->
+    <div class="grid md:grid-cols-3 gap-6 items-start">
+
+      <!-- Free -->
+      <div class="rounded-2xl bg-panel border border-edge p-7">
+        <h3 class="font-semibold text-white">Free</h3>
+        <p class="mt-1 text-sm text-slate-400">For side projects and trying things out.</p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-4xl font-extrabold text-white price" data-monthly="0" data-annual="0">$0</span>
+          <span class="text-sm text-slate-400 suffix">/mo</span>
+        </div>
+        <p class="mt-1 text-xs text-slate-500 note">&nbsp;</p>
+        <a href="#" class="mt-6 block text-center rounded-lg bg-white/5 border border-edge text-white py-2.5 text-sm font-medium hover:bg-white/10 transition">
+          Get started
+        </a>
+        <ul class="mt-7 space-y-3 text-sm">
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>1 project</li>
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>100 build minutes / mo</li>
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Community support</li>
+        </ul>
+      </div>
+
+      <!-- Pro (featured) -->
+      <div class="relative rounded-2xl bg-panel border border-brand-500/40 p-7 glow md:-mt-3">
+        <span class="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold text-white bg-brand-500 rounded-full px-3 py-1">Most popular</span>
+        <h3 class="font-semibold text-white">Pro</h3>
+        <p class="mt-1 text-sm text-slate-400">For professionals shipping in production.</p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-4xl font-extrabold text-white price" data-monthly="20" data-annual="16">$20</span>
+          <span class="text-sm text-slate-400 suffix">/mo</span>
+        </div>
+        <p class="mt-1 text-xs text-slate-500 note">per user, billed monthly</p>
+        <a href="#" class="mt-6 block text-center rounded-lg bg-brand-500 text-white py-2.5 text-sm font-medium hover:bg-brand-600 transition">
+          Start free trial
+        </a>
+        <ul class="mt-7 space-y-3 text-sm">
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Unlimited projects</li>
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>5,000 build minutes / mo</li>
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Priority email support</li>
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Secrets &amp; env management</li>
+        </ul>
+      </div>
+
+      <!-- Team -->
+      <div class="rounded-2xl bg-panel border border-edge p-7">
+        <h3 class="font-semibold text-white">Team</h3>
+        <p class="mt-1 text-sm text-slate-400">For teams that need control and scale.</p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-4xl font-extrabold text-white price" data-monthly="60" data-annual="48">$60</span>
+          <span class="text-sm text-slate-400 suffix">/mo</span>
+        </div>
+        <p class="mt-1 text-xs text-slate-500 note">per user, billed monthly</p>
+        <a href="#" class="mt-6 block text-center rounded-lg bg-white/5 border border-edge text-white py-2.5 text-sm font-medium hover:bg-white/10 transition">
+          Contact sales
+        </a>
+        <ul class="mt-7 space-y-3 text-sm">
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Everything in Pro</li>
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>25,000 build minutes / mo</li>
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>SSO &amp; SAML, audit logs</li>
+          <li class="flex gap-2.5"><svg class="h-5 w-5 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Dedicated Slack channel</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== Feature comparison ===== -->
+    <section class="mt-20">
+      <h2 class="text-2xl font-bold text-white text-center">Compare plans</h2>
+      <p class="text-center text-slate-400 mt-2">Every feature, side by side.</p>
+
+      <div class="mt-8 overflow-x-auto rounded-2xl border border-edge">
+        <table class="w-full text-sm min-w-[640px]">
+          <thead>
+            <tr class="bg-white/[0.03] border-b border-edge">
+              <th class="text-left font-medium text-slate-400 px-6 py-4 w-2/5">Features</th>
+              <th class="font-semibold text-white px-6 py-4">Free</th>
+              <th class="font-semibold text-white px-6 py-4 bg-brand-500/[0.07]">Pro</th>
+              <th class="font-semibold text-white px-6 py-4">Team</th>
+            </tr>
+          </thead>
+          <tbody id="compare-body" class="divide-y divide-edge"></tbody>
+        </table>
+      </div>
+      <p class="text-center text-xs text-slate-500 mt-6">Prices in USD. Annual plans are billed yearly at the discounted rate.</p>
+    </section>
+  </main>
+
+  <footer class="border-t border-edge">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
+      <span>© 2026 Forge, Inc.</span>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-white transition">Privacy</a>
+        <a href="#" class="hover:text-white transition">Terms</a>
+        <a href="#" class="hover:text-white transition">Status</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Feature comparison data ----
+    const groups = [
+      {
+        name: 'Core',
+        rows: [
+          ['Projects', '1', 'Unlimited', 'Unlimited'],
+          ['Build minutes / month', '100', '5,000', '25,000'],
+          ['Concurrent builds', '1', '5', '20'],
+          ['Team members', '1', '10', 'Unlimited'],
+        ],
+      },
+      {
+        name: 'Deploy & infra',
+        rows: [
+          ['Preview deployments', true, true, true],
+          ['Custom domains', false, true, true],
+          ['Secrets & env management', false, true, true],
+          ['Deploy regions', '1', '3', 'All'],
+        ],
+      },
+      {
+        name: 'Security & support',
+        rows: [
+          ['Community support', true, true, true],
+          ['Priority email support', false, true, true],
+          ['SSO & SAML', false, false, true],
+          ['Audit logs', false, false, true],
+          ['Dedicated Slack channel', false, false, true],
+        ],
+      },
+    ];
+
+    const check = '<svg class="h-5 w-5 text-brand-400 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+    const dash  = '<span class="text-slate-600">—</span>';
+
+    function cell(v, highlight) {
+      const content = v === true ? check : v === false ? dash : `<span class="text-slate-200">${v}</span>`;
+      return `<td class="px-6 py-3.5 text-center${highlight ? ' bg-brand-500/[0.05]' : ''}">${content}</td>`;
+    }
+
+    const body = document.getElementById('compare-body');
+    body.innerHTML = groups.map(g => {
+      const header = `<tr class="bg-white/[0.02]"><td colspan="4" class="px-6 py-2.5 text-xs font-semibold uppercase tracking-wider text-slate-500">${g.name}</td></tr>`;
+      const rows = g.rows.map(r => `
+        <tr class="hover:bg-white/[0.02] transition">
+          <td class="px-6 py-3.5 text-slate-300">${r[0]}</td>
+          ${cell(r[1], false)}
+          ${cell(r[2], true)}
+          ${cell(r[3], false)}
+        </tr>`).join('');
+      return header + rows;
+    }).join('');
+
+    // ---- Billing toggle ----
+    const toggle = document.getElementById('billing-toggle');
+    const knob = document.getElementById('knob');
+    const lblMonthly = document.getElementById('lbl-monthly');
+    const lblAnnual = document.getElementById('lbl-annual');
+    let annual = false;
+
+    function render() {
+      document.querySelectorAll('.price').forEach(el => {
+        const v = annual ? el.dataset.annual : el.dataset.monthly;
+        el.textContent = '$' + v;
+      });
+      // Update the billing-period notes on the paid cards (Free card's note stays blank)
+      document.querySelectorAll('.note').forEach(el => {
+        if (el.textContent.includes('per user')) {
+          el.textContent = annual ? 'per user, billed annually' : 'per user, billed monthly';
+        }
+      });
+    }
+
+    toggle.addEventListener('click', () => {
+      annual = !annual;
+      toggle.setAttribute('aria-checked', String(annual));
+      toggle.classList.toggle('bg-brand-500/30', annual);
+      knob.classList.toggle('translate-x-5', annual);
+      lblMonthly.classList.toggle('text-white', !annual);
+      lblMonthly.classList.toggle('text-slate-400', annual);
+      lblAnnual.classList.toggle('text-white', annual);
+      lblAnnual.classList.toggle('text-slate-400', !annual);
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --background: #0f0f0f;
+        --surface: #1a1a1a;
+        --surface-muted: #202020;
+        --border: #2f2f2f;
+        --border-strong: #414141;
+        --text: #f5f5f5;
+        --muted: #a3a3a3;
+        --subtle: #737373;
+        --primary: #00d4aa;
+        --primary-strong: #14e2ba;
+        --danger: #ff6b9d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--text);
+        font-family: "IBM Plex Sans", sans-serif;
+      }
+
+      input,
+      textarea,
+      button {
+        font: inherit;
+      }
+
+      .settings-shell {
+        width: min(100%, 1080px);
+        margin: 0 auto;
+        padding: 28px 24px 32px;
+      }
+
+      .page-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .page-title {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.25;
+        font-weight: 600;
+        letter-spacing: 0;
+      }
+
+      .page-copy {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .status-text {
+        min-width: 130px;
+        color: var(--subtle);
+        font-size: 14px;
+        text-align: right;
+      }
+
+      .settings-form {
+        display: grid;
+        gap: 0;
+        margin-top: 0;
+      }
+
+      .settings-section {
+        display: grid;
+        grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+        gap: 28px;
+        padding: 28px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.4;
+        font-weight: 600;
+        letter-spacing: 0;
+      }
+
+      .section-copy {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+        max-width: 240px;
+      }
+
+      .fields {
+        display: grid;
+        gap: 18px;
+        max-width: 620px;
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      .field label,
+      .preference-label {
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+
+      .field input,
+      .field textarea {
+        width: 100%;
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+        outline: none;
+        transition:
+          border-color 160ms ease,
+          background-color 160ms ease,
+          box-shadow 160ms ease;
+      }
+
+      .field input {
+        height: 42px;
+        padding: 0 12px;
+      }
+
+      .field textarea {
+        min-height: 108px;
+        resize: vertical;
+        padding: 10px 12px;
+        line-height: 1.5;
+      }
+
+      .field input:focus,
+      .field textarea:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.16);
+      }
+
+      .field-hint {
+        color: var(--subtle);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .preferences {
+        max-width: 620px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+      }
+
+      .preference {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        min-height: 72px;
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .preference:last-child {
+        border-bottom: 0;
+      }
+
+      .preference-copy {
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .switch {
+        position: relative;
+        flex: 0 0 auto;
+        width: 44px;
+        height: 24px;
+      }
+
+      .switch input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+      }
+
+      .switch-track {
+        position: absolute;
+        inset: 0;
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        background: var(--surface-muted);
+        cursor: pointer;
+        transition:
+          border-color 160ms ease,
+          background-color 160ms ease,
+          box-shadow 160ms ease;
+      }
+
+      .switch-track::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 16px;
+        height: 16px;
+        border-radius: 6px;
+        background: #d4d4d4;
+        transition:
+          left 160ms ease,
+          background-color 160ms ease;
+      }
+
+      .switch input:checked + .switch-track {
+        border-color: var(--primary);
+        background: rgba(0, 212, 170, 0.22);
+      }
+
+      .switch input:checked + .switch-track::after {
+        left: 23px;
+        background: var(--primary-strong);
+      }
+
+      .switch input:focus-visible + .switch-track {
+        box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.16);
+      }
+
+      .form-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        padding-top: 24px;
+      }
+
+      .button {
+        min-width: 88px;
+        height: 40px;
+        border-radius: 8px;
+        border: 1px solid var(--border-strong);
+        padding: 0 14px;
+        cursor: pointer;
+        transition:
+          border-color 160ms ease,
+          background-color 160ms ease,
+          color 160ms ease;
+      }
+
+      .button-secondary {
+        background: transparent;
+        color: var(--text);
+      }
+
+      .button-secondary:hover {
+        border-color: #5a5a5a;
+        background: var(--surface);
+      }
+
+      .button-primary {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: #06110f;
+        font-weight: 600;
+      }
+
+      .button-primary:hover {
+        border-color: var(--primary-strong);
+        background: var(--primary-strong);
+      }
+
+      .button:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.18);
+      }
+
+      @media (max-width: 760px) {
+        .settings-shell {
+          padding: 22px 18px 28px;
+        }
+
+        .page-header {
+          display: block;
+        }
+
+        .status-text {
+          margin-top: 10px;
+          min-width: 0;
+          text-align: left;
+        }
+
+        .settings-section {
+          grid-template-columns: 1fr;
+          gap: 16px;
+          padding: 24px 0;
+        }
+
+        .section-copy {
+          max-width: none;
+        }
+
+        .field-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .preference {
+          align-items: flex-start;
+        }
+
+        .form-actions {
+          justify-content: stretch;
+        }
+
+        .button {
+          flex: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="settings-shell">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Account settings</h1>
+          <p class="page-copy">Manage your profile, password, and email preferences.</p>
+        </div>
+        <div class="status-text" id="saveStatus" aria-live="polite">No changes</div>
+      </header>
+
+      <form class="settings-form" id="settingsForm">
+        <section class="settings-section" aria-labelledby="profile-title">
+          <div>
+            <h2 class="section-title" id="profile-title">Profile</h2>
+            <p class="section-copy">This information is visible to people you collaborate with.</p>
+          </div>
+
+          <div class="fields">
+            <div class="field-grid">
+              <div class="field">
+                <label for="fullName">Name</label>
+                <input id="fullName" name="fullName" type="text" value="Maya Chen" autocomplete="name" />
+              </div>
+
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" value="maya@example.com" autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="bio">Bio</label>
+              <textarea id="bio" name="bio">Product lead focused on account workflows, onboarding, and support tooling.</textarea>
+              <div class="field-hint">Briefly describe your role or work focus.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="password-title">
+          <div>
+            <h2 class="section-title" id="password-title">Password</h2>
+            <p class="section-copy">Use a password that is not shared with other services.</p>
+          </div>
+
+          <div class="fields">
+            <div class="field">
+              <label for="currentPassword">Current password</label>
+              <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" />
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="newPassword">New password</label>
+                <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" />
+              </div>
+
+              <div class="field">
+                <label for="confirmPassword">Confirm password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" />
+              </div>
+            </div>
+
+            <div class="field-hint">Leave these fields blank to keep your current password.</div>
+          </div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="notifications-title">
+          <div>
+            <h2 class="section-title" id="notifications-title">Notifications</h2>
+            <p class="section-copy">Choose which updates should reach your inbox.</p>
+          </div>
+
+          <div class="preferences">
+            <label class="preference" for="productUpdates">
+              <span>
+                <span class="preference-label">Product updates</span>
+                <span class="preference-copy">New features, improvements, and release notes.</span>
+              </span>
+              <span class="switch">
+                <input id="productUpdates" name="productUpdates" type="checkbox" checked />
+                <span class="switch-track" aria-hidden="true"></span>
+              </span>
+            </label>
+
+            <label class="preference" for="securityAlerts">
+              <span>
+                <span class="preference-label">Security alerts</span>
+                <span class="preference-copy">Sign-in notices and important account activity.</span>
+              </span>
+              <span class="switch">
+                <input id="securityAlerts" name="securityAlerts" type="checkbox" checked />
+                <span class="switch-track" aria-hidden="true"></span>
+              </span>
+            </label>
+
+            <label class="preference" for="billingEmails">
+              <span>
+                <span class="preference-label">Billing email</span>
+                <span class="preference-copy">Receipts, renewal reminders, and invoice changes.</span>
+              </span>
+              <span class="switch">
+                <input id="billingEmails" name="billingEmails" type="checkbox" />
+                <span class="switch-track" aria-hidden="true"></span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <button class="button button-secondary" type="reset">Cancel</button>
+          <button class="button button-primary" type="submit">Save</button>
+        </div>
+      </form>
+    </main>
+
+    <script>
+      const form = document.getElementById("settingsForm");
+      const statusEl = document.getElementById("saveStatus");
+
+      form.addEventListener("input", () => {
+        statusEl.textContent = "Unsaved changes";
+      });
+
+      form.addEventListener("reset", () => {
+        window.setTimeout(() => {
+          statusEl.textContent = "No changes";
+        }, 0);
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        statusEl.textContent = "Saved";
+      });
+    </script>
+  </body>
+</html>

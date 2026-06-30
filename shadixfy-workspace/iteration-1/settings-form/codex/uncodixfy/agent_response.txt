@@ -1,0 +1,3 @@
+Built [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.LRvfpLgSV9/index.html) as a single browser-openable account settings page.
+
+It includes Profile, Password, Notification preferences with toggles, plus Save and Cancel actions. The form has small inline behavior for unsaved/saved status and reset handling. Verification pass checked that the requested sections and controls are present and that the styling avoids oversized radii, gradients, heavy shadows, uppercase tracking, and banned font names.

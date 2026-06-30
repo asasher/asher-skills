@@ -1,0 +1,67 @@
+{
+  "eval_id": "settings-form",
+  "html_present": true,
+  "assertion_results": [
+    {
+      "text": "An index.html file is produced and renders without errors",
+      "manual": true,
+      "passed": null,
+      "evidence": "manual review (visual/structural)"
+    },
+    {
+      "text": "Each input has a visible label positioned above (or clearly beside) it; no placeholder-only fields and no floating/morphing labels",
+      "manual": true,
+      "passed": null,
+      "evidence": "manual review (visual/structural)"
+    },
+    {
+      "text": "Inputs have a visible focus state (focus ring or border change)",
+      "manual": true,
+      "passed": null,
+      "evidence": "manual review (visual/structural)"
+    },
+    {
+      "text": "Buttons use solid/outline fills, not gradient backgrounds, and are not full-width pills",
+      "manual": false,
+      "passed": true,
+      "evidence": "rounded-full uses: 8 (manual: confirm these are avatars/toggles, not buttons/cards)"
+    },
+    {
+      "text": "No CSS gradient used as a background anywhere on the page",
+      "manual": false,
+      "passed": false,
+      "evidence": "found: radial-gradient, linear-gradient"
+    },
+    {
+      "text": "Largest border-radius on inputs/cards/buttons is <= 16px",
+      "manual": false,
+      "passed": true,
+      "evidence": "max non-full radius ~8px (rounded-md, rounded-lg); rounded-full uses: 8"
+    },
+    {
+      "text": "The primary/accent color is neutral or a single restrained hue (not blue/indigo/cyan)",
+      "manual": false,
+      "passed": true,
+      "evidence": "no obvious blue/indigo/cyan accent utilities (heuristic — confirm visually)"
+    },
+    {
+      "text": "Body font is Geist or a system stack, not Inter/Roboto/Segoe UI",
+      "manual": false,
+      "passed": false,
+      "evidence": "banned font(s): inter"
+    },
+    {
+      "text": "No decorative mini-notes or eyebrow labels explaining what each section does",
+      "manual": false,
+      "passed": true,
+      "evidence": "no eyebrow kicker pattern detected (heuristic)"
+    }
+  ],
+  "summary": {
+    "auto_passed": 4,
+    "auto_failed": 2,
+    "auto_total": 6,
+    "auto_pass_rate": 0.667,
+    "manual_pending": 3
+  }
+}

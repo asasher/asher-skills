@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en" class="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Northstar — Analytics</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style type="text/tailwindcss">
+    @layer base {
+      :root {
+        --background: 0 0% 100%;            --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;                  --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;              --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;           --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;       --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;           --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;          --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;      --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;            --input: 240 5.9% 90%;
+        --ring: 240 10% 3.9%;              --radius: 0.5rem;
+      }
+      .dark {
+        --background: 240 10% 3.9%;         --foreground: 0 0% 98%;
+        --card: 240 10% 3.9%;             --card-foreground: 0 0% 98%;
+        --popover: 240 10% 3.9%;          --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;              --primary-foreground: 240 5.9% 10%;
+        --secondary: 240 3.7% 15.9%;      --secondary-foreground: 0 0% 98%;
+        --muted: 240 3.7% 15.9%;          --muted-foreground: 240 5% 64.9%;
+        --accent: 240 3.7% 15.9%;         --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;     --destructive-foreground: 0 0% 98%;
+        --border: 240 3.7% 15.9%;         --input: 240 3.7% 15.9%;
+        --ring: 240 4.9% 83.9%;
+      }
+      * { border-color: hsl(var(--border)); }
+      body {
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-feature-settings: "rlig" 1, "calt" 1;
+      }
+    }
+  </style>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        container: { center: true },
+        extend: {
+          fontFamily: {
+            sans: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            border: "hsl(var(--border))",
+            input: "hsl(var(--input))",
+            ring: "hsl(var(--ring))",
+            background: "hsl(var(--background))",
+            foreground: "hsl(var(--foreground))",
+            primary: { DEFAULT: "hsl(var(--primary))", foreground: "hsl(var(--primary-foreground))" },
+            secondary: { DEFAULT: "hsl(var(--secondary))", foreground: "hsl(var(--secondary-foreground))" },
+            destructive: { DEFAULT: "hsl(var(--destructive))", foreground: "hsl(var(--destructive-foreground))" },
+            muted: { DEFAULT: "hsl(var(--muted))", foreground: "hsl(var(--muted-foreground))" },
+            accent: { DEFAULT: "hsl(var(--accent))", foreground: "hsl(var(--accent-foreground))" },
+            popover: { DEFAULT: "hsl(var(--popover))", foreground: "hsl(var(--popover-foreground))" },
+            card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
+          },
+          borderRadius: {
+            lg: "var(--radius)",
+            md: "calc(var(--radius) - 2px)",
+            sm: "calc(var(--radius) - 4px)",
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="font-sans antialiased">
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="hidden w-64 shrink-0 flex-col border-r bg-muted/40 md:flex">
+      <div class="flex h-14 items-center gap-2 border-b px-4">
+        <div class="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <i data-lucide="compass" class="h-4 w-4"></i>
+        </div>
+        <span class="text-sm font-semibold">Northstar</span>
+      </div>
+
+      <nav class="flex-1 space-y-1 px-3 py-4">
+        <a href="#" class="flex items-center gap-3 rounded-md bg-accent px-3 py-2 text-sm font-medium text-accent-foreground transition-colors">
+          <i data-lucide="layout-dashboard" class="h-4 w-4"></i> Overview
+        </a>
+        <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+          <i data-lucide="bar-chart-3" class="h-4 w-4"></i> Analytics
+        </a>
+        <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+          <i data-lucide="users" class="h-4 w-4"></i> Customers
+        </a>
+        <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+          <i data-lucide="credit-card" class="h-4 w-4"></i> Billing
+        </a>
+        <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+          <i data-lucide="file-text" class="h-4 w-4"></i> Reports
+        </a>
+
+        <div class="px-3 pb-2 pt-5 text-xs font-medium text-muted-foreground">Workspace</div>
+        <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+          <i data-lucide="settings" class="h-4 w-4"></i> Settings
+        </a>
+        <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+          <i data-lucide="life-buoy" class="h-4 w-4"></i> Support
+        </a>
+      </nav>
+
+      <div class="border-t p-3">
+        <div class="flex items-center gap-3 rounded-md px-2 py-1.5">
+          <span class="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">AA</span>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-medium">Asher Anjum</p>
+            <p class="truncate text-xs text-muted-foreground">as.asher.anjum@gmail.com</p>
+          </div>
+          <i data-lucide="chevrons-up-down" class="h-4 w-4 text-muted-foreground"></i>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex min-w-0 flex-1 flex-col">
+
+      <!-- Top bar -->
+      <header class="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 lg:px-6">
+        <button class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground md:hidden" aria-label="Menu">
+          <i data-lucide="menu" class="h-5 w-5"></i>
+        </button>
+
+        <div class="relative hidden w-full max-w-sm sm:block">
+          <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"></i>
+          <input type="text" placeholder="Search…"
+            class="h-9 w-full rounded-md border border-input bg-transparent pl-9 pr-3 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+        </div>
+
+        <div class="ml-auto flex items-center gap-1">
+          <button id="theme-toggle" class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="Toggle theme">
+            <i data-lucide="sun" class="h-[18px] w-[18px] dark:hidden"></i>
+            <i data-lucide="moon" class="hidden h-[18px] w-[18px] dark:block"></i>
+          </button>
+          <button class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground" aria-label="Notifications">
+            <i data-lucide="bell" class="h-[18px] w-[18px]"></i>
+          </button>
+          <span class="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">AA</span>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <main class="flex-1 space-y-6 p-4 lg:p-6">
+
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h1 class="text-2xl font-semibold tracking-tight">Overview</h1>
+            <p class="text-sm text-muted-foreground">Last 30 days across all projects.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="inline-flex h-9 items-center gap-2 rounded-md border border-input bg-transparent px-3 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground">
+              <i data-lucide="calendar" class="h-4 w-4"></i> Jun 1 – Jun 30
+            </button>
+            <button class="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90">
+              <i data-lucide="download" class="h-4 w-4"></i> Export
+            </button>
+          </div>
+        </div>
+
+        <!-- Metrics -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- card -->
+          <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="flex flex-row items-center justify-between p-4 pb-2">
+              <span class="text-sm font-medium text-muted-foreground">Monthly recurring revenue</span>
+              <i data-lucide="dollar-sign" class="h-4 w-4 text-muted-foreground"></i>
+            </div>
+            <div class="p-4 pt-0">
+              <div class="font-mono text-2xl font-semibold tracking-tight">$48,210</div>
+              <p class="mt-1 text-xs text-muted-foreground"><span class="font-medium text-foreground">+12.4%</span> from last month</p>
+            </div>
+          </div>
+
+          <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="flex flex-row items-center justify-between p-4 pb-2">
+              <span class="text-sm font-medium text-muted-foreground">Active users</span>
+              <i data-lucide="users" class="h-4 w-4 text-muted-foreground"></i>
+            </div>
+            <div class="p-4 pt-0">
+              <div class="font-mono text-2xl font-semibold tracking-tight">9,142</div>
+              <p class="mt-1 text-xs text-muted-foreground"><span class="font-medium text-foreground">+5.1%</span> from last month</p>
+            </div>
+          </div>
+
+          <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="flex flex-row items-center justify-between p-4 pb-2">
+              <span class="text-sm font-medium text-muted-foreground">Conversion rate</span>
+              <i data-lucide="target" class="h-4 w-4 text-muted-foreground"></i>
+            </div>
+            <div class="p-4 pt-0">
+              <div class="font-mono text-2xl font-semibold tracking-tight">3.84%</div>
+              <p class="mt-1 text-xs text-muted-foreground"><span class="font-medium text-foreground">−0.4%</span> from last month</p>
+            </div>
+          </div>
+
+          <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="flex flex-row items-center justify-between p-4 pb-2">
+              <span class="text-sm font-medium text-muted-foreground">Churn</span>
+              <i data-lucide="trending-down" class="h-4 w-4 text-muted-foreground"></i>
+            </div>
+            <div class="p-4 pt-0">
+              <div class="font-mono text-2xl font-semibold tracking-tight">1.9%</div>
+              <p class="mt-1 text-xs text-muted-foreground"><span class="font-medium text-foreground">−0.2%</span> from last month</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart + activity -->
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-7">
+
+          <!-- Chart -->
+          <div class="rounded-lg border bg-card text-card-foreground shadow-sm lg:col-span-4">
+            <div class="flex flex-wrap items-start justify-between gap-3 p-4 pb-0 sm:p-6 sm:pb-0">
+              <div>
+                <h2 class="text-base font-semibold">Revenue</h2>
+                <p class="text-sm text-muted-foreground">Daily gross revenue, this month.</p>
+              </div>
+              <div class="inline-flex h-9 items-center rounded-md bg-muted p-1 text-muted-foreground">
+                <button class="inline-flex h-7 items-center rounded-sm bg-background px-3 text-sm font-medium text-foreground shadow-sm">30d</button>
+                <button class="inline-flex h-7 items-center rounded-sm px-3 text-sm font-medium transition-colors hover:text-foreground">90d</button>
+                <button class="inline-flex h-7 items-center rounded-sm px-3 text-sm font-medium transition-colors hover:text-foreground">12m</button>
+              </div>
+            </div>
+            <div class="p-4 sm:p-6">
+              <svg id="chart" viewBox="0 0 720 260" preserveAspectRatio="none" class="h-[260px] w-full overflow-visible"></svg>
+            </div>
+          </div>
+
+          <!-- Recent activity -->
+          <div class="rounded-lg border bg-card text-card-foreground shadow-sm lg:col-span-3">
+            <div class="flex items-center justify-between p-4 sm:p-6 sm:pb-4">
+              <div>
+                <h2 class="text-base font-semibold">Recent activity</h2>
+                <p class="text-sm text-muted-foreground">Latest events across the workspace.</p>
+              </div>
+              <a href="#" class="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">View all</a>
+            </div>
+            <div id="activity" class="divide-y border-t"></div>
+          </div>
+        </div>
+
+        <!-- Recent customers table -->
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+          <div class="p-4 sm:p-6 sm:pb-4">
+            <h2 class="text-base font-semibold">Recent signups</h2>
+            <p class="text-sm text-muted-foreground">New accounts created in the last 7 days.</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-t border-b text-muted-foreground">
+                  <th class="px-4 py-2.5 text-left font-medium sm:px-6">Customer</th>
+                  <th class="px-4 py-2.5 text-left font-medium">Plan</th>
+                  <th class="px-4 py-2.5 text-left font-medium">Status</th>
+                  <th class="px-4 py-2.5 text-right font-medium sm:px-6">MRR</th>
+                </tr>
+              </thead>
+              <tbody id="signups"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // ---- Theme: respect system, allow toggle ----
+    (function () {
+      const root = document.documentElement;
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        root.classList.add("dark");
+      }
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        root.classList.toggle("dark");
+      });
+    })();
+
+    // ---- Revenue line chart (real data, drawn from values) ----
+    (function () {
+      const data = [
+        1280, 1340, 1190, 1410, 1520, 1480, 1390, 1610, 1720, 1680,
+        1590, 1750, 1830, 1790, 1880, 2010, 1950, 1870, 2040, 2160,
+        2090, 2230, 2310, 2280, 2390, 2520, 2470, 2410, 2600, 2710
+      ];
+      const W = 720, H = 260, padX = 8, padY = 20;
+      const max = Math.max(...data), min = Math.min(...data);
+      const x = i => padX + (i * (W - padX * 2)) / (data.length - 1);
+      const y = v => padY + (1 - (v - min) / (max - min)) * (H - padY * 2);
+
+      const line = data.map((v, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+      const area = `${line} L${x(data.length - 1).toFixed(1)},${H - padY} L${x(0).toFixed(1)},${H - padY} Z`;
+
+      const grid = [0, 0.25, 0.5, 0.75, 1]
+        .map(t => {
+          const gy = (padY + t * (H - padY * 2)).toFixed(1);
+          return `<line x1="0" x2="${W}" y1="${gy}" y2="${gy}" stroke="hsl(var(--border))" stroke-width="1" />`;
+        })
+        .join("");
+
+      const lastX = x(data.length - 1).toFixed(1), lastY = y(data[data.length - 1]).toFixed(1);
+
+      document.getElementById("chart").innerHTML = `
+        <defs>
+          <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="hsl(var(--foreground))" stop-opacity="0.10" />
+            <stop offset="100%" stop-color="hsl(var(--foreground))" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        ${grid}
+        <path d="${area}" fill="url(#fill)" />
+        <path d="${line}" fill="none" stroke="hsl(var(--foreground))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="${lastX}" cy="${lastY}" r="3.5" fill="hsl(var(--background))" stroke="hsl(var(--foreground))" stroke-width="2" />
+      `;
+    })();
+
+    // ---- Recent activity ----
+    (function () {
+      const items = [
+        { icon: "user-plus", title: "Maya Okafor", desc: "started a Pro trial", time: "2m" },
+        { icon: "credit-card", title: "Globex Inc.", desc: "upgraded to Scale", time: "18m" },
+        { icon: "file-text", title: "Leo Tran", desc: "exported a usage report", time: "1h" },
+        { icon: "alert-triangle", title: "Acme Co.", desc: "payment failed", time: "3h" },
+        { icon: "user-minus", title: "Priya Shah", desc: "canceled subscription", time: "5h" },
+        { icon: "check-circle-2", title: "Hooli", desc: "completed onboarding", time: "8h" },
+      ];
+      document.getElementById("activity").innerHTML = items.map(it => `
+        <div class="flex items-center gap-3 px-4 py-3 sm:px-6">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <i data-lucide="${it.icon}" class="h-4 w-4"></i>
+          </span>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm"><span class="font-medium">${it.title}</span> <span class="text-muted-foreground">${it.desc}</span></p>
+          </div>
+          <span class="shrink-0 text-xs tabular-nums text-muted-foreground">${it.time}</span>
+        </div>
+      `).join("");
+    })();
+
+    // ---- Recent signups table ----
+    (function () {
+      function badge(status) {
+        const map = {
+          Active: "border-transparent bg-primary text-primary-foreground",
+          Trial: "text-foreground",
+          Past_due: "border-transparent bg-destructive text-destructive-foreground",
+        };
+        const label = status.replace("_", " ");
+        return `<span class="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium ${map[status]}">${label}</span>`;
+      }
+      const rows = [
+        { name: "Maya Okafor", email: "maya@northwind.io", plan: "Pro", status: "Trial", mrr: "$0" },
+        { name: "Globex Inc.", email: "ops@globex.com", plan: "Scale", status: "Active", mrr: "$1,200" },
+        { name: "Leo Tran", email: "leo@tran.dev", plan: "Pro", status: "Active", mrr: "$49" },
+        { name: "Acme Co.", email: "billing@acme.co", plan: "Scale", status: "Past_due", mrr: "$1,200" },
+        { name: "Hooli", email: "team@hooli.com", plan: "Pro", status: "Active", mrr: "$49" },
+      ];
+      document.getElementById("signups").innerHTML = rows.map(r => `
+        <tr class="border-b transition-colors hover:bg-muted/50">
+          <td class="px-4 py-3 sm:px-6">
+            <div class="flex items-center gap-3">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">${r.name.split(" ").map(w => w[0]).join("").slice(0,2)}</span>
+              <div class="min-w-0">
+                <p class="truncate font-medium">${r.name}</p>
+                <p class="truncate text-xs text-muted-foreground">${r.email}</p>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 py-3 text-muted-foreground">${r.plan}</td>
+          <td class="px-4 py-3">${badge(r.status)}</td>
+          <td class="px-4 py-3 text-right font-mono tabular-nums sm:px-6">${r.mrr}</td>
+        </tr>
+      `).join("");
+    })();
+
+    // Render all icons last (after injected markup)
+    lucide.createIcons();
+  </script>
+</body>
+</html>

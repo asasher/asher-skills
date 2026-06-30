@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en" class="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pricing — Querybox</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        container: { center: true, padding: "1.5rem", screens: { "2xl": "1100px" } },
+        extend: {
+          fontFamily: {
+            sans: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            border: "hsl(var(--border))",
+            input: "hsl(var(--input))",
+            ring: "hsl(var(--ring))",
+            background: "hsl(var(--background))",
+            foreground: "hsl(var(--foreground))",
+            primary: { DEFAULT: "hsl(var(--primary))", foreground: "hsl(var(--primary-foreground))" },
+            secondary: { DEFAULT: "hsl(var(--secondary))", foreground: "hsl(var(--secondary-foreground))" },
+            destructive: { DEFAULT: "hsl(var(--destructive))", foreground: "hsl(var(--destructive-foreground))" },
+            muted: { DEFAULT: "hsl(var(--muted))", foreground: "hsl(var(--muted-foreground))" },
+            accent: { DEFAULT: "hsl(var(--accent))", foreground: "hsl(var(--accent-foreground))" },
+            popover: { DEFAULT: "hsl(var(--popover))", foreground: "hsl(var(--popover-foreground))" },
+            card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
+          },
+          borderRadius: {
+            lg: "var(--radius)",
+            md: "calc(var(--radius) - 2px)",
+            sm: "calc(var(--radius) - 4px)",
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root {
+      --background: 0 0% 100%;            --foreground: 240 10% 3.9%;
+      --card: 0 0% 100%;                  --card-foreground: 240 10% 3.9%;
+      --popover: 0 0% 100%;               --popover-foreground: 240 10% 3.9%;
+      --primary: 240 5.9% 10%;            --primary-foreground: 0 0% 98%;
+      --secondary: 240 4.8% 95.9%;        --secondary-foreground: 240 5.9% 10%;
+      --muted: 240 4.8% 95.9%;            --muted-foreground: 240 3.8% 46.1%;
+      --accent: 240 4.8% 95.9%;           --accent-foreground: 240 5.9% 10%;
+      --destructive: 0 84.2% 60.2%;       --destructive-foreground: 0 0% 98%;
+      --border: 240 5.9% 90%;             --input: 240 5.9% 90%;
+      --ring: 240 10% 3.9%;               --radius: 0.5rem;
+    }
+    .dark {
+      --background: 240 10% 3.9%;         --foreground: 0 0% 98%;
+      --card: 240 10% 3.9%;               --card-foreground: 0 0% 98%;
+      --popover: 240 10% 3.9%;            --popover-foreground: 0 0% 98%;
+      --primary: 0 0% 98%;                --primary-foreground: 240 5.9% 10%;
+      --secondary: 240 3.7% 15.9%;        --secondary-foreground: 0 0% 98%;
+      --muted: 240 3.7% 15.9%;            --muted-foreground: 240 5% 64.9%;
+      --accent: 240 3.7% 15.9%;           --accent-foreground: 0 0% 98%;
+      --destructive: 0 62.8% 30.6%;       --destructive-foreground: 0 0% 98%;
+      --border: 240 3.7% 15.9%;           --input: 240 3.7% 15.9%;
+      --ring: 240 4.9% 83.9%;
+    }
+    * { border-color: hsl(var(--border)); }
+    body { font-feature-settings: "rlig" 1, "calt" 1; }
+  </style>
+</head>
+
+<body class="min-h-screen bg-background font-sans text-foreground antialiased">
+
+  <!-- Top bar -->
+  <header class="border-b">
+    <div class="container flex h-14 items-center justify-between">
+      <div class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-foreground"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+        <span class="text-sm font-semibold tracking-tight">Querybox</span>
+      </div>
+      <nav class="flex items-center gap-1">
+        <a href="#" class="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground">Docs</a>
+        <a href="#" class="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground">Changelog</a>
+        <button id="theme-toggle" type="button" aria-label="Toggle theme"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+          <svg data-icon="sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg data-icon="moon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        <a href="#" class="ml-1 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container py-16">
+
+    <!-- Header -->
+    <div class="mx-auto max-w-2xl text-center">
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Pricing</h1>
+      <p class="mt-3 text-base text-muted-foreground">Start free. Upgrade when your team and your query volume grow.</p>
+    </div>
+
+    <!-- Billing toggle -->
+    <div class="mt-8 flex items-center justify-center">
+      <div class="inline-flex items-center rounded-lg bg-muted p-1 text-sm" role="tablist" aria-label="Billing period">
+        <button type="button" data-period="monthly" role="tab" aria-selected="true"
+          class="period-btn rounded-md px-4 py-1.5 font-medium transition-colors">Monthly</button>
+        <button type="button" data-period="annual" role="tab" aria-selected="false"
+          class="period-btn rounded-md px-4 py-1.5 font-medium text-muted-foreground transition-colors">
+          Annual
+          <span class="ml-1.5 inline-flex items-center rounded-md border border-transparent bg-secondary px-1.5 py-0.5 text-xs font-medium text-secondary-foreground">−20%</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tiers -->
+    <section class="mx-auto mt-10 grid max-w-5xl gap-6 lg:grid-cols-3">
+
+      <!-- Free -->
+      <div class="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h3 class="text-lg font-semibold">Free</h3>
+          <p class="text-sm text-muted-foreground">For side projects and trying things out.</p>
+          <div class="flex items-baseline gap-1 pt-3">
+            <span class="text-3xl font-semibold tracking-tight" data-price="free">$0</span>
+            <span class="text-sm text-muted-foreground" data-suffix="free">/mo</span>
+          </div>
+        </div>
+        <div class="px-6">
+          <a href="#" class="inline-flex h-9 w-full items-center justify-center rounded-md border border-input bg-transparent px-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">Get started</a>
+        </div>
+        <div class="p-6 pt-5">
+          <ul class="space-y-2.5 text-sm">
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>1 project</span></li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>10k queries / month</span></li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Community support</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pro (highlighted) -->
+      <div class="relative flex flex-col rounded-lg border border-foreground bg-card text-card-foreground shadow-sm">
+        <div class="absolute right-6 top-6">
+          <span class="inline-flex items-center rounded-md bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">Popular</span>
+        </div>
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h3 class="text-lg font-semibold">Pro</h3>
+          <p class="text-sm text-muted-foreground">For developers shipping to production.</p>
+          <div class="flex items-baseline gap-1 pt-3">
+            <span class="text-3xl font-semibold tracking-tight" data-price="pro" data-monthly="$20" data-annual="$16">$20</span>
+            <span class="text-sm text-muted-foreground" data-suffix="pro">/mo</span>
+          </div>
+        </div>
+        <div class="px-6">
+          <a href="#" class="inline-flex h-9 w-full items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Start free trial</a>
+        </div>
+        <div class="p-6 pt-5">
+          <ul class="space-y-2.5 text-sm">
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Unlimited projects</span></li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>1M queries / month</span></li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Branch databases</span></li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Email support</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Team -->
+      <div class="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h3 class="text-lg font-semibold">Team</h3>
+          <p class="text-sm text-muted-foreground">For teams with shared infrastructure.</p>
+          <div class="flex items-baseline gap-1 pt-3">
+            <span class="text-3xl font-semibold tracking-tight" data-price="team" data-monthly="$60" data-annual="$48">$60</span>
+            <span class="text-sm text-muted-foreground" data-suffix="team">/mo</span>
+          </div>
+        </div>
+        <div class="px-6">
+          <a href="#" class="inline-flex h-9 w-full items-center justify-center rounded-md border border-input bg-transparent px-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">Contact sales</a>
+        </div>
+        <div class="p-6 pt-5">
+          <ul class="space-y-2.5 text-sm">
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Everything in Pro</span></li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Unlimited queries</span></li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>SSO &amp; audit logs</span></li>
+            <li class="flex items-start gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Priority support</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature comparison -->
+    <section class="mx-auto mt-20 max-w-5xl">
+      <h2 class="text-xl font-semibold tracking-tight">Compare plans</h2>
+      <div class="mt-6 overflow-x-auto rounded-lg border">
+        <table class="w-full caption-bottom text-sm">
+          <thead>
+            <tr class="border-b bg-muted/40">
+              <th class="h-11 px-4 text-left align-middle font-medium text-muted-foreground">Feature</th>
+              <th class="h-11 px-4 text-left align-middle font-medium">Free</th>
+              <th class="h-11 px-4 text-left align-middle font-medium">Pro</th>
+              <th class="h-11 px-4 text-left align-middle font-medium">Team</th>
+            </tr>
+          </thead>
+          <tbody id="compare-body" class="[&_tr:last-child]:border-0"></tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-sm text-muted-foreground">Prices in USD. Annual billing is charged yearly and shown as the equivalent monthly rate.</p>
+    </section>
+  </main>
+
+  <footer class="mt-8 border-t">
+    <div class="container flex h-14 items-center justify-between text-sm text-muted-foreground">
+      <span>© 2026 Querybox</span>
+      <div class="flex items-center gap-4">
+        <a href="#" class="transition-colors hover:text-foreground">Terms</a>
+        <a href="#" class="transition-colors hover:text-foreground">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Theme toggle
+    (function () {
+      const root = document.documentElement;
+      const btn = document.getElementById("theme-toggle");
+      const sun = btn.querySelector('[data-icon="sun"]');
+      const moon = btn.querySelector('[data-icon="moon"]');
+      function render() {
+        const dark = root.classList.contains("dark");
+        sun.classList.toggle("hidden", dark);
+        moon.classList.toggle("hidden", !dark);
+      }
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        root.classList.add("dark");
+      }
+      render();
+      btn.addEventListener("click", () => { root.classList.toggle("dark"); render(); });
+    })();
+
+    // Billing period toggle
+    (function () {
+      const btns = document.querySelectorAll(".period-btn");
+      const prices = document.querySelectorAll("[data-monthly]");
+      const activeCls = ["bg-background", "text-foreground", "shadow-sm"];
+
+      function setPeriod(period) {
+        btns.forEach((b) => {
+          const on = b.dataset.period === period;
+          b.setAttribute("aria-selected", String(on));
+          activeCls.forEach((c) => b.classList.toggle(c, on));
+          b.classList.toggle("text-muted-foreground", !on);
+        });
+        prices.forEach((p) => {
+          p.textContent = period === "annual" ? p.dataset.annual : p.dataset.monthly;
+        });
+      }
+      btns.forEach((b) => b.addEventListener("click", () => setPeriod(b.dataset.period)));
+      setPeriod("monthly");
+    })();
+
+    // Comparison table
+    (function () {
+      const check = '<svg class="h-4 w-4 text-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+      const dash = '<span class="text-muted-foreground">—</span>';
+      const rows = [
+        ["Projects", "1", "Unlimited", "Unlimited"],
+        ["Queries / month", "10k", "1M", "Unlimited"],
+        ["Branch databases", false, true, true],
+        ["Point-in-time recovery", false, "7 days", "30 days"],
+        ["Team members", "1", "5", "Unlimited"],
+        ["SSO &amp; SAML", false, false, true],
+        ["Audit logs", false, false, true],
+        ["Support", "Community", "Email", "Priority"],
+        ["SLA", false, false, "99.9%"],
+      ];
+      function cell(v) {
+        if (v === true) return check;
+        if (v === false) return dash;
+        return '<span>' + v + '</span>';
+      }
+      const body = document.getElementById("compare-body");
+      body.innerHTML = rows.map((r) =>
+        '<tr class="border-b transition-colors hover:bg-muted/50">' +
+          '<td class="px-4 py-3 align-middle font-medium">' + r[0] + '</td>' +
+          '<td class="px-4 py-3 align-middle">' + cell(r[1]) + '</td>' +
+          '<td class="px-4 py-3 align-middle">' + cell(r[2]) + '</td>' +
+          '<td class="px-4 py-3 align-middle">' + cell(r[3]) + '</td>' +
+        '</tr>'
+      ).join("");
+    })();
+  </script>
+</body>
+</html>

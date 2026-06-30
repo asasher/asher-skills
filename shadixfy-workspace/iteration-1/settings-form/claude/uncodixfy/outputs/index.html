@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Public Sans"', 'sans-serif'],
+          },
+          colors: {
+            bg: '#18181b',
+            surface: '#1f1f23',
+            raised: '#27272a',
+            line: '#34343a',
+            'line-soft': '#2a2a2f',
+            text: '#ededee',
+            muted: '#9a9aa2',
+            faint: '#6e6e76',
+            accent: '#a855f7',
+          },
+          borderRadius: {
+            DEFAULT: '8px',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { -webkit-font-smoothing: antialiased; }
+    /* Toggle switch */
+    .switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .switch .track {
+      width: 38px; height: 22px; border-radius: 11px;
+      background: #34343a; border: 1px solid #3e3e45;
+      transition: background 150ms ease, border-color 150ms ease;
+      flex: none; position: relative;
+    }
+    .switch .track::after {
+      content: ""; position: absolute; top: 2px; left: 2px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #c4c4cc; transition: transform 150ms ease, background 150ms ease;
+    }
+    .switch input:checked + .track { background: #6d3f96; border-color: #7c4aa8; }
+    .switch input:checked + .track::after { transform: translateX(16px); background: #ededee; }
+    .switch input:focus-visible + .track { box-shadow: 0 0 0 2px #18181b, 0 0 0 4px #7c4aa8; }
+    .field:focus { outline: none; border-color: #5a5a63; box-shadow: 0 0 0 1px #5a5a63; }
+  </style>
+</head>
+<body class="bg-bg text-text font-sans text-[15px] leading-normal">
+  <div class="mx-auto max-w-[1100px] px-6">
+    <!-- Page header -->
+    <header class="flex items-center justify-between border-b border-line-soft py-5">
+      <div class="flex items-center gap-3">
+        <div class="grid h-8 w-8 place-items-center rounded bg-raised text-sm font-semibold text-muted">AR</div>
+        <div>
+          <div class="text-[15px] font-semibold">Account settings</div>
+          <div class="text-[13px] text-faint">Manage your profile and preferences</div>
+        </div>
+      </div>
+      <a href="#" class="text-[13px] text-muted hover:text-text">Back to app</a>
+    </header>
+
+    <div class="flex flex-col gap-10 py-8 md:flex-row">
+      <!-- Section nav -->
+      <nav class="md:w-48 md:flex-none">
+        <ul class="flex gap-1 text-[14px] md:flex-col">
+          <li><a href="#profile" class="block rounded px-3 py-2 text-text bg-raised">Profile</a></li>
+          <li><a href="#password" class="block rounded px-3 py-2 text-muted hover:bg-raised hover:text-text">Password</a></li>
+          <li><a href="#notifications" class="block rounded px-3 py-2 text-muted hover:bg-raised hover:text-text">Notifications</a></li>
+        </ul>
+      </nav>
+
+      <!-- Content -->
+      <form class="min-w-0 flex-1 space-y-6" autocomplete="off">
+        <!-- Profile -->
+        <section id="profile" class="rounded border border-line-soft bg-surface">
+          <div class="border-b border-line-soft px-5 py-4">
+            <h2 class="text-[15px] font-semibold">Profile</h2>
+            <p class="mt-0.5 text-[13px] text-faint">This information is visible to your team.</p>
+          </div>
+          <div class="space-y-5 px-5 py-5">
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label for="name" class="mb-1.5 block text-[13px] font-medium text-muted">Full name</label>
+                <input id="name" name="name" type="text" value="Asher Anjum"
+                  class="field w-full rounded border border-line bg-raised px-3 py-2 text-[14px] text-text placeholder:text-faint" />
+              </div>
+              <div>
+                <label for="email" class="mb-1.5 block text-[13px] font-medium text-muted">Email address</label>
+                <input id="email" name="email" type="email" value="as.asher.anjum@gmail.com"
+                  class="field w-full rounded border border-line bg-raised px-3 py-2 text-[14px] text-text placeholder:text-faint" />
+              </div>
+            </div>
+            <div>
+              <label for="bio" class="mb-1.5 block text-[13px] font-medium text-muted">Bio</label>
+              <textarea id="bio" name="bio" rows="3"
+                class="field w-full resize-y rounded border border-line bg-raised px-3 py-2 text-[14px] text-text placeholder:text-faint"
+                placeholder="A short description about yourself.">Engineering lead. Building tools that stay out of the way.</textarea>
+              <p class="mt-1.5 text-[12px] text-faint">Brief description for your profile. Markdown is not supported.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Password -->
+        <section id="password" class="rounded border border-line-soft bg-surface">
+          <div class="border-b border-line-soft px-5 py-4">
+            <h2 class="text-[15px] font-semibold">Change password</h2>
+            <p class="mt-0.5 text-[13px] text-faint">Use at least 8 characters. We recommend a passphrase.</p>
+          </div>
+          <div class="space-y-5 px-5 py-5">
+            <div class="max-w-sm">
+              <label for="current" class="mb-1.5 block text-[13px] font-medium text-muted">Current password</label>
+              <input id="current" name="current" type="password"
+                class="field w-full rounded border border-line bg-raised px-3 py-2 text-[14px] text-text" />
+            </div>
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label for="new" class="mb-1.5 block text-[13px] font-medium text-muted">New password</label>
+                <input id="new" name="new" type="password"
+                  class="field w-full rounded border border-line bg-raised px-3 py-2 text-[14px] text-text" />
+              </div>
+              <div>
+                <label for="confirm" class="mb-1.5 block text-[13px] font-medium text-muted">Confirm new password</label>
+                <input id="confirm" name="confirm" type="password"
+                  class="field w-full rounded border border-line bg-raised px-3 py-2 text-[14px] text-text" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Notifications -->
+        <section id="notifications" class="rounded border border-line-soft bg-surface">
+          <div class="border-b border-line-soft px-5 py-4">
+            <h2 class="text-[15px] font-semibold">Notifications</h2>
+            <p class="mt-0.5 text-[13px] text-faint">Choose what you want to be notified about.</p>
+          </div>
+          <div class="divide-y divide-line-soft px-5">
+            <label class="switch flex cursor-pointer items-center justify-between gap-4 py-4">
+              <span>
+                <span class="block text-[14px] font-medium text-text">Product updates</span>
+                <span class="block text-[13px] text-faint">News about features and improvements.</span>
+              </span>
+              <input type="checkbox" name="n_product" checked />
+              <span class="track"></span>
+            </label>
+            <label class="switch flex cursor-pointer items-center justify-between gap-4 py-4">
+              <span>
+                <span class="block text-[14px] font-medium text-text">Comments and mentions</span>
+                <span class="block text-[13px] text-faint">When someone replies to you or @mentions you.</span>
+              </span>
+              <input type="checkbox" name="n_mentions" checked />
+              <span class="track"></span>
+            </label>
+            <label class="switch flex cursor-pointer items-center justify-between gap-4 py-4">
+              <span>
+                <span class="block text-[14px] font-medium text-text">Weekly summary</span>
+                <span class="block text-[13px] text-faint">A digest of activity across your projects.</span>
+              </span>
+              <input type="checkbox" name="n_weekly" />
+              <span class="track"></span>
+            </label>
+            <label class="switch flex cursor-pointer items-center justify-between gap-4 py-4">
+              <span>
+                <span class="block text-[14px] font-medium text-text">Marketing emails</span>
+                <span class="block text-[13px] text-faint">Tips, offers, and occasional announcements.</span>
+              </span>
+              <input type="checkbox" name="n_marketing" />
+              <span class="track"></span>
+            </label>
+          </div>
+        </section>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end gap-3 border-t border-line-soft pt-5">
+          <button type="reset"
+            class="rounded border border-line bg-transparent px-4 py-2 text-[14px] font-medium text-muted transition-colors hover:bg-raised hover:text-text">
+            Cancel
+          </button>
+          <button type="submit"
+            class="rounded border border-line bg-raised px-4 py-2 text-[14px] font-medium text-text transition-colors hover:bg-[#303036]">
+            Save changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Simple section-nav highlight on click; no framework needed.
+    const navLinks = document.querySelectorAll('nav a');
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        navLinks.forEach((l) => {
+          l.classList.remove('text-text', 'bg-raised');
+          l.classList.add('text-muted');
+        });
+        link.classList.add('text-text', 'bg-raised');
+        link.classList.remove('text-muted');
+      });
+    });
+
+    document.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = e.submitter;
+      if (!btn) return;
+      const original = btn.textContent;
+      btn.textContent = 'Saved';
+      setTimeout(() => { btn.textContent = original; }, 1400);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+Built [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.Cy2sTCJh3y/index.html) in the current directory.
+
+It’s a single direct-open HTML file with a Northstar SaaS analytics dashboard: sidebar navigation, top bar, metric cards, interactive chart range tabs, recent activity, segment table, and funnel panel. Static checks confirm the only remote URLs are Tailwind CDN and Google Fonts, with no external image hosts.
