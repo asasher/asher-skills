@@ -1,6 +1,6 @@
 # research — anchor positions to objective data
 
-The framework is benchmark-driven: every ask should rest on an impersonal standard (market rate, agency
+Fair Deal is benchmark-driven: every ask should rest on an impersonal standard (market rate, agency
 margin, royalty range, comparable terms), not "what feels fair to a friend." This is where the agent earns its
 keep for non-expert partners. Run during `interview` and `negotiate` whenever a position needs an anchor.
 

@@ -6,7 +6,7 @@ won't cross. Make it safe to be honest: the private answers never leave their ma
 
 ## Where things go
 - **Private reasoning, floor, BATNA, raw worries** → `private/solo-prep.md` (gitignored). This is the
-  framework's Solo Prep Sheet.
+  Solo Prep layer — the things that never go on the table.
 - **Shareable opening positions** → `canvas.json` (committed). These are *derived* from the private answers —
   an anchored ask, never the underlying secret. (e.g. private: "I'd take 40% but want 55%"; shared: "I propose
   55%, anchored to <benchmark>". Never commit the 40%.)

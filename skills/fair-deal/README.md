@@ -5,8 +5,9 @@ their own agent. The agents privately interview their humans, research objective
 fair structure with each other through a shared **private GitHub repo** (commits are the mediation channel),
 filling a shared **Fair Deal Canvas** as the human review surface.
 
-It operationalises the Fair Deal Canvas framework's three layers: a private **Solo Prep** scratchpad
-(gitignored), the shared **Canvas** (committed, the review surface), and the **Agreement Memo** (the output).
+It is built around the **Fair Deal Canvas** — a shared, fill-it-together planning surface for a deal — in
+three layers: a private **Solo Prep** scratchpad (gitignored), the shared **Canvas** (committed, the review
+surface), and the **Agreement Memo** (the output).
 
 ## Why an agent in the mix
 So two people who like each other don't have to argue across a table. Each agent draws out its human's true

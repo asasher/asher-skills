@@ -13,7 +13,7 @@ the secret.
    line they drew, and what's genuinely at stake. State the BATNA honestly — "if this doesn't move, your
    alternative is ___" — calmly, not as a threat.
 3. **Offer a creative third option first.** Before asking them to give ground, propose at least one restructure
-   that could satisfy both sides without crossing the floor. Reach for the framework's neutral mechanisms:
+   that could satisfy both sides without crossing the floor. Reach for the canvas's neutral mechanisms:
    - pay a durable contribution as a **fee off the top** (waterfall) so the **equity** split can stay clean;
    - move reward onto **vesting / milestones** so it's earned over time rather than conceded up front;
    - switch to a **lighter instrument** (cash/bonus/profit-share instead of equity);

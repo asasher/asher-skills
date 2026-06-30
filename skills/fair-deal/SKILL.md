@@ -15,10 +15,10 @@ partner's true goals, reservations, and floor *in private*, then negotiates a fa
 partner's agent — so the two humans never have to sit across a table and argue. The agents do the admin and
 the back-and-forth; the humans just answer questions honestly and review the result.
 
-This skill is the operational engine for the **Fair Deal Canvas** framework. It maps onto the framework's
-three layers exactly:
+This skill is built around the **Fair Deal Canvas** — a shared, fill-it-together planning surface for a deal —
+in three layers:
 
-| Framework layer | Here |
+| Layer | Here |
 |---|---|
 | **Solo Prep Sheet** — private floor, BATNA, benchmarks | `private/solo-prep.md` — **gitignored, never pushed** |
 | **The Canvas** — the shared, fair structure filled together | `canvas.json` (+ `canvas.html` to view) — the **committed human review surface** |
