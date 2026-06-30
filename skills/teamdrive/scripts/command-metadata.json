@@ -1,0 +1,22 @@
+{
+  "setup": {
+    "description": "Walk a new user through installing the gws CLI, authenticating in the browser, and a live check — explaining each step.",
+    "argumentHint": "[gcp project id optional]"
+  },
+  "check": {
+    "description": "Confirm gws install, auth, and real access with a live API call; name the broken link and its fix if any.",
+    "argumentHint": "[shared drive id optional]"
+  },
+  "edit": {
+    "description": "Edit a Google Doc, Sheet, or Slides in place under the same fileId, with concurrency safety for shared files.",
+    "argumentHint": "[fileId or url]"
+  },
+  "read": {
+    "description": "Read, export, or download a Workspace file's content, including from a Shared Drive.",
+    "argumentHint": "[fileId or url]"
+  },
+  "versions": {
+    "description": "List a file's revision history and upload managed versions under the same fileId.",
+    "argumentHint": "[fileId or url]"
+  }
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Teamdrive"
+  short_description: "Shared Google Workspace for agents via the gws CLI"
+  default_prompt: "Use $teamdrive setup to install and connect the Google Workspace CLI."
+
+policy:
+  allow_implicit_invocation: false
