@@ -235,6 +235,50 @@
   .glossdl dd .ex{display:block;color:var(--grey);font-style:italic;margin-top:1px}
   @media(max-width:640px){.glossdl{columns:1}}
   @media print{.glossbox{display:none !important}}
+
+  /* ---------- improvements: shape selector, keystone, tags, flags, status ---------- */
+  .shapebar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#f4eee3;border:1px solid var(--hair);border-radius:12px;padding:11px 18px;margin-bottom:16px}
+  .shapebar .fieldlabel{margin:0;white-space:nowrap}
+  .shapehint{font-size:12px;line-height:1.45;color:var(--ink-soft);flex:1;min-width:220px}
+  .lockset{font-size:12.5px;line-height:1.55;color:var(--ink-soft);background:#f4eee3;border:1px solid var(--hair);border-radius:8px;padding:10px 13px;margin:0 0 14px}
+  .lockset b{color:var(--ink)}
+  .keystone{display:none;border:1px solid var(--hair);border-radius:10px;background:#fcfaf5;padding:13px 15px;margin:0 0 14px}
+  .keystone.on{display:block}
+  .keystone .kshd{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+  .keystone .kmuted{font-weight:600;color:var(--grey);letter-spacing:.02em;text-transform:none}
+  .keystone .kbody{font-size:12.5px;line-height:1.5;color:var(--ink-soft)}
+  .keystone .ksplit{font-size:15px;color:var(--ink);margin-bottom:8px}
+  .kbar{height:10px;border-radius:5px;background:var(--cont);overflow:hidden;margin-bottom:8px;display:flex}
+  .kbar>span{display:block;height:100%;background:var(--accent)}
+  .keystone .kmuted2{font-size:12px;line-height:1.5;color:var(--ink-soft);margin-top:2px}
+  .kflag{font-size:12.5px;line-height:1.5;color:#7a3b1c;background:#f6e6da;border:1px solid #e3c4ad;border-radius:7px;padding:8px 11px;margin-top:9px}
+  .kflag b{color:#5e2c12}
+  .kok{font-size:12px;line-height:1.5;color:var(--prop);margin-top:9px}
+  .tagset{display:flex;flex-wrap:wrap;gap:5px 12px}
+  .tagset .chk{white-space:nowrap}
+  .flags{display:flex;flex-direction:column;gap:7px;margin:6px 0 12px}
+  .flagq{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer}
+  .flagq input{accent-color:var(--accent);width:16px;height:16px;flex:none}
+  .flaghint{display:none;font-size:12.5px;line-height:1.55;color:var(--ink-soft);background:#f4eee3;border-left:3px solid var(--accent);border-radius:0 7px 7px 0;padding:8px 12px;margin:-2px 0 4px 24px}
+  .flaghint.on{display:block}
+  .flaghint b{color:var(--ink)}
+  .secstatus{margin-top:7px}
+  .secstatus select{font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--grey);background:var(--fieldbg);
+    border:1px solid var(--hair);border-radius:6px;padding:3px 7px;cursor:pointer;outline:none}
+  .secstatus select:focus{border-color:var(--accent)}
+  .readingnow{font-size:13px;line-height:1.5;color:var(--ink-soft);background:var(--paper);border:1px solid var(--hair);border-radius:10px;padding:11px 15px;margin:0 0 16px}
+  .readingnow b{color:var(--ink)}
+  .rdot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+  .rdot.talk{background:var(--ink)} .rdot.pilot{background:var(--grey)} .rdot.ready{background:var(--accent)}
+  .reading .r.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(180,85,45,.18)}
+  .sec.collapsed{opacity:.82}
+  .sec.collapsed > *:not(.head){display:none}
+  .sec.collapsed.revealed{opacity:1}
+  .sec.collapsed.revealed > *:not(.head){display:block}
+  .sec.collapsed .head{cursor:pointer}
+  .sec.collapsed .head::after{content:"▸ show";font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--accent);margin-left:auto;align-self:center;white-space:nowrap}
+  .sec.collapsed.revealed .head::after{content:"▾ hide"}
 </style>
 </head>
 <body>
@@ -270,6 +314,19 @@
     <div class="howto">
       <div class="lab">How to use</div>
       <p>Work through the sections in order — each answer sets up the next. Where something is hard to fill or you don’t yet agree, that’s a real term to settle now — while it’s cheap. A blank field is information, not a failure. Nothing here is a test of trust; it’s the structure both sides will rely on. Your answers save automatically in this browser.</p>
+    </div>
+
+    <!-- deal-shape selector: collapses (never removes) the boxes that rarely apply to a shape -->
+    <div class="shapebar">
+      <label class="fieldlabel" for="dealShapeSel">Deal shape</label>
+      <select class="sel" data-k="dealShape" id="dealShapeSel" style="max-width:230px">
+        <option value="">Full canvas (default)</option>
+        <option>Co-founder / JV</option>
+        <option>Advisory</option>
+        <option>Client / JV</option>
+        <option>Revenue-share</option>
+      </select>
+      <span class="shapehint" id="shapehint"></span>
     </div>
 
     <!-- plain-english glossary (progressive disclosure) -->
@@ -353,6 +410,15 @@
           <input class="ti-txt" data-k="ns_track" placeholder="e.g. 5 sales conversations / week · 1 published piece / week"></div>
       </div>
 
+      <div class="subhead">Two questions a handshake skips<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+        Both real-world deals this canvas was tested on hid the <b>same two</b> issues. Tick either to reveal what to do — both surfaced repeatedly and quietly subsidise one side when left unsaid.</span></span></div>
+      <div class="flags">
+        <label class="flagq"><input type="checkbox" data-k="flag_employed"> Is one party also employed by the other?</label>
+        <div class="flaghint" id="hint_employed">Use <b>two separate contracts</b> so neither role absorbs the other. Watch <b>work-for-hire</b>: IP you build as an employee defaults to the employer unless the deal says otherwise.</div>
+        <label class="flagq"><input type="checkbox" data-k="flag_internaluse"> Will a partner’s own business use what’s built?</label>
+        <div class="flaghint" id="hint_internaluse">Price it at an <b>internal / transfer rate</b> so it runs through the waterfall (section 6). <b>Free-by-default hides a subsidy</b> to one side.</div>
+      </div>
+
       <div class="notes" style="margin-top:14px"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="biz_notes" placeholder="Anything else about the business…"></textarea></div>
     </section>
 
@@ -367,7 +433,7 @@
           <span class="ex"><b>Co-building the uncertain</b> → a share. e.g. “we’re both inventing the product, finding the first customers, and carrying the risk — no one knows yet if it sells.”</span>
         </span></span></div>
         <div class="lenstag">Proportion</div></div></div>
-      <p class="desc">What does each side bring that the other would otherwise have to buy or build? Tag each as a <b>pre-existing asset</b>, a <b>task</b>, a <b>role</b>, or <b>co-building the uncertain</b> — each is paid differently, and only co-building is what a share is for. One row per distinct involvement: split a person into two rows if they bring an asset they own <i>and</i> co-found.</p>
+      <p class="desc">What does each side bring that the other would otherwise have to buy or build? Tag each as a <b>pre-existing asset</b>, a <b>task</b>, a <b>role</b>, or <b>co-building the uncertain</b> — each is paid differently, and only co-building is what a share is for. <b>A contribution can be more than one at once</b> — e.g. an audience is a pre-existing asset (licensed in) <i>and</i> ongoing co-building (a share). Tag every part that applies, and pay each part its own way.</p>
       <div class="tbl" id="tbl-t1"></div>
       <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b1_notes" placeholder="Anything deal-specific…"></textarea></div>
     </section>
@@ -401,6 +467,8 @@
         </span></span></div>
         <div class="lenstag">Proportion</div></div></div>
       <p class="desc">Peg numbers to objective standards (market rate, hours, capital at risk). Reward the durable end (section 4). Pick the vehicle, then set who holds what and how a share is earned.</p>
+      <div class="lockset">Boxes <b>5, 6 and 8 lock together</b> — a fair % often depends on paying a durable asset as a <b>fee in the waterfall (6)</b> and on <b>who owns what (8)</b>. Expect to jog between them rather than settle 5 first.</div>
+      <div class="keystone" id="keystone"></div>
       <div class="field"><label class="fieldlabel">Vehicle</label>
         <select class="sel" data-k="b5_vehicle">
           <option value="">— choose —</option>
@@ -416,6 +484,10 @@
         <div class="field"><label class="fieldlabel">How a share is earned (vesting)</label>
           <textarea class="ta" data-k="b5_vest" placeholder="e.g. 4-year vest, 1-year cliff, reverse vesting on the units above"></textarea></div>
       </div>
+      <details class="disc"><summary>Multi-stream deal? Split by revenue stream</summary><div class="body">
+        Some deals don’t have one fair number — different revenue streams fairly carry <b>different splits</b> (e.g. software vs. services, delivery vs. sourcing). Optional: leave it untouched for a single-number deal; fill the rows that apply.
+        <div class="tbl" id="tbl-t5s" style="margin-top:9px"></div>
+      </div></details>
       <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b5_notes" placeholder="Anything deal-specific…"></textarea></div>
     </section>
 
@@ -488,6 +560,16 @@
         <input class="ti-txt" data-k="b8_stuck" placeholder="talk within [X] days → mediate → arbitrate → buyout → orderly wind-up"></div>
       <div class="field"><label class="fieldlabel">On exit</label>
         <textarea class="ta" data-k="b8_exit" placeholder="Who keeps customers, brand, data (with an export copy); any “please step back” is paid for…"></textarea></div>
+      <div class="field"><label class="fieldlabel">Any restraint after exit? (non-compete / non-solicit)<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+          A restraint must be <b>narrow, time-boxed, and paid for</b> — never imposed for free. <b>“None” is a valid, encouraged answer.</b> Easy to leave unsaid until it bites, so settle it now.</span></span></label>
+        <select class="sel" data-k="b8_restraint">
+          <option value="">— choose —</option>
+          <option>None — neither side is restrained (encouraged default)</option>
+          <option>Non-solicit only — don’t poach customers / staff</option>
+          <option>Narrow non-compete — time-boxed and paid for</option>
+          <option>Other — describe</option>
+        </select>
+        <input class="ti-txt" data-k="b8_restraint_detail" placeholder="If any: how narrow, how long, and how it’s paid for (e.g. garden leave)" style="margin-top:8px"></div>
       <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b8_notes" placeholder="Anything deal-specific…"></textarea></div>
     </section>
 
@@ -515,6 +597,7 @@
       <div class="r ready"><div class="rnum"><span class="bar"></span>State 03</div><h4>Ready to formalize</h4>
         <p>Every field is filled and agreed, pegged to objective standards, with endings written before entry.</p><p class="act">→ Convert to the Agreement Memo, then a lawyer.</p></div>
     </div>
+    <div class="readingnow" id="readingnow"></div>
 
     <!-- agreement: generate from the canvas -->
     <div class="agreement">
@@ -539,8 +622,13 @@
   var TABLES = {
     t1:{cols:[
       {k:"what",t:"text",h:"What they bring",ph:"An asset, a task, a role, or co-building"},
-      {k:"by",t:"sel",h:"By",opts:["Party A","Party B"],w:"110px"},
-      {k:"kind",t:"sel",h:"So it's paid as…",opts:["Pre-existing asset → license / value","One-off task → fee","Ongoing role → salary","Co-building → share"],w:"234px"}
+      {k:"by",t:"sel",h:"By",opts:["Party A","Party B"],w:"108px"},
+      {k:"kind",t:"tags",h:"Paid as… (tag every part that applies)",w:"300px",opts:[
+        {v:"asset",l:"Asset → license / value"},
+        {v:"task",l:"Task → fee"},
+        {v:"role",l:"Role → salary"},
+        {v:"share",l:"Co-build → share"}
+      ]}
     ]},
     t2:{cols:[
       {k:"what",t:"text",h:"Contribution",ph:"What's contributed"},
@@ -562,13 +650,20 @@
       {k:"asset",t:"text",h:"Made together",ph:"Software, configs, playbooks, data…"},
       {k:"owned",t:"text",h:"Owned by",ph:"the venture",w:"150px"},
       {k:"lic",t:"sel",h:"Licence back to",opts:["Both","Party A","Party B","—"],w:"140px"}
+    ]},
+    t5s:{cols:[
+      {k:"stream",t:"text",h:"Revenue stream",ph:"e.g. software / platform"},
+      {k:"who",t:"sel",h:"Weighted to",opts:["Party A","Party B","Both"],w:"130px"},
+      {k:"split",t:"text",h:"Split for this stream",ph:"e.g. 60 / 40",w:"170px"}
     ]}
   };
 
   var SEED = {
     t6:[ "Pricing","Hiring & firing","Spend over a set amount","Product / roadmap","Customer contracts",
          "Brand & messaging","Taking on debt","Fundraising / new owners","Changing the split","Selling or closing"
-       ].map(function(a){return {area:a,owner:"",reserved:(a==="Changing the split"||a==="Selling or closing"||a==="Taking on debt")};})
+       ].map(function(a){return {area:a,owner:"",reserved:(a==="Changing the split"||a==="Selling or closing"||a==="Taking on debt")};}),
+    t5s:[ "Software / platform","Services","Sales / sourcing","Support"
+       ].map(function(a){return {stream:a,who:"",split:""};})
   };
 
   var VEHICLE = {
@@ -592,7 +687,7 @@
     });
     return d;
   }
-  function emptyRow(tid){ var r={}; TABLES[tid].cols.forEach(function(c){ r[c.k]= c.t==="chk"?false:""; }); return r; }
+  function emptyRow(tid){ var r={}; TABLES[tid].cols.forEach(function(c){ r[c.k]= c.t==="chk"?false:(c.t==="tags"?{}:""); }); return r; }
 
   var savedEl = document.getElementById("saved"), st;
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} savedEl.textContent="Saved"; clearTimeout(st); st=setTimeout(function(){savedEl.textContent="";},1300); }
@@ -609,6 +704,10 @@
     if(c.t==="text") return '<input class="cin" type="text" data-tid="'+tid+'" data-i="'+i+'" data-col="'+c.k+'" placeholder="'+esc(c.ph||"")+'" value="'+esc(val)+'">';
     if(c.t==="sel"){ var o='<option value="">—</option>'+c.opts.map(function(op){return '<option value="'+esc(op)+'"'+(op===val?" selected":"")+'>'+esc(pdisp(op))+'</option>';}).join(""); return '<select class="cin" data-tid="'+tid+'" data-i="'+i+'" data-col="'+c.k+'">'+o+'</select>'; }
     if(c.t==="chk") return '<label class="chk"><input type="checkbox" data-tid="'+tid+'" data-i="'+i+'" data-col="'+c.k+'"'+(val?" checked":"")+'> '+esc(c.label||"")+'</label>';
+    if(c.t==="tags"){ var o=(val&&typeof val==="object")?val:{};
+      return '<div class="tagset">'+c.opts.map(function(t){
+        return '<label class="chk"><input type="checkbox" data-tid="'+tid+'" data-i="'+i+'" data-col="'+c.k+'" data-tag="'+t.v+'"'+(o[t.v]?" checked":"")+'> '+esc(t.l)+'</label>';
+      }).join("")+'</div>'; }
     return "";
   }
   function renderTable(tid){
@@ -626,24 +725,32 @@
   Object.keys(TABLES).forEach(renderTable);
 
   /* ---- bind static fields ---- */
+  function setEl(el){ var k=el.getAttribute("data-k"); var v=state.fields[k]; if(el.type==="checkbox") el.checked=!!v; else el.value=(v!=null?v:""); }
   var fields = Array.prototype.slice.call(document.querySelectorAll("[data-k]"));
-  fields.forEach(function(el){
-    var k=el.getAttribute("data-k");
-    if(state.fields[k]!=null) el.value=state.fields[k];
-  });
+  fields.forEach(setEl);
 
   function autosize(){ document.querySelectorAll("textarea.ta").forEach(function(el){ el.style.height="auto"; el.style.height=Math.max(el.scrollHeight,62)+"px"; }); }
 
   /* ---- events ---- */
+  function setTag(el){ var row=state.tables[el.dataset.tid][+el.dataset.i]; var o=(row[el.dataset.col]&&typeof row[el.dataset.col]==="object")?row[el.dataset.col]:{}; o[el.dataset.tag]=el.checked; row[el.dataset.col]=o; }
+  function setCell(el){ var v=el.type==="checkbox"?el.checked:el.value; state.tables[el.dataset.tid][+el.dataset.i][el.dataset.col]=v; }
+  function setField(el){ return el.type==="checkbox"?el.checked:el.value; }
   document.addEventListener("input", function(e){
     var el=e.target;
-    if(el.dataset && el.dataset.tid!=null && el.dataset.col){ var v=el.type==="checkbox"?el.checked:el.value; state.tables[el.dataset.tid][+el.dataset.i][el.dataset.col]=v; save(); return; }
-    if(el.dataset && el.dataset.k){ state.fields[el.dataset.k]=el.value; if(el.tagName==="TEXTAREA"){el.style.height="auto";el.style.height=Math.max(el.scrollHeight,62)+"px";} reflectLabels(); if(el.dataset.k==="partyA"||el.dataset.k==="partyB") PARTY_TABLES.forEach(renderTable); save(); }
+    if(el.dataset && el.dataset.tag && el.dataset.tid!=null){ setTag(el); renderKeystone(); save(); return; }
+    if(el.dataset && el.dataset.tid!=null && el.dataset.col){ setCell(el); renderKeystone(); save(); return; }
+    if(el.dataset && el.dataset.k){ state.fields[el.dataset.k]=setField(el); if(el.tagName==="TEXTAREA"){el.style.height="auto";el.style.height=Math.max(el.scrollHeight,62)+"px";} reflectLabels(); if(el.dataset.k==="partyA"||el.dataset.k==="partyB") PARTY_TABLES.forEach(renderTable); if(el.dataset.k==="b5_alloc") renderKeystone(); save(); }
   });
   document.addEventListener("change", function(e){
     var el=e.target;
-    if(el.dataset && el.dataset.tid!=null && el.dataset.col){ var v=el.type==="checkbox"?el.checked:el.value; state.tables[el.dataset.tid][+el.dataset.i][el.dataset.col]=v; save(); return; }
-    if(el.dataset && el.dataset.k){ state.fields[el.dataset.k]=el.value; if(el.dataset.k==="b5_vehicle") vehicleGuide(); save(); }
+    if(el.dataset && el.dataset.tag && el.dataset.tid!=null){ setTag(el); renderKeystone(); save(); return; }
+    if(el.dataset && el.dataset.tid!=null && el.dataset.col){ setCell(el); renderKeystone(); save(); return; }
+    if(el.dataset && el.dataset.k){ state.fields[el.dataset.k]=setField(el);
+      if(el.dataset.k==="b5_vehicle") vehicleGuide();
+      if(el.dataset.k==="dealShape") applyShape();
+      if(/^flag_/.test(el.dataset.k)) updateFlags();
+      if(/^st_s/.test(el.dataset.k)) rollupReading();
+      save(); }
   });
   document.addEventListener("click", function(e){
     var a=e.target.closest("[data-add]"); if(a){ var t=a.getAttribute("data-add"); state.tables[t].push(emptyRow(t)); renderTable(t); save(); return; }
@@ -669,9 +776,9 @@
     if(!confirm("Clear every field on this canvas? This cannot be undone.")) return;
     try{ localStorage.removeItem(KEY); }catch(e){}
     state = load();
-    fields.forEach(function(el){ var k=el.getAttribute("data-k"); el.value = state.fields[k]!=null?state.fields[k]:""; });
+    fields.forEach(setEl);
     Object.keys(TABLES).forEach(renderTable);
-    vehicleGuide(); reflectLabels(); autosize(); save();
+    vehicleGuide(); reflectLabels(); autosize(); refreshDerived(); save();
   }
   window.clearAll = clearAll;
 
@@ -690,8 +797,8 @@
     state.fields = (d&&d.fields&&typeof d.fields==="object") ? d.fields : {};
     state.tables = (d&&d.tables&&typeof d.tables==="object") ? d.tables : {};
     Object.keys(TABLES).forEach(function(tid){ if(!Array.isArray(state.tables[tid])||!state.tables[tid].length) state.tables[tid]=SEED[tid]?SEED[tid].slice():[emptyRow(tid)]; });
-    fields.forEach(function(el){ var k=el.getAttribute("data-k"); el.value = state.fields[k]!=null?state.fields[k]:""; });
-    Object.keys(TABLES).forEach(renderTable); vehicleGuide(); reflectLabels(); autosize(); save();
+    fields.forEach(setEl);
+    Object.keys(TABLES).forEach(renderTable); vehicleGuide(); reflectLabels(); autosize(); refreshDerived(); save();
   }
   function importClick(){ document.getElementById("importfile").click(); }
   window.importClick=importClick;
@@ -723,7 +830,7 @@
   function nm(v){ return v==="Party A"?(state.fields.partyA||"Party A"):v==="Party B"?(state.fields.partyB||"Party B"):v; }
   function li(label,k){ var v=fv(k); return v?("- "+label+": "+v+"\n"):""; }
   function liv(label,v){ return v?("- "+label+": "+v+"\n"):""; }
-  function tbl(tid){ var cfg=TABLES[tid],out=""; state.tables[tid].forEach(function(r){ var p=cfg.cols.map(function(c){var v=r[c.k]; if(c.t==="chk")return v?(c.label||c.h):""; if(v&&String(v).trim())return c.h+": "+nm(v); return "";}).filter(Boolean); if(p.length)out+="  - "+p.join("; ")+"\n"; }); return out; }
+  function tbl(tid){ var cfg=TABLES[tid],out=""; state.tables[tid].forEach(function(r){ var p=cfg.cols.map(function(c){var v=r[c.k]; if(c.t==="chk")return v?(c.label||c.h):""; if(c.t==="tags"){var labs=tagLabels(c,v);return labs?(c.h+": "+labs):"";} if(v&&String(v).trim())return c.h+": "+nm(v); return "";}).filter(Boolean); if(p.length)out+="  - "+p.join("; ")+"\n"; }); return out; }
 
   function buildCanvasMd(){
     var f=state.fields, s="";
@@ -736,16 +843,22 @@
     s+=li("Goals fit","b9_align")+li("Notes","b9_notes");
     s+="\n## 2. The business\n";
     s+=li("Customer / niche","biz_customer")+li("Offer & price","biz_offer")+li("Channel","biz_channel")+li("Edge","biz_edge");
-    s+=li("North Star","ns_metric")+li("On track if","ns_track")+li("Notes","biz_notes");
+    s+=li("North Star","ns_metric")+li("On track if","ns_track");
+    if(state.fields.flag_employed) s+="- Flag — one party is also employed by the other: use two separate contracts; watch work-for-hire (IP built as an employee defaults to the employer).\n";
+    if(state.fields.flag_internaluse) s+="- Flag — a partner’s own business will use what’s built: price it at an internal rate so it runs through the waterfall; free-by-default hides a subsidy.\n";
+    s+=li("Notes","biz_notes");
     s+="\n## 3. Why this is a partnership\n"+tbl("t1")+li("Notes","b1_notes");
     s+="\n## 4. Contributions: durability & leverage\n"+tbl("t2")+li("Notes","b2_notes");
-    s+="\n## 5. Setting the split\n"+li("Vehicle","b5_vehicle")+li("Holdings at formation","b5_alloc")+li("Vesting","b5_vest")+li("Notes","b5_notes");
+    s+="\n## 5. Setting the split\n"+li("Vehicle","b5_vehicle")+li("Holdings at formation","b5_alloc")+li("Vesting","b5_vest");
+    var kl=keystoneLine(); if(kl) s+="- "+kl+"\n";
+    if(streamsFilled()) s+="Split by stream:\n"+tbl("t5s");
+    s+=li("Notes","b5_notes");
     s+="\n## 6. How money flows\n"+li("Specifics","b4")+li("Notes","b4_notes");
     s+="\n## 7. Who decides what\n"+tbl("t6")+li("Notes","b6_notes");
     s+="\n## 8. What each owns\n";
     var ba=tbl("t7a"), mt=tbl("t7b");
     if(ba) s+="Brought in:\n"+ba; if(mt) s+="Made together:\n"+mt; s+=li("Notes","b7_notes");
-    s+="\n## 9. How it can end or change\n"+liv("Valuation",[fv("b8_valmethod"),fv("b8_valdetail")].filter(Boolean).join(" — "))+li("Leaving","b8_leaving")+li("If stuck","b8_stuck")+li("On exit","b8_exit")+li("Notes","b8_notes");
+    s+="\n## 9. How it can end or change\n"+liv("Valuation",[fv("b8_valmethod"),fv("b8_valdetail")].filter(Boolean).join(" — "))+li("Leaving","b8_leaving")+li("If stuck","b8_stuck")+li("On exit","b8_exit")+liv("Restraint after exit",[fv("b8_restraint"),fv("b8_restraint_detail")].filter(Boolean).join(" — "))+li("Notes","b8_notes");
     s+="\n## 10. Premortem\n"+li("Failed because","b10_fail")+li("Watch / prevent","b10_prevent")+li("Notes","b10_notes");
     return s;
   }
@@ -771,11 +884,14 @@
 
   /* ---- print export (generated, separate format) ---- */
   function pname(v){ if(v==="Party A") return state.fields.partyA||"Party A"; if(v==="Party B") return state.fields.partyB||"Party B"; return v; }
-  function tableHasData(tid){ return state.tables[tid].some(function(r){ return TABLES[tid].cols.some(function(c){ var v=r[c.k]; return c.t==="chk"?v:(v&&String(v).trim()); }); }); }
+  function tagLabels(c,v){ if(!v||typeof v!=="object") return ""; return c.opts.filter(function(t){return v[t.v];}).map(function(t){return t.l;}).join(", "); }
+  function tableHasData(tid){ return state.tables[tid].some(function(r){ return TABLES[tid].cols.some(function(c){ var v=r[c.k]; if(c.t==="chk") return !!v; if(c.t==="tags") return v&&Object.keys(v).some(function(k){return v[k];}); return v&&String(v).trim(); }); }); }
+  /* streams (5b) count as filled only when a split or weighting is set — the seeded stream names alone don't */
+  function streamsFilled(){ return state.tables.t5s.some(function(r){ return (r.who&&r.who.trim())||(r.split&&r.split.trim()); }); }
   function poTable(tid){
     var cfg=TABLES[tid], out="";
     state.tables[tid].forEach(function(r){
-      var parts=cfg.cols.map(function(c){ var v=r[c.k]; if(c.t==="chk") return v?("<b>"+esc(c.label||c.h)+"</b>"):""; if(v&&String(v).trim()) return '<span class="k">'+esc(c.h)+':</span> '+esc(pname(v)); return ""; }).filter(Boolean);
+      var parts=cfg.cols.map(function(c){ var v=r[c.k]; if(c.t==="chk") return v?("<b>"+esc(c.label||c.h)+"</b>"):""; if(c.t==="tags"){var labs=tagLabels(c,v);return labs?('<span class="k">'+esc(c.h)+':</span> '+esc(labs)):"";} if(v&&String(v).trim()) return '<span class="k">'+esc(c.h)+':</span> '+esc(pname(v)); return ""; }).filter(Boolean);
       if(parts.length) out+='<div class="po-row">'+parts.join(" &nbsp;·&nbsp; ")+'</div>';
     });
     return out;
@@ -790,16 +906,18 @@
     var meta='<div class="po-meta"><b>'+esc(f.partyA||"Party A")+'</b> &nbsp;/&nbsp; <b>'+esc(f.partyB||"Party B")+'</b> &nbsp;&nbsp; Deal: <b>'+esc(f.deal||"—")+'</b> &nbsp;&nbsp; Date: <b>'+esc(f.date||"—")+'</b></div>';
     var html='<div class="po-mast"><h1>The Fair Deal Canvas</h1>'+meta+'</div>';
     html+=poSec("1","Goals, alternatives & alignment","Proportion", poRow((f.partyA||"Party A")+" goal",poField("b9_goalA"))+poRow((f.partyB||"Party B")+" goal",poField("b9_goalB"))+poRow((f.partyA||"Party A")+" alternative",poField("b9_batnaA"))+poRow((f.partyB||"Party B")+" alternative",poField("b9_batnaB"))+poRow((f.partyA||"Party A")+" wins when",poField("b9_winA"))+poRow((f.partyB||"Party B")+" wins when",poField("b9_winB"))+poRow("Goals fit?",poField("b9_align")));
-    html+=poSec("2","The business","Clarity", poRow("Customer / niche",poField("biz_customer"))+poRow("Offer & price",poField("biz_offer"))+poRow("Channel",poField("biz_channel"))+poRow("Edge",poField("biz_edge")));
+    var flagrows=(state.fields.flag_employed?'<div class="po-row"><span class="k">Flag:</span> one party is also employed by the other → two separate contracts; watch work-for-hire.</div>':"")+(state.fields.flag_internaluse?'<div class="po-row"><span class="k">Flag:</span> a partner’s own business will use what’s built → price at an internal rate through the waterfall.</div>':"");
+    html+=poSec("2","The business","Clarity", poRow("Customer / niche",poField("biz_customer"))+poRow("Offer & price",poField("biz_offer"))+poRow("Channel",poField("biz_channel"))+poRow("Edge",poField("biz_edge"))+flagrows);
     var nsbody=poRow("North Star",poField("ns_metric"))+poRow("On track if",poField("ns_track"));
     if(nsbody) html+='<div class="po-sec"><div class="po-h">What good looks like</div>'+nsbody+'</div>';
     html+=poSec("3","Why this is a partnership","Proportion", poTable("t1"));
     html+=poSec("4","Contributions: durability & leverage","Proportion", poTable("t2"));
-    html+=poSec("5","Setting the split","Proportion", poRow("Vehicle",poField("b5_vehicle"))+poRow("Holdings at formation",poField("b5_alloc"))+poRow("Vesting",poField("b5_vest")));
+    var kl5=keystoneLine();
+    html+=poSec("5","Setting the split","Proportion", poRow("Vehicle",poField("b5_vehicle"))+poRow("Holdings at formation",poField("b5_alloc"))+poRow("Vesting",poField("b5_vest"))+(kl5?poRow("Keystone",esc(kl5)):"")+(streamsFilled()?'<div class="po-row"><span class="k">Split by stream</span></div>'+poTable("t5s"):""));
     html+=poSec("6","How money flows","Clarity", poRow("Specifics",poField("b4")));
     html+=poSec("7","Who decides what","Clarity", poTable("t6"));
     html+=poSec("8","What each owns","Continuity", (tableHasData("t7a")?'<div class="po-row"><span class="k">Brought in</span></div>'+poTable("t7a"):"")+(tableHasData("t7b")?'<div class="po-row"><span class="k">Made together</span></div>'+poTable("t7b"):""));
-    html+=poSec("9","How it can end or change","Continuity", poRow("Valuation",[poField("b8_valmethod"),poField("b8_valdetail")].filter(Boolean).join(" — "))+poRow("Leaving",poField("b8_leaving"))+poRow("If stuck",poField("b8_stuck"))+poRow("On exit",poField("b8_exit")));
+    html+=poSec("9","How it can end or change","Continuity", poRow("Valuation",[poField("b8_valmethod"),poField("b8_valdetail")].filter(Boolean).join(" — "))+poRow("Leaving",poField("b8_leaving"))+poRow("If stuck",poField("b8_stuck"))+poRow("On exit",poField("b8_exit"))+poRow("Restraint after exit",[poField("b8_restraint"),poField("b8_restraint_detail")].filter(Boolean).join(" — ")));
     html+=poSec("10","Premortem — imagine it failed","Continuity", poRow("Failed because",poField("b10_fail"))+poRow("Watch / prevent",poField("b10_prevent")));
     document.getElementById("printout").innerHTML=html;
   }
@@ -941,8 +1059,99 @@
     });
   }
 
+  /* ===================== KEYSTONE: visible durability-weighted share =====================
+     The fair split falls out of durability (section 4). This makes that visible: tally each
+     side's contributions weighted by durability rank, show the implied share, and flag when the
+     proposed split (b5_alloc) diverges from it. Leverage is shown alongside, never summed in. */
+  var DUR_W={ "Distribution / audience":7,"Brand & relationships":6,"Proprietary data":5,"Systems & judgment":4,"Code / content":3,"Capital":2,"Labour / one-off":1 };
+  function computeKeystone(){
+    var wA=0,wB=0,n=0;
+    state.tables.t2.forEach(function(r){ var w=DUR_W[r.dur]||0; if(!w||!r.by) return; n++; if(r.by==="Party A") wA+=w; else if(r.by==="Party B") wB+=w; });
+    if(wA+wB===0) return null;
+    return { a:wA/(wA+wB), n:n };
+  }
+  function leverageNote(){
+    var a=0,b=0; state.tables.t2.forEach(function(r){ if(r.lev&&r.lev.indexOf("High")===0){ if(r.by==="Party A")a++; else if(r.by==="Party B")b++; } });
+    if(!a&&!b) return "";
+    var aN=state.fields.partyA||"Party A", bN=state.fields.partyB||"Party B";
+    if(a&&!b) return "High-leverage contributions sit with <b>"+esc(aN)+"</b> — grow those, but they don’t change the lasting share.";
+    if(b&&!a) return "High-leverage contributions sit with <b>"+esc(bN)+"</b> — grow those, but they don’t change the lasting share.";
+    return "Both sides hold high-leverage contributions — grow them; the lasting share still tracks durability.";
+  }
+  function parseSplitAB(txt){ if(!txt) return null; var m=String(txt).match(/(\d+(?:\.\d+)?)\s*%/g); if(!m||m.length<2) return null; var a=parseFloat(m[0]),b=parseFloat(m[1]); if(isNaN(a)||isNaN(b)||a+b===0) return null; return a/(a+b); }
+  function keystoneLine(){ var k=computeKeystone(); if(!k) return ""; var aN=state.fields.partyA||"Party A", bN=state.fields.partyB||"Party B", aP=Math.round(k.a*100); return "Durability-weighted share ≈ "+aN+" "+aP+"% / "+bN+" "+(100-aP)+"%"; }
+  function renderKeystone(){
+    var host=document.getElementById("keystone"); if(!host) return;
+    var aN=state.fields.partyA||"Party A", bN=state.fields.partyB||"Party B", k=computeKeystone();
+    if(!k){ host.classList.add("on"); host.innerHTML='<div class="kshd">Durability-weighted share</div><div class="kbody">Tag each contribution’s <b>durability</b> in section 4 to see the split the keystone implies.</div>'; return; }
+    var aP=Math.round(k.a*100), bP=100-aP;
+    var html='<div class="kshd">Durability-weighted share <span class="kmuted">· from section 4; leverage shown, never added in</span></div>';
+    html+='<div class="ksplit"><b>'+esc(aN)+' ≈ '+aP+'%</b> &nbsp;/&nbsp; <b>'+esc(bN)+' ≈ '+bP+'%</b></div>';
+    html+='<div class="kbar"><span style="width:'+aP+'%"></span></div>';
+    var lev=leverageNote(); if(lev) html+='<div class="kmuted2">'+lev+'</div>';
+    var ps=parseSplitAB(state.fields.b5_alloc);
+    if(ps!=null){ var diff=Math.round(Math.abs(ps-k.a)*100), pA=Math.round(ps*100);
+      if(diff>10){ var fav=ps>k.a?aN:bN; html+='<div class="kflag">Your proposed split (≈ '+pA+' / '+(100-pA)+') favours <b>'+esc(fav)+'</b> more than durability suggests, by ~'+diff+' pts. That can be fine — just say why.</div>'; }
+      else html+='<div class="kok">Proposed split (≈ '+pA+' / '+(100-pA)+') tracks durability within '+diff+' pts.</div>';
+    }
+    host.classList.add("on"); host.innerHTML=html;
+  }
+
+  /* ---- deal-shape selector: collapse (never remove) boxes that rarely apply ---- */
+  var SHAPE_COLLAPSE={ "Co-founder / JV":[], "Advisory":["s6","s7"], "Client / JV":["s4"], "Revenue-share":["s8"] };
+  var SHAPE_HINT={
+    "Co-founder / JV":"Full canvas — every box tends to apply to a co-founder venture.",
+    "Advisory":"Light-touch: the waterfall (6) and decision matrix (7) rarely bite — collapsed, but open them if money or control is shared.",
+    "Client / JV":"Leans on scope, ownership and exit; the durability split (4) matters less — collapsed, open it if you’re sharing upside.",
+    "Revenue-share":"Leans on streams and the waterfall; deep ownership splits (8) matter less — collapsed, open it if IP is shared."
+  };
+  function applyShape(){
+    var shape=state.fields.dealShape||"";
+    document.querySelectorAll("section.sec").forEach(function(s){ s.classList.remove("collapsed","revealed"); });
+    var hint=document.getElementById("shapehint"); if(hint) hint.textContent=shape?(SHAPE_HINT[shape]||""):"";
+    (SHAPE_COLLAPSE[shape]||[]).forEach(function(id){ var s=document.getElementById(id); if(s) s.classList.add("collapsed"); });
+  }
+
+  /* ---- real-deal landmine flags (section 2) ---- */
+  function updateFlags(){
+    var e=document.getElementById("hint_employed"); if(e) e.classList.toggle("on", !!state.fields.flag_employed);
+    var u=document.getElementById("hint_internaluse"); if(u) u.classList.toggle("on", !!state.fields.flag_internaluse);
+  }
+
+  /* ---- auto-derived canvas reading from per-section status (open / pilot / agreed) ---- */
+  var SECN=[1,2,3,4,5,6,7,8,9,10];
+  function renderSectionStatus(){
+    SECN.forEach(function(i){
+      var sec=document.getElementById("s"+i); if(!sec) return;
+      var htext=sec.querySelector(".htext"); if(!htext) return;
+      var cur=state.fields["st_s"+i]||"";
+      var existing=htext.querySelector(".secstatus select");
+      if(existing){ existing.value=cur; return; }
+      var wrap=document.createElement("div"); wrap.className="secstatus";
+      wrap.innerHTML='<select class="ststat" data-k="st_s'+i+'"><option value="">· mark status ·</option><option value="open">Open</option><option value="pilot">Pilot first</option><option value="agreed">Agreed</option></select>';
+      htext.appendChild(wrap); wrap.querySelector("select").value=cur;
+    });
+  }
+  function rollupReading(){
+    var anyOpen=false, anyPilot=false, marked=0;
+    SECN.forEach(function(i){ var v=state.fields["st_s"+i]; if(v) marked++; if(v==="pilot") anyPilot=true; else if(v!=="agreed") anyOpen=true; });
+    var s3=anyOpen?"talk":(anyPilot?"pilot":"ready");
+    ["talk","pilot","ready"].forEach(function(c){ var el=document.querySelector(".reading .r."+c); if(el) el.classList.toggle("active", c===s3); });
+    var rn=document.getElementById("readingnow"); if(!rn) return;
+    if(!marked){ rn.innerHTML='<span class="rdot talk"></span> Mark each section <b>Open / Pilot first / Agreed</b> (top-right of each box) and this reads the canvas state for you.'; return; }
+    var label={talk:"Keep talking",pilot:"Pilot first",ready:"Ready to formalize"}[s3];
+    var note={talk:"Some sections are still open or unmarked — settle them before signing.",pilot:"Every marked section is agreed, but at least one is Pilot first — test it on narrow, time-boxed terms.",ready:"Every section is marked agreed — review together, then convert to the Agreement Memo."}[s3];
+    rn.innerHTML='<span class="rdot '+s3+'"></span> This canvas reads: <b>'+label+'</b>. '+note;
+  }
+
+  function refreshDerived(){ renderSectionStatus(); applyShape(); updateFlags(); renderKeystone(); rollupReading(); }
+
+  /* ---- collapsed-section reveal: click a collapsed section's head to show/hide it ---- */
+  document.addEventListener("click", function(e){ var hd=e.target.closest(".head"); if(hd){ var sec=hd.parentElement; if(sec&&sec.classList.contains("collapsed")){ sec.classList.toggle("revealed"); } } });
+
   buildGlossary();
   vehicleGuide(); reflectLabels(); autosize();
+  refreshDerived();
   decorateGlossary(document.querySelector(".app"), new Set());
   /* re-decorate the vehicle guide each time it re-renders (it holds SAFE, reverse vesting, units…) */
   (function(){ var _vg=vehicleGuide; vehicleGuide=function(){ _vg.apply(this,arguments); decorateGlossary(document.getElementById("b5guide"), new Set()); }; })();

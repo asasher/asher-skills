@@ -6,16 +6,27 @@
     "b9_winA": "", "b9_winB": "", "b9_align": "", "b9_notes": "",
     "biz_customer": "", "biz_offer": "", "biz_channel": "", "biz_edge": "",
     "ns_metric": "", "ns_track": "", "biz_notes": "",
+    "flag_employed": false, "flag_internaluse": false,
     "b1_notes": "", "b2_notes": "",
     "b5_vehicle": "", "b5_alloc": "", "b5_vest": "", "b5_notes": "",
     "b4": "", "b4_notes": "",
     "b6_notes": "", "b7_notes": "",
-    "b8_valmethod": "", "b8_valdetail": "", "b8_leaving": "", "b8_stuck": "", "b8_exit": "", "b8_notes": "",
-    "b10_fail": "", "b10_prevent": "", "b10_notes": ""
+    "b8_valmethod": "", "b8_valdetail": "", "b8_leaving": "", "b8_stuck": "", "b8_exit": "",
+    "b8_restraint": "", "b8_restraint_detail": "", "b8_notes": "",
+    "b10_fail": "", "b10_prevent": "", "b10_notes": "",
+    "dealShape": "",
+    "st_s1": "", "st_s2": "", "st_s3": "", "st_s4": "", "st_s5": "",
+    "st_s6": "", "st_s7": "", "st_s8": "", "st_s9": "", "st_s10": ""
   },
   "tables": {
     "t1": [],
     "t2": [],
+    "t5s": [
+      { "stream": "Software / platform", "who": "", "split": "" },
+      { "stream": "Services", "who": "", "split": "" },
+      { "stream": "Sales / sourcing", "who": "", "split": "" },
+      { "stream": "Support", "who": "", "split": "" }
+    ],
     "t6": [],
     "t7a": [],
     "t7b": []
