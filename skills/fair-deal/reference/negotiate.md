@@ -12,9 +12,10 @@ while keeping it secret. You drive this autonomously — the human is only pulle
 Repeat until `phase` becomes `ready`, `escalated`, or you hit `round_cap`:
 
 1. `git pull --rebase`. Read `state.json`.
-2. **Not my turn** → poll: tell the human you're waiting on the other side, then re-pull on a sensible
-   interval. If the human steps away, it's fine to stop and resume later with `fair-deal negotiate`. Never
-   write shared files out of turn.
+2. **Not my turn** → monitor for their move per `monitor.md`: pick a mechanism (default: stop and resume on a
+   human poke; or a bounded in-session poll / the `loop` skill if the human wants you to stay on it), and say
+   which you chose. A fresh `fair-deal negotiate` always recovers state, so stopping is safe. Never write
+   shared files out of turn.
 3. **My turn** → build my move:
    a. Read the other side's latest `negotiation/from-<them>/round-*.md`, the current `canvas.json`, and
       `negotiation/log.md`. Re-read my `private/solo-prep.md`.

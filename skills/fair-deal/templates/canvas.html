@@ -946,6 +946,29 @@
   decorateGlossary(document.querySelector(".app"), new Set());
   /* re-decorate the vehicle guide each time it re-renders (it holds SAFE, reverse vesting, units…) */
   (function(){ var _vg=vehicleGuide; vehicleGuide=function(){ _vg.apply(this,arguments); decorateGlossary(document.getElementById("b5guide"), new Set()); }; })();
+
+  /* ---- auto-load canvas.json when served over http(s) (file:// can't fetch) ----
+     Reflects the committed canvas live: re-fetches on an interval and re-applies only when the
+     file's content actually changed and the user isn't mid-edit, so it never clobbers typing. */
+  (function(){
+    if(!/^https?:$/.test(location.protocol)) return;  // file:// → keep manual Import
+    var lastText=null, first=true;
+    function editing(){ var a=document.activeElement; return a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.closest(".app"); }
+    function tick(){
+      fetch("canvas.json",{cache:"no-store"}).then(function(r){ return r.ok?r.text():null; }).then(function(t){
+        if(t==null || t===lastText) return;           // missing or unchanged → nothing to do
+        var d; try{ d=JSON.parse(t); }catch(e){ return; }
+        if(!d||typeof d!=="object") return;
+        if(!first && editing()) return;               // don't interrupt active typing; pick it up next tick
+        lastText=t; applyImport(d);
+        savedEl.textContent = first?"Loaded canvas.json":"Updated from canvas.json";
+        clearTimeout(st); st=setTimeout(function(){savedEl.textContent="";},1800);
+        first=false;
+      }).catch(function(){});
+    }
+    tick();
+    setInterval(tick, 5000);
+  })();
 </script>
 </body>
 </html>

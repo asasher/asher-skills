@@ -41,7 +41,7 @@ source of truth for the file layout and the turn/state machine; every subcommand
 | `setup` | **Party A:** scaffold the deal repo (canvas, negotiation files, gitignored scratchpad), create a **private** GitHub repo, invite Party B, record your identity | `reference/setup.md` · `reference/protocol.md` |
 | `join` | **Party B:** after cloning, create your own gitignored scratchpad and record your identity | `reference/join.md` · `reference/protocol.md` |
 | `interview` | Privately interview your human one question at a time (canvas-box order); fill the private Solo Prep, derive shareable opening positions onto the canvas | `reference/interview.md` |
-| `negotiate` | The **autopilot** turn loop: pull, take your turn (counter / accept / hold), push; pause only to ask the human something or to run a **floor gate** | `reference/negotiate.md` · `reference/protocol.md` · `reference/floor-gate.md` |
+| `negotiate` | The **autopilot** turn loop: pull, take your turn (counter / accept / hold), push; pause only to ask the human something or to run a **floor gate** | `reference/negotiate.md` · `reference/protocol.md` · `reference/floor-gate.md` · `reference/monitor.md` |
 | `research` | Pull objective benchmarks (salaries, margins, royalty ranges, comparable terms) via subagents into the canvas/log, with sources | `reference/research.md` |
 | `status` | Show the canvas state, phase, whose turn it is, and the open items | `reference/protocol.md` |
 | `draft` | When *Ready* and both humans have accepted, generate the Agreement Memo | `reference/draft.md` |

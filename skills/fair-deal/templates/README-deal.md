@@ -21,8 +21,20 @@ accept it, and then a lawyer formalises it.
    ask something or when a decision touches your floor — and even then it'll suggest creative options first.
 5. Review the result on the canvas. Accept it, then take `AGREEMENT.md` to a lawyer.
 
+## See the canvas
+Run a tiny local server in this folder so the canvas loads — and stays in sync with — `canvas.json`
+automatically:
+```bash
+python3 -m http.server 8000      # any static server works
+# then open http://localhost:8000/canvas.html
+```
+Served this way it auto-loads `canvas.json` and refreshes as the file changes — after a `git pull` you'll see
+the other side's latest move without re-importing. (Opening `canvas.html` directly as a `file://` still works;
+browsers just can't auto-fetch there, so use the **Import JSON** button.)
+
 ## What's here
-- `canvas.html` — open in a browser and **Import `canvas.json`** to see the current deal.
+- `canvas.html` — the review surface. Serve the folder (above) for live auto-load, or open it directly and
+  **Import `canvas.json`**.
 - `canvas.json` — the shared, agreed structure (filled by the agents).
 - `negotiation/` — the turn state, the log, and each side's arguments (the deal's audit trail).
 - `private/` — **your** scratchpad. Gitignored. Never committed. Each of us has our own.
