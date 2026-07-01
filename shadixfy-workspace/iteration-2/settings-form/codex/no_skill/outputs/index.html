@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+            colors: {
+              ink: "#17202A",
+              line: "#D9DEE6",
+              field: "#F7F9FC",
+              teal: {
+                50: "#EAF7F4",
+                600: "#0F766E",
+                700: "#0B5F59",
+              },
+              saffron: "#C27803",
+              coral: "#C24131",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      }
+
+      .focus-ring:focus {
+        outline: 3px solid rgba(15, 118, 110, 0.18);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-[#F3F5F8] text-ink antialiased">
+    <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-6 sm:px-6 lg:px-8">
+      <header
+        class="flex flex-col gap-4 border-b border-line pb-5 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div class="flex min-w-0 items-center gap-4">
+          <div
+            class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-teal-600 text-lg font-bold text-white"
+            aria-hidden="true"
+          >
+            AC
+          </div>
+          <div class="min-w-0">
+            <h1 class="text-2xl font-semibold">Account settings</h1>
+            <p class="mt-1 text-sm text-slate-600">Signed in as alex.chen@example.com</p>
+          </div>
+        </div>
+        <div class="flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            id="topCancelButton"
+            class="focus-ring rounded-lg border border-line bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            form="settingsForm"
+            id="topSaveButton"
+            class="focus-ring rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+          >
+            Save changes
+          </button>
+        </div>
+      </header>
+
+      <div class="grid flex-1 gap-6 py-6 lg:grid-cols-[220px_minmax(0,1fr)]">
+        <aside class="lg:pt-1">
+          <nav class="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible" aria-label="Settings sections">
+            <a
+              href="#profile"
+              class="focus-ring whitespace-nowrap rounded-lg bg-white px-3 py-2 text-sm font-semibold text-teal-700 ring-1 ring-line"
+            >
+              Profile
+            </a>
+            <a
+              href="#password"
+              class="focus-ring whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white hover:text-ink hover:ring-1 hover:ring-line"
+            >
+              Password
+            </a>
+            <a
+              href="#notifications"
+              class="focus-ring whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white hover:text-ink hover:ring-1 hover:ring-line"
+            >
+              Notifications
+            </a>
+          </nav>
+        </aside>
+
+        <form id="settingsForm" class="min-w-0 space-y-5">
+          <section id="profile" class="rounded-lg border border-line bg-white">
+            <div class="border-b border-line px-5 py-4">
+              <h2 class="text-lg font-semibold">Profile</h2>
+              <p class="mt-1 text-sm text-slate-600">Public details and account contact information.</p>
+            </div>
+            <div class="grid gap-5 px-5 py-5 md:grid-cols-2">
+              <label class="block">
+                <span class="text-sm font-semibold text-slate-700">Full name</span>
+                <input
+                  name="fullName"
+                  type="text"
+                  value="Alex Chen"
+                  autocomplete="name"
+                  class="focus-ring mt-2 h-11 w-full rounded-lg border border-line bg-field px-3 text-sm text-ink transition placeholder:text-slate-400 hover:border-slate-400"
+                />
+              </label>
+              <label class="block">
+                <span class="text-sm font-semibold text-slate-700">Email address</span>
+                <input
+                  name="email"
+                  type="email"
+                  value="alex.chen@example.com"
+                  autocomplete="email"
+                  class="focus-ring mt-2 h-11 w-full rounded-lg border border-line bg-field px-3 text-sm text-ink transition placeholder:text-slate-400 hover:border-slate-400"
+                />
+              </label>
+              <label class="block md:col-span-2">
+                <span class="text-sm font-semibold text-slate-700">Bio</span>
+                <textarea
+                  name="bio"
+                  rows="5"
+                  class="focus-ring mt-2 w-full resize-y rounded-lg border border-line bg-field px-3 py-3 text-sm leading-6 text-ink transition placeholder:text-slate-400 hover:border-slate-400"
+                  placeholder="Add a short bio"
+                >Product lead focused on operations, customer feedback, and launch readiness.</textarea>
+              </label>
+            </div>
+          </section>
+
+          <section id="password" class="rounded-lg border border-line bg-white">
+            <div class="border-b border-line px-5 py-4">
+              <h2 class="text-lg font-semibold">Password change</h2>
+              <p class="mt-1 text-sm text-slate-600">Use a strong password that is unique to this account.</p>
+            </div>
+            <div class="grid gap-5 px-5 py-5 md:grid-cols-2">
+              <label class="block md:col-span-2">
+                <span class="text-sm font-semibold text-slate-700">Current password</span>
+                <input
+                  name="currentPassword"
+                  type="password"
+                  autocomplete="current-password"
+                  class="focus-ring mt-2 h-11 w-full rounded-lg border border-line bg-field px-3 text-sm text-ink transition placeholder:text-slate-400 hover:border-slate-400"
+                />
+              </label>
+              <label class="block">
+                <span class="text-sm font-semibold text-slate-700">New password</span>
+                <input
+                  id="newPassword"
+                  name="newPassword"
+                  type="password"
+                  autocomplete="new-password"
+                  minlength="8"
+                  class="focus-ring mt-2 h-11 w-full rounded-lg border border-line bg-field px-3 text-sm text-ink transition placeholder:text-slate-400 hover:border-slate-400"
+                />
+              </label>
+              <label class="block">
+                <span class="text-sm font-semibold text-slate-700">Confirm password</span>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  autocomplete="new-password"
+                  minlength="8"
+                  class="focus-ring mt-2 h-11 w-full rounded-lg border border-line bg-field px-3 text-sm text-ink transition placeholder:text-slate-400 hover:border-slate-400"
+                />
+              </label>
+              <p id="passwordMessage" class="hidden text-sm font-medium text-coral md:col-span-2" role="alert">
+                New password and confirmation must match.
+              </p>
+            </div>
+          </section>
+
+          <section id="notifications" class="rounded-lg border border-line bg-white">
+            <div class="border-b border-line px-5 py-4">
+              <h2 class="text-lg font-semibold">Notification preferences</h2>
+              <p class="mt-1 text-sm text-slate-600">Choose which account updates should reach you.</p>
+            </div>
+            <div class="divide-y divide-line">
+              <label class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4">
+                <span class="min-w-0">
+                  <span class="block text-sm font-semibold text-slate-800">Security alerts</span>
+                  <span class="mt-1 block text-sm text-slate-600">Login attempts, password changes, and recovery updates.</span>
+                </span>
+                <span class="relative inline-flex h-7 w-12 shrink-0 items-center">
+                  <input name="securityAlerts" type="checkbox" class="peer sr-only" checked />
+                  <span
+                    class="absolute inset-0 rounded-full bg-slate-300 transition peer-checked:bg-teal-600 peer-focus-visible:outline peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-teal-200"
+                  ></span>
+                  <span
+                    class="absolute left-1 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"
+                  ></span>
+                </span>
+              </label>
+              <label class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4">
+                <span class="min-w-0">
+                  <span class="block text-sm font-semibold text-slate-800">Product updates</span>
+                  <span class="mt-1 block text-sm text-slate-600">Release notes, feature changes, and service announcements.</span>
+                </span>
+                <span class="relative inline-flex h-7 w-12 shrink-0 items-center">
+                  <input name="productUpdates" type="checkbox" class="peer sr-only" checked />
+                  <span
+                    class="absolute inset-0 rounded-full bg-slate-300 transition peer-checked:bg-teal-600 peer-focus-visible:outline peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-teal-200"
+                  ></span>
+                  <span
+                    class="absolute left-1 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"
+                  ></span>
+                </span>
+              </label>
+              <label class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4">
+                <span class="min-w-0">
+                  <span class="block text-sm font-semibold text-slate-800">Weekly summary</span>
+                  <span class="mt-1 block text-sm text-slate-600">A compact digest of activity across your workspace.</span>
+                </span>
+                <span class="relative inline-flex h-7 w-12 shrink-0 items-center">
+                  <input name="weeklySummary" type="checkbox" class="peer sr-only" />
+                  <span
+                    class="absolute inset-0 rounded-full bg-slate-300 transition peer-checked:bg-teal-600 peer-focus-visible:outline peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-teal-200"
+                  ></span>
+                  <span
+                    class="absolute left-1 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"
+                  ></span>
+                </span>
+              </label>
+              <label class="flex cursor-pointer items-center justify-between gap-4 px-5 py-4">
+                <span class="min-w-0">
+                  <span class="block text-sm font-semibold text-slate-800">Billing reminders</span>
+                  <span class="mt-1 block text-sm text-slate-600">Invoices, payment issues, and plan renewal notices.</span>
+                </span>
+                <span class="relative inline-flex h-7 w-12 shrink-0 items-center">
+                  <input name="billingReminders" type="checkbox" class="peer sr-only" checked />
+                  <span
+                    class="absolute inset-0 rounded-full bg-slate-300 transition peer-checked:bg-teal-600 peer-focus-visible:outline peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-teal-200"
+                  ></span>
+                  <span
+                    class="absolute left-1 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"
+                  ></span>
+                </span>
+              </label>
+            </div>
+          </section>
+
+          <div
+            class="sticky bottom-0 z-10 -mx-4 border-t border-line bg-[#F3F5F8]/95 px-4 py-4 backdrop-blur sm:-mx-6 sm:px-6 lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-0"
+          >
+            <div class="flex flex-col gap-3 rounded-lg border border-line bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <p id="statusText" class="text-sm font-medium text-slate-600" aria-live="polite">No unsaved changes</p>
+              <div class="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  id="bottomCancelButton"
+                  class="focus-ring flex-1 rounded-lg border border-line bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 sm:flex-none"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  id="bottomSaveButton"
+                  class="focus-ring flex-1 rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-slate-300 sm:flex-none"
+                >
+                  Save changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <script>
+      const form = document.querySelector("#settingsForm");
+      const statusText = document.querySelector("#statusText");
+      const newPassword = document.querySelector("#newPassword");
+      const confirmPassword = document.querySelector("#confirmPassword");
+      const passwordMessage = document.querySelector("#passwordMessage");
+      const saveButtons = [document.querySelector("#topSaveButton"), document.querySelector("#bottomSaveButton")];
+      const cancelButtons = [document.querySelector("#topCancelButton"), document.querySelector("#bottomCancelButton")];
+
+      let lastSaved = new FormData(form);
+
+      function snapshotMatchesCurrent() {
+        const current = new FormData(form);
+        const keys = new Set([...current.keys(), ...lastSaved.keys()]);
+
+        for (const key of keys) {
+          const currentValues = current.getAll(key).join("|");
+          const savedValues = lastSaved.getAll(key).join("|");
+          if (currentValues !== savedValues) {
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      function validatePasswords() {
+        const hasNewPassword = newPassword.value.length > 0 || confirmPassword.value.length > 0;
+        const matches = newPassword.value === confirmPassword.value;
+        const valid = !hasNewPassword || matches;
+
+        passwordMessage.classList.toggle("hidden", valid);
+        confirmPassword.setCustomValidity(valid ? "" : "Passwords do not match.");
+        return valid;
+      }
+
+      function updateState() {
+        validatePasswords();
+        const isDirty = !snapshotMatchesCurrent();
+        statusText.textContent = isDirty ? "Unsaved changes" : "No unsaved changes";
+        statusText.className = isDirty
+          ? "text-sm font-semibold text-saffron"
+          : "text-sm font-medium text-slate-600";
+        saveButtons.forEach((button) => {
+          button.disabled = !isDirty;
+        });
+      }
+
+      function resetToLastSaved() {
+        for (const element of form.elements) {
+          if (!element.name) continue;
+
+          if (element.type === "checkbox") {
+            element.checked = lastSaved.has(element.name);
+          } else {
+            element.value = lastSaved.get(element.name) || "";
+          }
+        }
+
+        updateState();
+      }
+
+      form.addEventListener("input", updateState);
+      form.addEventListener("change", updateState);
+
+      cancelButtons.forEach((button) => {
+        button.addEventListener("click", resetToLastSaved);
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!validatePasswords() || !form.reportValidity()) {
+          return;
+        }
+
+        form.currentPassword.value = "";
+        newPassword.value = "";
+        confirmPassword.value = "";
+        lastSaved = new FormData(form);
+        statusText.textContent = "Changes saved";
+        statusText.className = "text-sm font-semibold text-teal-700";
+        saveButtons.forEach((button) => {
+          button.disabled = true;
+        });
+      });
+
+      updateState();
+    </script>
+  </body>
+</html>

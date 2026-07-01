@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Patchkit Pricing</title>
+    <meta
+      name="description"
+      content="Pricing for Patchkit, a developer tool for checks, code review, and release automation."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              fontFamily: {
+                sans: ["Geist", "sans-serif"],
+                mono: ["Geist Mono", "monospace"],
+              },
+              colors: {
+                border: "hsl(var(--border) / <alpha-value>)",
+                input: "hsl(var(--input) / <alpha-value>)",
+                ring: "hsl(var(--ring) / <alpha-value>)",
+                background: "hsl(var(--background) / <alpha-value>)",
+                foreground: "hsl(var(--foreground) / <alpha-value>)",
+                primary: {
+                  DEFAULT: "hsl(var(--primary) / <alpha-value>)",
+                  foreground: "hsl(var(--primary-foreground) / <alpha-value>)",
+                },
+                secondary: {
+                  DEFAULT: "hsl(var(--secondary) / <alpha-value>)",
+                  foreground: "hsl(var(--secondary-foreground) / <alpha-value>)",
+                },
+                destructive: {
+                  DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
+                  foreground:
+                    "hsl(var(--destructive-foreground) / <alpha-value>)",
+                },
+                muted: {
+                  DEFAULT: "hsl(var(--muted) / <alpha-value>)",
+                  foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
+                },
+                accent: {
+                  DEFAULT: "hsl(var(--accent) / <alpha-value>)",
+                  foreground: "hsl(var(--accent-foreground) / <alpha-value>)",
+                },
+                popover: {
+                  DEFAULT: "hsl(var(--popover) / <alpha-value>)",
+                  foreground: "hsl(var(--popover-foreground) / <alpha-value>)",
+                },
+                card: {
+                  DEFAULT: "hsl(var(--card) / <alpha-value>)",
+                  foreground: "hsl(var(--card-foreground) / <alpha-value>)",
+                },
+              },
+              borderRadius: {
+                lg: "var(--radius)",
+                md: "calc(var(--radius) - 2px)",
+                sm: "calc(var(--radius) - 4px)",
+              },
+            },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 10% 3.9%;
+        --radius: 0.5rem;
+      }
+
+      .dark {
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 240 10% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 240 5.9% 10%;
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+        --accent: 240 3.7% 15.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 240 4.9% 83.9%;
+      }
+
+      * {
+        border-color: hsl(var(--border));
+      }
+
+      body {
+        font-family: "Geist", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-background text-foreground antialiased">
+    <header class="border-b bg-background">
+      <div
+        class="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6"
+      >
+        <a href="#" class="text-sm font-semibold text-foreground">Patchkit</a>
+        <nav
+          class="hidden items-center gap-6 text-sm text-muted-foreground sm:flex"
+          aria-label="Primary navigation"
+        >
+          <a href="#plans" class="transition-colors hover:text-foreground"
+            >Plans</a
+          >
+          <a href="#compare" class="transition-colors hover:text-foreground"
+            >Compare</a
+          >
+          <a href="#" class="transition-colors hover:text-foreground">Docs</a>
+        </nav>
+        <a
+          href="#plans"
+          class="inline-flex h-9 items-center justify-center rounded-md border bg-background px-3 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
+          Get started
+        </a>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+      <section
+        class="grid gap-6 border-b pb-8 sm:pb-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end"
+      >
+        <div class="max-w-2xl">
+          <h1 class="text-3xl font-semibold sm:text-4xl">
+            Pricing
+          </h1>
+          <p class="mt-3 text-base leading-7 text-muted-foreground">
+            Plans for running repository checks, code review, and release
+            automation from one developer tool.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-2 sm:items-end">
+          <div
+            class="inline-flex h-10 w-fit items-center rounded-md bg-muted p-1"
+            role="group"
+            aria-label="Billing frequency"
+          >
+            <button
+              type="button"
+              class="billing-option inline-flex h-8 items-center justify-center rounded-sm px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              data-billing="monthly"
+              aria-pressed="true"
+            >
+              Monthly
+            </button>
+            <button
+              type="button"
+              class="billing-option inline-flex h-8 items-center justify-center rounded-sm px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              data-billing="annual"
+              aria-pressed="false"
+            >
+              Annual - save 20%
+            </button>
+          </div>
+          <p class="text-sm text-muted-foreground" id="billing-note">
+            Prices shown for monthly billing.
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="plans"
+        class="grid gap-4 py-8 sm:py-10 md:grid-cols-3"
+        aria-label="Pricing plans"
+      >
+        <article class="flex rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+          <div class="flex w-full flex-col">
+            <div>
+              <h2 class="text-lg font-semibold">Free</h2>
+              <p class="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">
+                For testing Patchkit on a single repository.
+              </p>
+            </div>
+            <div class="mt-6">
+              <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-semibold" data-price="free"
+                  >$0</span
+                >
+                <span class="text-sm text-muted-foreground" data-period="free"
+                  >/month</span
+                >
+              </div>
+              <p class="mt-2 text-sm text-muted-foreground" data-note="free">
+                No credit card required.
+              </p>
+            </div>
+            <a
+              href="#"
+              class="mt-6 inline-flex h-10 items-center justify-center rounded-md border bg-background px-4 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              Start free
+            </a>
+            <ul class="mt-6 space-y-3 text-sm">
+              <li class="flex gap-3">
+                <svg
+                  class="mt-0.5 h-4 w-4 shrink-0 text-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m20 6-11 11-5-5" />
+                </svg>
+                1 private repository
+              </li>
+              <li class="flex gap-3">
+                <svg
+                  class="mt-0.5 h-4 w-4 shrink-0 text-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m20 6-11 11-5-5" />
+                </svg>
+                500 check minutes per month
+              </li>
+              <li class="flex gap-3">
+                <svg
+                  class="mt-0.5 h-4 w-4 shrink-0 text-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m20 6-11 11-5-5" />
+                </svg>
+                Community support
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article
+          class="flex rounded-lg border border-primary bg-card p-6 text-card-foreground shadow-sm"
+        >
+          <div class="flex w-full flex-col">
+            <div>
+              <h2 class="text-lg font-semibold">Pro</h2>
+              <p class="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">
+                For developers working across private projects.
+              </p>
+            </div>
+            <div class="mt-6">
+              <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-semibold" data-price="pro"
+                  >$19</span
+                >
+                <span class="text-sm text-muted-foreground" data-period="pro"
+                  >/developer/month</span
+                >
+              </div>
+              <p class="mt-2 text-sm text-muted-foreground" data-note="pro">
+                Billed monthly.
+              </p>
+            </div>
+            <a
+              href="#"
+              class="mt-6 inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              Start Pro
+            </a>
+            <ul class="mt-6 space-y-3 text-sm">
+              <li class="flex gap-3">
+                <svg
+                  class="mt-0.5 h-4 w-4 shrink-0 text-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m20 6-11 11-5-5" />
+                </svg>
+                Unlimited private repositories
+              </li>
+              <li class="flex gap-3">
+                <svg
+                  class="mt-0.5 h-4 w-4 shrink-0 text-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m20 6-11 11-5-5" />
+                </svg>
+                10,000 check minutes per month
+              </li>
+              <li class="flex gap-3">
+                <svg
+                  class="mt-0.5 h-4 w-4 shrink-0 text-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m20 6-11 11-5-5" />
+                </svg>
+                Automated release notes
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="flex rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+          <div class="flex w-full flex-col">
+            <div>
+              <h2 class="text-lg font-semibold">Team</h2>
+              <p class="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">
+                For engineering groups that need access control and support.
+              </p>
+            </div>
+            <div class="mt-6">
+              <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-semibold" data-price="team"
+                  >$49</span
+                >
+                <span class="text-sm text-muted-foreground" data-period="team"
+                  >/developer/month</span
+                >
+              </div>
+              <p class="mt-2 text-sm text-muted-foreground" data-note="team">
+                Billed monthly.
+              </p>
+            </div>
+            <a
+              href="#"
+              class="mt-6 inline-flex h-10 items-center justify-center rounded-md border bg-background px-4 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              Contact sales
+            </a>
+            <ul class="mt-6 space-y-3 text-sm">
+              <li class="flex gap-3">
+                <svg
+                  class="mt-0.5 h-4 w-4 shrink-0 text-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m20 6-11 11-5-5" />
+                </svg>
+                Shared team workspaces
+              </li>
+              <li class="flex gap-3">
+                <svg
+                  class="mt-0.5 h-4 w-4 shrink-0 text-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m20 6-11 11-5-5" />
+                </svg>
+                Policy approvals and audit log
+              </li>
+              <li class="flex gap-3">
+                <svg
+                  class="mt-0.5 h-4 w-4 shrink-0 text-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m20 6-11 11-5-5" />
+                </svg>
+                Priority support
+              </li>
+            </ul>
+          </div>
+        </article>
+      </section>
+
+      <section id="compare" class="pb-8 sm:pb-10" aria-labelledby="compare-title">
+        <div class="mb-4">
+          <h2 id="compare-title" class="text-2xl font-semibold">
+            Compare features
+          </h2>
+          <p class="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+            Review the limits and collaboration controls included with each
+            tier.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-lg border bg-card">
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[760px] text-left text-sm">
+              <caption class="sr-only">
+                Feature comparison across Free, Pro, and Team plans
+              </caption>
+              <thead class="bg-muted/50 text-foreground">
+                <tr class="border-b">
+                  <th scope="col" class="w-2/5 px-4 py-3 font-medium">
+                    Feature
+                  </th>
+                  <th scope="col" class="px-4 py-3 font-medium">Free</th>
+                  <th scope="col" class="px-4 py-3 font-medium">Pro</th>
+                  <th scope="col" class="px-4 py-3 font-medium">Team</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b hover:bg-muted/50">
+                  <th scope="row" class="px-4 py-3 font-medium">
+                    Private repositories
+                  </th>
+                  <td class="px-4 py-3 text-muted-foreground">1</td>
+                  <td class="px-4 py-3 text-muted-foreground">Unlimited</td>
+                  <td class="px-4 py-3 text-muted-foreground">Unlimited</td>
+                </tr>
+                <tr class="border-b hover:bg-muted/50">
+                  <th scope="row" class="px-4 py-3 font-medium">
+                    Check minutes per month
+                  </th>
+                  <td class="px-4 py-3 text-muted-foreground">500</td>
+                  <td class="px-4 py-3 text-muted-foreground">10,000</td>
+                  <td class="px-4 py-3 text-muted-foreground">Custom</td>
+                </tr>
+                <tr class="border-b hover:bg-muted/50">
+                  <th scope="row" class="px-4 py-3 font-medium">
+                    Automated code review
+                  </th>
+                  <td class="px-4 py-3 text-muted-foreground">Basic</td>
+                  <td class="px-4 py-3 text-muted-foreground">Advanced</td>
+                  <td class="px-4 py-3 text-muted-foreground">
+                    Advanced with policies
+                  </td>
+                </tr>
+                <tr class="border-b hover:bg-muted/50">
+                  <th scope="row" class="px-4 py-3 font-medium">
+                    Release notes
+                  </th>
+                  <td class="px-4 py-3 text-muted-foreground">Manual draft</td>
+                  <td class="px-4 py-3 text-muted-foreground">Auto draft</td>
+                  <td class="px-4 py-3 text-muted-foreground">
+                    Auto draft with approvals
+                  </td>
+                </tr>
+                <tr class="border-b hover:bg-muted/50">
+                  <th scope="row" class="px-4 py-3 font-medium">
+                    Environments
+                  </th>
+                  <td class="px-4 py-3 text-muted-foreground">Local only</td>
+                  <td class="px-4 py-3 text-muted-foreground">
+                    Preview and production
+                  </td>
+                  <td class="px-4 py-3 text-muted-foreground">
+                    Custom stages
+                  </td>
+                </tr>
+                <tr class="border-b hover:bg-muted/50">
+                  <th scope="row" class="px-4 py-3 font-medium">Audit log</th>
+                  <td class="px-4 py-3 text-muted-foreground">7 days</td>
+                  <td class="px-4 py-3 text-muted-foreground">90 days</td>
+                  <td class="px-4 py-3 text-muted-foreground">1 year</td>
+                </tr>
+                <tr class="border-b hover:bg-muted/50">
+                  <th scope="row" class="px-4 py-3 font-medium">SSO</th>
+                  <td class="px-4 py-3 text-muted-foreground">Not included</td>
+                  <td class="px-4 py-3 text-muted-foreground">Not included</td>
+                  <td class="px-4 py-3 text-muted-foreground">SAML SSO</td>
+                </tr>
+                <tr class="hover:bg-muted/50">
+                  <th scope="row" class="px-4 py-3 font-medium">Support</th>
+                  <td class="px-4 py-3 text-muted-foreground">Community</td>
+                  <td class="px-4 py-3 text-muted-foreground">Email</td>
+                  <td class="px-4 py-3 text-muted-foreground">Priority</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const billingCopy = {
+        monthly: {
+          note: "Prices shown for monthly billing.",
+          free: {
+            price: "$0",
+            period: "/month",
+            note: "No credit card required.",
+          },
+          pro: {
+            price: "$19",
+            period: "/developer/month",
+            note: "Billed monthly.",
+          },
+          team: {
+            price: "$49",
+            period: "/developer/month",
+            note: "Billed monthly.",
+          },
+        },
+        annual: {
+          note: "Prices shown as monthly equivalents. Annual plans are billed yearly.",
+          free: {
+            price: "$0",
+            period: "/month",
+            note: "No credit card required.",
+          },
+          pro: {
+            price: "$15",
+            period: "/developer/month",
+            note: "$180 billed yearly.",
+          },
+          team: {
+            price: "$39",
+            period: "/developer/month",
+            note: "$468 billed yearly.",
+          },
+        },
+      };
+
+      const options = document.querySelectorAll("[data-billing]");
+      const billingNote = document.querySelector("#billing-note");
+
+      function setBilling(mode) {
+        const copy = billingCopy[mode];
+
+        billingNote.textContent = copy.note;
+
+        options.forEach((button) => {
+          const active = button.dataset.billing === mode;
+          button.setAttribute("aria-pressed", String(active));
+          button.classList.toggle("bg-background", active);
+          button.classList.toggle("text-foreground", active);
+          button.classList.toggle("shadow-sm", active);
+          button.classList.toggle("text-muted-foreground", !active);
+          button.classList.toggle("hover:text-foreground", !active);
+        });
+
+        ["free", "pro", "team"].forEach((plan) => {
+          document.querySelector(`[data-price="${plan}"]`).textContent =
+            copy[plan].price;
+          document.querySelector(`[data-period="${plan}"]`).textContent =
+            copy[plan].period;
+          document.querySelector(`[data-note="${plan}"]`).textContent =
+            copy[plan].note;
+        });
+      }
+
+      options.forEach((button) => {
+        button.addEventListener("click", () => setBilling(button.dataset.billing));
+      });
+
+      setBilling("monthly");
+    </script>
+  </body>
+</html>

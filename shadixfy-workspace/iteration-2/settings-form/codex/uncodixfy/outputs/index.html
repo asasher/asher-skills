@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"IBM Plex Sans"'],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0f0f0f;
+        --surface: #1a1a1a;
+        --surface-raised: #202020;
+        --border: #2d2d2d;
+        --border-strong: #3a3a3a;
+        --text: #f5f5f5;
+        --muted: #b8b8b8;
+        --primary: #00d4aa;
+        --primary-pressed: #00bd98;
+      }
+
+      html {
+        background: var(--bg);
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "IBM Plex Sans";
+        font-size: 15px;
+        line-height: 1.5;
+        letter-spacing: 0;
+      }
+
+      input,
+      textarea,
+      button {
+        font: inherit;
+      }
+
+      .field:focus,
+      .toggle:focus-visible,
+      .action:focus-visible,
+      .tab-link:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+      }
+
+      .field::placeholder {
+        color: #707070;
+      }
+
+      .toggle {
+        position: relative;
+        width: 38px;
+        height: 22px;
+        flex: 0 0 auto;
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        background: var(--surface-raised);
+        transition: background-color 150ms ease, border-color 150ms ease;
+      }
+
+      .toggle::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 14px;
+        height: 14px;
+        border-radius: 5px;
+        background: #9a9a9a;
+        transition: left 150ms ease, background-color 150ms ease;
+      }
+
+      .toggle[aria-checked="true"] {
+        background: var(--primary);
+        border-color: var(--primary);
+      }
+
+      .toggle[aria-checked="true"]::after {
+        left: 19px;
+        background: #0f0f0f;
+      }
+
+      @media (max-width: 860px) {
+        .actions-bar {
+          position: static;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="min-h-screen">
+      <header class="border-b border-[var(--border)] bg-[var(--bg)]">
+        <div class="mx-auto max-w-[1040px] px-5 sm:px-8">
+          <div class="flex min-h-14 items-center justify-between gap-5 py-3">
+            <a href="#" class="text-[16px] font-semibold text-[var(--text)]">Acme</a>
+            <nav class="flex items-center gap-1 overflow-x-auto" aria-label="Settings navigation">
+              <a
+                href="#profile"
+                class="tab-link rounded-md bg-[var(--surface)] px-3 py-2 text-[14px] font-medium text-[var(--text)]"
+                >Account</a
+              >
+              <a
+                href="#password"
+                class="tab-link rounded-md px-3 py-2 text-[14px] text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--text)]"
+                >Security</a
+              >
+              <a
+                href="#notifications"
+                class="tab-link rounded-md px-3 py-2 text-[14px] text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--text)]"
+                >Notifications</a
+              >
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <section class="mx-auto max-w-[960px] px-5 py-7 sm:px-8">
+        <div class="mb-7">
+          <h1 class="text-[21px] font-semibold leading-7 text-[var(--text)]">Account settings</h1>
+          <p class="mt-1 max-w-[640px] text-[14px] text-[var(--muted)]">
+            Manage your account details, password, and notification preferences.
+          </p>
+        </div>
+
+        <form id="settings-form">
+          <section id="profile" class="border-b border-[var(--border)] pb-8">
+            <div class="grid gap-6 md:grid-cols-[220px_minmax(0,1fr)]">
+              <div>
+                <h2 class="text-[16px] font-semibold text-[var(--text)]">Profile</h2>
+                <p class="mt-1 text-[14px] text-[var(--muted)]">
+                  These details are visible to workspace members.
+                </p>
+              </div>
+
+              <div class="space-y-5">
+                <label class="block">
+                  <span class="mb-2 block text-[14px] font-medium text-[var(--text)]">Name</span>
+                  <input
+                    class="field block h-10 w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface)] px-3 text-[14px] text-[var(--text)]"
+                    type="text"
+                    name="name"
+                    value="Maya Chen"
+                    autocomplete="name"
+                  />
+                </label>
+
+                <label class="block">
+                  <span class="mb-2 block text-[14px] font-medium text-[var(--text)]">Email</span>
+                  <input
+                    class="field block h-10 w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface)] px-3 text-[14px] text-[var(--text)]"
+                    type="email"
+                    name="email"
+                    value="maya.chen@example.com"
+                    autocomplete="email"
+                  />
+                </label>
+
+                <label class="block">
+                  <span class="mb-2 block text-[14px] font-medium text-[var(--text)]">Bio</span>
+                  <textarea
+                    class="field block min-h-[112px] w-full resize-y rounded-md border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-2 text-[14px] text-[var(--text)]"
+                    name="bio"
+                    placeholder="Write a short bio"
+                  >Product lead focused on planning, research, and design systems.</textarea>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <section id="password" class="border-b border-[var(--border)] py-8">
+            <div class="grid gap-6 md:grid-cols-[220px_minmax(0,1fr)]">
+              <div>
+                <h2 class="text-[16px] font-semibold text-[var(--text)]">Password</h2>
+                <p class="mt-1 text-[14px] text-[var(--muted)]">
+                  Use at least 12 characters with a mix of letters, numbers, and symbols.
+                </p>
+              </div>
+
+              <div class="grid gap-5 sm:grid-cols-2">
+                <label class="block sm:col-span-2">
+                  <span class="mb-2 block text-[14px] font-medium text-[var(--text)]">Current password</span>
+                  <input
+                    class="field block h-10 w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface)] px-3 text-[14px] text-[var(--text)]"
+                    type="password"
+                    name="current-password"
+                    autocomplete="current-password"
+                  />
+                </label>
+
+                <label class="block">
+                  <span class="mb-2 block text-[14px] font-medium text-[var(--text)]">New password</span>
+                  <input
+                    class="field block h-10 w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface)] px-3 text-[14px] text-[var(--text)]"
+                    type="password"
+                    name="new-password"
+                    autocomplete="new-password"
+                  />
+                </label>
+
+                <label class="block">
+                  <span class="mb-2 block text-[14px] font-medium text-[var(--text)]">Confirm password</span>
+                  <input
+                    class="field block h-10 w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface)] px-3 text-[14px] text-[var(--text)]"
+                    type="password"
+                    name="confirm-password"
+                    autocomplete="new-password"
+                  />
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <section id="notifications" class="py-8">
+            <div class="grid gap-6 md:grid-cols-[220px_minmax(0,1fr)]">
+              <div>
+                <h2 class="text-[16px] font-semibold text-[var(--text)]">Notifications</h2>
+                <p class="mt-1 text-[14px] text-[var(--muted)]">
+                  Choose which account updates should reach your inbox.
+                </p>
+              </div>
+
+              <div class="divide-y divide-[var(--border)] rounded-lg border border-[var(--border)] bg-[var(--surface)]">
+                <div class="flex items-start justify-between gap-5 px-4 py-4">
+                  <div class="min-w-0">
+                    <p id="product-updates-label" class="text-[14px] font-medium text-[var(--text)]">Product updates</p>
+                    <p class="mt-1 text-[14px] text-[var(--muted)]">
+                      New features, interface changes, and account notices.
+                    </p>
+                  </div>
+                  <button
+                    class="toggle"
+                    type="button"
+                    role="switch"
+                    aria-checked="true"
+                    aria-labelledby="product-updates-label"
+                    data-toggle="product-updates"
+                  ></button>
+                  <input type="hidden" name="product-updates" value="true" />
+                </div>
+
+                <div class="flex items-start justify-between gap-5 px-4 py-4">
+                  <div class="min-w-0">
+                    <p id="security-alerts-label" class="text-[14px] font-medium text-[var(--text)]">Security alerts</p>
+                    <p class="mt-1 text-[14px] text-[var(--muted)]">
+                      Sign-in attempts, password changes, and recovery activity.
+                    </p>
+                  </div>
+                  <button
+                    class="toggle"
+                    type="button"
+                    role="switch"
+                    aria-checked="true"
+                    aria-labelledby="security-alerts-label"
+                    data-toggle="security-alerts"
+                  ></button>
+                  <input type="hidden" name="security-alerts" value="true" />
+                </div>
+
+                <div class="flex items-start justify-between gap-5 px-4 py-4">
+                  <div class="min-w-0">
+                    <p id="weekly-summary-label" class="text-[14px] font-medium text-[var(--text)]">Weekly summary</p>
+                    <p class="mt-1 text-[14px] text-[var(--muted)]">
+                      A weekly digest of account and workspace activity.
+                    </p>
+                  </div>
+                  <button
+                    class="toggle"
+                    type="button"
+                    role="switch"
+                    aria-checked="false"
+                    aria-labelledby="weekly-summary-label"
+                    data-toggle="weekly-summary"
+                  ></button>
+                  <input type="hidden" name="weekly-summary" value="false" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div
+            class="actions-bar sticky bottom-0 -mx-5 border-t border-[var(--border)] bg-[var(--bg)] px-5 py-4 sm:-mx-8 sm:px-8"
+          >
+            <div class="flex items-center justify-end gap-3">
+              <button
+                class="action h-10 rounded-md border border-[var(--border-strong)] px-4 text-[14px] font-medium text-[var(--text)] hover:bg-[var(--surface)]"
+                type="reset"
+              >
+                Cancel
+              </button>
+              <button
+                class="action h-10 rounded-md bg-[var(--primary)] px-4 text-[14px] font-semibold text-[#0f0f0f] hover:bg-[var(--primary-pressed)]"
+                type="submit"
+              >
+                Save changes
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+    <script>
+      const settingsForm = document.querySelector("#settings-form");
+      const toggleButtons = document.querySelectorAll("[data-toggle]");
+
+      toggleButtons.forEach((button) => {
+        button.dataset.defaultChecked = button.getAttribute("aria-checked");
+        button.addEventListener("click", () => {
+          const checked = button.getAttribute("aria-checked") !== "true";
+          const input = button.nextElementSibling;
+
+          button.setAttribute("aria-checked", String(checked));
+          if (input) input.value = String(checked);
+        });
+      });
+
+      settingsForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+      });
+
+      settingsForm.addEventListener("reset", () => {
+        window.setTimeout(() => {
+          toggleButtons.forEach((button) => {
+            const input = button.nextElementSibling;
+            const checked = button.dataset.defaultChecked || "false";
+
+            button.setAttribute("aria-checked", checked);
+            if (input) input.value = checked;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

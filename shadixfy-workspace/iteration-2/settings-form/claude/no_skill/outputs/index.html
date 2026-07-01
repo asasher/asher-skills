@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Settings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 400: '#818cf8',
+              500: '#6366f1', 600: '#4f46e5', 700: '#4338ca'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    /* Custom toggle switch */
+    .toggle:checked { background-color: #4f46e5; }
+    .toggle:checked::before { transform: translateX(1.25rem); }
+    .toggle::before {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      height: 1.25rem; width: 1.25rem;
+      border-radius: 9999px;
+      background-color: #fff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+      transition: transform 0.2s ease;
+    }
+    .toggle {
+      position: relative;
+      appearance: none;
+      width: 2.75rem; height: 1.5rem;
+      border-radius: 9999px;
+      background-color: #d1d5db;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      flex-shrink: 0;
+    }
+    .toggle:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+  </style>
+</head>
+<body class="h-full bg-slate-100 text-slate-800 antialiased">
+  <div class="min-h-full">
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+        <h1 class="text-2xl font-bold text-slate-900">Account Settings</h1>
+        <p class="mt-1 text-sm text-slate-500">Manage your profile, security, and notification preferences.</p>
+      </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+      <form id="settings-form" novalidate>
+        <div class="space-y-6">
+
+          <!-- Profile -->
+          <section class="bg-white rounded-xl shadow-sm border border-slate-200">
+            <div class="px-6 py-5 border-b border-slate-100">
+              <h2 class="text-lg font-semibold text-slate-900">Profile</h2>
+              <p class="mt-0.5 text-sm text-slate-500">This information may be visible to others.</p>
+            </div>
+            <div class="px-6 py-6 space-y-5">
+              <!-- Avatar (initials, no external image) -->
+              <div class="flex items-center gap-4">
+                <div id="avatar" class="h-16 w-16 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xl font-semibold select-none">AM</div>
+                <div>
+                  <p class="text-sm font-medium text-slate-700">Avatar</p>
+                  <p class="text-xs text-slate-500">Generated from your name.</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label for="name" class="block text-sm font-medium text-slate-700">Full name</label>
+                  <input id="name" name="name" type="text" value="Alex Morgan" autocomplete="name"
+                    class="mt-1.5 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none" />
+                </div>
+                <div>
+                  <label for="email" class="block text-sm font-medium text-slate-700">Email address</label>
+                  <input id="email" name="email" type="email" value="alex.morgan@example.com" autocomplete="email"
+                    class="mt-1.5 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none" />
+                  <p data-error-for="email" class="mt-1 text-xs text-red-600 hidden">Please enter a valid email address.</p>
+                </div>
+              </div>
+
+              <div>
+                <label for="bio" class="block text-sm font-medium text-slate-700">Bio</label>
+                <textarea id="bio" name="bio" rows="3" maxlength="160"
+                  class="mt-1.5 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none resize-none"
+                  placeholder="Tell us a little about yourself.">Product designer. Coffee enthusiast. Building thoughtful interfaces.</textarea>
+                <p class="mt-1 text-xs text-slate-400"><span id="bio-count">0</span>/160 characters</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Password -->
+          <section class="bg-white rounded-xl shadow-sm border border-slate-200">
+            <div class="px-6 py-5 border-b border-slate-100">
+              <h2 class="text-lg font-semibold text-slate-900">Change password</h2>
+              <p class="mt-0.5 text-sm text-slate-500">Leave blank if you don't want to change it.</p>
+            </div>
+            <div class="px-6 py-6 space-y-5">
+              <div>
+                <label for="current-password" class="block text-sm font-medium text-slate-700">Current password</label>
+                <input id="current-password" name="current-password" type="password" autocomplete="current-password"
+                  class="mt-1.5 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none" />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label for="new-password" class="block text-sm font-medium text-slate-700">New password</label>
+                  <input id="new-password" name="new-password" type="password" autocomplete="new-password"
+                    class="mt-1.5 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none" />
+                  <p class="mt-1 text-xs text-slate-400">At least 8 characters.</p>
+                </div>
+                <div>
+                  <label for="confirm-password" class="block text-sm font-medium text-slate-700">Confirm new password</label>
+                  <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password"
+                    class="mt-1.5 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none" />
+                  <p data-error-for="confirm-password" class="mt-1 text-xs text-red-600 hidden">Passwords don't match.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Notifications -->
+          <section class="bg-white rounded-xl shadow-sm border border-slate-200">
+            <div class="px-6 py-5 border-b border-slate-100">
+              <h2 class="text-lg font-semibold text-slate-900">Notifications</h2>
+              <p class="mt-0.5 text-sm text-slate-500">Choose what we contact you about.</p>
+            </div>
+            <div class="px-6 py-2 divide-y divide-slate-100">
+              <label class="flex items-center justify-between gap-4 py-4 cursor-pointer">
+                <span>
+                  <span class="block text-sm font-medium text-slate-800">Product updates</span>
+                  <span class="block text-xs text-slate-500">News about features and improvements.</span>
+                </span>
+                <input type="checkbox" name="notify-product" class="toggle" checked />
+              </label>
+              <label class="flex items-center justify-between gap-4 py-4 cursor-pointer">
+                <span>
+                  <span class="block text-sm font-medium text-slate-800">Security alerts</span>
+                  <span class="block text-xs text-slate-500">Important notices about your account security.</span>
+                </span>
+                <input type="checkbox" name="notify-security" class="toggle" checked />
+              </label>
+              <label class="flex items-center justify-between gap-4 py-4 cursor-pointer">
+                <span>
+                  <span class="block text-sm font-medium text-slate-800">Marketing emails</span>
+                  <span class="block text-xs text-slate-500">Tips, offers, and occasional surveys.</span>
+                </span>
+                <input type="checkbox" name="notify-marketing" class="toggle" />
+              </label>
+              <label class="flex items-center justify-between gap-4 py-4 cursor-pointer">
+                <span>
+                  <span class="block text-sm font-medium text-slate-800">Weekly summary</span>
+                  <span class="block text-xs text-slate-500">A digest of your activity every Monday.</span>
+                </span>
+                <input type="checkbox" name="notify-weekly" class="toggle" checked />
+              </label>
+            </div>
+          </section>
+
+          <!-- Actions -->
+          <div class="flex items-center justify-end gap-3 pt-2">
+            <span id="status" class="mr-auto text-sm text-emerald-600 font-medium opacity-0 transition-opacity duration-300">Saved.</span>
+            <button type="button" id="cancel-btn"
+              class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-200">
+              Cancel
+            </button>
+            <button type="submit"
+              class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+              Save changes
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById('settings-form');
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
+      const bio = document.getElementById('bio');
+      const bioCount = document.getElementById('bio-count');
+      const avatar = document.getElementById('avatar');
+      const status = document.getElementById('status');
+      const newPw = document.getElementById('new-password');
+      const confirmPw = document.getElementById('confirm-password');
+
+      // Snapshot of the pristine state so Cancel can restore it.
+      const snapshot = captureState();
+
+      function captureState() {
+        const data = {};
+        form.querySelectorAll('input, textarea').forEach((el) => {
+          data[el.id || el.name] = el.type === 'checkbox' ? el.checked : el.value;
+        });
+        return data;
+      }
+
+      function restoreState(data) {
+        form.querySelectorAll('input, textarea').forEach((el) => {
+          const key = el.id || el.name;
+          if (!(key in data)) return;
+          if (el.type === 'checkbox') el.checked = data[key];
+          else el.value = data[key];
+        });
+      }
+
+      // Avatar initials from name.
+      function updateAvatar() {
+        const parts = nameInput.value.trim().split(/\s+/).filter(Boolean);
+        const initials = parts.slice(0, 2).map((p) => p[0].toUpperCase()).join('');
+        avatar.textContent = initials || '?';
+      }
+
+      // Bio character counter.
+      function updateBioCount() {
+        bioCount.textContent = bio.value.length;
+      }
+
+      function showError(name, show) {
+        const el = form.querySelector('[data-error-for="' + name + '"]');
+        if (el) el.classList.toggle('hidden', !show);
+      }
+
+      function validate() {
+        let ok = true;
+        const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim());
+        showError('email', !emailValid);
+        if (!emailValid) ok = false;
+
+        const pwMatch = newPw.value === confirmPw.value;
+        showError('confirm-password', !pwMatch);
+        if (!pwMatch) ok = false;
+
+        return ok;
+      }
+
+      nameInput.addEventListener('input', updateAvatar);
+      bio.addEventListener('input', updateBioCount);
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!validate()) return;
+
+        // No backend — persist to memory of this session only.
+        Object.assign(snapshot, captureState());
+
+        // Clear password fields after a successful "save".
+        ['current-password', 'new-password', 'confirm-password'].forEach((id) => {
+          document.getElementById(id).value = '';
+        });
+
+        status.textContent = 'Saved.';
+        status.classList.remove('opacity-0');
+        clearTimeout(status._t);
+        status._t = setTimeout(() => status.classList.add('opacity-0'), 2000);
+      });
+
+      document.getElementById('cancel-btn').addEventListener('click', function () {
+        restoreState(snapshot);
+        showError('email', false);
+        showError('confirm-password', false);
+        updateAvatar();
+        updateBioCount();
+      });
+
+      updateAvatar();
+      updateBioCount();
+    })();
+  </script>
+</body>
+</html>

@@ -122,6 +122,7 @@ Not allowed. `<small>` eyebrow headers are not allowed. Rounded decorative `span
 - Status dots via `::before` pseudo-elements; muted uppercase + letter-spacing labels.
 - Pipeline/progress bars with gradient fills; quota panels with progress bars as decoration.
 - KPI cards in a grid as the default dashboard layout.
+- Sticky headers/top bars that copy shadcn block glass (`bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60`). Even if a registry block ships it, use solid `bg-background` with `border-b` instead.
 - "Team focus" / "Recent activity" panels with decorative internal copy.
 - Tables that slap a colored tag badge on every row.
 - Brand marks with gradient backgrounds (`linear-gradient(135deg, …)`).

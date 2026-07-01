@@ -1,0 +1,1 @@
+Build a pricing page for a developer tool with three tiers (Free, Pro, Team), a short header, a monthly/annual toggle, and a feature comparison area. Make it a single self-contained index.html I can open directly in a browser — Tailwind from the CDN and Google Fonts are fine, but no build step and no external image hosts. Write the file as index.html in the current directory.

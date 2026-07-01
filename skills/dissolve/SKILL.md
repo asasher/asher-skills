@@ -87,19 +87,23 @@ The moves are a loop, not a staircase — tabooing often exposes a new sub-quest
 
 ## Routing
 
-1. **`new "<question>"`** → scaffold the folder and begin (see `reference/artifact.md` for the copy/fill steps).
+1. **`debate "<question>"`** (or **`new`** for the solo fallback) → scaffold the folder and begin (see
+   `reference/artifact.md` for the copy/fill steps, `reference/debate.md` for the two-agent protocol).
 2. **No argument, inside a dissolution folder** (a `dissolution.html` is here) → `resume`.
 3. **No argument, at the workspace root** (sibling dissolution folders, no `dissolution.html` here) → `list`, then
    ask which to resume.
-4. **First word doesn't match** → treat the whole argument as a question to dissolve; confirm, then `new`.
+4. **First word doesn't match** → treat the whole argument as a question to dissolve; confirm, then `debate`
+   (or `new` if no second agent is available).
 
 ## Core rules
 
 - **Dissolve, don't answer.** Your job is to remove the question, not win it. If you catch yourself defending a
   position, stop — you've slipped from dissolving to arguing. Proving a question *meaningless* is also not
   dissolving; you must show *why the mind generated it*.
-- **The human owns the itch.** Completion is subjective — the confusion is in *their* map. Never declare a
-  question dissolved on your own authority; move 5's gate is a question you ask them, every time.
+- **Whoever owns the itch owns the gate.** Completion is subjective. When a human is in the loop, the confusion
+  is in *their* map — never declare it dissolved on your own authority; the gate is a question you ask them, every
+  time. In an unattended debate, the gate is the two agents' *explicit* agreement that the original has stopped
+  being a question — not one agent's say-so.
 - **The page stays current.** After every working session, update the affected sections, their `data-status`, the
   `Updated` date, and prepend a session-log entry. The page is only useful as state if it always reflects reality.
 - **Keep the artifact shareable.** `dissolution.html` must stay a clean, self-contained one-pager anyone can open

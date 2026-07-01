@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — Forge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            ink: {
+              950: '#0a0a0f',
+              900: '#0f1017',
+              800: '#16181f',
+              700: '#1e212b',
+            },
+            brand: {
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { -webkit-font-smoothing: antialiased; }
+    .grid-bg {
+      background-image:
+        radial-gradient(60% 50% at 50% 0%, rgba(99,102,241,0.18) 0%, rgba(10,10,15,0) 70%),
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 44px 44px, 44px 44px;
+    }
+    /* Toggle */
+    .toggle-track { transition: background-color .2s ease; }
+    .toggle-knob { transition: transform .25s cubic-bezier(.4,0,.2,1); }
+    input:checked + .toggle-track { background-color: #4f46e5; }
+    input:checked + .toggle-track .toggle-knob { transform: translateX(22px); }
+    /* Price crossfade */
+    .price-annual { display: none; }
+    body.annual .price-monthly { display: none; }
+    body.annual .price-annual { display: inline; }
+    body.annual .save-badge { opacity: 1; transform: translateY(0); }
+    .save-badge { opacity: 0; transform: translateY(-4px); transition: all .2s ease; }
+  </style>
+</head>
+<body class="bg-ink-950 text-slate-200 font-sans antialiased">
+
+  <div class="grid-bg">
+    <!-- Header -->
+    <header class="mx-auto max-w-5xl px-6 pt-20 pb-10 text-center">
+      <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-brand-400">
+        <span class="h-1.5 w-1.5 rounded-full bg-brand-400"></span>
+        <span class="font-mono">$ forge deploy --prod</span>
+      </div>
+      <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+        Ship faster. Pay for what you use.
+      </h1>
+      <p class="mx-auto mt-4 max-w-xl text-base text-slate-400">
+        Forge is the build &amp; deploy toolchain for teams who’d rather write code than wrangle YAML. Start free, upgrade when you grow.
+      </p>
+
+      <!-- Billing toggle -->
+      <div class="mt-9 flex items-center justify-center gap-4">
+        <span id="lbl-monthly" class="text-sm font-medium text-white">Monthly</span>
+        <label class="relative inline-flex cursor-pointer items-center">
+          <input type="checkbox" id="billing-toggle" class="peer sr-only" />
+          <span class="toggle-track flex h-7 w-[50px] items-center rounded-full bg-ink-700 px-1">
+            <span class="toggle-knob h-5 w-5 rounded-full bg-white shadow"></span>
+          </span>
+        </label>
+        <span id="lbl-annual" class="text-sm font-medium text-slate-400">
+          Annual
+          <span class="ml-1 rounded-full bg-brand-500/15 px-2 py-0.5 text-xs font-semibold text-brand-400">Save 20%</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- Pricing cards -->
+    <main class="mx-auto max-w-6xl px-6 pb-16">
+      <div class="grid gap-6 md:grid-cols-3">
+
+        <!-- Free -->
+        <div class="flex flex-col rounded-2xl border border-white/10 bg-ink-900/70 p-7 backdrop-blur">
+          <h2 class="text-lg font-semibold text-white">Free</h2>
+          <p class="mt-1 text-sm text-slate-400">For side projects and tinkering.</p>
+          <div class="mt-6 flex items-end gap-1">
+            <span class="text-4xl font-extrabold text-white">$0</span>
+            <span class="pb-1 text-sm text-slate-500">/mo</span>
+          </div>
+          <div class="mt-1 h-4"></div>
+          <a href="#" class="mt-6 rounded-lg border border-white/15 bg-white/5 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-white/10">
+            Get started
+          </a>
+          <ul class="mt-7 space-y-3 text-sm text-slate-300" data-features>
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>100 builds / month</li>
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>1 concurrent build</li>
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Community support</li>
+          </ul>
+        </div>
+
+        <!-- Pro (highlighted) -->
+        <div class="relative flex flex-col rounded-2xl border border-brand-500/60 bg-ink-800/80 p-7 shadow-2xl shadow-brand-500/10 backdrop-blur ring-1 ring-brand-500/30">
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-500 px-3 py-1 text-xs font-semibold text-white">Most popular</span>
+          <h2 class="text-lg font-semibold text-white">Pro</h2>
+          <p class="mt-1 text-sm text-slate-400">For professional developers.</p>
+          <div class="mt-6 flex items-end gap-1">
+            <span class="text-4xl font-extrabold text-white">
+              $<span class="price-monthly">19</span><span class="price-annual">15</span>
+            </span>
+            <span class="pb-1 text-sm text-slate-500">/mo</span>
+          </div>
+          <div class="mt-1 h-4 text-xs">
+            <span class="save-badge font-medium text-brand-400">Billed $180/yr — save $48</span>
+          </div>
+          <a href="#" class="mt-6 rounded-lg bg-brand-500 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-brand-600">
+            Start 14-day trial
+          </a>
+          <ul class="mt-7 space-y-3 text-sm text-slate-300">
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Unlimited builds</li>
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>5 concurrent builds</li>
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Private registries</li>
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Email support</li>
+          </ul>
+        </div>
+
+        <!-- Team -->
+        <div class="flex flex-col rounded-2xl border border-white/10 bg-ink-900/70 p-7 backdrop-blur">
+          <h2 class="text-lg font-semibold text-white">Team</h2>
+          <p class="mt-1 text-sm text-slate-400">For growing engineering teams.</p>
+          <div class="mt-6 flex items-end gap-1">
+            <span class="text-4xl font-extrabold text-white">
+              $<span class="price-monthly">49</span><span class="price-annual">39</span>
+            </span>
+            <span class="pb-1 text-sm text-slate-500">/user/mo</span>
+          </div>
+          <div class="mt-1 h-4 text-xs">
+            <span class="save-badge font-medium text-brand-400">Billed $468/user/yr — save $120</span>
+          </div>
+          <a href="#" class="mt-6 rounded-lg border border-white/15 bg-white/5 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-white/10">
+            Contact sales
+          </a>
+          <ul class="mt-7 space-y-3 text-sm text-slate-300">
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Everything in Pro</li>
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>20 concurrent builds</li>
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>SSO &amp; audit logs</li>
+            <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 flex-none text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>Priority support</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Feature comparison -->
+      <section class="mt-20">
+        <h2 class="text-center text-2xl font-bold text-white">Compare all features</h2>
+        <p class="mt-2 text-center text-sm text-slate-400">Everything each plan includes, side by side.</p>
+
+        <div class="mt-8 overflow-x-auto rounded-2xl border border-white/10 bg-ink-900/50">
+          <table class="w-full min-w-[640px] text-left text-sm">
+            <thead>
+              <tr class="border-b border-white/10 text-slate-400">
+                <th class="p-5 font-medium">Feature</th>
+                <th class="p-5 text-center font-semibold text-white">Free</th>
+                <th class="p-5 text-center font-semibold text-brand-400">Pro</th>
+                <th class="p-5 text-center font-semibold text-white">Team</th>
+              </tr>
+            </thead>
+            <tbody id="compare-body" class="divide-y divide-white/5">
+              <!-- rows injected -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FAQ / footer note -->
+      <p class="mt-14 text-center text-sm text-slate-500">
+        All plans include unlimited seats on public projects. Prices in USD. Cancel anytime.
+      </p>
+    </main>
+
+    <footer class="border-t border-white/10 py-8 text-center text-xs text-slate-600">
+      © 2026 Forge Labs, Inc. · <a href="#" class="hover:text-slate-400">Docs</a> · <a href="#" class="hover:text-slate-400">Status</a> · <a href="#" class="hover:text-slate-400">Contact</a>
+    </footer>
+  </div>
+
+  <script>
+    // Billing toggle
+    const toggle = document.getElementById('billing-toggle');
+    const lblMonthly = document.getElementById('lbl-monthly');
+    const lblAnnual = document.getElementById('lbl-annual');
+    toggle.addEventListener('change', () => {
+      const annual = toggle.checked;
+      document.body.classList.toggle('annual', annual);
+      lblMonthly.classList.toggle('text-white', !annual);
+      lblMonthly.classList.toggle('text-slate-400', annual);
+      lblAnnual.classList.toggle('text-white', annual);
+      lblAnnual.classList.toggle('text-slate-400', !annual);
+    });
+
+    // Feature comparison data
+    const check = '<svg class="mx-auto h-5 w-5 text-brand-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>';
+    const dash = '<span class="text-slate-600">—</span>';
+    const rows = [
+      { label: 'Monthly build minutes', free: '2,000', pro: '20,000', team: 'Unlimited' },
+      { label: 'Concurrent builds', free: '1', pro: '5', team: '20' },
+      { label: 'Team members', free: '1', pro: '3', team: 'Unlimited' },
+      { label: 'Private registries', free: dash, pro: check, team: check },
+      { label: 'Deploy previews', free: dash, pro: check, team: check },
+      { label: 'Custom domains', free: '1', pro: '10', team: 'Unlimited' },
+      { label: 'SSO / SAML', free: dash, pro: dash, team: check },
+      { label: 'Audit logs', free: dash, pro: dash, team: check },
+      { label: 'Support', free: 'Community', pro: 'Email', team: 'Priority + SLA' },
+    ];
+    const cell = (v) => v.startsWith('<') ? v : `<span class="text-slate-200">${v}</span>`;
+    document.getElementById('compare-body').innerHTML = rows.map(r => `
+      <tr class="hover:bg-white/[0.02]">
+        <td class="p-5 text-slate-300">${r.label}</td>
+        <td class="p-5 text-center">${cell(r.free)}</td>
+        <td class="p-5 text-center bg-brand-500/[0.04]">${cell(r.pro)}</td>
+        <td class="p-5 text-center">${cell(r.team)}</td>
+      </tr>
+    `).join('');
+  </script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+Created [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.CxI2j8lMyy/index.html).
+
+It’s a single static dashboard file with a sidebar, top bar, metric strip, SVG chart area, recent activity, and an accounts table. No build step or dev server is needed; you can open the file directly in a browser.

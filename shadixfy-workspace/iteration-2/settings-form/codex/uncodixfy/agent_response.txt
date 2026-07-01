@@ -1,0 +1,3 @@
+Built [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.YQl9oggKxJ/index.html) as a single static page you can open directly in the browser.
+
+It includes Profile, Password, Notification toggles, and Save/Cancel actions. I also checked the inline scripts compile cleanly.

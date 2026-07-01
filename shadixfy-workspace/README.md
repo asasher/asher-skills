@@ -60,14 +60,19 @@ Each run executes in a fresh `mktemp -d` **outside this repo**, so no ambient `.
 
 ## Running
 
-Prereqs: `claude`, `codex`, `node`, `jq`, and Google Chrome (for screenshots) — all already
-present on this machine.
+Prereqs: `codex`, `node`, `jq`, and Google Chrome (for screenshots) — all already present on this
+machine. (`claude` is **not** invoked as a CLI: `claude` cells are produced by the orchestrating agent
+via a subagent, and are skipped by the harness by default — see **Agent execution** in `AGENTS.md`.)
+
+The full matrix runs `codex` cells via the Codex CLI (subscription-billed) and consumes real model
+usage. Confirm the intended scope before starting a full run.
 
 ```bash
 cd shadixfy-workspace
 
-# Full matrix for iteration 1: 3 evals × 2 agents × 3 conditions = 18 runs, then
-# screenshot + auto-grade + aggregate.
+# Full matrix for iteration 1: 3 evals × 2 agents × 3 conditions = 18 cells. The 9 codex
+# cells run via CLI; the 9 claude cells are skipped (prompt.txt saved) for the orchestrator
+# to fill via subagent. Then screenshot + auto-grade + aggregate.
 bash scripts/run_all.sh 1
 
 # Subsets while iterating (env vars):
@@ -124,7 +129,15 @@ numbers reflect the full rubric.
    (keyed by `<eval>/<agent>/<condition>`; empty string = looked fine).
 3. Hand failed assertions + feedback + the current `SKILL.md` to an LLM; apply lean, reasoned edits.
 4. Re-snapshot: `cp ../skills/shadixfy/SKILL.md conditions/shadixfy.md`.
-5. Re-run into `iteration-(N+1)/`. Stop when feedback is consistently empty or gains plateau.
+5. Re-run into `iteration-(N+1)/`. `run_all.sh` automatically screenshots, grades, aggregates, and
+   rebuilds `dashboard.html`.
+6. If you update any grading, feedback, or iteration artifacts manually, re-run
+   `node scripts/aggregate.mjs N` and then `node scripts/build_dashboard.mjs` before reporting.
+7. Stop when feedback is consistently empty or gains plateau.
+
+Local agent instructions live in `AGENTS.md` (with `CLAUDE.md` pointing to it). They keep this
+dashboard-update contract scoped to the shadixfy eval workspace without contaminating generated eval
+cells.
 
 ## Notes & limitations
 

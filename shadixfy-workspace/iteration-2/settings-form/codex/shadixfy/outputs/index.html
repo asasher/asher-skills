@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Geist", "sans-serif"],
+              mono: ["Geist Mono", "monospace"],
+            },
+            colors: {
+              border: "hsl(var(--border))",
+              input: "hsl(var(--input))",
+              ring: "hsl(var(--ring))",
+              background: "hsl(var(--background))",
+              foreground: "hsl(var(--foreground))",
+              primary: {
+                DEFAULT: "hsl(var(--primary))",
+                foreground: "hsl(var(--primary-foreground))",
+              },
+              secondary: {
+                DEFAULT: "hsl(var(--secondary))",
+                foreground: "hsl(var(--secondary-foreground))",
+              },
+              destructive: {
+                DEFAULT: "hsl(var(--destructive))",
+                foreground: "hsl(var(--destructive-foreground))",
+              },
+              muted: {
+                DEFAULT: "hsl(var(--muted))",
+                foreground: "hsl(var(--muted-foreground))",
+              },
+              accent: {
+                DEFAULT: "hsl(var(--accent))",
+                foreground: "hsl(var(--accent-foreground))",
+              },
+              popover: {
+                DEFAULT: "hsl(var(--popover))",
+                foreground: "hsl(var(--popover-foreground))",
+              },
+              card: {
+                DEFAULT: "hsl(var(--card))",
+                foreground: "hsl(var(--card-foreground))",
+              },
+            },
+            borderRadius: {
+              lg: "var(--radius)",
+              md: "calc(var(--radius) - 2px)",
+              sm: "calc(var(--radius) - 4px)",
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 10% 3.9%;
+        --radius: 0.5rem;
+      }
+
+      * {
+        border-color: hsl(var(--border));
+      }
+
+      body {
+        background: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-family: "Geist", sans-serif;
+      }
+
+      .settings-input {
+        width: 100%;
+        border-radius: calc(var(--radius) - 2px);
+        border: 1px solid hsl(var(--input));
+        background: transparent;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        outline: none;
+      }
+
+      .settings-input:focus-visible,
+      .settings-textarea:focus-visible,
+      .switch-input:focus-visible + .switch-track {
+        box-shadow: 0 0 0 2px hsl(var(--ring));
+      }
+
+      .settings-textarea {
+        width: 100%;
+        min-height: 7rem;
+        resize: vertical;
+        border-radius: calc(var(--radius) - 2px);
+        border: 1px solid hsl(var(--input));
+        background: transparent;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        outline: none;
+      }
+
+      .switch-track {
+        position: relative;
+        display: inline-flex;
+        height: 1.5rem;
+        width: 2.75rem;
+        flex-shrink: 0;
+        cursor: pointer;
+        align-items: center;
+        border-radius: 9999px;
+        border: 1px solid transparent;
+        background: hsl(var(--input));
+        transition: background-color 150ms ease;
+      }
+
+      .switch-track::after {
+        content: "";
+        position: absolute;
+        left: 0.1875rem;
+        height: 1rem;
+        width: 1rem;
+        border-radius: 9999px;
+        background: hsl(var(--background));
+        box-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
+        transition: left 150ms ease;
+      }
+
+      .switch-input:checked + .switch-track {
+        background: hsl(var(--primary));
+      }
+
+      .switch-input:checked + .switch-track::after {
+        left: 1.5rem;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-background text-foreground antialiased">
+    <div class="flex min-h-screen flex-col md:flex-row">
+      <aside class="border-b bg-muted/40 md:w-64 md:border-b-0 md:border-r">
+        <div class="p-6">
+          <a href="#" class="text-lg font-semibold tracking-normal text-foreground">Acme</a>
+          <nav class="mt-6 flex gap-1 overflow-x-auto md:flex-col md:overflow-visible" aria-label="Settings">
+            <a
+              href="#profile"
+              class="rounded-md bg-accent px-3 py-2 text-sm font-medium text-accent-foreground transition-colors"
+            >
+              Profile
+            </a>
+            <a
+              href="#password"
+              class="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              Password
+            </a>
+            <a
+              href="#notifications"
+              class="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              Notifications
+            </a>
+          </nav>
+        </div>
+      </aside>
+
+      <main class="flex-1">
+        <form class="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
+          <header class="border-b pb-5">
+            <h1 class="text-2xl font-semibold tracking-normal text-foreground">Account settings</h1>
+            <p class="mt-1 text-sm text-muted-foreground">Manage your profile, password, and notification settings.</p>
+          </header>
+
+          <section id="profile" class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="border-b p-6">
+              <h2 class="text-base font-semibold tracking-normal">Profile</h2>
+              <p class="mt-1 text-sm text-muted-foreground">This information appears on your account.</p>
+            </div>
+            <div class="grid gap-5 p-6">
+              <div class="grid gap-2">
+                <label for="name" class="text-sm font-medium leading-none">Name</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  value="Jordan Lee"
+                  class="settings-input"
+                />
+              </div>
+
+              <div class="grid gap-2">
+                <label for="email" class="text-sm font-medium leading-none">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  value="jordan.lee@example.com"
+                  class="settings-input"
+                />
+              </div>
+
+              <div class="grid gap-2">
+                <label for="bio" class="text-sm font-medium leading-none">Bio</label>
+                <textarea id="bio" name="bio" class="settings-textarea">Product manager focused on customer support workflows and internal tooling.</textarea>
+              </div>
+            </div>
+          </section>
+
+          <section id="password" class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="border-b p-6">
+              <h2 class="text-base font-semibold tracking-normal">Password</h2>
+              <p class="mt-1 text-sm text-muted-foreground">Update the password used to sign in to this account.</p>
+            </div>
+            <div class="grid gap-5 p-6 sm:grid-cols-2">
+              <div class="grid gap-2 sm:col-span-2">
+                <label for="current-password" class="text-sm font-medium leading-none">Current password</label>
+                <input
+                  id="current-password"
+                  name="current-password"
+                  type="password"
+                  autocomplete="current-password"
+                  class="settings-input"
+                />
+              </div>
+
+              <div class="grid gap-2">
+                <label for="new-password" class="text-sm font-medium leading-none">New password</label>
+                <input
+                  id="new-password"
+                  name="new-password"
+                  type="password"
+                  autocomplete="new-password"
+                  class="settings-input"
+                />
+              </div>
+
+              <div class="grid gap-2">
+                <label for="confirm-password" class="text-sm font-medium leading-none">Confirm password</label>
+                <input
+                  id="confirm-password"
+                  name="confirm-password"
+                  type="password"
+                  autocomplete="new-password"
+                  class="settings-input"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section id="notifications" class="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="border-b p-6">
+              <h2 class="text-base font-semibold tracking-normal">Notifications</h2>
+              <p class="mt-1 text-sm text-muted-foreground">Choose which account updates should reach you.</p>
+            </div>
+            <div class="divide-y">
+              <label class="flex items-center justify-between gap-4 p-6">
+                <span>
+                  <span class="block text-sm font-medium leading-none">Product updates</span>
+                  <span class="mt-1 block text-sm text-muted-foreground">Receive announcements about new features.</span>
+                </span>
+                <span class="relative inline-flex">
+                  <input type="checkbox" class="switch-input peer sr-only" checked />
+                  <span class="switch-track" aria-hidden="true"></span>
+                </span>
+              </label>
+
+              <label class="flex items-center justify-between gap-4 p-6">
+                <span>
+                  <span class="block text-sm font-medium leading-none">Security alerts</span>
+                  <span class="mt-1 block text-sm text-muted-foreground">Get notified about sign-ins and password changes.</span>
+                </span>
+                <span class="relative inline-flex">
+                  <input type="checkbox" class="switch-input peer sr-only" checked />
+                  <span class="switch-track" aria-hidden="true"></span>
+                </span>
+              </label>
+
+              <label class="flex items-center justify-between gap-4 p-6">
+                <span>
+                  <span class="block text-sm font-medium leading-none">Billing reminders</span>
+                  <span class="mt-1 block text-sm text-muted-foreground">Receive reminders before invoices are due.</span>
+                </span>
+                <span class="relative inline-flex">
+                  <input type="checkbox" class="switch-input peer sr-only" />
+                  <span class="switch-track" aria-hidden="true"></span>
+                </span>
+              </label>
+
+              <label class="flex items-center justify-between gap-4 p-6">
+                <span>
+                  <span class="block text-sm font-medium leading-none">Weekly summary</span>
+                  <span class="mt-1 block text-sm text-muted-foreground">Send a summary of account activity every Monday.</span>
+                </span>
+                <span class="relative inline-flex">
+                  <input type="checkbox" class="switch-input peer sr-only" />
+                  <span class="switch-track" aria-hidden="true"></span>
+                </span>
+              </label>
+            </div>
+          </section>
+
+          <div class="flex flex-col-reverse gap-3 border-t pt-6 sm:flex-row sm:justify-end">
+            <button
+              type="reset"
+              class="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Save changes
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>

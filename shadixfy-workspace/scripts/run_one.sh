@@ -26,6 +26,16 @@ trap 'rm -rf "$WORKDIR"' EXIT
 # Build and save the exact prompt for reproducibility.
 build_prompt "$CONDITION" "$EVAL_ID" > "$OUTDIR/prompt.txt"
 
+# Agent-execution gate (see README > "Agent execution"): Claude cells are produced
+# by the orchestrator via a subagent, not `claude -p`. Skip cleanly here unless the
+# CLI has been explicitly approved via ALLOW_CLAUDE_CLI=1.
+if [[ "$AGENT" == "claude" && "${ALLOW_CLAUDE_CLI:-0}" != "1" ]]; then
+  echo ">> [$EVAL_ID | claude | $CONDITION] skipped — produce this cell via a subagent." >&2
+  claude_cli_policy_notice
+  echo "   (prompt saved to $OUTDIR/prompt.txt for the subagent to use)" >&2
+  exit 0
+fi
+
 echo ">> [$EVAL_ID | $AGENT | $CONDITION] running in $WORKDIR"
 start="$(now_ms)"
 (

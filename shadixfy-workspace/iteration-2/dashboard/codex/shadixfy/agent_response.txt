@@ -1,0 +1,3 @@
+Built [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.Qjzq169g1D/index.html).
+
+It’s a single static dashboard file with a sidebar, top bar, key metrics, inline SVG chart, recent activity, and account table. It uses Tailwind from the CDN plus Google-hosted Geist fonts; no build step or dev server is needed.

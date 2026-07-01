@@ -1,0 +1,3 @@
+Created [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.UJ4xoQO0jb/index.html).
+
+It’s a single static pricing page with Free, Pro, and Team tiers, a working monthly/annual toggle, and a feature comparison table. No build step or dev server is needed; it uses Tailwind from the CDN and Google Fonts. I also verified the inline scripts parse successfully.

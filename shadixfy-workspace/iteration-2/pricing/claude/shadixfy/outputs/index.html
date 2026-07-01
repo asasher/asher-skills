@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en" class="">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pricing — Sendcup</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          container: {
+            center: true,
+            padding: "1.5rem",
+            screens: { "2xl": "1120px" },
+          },
+          extend: {
+            fontFamily: {
+              sans: ["Geist", "ui-sans-serif", "system-ui", "sans-serif"],
+              mono: ["Geist Mono", "ui-monospace", "monospace"],
+            },
+            colors: {
+              border: "hsl(var(--border))",
+              input: "hsl(var(--input))",
+              ring: "hsl(var(--ring))",
+              background: "hsl(var(--background))",
+              foreground: "hsl(var(--foreground))",
+              primary: {
+                DEFAULT: "hsl(var(--primary))",
+                foreground: "hsl(var(--primary-foreground))",
+              },
+              secondary: {
+                DEFAULT: "hsl(var(--secondary))",
+                foreground: "hsl(var(--secondary-foreground))",
+              },
+              destructive: {
+                DEFAULT: "hsl(var(--destructive))",
+                foreground: "hsl(var(--destructive-foreground))",
+              },
+              muted: {
+                DEFAULT: "hsl(var(--muted))",
+                foreground: "hsl(var(--muted-foreground))",
+              },
+              accent: {
+                DEFAULT: "hsl(var(--accent))",
+                foreground: "hsl(var(--accent-foreground))",
+              },
+              popover: {
+                DEFAULT: "hsl(var(--popover))",
+                foreground: "hsl(var(--popover-foreground))",
+              },
+              card: {
+                DEFAULT: "hsl(var(--card))",
+                foreground: "hsl(var(--card-foreground))",
+              },
+            },
+            borderRadius: {
+              lg: "var(--radius)",
+              md: "calc(var(--radius) - 2px)",
+              sm: "calc(var(--radius) - 4px)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style type="text/tailwindcss">
+      @layer base {
+        :root {
+          --background: 0 0% 100%;
+          --foreground: 240 10% 3.9%;
+          --card: 0 0% 100%;
+          --card-foreground: 240 10% 3.9%;
+          --popover: 0 0% 100%;
+          --popover-foreground: 240 10% 3.9%;
+          --primary: 240 5.9% 10%;
+          --primary-foreground: 0 0% 98%;
+          --secondary: 240 4.8% 95.9%;
+          --secondary-foreground: 240 5.9% 10%;
+          --muted: 240 4.8% 95.9%;
+          --muted-foreground: 240 3.8% 46.1%;
+          --accent: 240 4.8% 95.9%;
+          --accent-foreground: 240 5.9% 10%;
+          --destructive: 0 84.2% 60.2%;
+          --destructive-foreground: 0 0% 98%;
+          --border: 240 5.9% 90%;
+          --input: 240 5.9% 90%;
+          --ring: 240 10% 3.9%;
+          --radius: 0.5rem;
+        }
+        .dark {
+          --background: 240 10% 3.9%;
+          --foreground: 0 0% 98%;
+          --card: 240 10% 3.9%;
+          --card-foreground: 0 0% 98%;
+          --popover: 240 10% 3.9%;
+          --popover-foreground: 0 0% 98%;
+          --primary: 0 0% 98%;
+          --primary-foreground: 240 5.9% 10%;
+          --secondary: 240 3.7% 15.9%;
+          --secondary-foreground: 0 0% 98%;
+          --muted: 240 3.7% 15.9%;
+          --muted-foreground: 240 5% 64.9%;
+          --accent: 240 3.7% 15.9%;
+          --accent-foreground: 0 0% 98%;
+          --destructive: 0 62.8% 30.6%;
+          --destructive-foreground: 0 0% 98%;
+          --border: 240 3.7% 15.9%;
+          --input: 240 3.7% 15.9%;
+          --ring: 240 4.9% 83.9%;
+        }
+        * {
+          border-color: hsl(var(--border));
+        }
+        body {
+          background-color: hsl(var(--background));
+          color: hsl(var(--foreground));
+          -webkit-font-smoothing: antialiased;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen font-sans">
+    <!-- Top bar -->
+    <header class="border-b">
+      <div class="container flex h-14 items-center justify-between">
+        <div class="flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-foreground"
+            aria-hidden="true"
+          >
+            <path d="m22 2-7 20-4-9-9-4Z" />
+            <path d="M22 2 11 13" />
+          </svg>
+          <span class="text-sm font-semibold">Sendcup</span>
+        </div>
+
+        <nav class="hidden items-center gap-6 md:flex">
+          <a
+            href="#"
+            class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >Docs</a
+          >
+          <a
+            href="#"
+            class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >Changelog</a
+          >
+          <a
+            href="#pricing"
+            class="text-sm font-medium text-foreground transition-colors"
+            >Pricing</a
+          >
+        </nav>
+
+        <div class="flex items-center gap-2">
+          <button
+            id="theme-toggle"
+            type="button"
+            aria-label="Toggle theme"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <svg
+              class="hidden h-[18px] w-[18px] dark:block"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+            </svg>
+            <svg
+              class="block h-[18px] w-[18px] dark:hidden"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </button>
+          <a
+            href="#"
+            class="hidden h-9 items-center rounded-md px-3 text-sm font-medium text-foreground transition-colors hover:bg-accent sm:inline-flex"
+            >Sign in</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main id="pricing" class="container py-16 md:py-20">
+      <!-- Header -->
+      <div class="mx-auto max-w-2xl text-center">
+        <h1 class="text-3xl font-semibold tracking-tight md:text-4xl">
+          Pricing
+        </h1>
+        <p class="mt-3 text-base text-muted-foreground">
+          Start free and scale as your team ships. No credit card required to
+          begin.
+        </p>
+      </div>
+
+      <!-- Billing toggle -->
+      <div class="mt-8 flex items-center justify-center">
+        <div
+          role="group"
+          aria-label="Billing period"
+          class="inline-flex items-center rounded-lg border bg-muted p-1 text-sm"
+        >
+          <button
+            type="button"
+            data-billing="monthly"
+            class="billing-btn rounded-md px-3 py-1.5 font-medium transition-colors"
+          >
+            Monthly
+          </button>
+          <button
+            type="button"
+            data-billing="annual"
+            class="billing-btn rounded-md px-3 py-1.5 font-medium transition-colors"
+          >
+            Annual
+            <span class="text-muted-foreground">· 2 months free</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tiers -->
+      <div class="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-3">
+        <!-- Free -->
+        <div class="flex flex-col rounded-lg border bg-card p-6 shadow-sm">
+          <div class="flex-1">
+            <h2 class="text-base font-semibold">Free</h2>
+            <p class="mt-1.5 text-sm text-muted-foreground">
+              For side projects and getting a feel for the API.
+            </p>
+            <div class="mt-5 flex items-baseline gap-1">
+              <span class="text-3xl font-semibold tracking-tight">$0</span>
+              <span class="text-sm text-muted-foreground">/mo</span>
+            </div>
+            <p class="mt-1 h-5 text-xs text-muted-foreground">Free forever</p>
+
+            <ul class="mt-6 space-y-3 text-sm" data-features>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>3,000 requests / month
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>1 project
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>Community support
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>7-day log retention
+              </li>
+            </ul>
+          </div>
+          <a
+            href="#"
+            class="mt-6 inline-flex h-9 w-full items-center justify-center rounded-md border bg-transparent px-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >Get started</a
+          >
+        </div>
+
+        <!-- Pro (featured) -->
+        <div class="relative flex flex-col rounded-lg border border-foreground/20 bg-card p-6 shadow-sm">
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <h2 class="text-base font-semibold">Pro</h2>
+              <span
+                class="inline-flex items-center rounded-md border border-transparent bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground"
+                >Most popular</span
+              >
+            </div>
+            <p class="mt-1.5 text-sm text-muted-foreground">
+              For solo developers and small production apps.
+            </p>
+            <div class="mt-5 flex items-baseline gap-1">
+              <span class="text-3xl font-semibold tracking-tight" data-price="pro">$20</span>
+              <span class="text-sm text-muted-foreground" data-period>/mo</span>
+            </div>
+            <p class="mt-1 h-5 text-xs text-muted-foreground" data-note="pro"></p>
+
+            <ul class="mt-6 space-y-3 text-sm" data-features>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>100,000 requests / month
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>Unlimited projects
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>Email support
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>30-day log retention
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>Custom domains
+              </li>
+            </ul>
+          </div>
+          <a
+            href="#"
+            class="mt-6 inline-flex h-9 w-full items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >Start Pro trial</a
+          >
+        </div>
+
+        <!-- Team -->
+        <div class="flex flex-col rounded-lg border bg-card p-6 shadow-sm">
+          <div class="flex-1">
+            <h2 class="text-base font-semibold">Team</h2>
+            <p class="mt-1.5 text-sm text-muted-foreground">
+              For teams that need collaboration and controls.
+            </p>
+            <div class="mt-5 flex items-baseline gap-1">
+              <span class="text-3xl font-semibold tracking-tight" data-price="team">$60</span>
+              <span class="text-sm text-muted-foreground" data-period>/mo</span>
+            </div>
+            <p class="mt-1 h-5 text-xs text-muted-foreground" data-note="team"></p>
+
+            <ul class="mt-6 space-y-3 text-sm" data-features>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>1,000,000 requests / month
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>Everything in Pro
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>Up to 10 members
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>Role-based access
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span data-check></span>Priority support & SSO
+              </li>
+            </ul>
+          </div>
+          <a
+            href="#"
+            class="mt-6 inline-flex h-9 w-full items-center justify-center rounded-md border bg-transparent px-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >Start Team trial</a
+          >
+        </div>
+      </div>
+
+      <!-- Feature comparison -->
+      <section class="mx-auto mt-20 max-w-5xl">
+        <h2 class="text-xl font-semibold tracking-tight">Compare plans</h2>
+        <p class="mt-1 text-sm text-muted-foreground">
+          Every plan includes the core API, SDKs, and dashboard.
+        </p>
+
+        <div class="mt-6 overflow-x-auto rounded-lg border">
+          <table class="w-full border-collapse text-sm">
+            <thead>
+              <tr class="border-b bg-muted/50">
+                <th
+                  scope="col"
+                  class="w-2/5 px-4 py-3 text-left font-medium text-muted-foreground"
+                >
+                  Feature
+                </th>
+                <th scope="col" class="px-4 py-3 text-left font-medium">Free</th>
+                <th scope="col" class="px-4 py-3 text-left font-medium">Pro</th>
+                <th scope="col" class="px-4 py-3 text-left font-medium">Team</th>
+              </tr>
+            </thead>
+            <tbody id="compare-body">
+              <!-- rows injected -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FAQ / footer note -->
+      <div class="mx-auto mt-12 max-w-2xl text-center text-sm text-muted-foreground">
+        Prices in USD. Annual plans are billed yearly at the discounted rate.
+        Need a higher volume plan?
+        <a
+          href="#"
+          class="font-medium text-foreground underline-offset-4 hover:underline"
+          >Contact sales</a
+        >.
+      </div>
+    </main>
+
+    <footer class="border-t">
+      <div
+        class="container flex h-14 items-center justify-between text-sm text-muted-foreground"
+      >
+        <span>© 2026 Sendcup, Inc.</span>
+        <div class="flex items-center gap-6">
+          <a href="#" class="transition-colors hover:text-foreground">Terms</a>
+          <a href="#" class="transition-colors hover:text-foreground">Privacy</a>
+          <a href="#" class="transition-colors hover:text-foreground">Status</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // ---- Theme toggle ----
+      (function () {
+        const root = document.documentElement;
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        if (stored === "dark" || (!stored && prefersDark)) {
+          root.classList.add("dark");
+        }
+        document
+          .getElementById("theme-toggle")
+          .addEventListener("click", function () {
+            root.classList.toggle("dark");
+            localStorage.setItem(
+              "theme",
+              root.classList.contains("dark") ? "dark" : "light"
+            );
+          });
+      })();
+
+      // ---- Check icon injection ----
+      (function () {
+        const svg =
+          '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0 text-foreground" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+        document.querySelectorAll("[data-check]").forEach(function (el) {
+          el.outerHTML = svg;
+        });
+      })();
+
+      // ---- Billing toggle ----
+      (function () {
+        const prices = {
+          pro: { monthly: 20, annual: 200 },
+          team: { monthly: 60, annual: 600 },
+        };
+        const btns = document.querySelectorAll(".billing-btn");
+        const active =
+          "bg-background text-foreground shadow-sm";
+        const inactive = "text-muted-foreground hover:text-foreground";
+
+        function render(mode) {
+          btns.forEach(function (b) {
+            const on = b.dataset.billing === mode;
+            b.classList.toggle("bg-background", on);
+            b.classList.toggle("text-foreground", on);
+            b.classList.toggle("shadow-sm", on);
+            b.classList.toggle("text-muted-foreground", !on);
+            b.setAttribute("aria-pressed", on ? "true" : "false");
+          });
+
+          document.querySelectorAll("[data-period]").forEach(function (el) {
+            el.textContent = mode === "annual" ? "/yr" : "/mo";
+          });
+
+          Object.keys(prices).forEach(function (tier) {
+            const p = prices[tier][mode];
+            const priceEl = document.querySelector(
+              '[data-price="' + tier + '"]'
+            );
+            const noteEl = document.querySelector('[data-note="' + tier + '"]');
+            priceEl.textContent = "$" + p;
+            if (mode === "annual") {
+              const perMo = Math.round((p / 12) * 100) / 100;
+              noteEl.textContent = "$" + perMo + "/mo, billed annually";
+            } else {
+              noteEl.textContent = "Billed monthly";
+            }
+          });
+        }
+
+        btns.forEach(function (b) {
+          b.addEventListener("click", function () {
+            render(b.dataset.billing);
+          });
+        });
+        render("monthly");
+      })();
+
+      // ---- Feature comparison table ----
+      (function () {
+        // value can be: true (check), false (dash), or a string
+        const rows = [
+          {
+            group: "Usage",
+            items: [
+              { label: "Requests / month", free: "3K", pro: "100K", team: "1M" },
+              { label: "Projects", free: "1", pro: "Unlimited", team: "Unlimited" },
+              { label: "Log retention", free: "7 days", pro: "30 days", team: "90 days" },
+            ],
+          },
+          {
+            group: "Features",
+            items: [
+              { label: "Custom domains", free: false, pro: true, team: true },
+              { label: "Webhooks", free: true, pro: true, team: true },
+              { label: "Environments", free: "1", pro: "3", team: "Unlimited" },
+              { label: "Analytics dashboard", free: false, pro: true, team: true },
+            ],
+          },
+          {
+            group: "Collaboration",
+            items: [
+              { label: "Team members", free: "1", pro: "1", team: "Up to 10" },
+              { label: "Role-based access", free: false, pro: false, team: true },
+              { label: "Audit logs", free: false, pro: false, team: true },
+              { label: "SSO / SAML", free: false, pro: false, team: true },
+            ],
+          },
+          {
+            group: "Support",
+            items: [
+              { label: "Community", free: true, pro: true, team: true },
+              { label: "Email support", free: false, pro: true, team: true },
+              { label: "Priority support", free: false, pro: false, team: true },
+            ],
+          },
+        ];
+
+        const check =
+          '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-foreground" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="sr-only">Included</span>';
+        const dash =
+          '<span class="text-muted-foreground" aria-hidden="true">—</span><span class="sr-only">Not included</span>';
+
+        function cell(v) {
+          if (v === true) return check;
+          if (v === false) return dash;
+          return '<span>' + v + "</span>";
+        }
+
+        const body = document.getElementById("compare-body");
+        let html = "";
+        rows.forEach(function (section) {
+          html +=
+            '<tr class="border-b bg-muted/30"><th scope="colgroup" colspan="4" class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">' +
+            section.group +
+            "</th></tr>";
+          section.items.forEach(function (row) {
+            html +=
+              '<tr class="border-b transition-colors hover:bg-muted/50 last:border-0">' +
+              '<th scope="row" class="px-4 py-3 text-left font-normal">' +
+              row.label +
+              "</th>" +
+              '<td class="px-4 py-3">' + cell(row.free) + "</td>" +
+              '<td class="px-4 py-3">' + cell(row.pro) + "</td>" +
+              '<td class="px-4 py-3">' + cell(row.team) + "</td>" +
+              "</tr>";
+          });
+        });
+        body.innerHTML = html;
+      })();
+    </script>
+  </body>
+</html>

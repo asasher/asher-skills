@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pricing — Rowline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          bg:      '#0f0f0f',
+          surface: '#171717',
+          raised:  '#1d1d1d',
+          border:  '#2a2a2a',
+          borderStrong: '#383838',
+          text:    '#ededed',
+          muted:   '#8a8a8a',
+          faint:   '#6a6a6a',
+          accent:  '#00b389',
+        },
+        fontFamily: {
+          sans: ['"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        },
+        borderRadius: {
+          DEFAULT: '8px',
+        },
+      },
+    },
+  };
+</script>
+<style type="text/tailwindcss">
+  @layer base {
+    body { @apply bg-bg text-text font-sans antialiased; }
+  }
+</style>
+</head>
+<body class="min-h-screen">
+  <div class="mx-auto max-w-[1120px] px-6">
+
+    <!-- Header -->
+    <header class="pt-16 pb-10 border-b border-border">
+      <div class="flex items-center gap-2 text-sm text-muted mb-8">
+        <span class="font-mono font-medium text-text">rowline</span>
+        <span class="text-faint">/</span>
+        <span>pricing</span>
+      </div>
+      <h1 class="text-3xl font-semibold tracking-tight">Plans for every stage</h1>
+      <p class="mt-3 text-muted max-w-xl">
+        Start free, upgrade when your team grows. No usage caps on any paid plan,
+        and every tier includes the full CLI and API.
+      </p>
+
+      <!-- Billing toggle -->
+      <div class="mt-8 inline-flex items-center gap-3">
+        <div class="inline-flex rounded border border-border bg-surface p-1">
+          <button id="btn-monthly" type="button"
+            class="px-3 py-1.5 text-sm font-medium rounded transition-colors duration-150">
+            Monthly
+          </button>
+          <button id="btn-annual" type="button"
+            class="px-3 py-1.5 text-sm font-medium rounded transition-colors duration-150">
+            Annual
+          </button>
+        </div>
+        <span class="text-sm text-muted">Save ~17% with annual billing</span>
+      </div>
+    </header>
+
+    <!-- Pricing tiers -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 py-10">
+
+      <!-- Free -->
+      <div class="rounded border border-border bg-surface p-6 flex flex-col">
+        <h2 class="text-base font-semibold">Free</h2>
+        <p class="mt-1 text-sm text-muted">For personal projects and trying things out.</p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-3xl font-semibold font-mono">$0</span>
+          <span class="text-sm text-muted">/month</span>
+        </div>
+        <p class="mt-1 text-xs text-faint h-4"></p>
+        <button class="mt-6 w-full rounded border border-borderStrong bg-raised px-4 py-2 text-sm font-medium hover:bg-border transition-colors duration-150">
+          Get started
+        </button>
+        <ul class="mt-6 space-y-2.5 text-sm text-muted">
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>1 project</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>Up to 2 members</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>Community support</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>7-day log retention</li>
+        </ul>
+      </div>
+
+      <!-- Pro (highlighted) -->
+      <div class="rounded border border-borderStrong bg-raised p-6 flex flex-col relative">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold">Pro</h2>
+          <span class="text-xs font-medium text-accent border border-accent/40 rounded px-2 py-0.5">Popular</span>
+        </div>
+        <p class="mt-1 text-sm text-muted">For individual developers shipping in production.</p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-3xl font-semibold font-mono" data-price="pro">$12</span>
+          <span class="text-sm text-muted">/month</span>
+        </div>
+        <p class="mt-1 text-xs text-faint h-4" data-note="pro">Billed monthly</p>
+        <button class="mt-6 w-full rounded bg-accent px-4 py-2 text-sm font-medium text-black hover:bg-accent/90 transition-colors duration-150">
+          Start free trial
+        </button>
+        <ul class="mt-6 space-y-2.5 text-sm text-muted">
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>Unlimited projects</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>Up to 5 members</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>Email support</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>30-day log retention</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>Deploy previews</li>
+        </ul>
+      </div>
+
+      <!-- Team -->
+      <div class="rounded border border-border bg-surface p-6 flex flex-col">
+        <h2 class="text-base font-semibold">Team</h2>
+        <p class="mt-1 text-sm text-muted">For teams that need control and collaboration.</p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-3xl font-semibold font-mono" data-price="team">$24</span>
+          <span class="text-sm text-muted">/user/month</span>
+        </div>
+        <p class="mt-1 text-xs text-faint h-4" data-note="team">Billed monthly</p>
+        <button class="mt-6 w-full rounded border border-borderStrong bg-raised px-4 py-2 text-sm font-medium hover:bg-border transition-colors duration-150">
+          Contact sales
+        </button>
+        <ul class="mt-6 space-y-2.5 text-sm text-muted">
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>Everything in Pro</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>Unlimited members</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>SSO &amp; SAML</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>Priority support</li>
+          <li class="flex gap-2.5"><span class="text-accent mt-0.5">&check;</span>Audit logs</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Feature comparison -->
+    <section class="pb-24">
+      <h2 class="text-lg font-semibold mb-4">Compare features</h2>
+      <div class="overflow-x-auto rounded border border-border">
+        <table class="w-full text-sm border-collapse min-w-[560px]">
+          <thead>
+            <tr class="border-b border-border bg-surface">
+              <th class="text-left font-medium py-3 px-4 w-2/5">Feature</th>
+              <th class="text-left font-medium py-3 px-4">Free</th>
+              <th class="text-left font-medium py-3 px-4">Pro</th>
+              <th class="text-left font-medium py-3 px-4">Team</th>
+            </tr>
+          </thead>
+          <tbody id="compare-body" class="text-muted"></tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-sm text-muted">
+        Questions about a plan? Reach us at
+        <a href="mailto:support@rowline.dev" class="text-text underline underline-offset-2 hover:text-accent transition-colors duration-150">support@rowline.dev</a>.
+      </p>
+    </section>
+  </div>
+
+  <script>
+    // Billing toggle
+    const prices = {
+      pro:  { monthly: '$12', annual: '$10' },
+      team: { monthly: '$24', annual: '$20' },
+    };
+    const btnMonthly = document.getElementById('btn-monthly');
+    const btnAnnual  = document.getElementById('btn-annual');
+
+    const activeClasses = ['bg-raised', 'text-text'];
+    const idleClasses   = ['text-muted'];
+
+    function setActive(mode) {
+      const on  = mode === 'annual' ? btnAnnual : btnMonthly;
+      const off = mode === 'annual' ? btnMonthly : btnAnnual;
+      on.classList.add(...activeClasses);
+      on.classList.remove(...idleClasses);
+      off.classList.remove(...activeClasses);
+      off.classList.add(...idleClasses);
+
+      document.querySelectorAll('[data-price]').forEach(el => {
+        el.textContent = prices[el.dataset.price][mode];
+      });
+      const note = mode === 'annual' ? 'Billed annually' : 'Billed monthly';
+      document.querySelectorAll('[data-note]').forEach(el => {
+        el.textContent = note;
+      });
+    }
+
+    btnMonthly.addEventListener('click', () => setActive('monthly'));
+    btnAnnual.addEventListener('click', () => setActive('annual'));
+    setActive('monthly');
+
+    // Feature comparison rows
+    const check = '<span class="text-accent">&check;</span>';
+    const dash  = '<span class="text-faint">&mdash;</span>';
+    const features = [
+      ['Projects', '1', 'Unlimited', 'Unlimited'],
+      ['Team members', '2', '5', 'Unlimited'],
+      ['CLI &amp; API access', check, check, check],
+      ['Deploy previews', dash, check, check],
+      ['Log retention', '7 days', '30 days', '1 year'],
+      ['SSO &amp; SAML', dash, dash, check],
+      ['Audit logs', dash, dash, check],
+      ['Support', 'Community', 'Email', 'Priority'],
+      ['SLA', dash, dash, '99.9%'],
+    ];
+    const body = document.getElementById('compare-body');
+    body.innerHTML = features.map((row, i) => {
+      const border = i < features.length - 1 ? 'border-b border-border' : '';
+      const cells = row.map((c, j) =>
+        `<td class="py-3 px-4 ${j === 0 ? 'text-text font-medium' : ''}">${c}</td>`
+      ).join('');
+      return `<tr class="${border} hover:bg-surface transition-colors duration-150">${cells}</tr>`;
+    }).join('');
+  </script>
+</body>
+</html>

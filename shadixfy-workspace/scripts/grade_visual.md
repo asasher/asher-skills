@@ -51,14 +51,21 @@ Save scores to `iteration-N/visual_scores.json`, e.g.:
 
 ## Running the judge with Claude (optional, automatable)
 
-Claude can view images directly. From the workspace you can do, for one eval/agent:
+Claude can view images directly, so run the judge **in-session** — see the workspace README >
+"Agent execution". If the orchestrator is Claude Code, either view the shuffled screenshots yourself
+or hand them to an Agent-tool subagent with the Judge prompt above; the subagent shares your session
+quota. **Do not** shell out to `claude -p` for this — a nested `claude` process bills as a separate
+metered client.
+
+For a true blind run, copy the three screenshots to shuffled neutral filenames (`A.png`/`B.png`/`C.png`)
+first and pass those, keeping a private mapping.
+
+Only a non-Claude orchestrator that cannot spawn a subagent should consider the CLI, and only after
+explicit human approval of the extra usage:
 
 ```bash
+# extra usage — run ONLY with explicit approval
 claude -p "$(cat scripts/grade_visual.md | sed -n '/## Judge prompt/,/## Recording/p')" \
   --permission-mode bypassPermissions \
-  iteration-1/dashboard/claude/no_skill/outputs/screenshot.png \
-  iteration-1/dashboard/claude/uncodixfy/outputs/screenshot.png \
-  iteration-1/dashboard/claude/shadixfy/outputs/screenshot.png
+  A.png B.png C.png
 ```
-
-(For a true blind run, copy the three to shuffled neutral filenames first and pass those.)

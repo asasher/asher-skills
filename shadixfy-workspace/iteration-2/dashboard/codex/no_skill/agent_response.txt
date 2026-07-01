@@ -1,0 +1,5 @@
+Built [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.rLWHIRokLD/index.html:1).
+
+It’s a single direct-open HTML dashboard for Northstar with a sidebar, top bar, metrics, interactive range chart, recent activity filters, and responsive layout. It loads Tailwind from the CDN and Inter from Google Fonts, with no build step and no external image assets.
+
+Verified the inline JavaScript parses cleanly.

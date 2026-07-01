@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ForgeKit Pricing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0f0f0f;
+        --surface: #1a1a1a;
+        --surface-soft: #202020;
+        --border: #2f2f2f;
+        --border-strong: #3a3a3a;
+        --text: #f5f5f5;
+        --muted: #a3a3a3;
+        --muted-strong: #c7c7c7;
+        --primary: #00d4aa;
+        --primary-text: #06120f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "IBM Plex Sans", sans-serif;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .page-shell {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 24px 0 40px;
+      }
+
+      .topbar {
+        display: flex;
+        min-height: 52px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .brand {
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        color: var(--muted-strong);
+        font-size: 14px;
+      }
+
+      .top-actions a:hover {
+        color: var(--text);
+      }
+
+      .page-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 36px 0 24px;
+      }
+
+      .page-title {
+        max-width: 560px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(32px, 5vw, 48px);
+        line-height: 1.05;
+        font-weight: 700;
+      }
+
+      .lead {
+        margin-top: 12px;
+        color: var(--muted-strong);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      .billing-control {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px;
+        min-width: 220px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #141414;
+        padding: 4px;
+      }
+
+      .billing-control button {
+        min-height: 38px;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--muted-strong);
+        cursor: pointer;
+        font: inherit;
+        font-size: 14px;
+      }
+
+      .billing-control button[aria-pressed="true"] {
+        border-color: var(--border-strong);
+        background: var(--surface-soft);
+        color: var(--text);
+      }
+
+      .billing-control button:focus-visible,
+      .plan-button:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+      }
+
+      .plans {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .plan-card {
+        display: flex;
+        min-height: 480px;
+        flex-direction: column;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .plan-card.is-featured {
+        border-color: rgba(0, 212, 170, 0.55);
+      }
+
+      .plan-body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: 22px;
+      }
+
+      .plan-name {
+        font-size: 20px;
+        line-height: 1.2;
+        font-weight: 700;
+      }
+
+      .plan-fit {
+        min-height: 48px;
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .price-row {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin-top: 24px;
+      }
+
+      .price {
+        font-size: 42px;
+        line-height: 1;
+        font-weight: 700;
+      }
+
+      .price-unit {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .billing-note {
+        min-height: 22px;
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .plan-button {
+        display: inline-flex;
+        min-height: 42px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 24px;
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        background: #222;
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .plan-button.primary {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: var(--primary-text);
+      }
+
+      .plan-button:hover {
+        border-color: var(--muted);
+      }
+
+      .feature-list {
+        display: grid;
+        gap: 11px;
+        margin: 24px 0 0;
+        padding: 22px 0 0;
+        border-top: 1px solid var(--border);
+        list-style: none;
+      }
+
+      .feature-list li {
+        color: var(--muted-strong);
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .comparison {
+        margin-top: 28px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .table-wrap {
+        margin-top: 14px;
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      table {
+        width: 100%;
+        min-width: 760px;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      th,
+      td {
+        padding: 15px 18px;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      td {
+        color: var(--muted-strong);
+      }
+
+      tbody tr:last-child th,
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      tbody th {
+        width: 28%;
+        color: var(--muted-strong);
+        font-weight: 500;
+      }
+
+      .included {
+        color: var(--text);
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      @media (max-width: 840px) {
+        .page-shell {
+          width: min(100% - 24px, 720px);
+          padding-top: 18px;
+        }
+
+        .topbar,
+        .page-header {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .page-header {
+          padding-top: 28px;
+        }
+
+        .billing-control {
+          width: 100%;
+        }
+
+        .plans {
+          grid-template-columns: 1fr;
+        }
+
+        .plan-card {
+          min-height: auto;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .top-actions {
+          width: 100%;
+          justify-content: space-between;
+          gap: 10px;
+        }
+
+        h1 {
+          font-size: 36px;
+        }
+
+        .lead {
+          font-size: 15px;
+        }
+
+        .plan-body {
+          padding: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page-shell">
+      <nav class="topbar" aria-label="Main navigation">
+        <a class="brand" href="#">ForgeKit</a>
+        <div class="top-actions" aria-label="Product links">
+          <a href="#">Docs</a>
+          <a href="#">Changelog</a>
+          <a href="#">Sign in</a>
+        </div>
+      </nav>
+
+      <header class="page-header">
+        <div class="page-title">
+          <h1>Pricing</h1>
+          <p class="lead">
+            Plans for a developer workflow tool that starts local and scales to shared automation.
+          </p>
+        </div>
+
+        <div class="billing-control" role="group" aria-label="Billing period">
+          <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
+          <button type="button" data-billing="annual" aria-pressed="false">Annual</button>
+        </div>
+      </header>
+
+      <section class="plans" aria-label="Pricing tiers">
+        <article class="plan-card">
+          <div class="plan-body">
+            <h2 class="plan-name">Free</h2>
+            <p class="plan-fit">For personal scripts, experiments, and small open-source work.</p>
+            <div class="price-row">
+              <p class="price" data-monthly="$0" data-annual="$0">$0</p>
+              <p class="price-unit">/ month</p>
+            </div>
+            <p class="billing-note" data-monthly-note="No card required" data-annual-note="No card required">
+              No card required
+            </p>
+            <a class="plan-button" href="#">Start free</a>
+            <ul class="feature-list">
+              <li>3 active projects</li>
+              <li>Local CLI with config sync</li>
+              <li>250 automation minutes</li>
+              <li>7-day run history</li>
+              <li>Community support</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="plan-card is-featured">
+          <div class="plan-body">
+            <h2 class="plan-name">Pro</h2>
+            <p class="plan-fit">For developers running production workflows across multiple projects.</p>
+            <div class="price-row">
+              <p class="price" data-monthly="$16" data-annual="$12">$16</p>
+              <p class="price-unit">/ user / month</p>
+            </div>
+            <p
+              class="billing-note"
+              data-monthly-note="Billed monthly"
+              data-annual-note="Billed at $144 per user yearly"
+            >
+              Billed monthly
+            </p>
+            <a class="plan-button primary" href="#">Upgrade to Pro</a>
+            <ul class="feature-list">
+              <li>Unlimited private projects</li>
+              <li>5,000 automation minutes</li>
+              <li>Encrypted cloud secrets</li>
+              <li>Pull request previews</li>
+              <li>Priority email support</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="plan-card">
+          <div class="plan-body">
+            <h2 class="plan-name">Team</h2>
+            <p class="plan-fit">For teams that need shared environments, permissions, and audit history.</p>
+            <div class="price-row">
+              <p class="price" data-monthly="$39" data-annual="$32">$39</p>
+              <p class="price-unit">/ user / month</p>
+            </div>
+            <p
+              class="billing-note"
+              data-monthly-note="Billed monthly"
+              data-annual-note="Billed at $384 per user yearly"
+            >
+              Billed monthly
+            </p>
+            <a class="plan-button" href="#">Contact sales</a>
+            <ul class="feature-list">
+              <li>Shared project workspaces</li>
+              <li>25,000 pooled automation minutes</li>
+              <li>Role-based access controls</li>
+              <li>SAML single sign-on</li>
+              <li>180-day audit log</li>
+            </ul>
+          </div>
+        </article>
+      </section>
+
+      <section class="comparison" aria-labelledby="comparison-title">
+        <h2 class="section-title" id="comparison-title">Feature comparison</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">Free</th>
+                <th scope="col">Pro</th>
+                <th scope="col">Team</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Active projects</th>
+                <td>3</td>
+                <td class="included">Unlimited</td>
+                <td class="included">Unlimited</td>
+              </tr>
+              <tr>
+                <th scope="row">Automation minutes</th>
+                <td>250</td>
+                <td>5,000</td>
+                <td>25,000 pooled</td>
+              </tr>
+              <tr>
+                <th scope="row">Environment secrets</th>
+                <td>Local only</td>
+                <td class="included">Encrypted cloud sync</td>
+                <td class="included">Scoped by team role</td>
+              </tr>
+              <tr>
+                <th scope="row">Pull request previews</th>
+                <td class="muted">Not included</td>
+                <td class="included">Included</td>
+                <td class="included">Included</td>
+              </tr>
+              <tr>
+                <th scope="row">Run history</th>
+                <td>7 days</td>
+                <td>30 days</td>
+                <td>180 days</td>
+              </tr>
+              <tr>
+                <th scope="row">Single sign-on</th>
+                <td class="muted">Not included</td>
+                <td class="muted">Not included</td>
+                <td class="included">SAML</td>
+              </tr>
+              <tr>
+                <th scope="row">Support</th>
+                <td>Community</td>
+                <td>Priority email</td>
+                <td>Shared Slack channel</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const billingButtons = document.querySelectorAll("[data-billing]");
+      const prices = document.querySelectorAll("[data-monthly][data-annual]");
+      const notes = document.querySelectorAll("[data-monthly-note][data-annual-note]");
+
+      function setBillingPeriod(period) {
+        billingButtons.forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.billing === period));
+        });
+
+        prices.forEach((price) => {
+          price.textContent = period === "annual" ? price.dataset.annual : price.dataset.monthly;
+        });
+
+        notes.forEach((note) => {
+          note.textContent =
+            period === "annual" ? note.dataset.annualNote : note.dataset.monthlyNote;
+        });
+      }
+
+      billingButtons.forEach((button) => {
+        button.addEventListener("click", () => setBillingPeriod(button.dataset.billing));
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account settings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            bg: '#18181b',
+            surface: '#212124',
+            line: '#2f2f33',
+            'line-strong': '#3a3a3f',
+            muted: '#8a8a92',
+            faint: '#6a6a72',
+            text: '#e7e7ea',
+            accent: '#a58a5c',
+          },
+          fontFamily: {
+            sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Helvetica Neue', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-feature-settings: "cv02","cv03","cv04","cv11"; }
+    input:focus-visible, textarea:focus-visible, button:focus-visible {
+      outline: 2px solid #55555c;
+      outline-offset: 1px;
+    }
+    /* toggle */
+    .switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .track {
+      width: 36px; height: 20px; border-radius: 11px;
+      background: #35353a; border: 1px solid #43434a;
+      transition: background 140ms ease, border-color 140ms ease;
+      flex: none;
+    }
+    .knob {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #b6b6bc; margin: 2px;
+      transform: translateX(0); transition: transform 140ms ease, background 140ms ease;
+    }
+    .switch input:checked + .track { background: #4a4030; border-color: #6b5c3e; }
+    .switch input:checked + .track .knob { transform: translateX(16px); background: #d8c79c; }
+    .switch input:focus-visible + .track { outline: 2px solid #55555c; outline-offset: 2px; }
+  </style>
+</head>
+<body class="bg-bg text-text font-sans antialiased min-h-screen">
+
+  <div class="max-w-3xl mx-auto px-6 py-10">
+
+    <header class="mb-8">
+      <h1 class="text-lg font-semibold text-text">Account settings</h1>
+      <p class="text-sm text-muted mt-1">Manage your profile, password, and notifications.</p>
+    </header>
+
+    <form id="settings" class="space-y-px">
+
+      <!-- Profile -->
+      <section class="border border-line rounded-lg bg-surface">
+        <div class="px-5 py-4 border-b border-line">
+          <h2 class="text-sm font-semibold">Profile</h2>
+        </div>
+        <div class="p-5 space-y-4">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="block text-sm text-muted mb-1.5">Name</label>
+              <input id="name" name="name" type="text" value="Asher Anjum"
+                class="w-full h-9 px-3 rounded-md bg-bg border border-line-strong text-sm text-text placeholder:text-faint focus:border-line-strong" />
+            </div>
+            <div>
+              <label for="email" class="block text-sm text-muted mb-1.5">Email</label>
+              <input id="email" name="email" type="email" value="as.asher.anjum@gmail.com"
+                class="w-full h-9 px-3 rounded-md bg-bg border border-line-strong text-sm text-text placeholder:text-faint" />
+            </div>
+          </div>
+          <div>
+            <label for="bio" class="block text-sm text-muted mb-1.5">Bio</label>
+            <textarea id="bio" name="bio" rows="3"
+              class="w-full px-3 py-2 rounded-md bg-bg border border-line-strong text-sm text-text placeholder:text-faint resize-y"
+              placeholder="A short description about you.">Product engineer. I build tools for small teams.</textarea>
+            <p class="text-xs text-faint mt-1.5">Brief description shown on your public profile.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="h-4"></div>
+
+      <!-- Password -->
+      <section class="border border-line rounded-lg bg-surface">
+        <div class="px-5 py-4 border-b border-line">
+          <h2 class="text-sm font-semibold">Change password</h2>
+        </div>
+        <div class="p-5 space-y-4">
+          <div>
+            <label for="current" class="block text-sm text-muted mb-1.5">Current password</label>
+            <input id="current" name="current" type="password" autocomplete="current-password"
+              class="w-full h-9 px-3 rounded-md bg-bg border border-line-strong text-sm text-text max-w-sm" />
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="new" class="block text-sm text-muted mb-1.5">New password</label>
+              <input id="new" name="new" type="password" autocomplete="new-password"
+                class="w-full h-9 px-3 rounded-md bg-bg border border-line-strong text-sm text-text" />
+            </div>
+            <div>
+              <label for="confirm" class="block text-sm text-muted mb-1.5">Confirm new password</label>
+              <input id="confirm" name="confirm" type="password" autocomplete="new-password"
+                class="w-full h-9 px-3 rounded-md bg-bg border border-line-strong text-sm text-text" />
+            </div>
+          </div>
+          <p class="text-xs text-faint">Use at least 8 characters, including a number.</p>
+        </div>
+      </section>
+
+      <div class="h-4"></div>
+
+      <!-- Notifications -->
+      <section class="border border-line rounded-lg bg-surface">
+        <div class="px-5 py-4 border-b border-line">
+          <h2 class="text-sm font-semibold">Notifications</h2>
+        </div>
+        <div class="divide-y divide-line">
+          <label class="flex items-center justify-between gap-4 px-5 py-3.5 cursor-pointer">
+            <span>
+              <span class="block text-sm text-text">Product updates</span>
+              <span class="block text-xs text-faint mt-0.5">News about features and improvements.</span>
+            </span>
+            <span class="switch inline-flex">
+              <input type="checkbox" name="notify_product" checked />
+              <span class="track flex items-center"><span class="knob"></span></span>
+            </span>
+          </label>
+          <label class="flex items-center justify-between gap-4 px-5 py-3.5 cursor-pointer">
+            <span>
+              <span class="block text-sm text-text">Comment replies</span>
+              <span class="block text-xs text-faint mt-0.5">When someone replies to your comments.</span>
+            </span>
+            <span class="switch inline-flex">
+              <input type="checkbox" name="notify_replies" checked />
+              <span class="track flex items-center"><span class="knob"></span></span>
+            </span>
+          </label>
+          <label class="flex items-center justify-between gap-4 px-5 py-3.5 cursor-pointer">
+            <span>
+              <span class="block text-sm text-text">Weekly summary</span>
+              <span class="block text-xs text-faint mt-0.5">A digest of your account activity each week.</span>
+            </span>
+            <span class="switch inline-flex">
+              <input type="checkbox" name="notify_summary" />
+              <span class="track flex items-center"><span class="knob"></span></span>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-end gap-3 pt-6">
+        <button type="reset"
+          class="h-9 px-4 rounded-md border border-line-strong text-sm text-text hover:bg-surface transition-colors">
+          Cancel
+        </button>
+        <button type="submit"
+          class="h-9 px-4 rounded-md bg-[#e7e7ea] text-[#1a1a1d] text-sm font-medium hover:bg-white transition-colors">
+          Save changes
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('settings').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const btn = e.submitter;
+      const original = btn.textContent;
+      btn.textContent = 'Saved';
+      btn.disabled = true;
+      setTimeout(function () {
+        btn.textContent = original;
+        btn.disabled = false;
+      }, 1400);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --background: 0 0% 100%;            --foreground: 240 10% 3.9%;
+      --card: 0 0% 100%;                  --card-foreground: 240 10% 3.9%;
+      --popover: 0 0% 100%;               --popover-foreground: 240 10% 3.9%;
+      --primary: 240 5.9% 10%;            --primary-foreground: 0 0% 98%;
+      --secondary: 240 4.8% 95.9%;        --secondary-foreground: 240 5.9% 10%;
+      --muted: 240 4.8% 95.9%;            --muted-foreground: 240 3.8% 46.1%;
+      --accent: 240 4.8% 95.9%;           --accent-foreground: 240 5.9% 10%;
+      --destructive: 0 84.2% 60.2%;       --destructive-foreground: 0 0% 98%;
+      --border: 240 5.9% 90%;             --input: 240 5.9% 90%;
+      --ring: 240 10% 3.9%;               --radius: 0.5rem;
+    }
+    .dark {
+      --background: 240 10% 3.9%;         --foreground: 0 0% 98%;
+      --card: 240 10% 3.9%;              --card-foreground: 0 0% 98%;
+      --popover: 240 10% 3.9%;           --popover-foreground: 0 0% 98%;
+      --primary: 0 0% 98%;               --primary-foreground: 240 5.9% 10%;
+      --secondary: 240 3.7% 15.9%;       --secondary-foreground: 0 0% 98%;
+      --muted: 240 3.7% 15.9%;           --muted-foreground: 240 5% 64.9%;
+      --accent: 240 3.7% 15.9%;          --accent-foreground: 0 0% 98%;
+      --destructive: 0 62.8% 30.6%;      --destructive-foreground: 0 0% 98%;
+      --border: 240 3.7% 15.9%;          --input: 240 3.7% 15.9%;
+      --ring: 240 4.9% 83.9%;
+    }
+    * { border-color: hsl(var(--border)); }
+    body { font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; }
+    .font-mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  </style>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            border: 'hsl(var(--border))',
+            input: 'hsl(var(--input))',
+            ring: 'hsl(var(--ring))',
+            background: 'hsl(var(--background))',
+            foreground: 'hsl(var(--foreground))',
+            primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+            secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
+            destructive: { DEFAULT: 'hsl(var(--destructive))', foreground: 'hsl(var(--destructive-foreground))' },
+            muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+            accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
+            popover: { DEFAULT: 'hsl(var(--popover))', foreground: 'hsl(var(--popover-foreground))' },
+            card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
+          },
+          borderRadius: {
+            lg: 'var(--radius)',
+            md: 'calc(var(--radius) - 2px)',
+            sm: 'calc(var(--radius) - 4px)',
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+  <div class="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-12">
+
+    <!-- Page header -->
+    <header class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight text-foreground">Account settings</h1>
+        <p class="mt-1 text-sm text-muted-foreground">Manage your profile, password, and how we reach you.</p>
+      </div>
+      <button
+        id="theme-toggle"
+        type="button"
+        class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-input bg-transparent text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        aria-label="Toggle theme"
+      >
+        <svg class="h-[18px] w-[18px] dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="hidden h-[18px] w-[18px] dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </header>
+
+    <form id="settings-form" class="mt-8 space-y-6" novalidate>
+
+      <!-- Profile -->
+      <section class="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h2 class="text-lg font-semibold leading-none tracking-tight">Profile</h2>
+          <p class="text-sm text-muted-foreground">This information is visible to your team.</p>
+        </div>
+        <div class="space-y-4 p-6 pt-0">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="space-y-2">
+              <label for="name" class="text-sm font-medium leading-none">Name</label>
+              <input id="name" name="name" type="text" value="Asher Anjum" autocomplete="name"
+                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+            </div>
+            <div class="space-y-2">
+              <label for="email" class="text-sm font-medium leading-none">Email</label>
+              <input id="email" name="email" type="email" value="as.asher.anjum@gmail.com" autocomplete="email"
+                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label for="bio" class="text-sm font-medium leading-none">Bio</label>
+            <textarea id="bio" name="bio" rows="3" placeholder="Tell us a little about yourself."
+              class="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">Product engineer. Building calm software.</textarea>
+            <p class="text-[0.8rem] text-muted-foreground">Brief description for your profile. Max 160 characters.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Password -->
+      <section class="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h2 class="text-lg font-semibold leading-none tracking-tight">Password</h2>
+          <p class="text-sm text-muted-foreground">Use at least 8 characters. Leave blank to keep your current password.</p>
+        </div>
+        <div class="space-y-4 p-6 pt-0">
+          <div class="space-y-2">
+            <label for="current-password" class="text-sm font-medium leading-none">Current password</label>
+            <input id="current-password" name="current-password" type="password" autocomplete="current-password"
+              class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="space-y-2">
+              <label for="new-password" class="text-sm font-medium leading-none">New password</label>
+              <input id="new-password" name="new-password" type="password" autocomplete="new-password"
+                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+            </div>
+            <div class="space-y-2">
+              <label for="confirm-password" class="text-sm font-medium leading-none">Confirm new password</label>
+              <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password"
+                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+              <p id="password-error" class="hidden text-[0.8rem] font-medium text-destructive">Passwords don't match.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Notifications -->
+      <section class="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h2 class="text-lg font-semibold leading-none tracking-tight">Notifications</h2>
+          <p class="text-sm text-muted-foreground">Choose what you want to be notified about.</p>
+        </div>
+        <div class="divide-y p-6 pt-0">
+          <!-- toggle row template -->
+          <div class="flex items-center justify-between py-4 first:pt-0">
+            <div class="space-y-0.5 pr-4">
+              <div class="text-sm font-medium leading-none">Product updates</div>
+              <div class="text-sm text-muted-foreground">News about features and improvements.</div>
+            </div>
+            <button type="button" role="switch" aria-checked="true" data-toggle
+              class="peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+              <span data-thumb class="pointer-events-none block h-4 w-4 translate-x-4 rounded-full bg-background shadow-sm transition-transform"></span>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between py-4">
+            <div class="space-y-0.5 pr-4">
+              <div class="text-sm font-medium leading-none">Security alerts</div>
+              <div class="text-sm text-muted-foreground">Sign-ins and password changes on your account.</div>
+            </div>
+            <button type="button" role="switch" aria-checked="true" data-toggle
+              class="peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+              <span data-thumb class="pointer-events-none block h-4 w-4 translate-x-4 rounded-full bg-background shadow-sm transition-transform"></span>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between py-4">
+            <div class="space-y-0.5 pr-4">
+              <div class="text-sm font-medium leading-none">Weekly summary</div>
+              <div class="text-sm text-muted-foreground">A digest of your activity, every Monday.</div>
+            </div>
+            <button type="button" role="switch" aria-checked="false" data-toggle
+              class="peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-input transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+              <span data-thumb class="pointer-events-none block h-4 w-4 translate-x-0 rounded-full bg-background shadow-sm transition-transform"></span>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between py-4 last:pb-0">
+            <div class="space-y-0.5 pr-4">
+              <div class="text-sm font-medium leading-none">Marketing emails</div>
+              <div class="text-sm text-muted-foreground">Offers, surveys, and other promotional mail.</div>
+            </div>
+            <button type="button" role="switch" aria-checked="false" data-toggle
+              class="peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-input transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+              <span data-thumb class="pointer-events-none block h-4 w-4 translate-x-0 rounded-full bg-background shadow-sm transition-transform"></span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-end gap-2">
+        <button type="reset"
+          class="inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+          Cancel
+        </button>
+        <button type="submit"
+          class="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+          Save changes
+        </button>
+      </div>
+    </form>
+
+    <!-- Toast -->
+    <div id="toast" class="pointer-events-none fixed bottom-4 right-4 z-50 translate-y-2 rounded-md border bg-popover px-4 py-3 text-sm text-popover-foreground opacity-0 shadow-md transition-all">
+      Changes saved.
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    // Switches
+    document.querySelectorAll('[data-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var on = btn.getAttribute('aria-checked') === 'true';
+        btn.setAttribute('aria-checked', String(!on));
+        btn.classList.toggle('bg-primary', !on);
+        btn.classList.toggle('bg-input', on);
+        var thumb = btn.querySelector('[data-thumb]');
+        thumb.classList.toggle('translate-x-4', !on);
+        thumb.classList.toggle('translate-x-0', on);
+      });
+    });
+
+    // Toast helper
+    var toast = document.getElementById('toast');
+    var toastTimer;
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0', 'translate-y-2');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () {
+        toast.classList.add('opacity-0', 'translate-y-2');
+      }, 2500);
+    }
+
+    // Save
+    var form = document.getElementById('settings-form');
+    var pwErr = document.getElementById('password-error');
+    var confirm = document.getElementById('confirm-password');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var np = document.getElementById('new-password').value;
+      var cp = confirm.value;
+      if (np !== cp) {
+        pwErr.classList.remove('hidden');
+        confirm.classList.add('border-destructive');
+        confirm.focus();
+        return;
+      }
+      pwErr.classList.add('hidden');
+      confirm.classList.remove('border-destructive');
+      showToast('Changes saved.');
+    });
+
+    // Cancel
+    form.addEventListener('reset', function () {
+      pwErr.classList.add('hidden');
+      confirm.classList.remove('border-destructive');
+      showToast('Changes discarded.');
+    });
+  </script>
+</body>
+</html>

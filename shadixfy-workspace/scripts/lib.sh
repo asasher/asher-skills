@@ -44,10 +44,41 @@ build_prompt() {
   esac
 }
 
+# Loud notice explaining why the Claude participant is not run via `claude -p`.
+# Printed to stderr wherever a Claude-via-CLI path would otherwise be taken.
+claude_cli_policy_notice() {
+  cat >&2 <<'EOF'
+────────────────────────────────────────────────────────────────────────────
+POLICY: the Claude participant is NOT run via `claude -p` (CLI).
+
+Why: a nested `claude` process authenticates as a separate metered client —
+per-token API billing if ANTHROPIC_API_KEY is set, otherwise a fragmented,
+separately-rate-limited subscription session. Neither is the free in-session path.
+
+Correct path: the ORCHESTRATOR produces Claude cells with an Agent-tool subagent
+(shares its session quota + prompt cache). See README > "Agent execution".
+
+Only if a NON-Claude orchestrator (e.g. Codex) genuinely needs a Claude result
+and has no subagent path: get EXPLICIT human approval, then re-run with
+ALLOW_CLAUDE_CLI=1 to accept the extra usage.
+────────────────────────────────────────────────────────────────────────────
+EOF
+}
+
 # Run Claude headless in $WORKDIR (cwd), prompt on stdin.
 # Writes JSON response to $1. Echoes nothing.
+#
+# Refuses by default: Claude cells are meant to be produced by the orchestrating
+# agent via a subagent, not `claude -p` (see claude_cli_policy_notice). Set
+# ALLOW_CLAUDE_CLI=1 — only after explicit human approval — to accept the extra
+# usage and run the CLI anyway. Returns 3 on refusal.
 run_claude() {
   local resp="$1"
+  if [[ "${ALLOW_CLAUDE_CLI:-0}" != "1" ]]; then
+    claude_cli_policy_notice
+    return 3
+  fi
+  echo ">> ALLOW_CLAUDE_CLI=1 set — running \`claude -p\` (extra usage accepted)." >&2
   claude -p \
     --output-format json \
     --permission-mode bypassPermissions \
