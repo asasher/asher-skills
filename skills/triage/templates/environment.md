@@ -35,6 +35,15 @@
 - How an agent mints a session: _<e.g. trigger an OTP → read it from the agentmail inbox → open the link with agent-browser>_.
 - Test accounts / where credentials live: _<env vars or secrets store; never hardcode, never echo `.env`>_.
 
+## Model staffing
+
+> Read by `run` at dispatch and by `verify`, `evidence`, and `adversarial-review` when they staff the delegate role. The skill defines the roles (lead / delegate / floor); this section maps them to models **per harness** — list only models each harness can actually reach, since one harness usually cannot spawn another vendor's models.
+
+- Floor: _<minimum capability class; nothing staffs below it>_.
+- From _<harness, e.g. Claude Code>_: lead = _<model>_; delegate = _<model + how to spawn it, e.g. subagent model override>_; external CLI delegate = _<e.g. codex CLI model+effort for backend-only work, or "none">_.
+- From _<other harness, e.g. Codex>_: _<mapping; if no lower tier is reachable above the floor, the delegate role collapses onto the lead — still delegated into separate threads>_.
+- Reviewer constraint: _<which delegate options may fill Reviewer; it must handle the full review criteria, frontend included>_.
+
 ## Parallelism verdict
 
 > Read by `run` before dispatch.

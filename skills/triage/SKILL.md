@@ -37,6 +37,16 @@ This file is the command surface; each subcommand loads its own contract from `r
 2. **First word matches a command** → load that bundled reference and follow it. Everything after the command name is the target (an issue number/URL, PR, branch, or path).
 3. **First word does not match** → infer the closest command, state the inferred command, then load its reference and proceed.
 
+## Model staffing
+
+The skill defines the roles; the Model staffing section of `docs/agents/environment.md` (written by `triage setup`) records who fills them, because the roster depends on the harness the loop runs in — a harness that cannot reach another vendor's models fills every role from its own lineup.
+
+- **Lead** — the most capable model reachable. Runs the issue thread and its thinking-heavy steps: groom, run, orient, diagnose, plan, implement, refactor.
+- **Delegate** — the next most capable tier below the lead, never below the floor. Runs the capped loops: verify ⇆ fix, evidence capture, and the adversarial-review subagents. May be an external CLI for backend-only work when the harness can invoke one; the Reviewer must satisfy the full review criteria, frontend included.
+- **Floor** — the minimum capability class the playbook names. Nothing staffs below it. If no model exists between the lead and the floor, the delegate role runs on the lead model itself — delegation into a separate thread still keeps the capped loops out of the lead context.
+
+Each reference restates its staffing where it spawns, so subcommands stay standalone.
+
 ## Core rules
 
 - Grooming is human-in-the-loop and classifies; running is autonomous and executes. The agent proposes labels but applies `ready-for-agent` only to issues the human confirms.

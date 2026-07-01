@@ -2,6 +2,8 @@
 
 Target: a branch whose behavior `reference/verify.md` has confirmed against its acceptance criteria. Terminal capture step — runs once, after the verify loop converges and before the PR. Never run it on a change that has not passed verification; the point is to prove to a human that the criteria are met, so capturing a half-working state defeats it.
 
+Staffing: capture is mechanical — a subagent filling the **delegate** role runs it, per the Model staffing section of `docs/agents/environment.md`. Run it on the current model when that section, a fitting tier, or a model override is unavailable.
+
 Read `docs/agents/verifying.md` for what evidence this repo requires, and `docs/agents/environment.md` for how to stand up, seed, and authenticate against the app. If either is missing, report a setup gap and stop.
 
 ## Steps

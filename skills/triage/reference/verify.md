@@ -4,6 +4,10 @@ Target: a branch, working tree, or PR. Confirms the change **behaves** as the is
 
 Read `docs/agents/verifying.md` for this repo's check commands, where acceptance criteria come from, and what evidence a change requires. Read `docs/agents/environment.md` for the isolation regime, how to bring up and seed a testable stack, and how to mint a session. If either is missing, report a setup gap and stop.
 
+## Staffing
+
+As the loop's verify step, this whole loop runs in a delegated subagent filling the **delegate** role: one capability tier below the issue thread, never below the floor. Read the Model staffing section of `docs/agents/environment.md` for who fills the role in the running harness, including whether an external CLI delegate is reachable for backend-only changes. If that section is missing, the harness offers no model override, or no tier fits between the thread's model and the floor, run the loop in a subagent on the current model — and inline only when no subagent is possible — rather than skipping verification; report a staffing gap if the section was missing. The issue thread stays coordinator either way. Two triggers escalate work back to the issue thread instead of burning iterations: a failure that points at a design gap rather than a mechanical slip, or the same criterion failing twice. Standalone runs execute wherever they were invoked.
+
 Verification produces a **verdict**, not artifacts. Capturing human-facing proof is the separate, terminal `reference/evidence.md` step — do not capture evidence here. Take a screenshot only when you need one to diagnose a failure.
 
 ## Steps
@@ -26,5 +30,6 @@ Verification produces a **verdict**, not artifacts. Capturing human-facing proof
 
 5. Loop or report.
    - As the loop's verify step: hand every failed criterion back to `implement.md` (enhancement) or `diagnose.md` (bug), then re-verify only what changed. Stop when all criteria pass, five verify/fix iterations are reached, or a blocker is hit. On cap or blocker, report it to the issue thread; do not proceed to evidence.
+   - Escalate to the issue thread instead of iterating when either Staffing trigger fires — a non-mechanical fix or a criterion failing twice — reporting the criterion, the observed gap, and what was tried.
    - Standalone: report the verdict.
    - Completion criterion: all criteria pass (proceed to `reference/evidence.md`), or the loop ends at its cap or an explicit blocker.

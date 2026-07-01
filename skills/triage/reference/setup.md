@@ -30,7 +30,7 @@ Prepares a repo for the loop. It scaffolds the project playbooks, provisions the
    - Completion criterion: the seed regime and command (or "none — drive the app") and the check commands are identified.
 
 5. Write the contracts into the playbooks.
-   - Record the results in `docs/agents/environment.md`: dev-stack startup, isolation regime and how to bring up an isolated stack, seed regime and command, auth/session minting, and the parallelism verdict. Record the check commands in `verifying.md`.
+   - Record the results in `docs/agents/environment.md`: dev-stack startup, isolation regime and how to bring up an isolated stack, seed regime and command, auth/session minting, the parallelism verdict, and the model-staffing roster (lead/delegate/floor per harness the loop runs from). Record the check commands in `verifying.md`.
    - Offer to fill the remaining baselines — the dependency convention in `triage-policy.md`, branch conventions, plan format, review criteria — with this repo's real values. The templates are baselines, not the contract.
    - Completion criterion: `environment.md` states the isolation, seed, and parallelism contracts the loop reads, or the user has chosen to keep a baseline section.
 

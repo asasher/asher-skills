@@ -23,10 +23,11 @@ Each branch below hands off to a bundled reference (`reference/<name>.md`) for t
 
 4. Verify behavior → follow `reference/verify.md`.
    - This is a loop: verify runs the checks and exercises the change against its acceptance criteria, handing failures back to `implement.md`/`diagnose.md` until every criterion passes or it hits its cap.
+   - Delegate the whole loop to a subagent filling the delegate role per `verify.md`'s staffing rule; this thread stays coordinator and takes back any failure the subagent escalates as non-mechanical or twice-failed.
    - Completion criterion: every acceptance criterion passes, or the verify loop ends at its cap or an explicit blocker (reported, no PR opened).
 
 5. Capture evidence → follow `reference/evidence.md`.
-   - Runs once, only after verify converges. Skip if the playbook requires no evidence beyond green checks.
+   - Runs once, only after verify converges. Skip if the playbook requires no evidence beyond green checks. Delegate per `evidence.md`'s staffing rule (the delegate role).
    - Completion criterion: the required evidence exists under `evidence/<slug>/` ready to embed, or none is required.
 
 6. Create the PR.
