@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dissolving: {{QUESTION}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!--
+  ============================================================
+  A DISSOLUTION — one self-contained page = the whole state.
+  The agent edits the marked regions directly; there is no
+  separate state file. Each <section> carries data-status
+  ("empty" | "active" | "done"); on resume, read these to see
+  where the thinking stands.
+  Edit only between the  <!== FILL: name ==>  markers.
+  Diagrams: write Mermaid inside a <pre class="mermaid">.
+  ============================================================
+-->
+<style>
+  :root{
+    --ink:#22201d; --ink-soft:#4d4842; --paper:#faf8f4; --bg:#eceae3;
+    --grey:#8a847a; --hair:#e2ddd2; --rule:#26221d;
+    --accent:#7a5cc4; --accent-2:#9679d6;     /* the "confusion" hue — cools as it dissolves */
+    --done:#2f7d72; --active:#b07d1a; --empty:#cfcabf;
+    --card:#fffdf9;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+    font-family:"Newsreader","Georgia",serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px 90px}
+  .label{font-family:"Inter",sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
+
+  /* masthead */
+  header.mast{padding:44px 0 26px;border-bottom:2px solid var(--rule);margin-bottom:8px}
+  .mast .kicker{color:var(--accent)}
+  h1{font-size:38px;line-height:1.08;font-weight:600;letter-spacing:-.02em;margin:10px 0 0}
+  .meta{font-family:"Inter",sans-serif;font-size:12px;color:var(--grey);margin-top:14px;display:flex;gap:18px;flex-wrap:wrap}
+  .meta b{color:var(--ink-soft);font-weight:600}
+
+  /* progress rail */
+  .rail{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 4px}
+  .rail a{font-family:"Inter",sans-serif;font-size:11px;font-weight:600;text-decoration:none;color:var(--grey);
+    border:1px solid var(--hair);background:var(--card);border-radius:20px;padding:5px 13px;display:flex;align-items:center;gap:7px}
+  .rail a .dot{width:8px;height:8px;border-radius:50%;background:var(--empty)}
+  .rail a[data-s="active"]{color:var(--active);border-color:var(--active)}
+  .rail a[data-s="active"] .dot{background:var(--active)}
+  .rail a[data-s="done"]{color:var(--done);border-color:var(--done)}
+  .rail a[data-s="done"] .dot{background:var(--done)}
+
+  /* sections */
+  section{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:26px 30px;margin:16px 0;
+    box-shadow:0 1px 2px rgba(50,40,28,.04)}
+  section[data-status="empty"]{opacity:.62}
+  .sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--hair);padding-bottom:12px;margin-bottom:16px}
+  .sec-head .n{font-family:"Inter",sans-serif;font-weight:700;color:var(--accent);font-size:14px}
+  .sec-head h2{font-size:22px;font-weight:600;margin:0;letter-spacing:-.01em;flex:1}
+  .sec-head .st{font-family:"Inter",sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;color:#fff;background:var(--empty)}
+  section[data-status="active"] .sec-head .st{background:var(--active)}
+  section[data-status="done"] .sec-head .st{background:var(--done)}
+  .hint{font-family:"Inter",sans-serif;font-size:12.5px;color:var(--grey);margin:-6px 0 14px;font-style:normal}
+
+  p{margin:0 0 14px} ul,ol{margin:0 0 14px;padding-left:22px} li{margin:5px 0}
+  em{color:var(--accent);font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:15px;margin:6px 0 14px;font-family:"Inter",sans-serif}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--hair);vertical-align:top}
+  th{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);font-weight:700}
+  .taboo-pair{font-family:"Inter",sans-serif;font-size:15px}
+  .taboo-pair .from{color:var(--accent);text-decoration:line-through;text-decoration-thickness:1px}
+  .taboo-pair .to{color:var(--ink)}
+  blockquote{margin:0 0 14px;padding:12px 18px;background:#f4f1ea;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+  pre.mermaid{background:#f4f1ea;border:1px solid var(--hair);border-radius:8px;padding:16px;text-align:center;font-family:"Inter",sans-serif}
+  cite{font-style:normal}
+  a.cite{font-family:"Inter",sans-serif;font-size:12px;color:var(--accent);text-decoration:none;vertical-align:super;font-weight:600}
+
+  /* resolution gets weight */
+  section#resolution{border-color:var(--done);border-width:1.5px}
+  section#resolution[data-status="empty"]{border-color:var(--hair);border-width:1px}
+  .verdict{font-size:20px;line-height:1.4;font-weight:500}
+
+  /* log + refs */
+  .log-entry{border-left:2px solid var(--hair);padding:2px 0 2px 16px;margin:0 0 16px}
+  .log-entry .when{font-family:"Inter",sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--grey)}
+  ol.refs{font-family:"Inter",sans-serif;font-size:14px} ol.refs li{margin:8px 0}
+  ol.refs a{color:var(--accent)}
+
+  @media print{body{background:#fff}section{box-shadow:none;break-inside:avoid}.rail{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="label kicker">A Dissolution</div>
+    <!-- FILL: question — the question exactly as it was first posed -->
+    <h1 id="question">{{QUESTION}}</h1>
+    <!-- /FILL: question -->
+    <div class="meta">
+      <span>Started <b>{{DATE}}</b></span>
+      <span>Updated <b id="updated">{{DATE}}</b></span>
+      <span>Status <b id="overall">open</b></span>
+    </div>
+    <nav class="rail">
+      <a href="#pose"     data-s="empty"><span class="dot"></span>1 · Question</a>
+      <a href="#taboo"    data-s="empty"><span class="dot"></span>2 · Taboo</a>
+      <a href="#trace"    data-s="empty"><span class="dot"></span>3 · Stack trace</a>
+      <a href="#anticipate" data-s="empty"><span class="dot"></span>4 · Anticipate</a>
+      <a href="#resolution" data-s="empty"><span class="dot"></span>5 · Resolution</a>
+    </nav>
+  </header>
+
+  <!-- 1 ─────────────────────────────────────────────── -->
+  <section id="pose" data-status="empty">
+    <div class="sec-head"><span class="n">1</span><h2>The question, as posed</h2><span class="st">empty</span></div>
+    <p class="hint">State it in the asker's own words. Then name the <em>itch</em> — what makes this feel like a real, hanging question rather than a settled fact. The itch is the thing we're dissolving; the confusion lives in the map, not the territory.</p>
+    <!-- FILL: pose -->
+    <p></p>
+    <!-- /FILL: pose -->
+  </section>
+
+  <!-- 2 ─────────────────────────────────────────────── -->
+  <section id="taboo" data-status="empty">
+    <div class="sec-head"><span class="n">2</span><h2>Taboo the words</h2><span class="st">empty</span></div>
+    <p class="hint">Ban the loaded word (<em>free will</em>, <em>disease</em>, <em>fair</em>, <em>conscious</em>, <em>really</em>) and re-ask using only what you actually mean. Where the substitution flows, the word was cheap. Where you <em>cannot</em> substitute without smuggling the word back — that spot is the confusion, now located.</p>
+    <!-- FILL: taboo -->
+    <table><thead><tr><th>Banned word</th><th>What it was standing in for</th></tr></thead>
+    <tbody></tbody></table>
+    <!-- /FILL: taboo -->
+  </section>
+
+  <!-- 3 ─────────────────────────────────────────────── -->
+  <section id="trace" data-status="empty">
+    <div class="sec-head"><span class="n">3</span><h2>Stack trace &amp; sub-questions</h2><span class="st">empty</span></div>
+    <p class="hint">Write the trace of the mental algorithm that <em>generates the feeling of a question</em> — not an answer to it. Then unbundle: a disguised question is usually several separate questions wearing one word. Diagram the decomposition.</p>
+    <!-- FILL: trace -->
+    <pre class="mermaid">
+graph TD
+  Q[the question] --> a[sub-question?]
+</pre>
+    <!-- /FILL: trace -->
+  </section>
+
+  <!-- 4 ─────────────────────────────────────────────── -->
+  <section id="anticipate" data-status="empty">
+    <div class="sec-head"><span class="n">4</span><h2>Reduce to anticipated experience</h2><span class="st">empty</span></div>
+    <p class="hint">Turn each sub-question into what you'd actually <em>expect to observe</em> if it went one way versus the other. A sub-question whose two answers predict the same experience is <em>empty</em> — mark it dissolved-on-contact. The rest are real and may need evidence.</p>
+    <!-- FILL: anticipate -->
+    <table><thead><tr><th>Sub-question</th><th>If yes, I'd anticipate…</th><th>If no, I'd anticipate…</th><th>Verdict</th></tr></thead>
+    <tbody></tbody></table>
+    <!-- /FILL: anticipate -->
+  </section>
+
+  <!-- 5 ─────────────────────────────────────────────── -->
+  <section id="resolution" data-status="empty">
+    <div class="sec-head"><span class="n">5</span><h2>Resolution</h2><span class="st">empty</span></div>
+    <p class="hint">State the dissolution: with the word tabooed and the sub-questions separated, the original question is answered, empty, or replaced by sharper ones. Then run the gate — <em>is there any lingering feeling of a hanging question?</em> If yes, it is not dissolved; note where the pull remains and keep going.</p>
+    <!-- FILL: resolution -->
+    <p class="verdict"></p>
+    <p><span class="label">Lingering-confusion check</span><br></p>
+    <p><span class="label">Open threads</span></p>
+    <ul></ul>
+    <!-- /FILL: resolution -->
+  </section>
+
+  <!-- SESSION LOG ────────────────────────────────────── -->
+  <section id="log" data-status="active">
+    <div class="sec-head"><span class="n">·</span><h2>Session log</h2><span class="st">running</span></div>
+    <p class="hint">One dated entry per working session: what moved, what the human reported, what to pick up next.</p>
+    <!-- FILL: log — prepend newest entry at the top -->
+    <div class="log-entry"><div class="when">{{DATE}}</div><p>Started. Question posed.</p></div>
+    <!-- /FILL: log -->
+  </section>
+
+  <!-- REFERENCES ─────────────────────────────────────── -->
+  <section id="refs" data-status="active">
+    <div class="sec-head"><span class="n">·</span><h2>References</h2><span class="st">sources</span></div>
+    <p class="hint">Sources that can't live inline. Files sit in <code>sources/</code>; cite them in the text above as <a class="cite">[n]</a>.</p>
+    <!-- FILL: refs -->
+    <ol class="refs"></ol>
+    <!-- /FILL: refs -->
+  </section>
+
+</div>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({startOnLoad:true, theme:"neutral", themeVariables:{fontFamily:"Inter, sans-serif", primaryColor:"#f0ebff", primaryBorderColor:"#9679d6", lineColor:"#8a847a"}});
+</script>
+</body>
+</html>

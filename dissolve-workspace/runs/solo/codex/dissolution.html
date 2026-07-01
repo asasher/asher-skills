@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dissolving: Is alcoholism a disease?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!--
+  ============================================================
+  A DISSOLUTION — one self-contained page = the whole state.
+  The agent edits the marked regions directly; there is no
+  separate state file. Each <section> carries data-status
+  ("empty" | "active" | "done"); on resume, read these to see
+  where the thinking stands.
+  Edit only between the  <!== FILL: name ==>  markers.
+  Diagrams: write Mermaid inside a <pre class="mermaid">.
+  ============================================================
+-->
+<style>
+  :root{
+    --ink:#22201d; --ink-soft:#4d4842; --paper:#faf8f4; --bg:#eceae3;
+    --grey:#8a847a; --hair:#e2ddd2; --rule:#26221d;
+    --accent:#7a5cc4; --accent-2:#9679d6;     /* the "confusion" hue — cools as it dissolves */
+    --done:#2f7d72; --active:#b07d1a; --empty:#cfcabf;
+    --card:#fffdf9;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+    font-family:"Newsreader","Georgia",serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px 90px}
+  .label{font-family:"Inter",sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
+
+  /* masthead */
+  header.mast{padding:44px 0 26px;border-bottom:2px solid var(--rule);margin-bottom:8px}
+  .mast .kicker{color:var(--accent)}
+  h1{font-size:38px;line-height:1.08;font-weight:600;letter-spacing:-.02em;margin:10px 0 0}
+  .meta{font-family:"Inter",sans-serif;font-size:12px;color:var(--grey);margin-top:14px;display:flex;gap:18px;flex-wrap:wrap}
+  .meta b{color:var(--ink-soft);font-weight:600}
+
+  /* progress rail */
+  .rail{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 4px}
+  .rail a{font-family:"Inter",sans-serif;font-size:11px;font-weight:600;text-decoration:none;color:var(--grey);
+    border:1px solid var(--hair);background:var(--card);border-radius:20px;padding:5px 13px;display:flex;align-items:center;gap:7px}
+  .rail a .dot{width:8px;height:8px;border-radius:50%;background:var(--empty)}
+  .rail a[data-s="active"]{color:var(--active);border-color:var(--active)}
+  .rail a[data-s="active"] .dot{background:var(--active)}
+  .rail a[data-s="done"]{color:var(--done);border-color:var(--done)}
+  .rail a[data-s="done"] .dot{background:var(--done)}
+
+  /* sections */
+  section{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:26px 30px;margin:16px 0;
+    box-shadow:0 1px 2px rgba(50,40,28,.04)}
+  section[data-status="empty"]{opacity:.62}
+  .sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--hair);padding-bottom:12px;margin-bottom:16px}
+  .sec-head .n{font-family:"Inter",sans-serif;font-weight:700;color:var(--accent);font-size:14px}
+  .sec-head h2{font-size:22px;font-weight:600;margin:0;letter-spacing:-.01em;flex:1}
+  .sec-head .st{font-family:"Inter",sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;color:#fff;background:var(--empty)}
+  section[data-status="active"] .sec-head .st{background:var(--active)}
+  section[data-status="done"] .sec-head .st{background:var(--done)}
+  .hint{font-family:"Inter",sans-serif;font-size:12.5px;color:var(--grey);margin:-6px 0 14px;font-style:normal}
+
+  p{margin:0 0 14px} ul,ol{margin:0 0 14px;padding-left:22px} li{margin:5px 0}
+  em{color:var(--accent);font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:15px;margin:6px 0 14px;font-family:"Inter",sans-serif}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--hair);vertical-align:top}
+  th{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);font-weight:700}
+  .taboo-pair{font-family:"Inter",sans-serif;font-size:15px}
+  .taboo-pair .from{color:var(--accent);text-decoration:line-through;text-decoration-thickness:1px}
+  .taboo-pair .to{color:var(--ink)}
+  blockquote{margin:0 0 14px;padding:12px 18px;background:#f4f1ea;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+  pre.mermaid{background:#f4f1ea;border:1px solid var(--hair);border-radius:8px;padding:16px;text-align:center;font-family:"Inter",sans-serif}
+  cite{font-style:normal}
+  a.cite{font-family:"Inter",sans-serif;font-size:12px;color:var(--accent);text-decoration:none;vertical-align:super;font-weight:600}
+
+  /* resolution gets weight */
+  section#resolution{border-color:var(--done);border-width:1.5px}
+  section#resolution[data-status="empty"]{border-color:var(--hair);border-width:1px}
+  .verdict{font-size:20px;line-height:1.4;font-weight:500}
+
+  /* log + refs */
+  .log-entry{border-left:2px solid var(--hair);padding:2px 0 2px 16px;margin:0 0 16px}
+  .log-entry .when{font-family:"Inter",sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--grey)}
+  ol.refs{font-family:"Inter",sans-serif;font-size:14px} ol.refs li{margin:8px 0}
+  ol.refs a{color:var(--accent)}
+
+  @media print{body{background:#fff}section{box-shadow:none;break-inside:avoid}.rail{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="label kicker">A Dissolution</div>
+    <!-- FILL: question — the question exactly as it was first posed -->
+    <h1 id="question">Is alcoholism a disease?</h1>
+    <!-- /FILL: question -->
+    <div class="meta">
+      <span>Started <b>2026-07-01</b></span>
+      <span>Updated <b id="updated">2026-07-01</b></span>
+      <span>Status <b id="overall">dissolved</b></span>
+    </div>
+    <nav class="rail">
+      <a href="#pose"     data-s="done"><span class="dot"></span>1 · Question</a>
+      <a href="#taboo"    data-s="done"><span class="dot"></span>2 · Taboo</a>
+      <a href="#trace"    data-s="done"><span class="dot"></span>3 · Stack trace</a>
+      <a href="#anticipate" data-s="done"><span class="dot"></span>4 · Anticipate</a>
+      <a href="#resolution" data-s="done"><span class="dot"></span>5 · Resolution</a>
+    </nav>
+  </header>
+
+  <!-- 1 ─────────────────────────────────────────────── -->
+  <section id="pose" data-status="done">
+    <div class="sec-head"><span class="n">1</span><h2>The question, as posed</h2><span class="st">done</span></div>
+    <p class="hint">State it in the asker's own words. Then name the <em>itch</em> — what makes this feel like a real, hanging question rather than a settled fact. The itch is the thing we're dissolving; the confusion lives in the map, not the territory.</p>
+    <!-- FILL: pose -->
+    <blockquote>Is alcoholism a disease?</blockquote>
+    <p>The itch comes from two mental pictures colliding. In one picture, repeated harmful drinking looks like ordinary action: a person raises a glass, ignores consequences, breaks promises, and can be praised or blamed for choices. In the other picture, the same pattern includes craving, withdrawal, tolerance, relapse after sincere resolve, family risk, and treatment response, so it looks less like simple preference and more like a constrained failure mode.</p>
+    <p>The word <em>disease</em> feels urgent because it seems to decide several high-stakes things at once: whether to treat or punish, whether to blame or excuse, whether insurance should pay, whether the person should feel shame or seek care, and whether the condition belongs to medicine or morality. No single observation seems able to settle all of that. The hanging feeling comes from using one category word as if it contained facts, policies, and moral permissions in a single switch.</p>
+    <!-- /FILL: pose -->
+  </section>
+
+  <!-- 2 ─────────────────────────────────────────────── -->
+  <section id="taboo" data-status="done">
+    <div class="sec-head"><span class="n">2</span><h2>Taboo the words</h2><span class="st">done</span></div>
+    <p class="hint">Ban the loaded word (<em>free will</em>, <em>disease</em>, <em>fair</em>, <em>conscious</em>, <em>really</em>) and re-ask using only what you actually mean. Where the substitution flows, the word was cheap. Where you <em>cannot</em> substitute without smuggling the word back — that spot is the confusion, now located.</p>
+    <!-- FILL: taboo -->
+    <table><thead><tr><th>Banned word</th><th>What it was standing in for</th></tr></thead>
+    <tbody>
+      <tr><td><span class="taboo-pair"><span class="from">disease</span></span></td><td>A pattern with causal mechanisms, impairment, prognosis, and a usual place in clinical care.</td></tr>
+      <tr><td><span class="taboo-pair"><span class="from">illness / sickness</span></span></td><td>A signal for sympathy, care-seeking, reduced condemnation, and bodily or mental malfunction.</td></tr>
+      <tr><td><span class="taboo-pair"><span class="from">medical condition</span></span></td><td>Eligibility for clinicians, diagnosis codes, reimbursement, leave, accommodations, and formal treatment plans.</td></tr>
+      <tr><td><span class="taboo-pair"><span class="from">disorder / pathology</span></span></td><td>Departure from ordinary functioning that impairs life and follows recognizable causal routes.</td></tr>
+      <tr><td><span class="taboo-pair"><span class="from">real / really / true / actually / is</span></span></td><td>A demand for category membership over and above observable mechanisms, outcomes, and decisions.</td></tr>
+      <tr><td><span class="taboo-pair"><span class="from">just</span></span></td><td>An attempt to collapse the whole case into one side: only choice, only weakness, only biology, only excuse.</td></tr>
+      <tr><td><span class="taboo-pair"><span class="from">alcoholism</span></span></td><td>Repeated alcohol use despite harm, difficulty stopping, craving, tolerance or withdrawal in some cases, and relapse risk. This description carries no verdict about the forbidden label.</td></tr>
+      <tr><td><span class="taboo-pair"><span class="from">irreplaceable word</span></span></td><td>None for the empirical or policy questions. The only residue that resists rewriting asks whether the old category label should be granted after every prediction and decision has already been specified.</td></tr>
+    </tbody></table>
+    <p>Taboo rewrite: for people who repeatedly drink despite serious costs and often report craving, withdrawal, tolerance, or failed attempts to stop, which mechanisms predict the pattern, which interventions reduce harm, how much practical control remains in different contexts, how should institutions respond, and how should blame be assigned?</p>
+    <p>Where the rewrite flows, the forbidden label was cheap. Where it catches, the mind wants the label itself to settle compassion, responsibility, funding, and identity without doing those separate jobs explicitly.</p>
+    <!-- /FILL: taboo -->
+  </section>
+
+  <!-- 3 ─────────────────────────────────────────────── -->
+  <section id="trace" data-status="done">
+    <div class="sec-head"><span class="n">3</span><h2>Stack trace &amp; sub-questions</h2><span class="st">done</span></div>
+    <p class="hint">Write the trace of the mental algorithm that <em>generates the feeling of a question</em> — not an answer to it. Then unbundle: a disguised question is usually several separate questions wearing one word. Diagram the decomposition.</p>
+    <!-- FILL: trace -->
+    <ol>
+      <li>The mind observes a repeated pattern: someone drinks, suffers losses, promises change, then drinks again.</li>
+      <li>The ordinary action model fires first. Drinking has visible steps, so the event gets parsed as chosen conduct.</li>
+      <li>The constraint model fires next. Craving, withdrawal, tolerance, relapse after sincere resolve, and response to structured help look like a system pushing back against the person's stated plans.</li>
+      <li>The prototype matcher searches for a familiar category. Infection, cancer, injury, habit, vice, weakness, and compulsion all provide partial matches and partial mismatches.</li>
+      <li>The social evaluator notices that the chosen category changes expected treatment: sympathy or contempt, care or punishment, coverage or exclusion, mitigation or full blame.</li>
+      <li>Because those consequences matter, the mind compresses many decisions into one category test and asks for a yes/no answer.</li>
+      <li>The question feels unresolved because different sub-questions point in different directions: some ask for evidence, some ask for values, and one asks only for permission to use a word.</li>
+    </ol>
+    <p>Unbundled, the single question splits into these sharper questions:</p>
+    <ul>
+      <li>What pattern of behavior and experience are we grouping?</li>
+      <li>Do stable causal mechanisms make recurrence and quitting difficulty predictable?</li>
+      <li>Does the pattern reduce practical control in some contexts?</li>
+      <li>Which responses reduce harm best?</li>
+      <li>How should blame, accountability, and repair be assigned?</li>
+      <li>Should institutions fund, accommodate, or route this pattern through care systems?</li>
+      <li>After those answers are fixed, does the old category label add any further prediction?</li>
+    </ul>
+    <pre class="mermaid">
+graph TD
+  Q["Is alcoholism a disease?"] --> A["What pattern?"]
+  Q --> B["Stable mechanisms?"]
+  Q --> C["Reduced control?"]
+  Q --> D["Helpful responses?"]
+  Q --> E["Blame and repair?"]
+  Q --> F["Institutional route?"]
+  Q --> G["Label adds prediction?"]
+  A --> A1["drinking despite harm"]
+  B --> B1["risk, craving, withdrawal"]
+  C --> C1["plans versus impulses"]
+  D --> D1["care, sanctions, supports"]
+  E --> E1["moral allocation"]
+  F --> F1["coverage and accommodation"]
+  G --> G1["empty status residue"]
+</pre>
+    <!-- /FILL: trace -->
+  </section>
+
+  <!-- 4 ─────────────────────────────────────────────── -->
+  <section id="anticipate" data-status="done">
+    <div class="sec-head"><span class="n">4</span><h2>Reduce to anticipated experience</h2><span class="st">done</span></div>
+    <p class="hint">Turn each sub-question into what you'd actually <em>expect to observe</em> if it went one way versus the other. A sub-question whose two answers predict the same experience is <em>empty</em> — mark it dissolved-on-contact. The rest are real and may need evidence.</p>
+    <!-- FILL: anticipate -->
+    <table><thead><tr><th>Sub-question</th><th>If yes, I'd anticipate…</th><th>If no, I'd anticipate…</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>Are we grouping a coherent pattern?</td><td>Cases cluster around repeated drinking despite harm, failed stopping attempts, craving, tolerance or withdrawal in some people, and recognizable relapse routes.</td><td>The cases share little beyond alcohol consumption; future risk, support needs, and impairment vary too idiosyncratically for the grouping to help.</td><td>empirical</td></tr>
+      <tr><td>Do stable causal mechanisms predict recurrence and quitting difficulty?</td><td>Past use, physiology, family risk, stress, cues, withdrawal, and learned reinforcement predict risk and response better than chance.</td><td>Relapse and recovery track ordinary preference, opportunity, and incentives with no special recurring mechanism to model.</td><td>empirical</td></tr>
+      <tr><td>Does the pattern reduce practical control in some contexts?</td><td>In cue-heavy or withdrawal states, abstaining fails more often despite endorsed plans and known costs; changing context, support, or medication changes success rates.</td><td>Drinking decisions track explicit intentions and ordinary incentives about as reliably as comparable everyday plans.</td><td>empirical</td></tr>
+      <tr><td>Which responses reduce harm best?</td><td>Structured care, social support, environmental changes, medication, skills training, or combined approaches reduce harm more than condemnation or punishment alone.</td><td>Specialized supports add little; ordinary deterrence, personal resolve, or time perform about as well.</td><td>empirical</td></tr>
+      <tr><td>How should blame, accountability, and repair be assigned?</td><td>Condemnation softens where control was narrowed, while duties to prevent harm, make repair, and accept boundaries remain.</td><td>The person receives the same blame and sanction as any other harmful voluntary act, even when causes and constraints are acknowledged.</td><td>value</td></tr>
+      <tr><td>Should institutions fund, accommodate, or route this through care systems?</td><td>Insurance, clinics, employers, courts, and families create pathways for treatment access, leave, relapse planning, and safety boundaries.</td><td>The pattern stays mainly in private conduct, discipline, criminal justice, or informal support, with no special care-route commitment.</td><td>value</td></tr>
+      <tr><td>After the above answers are fixed, does the category label add a further prediction?</td><td>Nothing new changes: the same mechanisms, outcomes, duties, costs, supports, and policies have already been stated.</td><td>Nothing new changes: the same mechanisms, outcomes, duties, costs, supports, and policies have already been stated.</td><td>empty</td></tr>
+    </tbody></table>
+    <!-- /FILL: anticipate -->
+  </section>
+
+  <!-- 5 ─────────────────────────────────────────────── -->
+  <section id="resolution" data-status="done">
+    <div class="sec-head"><span class="n">5</span><h2>Resolution</h2><span class="st">done</span></div>
+    <p class="hint">State the dissolution: with the word tabooed and the sub-questions separated, the original question is answered, empty, or replaced by sharper ones. Then run the gate — <em>is there any lingering feeling of a hanging question?</em> If yes, it is not dissolved; note where the pull remains and keep going.</p>
+    <!-- FILL: resolution -->
+    <p class="verdict">With the loaded label tabooed, the original question dissolves into empirical questions about mechanism, control, and intervention; value questions about blame and institutional response; and an empty status question about whether a category word adds anything after those answers are fixed.</p>
+    <p>The original yes/no form no longer carries one hidden fact to discover. If someone asks it, the useful reply is: specify the pattern, test the causal and treatment claims, decide the accountability and policy questions openly, and drop the leftover demand for bare category membership.</p>
+    <p><span class="label">Lingering-confusion check</span><br>Rereading "Is alcoholism a disease?", I still feel a small pull only when I imagine the answer deciding compassion or responsibility in one stroke. Once compassion, responsibility, treatment, and funding are named separately, that pull does not survive. Gate passes: no hanging question remains in the original form.</p>
+    <p><span class="label">Open threads</span></p>
+    <ul>
+      <li>Empirical work remains: specify severity, population, mechanisms, predictors, and intervention outcomes.</li>
+      <li>Value work remains: choose rules for blame, repair, coercion, coverage, and accommodation.</li>
+      <li>Boundary work remains: mild harmful drinking, severe dependence, intoxicated wrongdoing, and recovery identity may need different descriptions.</li>
+      <li>No open thread remains for the bare label after the observations and decisions are spelled out.</li>
+    </ul>
+    <!-- /FILL: resolution -->
+  </section>
+
+  <!-- SESSION LOG ────────────────────────────────────── -->
+  <section id="log" data-status="active">
+    <div class="sec-head"><span class="n">·</span><h2>Session log</h2><span class="st">running</span></div>
+    <p class="hint">One dated entry per working session: what moved, what the human reported, what to pick up next.</p>
+    <!-- FILL: log — prepend newest entry at the top -->
+    <div class="log-entry"><div class="when">2026-07-01</div><p>Completed the five-move dissolution blind, with no outside sources. The original question was split into empirical, value-laden, and empty residues; gate passed.</p></div>
+    <div class="log-entry"><div class="when">2026-07-01</div><p>Started. Question posed.</p></div>
+    <!-- /FILL: log -->
+  </section>
+
+  <!-- REFERENCES ─────────────────────────────────────── -->
+  <section id="refs" data-status="active">
+    <div class="sec-head"><span class="n">·</span><h2>References</h2><span class="st">sources</span></div>
+    <p class="hint">Sources that can't live inline. Files sit in <code>sources/</code>; cite them in the text above as <a class="cite">[n]</a>.</p>
+    <!-- FILL: refs -->
+    <ol class="refs">
+      <li>No outside sources used.</li>
+    </ol>
+    <!-- /FILL: refs -->
+  </section>
+
+</div>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({startOnLoad:true, theme:"neutral", themeVariables:{fontFamily:"Inter, sans-serif", primaryColor:"#f0ebff", primaryBorderColor:"#9679d6", lineColor:"#8a847a"}});
+</script>
+</body>
+</html>

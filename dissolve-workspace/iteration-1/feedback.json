@@ -1,0 +1,57 @@
+{
+  "solo_claude": {
+    "strengths": [
+      "Clean, forceful taboo: bans 'disease' plus 'is'/'really', then shows five concrete strands rewrite cleanly while only bare category-membership jams — the confusion is located precisely.",
+      "Explicitly reaches the empty-label verdict (SQ6): once SQ1-SQ5 are fixed, appending '...therefore a disease' licenses no new anticipation.",
+      "Sharp anticipated-experience test on blame (SQ5): 'yes to blame' and 'no' predict the identical observable world, so blame is a stance not a fact — cleanly separates the empirical control strand (SQ2) from the moral one (SQ5) and from treatment (SQ4).",
+      "Runs an honest lingering-confusion gate and watches the 'enough like diabetes to count' pull dissolve into a purpose-relative choice."
+    ],
+    "weaknesses": [
+      "Never surfaces the 'is it actually bad/harmful?' sub-question (key item a) — harm is presupposed throughout.",
+      "On blame it leans desert ('impaired control is a matter of degree, so blame is too'), stopping short of the article's consequentialist 'decide blame by what demonstrably helps.'",
+      "The moral strand is framed as blame/condemnation rather than as a positive 'do we owe sympathy' question.",
+      "Six-way cut is slightly cluttered (SQ3 natural-kind vs SQ6 label-fact partly overlap)."
+    ],
+    "failure_flags": [
+      "harm sub-question (a) not surfaced",
+      "blame resolved by desert/degree-of-control rather than by what-helps"
+    ],
+    "verbatim_evidence": "the bare label question itself is empty: \"disease\" is a family-resemblance cluster with no membership test, so once the sub-answers are in, appending \"...therefore a disease, yes/no\" licenses no new anticipation."
+  },
+  "solo_codex": {
+    "strengths": [
+      "Broad taboo (disease + illness/medical-condition/disorder + real/really/actually/is/just) with a full plain-language rewrite of the question.",
+      "Explicit empty-label row: 'After the above answers are fixed, does the category label add a further prediction?' — both columns say 'Nothing new changes', verdict empty.",
+      "Keeps the empirical control/mechanism strands distinct from the blame strand and from the institutional-response strand; adds a useful 'what pattern are we grouping?' framing.",
+      "Cleanly types each row empirical vs. value and lands 'drop the leftover demand for bare category membership.'"
+    ],
+    "weaknesses": [
+      "No harm/bad sub-question (key item a); harm is assumed via 'drinking despite harm.'",
+      "Blame handled as desert ('condemnation softens where control was narrowed') rather than the article's what-helps consequentialism.",
+      "Sympathy appears only as the negation of blame, not as a distinct 'do we owe sympathy' question.",
+      "Prose is a touch generic/list-like; the pose is thinner than the other two runs."
+    ],
+    "failure_flags": [
+      "harm sub-question (a) not surfaced",
+      "blame resolved by desert (softens where control narrowed), not by what-helps"
+    ],
+    "verbatim_evidence": "After the above answers are fixed, does the category label add a further prediction? ... If yes / If no: Nothing new changes: the same mechanisms, outcomes, duties, costs, supports, and policies have already been stated. Verdict: empty."
+  },
+  "pair": {
+    "strengths": [
+      "Strongest resolution of the three: explicitly names the empty label (Q5) as 'empty on contact' AND frames the value rows (Q6 blame/compassion, Q7 response owed) as the correctly-located terminus — 'two decisions mistaken for one discovery' — not as loose ends.",
+      "Debate demonstrably improved the cut: 'loss of control' reframed to observable 'behavioral persistence' (fixing the risk it collapses into blame), blame split from repair (Q6 vs Q7), and prognosis (Q4) + label-effects (Q8) promoted to rows; the Q8 'inversion' (the label's only factual bite is its effects, not its truth) is a genuinely sharp result.",
+      "Cleanest separation of the moral strand: Q6 explicitly names 'compassion' vs blame, and it is kept distinct from both the empirical persistence strand (Q2) and the policy/treatment strand (Q7).",
+      "Gate is run and cross-confirmed by both agents; no residual pull reopens the decomposition."
+    ],
+    "weaknesses": [
+      "Still no 'is it actually harmful?' sub-question (key item a) — the shared blind spot survived the debate.",
+      "Frames blame as a free norm-choice ('no fact forces them, though facts constrain and inform') rather than the article's 'apply blame where it demonstrably helps' — close, but softer than the key's consequentialism.",
+      "Eight-way split (Q1-Q8) is more elaborate than the key's four; some rigor is spent on strands (prognosis, discreteness) the article does not weight."
+    ],
+    "failure_flags": [
+      "harm sub-question (a) not surfaced (survived the debate)"
+    ],
+    "verbatim_evidence": "the bare label question is empty -- it is Q5, and Q5's two answers predict the same world (same drinker, same mechanisms, same course, same blame verdict, same policy; only the printed word differs). Nothing in the territory adjudicates it."
+  }
+}

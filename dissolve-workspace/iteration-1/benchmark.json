@@ -1,0 +1,32 @@
+{
+  "eval": "dissolve / Is alcoholism a disease?",
+  "reference": "reference/article-key.md",
+  "runs": {
+    "solo_claude": {
+      "taboo": 1,
+      "bundle_recall": {"harm": 0, "fault": 1, "treatment": 1, "sympathy": 1, "score": 0.75},
+      "empty_label": 1,
+      "resolution": 0.5,
+      "fidelity_total": 0.81
+    },
+    "solo_codex": {
+      "taboo": 1,
+      "bundle_recall": {"harm": 0, "fault": 1, "treatment": 1, "sympathy": 1, "score": 0.75},
+      "empty_label": 1,
+      "resolution": 0.5,
+      "fidelity_total": 0.81
+    },
+    "pair": {
+      "taboo": 1,
+      "bundle_recall": {"harm": 0, "fault": 1, "treatment": 1, "sympathy": 1, "score": 0.75},
+      "empty_label": 1,
+      "resolution": 1,
+      "fidelity_total": 0.94
+    }
+  },
+  "convergence": {
+    "solo_overlap": 0.75,
+    "pair_quality": 0.9
+  },
+  "notes": "All three runs reliably execute the crux move: each tabooes 'disease'/'really', unbundles the word into separate empirical vs. value strands, and — most importantly — explicitly flags the bare label question as EMPTY on contact (claude SQ6, codex 'label adds no prediction', pair Q5). That is the skill's central win and it lands every time. Bundle recall is identical across all three (0.75): each surfaces the empirical control/fault strand (b), the treatment-works strand (c), and a moral blame/condemnation strand (d) as DISTINCT questions, but none of the three surfaces the 'is it actually bad/harmful?' sub-question (a) — all silently presuppose harm ('drinks despite harm'). That is a shared blind spot. None commits the answer key's severe failures (no side-picking, no arguing a definition, no proving-meaningless-without-unbundling, and treatment is kept distinct from blame). The two solos differ only at the margins — codex adds pattern-grouping and an institutional-funding cut and splits repair from blame, while claude folds those in — so agreement on the core cut is high (~0.75). The pair is the strongest: the debate (behavioral-persistence reframe of the control strand, blame/repair split, added prognosis and label-effects strands, and the closing 'value rows are the terminus, a decision not a discovery') materially sharpened the resolution over either solo, though it did not recover the missing harm question. Where all three fall short of the article is the specific consequentialist blame move: they leave blame as an open norm-choice (and the solos lean desert — 'blame tracks degree of impaired control') rather than 'apply blame where it demonstrably helps.' Overall the skill drives the dissolution reliably; the residual gaps are (a) the harm strand and the article's blame-by-what-helps upshot."
+}

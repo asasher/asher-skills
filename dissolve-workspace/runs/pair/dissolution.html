@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dissolving: Is alcoholism a disease?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!--
+  ============================================================
+  A DISSOLUTION — one self-contained page = the whole state.
+  The agent edits the marked regions directly; there is no
+  separate state file. Each <section> carries data-status
+  ("empty" | "active" | "done"); on resume, read these to see
+  where the thinking stands.
+  Edit only between the  <!== FILL: name ==>  markers.
+  Diagrams: write Mermaid inside a <pre class="mermaid">.
+  ============================================================
+-->
+<style>
+  :root{
+    --ink:#22201d; --ink-soft:#4d4842; --paper:#faf8f4; --bg:#eceae3;
+    --grey:#8a847a; --hair:#e2ddd2; --rule:#26221d;
+    --accent:#7a5cc4; --accent-2:#9679d6;     /* the "confusion" hue — cools as it dissolves */
+    --done:#2f7d72; --active:#b07d1a; --empty:#cfcabf;
+    --card:#fffdf9;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+    font-family:"Newsreader","Georgia",serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px 90px}
+  .label{font-family:"Inter",sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
+
+  /* masthead */
+  header.mast{padding:44px 0 26px;border-bottom:2px solid var(--rule);margin-bottom:8px}
+  .mast .kicker{color:var(--accent)}
+  h1{font-size:38px;line-height:1.08;font-weight:600;letter-spacing:-.02em;margin:10px 0 0}
+  .meta{font-family:"Inter",sans-serif;font-size:12px;color:var(--grey);margin-top:14px;display:flex;gap:18px;flex-wrap:wrap}
+  .meta b{color:var(--ink-soft);font-weight:600}
+
+  /* progress rail */
+  .rail{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 4px}
+  .rail a{font-family:"Inter",sans-serif;font-size:11px;font-weight:600;text-decoration:none;color:var(--grey);
+    border:1px solid var(--hair);background:var(--card);border-radius:20px;padding:5px 13px;display:flex;align-items:center;gap:7px}
+  .rail a .dot{width:8px;height:8px;border-radius:50%;background:var(--empty)}
+  .rail a[data-s="active"]{color:var(--active);border-color:var(--active)}
+  .rail a[data-s="active"] .dot{background:var(--active)}
+  .rail a[data-s="done"]{color:var(--done);border-color:var(--done)}
+  .rail a[data-s="done"] .dot{background:var(--done)}
+
+  /* sections */
+  section{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:26px 30px;margin:16px 0;
+    box-shadow:0 1px 2px rgba(50,40,28,.04)}
+  section[data-status="empty"]{opacity:.62}
+  .sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--hair);padding-bottom:12px;margin-bottom:16px}
+  .sec-head .n{font-family:"Inter",sans-serif;font-weight:700;color:var(--accent);font-size:14px}
+  .sec-head h2{font-size:22px;font-weight:600;margin:0;letter-spacing:-.01em;flex:1}
+  .sec-head .st{font-family:"Inter",sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;color:#fff;background:var(--empty)}
+  section[data-status="active"] .sec-head .st{background:var(--active)}
+  section[data-status="done"] .sec-head .st{background:var(--done)}
+  .hint{font-family:"Inter",sans-serif;font-size:12.5px;color:var(--grey);margin:-6px 0 14px;font-style:normal}
+
+  p{margin:0 0 14px} ul,ol{margin:0 0 14px;padding-left:22px} li{margin:5px 0}
+  em{color:var(--accent);font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:15px;margin:6px 0 14px;font-family:"Inter",sans-serif}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--hair);vertical-align:top}
+  th{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);font-weight:700}
+  .taboo-pair{font-family:"Inter",sans-serif;font-size:15px}
+  .taboo-pair .from{color:var(--accent);text-decoration:line-through;text-decoration-thickness:1px}
+  .taboo-pair .to{color:var(--ink)}
+  blockquote{margin:0 0 14px;padding:12px 18px;background:#f4f1ea;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+  pre.mermaid{background:#f4f1ea;border:1px solid var(--hair);border-radius:8px;padding:16px;text-align:center;font-family:"Inter",sans-serif}
+  cite{font-style:normal}
+  a.cite{font-family:"Inter",sans-serif;font-size:12px;color:var(--accent);text-decoration:none;vertical-align:super;font-weight:600}
+
+  /* resolution gets weight */
+  section#resolution{border-color:var(--done);border-width:1.5px}
+  section#resolution[data-status="empty"]{border-color:var(--hair);border-width:1px}
+  .verdict{font-size:20px;line-height:1.4;font-weight:500}
+
+  /* log + refs */
+  .log-entry{border-left:2px solid var(--hair);padding:2px 0 2px 16px;margin:0 0 16px}
+  .log-entry .when{font-family:"Inter",sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--grey)}
+  ol.refs{font-family:"Inter",sans-serif;font-size:14px} ol.refs li{margin:8px 0}
+  ol.refs a{color:var(--accent)}
+
+  @media print{body{background:#fff}section{box-shadow:none;break-inside:avoid}.rail{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="label kicker">A Dissolution</div>
+    <!-- FILL: question — the question exactly as it was first posed -->
+    <h1 id="question">Is alcoholism a disease?</h1>
+    <!-- /FILL: question -->
+    <div class="meta">
+      <span>Started <b>2026-07-01</b></span>
+      <span>Updated <b id="updated">2026-07-01</b></span>
+      <span>Status <b id="overall">dissolved</b></span>
+    </div>
+    <nav class="rail">
+      <a href="#pose"     data-s="done"><span class="dot"></span>1 · Question</a>
+      <a href="#taboo"    data-s="done"><span class="dot"></span>2 · Taboo</a>
+      <a href="#trace"    data-s="done"><span class="dot"></span>3 · Stack trace</a>
+      <a href="#anticipate" data-s="done"><span class="dot"></span>4 · Anticipate</a>
+      <a href="#resolution" data-s="done"><span class="dot"></span>5 · Resolution</a>
+    </nav>
+  </header>
+
+  <!-- 1 ─────────────────────────────────────────────── -->
+  <section id="pose" data-status="done">
+    <div class="sec-head"><span class="n">1</span><h2>The question, as posed</h2><span class="st">done</span></div>
+    <p class="hint">State it in the asker's own words. Then name the <em>itch</em> — what makes this feel like a real, hanging question rather than a settled fact. The itch is the thing we're dissolving; the confusion lives in the map, not the territory.</p>
+    <!-- FILL: pose -->
+    <p><b>As posed:</b> "Is alcoholism a disease?" — i.e., does the pattern of a person drinking heavily, wanting to stop, and not stopping belong in the same bin as cancer or diabetes, or in some other bin (a habit, a weakness, a choice, a vice)?</p>
+    <p><b>The itch.</b> Two intuitions collide and won't sit still together. One says: <em>the person keeps picking up the glass — nobody pours it down their throat — so this is something they do, a behavior, and behaviors are chosen.</em> The other says: <em>they swear they want to quit, they lose jobs and marriages over it, it runs in families and rewires the brain — that is not what "just deciding" looks like; it's something that happens to them.</em> Each intuition is confident, and they point at opposite bins.</p>
+    <p>What makes it feel <em>urgent</em> and <em>hanging</em> is that the yes/no seems to settle a whole stack of consequences at once — blame vs. sympathy, punishment vs. treatment, "pull yourself together" vs. "get you care," even the sufferer's own self-story ("I have a disease" / "I have no self-control") — yet there is no experiment you can run on the word <em>disease</em> itself to check the answer. The mind treats "disease" as a natural kind with a hidden essence that the world either does or doesn't contain, and then hunts for that essence and finds nothing to grab. The confusion is in the map: we are asking the world to adjudicate a category boundary we drew.</p>
+    <!-- /FILL: pose -->
+  </section>
+
+  <!-- 2 ─────────────────────────────────────────────── -->
+  <section id="taboo" data-status="done">
+    <div class="sec-head"><span class="n">2</span><h2>Taboo the words</h2><span class="st">done</span></div>
+    <p class="hint">Ban the loaded word (<em>free will</em>, <em>disease</em>, <em>fair</em>, <em>conscious</em>, <em>really</em>) and re-ask using only what you actually mean. Where the substitution flows, the word was cheap. Where you <em>cannot</em> substitute without smuggling the word back — that spot is the confusion, now located.</p>
+    <!-- FILL: taboo -->
+    <p>Banned: <b>disease</b> and its synonyms — <em>illness, sickness, medical condition, disorder</em> — plus the weasel words <em>real / really / actually / just</em> ("does the label name a <em>real</em> thing, or <em>just</em> bad conduct?"). When we re-ask without them, the word turns out to be a <b>bundle</b>. Each strand below is what "disease" was quietly standing in for. Most strands rewrite cleanly (the word was cheap there). Two resist substitution — that is where the confusion actually lives.</p>
+    <table><thead><tr><th>Banned word</th><th>What it was standing in for</th></tr></thead>
+    <tbody>
+      <tr><td class="taboo-pair"><span class="from">disease</span> <span class="to">→ physiological substrate</span></td><td>"Heavy drinking is tracked by reproducible changes in the body/brain and a heritable predisposition." <em>Rewrites cleanly</em> — an empirical claim, no "disease" needed.</td></tr>
+      <tr><td class="taboo-pair"><span class="from">disease</span> <span class="to">→ behavioral persistence</span></td><td>"The drinking persists even against the person's own strong stated intention and heavy incentives to stop, in a way that lets us predict failed attempts and relapse." Rewrites <em>partly</em> — the behavioral prediction is empirical, but "could not have done otherwise" quietly re-imports the free-will/agency question. <b>Sticky.</b></td></tr>
+      <tr><td class="taboo-pair"><span class="from">disease</span> <span class="to">→ dysfunction</span></td><td>"A part designed/selected to do X (self-regulation, reward) is not doing X." Rewrites, but "designed to" hides a norm of proper functioning. Mostly cheap.</td></tr>
+      <tr><td class="taboo-pair"><span class="from">disease</span> <span class="to">→ recurrent course</span></td><td>"This pattern has a predictable course: escalation, withdrawal/tolerance, relapse risk, and response to continuing management rather than one-time admonition." Rewrites cleanly — an empirical prognosis claim.</td></tr>
+      <tr><td class="taboo-pair"><span class="from">disease</span> <span class="to">→ not their fault</span></td><td>"The person does not deserve blame for the drinking or its harms." Rewrites cleanly — but into a <em>value</em> claim about desert, not a fact. <b>Sticky.</b></td></tr>
+      <tr><td class="taboo-pair"><span class="from">disease</span> <span class="to">→ warrants care</span></td><td>"The right societal response is structured help — withdrawal support, counseling, medication where useful, paid coverage, and relapse planning — not moral exhortation or punishment." Rewrites cleanly — into a practical/policy claim.</td></tr>
+      <tr><td class="taboo-pair"><span class="from">disease</span> <span class="to">→ identity effects</span></td><td>"Using this label changes the sufferer's self-story, stigma, treatment uptake, excuses, hope, and relapse risk." Rewrites cleanly — an empirical claim about consequences of a frame, plus a value choice about which consequences matter.</td></tr>
+      <tr><td class="taboo-pair"><span class="from">disease</span> <span class="to">→ a discrete kind</span></td><td>"'Alcoholism' names a single sharp-edged thing, not an arbitrary cut across a continuum of drinking." Rewrites cleanly — an empirical/definitional claim.</td></tr>
+    </tbody></table>
+    <p><b>Located.</b> Wherever "disease" tracked a <em>fact</em> (substrate, persistence patterns, course, discreteness, label effects) the substitution flowed and the word was cheap. The two strands that <em>cannot</em> be rewritten without smuggling the loaded word back are <em>could not have done otherwise</em> (re-imports the agency/free-will puzzle) and <em>not their fault</em> (a value judgment about blame). "Disease" feels indispensable precisely because it welds those two — one metaphysical-seeming, one normative — onto the empirical facts and passes the whole package off as a single discoverable property.</p>
+    <!-- /FILL: taboo -->
+  </section>
+
+  <!-- 3 ─────────────────────────────────────────────── -->
+  <section id="trace" data-status="done">
+    <div class="sec-head"><span class="n">3</span><h2>Stack trace &amp; sub-questions</h2><span class="st">done</span></div>
+    <p class="hint">Write the trace of the mental algorithm that <em>generates the feeling of a question</em> — not an answer to it. Then unbundle: a disguised question is usually several separate questions wearing one word. Diagram the decomposition.</p>
+    <!-- FILL: trace -->
+    <p><b>The stack trace</b> — how a mind manufactures the feeling of this question:</p>
+    <ol>
+      <li>Observe a person who (a) is visibly harmed by drinking, (b) sincerely says they want to stop, and (c) does not stop.</li>
+      <li>This violates the folk model of agency: <em>people do what they choose, and choose what they judge best for themselves.</em> (a)+(b)+(c) can't all be true under that model — dissonance.</li>
+      <li>To discharge the dissonance, the mind reaches for a <em>category</em> that explains the anomaly. Two bins are pre-loaded with opposite consequences:
+        <ul><li><b>Disease</b> — an involuntary bad bodily state that befalls you, carries no blame, and summons care.</li>
+        <li><b>Vice / weakness / choice</b> — voluntary bad conduct that is your fault and summons correction or contempt.</li></ul></li>
+      <li>The mind then asks "which bin is it <em>really</em> in?" — and here is the bug: it treats <em>disease</em> as a natural kind with a hidden essence the world contains, rather than as a human-drawn bin whose membership criteria <em>we</em> chose and could redraw.</li>
+      <li>Because the two bins carry opposite moral and institutional payloads, the essentialized yes/no feels enormously consequential — yet nothing in the territory answers "which essence is present," so the question hangs. <b>That hanging is the itch.</b></li>
+    </ol>
+    <p><b>Unbundle.</b> The single word "disease" is doing the work of several independent questions — some about facts, one about a label rule, and several about values or policy:</p>
+    <pre class="mermaid">
+graph TD
+  Q["Is alcoholism a disease?"]
+  Q --> E["Factual strands"]
+  Q --> L["Label strand"]
+  Q --> V["Value / policy strands"]
+  E --> E1["Q1 body/brain mechanisms + heritable risk?"]
+  E --> E2["Q2 persistent drinking against aims/incentives?"]
+  E --> E3["Q3 sharp cluster or continuum?"]
+  E --> E4["Q4 recurrent course / prognosis?"]
+  L --> L1["Q5 do chosen criteria include this case?"]
+  V --> V1["Q6 blame or compassion for drinking?"]
+  V --> V2["Q7 response owed: care, coverage, constraint, repair?"]
+  V --> V3["Q8 label effects on self-story/outcomes?"]
+  E2 -.agency residue.-> V1
+  L1 -.label licenses response.-> V2
+  V3 -.feeds policy.-> V2
+</pre>
+    <p>Note the dotted edges: Q2 has an empirical core (predictable persistence against intentions and incentives), but it leaks into Q6 when the mind silently turns "often fails to stop" into "could not have done otherwise." Q5, the pure label-rule question, is empty unless it is being used to smuggle in Q7 or Q8. Q8 was missing from the first split: labels can change outcomes, but that is a consequence to measure, not an essence to discover.</p>
+    <!-- /FILL: trace -->
+  </section>
+
+  <!-- 4 ─────────────────────────────────────────────── -->
+  <section id="anticipate" data-status="done">
+    <div class="sec-head"><span class="n">4</span><h2>Reduce to anticipated experience</h2><span class="st">done</span></div>
+    <p class="hint">Turn each sub-question into what you'd actually <em>expect to observe</em> if it went one way versus the other. A sub-question whose two answers predict the same experience is <em>empty</em> — mark it dissolved-on-contact. The rest are real and may need evidence.</p>
+    <!-- FILL: anticipate -->
+    <table><thead><tr><th>Sub-question</th><th>If yes, I'd anticipate…</th><th>If no, I'd anticipate…</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>Q1. Body/brain mechanisms + heritable risk?</td><td>Measurable bodily or neural differences, withdrawal/tolerance patterns, family-risk gradients, and interventions aimed at those mechanisms would predict drinking outcomes better than moral exhortation alone.</td><td>No reproducible mechanism or inherited risk pattern beyond ordinary intoxication and circumstance; changing incentives, access, and beliefs would explain the pattern without a distinct bodily contribution.</td><td>empirical</td></tr>
+      <tr><td>Q2. Persistent drinking against aims/incentives?</td><td>People would repeatedly drink after sincere abstinence plans, after losses they themselves judge severe, and after precommitments; relapse would be predictable from cues, withdrawal, stress, access, and supports.</td><td>Stable intentions plus strong incentives would usually stop the drinking; later drinking would mostly track changed preferences, weak incentives, or new information rather than repeated failure of the prior plan.</td><td>empirical</td></tr>
+      <tr><td>Q3. Sharp cluster or continuum?</td><td>Symptoms, harms, mechanisms, prognosis, and treatment response would cluster around a fairly stable boundary; crossing that boundary would add predictive power.</td><td>Drinking patterns and harms would vary smoothly; any cutoff would be a pragmatic threshold chosen for communication, triage, or policy, not a discovered joint in nature.</td><td>empirical</td></tr>
+      <tr><td>Q4. Recurrent course / prognosis?</td><td>The pattern would commonly escalate or recur, stopping once would not erase elevated relapse risk, and continuing support would outperform one-time warning or resolution.</td><td>Once the immediate context changed or the person stopped, future risk would not be specially elevated; the episode would behave more like a reversible habit than a recurring course.</td><td>empirical</td></tr>
+      <tr><td>Q5. Do chosen criteria include this case?</td><td>After a criterion list is stipulated, the checklist returns "include"; people then print one label on the same facts.</td><td>After a different criterion list is stipulated, the checklist returns "exclude"; people then print another label on the same facts.</td><td>empty</td></tr>
+      <tr><td>Q6. Blame or compassion for drinking?</td><td>Holding the facts fixed, condemnation, shame, or punitive desert would feel endorsed or socially appropriate.</td><td>Holding the facts fixed, compassion, patience, or non-condemnation would feel endorsed or socially appropriate.</td><td>value</td></tr>
+      <tr><td>Q7. Response owed: care, coverage, constraint, repair?</td><td>We would endorse spending resources on treatment and coverage, reducing exposure to triggers, sometimes imposing protective constraints, and still asking for repair where harms occurred.</td><td>We would endorse ordinary exhortation, punishment, exclusion from coverage, or leaving help to private choice, with fewer special institutions around the pattern.</td><td>value</td></tr>
+      <tr><td>Q8. Label effects on self-story/outcomes?</td><td>Using the label would change observable behavior: treatment uptake, shame, stigma, hope, excuse-making, relapse rates, family response, or willingness to seek help would shift in a measurable direction.</td><td>The label would make no outcome difference, or would be worse than alternative framings once the same supports and facts were held fixed.</td><td>empirical</td></tr>
+    </tbody></table>
+    <p>Q5 is the clean answer to Claude's first challenge: once Q1-Q4 facts and Q6-Q8 values/consequences are specified, "does the criterion-set include this case?" has no further sensory prediction. Any residue belongs to institutions applying the label (Q7) or to label-caused outcomes (Q8), not to the word itself.</p>
+    <!-- /FILL: anticipate -->
+  </section>
+
+  <!-- 5 ─────────────────────────────────────────────── -->
+  <section id="resolution" data-status="done">
+    <div class="sec-head"><span class="n">5</span><h2>Resolution</h2><span class="st">done</span></div>
+    <p class="hint">State the dissolution: with the word tabooed and the sub-questions separated, the original question is answered, empty, or replaced by sharper ones. Then run the gate — <em>is there any lingering feeling of a hanging question?</em> If yes, it is not dissolved; note where the pull remains and keep going.</p>
+    <!-- FILL: resolution -->
+    <p class="verdict"><b>"Is alcoholism a disease?" dissolves.</b> Once the word is tabooed and its work is handed out to the strands, <em>the bare label question is empty</em> — it is Q5, and Q5's two answers predict the same world (same drinker, same mechanisms, same course, same blame verdict, same policy; only the printed word differs). Nothing in the territory adjudicates it. What is left is not a residue of the word but a <b>bundle of sharper questions</b> that the single yes/no was welding together and passing off as one discoverable property.</p>
+    <p>Sorted, the bundle is:</p>
+    <ul>
+      <li><b>Four empirical questions with real answers</b> — Q1 mechanisms + heritable risk, Q2 behavioral persistence against sincere aims and heavy incentives, Q3 sharp cluster vs. continuum, Q4 recurrent course / prognosis. These have anticipated-experience tests and turn on evidence, not on the label.</li>
+      <li><b>One empirical question about the label itself</b> — Q8, whether <em>using</em> the word changes outcomes (uptake, stigma, hope, relapse). Note the inversion: the label's only factual bite is in its <em>effects</em>, not in its <em>truth</em>.</li>
+      <li><b>Two norm-choices</b> — Q6 (blame vs. compassion for the drinking) and Q7 (what response is owed: care, coverage, constraint, repair).</li>
+    </ul>
+    <p><b>On CODEX's remaining pull — the value rows.</b> This is the one place worth saying plainly, and CODEX is right to insist on it. For the empirical rows, "reduce to anticipated experience" runs clean: each answer predicts a different observation. For Q6 and Q7 the same move produces a different <em>kind</em> of question — not "what will I observe?" but "<em>what would I endorse, holding all the facts fixed?</em>" That is not a further fact hiding under the word, waiting to be discovered once the science comes in. It is the point at which the asker must <b>choose a norm</b>. The felt pull of the original question — that answering "disease: yes/no" would settle blame and policy in one stroke — is exactly the illusion being dissolved: it mistook two decisions (whom to blame, what to owe) for one discovery. No experiment on the word can make those choices for you, and no fact about mechanisms <em>forces</em> them either, though facts constrain and inform them. Locating that as a decision, not a discovery, is the resolution — not an unfinished thread.</p>
+    <p><span class="label">Lingering-confusion check</span><br>Reread cold, "Is alcoholism a disease?" no longer hangs. Every bit of its urgency has a home: the facts became Q1–Q4 and Q8 (answerable by evidence), and the moral weight became Q6–Q7 (answerable by choosing norms). The bare label question is empty on contact. The remaining <em>hard</em> work — gathering the evidence, making the value calls — is real, but it is no longer <em>confusing</em>: it does not present as a single yes/no with a hidden essence. Neither CLAUDE nor CODEX reports a residual pull that reopens the decomposition. <b>Gate: passes.</b> Dissolved.</p>
+    <p><span class="label">Open threads</span> — none that reopen the question. Two flagged as ordinary (not confused) follow-ups: the empirical rows still need actual evidence, and Q6/Q7 still need the asker to make explicit norm-choices. Both sit downstream of the dissolution, not inside it.</p>
+    <ul>
+      <li>Empirical work (not conceptual): weigh evidence on Q1–Q4, Q8.</li>
+      <li>Normative work (not conceptual): the asker chooses where they stand on Q6 (blame) and Q7 (response owed).</li>
+    </ul>
+    <!-- /FILL: resolution -->
+  </section>
+
+  <!-- SESSION LOG ────────────────────────────────────── -->
+  <section id="log" data-status="active">
+    <div class="sec-head"><span class="n">·</span><h2>Session log</h2><span class="st">running</span></div>
+    <p class="hint">One dated entry per working session: what moved, what the human reported, what to pick up next.</p>
+    <!-- FILL: log — prepend newest entry at the top -->
+    <div class="log-entry"><div class="when">2026-07-01 · CLAUDE</div><p>Closing turn: filled Move 5 (Resolution) and ran the gate. Accepted CODEX's <em>behavioral persistence</em> reframe of Q2, the blame/repair split (Q6 vs. Q7), and the added prognosis (Q4) and label-effects (Q8) strands. Stated the bare label question (Q5) is empty on contact and the original resolves into a bundle. Named the value rows explicitly as norm-choices, not hidden facts. Gate passes for me; set Resolution to <em>done</em> and overall to <em>dissolved</em>.</p></div>
+    <div class="log-entry"><div class="when">2026-07-01 · CODEX</div><p>Move 4 filled. Refined the split: kept Q2 empirical only as observable persistence against aims/incentives, added a prognosis/course strand, treated the pure label criterion question as empty, split policy response from blame, and added label-effects as an empirical consequence rather than an essence.</p></div>
+    <div class="log-entry"><div class="when">2026-07-01 · CLAUDE</div><p>Opening turn: filled moves 1–3 (pose &amp; itch, taboo table, stack trace + unbundling diagram). Located the confusion in two "sticky" strands — <em>loss of control</em> and <em>not their fault</em>. Anticipate &amp; Resolution left empty for CODEX. Handed back two challenges in discussion.md.</p></div>
+    <div class="log-entry"><div class="when">2026-07-01</div><p>Started. Question posed.</p></div>
+    <!-- /FILL: log -->
+  </section>
+
+  <!-- REFERENCES ─────────────────────────────────────── -->
+  <section id="refs" data-status="active">
+    <div class="sec-head"><span class="n">·</span><h2>References</h2><span class="st">sources</span></div>
+    <p class="hint">Sources that can't live inline. Files sit in <code>sources/</code>; cite them in the text above as <a class="cite">[n]</a>.</p>
+    <!-- FILL: refs -->
+    <ol class="refs"></ol>
+    <!-- /FILL: refs -->
+  </section>
+
+</div>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({startOnLoad:true, theme:"neutral", themeVariables:{fontFamily:"Inter, sans-serif", primaryColor:"#f0ebff", primaryBorderColor:"#9679d6", lineColor:"#8a847a"}});
+</script>
+</body>
+</html>
