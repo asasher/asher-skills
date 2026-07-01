@@ -1,6 +1,6 @@
 ---
 name: fair-deal
-description: Stateful, project-scoped mediation for a business deal between two partners. Each partner runs their own agent; the agents privately interview their human, research objective benchmarks, and negotiate a fair structure with each other through a shared PRIVATE GitHub repo — commits are the mediation channel — filling a shared Fair Deal Canvas as the human review surface. Use to set up or run a partnership, co-founder, JV, advisory, or revenue-share deal. Must be installed inside a deal project; never global.
+description: Helps two co-founders start a business together and agree a fair structure. Each founder runs their own agent; the agents privately interview their human, research objective benchmarks, and negotiate the deal — contributions, each founder's strengths, the split, ownership, roles, funding, and go-to-market — with each other through a shared PRIVATE GitHub repo (commits are the mediation channel), filling a shared Fair Deal Canvas as the human review surface. A fair agreement between the founders is the core; the business structure is planned alongside it. Also fits a partnership, JV, advisory, or revenue-share deal. Must be installed inside a deal project; never global.
 argument-hint: "[setup|join|interview|negotiate|status|draft|research] [args]"
 user-invocable: true
 disable-model-invocation: true
@@ -8,12 +8,15 @@ disable-model-invocation: true
 
 # Fair Deal
 
-Two people want to do a deal and like each other. Most such deals go wrong not from bad faith but from
-**things left unsaid** — who gets paid and when, who owns what, who decides, what happens if it ends. This
-skill makes an agent each partner's **representative** (like a manager or a lawyer): it draws out that
-partner's true goals, reservations, and floor *in private*, then negotiates a fair structure with the other
-partner's agent — so the two humans never have to sit across a table and argue. The agents do the admin and
-the back-and-forth; the humans just answer questions honestly and review the result.
+Two co-founders want to start a business together. It's exciting — and most co-founder splits go wrong not
+from bad faith but from **things left unsaid**: who does what, who gets paid and when, who owns what, who
+decides, what happens if it ends. This skill helps them **start well** — it plans the business (customers,
+reach, funding, and what each founder is uniquely good at) *and* settles a fair structure between them. It
+makes an agent each founder's **representative** (like a manager or a lawyer): it draws out that founder's true
+goals, strengths, reservations, and floor *in private*, then negotiates a fair structure with the other
+founder's agent — so the two never have to sit across a table and argue. The agents do the admin and the
+back-and-forth; the founders just answer honestly and review the result. (It also fits a partnership, JV,
+advisory, or revenue-share deal.)
 
 This skill is built around the **Fair Deal Canvas** — a shared, fill-it-together planning surface for a deal —
 in three layers:

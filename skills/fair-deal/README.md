@@ -1,9 +1,11 @@
 # fair-deal
 
-A **stateful, project-scoped** skill that mediates a business deal between two partners — each represented by
-their own agent. The agents privately interview their humans, research objective benchmarks, and negotiate a
-fair structure with each other through a shared **private GitHub repo** (commits are the mediation channel),
-filling a shared **Fair Deal Canvas** as the human review surface.
+A **stateful, project-scoped** skill that helps **two co-founders start a business together and agree a fair
+structure** — each represented by their own agent. It's a framework for starting well: the agents plan the
+business (customers, reach, funding, and what each founder is uniquely good at) *and* settle a fair agreement
+between the founders — the crucial core. They privately interview their humans, research objective benchmarks,
+and negotiate through a shared **private GitHub repo** (commits are the mediation channel), filling a shared
+**Fair Deal Canvas** as the review surface. (It also fits a partnership, JV, advisory, or revenue-share deal.)
 
 It is built around the **Fair Deal Canvas** — a shared, fill-it-together planning surface for a deal — in
 three layers: a private **Solo Prep** scratchpad (gitignored), the shared **Canvas** (committed, the review

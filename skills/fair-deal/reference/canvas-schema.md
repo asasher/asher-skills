@@ -36,7 +36,7 @@ and write it during interview and negotiation. Keep it valid at all times.
     - `fund_needed` ∈ "No — we self-fund (savings / reinvested profit / customers pay up front)" | "Yes — we need outside capital to start"
     - `fund_kind` ∈ "Debt — a loan we repay (no ownership given up)" | "Equity — investors get ownership (dilution)" | "A mix of debt and equity"  (only when raising)
     - `fund_who` ∈ "Party A" | "Party B" | "Both" | "Outside" — who puts the money in. Capital is a contribution: feeds `t1`/`t2` (section 3/4), a preferred return in the waterfall (`b4`, section 6), and the reserved-matters list (`t6`, section 7).
-- Box 3 notes: `b1_notes` · Box 4 notes: `b2_notes`
+- Box 3: `strengthA`, `strengthB` (each founder's highest-leverage strength + what to clear off their plate — a project/process/person), `b1_notes` · Box 4 notes: `b2_notes`
 - Box 5: `b5_alloc`, `b5_vest`, `b5_notes`
   - `b5_vehicle` ∈ "Handshake / contract only" | "LLC" | "Company (Ltd / corp)" | "Partnership"
 - Box 6: `b4` (waterfall text), `b4_notes`

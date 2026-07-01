@@ -501,6 +501,14 @@
         </span></span></div>
         <div class="lenstag">Proportion</div></div></div>
       <p class="desc">What does each side bring that the other would otherwise have to buy or build? Tag each as a <b>pre-existing asset</b>, a <b>task</b>, a <b>role</b>, or <b>co-building the uncertain</b> — each is paid differently, and only co-building is what a share is for. <b>A contribution can be more than one at once</b> — e.g. an audience is a pre-existing asset (licensed in) <i>and</i> ongoing co-building (a share). Tag every part that applies, and pay each part its own way.</p>
+      <div class="subhead">Each founder’s highest-leverage strength<span class="tip" tabindex="0"><span class="ti">i</span><span class="tb">
+        The best reason to partner: each founder does what they’re <b>uniquely good at</b> and the deal <b>clears the way</b> for it. Name each one’s highest-leverage strength — that’s their core contribution below — and what to take off their plate so they can do more of it: a <b>project</b> (one-off), a <b>process</b> (recurring), or a <b>person</b> (a hire). Offloaded work is a cost in the waterfall (section 6) and shapes the roles (section 7); a founder stuck on low-leverage work is the key-person risk from section 2.</span></span></div>
+      <div class="pair">
+        <div class="field"><label class="fieldlabel" id="lbl-strengthA">Party A — uniquely good at, and what we’ll clear off their plate</label>
+          <textarea class="ta" data-k="strengthA" placeholder="Their highest-leverage strength — and what to offload (a project · a process · a hire) so they can do more of it"></textarea></div>
+        <div class="field"><label class="fieldlabel" id="lbl-strengthB">Party B — uniquely good at, and what we’ll clear off their plate</label>
+          <textarea class="ta" data-k="strengthB" placeholder="Their highest-leverage strength — and what to offload (a project · a process · a hire) so they can do more of it"></textarea></div>
+      </div>
       <div class="tbl" id="tbl-t1"></div>
       <div class="notes"><label class="fieldlabel">Notes</label><textarea class="ta" data-k="b1_notes" placeholder="Anything deal-specific…"></textarea></div>
     </section>
@@ -835,6 +843,8 @@
     setL("lbl-batnaB",(b||"Party B")+" — best alternative if no deal");
     setL("lbl-winA",(a||"Party A")+" — “I win when ___”");
     setL("lbl-winB",(b||"Party B")+" — “I win when ___”");
+    setL("lbl-strengthA",(a||"Party A")+" — uniquely good at, and what we’ll clear off their plate");
+    setL("lbl-strengthB",(b||"Party B")+" — uniquely good at, and what we’ll clear off their plate");
     setPartyOpt("gtm_owner"); setPartyOpt("fund_who");
   }
   function setL(id,txt){ var el=document.getElementById(id); if(el) el.textContent=txt; }
@@ -925,7 +935,9 @@
     if(getters.length) s+="- Grow reach via: "+getters.join(", ")+"\n";
     if(fv("fund_needed")) s+="- Funding: "+fv("fund_needed")+(fv("fund_kind")?" — "+fv("fund_kind"):"")+(fv("fund_who")?" (who puts it in: "+nm(fv("fund_who"))+")":"")+"\n";
     s+=li("Notes","biz_notes");
-    s+="\n## 3. Why this is a partnership\n"+tbl("t1")+li("Notes","b1_notes");
+    s+="\n## 3. Why this is a partnership\n";
+    s+=li((f.partyA||"Party A")+" — highest-leverage strength","strengthA")+li((f.partyB||"Party B")+" — highest-leverage strength","strengthB");
+    s+=tbl("t1")+li("Notes","b1_notes");
     s+="\n## 4. Contributions: durability & leverage\n"+tbl("t2")+li("Notes","b2_notes");
     s+="\n## 5. Setting the split\n"+li("Vehicle","b5_vehicle")+li("Holdings at formation","b5_alloc")+li("Vesting","b5_vest");
     var kl=keystoneLine(); if(kl) s+="- "+kl+"\n";
@@ -990,7 +1002,7 @@
     html+=poSec("2","The business","Clarity", poRow("Customer / niche",poField("biz_customer"))+poRow("Offer & price",poField("biz_offer"))+poRow("Channel",poField("biz_channel"))+poRow("Edge",poField("biz_edge"))+flagrows+gtmrows);
     var nsbody=poRow("North Star",poField("ns_metric"))+poRow("On track if",poField("ns_track"));
     if(nsbody) html+='<div class="po-sec"><div class="po-h">What good looks like</div>'+nsbody+'</div>';
-    html+=poSec("3","Why this is a partnership","Proportion", poTable("t1"));
+    html+=poSec("3","Why this is a partnership","Proportion", poRow((f.partyA||"Party A")+" — strength",poField("strengthA"))+poRow((f.partyB||"Party B")+" — strength",poField("strengthB"))+poTable("t1"));
     html+=poSec("4","Contributions: durability & leverage","Proportion", poTable("t2"));
     var kl5=keystoneLine();
     html+=poSec("5","Setting the split","Proportion", poRow("Vehicle",poField("b5_vehicle"))+poRow("Holdings at formation",poField("b5_alloc"))+poRow("Vesting",poField("b5_vest"))+(kl5?poRow("Keystone",esc(kl5)):"")+(streamsFilled()?'<div class="po-row"><span class="k">Split by stream</span></div>'+poTable("t5s"):""));

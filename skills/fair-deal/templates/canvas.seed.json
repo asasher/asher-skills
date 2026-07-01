@@ -10,6 +10,7 @@
     "gtm_primary": "", "gtm_owner": "", "gtm_commitment": "",
     "get_referrals": false, "get_team": false, "get_specialists": false, "get_partners": false,
     "fund_needed": "", "fund_kind": "", "fund_who": "",
+    "strengthA": "", "strengthB": "",
     "b1_notes": "", "b2_notes": "",
     "b5_vehicle": "", "b5_alloc": "", "b5_vest": "", "b5_notes": "",
     "b4": "", "b4_notes": "",

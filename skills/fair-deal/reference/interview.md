@@ -30,9 +30,14 @@ Cover, roughly in this order:
      or other people's (debt they repay, or equity that dilutes). Default to self-/customer-funded; if they'll
      raise, capture who provides the capital — it's a contribution (Box 3), may earn a preferred return in the
      waterfall (Box 6), and taking it on is a reserved matter (Box 7).
-3. **What each side brings** (Box 3) — and, privately, what they think the *other* side brings. Walk the
-   **three engines every business runs on, and who carries each** — it's the fastest way to surface a missing
-   or lopsided contribution:
+3. **What each side brings** (Box 3) — and, privately, what they think the *other* side brings.
+   - **Each founder's highest-leverage strength.** Ask what they're *uniquely* good at that this venture needs
+     — their best shot, the thing only they should be doing. That strength is their core contribution; design
+     the deal to **clear the way** for it. Everything outside it should be taken off their plate: a **project**
+     (one-off), a **process** (recurring), or a **person** (a hire) — each is a cost in the waterfall (Box 6)
+     and shapes the roles (Box 7). A founder stuck doing low-leverage work is the key-person risk (Box 2).
+   Then walk the **three engines every business runs on, and who carries each** — the fastest way to surface a
+   missing or lopsided contribution:
    - **Traffic** — who fills the funnel with leads (the reach/channel from Box 2; most durable).
    - **Systems** — who builds the "plumbing" that converts leads → customers and runs ops (durable *systems &
      judgment*, and foreground IP for Box 8).
