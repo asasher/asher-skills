@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "skill-loop": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "e55f8e33217a38b9afd94f831ad82da217c3bd6a611f6c8c33b9e760d604d8f9"
+    },
     "writing-great-skills": {
       "source": "mattpocock/skills",
       "sourceType": "github",
