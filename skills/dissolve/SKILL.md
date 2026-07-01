@@ -1,7 +1,7 @@
 ---
 name: dissolve
-description: Take a confusing question or contested concept and dissolve it — rather than pick a side, deconstruct the mental algorithm that makes it feel like a question, taboo the loaded word, and unbundle the disguised sub-questions until no confusion remains. Use for "what is X really?", free-will / consciousness / disease / fairness-type puzzles, definitional deadlocks, and stuck conceptual arguments. Stateful and resumable across sessions; the whole state is one shareable HTML page. Install once in a dissolve workspace.
-argument-hint: "[new \"<question>\"] | [resume] | [list]"
+description: Take a confusing question or contested concept and dissolve it — rather than pick a side, deconstruct the mental algorithm that makes it feel like a question, taboo the loaded word, and unbundle the disguised sub-questions until no confusion remains. Defaults to a two-agent debate (optionally with a human in the loop), since a lone reasoner smuggles in its own assumptions. Use for "what is X really?", free-will / consciousness / disease / fairness-type puzzles, definitional deadlocks, and stuck conceptual arguments. Stateful and resumable across sessions; the whole state is one shareable HTML page. Install once in a dissolve workspace.
+argument-hint: "[debate \"<question>\"] | [new \"<question>\"] | [resume] | [list]"
 user-invocable: true
 disable-model-invocation: true
 ---
@@ -10,8 +10,8 @@ disable-model-invocation: true
 
 Some questions can't be *answered* — they must be **dissolved**. "Is free will real?" "Is addiction a disease?"
 "Is a hotdog a sandwich?" You can argue either side forever because the question is malformed: a loaded word is
-doing work no fact can settle. Dissolving means refusing the debate and instead **deconstructing the cognitive
-algorithm that makes it feel like a question** — until the itch is gone, not merely out-argued. As Yudkowsky
+doing work no fact can settle. Dissolving means refusing to pick a side and instead **deconstructing the
+cognitive algorithm that makes it feel like a question** — until the itch is gone, not merely out-argued. As Yudkowsky
 puts it, you write *a stack trace of the internal algorithm*, not a verdict.
 
 This skill runs that process as a **debate between two minds** — because a lone reasoner smuggles in its own
