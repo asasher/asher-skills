@@ -9,3 +9,4 @@ description: Use when designing, building, reviewing, or improving application U
 4. For microcopy don't put supporting information in brackets
   - Bad: Update supplier price info from this RFQ (all valid quote rows)
   - Good: Update supplier price from this RFQ for all valid quote rows
+5. When work touches notifications, alerts, badges, toasts, reminders, notification centers, or other interruption channels, load [notification rules](references/notifications.md).
