@@ -1,6 +1,6 @@
 # Setup
 
-Prepares a repo for the loop. It scaffolds the project playbooks, provisions the GitHub labels the role model needs, decides whether work runs in parallel or sequentially (and prepares worktree isolation when parallel), identifies the seed and check commands, and confirms the repo is actually ready. Run once per repo, and again to fill a gap.
+Prepares a repo for the loop. It scaffolds the project playbooks, provisions the GitHub labels the role model needs, decides whether work runs in parallel or sequentially (and prepares worktree isolation when parallel), identifies the seed and check commands, confirms the agent can drive, authenticate to, and capture evidence from the app, and confirms the repo is actually ready. Run once per repo, and again to fill a gap.
 
 ## Steps
 
@@ -29,18 +29,28 @@ Prepares a repo for the loop. It scaffolds the project playbooks, provisions the
    - Read an existing machine-readable command catalog if present (e.g. `.intent/`) to populate the check commands rather than asking.
    - Completion criterion: the seed regime and command (or "none — drive the app") and the check commands are identified.
 
-5. Write the contracts into the playbooks.
-   - Record the results in `docs/agents/environment.md`: dev-stack startup, isolation regime and how to bring up an isolated stack, seed regime and command, auth/session minting, the parallelism verdict, and the model-staffing roster (lead/delegate/floor per harness the loop runs from). Record the check commands in `verifying.md`.
+5. Confirm app access.
+   - Verification and evidence capture only work if the agent can actually exercise the app. Identify the app's form factor(s) and confirm a working **driver** for every surface the loop will verify:
+     - **CLI** → shell access and the command entrypoint.
+     - **Web** → a browser the agent can drive (e.g. agent-browser, a Playwright MCP, or the harness's built-in browser).
+     - **Mobile** → an emulator/simulator the agent can boot, plus a driver that installs the build and interacts with it.
+     - **Desktop** → a windowed environment the agent can control (computer-use tooling or an OS automation driver).
+   - Confirm an **evidence path** for the same surfaces: screenshots for static states, screen recordings (convertible to GIF) for flows, terminal transcripts for CLI output.
+   - Confirm the agent can **mint a session unattended**, matching the app's auth model: a test account, an OTP/magic-link inbox the agent can read, a token in the environment — whatever the model needs.
+   - Where a driver, capture path, or auth path is missing, help set it up — install the tool, create the test account, wire the inbox — with the user's approval. Anything that cannot be set up is a blocker for the surfaces it covers, and `verify`/`evidence` will inherit it.
+   - Completion criterion: every app surface the loop will verify has a named driver, capture method, and auth path — or an explicit blocker.
+
+6. Write the contracts into the playbooks.
+   - Record the results in `docs/agents/environment.md`: dev-stack startup, isolation regime and how to bring up an isolated stack, seed regime and command, auth/session minting, the app drivers and evidence-capture tooling from the access audit, the parallelism verdict, and the model-staffing roster (lead/delegate/floor per harness the loop runs from). Record the check commands in `verifying.md`, and set the **presentation mode** in `evidence.md` from the repo's visibility: `public-inline` for a public repo, `private-links` for a private one (GitHub's image proxy cannot render committed images inline in private-repo PR bodies).
    - Offer to fill the remaining baselines — the dependency convention in `triage-policy.md`, branch conventions, plan format, review criteria — with this repo's real values. The templates are baselines, not the contract.
    - Completion criterion: `environment.md` states the isolation, seed, and parallelism contracts the loop reads, or the user has chosen to keep a baseline section.
 
-6. Offer external skills.
-   - The playbooks may defer to installed skills. Offer to install the matching ones and tell the user the exact command, e.g.:
-     - `diagnosing-bugs`, `tdd` — `npx skills@latest add mattpocock/skills --skill diagnosing-bugs tdd`
-   - Prefer composing with an in-repo dev-loop skill (`diagnose`, `diagnosing-bugs`, `tdd`) already present rather than duplicating it. Install only what the user approves.
-   - Completion criterion: the user has chosen which external skills to install, and approved installs have run.
+7. Fold in existing repo practice.
+   - The scaffolded playbooks are self-contained: the debugging discipline, test-first build technique, and review standards ship inlined, so nothing external is required. But a repo may already have its own practice — a dev-loop skill, a testing guide, debugging docs, review checklists.
+   - Where one exists, offer to fold it into (or substitute it for) the matching playbook section, so the loop follows house practice instead of the shipped default. Edit only with the user's approval.
+   - Completion criterion: each playbook either keeps its inlined default or records the repo's own practice, per the user's choice.
 
-7. Verify readiness and confirm.
-   - Offer a smoke test of the recorded commands — bring up the stack, seed it, and run the check gate once — so a wrong command surfaces now, not mid-loop. When the verdict is `parallel-safe`, run it in a throwaway worktree to confirm isolation actually holds; tear the worktree down after.
-   - Report a readiness checklist: playbooks present; GitHub labels provisioned; dependency convention set; seed and checks identified (and smoke-tested if run); parallelism verdict; external skills installed.
+8. Verify readiness and confirm.
+   - Offer a smoke test of the recorded contracts — bring up the stack, seed it, mint a session, drive one interaction through the recorded driver, capture one throwaway artifact, and run the check gate once — so a wrong command or a broken driver surfaces now, not mid-loop. When the verdict is `parallel-safe`, run it in a throwaway worktree to confirm isolation actually holds; tear the worktree down after.
+   - Report a readiness checklist: playbooks present; GitHub labels provisioned; dependency convention set; seed and checks identified; app driver, evidence capture, and auth confirmed per surface (and smoke-tested if run); parallelism verdict; playbooks tailored to house practice where the repo has one.
    - Completion criterion: the user has a clear ready / not-ready verdict for each item and knows whether `triage` will verify in parallel or serialized.

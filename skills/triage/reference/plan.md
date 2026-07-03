@@ -2,19 +2,12 @@
 
 Target: an enhancement issue or feature request. Runs standalone or as the planning step of the `enhancement` branch.
 
-Read `docs/agents/planning.md` for this repo's plan format, location, plan-size threshold, and approval conventions. If it is missing, report a setup gap and stop.
+What a plan covers, its HTML format and location, the plan-size threshold, review conduct, and who approves live in `docs/agents/planning.md`. If it is missing, report a setup gap and stop.
 
-## Steps
+## Gates
 
-1. Decide whether the change needs a plan.
-   - Apply the playbook's plan-size threshold. Small, low-risk changes skip planning and go straight to `reference/implement.md`.
-   - Completion criterion: a stated decision — plan or skip — grounded in the playbook's threshold.
-
-2. Write the plan.
-   - Produce the plan in the format and location the playbook specifies. Cover what the playbook requires (typically: user stories, definition of done, evidence required, implementation outline, risks, test plan).
-   - State the definition of done as explicit, testable acceptance criteria — each something the verify loop can check pass/fail against a running app. These are the contract `reference/verify.md` and `reference/evidence.md` consume downstream.
-   - Completion criterion: the plan exists in the specified location, meets the playbook's checklist, and its acceptance criteria are individually checkable.
-
-3. Stop at the approval gate.
-   - Wait for human approval before implementation. If approval changes scope, update the plan before coding.
-   - Completion criterion: the plan is approved as-is, or revised and re-submitted; no implementation begins until approval.
+1. **Decided** — a stated plan-or-skip decision grounded in the playbook's threshold. Small, low-risk changes skip planning and go straight to `reference/implement.md`.
+2. **Design questions answered** — any question the plan cannot settle on paper (a state model that only feels right or wrong under real cases, a UI that needs to be seen) goes through `reference/prototype.md`; its answer — and for UI, the variant screenshots — is folded into the plan before review.
+3. **Written** — the plan exists as an HTML document in the playbook's location, meets its checklist, and states the definition of done as explicit, testable acceptance criteria — each checkable pass/fail against a running app. These are the contract `reference/verify.md` and `reference/evidence.md` consume downstream.
+4. **Approved** — the rendered plan was opened for the human, and a human approved it as-is or a revised resubmission before any implementation begins. If approval changes scope, update the plan first.
+5. **Committed** — the approved plan is committed to the work branch before implementation is dispatched, so implementing agents read it from disk, and the playbook's posterity step (if any) has run.
