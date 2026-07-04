@@ -20,11 +20,12 @@ Each branch below hands off to a bundled reference (`reference/<name>.md`) for t
    - **refactor** → follow `reference/refactor.md`.
    - **enhancement** → follow `reference/plan.md`; it decides whether a plan is needed, may hand a blocking design question to `reference/prototype.md`, and holds the approval gate. Once it returns an approved, committed plan or a skip decision, follow `reference/implement.md`.
    - Any branch — not just enhancement — may hand a blocking design question to `reference/prototype.md`; the branch's own reference states when.
+   - Staffing: build-out — `implement.md`, `refactor.md`, and fix commits — runs on the **builder** role for its surface per `reference/staffing.md`, dispatched out of this thread; diagnosis is orchestrator work and stays here.
    - Completion criterion: the branch's own completion criterion is met, or the thread is paused at the enhancement approval gate.
 
 4. Verify behavior → follow `reference/verify.md`.
    - This is a loop: verify runs the checks and exercises the change against its acceptance criteria, handing failures back to the branch that built the change (`implement.md`, `diagnose.md`, or `refactor.md`) until every criterion passes or it hits its cap.
-   - Delegate the whole loop to a subagent filling the **delegate** role per `reference/staffing.md`; this thread stays coordinator and takes back any failure the subagent escalates per `verify.md`'s triggers.
+   - Delegate the whole loop to a subagent filling the **checker** role per `reference/staffing.md`; this thread stays coordinator and takes back any failure the subagent escalates per `verify.md`'s triggers.
    - Completion criterion: every acceptance criterion passes, or the verify loop ends at its cap or an explicit blocker (reported, no PR opened).
 
 5. Create the PR.
@@ -37,7 +38,7 @@ Each branch below hands off to a bundled reference (`reference/<name>.md`) for t
    - Completion criterion: review reaches `LGTM`, hits its iteration cap, or reports an explicit blocker.
 
 7. Capture evidence → follow `reference/evidence.md`.
-   - Runs once, after the review loop ends, against the branch's final HEAD; `reference/evidence.md` carries the timing rationale. Skip if the playbook requires no evidence beyond green checks. Delegate the capture to the **delegate** role per `reference/staffing.md`.
+   - Runs once, after the review loop ends, against the branch's final HEAD; `reference/evidence.md` carries the timing rationale. Skip if the playbook requires no evidence beyond green checks. Delegate the capture to the **checker** role per `reference/staffing.md`.
    - Commits after the Reviewer's `LGTM` may touch only `evidence/` — never product code — so the approval stays valid.
    - Replace the PR body's evidence placeholder with the verified ready-to-paste block (`gh pr edit` or equivalent) — do not rebuild or reformat the block. If a browser driver in `environment.md` can reach GitHub, eyeball the rendered body after the edit.
    - Completion criterion: the evidence is committed and pushed, and the PR body carries the verified block in place of the placeholder — or none is required.

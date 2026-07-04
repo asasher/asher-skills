@@ -42,7 +42,7 @@ Prepares a repo for the loop. It scaffolds the project playbooks, provisions the
    - Completion criterion: every app surface the loop will verify has a named driver, capture method, and auth path — or an explicit blocker.
 
 6. Write the contracts into the playbooks.
-   - Record the results in `docs/agents/environment.md`: dev-stack startup, isolation regime and how to bring up an isolated stack, seed regime and command, auth/session minting, the app drivers and evidence-capture tooling from the access audit, the parallelism verdict with its serialized exception lane, and the model-staffing roster (lead/delegate/floor per harness the loop runs from). Record the check commands in `verifying.md` and the repo's evidence expectations in `evidence.md`.
+   - Record the results in `docs/agents/environment.md`: dev-stack startup, isolation regime and how to bring up an isolated stack, seed regime and command, auth/session minting, the app drivers and evidence-capture tooling from the access audit, the parallelism verdict with its serialized exception lane, and the model-staffing roster (orchestrator / builder by surface / checker / floor, per harness the loop runs from, plus the succession line — per `reference/staffing.md`). Record the check commands in `verifying.md` and the repo's evidence expectations in `evidence.md`.
    - Offer to fill the remaining baselines — the dependency convention in `triage-policy.md`, branch conventions, plan format, review criteria — with this repo's real values. The templates are baselines, not the contract.
    - Completion criterion: `environment.md` states the isolation, seed, and parallelism contracts the loop reads, or the user has chosen to keep a baseline section.
 

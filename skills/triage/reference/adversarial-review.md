@@ -2,7 +2,7 @@
 
 Target: a PR. Runs standalone (`triage adversarial-review <PR>`) or as the final step of the loop.
 
-Staffing: both subagents fill the **delegate** role — see `reference/staffing.md` for the role, the Reviewer constraint, and the fallback ladder, and the Model staffing section of `docs/agents/environment.md` for the roster.
+Staffing: the Reviewer fills the **checker** role and the Fixer the **builder** role for the PR's surface — see `reference/staffing.md` for both, the Reviewer constraint, and the fallback ladder, and the Model staffing section of `docs/agents/environment.md` for the roster.
 
 Spawn two subagents, Reviewer and Fixer, both working only on this PR. The Reviewer's criteria, comment conduct, and approval bar live in `docs/agents/pr-reviewer.md`; the Fixer's fix-and-reply conduct in `docs/agents/pr-fixer.md`, with `docs/agents/environment.md` to run and test the app. If a required playbook is missing, report a setup gap and stop.
 

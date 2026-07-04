@@ -2,6 +2,8 @@
 
 Target: a module, surface, or issue calling for behavior-preserving change. Runs standalone or as the `refactor` branch of the loop.
 
+Staffing: build-out fills the **builder** role for its surface — see `reference/staffing.md`; in the loop, the issue thread dispatches it rather than building in its own context.
+
 The technique — locking behavior with tests and refactoring under that net — lives in `docs/agents/refactoring.md`; work that playbook end to end. If it is missing, report a setup gap and stop.
 
 ## Gates

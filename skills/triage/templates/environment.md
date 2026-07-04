@@ -47,12 +47,16 @@
 
 ## Model staffing
 
-> Read by `run` at dispatch and by `verify`, `evidence`, and `adversarial-review` when they staff the delegate role. The skill defines the roles (lead / delegate / floor); this section maps them to models **per harness** — list only models each harness can actually reach, since one harness usually cannot spawn another vendor's models.
+> Read by `run` at dispatch and by every reference that spawns work. The skill defines the roles (`reference/staffing.md`: orchestrator, builder by surface, checker, floor); this section maps them to models **per harness** — list only models each harness can actually reach, since one harness usually cannot spawn another vendor's models. One model may fill several roles.
 
-- Floor: _<minimum capability class; nothing staffs below it>_.
-- From _<harness, e.g. Claude Code>_: lead = _<model>_; delegate = _<model + how to spawn it, e.g. subagent model override>_; external CLI delegate = _<e.g. codex CLI model+effort for backend-only work, or "none">_.
-- From _<other harness, e.g. Codex>_: _<mapping; if no lower tier is reachable above the floor, the delegate role collapses onto the lead — still delegated into separate threads>_.
-- Reviewer constraint: _<which delegate options may fill Reviewer; it must handle the full review criteria, frontend included>_.
+- Floor: _<minimum capability class; nothing staffs below it in any role>_.
+- From _<harness, e.g. Claude Code>_:
+  - Orchestrator: _<model, usually the session model>_.
+  - Builder (backend): _<model + how to spawn it, e.g. an external CLI + effort>_.
+  - Builder (ui): _<model + how to spawn it, e.g. subagent model override>_.
+  - Checker: _<model per surface; the Reviewer must handle the full review criteria, frontend included>_.
+- From _<other harness, e.g. Codex>_: _<mapping; when no other tier is reachable above the floor, every role collapses onto the session model — still delegated into separate threads>_.
+- Succession: _<who steps up to orchestrate when the orchestrator's model is unreachable, and which roles they keep>_.
 
 ## Parallelism verdict
 

@@ -2,6 +2,8 @@
 
 Target: a bug issue, a failing report, or a described defect. Runs standalone or as the `bug` branch of the loop.
 
+Staffing: diagnosis is **orchestrator** work — it runs in the invoking thread; once the cause is named, the fix commit may be delegated to the **builder** for its surface (`reference/staffing.md`).
+
 The technique — building a feedback loop, reproducing, hypothesising, instrumenting, fixing — lives in `docs/agents/diagnosing-bugs.md`; work that playbook end to end. To run or authenticate against the app while reproducing, read `docs/agents/environment.md`. If either is missing, report a setup gap and stop.
 
 ## Gates
