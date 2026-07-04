@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Northstar Analytics Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui']
+          },
+          colors: {
+            ink: '#171717',
+            fog: '#f5f6f8',
+            line: '#e6e8ec',
+            teal: '#0f766e',
+            mint: '#ccfbf1',
+            amber: '#b45309',
+            coral: '#e11d48'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .metric-card {
+      min-height: 156px;
+    }
+
+    .chart-grid line {
+      stroke: #e9ebef;
+      stroke-width: 1;
+    }
+
+    .chart-label {
+      fill: #7c828d;
+      font-size: 11px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="bg-fog text-ink antialiased">
+  <div class="min-h-screen lg:grid lg:grid-cols-[272px_1fr]">
+    <aside class="hidden border-r border-line bg-white lg:flex lg:min-h-screen lg:flex-col">
+      <div class="flex h-20 items-center gap-3 border-b border-line px-6">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-ink text-white">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2.8 14.7 9l6.7.5-5.1 4.4 1.6 6.5-5.9-3.5-5.9 3.5 1.6-6.5-5.1-4.4L9.3 9 12 2.8Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-lg font-bold tracking-normal">Northstar</p>
+          <p class="text-xs font-semibold text-zinc-500">Growth analytics</p>
+        </div>
+      </div>
+
+      <nav class="flex-1 space-y-7 px-4 py-6">
+        <div>
+          <p class="px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-zinc-400">Workspace</p>
+          <div class="mt-3 space-y-1">
+            <a href="#" class="flex h-10 items-center gap-3 rounded-lg bg-zinc-100 px-3 text-sm font-semibold text-ink">
+              <span class="grid h-5 w-5 place-items-center rounded bg-teal text-white">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 13h6v7H4v-7Zm10-9h6v16h-6V4ZM4 4h6v6H4V4Z" fill="currentColor"/>
+                </svg>
+              </span>
+              Overview
+            </a>
+            <a href="#" class="flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-semibold text-zinc-600 hover:bg-zinc-50 hover:text-ink">
+              <span class="grid h-5 w-5 place-items-center text-zinc-400">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 19V5h14v14H5Zm3-3h8v-2H8v2Zm0-4h8v-2H8v2Zm0-4h8V6H8v2Z" fill="currentColor"/>
+                </svg>
+              </span>
+              Reports
+            </a>
+            <a href="#" class="flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-semibold text-zinc-600 hover:bg-zinc-50 hover:text-ink">
+              <span class="grid h-5 w-5 place-items-center text-zinc-400">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0H5Z" fill="currentColor"/>
+                </svg>
+              </span>
+              Customers
+            </a>
+            <a href="#" class="flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-semibold text-zinc-600 hover:bg-zinc-50 hover:text-ink">
+              <span class="grid h-5 w-5 place-items-center text-zinc-400">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 2 3 6v6c0 5.1 3.8 9.8 9 10 5.2-.2 9-4.9 9-10V6l-9-4Zm0 3.2 6 2.7V12c0 3.6-2.5 6.6-6 7-3.5-.4-6-3.4-6-7V7.9l6-2.7Z" fill="currentColor"/>
+                </svg>
+              </span>
+              Retention
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <p class="px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-zinc-400">Operations</p>
+          <div class="mt-3 space-y-1">
+            <a href="#" class="flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-semibold text-zinc-600 hover:bg-zinc-50 hover:text-ink">
+              <span class="grid h-5 w-5 place-items-center text-zinc-400">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 5h16v4H4V5Zm0 6h7v8H4v-8Zm9 0h7v8h-7v-8Z" fill="currentColor"/>
+                </svg>
+              </span>
+              Segments
+            </a>
+            <a href="#" class="flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-semibold text-zinc-600 hover:bg-zinc-50 hover:text-ink">
+              <span class="grid h-5 w-5 place-items-center text-zinc-400">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" fill="currentColor"/>
+                </svg>
+              </span>
+              Automations
+            </a>
+            <a href="#" class="flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-semibold text-zinc-600 hover:bg-zinc-50 hover:text-ink">
+              <span class="grid h-5 w-5 place-items-center text-zinc-400">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M10.4 3h3.2l.6 2.1c.7.2 1.3.5 1.9.8l1.9-1.1 2.2 2.2-1.1 1.9c.3.6.6 1.2.8 1.9l2.1.6v3.2l-2.1.6c-.2.7-.5 1.3-.8 1.9l1.1 1.9-2.2 2.2-1.9-1.1c-.6.3-1.2.6-1.9.8l-.6 2.1h-3.2l-.6-2.1c-.7-.2-1.3-.5-1.9-.8L6 21.2 3.8 19l1.1-1.9c-.3-.6-.6-1.2-.8-1.9L2 14.6v-3.2l2.1-.6c.2-.7.5-1.3.8-1.9L3.8 7 6 4.8l1.9 1.1c.6-.3 1.2-.6 1.9-.8L10.4 3Zm1.6 6a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" fill="currentColor"/>
+                </svg>
+              </span>
+              Settings
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="m-4 rounded-lg border border-line bg-zinc-50 p-4">
+        <div class="flex items-center justify-between">
+          <p class="text-sm font-bold">Scale plan</p>
+          <span class="rounded bg-mint px-2 py-1 text-[11px] font-bold text-teal">82%</span>
+        </div>
+        <div class="mt-3 h-2 rounded-full bg-zinc-200">
+          <div class="h-2 w-[82%] rounded-full bg-teal"></div>
+        </div>
+        <p class="mt-3 text-xs font-medium leading-5 text-zinc-500">8.2M of 10M events processed this month.</p>
+      </div>
+    </aside>
+
+    <main class="min-w-0">
+      <header class="sticky top-0 z-10 border-b border-line bg-white/95 backdrop-blur">
+        <div class="flex min-h-20 flex-col gap-4 px-4 py-4 sm:px-6 xl:px-8">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex min-w-0 items-center gap-3">
+              <div class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-ink text-white lg:hidden">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 2.8 14.7 9l6.7.5-5.1 4.4 1.6 6.5-5.9-3.5-5.9 3.5 1.6-6.5-5.1-4.4L9.3 9 12 2.8Z" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <p class="truncate text-xl font-bold text-ink">Analytics Overview</p>
+                <p class="mt-1 text-sm font-medium text-zinc-500">Northstar performance for Jul 2026</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button class="grid h-10 w-10 place-items-center rounded-lg border border-line bg-white text-zinc-600 hover:border-zinc-300 hover:text-ink" aria-label="Search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M10.8 4a6.8 6.8 0 1 0 0 13.6 6.8 6.8 0 0 0 0-13.6ZM2 10.8a8.8 8.8 0 1 1 15.7 5.5l4 4-1.4 1.4-4-4A8.8 8.8 0 0 1 2 10.8Z" fill="currentColor"/>
+                </svg>
+              </button>
+              <button class="grid h-10 w-10 place-items-center rounded-lg border border-line bg-white text-zinc-600 hover:border-zinc-300 hover:text-ink" aria-label="Notifications">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 22a2.6 2.6 0 0 0 2.5-2h-5a2.6 2.6 0 0 0 2.5 2Zm7-6h-1V9a6 6 0 1 0-12 0v7H5v2h14v-2Z" fill="currentColor"/>
+                </svg>
+              </button>
+              <button class="hidden h-10 items-center gap-2 rounded-lg border border-line bg-white px-3 text-sm font-bold text-zinc-700 hover:border-zinc-300 hover:text-ink sm:flex">
+                <span class="h-2 w-2 rounded-full bg-teal"></span>
+                Live
+              </button>
+              <div class="flex h-10 items-center gap-3 rounded-lg border border-line bg-white py-1 pl-2 pr-3">
+                <div class="grid h-7 w-7 place-items-center rounded bg-coral text-xs font-bold text-white">AR</div>
+                <div class="hidden sm:block">
+                  <p class="text-xs font-bold leading-4">Avery Reed</p>
+                  <p class="text-[11px] font-semibold leading-3 text-zinc-500">Admin</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="flex gap-2 overflow-x-auto pb-1 lg:hidden" aria-label="Mobile navigation">
+            <a href="#" class="shrink-0 rounded-lg bg-ink px-3 py-2 text-sm font-bold text-white">Overview</a>
+            <a href="#" class="shrink-0 rounded-lg border border-line bg-white px-3 py-2 text-sm font-bold text-zinc-600">Reports</a>
+            <a href="#" class="shrink-0 rounded-lg border border-line bg-white px-3 py-2 text-sm font-bold text-zinc-600">Customers</a>
+            <a href="#" class="shrink-0 rounded-lg border border-line bg-white px-3 py-2 text-sm font-bold text-zinc-600">Retention</a>
+            <a href="#" class="shrink-0 rounded-lg border border-line bg-white px-3 py-2 text-sm font-bold text-zinc-600">Segments</a>
+          </nav>
+        </div>
+      </header>
+
+      <section class="px-4 py-6 sm:px-6 xl:px-8">
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <article class="metric-card rounded-lg border border-line bg-white p-5">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold text-zinc-500">Monthly recurring revenue</p>
+                <p class="mt-4 text-3xl font-extrabold tracking-normal">$482.6K</p>
+              </div>
+              <span class="rounded bg-mint px-2 py-1 text-xs font-bold text-teal">+12.4%</span>
+            </div>
+            <div class="mt-6 flex items-end gap-1.5" aria-hidden="true">
+              <span class="h-8 w-full rounded-sm bg-teal/20"></span>
+              <span class="h-12 w-full rounded-sm bg-teal/30"></span>
+              <span class="h-10 w-full rounded-sm bg-teal/30"></span>
+              <span class="h-14 w-full rounded-sm bg-teal/40"></span>
+              <span class="h-16 w-full rounded-sm bg-teal"></span>
+            </div>
+          </article>
+
+          <article class="metric-card rounded-lg border border-line bg-white p-5">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold text-zinc-500">Active accounts</p>
+                <p class="mt-4 text-3xl font-extrabold tracking-normal">18,420</p>
+              </div>
+              <span class="rounded bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700">+6.8%</span>
+            </div>
+            <p class="mt-7 text-sm font-medium text-zinc-500">Enterprise expansion drove 742 net-new seats this week.</p>
+          </article>
+
+          <article class="metric-card rounded-lg border border-line bg-white p-5">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold text-zinc-500">Net retention</p>
+                <p class="mt-4 text-3xl font-extrabold tracking-normal">117.3%</p>
+              </div>
+              <span class="rounded bg-amber-50 px-2 py-1 text-xs font-bold text-amber">+2.1%</span>
+            </div>
+            <div class="mt-7 h-2 rounded-full bg-zinc-100">
+              <div class="h-2 w-[76%] rounded-full bg-amber-600"></div>
+            </div>
+            <p class="mt-3 text-sm font-medium text-zinc-500">Target: 120% by quarter close.</p>
+          </article>
+
+          <article class="metric-card rounded-lg border border-line bg-white p-5">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold text-zinc-500">Churn risk</p>
+                <p class="mt-4 text-3xl font-extrabold tracking-normal">3.9%</p>
+              </div>
+              <span class="rounded bg-rose-50 px-2 py-1 text-xs font-bold text-coral">-0.7%</span>
+            </div>
+            <p class="mt-7 text-sm font-medium text-zinc-500">28 accounts need outreach before renewal windows open.</p>
+          </article>
+        </div>
+
+        <div class="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_388px]">
+          <section class="rounded-lg border border-line bg-white">
+            <div class="flex flex-wrap items-start justify-between gap-4 border-b border-line p-5">
+              <div>
+                <h2 class="text-lg font-bold tracking-normal">Revenue and activation</h2>
+                <p class="mt-1 text-sm font-medium text-zinc-500">Trailing 12 weeks across paid workspaces</p>
+              </div>
+              <div class="flex rounded-lg border border-line bg-zinc-50 p-1">
+                <button class="rounded-md bg-white px-3 py-1.5 text-xs font-bold text-ink shadow-sm">MRR</button>
+                <button class="rounded-md px-3 py-1.5 text-xs font-bold text-zinc-500">Users</button>
+                <button class="rounded-md px-3 py-1.5 text-xs font-bold text-zinc-500">Cohorts</button>
+              </div>
+            </div>
+
+            <div class="p-5">
+              <div class="flex flex-wrap gap-x-8 gap-y-3 pb-5">
+                <div class="flex items-center gap-2">
+                  <span class="h-2.5 w-2.5 rounded-full bg-teal"></span>
+                  <span class="text-sm font-semibold text-zinc-600">Revenue</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="h-2.5 w-2.5 rounded-full bg-coral"></span>
+                  <span class="text-sm font-semibold text-zinc-600">Activation</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+                  <span class="text-sm font-semibold text-zinc-600">Expansion</span>
+                </div>
+              </div>
+
+              <div class="aspect-[16/9] min-h-[300px] w-full overflow-hidden rounded-lg border border-line bg-white">
+                <svg viewBox="0 0 960 540" class="h-full w-full" role="img" aria-labelledby="chart-title chart-desc">
+                  <title id="chart-title">Northstar revenue and activation trend</title>
+                  <desc id="chart-desc">Revenue rises steadily across 12 weeks while activation climbs after a mid-period dip.</desc>
+                  <defs>
+                    <linearGradient id="revenue-fill" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0%" stop-color="#0f766e" stop-opacity="0.24"/>
+                      <stop offset="100%" stop-color="#0f766e" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <rect width="960" height="540" fill="#ffffff"/>
+                  <g class="chart-grid">
+                    <line x1="82" x2="914" y1="88" y2="88"/>
+                    <line x1="82" x2="914" y1="168" y2="168"/>
+                    <line x1="82" x2="914" y1="248" y2="248"/>
+                    <line x1="82" x2="914" y1="328" y2="328"/>
+                    <line x1="82" x2="914" y1="408" y2="408"/>
+                  </g>
+                  <g>
+                    <text class="chart-label" x="28" y="92">$520K</text>
+                    <text class="chart-label" x="28" y="172">$480K</text>
+                    <text class="chart-label" x="28" y="252">$440K</text>
+                    <text class="chart-label" x="28" y="332">$400K</text>
+                    <text class="chart-label" x="28" y="412">$360K</text>
+                  </g>
+                  <g>
+                    <rect x="118" y="352" width="28" height="56" rx="5" fill="#f59e0b" opacity="0.42"/>
+                    <rect x="188" y="336" width="28" height="72" rx="5" fill="#f59e0b" opacity="0.5"/>
+                    <rect x="258" y="316" width="28" height="92" rx="5" fill="#f59e0b" opacity="0.58"/>
+                    <rect x="328" y="302" width="28" height="106" rx="5" fill="#f59e0b" opacity="0.66"/>
+                    <rect x="398" y="286" width="28" height="122" rx="5" fill="#f59e0b" opacity="0.72"/>
+                    <rect x="468" y="296" width="28" height="112" rx="5" fill="#f59e0b" opacity="0.64"/>
+                    <rect x="538" y="254" width="28" height="154" rx="5" fill="#f59e0b" opacity="0.78"/>
+                    <rect x="608" y="238" width="28" height="170" rx="5" fill="#f59e0b" opacity="0.84"/>
+                    <rect x="678" y="210" width="28" height="198" rx="5" fill="#f59e0b" opacity="0.9"/>
+                    <rect x="748" y="194" width="28" height="214" rx="5" fill="#f59e0b" opacity="0.95"/>
+                    <rect x="818" y="174" width="28" height="234" rx="5" fill="#f59e0b"/>
+                  </g>
+                  <path d="M82 398 C154 372 188 340 244 320 C309 296 348 306 402 260 C472 201 504 212 558 188 C630 156 656 168 720 132 C786 95 846 92 914 76 L914 408 L82 408 Z" fill="url(#revenue-fill)"/>
+                  <path d="M82 398 C154 372 188 340 244 320 C309 296 348 306 402 260 C472 201 504 212 558 188 C630 156 656 168 720 132 C786 95 846 92 914 76" fill="none" stroke="#0f766e" stroke-width="5" stroke-linecap="round"/>
+                  <path d="M82 338 C148 318 180 300 244 312 C312 324 348 356 402 334 C468 306 500 250 558 244 C626 236 650 286 720 258 C790 226 846 190 914 182" fill="none" stroke="#e11d48" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 10"/>
+                  <g fill="#0f766e" stroke="#fff" stroke-width="4">
+                    <circle cx="82" cy="398" r="7"/>
+                    <circle cx="244" cy="320" r="7"/>
+                    <circle cx="402" cy="260" r="7"/>
+                    <circle cx="558" cy="188" r="7"/>
+                    <circle cx="720" cy="132" r="7"/>
+                    <circle cx="914" cy="76" r="7"/>
+                  </g>
+                  <g>
+                    <text class="chart-label" x="106" y="470">Apr 13</text>
+                    <text class="chart-label" x="246" y="470">Apr 27</text>
+                    <text class="chart-label" x="386" y="470">May 11</text>
+                    <text class="chart-label" x="526" y="470">May 25</text>
+                    <text class="chart-label" x="666" y="470">Jun 08</text>
+                    <text class="chart-label" x="806" y="470">Jun 22</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </section>
+
+          <aside class="rounded-lg border border-line bg-white">
+            <div class="flex items-center justify-between border-b border-line p-5">
+              <div>
+                <h2 class="text-lg font-bold tracking-normal">Recent activity</h2>
+                <p class="mt-1 text-sm font-medium text-zinc-500">Account and pipeline signals</p>
+              </div>
+              <button class="rounded-lg border border-line px-3 py-2 text-sm font-bold text-zinc-600 hover:border-zinc-300 hover:text-ink">View all</button>
+            </div>
+
+            <div class="divide-y divide-line">
+              <article class="flex gap-4 p-5">
+                <div class="mt-1 h-9 w-9 shrink-0 rounded-lg bg-mint text-teal">
+                  <div class="grid h-full w-full place-items-center">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M5 12.5 10 17 19 7l-1.5-1.4-7.7 8.5-3.4-3L5 12.5Z" fill="currentColor"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-bold">HelioStack upgraded to Enterprise</p>
+                  <p class="mt-1 text-sm leading-5 text-zinc-500">Projected expansion adds $42K ARR this quarter.</p>
+                  <p class="mt-2 text-xs font-bold text-zinc-400">12 min ago</p>
+                </div>
+              </article>
+
+              <article class="flex gap-4 p-5">
+                <div class="mt-1 h-9 w-9 shrink-0 rounded-lg bg-amber-50 text-amber">
+                  <div class="grid h-full w-full place-items-center">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" fill="currentColor"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-bold">Activation milestone reached</p>
+                  <p class="mt-1 text-sm leading-5 text-zinc-500">Trial cohort hit 64% setup completion after onboarding changes.</p>
+                  <p class="mt-2 text-xs font-bold text-zinc-400">41 min ago</p>
+                </div>
+              </article>
+
+              <article class="flex gap-4 p-5">
+                <div class="mt-1 h-9 w-9 shrink-0 rounded-lg bg-rose-50 text-coral">
+                  <div class="grid h-full w-full place-items-center">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M12 3 2 20h20L12 3Zm1 13h-2v2h2v-2Zm0-7h-2v5h2V9Z" fill="currentColor"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-bold">Renewal risk detected</p>
+                  <p class="mt-1 text-sm leading-5 text-zinc-500">BluePeak usage fell 23% over the last 14 days.</p>
+                  <p class="mt-2 text-xs font-bold text-zinc-400">1 hr ago</p>
+                </div>
+              </article>
+
+              <article class="flex gap-4 p-5">
+                <div class="mt-1 h-9 w-9 shrink-0 rounded-lg bg-zinc-100 text-zinc-600">
+                  <div class="grid h-full w-full place-items-center">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M4 4h16v12H7l-3 4V4Zm4 5v2h8V9H8Z" fill="currentColor"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-bold">Customer note added</p>
+                  <p class="mt-1 text-sm leading-5 text-zinc-500">Success team logged procurement feedback for OrbitLabs.</p>
+                  <p class="mt-2 text-xs font-bold text-zinc-400">2 hrs ago</p>
+                </div>
+              </article>
+            </div>
+          </aside>
+        </div>
+
+        <div class="mt-6 grid gap-6 lg:grid-cols-3">
+          <section class="rounded-lg border border-line bg-white p-5">
+            <div class="flex items-center justify-between">
+              <h2 class="text-base font-bold">Pipeline health</h2>
+              <span class="text-xs font-bold text-teal">Strong</span>
+            </div>
+            <div class="mt-5 space-y-4">
+              <div>
+                <div class="flex justify-between text-sm font-semibold">
+                  <span class="text-zinc-500">Qualified expansion</span>
+                  <span>$182K</span>
+                </div>
+                <div class="mt-2 h-2 rounded-full bg-zinc-100"><div class="h-2 w-[82%] rounded-full bg-teal"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm font-semibold">
+                  <span class="text-zinc-500">At-risk ARR</span>
+                  <span>$31K</span>
+                </div>
+                <div class="mt-2 h-2 rounded-full bg-zinc-100"><div class="h-2 w-[28%] rounded-full bg-coral"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm font-semibold">
+                  <span class="text-zinc-500">Open onboarding</span>
+                  <span>47</span>
+                </div>
+                <div class="mt-2 h-2 rounded-full bg-zinc-100"><div class="h-2 w-[64%] rounded-full bg-amber-500"></div></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="rounded-lg border border-line bg-white p-5">
+            <div class="flex items-center justify-between">
+              <h2 class="text-base font-bold">Top segment</h2>
+              <span class="rounded bg-zinc-100 px-2 py-1 text-xs font-bold text-zinc-600">Mid-market</span>
+            </div>
+            <div class="mt-5 grid grid-cols-2 gap-x-6 gap-y-3 border-y border-line py-4">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.12em] text-zinc-400">ARR</p>
+                <p class="mt-3 text-2xl font-extrabold">$216K</p>
+              </div>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.12em] text-zinc-400">NPS</p>
+                <p class="mt-3 text-2xl font-extrabold">48</p>
+              </div>
+            </div>
+            <p class="mt-4 text-sm leading-5 text-zinc-500">Workflow automation and shared reporting are the strongest adoption drivers.</p>
+          </section>
+
+          <section class="rounded-lg border border-line bg-ink p-5 text-white">
+            <div class="flex items-center justify-between">
+              <h2 class="text-base font-bold">Next best action</h2>
+              <span class="rounded bg-white/10 px-2 py-1 text-xs font-bold text-white">Today</span>
+            </div>
+            <p class="mt-5 text-3xl font-extrabold tracking-normal">28</p>
+            <p class="mt-2 text-sm leading-5 text-zinc-300">High-value accounts are ready for executive outreach based on adoption velocity.</p>
+            <button class="mt-5 w-full rounded-lg bg-white px-4 py-2.5 text-sm font-bold text-ink hover:bg-zinc-100">Open playbook</button>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

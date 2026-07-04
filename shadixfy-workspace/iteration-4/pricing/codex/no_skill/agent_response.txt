@@ -1,0 +1,3 @@
+Created [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.1zeqhPhVJO/index.html).
+
+It includes the pricing header, Free/Pro/Team cards, monthly/annual toggle with live price updates, feature comparison table, FAQ area, Tailwind CDN, Google Fonts, and no external image hosts. You can open the file directly in a browser.

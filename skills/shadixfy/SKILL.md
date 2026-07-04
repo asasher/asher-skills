@@ -45,6 +45,7 @@ If you're reaching for a value that has no token, stop — you're probably decor
 - Tabs: normal (underline or `bg-muted` track with one active segment; no sliding animation).
 - Badges: normal (shadcn `Badge` variants, small, only when they carry state).
 - Avatars: normal (`Avatar` circle with fallback initials, no status ring unless functional).
+- Switches: normal (`Switch` track/thumb, functional state only). In single-file HTML, use utility classes such as `rounded-full`; do not handwrite `border-radius: 9999px`.
 - Icons: normal (lucide-react, 16–20px, `text-muted-foreground` or `currentColor`, no icon background tiles).
 - Typography: normal (Geist or the project's existing sans; clear hierarchy; body 14–16px; no serif/sans mixing).
 - Spacing: normal (Tailwind scale — `2/3/4/6/8`; no random gaps, no overpadding).
@@ -74,7 +75,7 @@ Build it like you'd `npx shadcn@latest add` the component and use it as-is. Don'
 - No "control room" cosplay unless explicitly requested.
 - No serif headline + system sans fallback as a shortcut to "premium."
 - No `Inter`, `Roboto`, `Segoe UI`, `Trebuchet MS`, `Arial`, or safe default stacks. Use **Geist** (Geist Sans / Geist Mono) — or whatever font the project already ships.
-- Colors going towards blue — **no.** Stay on a neutral base (zinc / neutral / stone). Slate and gray lean cool; avoid unless the product is already blue.
+- Default-blue AI color — **no.** Stay on a neutral base, then use at most one deliberate shadcn palette accent. Blue/cyan/indigo are allowed only when the product domain already demands them.
 - No metric-card grid as the first instinct.
 - No fake charts that exist only to fill space.
 - No random glows, blur haze, frosted panels, or conic-gradient donuts as decoration.
@@ -133,15 +134,40 @@ Not allowed. `<small>` eyebrow headers are not allowed. Rounded decorative `span
 
 ## Color
 
-If a UI choice feels like a default AI move, ban it and pick the cleaner option. Colors stay calm and neutral; they don't fight.
+If a UI choice feels like a default AI move, ban it and pick the cleaner option. Colors can exist, but they must behave like shadcn tokens, not decoration. Start neutral, add one restrained accent when it helps the product, and keep everything wired through CSS variables.
 
 You are bad at picking colors. Follow this priority:
 
 1. **Highest priority:** use the existing tokens from the user's project if present (read `globals.css` / `tailwind.config` / `components.json` and reuse the `--background`, `--primary`, … they already define).
 2. If the project has none, **adopt one of the shadcn base palettes below** verbatim. Default to **Zinc**. Pick **Neutral** for pure gray, **Stone** for a warm gray.
-3. Do **not** invent random color combinations. The accent is `primary` — keep it to one. Everything else is the neutral ramp.
+3. For new standalone UIs with no existing brand tokens, choose exactly one non-blue accent family from the shadcn/Tailwind color library by default. Map it to `--primary`, `--primary-foreground`, `--ring`, and chart/status tokens. Do not leave `--primary` black unless the user explicitly asks for a monochrome UI or the existing project already uses monochrome tokens. Keep `--accent` as the muted hover/active surface.
+4. Do **not** invent random color combinations. Do not use gradients or colored shadows to make the accent feel bigger. Everything still sits on the neutral ramp.
 
-These are shadcn/ui (v3) tokens in `H S% L%` form, dropped straight into `:root` and `.dark`, with `--radius: 0.5rem`. Wire Tailwind to them with `hsl(var(--token))`.
+The shadcn v3 color library is the source for palette values: Tailwind colors in HSL, RGB, HEX, and OKLCH formats. Use those values directly. Prefer warm or organic accents for generic products: **orange**, **amber**, **green**, **emerald**, **teal**, **rose**, or **purple**. Use **blue**, **sky**, **cyan**, or **indigo** only when the product domain calls for a cool color; never as the default AI SaaS reflex.
+
+Good accent examples from shadcn v3 HSL values:
+
+```css
+/* Orange */
+--primary: 20.5 90.2% 48.2%;       --primary-foreground: 0 0% 9%;
+--ring: 20.5 90.2% 48.2%;
+
+/* Emerald */
+--primary: 161.4 93.5% 30.4%;      --primary-foreground: 0 0% 9%;
+--ring: 161.4 93.5% 30.4%;
+
+/* Rose */
+--primary: 346.8 77.2% 49.8%;      --primary-foreground: 0 0% 98%;
+--ring: 346.8 77.2% 49.8%;
+
+/* Purple */
+--primary: 271.5 81.3% 55.9%;      --primary-foreground: 0 0% 98%;
+--ring: 271.5 81.3% 55.9%;
+```
+
+For charts, use 2–4 shadcn palette stops plus neutral grid/text tokens. For status, use semantic color only when the status exists (`destructive`, success, warning); do not color every badge or row just because a palette is available.
+
+These neutral bases are shadcn/ui (v3) tokens in `H S% L%` form, dropped straight into `:root` and `.dark`, with `--radius: 0.5rem`. Wire Tailwind to them with `hsl(var(--token))`.
 
 ### Zinc (default)
 
@@ -230,4 +256,4 @@ These are shadcn/ui (v3) tokens in `H S% L%` form, dropped straight into `:root`
 }
 ```
 
-Avoid **Slate** and **Gray** bases — they lean cool/blue, which this skill bans. If the product genuinely needs a colored brand accent, change only `--primary` / `--primary-foreground` to one restrained hue and leave the neutral ramp intact.
+Avoid **Slate** and **Gray** as generic bases — they lean cool/blue. If the product needs color, change only the semantic accent tokens (`--primary`, `--primary-foreground`, `--ring`, and chart/status variables) and leave the neutral ramp intact.

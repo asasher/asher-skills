@@ -1,0 +1,3 @@
+Built [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.vfYh74iyNW/index.html).
+
+It includes the three pricing tiers, short header, monthly/annual toggle with vanilla JS, responsive feature comparison table, and FAQ/footer. No build step is needed; external references are limited to Tailwind CDN and Google Fonts, with no external image hosts.

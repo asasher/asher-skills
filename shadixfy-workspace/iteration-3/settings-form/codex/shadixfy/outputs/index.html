@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Geist", "sans-serif"],
+              mono: ["Geist Mono", "monospace"],
+            },
+            colors: {
+              border: "hsl(var(--border))",
+              input: "hsl(var(--input))",
+              ring: "hsl(var(--ring))",
+              background: "hsl(var(--background))",
+              foreground: "hsl(var(--foreground))",
+              primary: {
+                DEFAULT: "hsl(var(--primary))",
+                foreground: "hsl(var(--primary-foreground))",
+              },
+              secondary: {
+                DEFAULT: "hsl(var(--secondary))",
+                foreground: "hsl(var(--secondary-foreground))",
+              },
+              destructive: {
+                DEFAULT: "hsl(var(--destructive))",
+                foreground: "hsl(var(--destructive-foreground))",
+              },
+              muted: {
+                DEFAULT: "hsl(var(--muted))",
+                foreground: "hsl(var(--muted-foreground))",
+              },
+              accent: {
+                DEFAULT: "hsl(var(--accent))",
+                foreground: "hsl(var(--accent-foreground))",
+              },
+              popover: {
+                DEFAULT: "hsl(var(--popover))",
+                foreground: "hsl(var(--popover-foreground))",
+              },
+              card: {
+                DEFAULT: "hsl(var(--card))",
+                foreground: "hsl(var(--card-foreground))",
+              },
+            },
+            borderRadius: {
+              lg: "var(--radius)",
+              md: "calc(var(--radius) - 2px)",
+              sm: "calc(var(--radius) - 4px)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 10% 3.9%;
+        --radius: 0.5rem;
+      }
+
+      * {
+        border-color: hsl(var(--border));
+      }
+
+      body {
+        font-family: "Geist", sans-serif;
+      }
+
+      .switch-input:checked + .switch-track {
+        background-color: hsl(var(--primary));
+      }
+
+      .switch-input:checked + .switch-track .switch-thumb {
+        transform: translateX(1.25rem);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-background text-foreground antialiased">
+    <main class="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-6 sm:px-6 lg:px-8">
+      <header class="border-b pb-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 class="text-2xl font-semibold tracking-normal">Account settings</h1>
+            <p class="mt-1 text-sm text-muted-foreground">
+              Manage your profile, password, and notification preferences.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              type="reset"
+              form="account-settings"
+              class="inline-flex h-9 items-center justify-center rounded-md border bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="account-settings"
+              class="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              Save changes
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <form id="account-settings" class="grid flex-1 gap-6 py-6" action="#" method="post">
+        <section class="grid gap-6 rounded-lg border bg-card p-4 text-card-foreground shadow-sm sm:p-6">
+          <div class="grid gap-1">
+            <h2 class="text-lg font-semibold tracking-normal">Profile</h2>
+            <p class="text-sm text-muted-foreground">Update the public details tied to your account.</p>
+          </div>
+
+          <div class="grid gap-5">
+            <div class="grid gap-2">
+              <label for="name" class="text-sm font-medium leading-none">Name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                value="Alex Morgan"
+                autocomplete="name"
+                class="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
+
+            <div class="grid gap-2">
+              <label for="email" class="text-sm font-medium leading-none">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value="alex@example.com"
+                autocomplete="email"
+                class="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
+
+            <div class="grid gap-2">
+              <label for="bio" class="text-sm font-medium leading-none">Bio</label>
+              <textarea
+                id="bio"
+                name="bio"
+                rows="4"
+                class="flex min-h-24 w-full resize-y rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                placeholder="Write a short profile bio."
+              >Product manager focused on customer research and product operations.</textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid gap-6 rounded-lg border bg-card p-4 text-card-foreground shadow-sm sm:p-6">
+          <div class="grid gap-1">
+            <h2 class="text-lg font-semibold tracking-normal">Password</h2>
+            <p class="text-sm text-muted-foreground">Choose a new password for your account.</p>
+          </div>
+
+          <div class="grid gap-5 md:grid-cols-2">
+            <div class="grid gap-2 md:col-span-2">
+              <label for="current-password" class="text-sm font-medium leading-none">Current password</label>
+              <input
+                id="current-password"
+                name="current-password"
+                type="password"
+                autocomplete="current-password"
+                class="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
+
+            <div class="grid gap-2">
+              <label for="new-password" class="text-sm font-medium leading-none">New password</label>
+              <input
+                id="new-password"
+                name="new-password"
+                type="password"
+                autocomplete="new-password"
+                class="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
+
+            <div class="grid gap-2">
+              <label for="confirm-password" class="text-sm font-medium leading-none">Confirm password</label>
+              <input
+                id="confirm-password"
+                name="confirm-password"
+                type="password"
+                autocomplete="new-password"
+                class="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section class="grid gap-6 rounded-lg border bg-card p-4 text-card-foreground shadow-sm sm:p-6">
+          <div class="grid gap-1">
+            <h2 class="text-lg font-semibold tracking-normal">Notifications</h2>
+            <p class="text-sm text-muted-foreground">Set which account notifications you want to receive.</p>
+          </div>
+
+          <div class="divide-y">
+            <label for="product-updates" class="flex items-center justify-between gap-4 py-4 first:pt-0">
+              <span class="grid gap-1">
+                <span class="text-sm font-medium">Product updates</span>
+                <span class="text-sm text-muted-foreground">Receive announcements about new features.</span>
+              </span>
+              <span class="relative inline-flex shrink-0 items-center">
+                <input id="product-updates" name="product-updates" type="checkbox" class="switch-input peer sr-only" checked />
+                <span class="switch-track h-6 w-11 rounded-full bg-input transition-colors peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2">
+                  <span class="switch-thumb block h-5 w-5 translate-x-0.5 translate-y-0.5 rounded-full bg-background shadow-sm transition-transform"></span>
+                </span>
+              </span>
+            </label>
+
+            <label for="security-alerts" class="flex items-center justify-between gap-4 py-4">
+              <span class="grid gap-1">
+                <span class="text-sm font-medium">Security alerts</span>
+                <span class="text-sm text-muted-foreground">Get notified when important security events occur.</span>
+              </span>
+              <span class="relative inline-flex shrink-0 items-center">
+                <input id="security-alerts" name="security-alerts" type="checkbox" class="switch-input peer sr-only" checked />
+                <span class="switch-track h-6 w-11 rounded-full bg-input transition-colors peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2">
+                  <span class="switch-thumb block h-5 w-5 translate-x-0.5 translate-y-0.5 rounded-full bg-background shadow-sm transition-transform"></span>
+                </span>
+              </span>
+            </label>
+
+            <label for="marketing-emails" class="flex items-center justify-between gap-4 py-4">
+              <span class="grid gap-1">
+                <span class="text-sm font-medium">Marketing emails</span>
+                <span class="text-sm text-muted-foreground">Receive occasional offers and customer stories.</span>
+              </span>
+              <span class="relative inline-flex shrink-0 items-center">
+                <input id="marketing-emails" name="marketing-emails" type="checkbox" class="switch-input peer sr-only" />
+                <span class="switch-track h-6 w-11 rounded-full bg-input transition-colors peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2">
+                  <span class="switch-thumb block h-5 w-5 translate-x-0.5 translate-y-0.5 rounded-full bg-background shadow-sm transition-transform"></span>
+                </span>
+              </span>
+            </label>
+
+            <label for="weekly-summary" class="flex items-center justify-between gap-4 py-4 last:pb-0">
+              <span class="grid gap-1">
+                <span class="text-sm font-medium">Weekly summary</span>
+                <span class="text-sm text-muted-foreground">Send a weekly digest of account activity.</span>
+              </span>
+              <span class="relative inline-flex shrink-0 items-center">
+                <input id="weekly-summary" name="weekly-summary" type="checkbox" class="switch-input peer sr-only" />
+                <span class="switch-track h-6 w-11 rounded-full bg-input transition-colors peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2">
+                  <span class="switch-thumb block h-5 w-5 translate-x-0.5 translate-y-0.5 rounded-full bg-background shadow-sm transition-transform"></span>
+                </span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <footer class="flex justify-end gap-2 border-t pt-6">
+          <button
+            type="reset"
+            class="inline-flex h-9 items-center justify-center rounded-md border bg-background px-4 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            Save changes
+          </button>
+        </footer>
+      </form>
+    </main>
+  </body>
+</html>

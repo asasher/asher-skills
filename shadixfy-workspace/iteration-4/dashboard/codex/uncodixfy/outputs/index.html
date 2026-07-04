@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Northstar Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0f0f0f;
+        --surface: #1a1a1a;
+        --surface-2: #141414;
+        --surface-3: #222222;
+        --border: #2f2f2f;
+        --border-soft: #262626;
+        --text: #f5f5f5;
+        --muted: #a3a3a3;
+        --subtle: #737373;
+        --primary: #00d4aa;
+        --warn: #ffb86b;
+        --danger: #ff6b9d;
+        --sidebar: #111111;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 15px;
+        line-height: 1.45;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 236px minmax(0, 1fr);
+        background: var(--bg);
+      }
+
+      .sidebar {
+        background: var(--sidebar);
+        border-right: 1px solid var(--border);
+        padding: 18px 14px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 34px;
+        padding: 0 8px;
+        margin-bottom: 18px;
+        color: var(--text);
+        font-weight: 650;
+      }
+
+      .brand-mark {
+        width: 22px;
+        height: 22px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        display: grid;
+        place-items: center;
+        color: var(--primary);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .nav {
+        display: grid;
+        gap: 2px;
+      }
+
+      .nav a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 36px;
+        padding: 8px 10px;
+        color: var(--muted);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background-color 150ms ease, color 150ms ease;
+      }
+
+      .nav a:hover {
+        background: #181818;
+        color: var(--text);
+      }
+
+      .nav a.active {
+        background: var(--surface);
+        color: var(--text);
+      }
+
+      .nav svg {
+        width: 17px;
+        height: 17px;
+        stroke-width: 1.8;
+        flex: 0 0 auto;
+      }
+
+      .sidebar-section {
+        margin-top: 24px;
+        padding: 0 8px;
+        color: var(--subtle);
+        font-size: 13px;
+      }
+
+      .workspace-list {
+        margin-top: 10px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .workspace-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+      }
+
+      .workspace-row span:last-child {
+        color: var(--subtle);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .main {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .topbar {
+        min-height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 0 24px;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+      }
+
+      .page-title {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .page-title h1 {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1;
+        font-weight: 650;
+      }
+
+      .page-title span {
+        color: var(--subtle);
+        white-space: nowrap;
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .search {
+        width: 260px;
+        height: 34px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface-2);
+        color: var(--text);
+        padding: 0 12px;
+        outline: none;
+      }
+
+      .search::placeholder {
+        color: var(--subtle);
+      }
+
+      .search:focus {
+        border-color: #4a4a4a;
+        outline: 2px solid rgba(0, 212, 170, 0.4);
+        outline-offset: 1px;
+      }
+
+      .icon-button,
+      .text-button {
+        height: 34px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface-2);
+        color: var(--text);
+        transition: border-color 150ms ease, background-color 150ms ease;
+      }
+
+      .icon-button {
+        width: 34px;
+        display: grid;
+        place-items: center;
+      }
+
+      .text-button {
+        padding: 0 12px;
+      }
+
+      .icon-button:hover,
+      .text-button:hover {
+        background: var(--surface-3);
+        border-color: #494949;
+      }
+
+      .icon-button svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      .content {
+        width: 100%;
+        max-width: 1320px;
+        padding: 24px;
+      }
+
+      .metric-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+        overflow: hidden;
+      }
+
+      .metric {
+        min-width: 0;
+        padding: 17px 18px;
+        border-right: 1px solid var(--border-soft);
+      }
+
+      .metric:last-child {
+        border-right: 0;
+      }
+
+      .metric-label {
+        color: var(--muted);
+        margin-bottom: 9px;
+      }
+
+      .metric-value {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .metric-value strong {
+        font-size: 25px;
+        line-height: 1;
+        font-weight: 650;
+        letter-spacing: 0;
+      }
+
+      .metric-change {
+        color: var(--primary);
+        font-size: 13px;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      .metric-change.warning {
+        color: var(--warn);
+      }
+
+      .metric-change.danger {
+        color: var(--danger);
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.9fr) minmax(300px, 0.85fr);
+        gap: 18px;
+        margin-top: 18px;
+        align-items: start;
+      }
+
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+        overflow: hidden;
+      }
+
+      .panel-header {
+        min-height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 0 18px;
+        border-bottom: 1px solid var(--border-soft);
+      }
+
+      .panel-title {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 650;
+      }
+
+      .range-control {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--surface-2);
+      }
+
+      .range-control button {
+        height: 30px;
+        padding: 0 10px;
+        color: var(--muted);
+        border: 0;
+        border-right: 1px solid var(--border);
+        background: transparent;
+      }
+
+      .range-control button:last-child {
+        border-right: 0;
+      }
+
+      .range-control button.active {
+        color: var(--text);
+        background: #232323;
+      }
+
+      .chart-wrap {
+        height: 360px;
+        padding: 18px;
+      }
+
+      #revenueChart {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .chart-footer {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-top: 1px solid var(--border-soft);
+      }
+
+      .chart-stat {
+        padding: 14px 18px;
+        border-right: 1px solid var(--border-soft);
+      }
+
+      .chart-stat:last-child {
+        border-right: 0;
+      }
+
+      .chart-stat span {
+        display: block;
+        color: var(--muted);
+        margin-bottom: 5px;
+      }
+
+      .chart-stat strong {
+        font-size: 16px;
+        font-weight: 650;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .activity-list {
+        display: grid;
+      }
+
+      .activity-item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+        padding: 15px 18px;
+        border-bottom: 1px solid var(--border-soft);
+      }
+
+      .activity-item:last-child {
+        border-bottom: 0;
+      }
+
+      .activity-main {
+        min-width: 0;
+      }
+
+      .activity-title {
+        margin: 0;
+        color: var(--text);
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .activity-meta {
+        margin-top: 4px;
+        color: var(--subtle);
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .activity-value {
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      .lower-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.8fr);
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .table th,
+      .table td {
+        padding: 13px 18px;
+        border-bottom: 1px solid var(--border-soft);
+        text-align: left;
+      }
+
+      .table th {
+        color: var(--muted);
+        font-weight: 500;
+      }
+
+      .table td {
+        color: var(--text);
+      }
+
+      .table tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .table td:last-child,
+      .table th:last-child {
+        text-align: right;
+      }
+
+      .status {
+        color: var(--muted);
+      }
+
+      .status.good {
+        color: var(--primary);
+      }
+
+      .status.watch {
+        color: var(--warn);
+      }
+
+      .account-list {
+        display: grid;
+      }
+
+      .account-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--border-soft);
+      }
+
+      .account-row:last-child {
+        border-bottom: 0;
+      }
+
+      .account-row strong {
+        display: block;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .account-row span {
+        display: block;
+        margin-top: 4px;
+        color: var(--subtle);
+        font-size: 13px;
+      }
+
+      .account-row b {
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+      }
+
+      @media (max-width: 1100px) {
+        .metric-strip,
+        .chart-footer,
+        .lower-row {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .metric:nth-child(2) {
+          border-right: 0;
+        }
+
+        .metric:nth-child(-n + 2) {
+          border-bottom: 1px solid var(--border-soft);
+        }
+
+        .chart-stat:nth-child(2) {
+          border-right: 0;
+        }
+
+        .chart-stat:nth-child(-n + 2) {
+          border-bottom: 1px solid var(--border-soft);
+        }
+      }
+
+      @media (max-width: 820px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          border-right: 0;
+          border-bottom: 1px solid var(--border);
+          padding: 12px;
+        }
+
+        .brand {
+          margin-bottom: 10px;
+        }
+
+        .nav {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .sidebar-section {
+          display: none;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 14px 16px;
+        }
+
+        .top-actions {
+          width: 100%;
+        }
+
+        .search {
+          width: 100%;
+        }
+
+        .content {
+          padding: 16px;
+        }
+
+        .lower-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .nav {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .metric-strip,
+        .chart-footer {
+          grid-template-columns: 1fr;
+        }
+
+        .metric,
+        .chart-stat {
+          border-right: 0;
+          border-bottom: 1px solid var(--border-soft);
+        }
+
+        .metric:last-child,
+        .chart-stat:last-child {
+          border-bottom: 0;
+        }
+
+        .range-control button {
+          padding: 0 8px;
+        }
+
+        .chart-wrap {
+          height: 300px;
+          padding: 14px;
+        }
+
+        .table {
+          min-width: 560px;
+        }
+
+        .table-scroll {
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">N</div>
+          <span>Northstar</span>
+        </div>
+
+        <nav class="nav">
+          <a class="active" href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M4 19V5" />
+              <path d="M4 19h16" />
+              <path d="m7 15 4-4 3 3 5-6" />
+            </svg>
+            Analytics
+          </a>
+          <a href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M4 7h16" />
+              <path d="M4 12h16" />
+              <path d="M4 17h10" />
+            </svg>
+            Reports
+          </a>
+          <a href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M4 6h16v12H4z" />
+              <path d="M8 10h8" />
+              <path d="M8 14h5" />
+            </svg>
+            Accounts
+          </a>
+          <a href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M12 4v16" />
+              <path d="M5 9h14" />
+              <path d="M7 15h10" />
+            </svg>
+            Segments
+          </a>
+          <a href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M5 5h14v14H5z" />
+              <path d="M9 9h6v6H9z" />
+            </svg>
+            Integrations
+          </a>
+          <a href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
+              <path d="M19 12h2" />
+              <path d="M3 12h2" />
+              <path d="M12 3v2" />
+              <path d="M12 19v2" />
+            </svg>
+            Settings
+          </a>
+        </nav>
+
+        <div class="sidebar-section">
+          <div>Data sources</div>
+          <div class="workspace-list">
+            <div class="workspace-row">
+              <span>Billing</span>
+              <span>99.9%</span>
+            </div>
+            <div class="workspace-row">
+              <span>Product</span>
+              <span>98.7%</span>
+            </div>
+            <div class="workspace-row">
+              <span>CRM</span>
+              <span>97.4%</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="page-title">
+            <h1>Analytics</h1>
+            <span>July 2026</span>
+          </div>
+
+          <div class="top-actions">
+            <input class="search" type="search" placeholder="Search accounts" aria-label="Search accounts" />
+            <button class="icon-button" type="button" aria-label="Notifications">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+                <path d="M10 21h4" />
+              </svg>
+            </button>
+            <button class="text-button" type="button">Export</button>
+          </div>
+        </header>
+
+        <section class="content" aria-label="Northstar analytics dashboard">
+          <div class="metric-strip" aria-label="Key metrics">
+            <div class="metric">
+              <div class="metric-label">Monthly recurring revenue</div>
+              <div class="metric-value">
+                <strong>$482.1K</strong>
+                <span class="metric-change">+12.8%</span>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Active workspaces</div>
+              <div class="metric-value">
+                <strong>8,942</strong>
+                <span class="metric-change">+6.4%</span>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Net revenue retention</div>
+              <div class="metric-value">
+                <strong>118%</strong>
+                <span class="metric-change">+3.1%</span>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Gross churn</div>
+              <div class="metric-value">
+                <strong>2.7%</strong>
+                <span class="metric-change danger">+0.4%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel" aria-labelledby="revenue-title">
+              <div class="panel-header">
+                <h2 class="panel-title" id="revenue-title">Revenue</h2>
+                <div class="range-control" aria-label="Date range">
+                  <button type="button">30d</button>
+                  <button class="active" type="button">90d</button>
+                  <button type="button">12m</button>
+                </div>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="revenueChart" aria-label="Revenue line chart" role="img"></canvas>
+              </div>
+              <div class="chart-footer">
+                <div class="chart-stat">
+                  <span>Expansion revenue</span>
+                  <strong>$74.8K</strong>
+                </div>
+                <div class="chart-stat">
+                  <span>New business</span>
+                  <strong>$51.3K</strong>
+                </div>
+                <div class="chart-stat">
+                  <span>Contraction</span>
+                  <strong>$11.6K</strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="activity-title">
+              <div class="panel-header">
+                <h2 class="panel-title" id="activity-title">Recent activity</h2>
+                <button class="text-button" type="button">View all</button>
+              </div>
+              <div class="activity-list">
+                <article class="activity-item">
+                  <div class="activity-main">
+                    <p class="activity-title">Acme upgraded to Business</p>
+                    <div class="activity-meta">Subscription change · 9 minutes ago</div>
+                  </div>
+                  <div class="activity-value">+$4,200</div>
+                </article>
+                <article class="activity-item">
+                  <div class="activity-main">
+                    <p class="activity-title">Atlas Labs crossed activation</p>
+                    <div class="activity-meta">Product milestone · 24 minutes ago</div>
+                  </div>
+                  <div class="activity-value">84%</div>
+                </article>
+                <article class="activity-item">
+                  <div class="activity-main">
+                    <p class="activity-title">Renewal risk opened for Hexa</p>
+                    <div class="activity-meta">Customer health · 42 minutes ago</div>
+                  </div>
+                  <div class="activity-value">18 days</div>
+                </article>
+                <article class="activity-item">
+                  <div class="activity-main">
+                    <p class="activity-title">Seven seats added by Vela</p>
+                    <div class="activity-meta">Seat expansion · 1 hour ago</div>
+                  </div>
+                  <div class="activity-value">+$980</div>
+                </article>
+                <article class="activity-item">
+                  <div class="activity-main">
+                    <p class="activity-title">Cobalt connected warehouse sync</p>
+                    <div class="activity-meta">Integration · 2 hours ago</div>
+                  </div>
+                  <div class="activity-value">Live</div>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <div class="lower-row">
+            <section class="panel" aria-labelledby="pipeline-title">
+              <div class="panel-header">
+                <h2 class="panel-title" id="pipeline-title">Conversion pipeline</h2>
+                <button class="text-button" type="button">Filter</button>
+              </div>
+              <div class="table-scroll">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Stage</th>
+                      <th>Accounts</th>
+                      <th>Conversion</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Trial started</td>
+                      <td>1,426</td>
+                      <td class="status good">72.4%</td>
+                      <td>$198.2K</td>
+                    </tr>
+                    <tr>
+                      <td>Invited team</td>
+                      <td>884</td>
+                      <td class="status good">61.9%</td>
+                      <td>$151.6K</td>
+                    </tr>
+                    <tr>
+                      <td>Connected data</td>
+                      <td>621</td>
+                      <td class="status">43.5%</td>
+                      <td>$109.4K</td>
+                    </tr>
+                    <tr>
+                      <td>Paid conversion</td>
+                      <td>247</td>
+                      <td class="status watch">17.3%</td>
+                      <td>$72.8K</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="accounts-title">
+              <div class="panel-header">
+                <h2 class="panel-title" id="accounts-title">Top accounts</h2>
+                <button class="text-button" type="button">Open CRM</button>
+              </div>
+              <div class="account-list">
+                <div class="account-row">
+                  <div>
+                    <strong>Acme Systems</strong>
+                    <span>Business · 248 seats</span>
+                  </div>
+                  <b>$38.4K</b>
+                </div>
+                <div class="account-row">
+                  <div>
+                    <strong>Atlas Labs</strong>
+                    <span>Enterprise · 184 seats</span>
+                  </div>
+                  <b>$31.9K</b>
+                </div>
+                <div class="account-row">
+                  <div>
+                    <strong>Cobalt Data</strong>
+                    <span>Enterprise · 162 seats</span>
+                  </div>
+                  <b>$29.1K</b>
+                </div>
+                <div class="account-row">
+                  <div>
+                    <strong>Vela Studio</strong>
+                    <span>Business · 96 seats</span>
+                  </div>
+                  <b>$14.6K</b>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("revenueChart");
+      const ctx = canvas.getContext("2d");
+      const points = [305, 318, 312, 341, 352, 349, 366, 379, 387, 405, 417, 429, 438, 451, 463, 482];
+      const labels = ["Mar 15", "Mar 22", "Mar 29", "Apr 5", "Apr 12", "Apr 19", "Apr 26", "May 3", "May 10", "May 17", "May 24", "May 31", "Jun 7", "Jun 14", "Jun 21", "Jun 28"];
+
+      function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = Math.floor(rect.width * ratio);
+        canvas.height = Math.floor(rect.height * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        drawChart(rect.width, rect.height);
+      }
+
+      function drawChart(width, height) {
+        ctx.clearRect(0, 0, width, height);
+
+        const padding = { top: 18, right: 18, bottom: 34, left: 48 };
+        const plotWidth = width - padding.left - padding.right;
+        const plotHeight = height - padding.top - padding.bottom;
+        const min = 280;
+        const max = 500;
+        const gridLines = 4;
+
+        ctx.font = '12px "IBM Plex Sans", sans-serif';
+        ctx.lineWidth = 1;
+        ctx.textBaseline = "middle";
+
+        for (let i = 0; i <= gridLines; i += 1) {
+          const y = padding.top + (plotHeight / gridLines) * i;
+          const value = Math.round(max - ((max - min) / gridLines) * i);
+
+          ctx.strokeStyle = "#2a2a2a";
+          ctx.beginPath();
+          ctx.moveTo(padding.left, y);
+          ctx.lineTo(width - padding.right, y);
+          ctx.stroke();
+
+          ctx.fillStyle = "#737373";
+          ctx.textAlign = "right";
+          ctx.fillText(`$${value}K`, padding.left - 10, y);
+        }
+
+        const coords = points.map((point, index) => {
+          const x = padding.left + (plotWidth / (points.length - 1)) * index;
+          const y = padding.top + ((max - point) / (max - min)) * plotHeight;
+          return { x, y, point };
+        });
+
+        ctx.strokeStyle = "#00d4aa";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        coords.forEach((coord, index) => {
+          if (index === 0) {
+            ctx.moveTo(coord.x, coord.y);
+          } else {
+            ctx.lineTo(coord.x, coord.y);
+          }
+        });
+        ctx.stroke();
+
+        coords.forEach((coord, index) => {
+          if (index === 0 || index === coords.length - 1 || index % 5 === 0) {
+            ctx.fillStyle = "#1a1a1a";
+            ctx.strokeStyle = "#00d4aa";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(coord.x, coord.y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+          }
+        });
+
+        ctx.fillStyle = "#737373";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        [0, 5, 10, 15].forEach((index) => {
+          const coord = coords[index];
+          ctx.fillText(labels[index], coord.x, height - 22);
+        });
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+    </script>
+  </body>
+</html>

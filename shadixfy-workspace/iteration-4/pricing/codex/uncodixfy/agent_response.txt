@@ -1,0 +1,3 @@
+Built [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.5UuNKzulpZ/index.html).
+
+It’s a single direct-open HTML file using Tailwind CDN and Google Fonts, with three pricing tiers, a working monthly/annual toggle, and a feature comparison table. I also checked that it has no image tags and no build-step requirements.

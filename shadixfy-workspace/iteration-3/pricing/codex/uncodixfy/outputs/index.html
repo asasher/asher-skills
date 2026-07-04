@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forgekit Pricing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              plex: ['IBM Plex Sans', 'sans-serif'],
+            },
+            colors: {
+              ink: '#f4f1ea',
+              muted: '#b4ada3',
+              line: '#36312b',
+              page: '#11100e',
+              panel: '#191713',
+              panel2: '#211e19',
+              action: '#d88a3d',
+              action2: '#f0b86b',
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: 'IBM Plex Sans', sans-serif;
+        background: #11100e;
+      }
+
+      .billing-btn[aria-pressed='true'] {
+        background: #f4f1ea;
+        color: #11100e;
+        border-color: #f4f1ea;
+      }
+
+      .billing-btn[aria-pressed='false'] {
+        background: transparent;
+        color: #b4ada3;
+        border-color: transparent;
+      }
+
+      .checkmark {
+        width: 18px;
+        height: 18px;
+        color: #f0b86b;
+      }
+
+      .dash {
+        color: #756d63;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-page text-ink antialiased">
+    <main class="mx-auto w-full max-w-6xl px-5 py-8 sm:px-6 lg:px-8">
+      <header class="mb-8 flex flex-col gap-5 border-b border-line pb-6 md:flex-row md:items-end md:justify-between">
+        <div>
+          <div class="mb-5 flex items-center gap-3">
+            <div class="flex h-9 w-9 items-center justify-center rounded-md border border-line bg-panel2 text-sm font-semibold text-action2">
+              F
+            </div>
+            <span class="text-base font-semibold text-ink">Forgekit</span>
+          </div>
+          <h1 class="text-3xl font-semibold tracking-normal text-ink sm:text-4xl">Pricing</h1>
+          <p class="mt-2 max-w-2xl text-base leading-7 text-muted">
+            Plans for local development, production automation, and shared team workflows.
+          </p>
+        </div>
+
+        <div class="w-fit rounded-lg border border-line bg-panel p-1">
+          <button
+            type="button"
+            class="billing-btn rounded-md border px-4 py-2 text-sm font-medium transition-colors"
+            data-billing="monthly"
+            aria-pressed="true"
+          >
+            Monthly
+          </button>
+          <button
+            type="button"
+            class="billing-btn rounded-md border px-4 py-2 text-sm font-medium transition-colors"
+            data-billing="annual"
+            aria-pressed="false"
+          >
+            Annual
+          </button>
+        </div>
+      </header>
+
+      <section class="grid gap-4 lg:grid-cols-3" aria-label="Pricing tiers">
+        <article class="rounded-lg border border-line bg-panel p-5">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-semibold text-ink">Free</h2>
+              <p class="mt-1 text-sm leading-6 text-muted">For individual projects and command-line trials.</p>
+            </div>
+            <span class="rounded-md border border-line px-2 py-1 text-xs font-medium text-muted">Starter</span>
+          </div>
+
+          <div class="mt-6 flex items-baseline gap-2">
+            <span class="text-4xl font-semibold text-ink">$0</span>
+            <span class="text-sm text-muted">forever</span>
+          </div>
+
+          <a
+            href="#"
+            class="mt-6 flex h-10 items-center justify-center rounded-md border border-line bg-panel2 px-4 text-sm font-semibold text-ink transition-colors hover:border-action hover:text-action2"
+          >
+            Start free
+          </a>
+
+          <ul class="mt-6 space-y-3 text-sm leading-6 text-muted">
+            <li class="flex gap-3">
+              <svg class="checkmark shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M16.5 5.5 8 14l-4.5-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              3 active workspaces
+            </li>
+            <li class="flex gap-3">
+              <svg class="checkmark shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M16.5 5.5 8 14l-4.5-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              1,000 automation runs
+            </li>
+            <li class="flex gap-3">
+              <svg class="checkmark shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M16.5 5.5 8 14l-4.5-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Community support
+            </li>
+          </ul>
+        </article>
+
+        <article class="rounded-lg border border-action bg-panel2 p-5">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-semibold text-ink">Pro</h2>
+              <p class="mt-1 text-sm leading-6 text-muted">For developers shipping production services.</p>
+            </div>
+            <span class="rounded-md border border-action/60 bg-action/10 px-2 py-1 text-xs font-medium text-action2">Popular</span>
+          </div>
+
+          <div class="mt-6 flex items-baseline gap-2">
+            <span class="price text-4xl font-semibold text-ink" data-monthly="$18" data-annual="$15">$18</span>
+            <span class="period text-sm text-muted" data-monthly="/ developer / month" data-annual="/ developer / month, billed annually">/ developer / month</span>
+          </div>
+
+          <a
+            href="#"
+            class="mt-6 flex h-10 items-center justify-center rounded-md bg-action px-4 text-sm font-semibold text-[#15110d] transition-colors hover:bg-action2"
+          >
+            Choose Pro
+          </a>
+
+          <ul class="mt-6 space-y-3 text-sm leading-6 text-muted">
+            <li class="flex gap-3">
+              <svg class="checkmark shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M16.5 5.5 8 14l-4.5-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Unlimited workspaces
+            </li>
+            <li class="flex gap-3">
+              <svg class="checkmark shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M16.5 5.5 8 14l-4.5-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              50,000 automation runs
+            </li>
+            <li class="flex gap-3">
+              <svg class="checkmark shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M16.5 5.5 8 14l-4.5-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Private package registry
+            </li>
+          </ul>
+        </article>
+
+        <article class="rounded-lg border border-line bg-panel p-5">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-semibold text-ink">Team</h2>
+              <p class="mt-1 text-sm leading-6 text-muted">For shared delivery, access control, and audit needs.</p>
+            </div>
+            <span class="rounded-md border border-line px-2 py-1 text-xs font-medium text-muted">Scale</span>
+          </div>
+
+          <div class="mt-6 flex items-baseline gap-2">
+            <span class="price text-4xl font-semibold text-ink" data-monthly="$42" data-annual="$35">$42</span>
+            <span class="period text-sm text-muted" data-monthly="/ seat / month" data-annual="/ seat / month, billed annually">/ seat / month</span>
+          </div>
+
+          <a
+            href="#"
+            class="mt-6 flex h-10 items-center justify-center rounded-md border border-line bg-panel2 px-4 text-sm font-semibold text-ink transition-colors hover:border-action hover:text-action2"
+          >
+            Contact sales
+          </a>
+
+          <ul class="mt-6 space-y-3 text-sm leading-6 text-muted">
+            <li class="flex gap-3">
+              <svg class="checkmark shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M16.5 5.5 8 14l-4.5-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Organization controls
+            </li>
+            <li class="flex gap-3">
+              <svg class="checkmark shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M16.5 5.5 8 14l-4.5-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              SSO and SCIM
+            </li>
+            <li class="flex gap-3">
+              <svg class="checkmark shrink-0" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M16.5 5.5 8 14l-4.5-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Priority support
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="mt-8 rounded-lg border border-line bg-panel" aria-labelledby="compare-title">
+        <div class="border-b border-line px-5 py-4">
+          <h2 id="compare-title" class="text-lg font-semibold text-ink">Feature comparison</h2>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[760px] border-collapse text-left text-sm">
+            <thead>
+              <tr class="border-b border-line text-ink">
+                <th scope="col" class="w-[34%] px-5 py-3 font-semibold">Feature</th>
+                <th scope="col" class="px-5 py-3 font-semibold">Free</th>
+                <th scope="col" class="px-5 py-3 font-semibold">Pro</th>
+                <th scope="col" class="px-5 py-3 font-semibold">Team</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-line text-muted">
+              <tr class="hover:bg-panel2/70">
+                <th scope="row" class="px-5 py-4 font-medium text-ink">Automation runs</th>
+                <td class="px-5 py-4">1,000 / month</td>
+                <td class="px-5 py-4">50,000 / month</td>
+                <td class="px-5 py-4">Custom limits</td>
+              </tr>
+              <tr class="hover:bg-panel2/70">
+                <th scope="row" class="px-5 py-4 font-medium text-ink">Private environments</th>
+                <td class="px-5 py-4"><span class="dash">-</span></td>
+                <td class="px-5 py-4">10</td>
+                <td class="px-5 py-4">Unlimited</td>
+              </tr>
+              <tr class="hover:bg-panel2/70">
+                <th scope="row" class="px-5 py-4 font-medium text-ink">Secrets management</th>
+                <td class="px-5 py-4">Basic</td>
+                <td class="px-5 py-4">Encrypted vaults</td>
+                <td class="px-5 py-4">Vaults with approval rules</td>
+              </tr>
+              <tr class="hover:bg-panel2/70">
+                <th scope="row" class="px-5 py-4 font-medium text-ink">Role-based access</th>
+                <td class="px-5 py-4"><span class="dash">-</span></td>
+                <td class="px-5 py-4">Developer and admin</td>
+                <td class="px-5 py-4">Custom roles</td>
+              </tr>
+              <tr class="hover:bg-panel2/70">
+                <th scope="row" class="px-5 py-4 font-medium text-ink">Audit logs</th>
+                <td class="px-5 py-4"><span class="dash">-</span></td>
+                <td class="px-5 py-4">30 days</td>
+                <td class="px-5 py-4">1 year</td>
+              </tr>
+              <tr class="hover:bg-panel2/70">
+                <th scope="row" class="px-5 py-4 font-medium text-ink">Support</th>
+                <td class="px-5 py-4">Community</td>
+                <td class="px-5 py-4">Email</td>
+                <td class="px-5 py-4">Priority</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const buttons = document.querySelectorAll('[data-billing]');
+      const prices = document.querySelectorAll('.price');
+      const periods = document.querySelectorAll('.period');
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const billing = button.dataset.billing;
+
+          buttons.forEach((item) => {
+            item.setAttribute('aria-pressed', String(item === button));
+          });
+
+          prices.forEach((price) => {
+            price.textContent = price.dataset[billing];
+          });
+
+          periods.forEach((period) => {
+            period.textContent = period.dataset[billing];
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

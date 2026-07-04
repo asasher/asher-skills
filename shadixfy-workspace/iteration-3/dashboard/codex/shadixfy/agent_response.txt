@@ -1,0 +1,3 @@
+Created [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.UPnzevtgU2/index.html).
+
+It’s a single-file Northstar analytics dashboard with a sidebar, top bar, metric cards, chart area, recent activity, and accounts table. It can be opened directly in a browser and only uses the allowed Tailwind CDN and Google Fonts links.

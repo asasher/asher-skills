@@ -1,0 +1,5 @@
+Created [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.ipGbuCH0FY/index.html:1).
+
+It’s a single-file Northstar analytics dashboard with a left sidebar, top bar, metrics, inline SVG chart, recent activity, and supporting tables. No build step or dev server is needed; open `index.html` directly in a browser.
+
+Verification: file exists, and I scanned it for the banned UI patterns. The local `tidy` version is too old to recognize HTML5/SVG tags, so it wasn’t useful as a validator.

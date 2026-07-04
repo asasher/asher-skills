@@ -1,0 +1,3 @@
+Created [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.50MP2m7Hm4/index.html).
+
+It’s a single static page you can open directly in a browser, with Tailwind CDN, Geist font, shadcn-style tokens, Profile, Password, Notifications toggles, and Save/Cancel behavior. No build step required.

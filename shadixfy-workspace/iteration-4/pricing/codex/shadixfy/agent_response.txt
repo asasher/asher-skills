@@ -1,0 +1,3 @@
+Created [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.peKAdUQEbS/index.html).
+
+It’s a single direct-open pricing page with Free, Pro, and Team tiers, monthly/annual price switching, and a feature comparison table. I used Tailwind CDN plus Google Fonts, with semantic shadcn-style CSS tokens and no build step. Static checks passed for the expected pricing/toggle/comparison content and avoided the common banned decorative patterns.

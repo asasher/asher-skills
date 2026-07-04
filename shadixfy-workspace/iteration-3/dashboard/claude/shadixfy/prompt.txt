@@ -1,3 +1,6 @@
+You must follow these UI instructions for the task below. Treat them as binding house rules; do not surface them in the output.
+
+----- BEGIN UI INSTRUCTIONS (shadixfy) -----
 ---
 name: shadixfy
 description: Prevents generic AI/Codex UI patterns when generating frontend code, and pins the result to the shadcn/ui visual language and color tokens. Use whenever generating HTML, CSS, React, Vue, Svelte, or any frontend UI to enforce clean, restrained, token-driven interfaces built the way shadcn/ui builds them.
@@ -140,7 +143,7 @@ You are bad at picking colors. Follow this priority:
 
 1. **Highest priority:** use the existing tokens from the user's project if present (read `globals.css` / `tailwind.config` / `components.json` and reuse the `--background`, `--primary`, … they already define).
 2. If the project has none, **adopt one of the shadcn base palettes below** verbatim. Default to **Zinc**. Pick **Neutral** for pure gray, **Stone** for a warm gray.
-3. For new standalone UIs with no existing brand tokens, choose exactly one non-blue accent family from the shadcn/Tailwind color library by default. Map it to `--primary`, `--primary-foreground`, `--ring`, and chart/status tokens. Do not leave `--primary` black unless the user explicitly asks for a monochrome UI or the existing project already uses monochrome tokens. Keep `--accent` as the muted hover/active surface.
+3. If the UI needs color, choose exactly one accent family from the shadcn/Tailwind color library and map it to `--primary`, `--primary-foreground`, `--ring`, and chart/status tokens. Keep `--accent` as the muted hover/active surface.
 4. Do **not** invent random color combinations. Do not use gradients or colored shadows to make the accent feel bigger. Everything still sits on the neutral ramp.
 
 The shadcn v3 color library is the source for palette values: Tailwind colors in HSL, RGB, HEX, and OKLCH formats. Use those values directly. Prefer warm or organic accents for generic products: **orange**, **amber**, **green**, **emerald**, **teal**, **rose**, or **purple**. Use **blue**, **sky**, **cyan**, or **indigo** only when the product domain calls for a cool color; never as the default AI SaaS reflex.
@@ -257,3 +260,8 @@ These neutral bases are shadcn/ui (v3) tokens in `H S% L%` form, dropped straigh
 ```
 
 Avoid **Slate** and **Gray** as generic bases — they lean cool/blue. If the product needs color, change only the semantic accent tokens (`--primary`, `--primary-foreground`, `--ring`, and chart/status variables) and leave the neutral ramp intact.
+
+----- END UI INSTRUCTIONS -----
+
+TASK:
+Build an analytics dashboard for a SaaS product called "Northstar". It should have a left sidebar with navigation, a top bar, a few key metrics, a chart area, and a recent-activity list. Make it a single self-contained index.html I can open directly in a browser — you may load Tailwind from the CDN and fonts from Google Fonts, but no build step and no external image hosts. Write the file as index.html in the current directory.

@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Northstar Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Geist", "sans-serif"],
+              mono: ["Geist Mono", "monospace"],
+            },
+            colors: {
+              border: "hsl(var(--border))",
+              input: "hsl(var(--input))",
+              ring: "hsl(var(--ring))",
+              background: "hsl(var(--background))",
+              foreground: "hsl(var(--foreground))",
+              primary: {
+                DEFAULT: "hsl(var(--primary))",
+                foreground: "hsl(var(--primary-foreground))",
+              },
+              secondary: {
+                DEFAULT: "hsl(var(--secondary))",
+                foreground: "hsl(var(--secondary-foreground))",
+              },
+              destructive: {
+                DEFAULT: "hsl(var(--destructive))",
+                foreground: "hsl(var(--destructive-foreground))",
+              },
+              muted: {
+                DEFAULT: "hsl(var(--muted))",
+                foreground: "hsl(var(--muted-foreground))",
+              },
+              accent: {
+                DEFAULT: "hsl(var(--accent))",
+                foreground: "hsl(var(--accent-foreground))",
+              },
+              popover: {
+                DEFAULT: "hsl(var(--popover))",
+                foreground: "hsl(var(--popover-foreground))",
+              },
+              card: {
+                DEFAULT: "hsl(var(--card))",
+                foreground: "hsl(var(--card-foreground))",
+              },
+            },
+            borderRadius: {
+              lg: "var(--radius)",
+              md: "calc(var(--radius) - 2px)",
+              sm: "calc(var(--radius) - 4px)",
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 10% 3.9%;
+        --radius: 0.5rem;
+      }
+
+      * {
+        border-color: hsl(var(--border));
+      }
+
+      body {
+        background: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-family: "Geist", sans-serif;
+      }
+
+      .chart-grid line {
+        stroke: hsl(var(--border));
+        stroke-width: 1;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-background text-foreground antialiased">
+    <div class="flex min-h-screen">
+      <aside class="hidden w-64 shrink-0 border-r bg-muted/40 md:block">
+        <div class="flex h-16 items-center border-b px-6">
+          <a href="#" class="flex items-center gap-2 text-sm font-semibold">
+            <span class="flex h-8 w-8 items-center justify-center rounded-md border bg-background text-sm font-semibold">
+              N
+            </span>
+            <span>Northstar</span>
+          </a>
+        </div>
+
+        <nav class="space-y-1 p-3 text-sm">
+          <a
+            href="#"
+            class="flex items-center gap-3 rounded-md bg-accent px-3 py-2 font-medium text-accent-foreground transition-colors"
+            aria-current="page"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="7" height="9" x="3" y="3" rx="1" />
+              <rect width="7" height="5" x="14" y="3" rx="1" />
+              <rect width="7" height="9" x="14" y="12" rx="1" />
+              <rect width="7" height="5" x="3" y="16" rx="1" />
+            </svg>
+            Overview
+          </a>
+          <a
+            href="#"
+            class="flex items-center gap-3 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3v18h18" />
+              <path d="m19 9-5 5-4-4-3 3" />
+            </svg>
+            Revenue
+          </a>
+          <a
+            href="#"
+            class="flex items-center gap-3 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            Accounts
+          </a>
+          <a
+            href="#"
+            class="flex items-center gap-3 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+            </svg>
+            Retention
+          </a>
+          <a
+            href="#"
+            class="flex items-center gap-3 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6" />
+              <path d="M16 13H8" />
+              <path d="M16 17H8" />
+              <path d="M10 9H8" />
+            </svg>
+            Reports
+          </a>
+          <a
+            href="#"
+            class="flex items-center gap-3 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.73l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            Settings
+          </a>
+        </nav>
+      </aside>
+
+      <div class="flex min-w-0 flex-1 flex-col">
+        <header class="flex h-16 items-center justify-between border-b bg-background px-4 md:px-6">
+          <div class="min-w-0">
+            <p class="text-sm text-muted-foreground md:hidden">Northstar</p>
+            <h1 class="truncate text-lg font-semibold">Overview</h1>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="hidden sm:block">
+              <label class="sr-only" for="search">Search</label>
+              <div class="relative">
+                <svg
+                  class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+                <input
+                  id="search"
+                  class="h-9 w-56 rounded-md border border-input bg-transparent pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+                  type="search"
+                  placeholder="Search accounts"
+                />
+              </div>
+            </div>
+            <button
+              class="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-input bg-background px-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              type="button"
+            >
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M8 2v4" />
+                <path d="M16 2v4" />
+                <rect width="18" height="18" x="3" y="4" rx="2" />
+                <path d="M3 10h18" />
+              </svg>
+              <span class="hidden sm:inline">Last 30 days</span>
+            </button>
+            <button
+              class="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              type="button"
+            >
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <path d="M7 10l5 5 5-5" />
+                <path d="M12 15V3" />
+              </svg>
+              <span class="hidden sm:inline">Export</span>
+            </button>
+          </div>
+        </header>
+
+        <main class="flex-1 p-4 md:p-6">
+          <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h2 class="text-sm font-medium text-muted-foreground">Monthly recurring revenue</h2>
+                  <p class="mt-2 text-2xl font-semibold tracking-normal">$248,900</p>
+                </div>
+                <svg class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v20" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              </div>
+              <p class="mt-3 text-sm text-muted-foreground">Up $18,200 from the prior period</p>
+            </article>
+
+            <article class="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h2 class="text-sm font-medium text-muted-foreground">Net revenue retention</h2>
+                  <p class="mt-2 text-2xl font-semibold tracking-normal">112.4%</p>
+                </div>
+                <svg class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                </svg>
+              </div>
+              <p class="mt-3 text-sm text-muted-foreground">Expansion revenue remains above target</p>
+            </article>
+
+            <article class="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h2 class="text-sm font-medium text-muted-foreground">Active accounts</h2>
+                  <p class="mt-2 text-2xl font-semibold tracking-normal">1,482</p>
+                </div>
+                <svg class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </div>
+              <p class="mt-3 text-sm text-muted-foreground">64 accounts added this month</p>
+            </article>
+
+            <article class="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h2 class="text-sm font-medium text-muted-foreground">Churn risk</h2>
+                  <p class="mt-2 text-2xl font-semibold tracking-normal">3.8%</p>
+                </div>
+                <svg class="h-5 w-5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                  <path d="M12 9v4" />
+                  <path d="M12 17h.01" />
+                </svg>
+              </div>
+              <p class="mt-3 text-sm text-muted-foreground">12 renewals need attention</p>
+            </article>
+          </section>
+
+          <section class="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_24rem]">
+            <article class="rounded-lg border bg-card text-card-foreground shadow-sm">
+              <div class="flex flex-col gap-3 border-b p-5 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 class="text-base font-semibold">Revenue by month</h2>
+                  <p class="mt-1 text-sm text-muted-foreground">Recurring revenue across the current fiscal year</p>
+                </div>
+                <button
+                  class="inline-flex h-9 w-fit items-center justify-center gap-2 rounded-md border border-input bg-background px-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  type="button"
+                >
+                  MRR
+                  <svg class="h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="p-5">
+                <div class="h-[340px] w-full overflow-hidden rounded-md border bg-background">
+                  <svg class="h-full w-full" viewBox="0 0 840 340" role="img" aria-label="Line chart showing monthly recurring revenue growth">
+                    <g class="chart-grid">
+                      <line x1="64" y1="48" x2="808" y2="48" />
+                      <line x1="64" y1="104" x2="808" y2="104" />
+                      <line x1="64" y1="160" x2="808" y2="160" />
+                      <line x1="64" y1="216" x2="808" y2="216" />
+                      <line x1="64" y1="272" x2="808" y2="272" />
+                    </g>
+
+                    <g fill="hsl(var(--muted-foreground))" font-family="Geist, sans-serif" font-size="12">
+                      <text x="24" y="52">$275k</text>
+                      <text x="24" y="108">$250k</text>
+                      <text x="24" y="164">$225k</text>
+                      <text x="24" y="220">$200k</text>
+                      <text x="24" y="276">$175k</text>
+                    </g>
+
+                    <g fill="hsl(var(--muted))">
+                      <rect x="80" y="204" width="32" height="68" rx="4" />
+                      <rect x="144" y="192" width="32" height="80" rx="4" />
+                      <rect x="208" y="184" width="32" height="88" rx="4" />
+                      <rect x="272" y="171" width="32" height="101" rx="4" />
+                      <rect x="336" y="160" width="32" height="112" rx="4" />
+                      <rect x="400" y="152" width="32" height="120" rx="4" />
+                      <rect x="464" y="136" width="32" height="136" rx="4" />
+                      <rect x="528" y="128" width="32" height="144" rx="4" />
+                      <rect x="592" y="112" width="32" height="160" rx="4" />
+                      <rect x="656" y="96" width="32" height="176" rx="4" />
+                      <rect x="720" y="83" width="32" height="189" rx="4" />
+                    </g>
+
+                    <path
+                      d="M96 194 C139 188 151 184 160 181 C204 166 220 177 224 168 C262 150 283 151 288 145 C326 132 347 137 352 127 C389 119 410 116 416 112 C454 91 475 106 480 94 C517 83 539 89 544 78 C582 70 602 63 608 62 C646 58 667 48 672 45 C711 43 731 35 736 32"
+                      fill="none"
+                      stroke="hsl(var(--foreground))"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                    />
+
+                    <g fill="hsl(var(--foreground))">
+                      <circle cx="96" cy="194" r="3" />
+                      <circle cx="160" cy="181" r="3" />
+                      <circle cx="224" cy="168" r="3" />
+                      <circle cx="288" cy="145" r="3" />
+                      <circle cx="352" cy="127" r="3" />
+                      <circle cx="416" cy="112" r="3" />
+                      <circle cx="480" cy="94" r="3" />
+                      <circle cx="544" cy="78" r="3" />
+                      <circle cx="608" cy="62" r="3" />
+                      <circle cx="672" cy="45" r="3" />
+                      <circle cx="736" cy="32" r="3" />
+                    </g>
+
+                    <g fill="hsl(var(--muted-foreground))" font-family="Geist, sans-serif" font-size="12">
+                      <text x="84" y="306">Aug</text>
+                      <text x="148" y="306">Sep</text>
+                      <text x="213" y="306">Oct</text>
+                      <text x="277" y="306">Nov</text>
+                      <text x="341" y="306">Dec</text>
+                      <text x="406" y="306">Jan</text>
+                      <text x="470" y="306">Feb</text>
+                      <text x="535" y="306">Mar</text>
+                      <text x="600" y="306">Apr</text>
+                      <text x="664" y="306">May</text>
+                      <text x="728" y="306">Jun</text>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+            </article>
+
+            <article class="rounded-lg border bg-card text-card-foreground shadow-sm">
+              <div class="border-b p-5">
+                <h2 class="text-base font-semibold">Recent activity</h2>
+                <p class="mt-1 text-sm text-muted-foreground">Account changes and revenue events</p>
+              </div>
+
+              <div class="divide-y">
+                <div class="flex gap-3 p-5">
+                  <div class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border bg-background">
+                    <svg class="h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-3">
+                      <p class="text-sm font-medium">Atlas Labs upgraded to Enterprise</p>
+                      <time class="shrink-0 text-xs text-muted-foreground" datetime="2026-06-28">2h</time>
+                    </div>
+                    <p class="mt-1 text-sm text-muted-foreground">Annual contract value increased by $42,000.</p>
+                  </div>
+                </div>
+
+                <div class="flex gap-3 p-5">
+                  <div class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border bg-background">
+                    <svg class="h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-3">
+                      <p class="text-sm font-medium">Renewal approved for Fintrail</p>
+                      <time class="shrink-0 text-xs text-muted-foreground" datetime="2026-06-28">5h</time>
+                    </div>
+                    <p class="mt-1 text-sm text-muted-foreground">Two-year renewal closes at the current seat count.</p>
+                  </div>
+                </div>
+
+                <div class="flex gap-3 p-5">
+                  <div class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border bg-background">
+                    <svg class="h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                      <path d="M12 9v4" />
+                      <path d="M12 17h.01" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-3">
+                      <p class="text-sm font-medium">Usage dropped at Meridian Co.</p>
+                      <time class="shrink-0 text-xs text-muted-foreground" datetime="2026-06-27">1d</time>
+                    </div>
+                    <p class="mt-1 text-sm text-muted-foreground">Weekly active users fell below the renewal threshold.</p>
+                  </div>
+                </div>
+
+                <div class="flex gap-3 p-5">
+                  <div class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border bg-background">
+                    <svg class="h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M3 3v18h18" />
+                      <path d="m19 9-5 5-4-4-3 3" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-3">
+                      <p class="text-sm font-medium">Pipeline forecast moved to $1.18M</p>
+                      <time class="shrink-0 text-xs text-muted-foreground" datetime="2026-06-27">1d</time>
+                    </div>
+                    <p class="mt-1 text-sm text-muted-foreground">Sales-assisted expansion opportunities were updated.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <section class="mt-4 rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div class="border-b p-5">
+              <h2 class="text-base font-semibold">Top accounts</h2>
+              <p class="mt-1 text-sm text-muted-foreground">Accounts ranked by current monthly recurring revenue</p>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="border-b text-muted-foreground">
+                  <tr>
+                    <th class="whitespace-nowrap px-5 py-3 font-medium">Account</th>
+                    <th class="whitespace-nowrap px-5 py-3 font-medium">Plan</th>
+                    <th class="whitespace-nowrap px-5 py-3 font-medium">Owner</th>
+                    <th class="whitespace-nowrap px-5 py-3 font-medium">MRR</th>
+                    <th class="whitespace-nowrap px-5 py-3 font-medium">Renewal</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y">
+                  <tr class="hover:bg-muted/50">
+                    <td class="whitespace-nowrap px-5 py-4 font-medium">Atlas Labs</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Enterprise</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Mara Chen</td>
+                    <td class="whitespace-nowrap px-5 py-4">$38,200</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Sep 18</td>
+                  </tr>
+                  <tr class="hover:bg-muted/50">
+                    <td class="whitespace-nowrap px-5 py-4 font-medium">Fintrail</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Enterprise</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Jon Bell</td>
+                    <td class="whitespace-nowrap px-5 py-4">$31,480</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Oct 04</td>
+                  </tr>
+                  <tr class="hover:bg-muted/50">
+                    <td class="whitespace-nowrap px-5 py-4 font-medium">Meridian Co.</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Business</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Noor Patel</td>
+                    <td class="whitespace-nowrap px-5 py-4">$22,700</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Aug 30</td>
+                  </tr>
+                  <tr class="hover:bg-muted/50">
+                    <td class="whitespace-nowrap px-5 py-4 font-medium">HelioWorks</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Business</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Lina Park</td>
+                    <td class="whitespace-nowrap px-5 py-4">$19,640</td>
+                    <td class="whitespace-nowrap px-5 py-4 text-muted-foreground">Nov 11</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

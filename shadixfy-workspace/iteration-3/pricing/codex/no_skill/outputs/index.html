@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StackPilot Pricing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+            },
+            colors: {
+              ink: '#17201d',
+              mint: '#16a085',
+              clay: '#d97745',
+              frost: '#eef7f4',
+              paper: '#fbfaf7',
+            },
+            boxShadow: {
+              panel: '0 18px 44px rgba(23, 32, 29, 0.08)',
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      body {
+        min-height: 100vh;
+        background:
+          linear-gradient(rgba(23, 32, 29, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(23, 32, 29, 0.035) 1px, transparent 1px),
+          #fbfaf7;
+        background-size: 32px 32px;
+      }
+
+      .price-value,
+      .period-value,
+      .billing-note {
+        transition: opacity 160ms ease, transform 160ms ease;
+      }
+
+      .is-changing .price-value,
+      .is-changing .period-value,
+      .is-changing .billing-note {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        min-width: 9rem;
+      }
+    </style>
+  </head>
+  <body class="font-sans text-ink antialiased">
+    <header class="border-b border-ink/10 bg-paper/88 backdrop-blur">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8">
+        <a href="#" class="flex items-center gap-3" aria-label="StackPilot home">
+          <span class="grid h-9 w-9 place-items-center rounded-md bg-ink text-sm font-black text-paper shadow-sm">
+            SP
+          </span>
+          <span class="text-base font-bold tracking-tight">StackPilot</span>
+        </a>
+        <nav class="hidden items-center gap-7 text-sm font-medium text-ink/70 sm:flex" aria-label="Primary">
+          <a class="hover:text-ink" href="#plans">Plans</a>
+          <a class="hover:text-ink" href="#compare">Compare</a>
+          <a class="hover:text-ink" href="#faq">FAQ</a>
+        </nav>
+        <a
+          href="#plans"
+          class="rounded-md border border-ink/15 bg-white px-4 py-2 text-sm font-semibold shadow-sm transition hover:border-ink/30 hover:bg-frost"
+        >
+          View pricing
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="mx-auto max-w-7xl px-5 pb-10 pt-12 sm:px-6 sm:pb-14 sm:pt-16 lg:px-8">
+        <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-end">
+          <div class="max-w-3xl">
+            <p class="font-mono text-xs font-bold uppercase tracking-[0.18em] text-mint">Developer platform pricing</p>
+            <h1 class="mt-4 max-w-2xl text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">
+              Ship reliable internal tools without guessing your bill.
+            </h1>
+            <p class="mt-5 max-w-2xl text-lg leading-8 text-ink/70">
+              Start with observability, deploy previews, and workflow automation for solo projects. Upgrade when your
+              team needs shared environments, stronger controls, and faster support.
+            </p>
+          </div>
+
+          <div class="rounded-lg border border-ink/10 bg-white p-5 shadow-panel">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold">Billing</p>
+                <p class="mt-1 text-sm text-ink/62">Annual plans include two months free.</p>
+              </div>
+              <div
+                class="grid grid-cols-2 rounded-md border border-ink/12 bg-paper p-1 text-sm font-semibold"
+                role="group"
+                aria-label="Billing frequency"
+              >
+                <button
+                  type="button"
+                  class="billing-option rounded px-4 py-2 transition"
+                  data-billing="monthly"
+                  aria-pressed="true"
+                >
+                  Monthly
+                </button>
+                <button
+                  type="button"
+                  class="billing-option rounded px-4 py-2 transition"
+                  data-billing="annual"
+                  aria-pressed="false"
+                >
+                  Annual
+                </button>
+              </div>
+            </div>
+            <div class="mt-5 grid grid-cols-3 gap-3 text-center text-sm">
+              <div class="rounded-md bg-frost px-3 py-3">
+                <p class="font-mono text-xs font-bold text-mint">42%</p>
+                <p class="mt-1 text-ink/62">less setup time</p>
+              </div>
+              <div class="rounded-md bg-[#fff4ec] px-3 py-3">
+                <p class="font-mono text-xs font-bold text-clay">99.95%</p>
+                <p class="mt-1 text-ink/62">uptime SLA</p>
+              </div>
+              <div class="rounded-md bg-[#f3f0ff] px-3 py-3">
+                <p class="font-mono text-xs font-bold text-[#6658c9]">SOC 2</p>
+                <p class="mt-1 text-ink/62">controls</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="plans" class="mx-auto max-w-7xl px-5 py-8 sm:px-6 lg:px-8">
+        <div class="grid gap-5 lg:grid-cols-3">
+          <article class="flex h-full flex-col rounded-lg border border-ink/10 bg-white p-6 shadow-sm">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h2 class="text-xl font-bold">Free</h2>
+                <p class="mt-2 text-sm leading-6 text-ink/65">For testing ideas, side projects, and open source tools.</p>
+              </div>
+              <span class="rounded-md bg-frost px-3 py-1 text-xs font-bold text-mint">Start here</span>
+            </div>
+            <div class="mt-7 flex items-end gap-1" data-plan="free">
+              <span class="price-value text-5xl font-extrabold tracking-tight" data-monthly="0" data-annual="0">$0</span>
+              <span class="period-value pb-2 text-sm font-medium text-ink/55" data-monthly="/mo" data-annual="/mo">/mo</span>
+            </div>
+            <p class="billing-note mt-2 min-h-6 text-sm text-ink/55" data-monthly="Free forever" data-annual="Free forever">
+              Free forever
+            </p>
+            <a
+              href="#"
+              class="mt-7 inline-flex h-11 items-center justify-center rounded-md border border-ink/15 bg-white px-4 text-sm font-bold transition hover:border-ink/30 hover:bg-frost"
+            >
+              Create account
+            </a>
+            <ul class="mt-7 space-y-3 text-sm leading-6 text-ink/76">
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>3 projects and 1 active preview</span></li>
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>Community templates</span></li>
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>7-day deployment history</span></li>
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>Basic metrics dashboard</span></li>
+            </ul>
+          </article>
+
+          <article class="relative flex h-full flex-col rounded-lg border-2 border-mint bg-white p-6 shadow-panel">
+            <div class="absolute right-5 top-5 rounded-md bg-mint px-3 py-1 text-xs font-bold text-white">Popular</div>
+            <div class="pr-24">
+              <h2 class="text-xl font-bold">Pro</h2>
+              <p class="mt-2 text-sm leading-6 text-ink/65">
+                For builders who need production workflows and better visibility.
+              </p>
+            </div>
+            <div class="mt-7 flex items-end gap-1" data-plan="pro">
+              <span class="price-value text-5xl font-extrabold tracking-tight" data-monthly="20" data-annual="16">$20</span>
+              <span class="period-value pb-2 text-sm font-medium text-ink/55" data-monthly="/mo" data-annual="/mo">/mo</span>
+            </div>
+            <p
+              class="billing-note mt-2 min-h-6 text-sm text-ink/55"
+              data-monthly="Billed monthly"
+              data-annual="$192 billed annually"
+            >
+              Billed monthly
+            </p>
+            <a
+              href="#"
+              class="mt-7 inline-flex h-11 items-center justify-center rounded-md bg-ink px-4 text-sm font-bold text-white transition hover:bg-mint"
+            >
+              Start Pro
+            </a>
+            <ul class="mt-7 space-y-3 text-sm leading-6 text-ink/76">
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>25 projects and 10 active previews</span></li>
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>Custom environment variables</span></li>
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>30-day deployment history</span></li>
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>Email support in one business day</span></li>
+            </ul>
+          </article>
+
+          <article class="flex h-full flex-col rounded-lg border border-ink/10 bg-white p-6 shadow-sm">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h2 class="text-xl font-bold">Team</h2>
+                <p class="mt-2 text-sm leading-6 text-ink/65">For engineering groups coordinating production releases.</p>
+              </div>
+              <span class="rounded-md bg-[#fff4ec] px-3 py-1 text-xs font-bold text-clay">Scale up</span>
+            </div>
+            <div class="mt-7 flex items-end gap-1" data-plan="team">
+              <span class="price-value text-5xl font-extrabold tracking-tight" data-monthly="50" data-annual="40">$50</span>
+              <span class="period-value pb-2 text-sm font-medium text-ink/55" data-monthly="/seat/mo" data-annual="/seat/mo">
+                /seat/mo
+              </span>
+            </div>
+            <p
+              class="billing-note mt-2 min-h-6 text-sm text-ink/55"
+              data-monthly="Billed monthly"
+              data-annual="$480 per seat billed annually"
+            >
+              Billed monthly
+            </p>
+            <a
+              href="#"
+              class="mt-7 inline-flex h-11 items-center justify-center rounded-md border border-ink/15 bg-white px-4 text-sm font-bold transition hover:border-ink/30 hover:bg-frost"
+            >
+              Contact sales
+            </a>
+            <ul class="mt-7 space-y-3 text-sm leading-6 text-ink/76">
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>Unlimited projects and previews</span></li>
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>Role-based access control</span></li>
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>90-day deployment history</span></li>
+              <li class="flex gap-3"><span class="font-bold text-mint">✓</span><span>Priority support and onboarding</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="compare" class="mx-auto max-w-7xl px-5 py-12 sm:px-6 lg:px-8">
+        <div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p class="font-mono text-xs font-bold uppercase tracking-[0.18em] text-clay">Feature comparison</p>
+            <h2 class="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">Choose the limits that match your workflow.</h2>
+          </div>
+          <p class="max-w-xl text-sm leading-6 text-ink/65">
+            Every tier includes hosted previews, deployment logs, webhooks, and access to StackPilot's CLI.
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-lg border border-ink/10 bg-white shadow-sm">
+          <table class="comparison-table w-full border-collapse text-left text-sm">
+            <thead class="bg-frost text-ink">
+              <tr>
+                <th scope="col" class="sticky left-0 z-10 bg-frost px-5 py-4 font-bold">Feature</th>
+                <th scope="col" class="px-5 py-4 font-bold">Free</th>
+                <th scope="col" class="px-5 py-4 font-bold">Pro</th>
+                <th scope="col" class="px-5 py-4 font-bold">Team</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-ink/10 text-ink/72">
+              <tr>
+                <th scope="row" class="sticky left-0 bg-white px-5 py-4 font-semibold text-ink">Projects</th>
+                <td class="px-5 py-4">3</td>
+                <td class="px-5 py-4">25</td>
+                <td class="px-5 py-4">Unlimited</td>
+              </tr>
+              <tr>
+                <th scope="row" class="sticky left-0 bg-white px-5 py-4 font-semibold text-ink">Active previews</th>
+                <td class="px-5 py-4">1</td>
+                <td class="px-5 py-4">10</td>
+                <td class="px-5 py-4">Unlimited</td>
+              </tr>
+              <tr>
+                <th scope="row" class="sticky left-0 bg-white px-5 py-4 font-semibold text-ink">Deployment history</th>
+                <td class="px-5 py-4">7 days</td>
+                <td class="px-5 py-4">30 days</td>
+                <td class="px-5 py-4">90 days</td>
+              </tr>
+              <tr>
+                <th scope="row" class="sticky left-0 bg-white px-5 py-4 font-semibold text-ink">Seats included</th>
+                <td class="px-5 py-4">1</td>
+                <td class="px-5 py-4">1</td>
+                <td class="px-5 py-4">5, then per-seat</td>
+              </tr>
+              <tr>
+                <th scope="row" class="sticky left-0 bg-white px-5 py-4 font-semibold text-ink">Private templates</th>
+                <td class="px-5 py-4">—</td>
+                <td class="px-5 py-4">✓</td>
+                <td class="px-5 py-4">✓</td>
+              </tr>
+              <tr>
+                <th scope="row" class="sticky left-0 bg-white px-5 py-4 font-semibold text-ink">Role-based access</th>
+                <td class="px-5 py-4">—</td>
+                <td class="px-5 py-4">—</td>
+                <td class="px-5 py-4">✓</td>
+              </tr>
+              <tr>
+                <th scope="row" class="sticky left-0 bg-white px-5 py-4 font-semibold text-ink">Support</th>
+                <td class="px-5 py-4">Community</td>
+                <td class="px-5 py-4">Email</td>
+                <td class="px-5 py-4">Priority + onboarding</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="faq" class="border-t border-ink/10 bg-white/72">
+        <div class="mx-auto grid max-w-7xl gap-6 px-5 py-12 sm:px-6 lg:grid-cols-3 lg:px-8">
+          <div>
+            <p class="font-mono text-xs font-bold uppercase tracking-[0.18em] text-mint">Questions</p>
+            <h2 class="mt-3 text-2xl font-extrabold tracking-tight">Billing basics</h2>
+          </div>
+          <div class="grid gap-4 lg:col-span-2 sm:grid-cols-2">
+            <div class="rounded-lg border border-ink/10 bg-paper p-5">
+              <h3 class="font-bold">Can I switch later?</h3>
+              <p class="mt-2 text-sm leading-6 text-ink/65">
+                Yes. Move between monthly and annual billing from workspace settings. Plan limits update immediately.
+              </p>
+            </div>
+            <div class="rounded-lg border border-ink/10 bg-paper p-5">
+              <h3 class="font-bold">Do previews count as projects?</h3>
+              <p class="mt-2 text-sm leading-6 text-ink/65">
+                No. Projects are repositories or services. Previews are temporary environments created from branches.
+              </p>
+            </div>
+            <div class="rounded-lg border border-ink/10 bg-paper p-5">
+              <h3 class="font-bold">What happens at the limit?</h3>
+              <p class="mt-2 text-sm leading-6 text-ink/65">
+                Existing deployments keep running. New previews pause until you archive old ones or upgrade.
+              </p>
+            </div>
+            <div class="rounded-lg border border-ink/10 bg-paper p-5">
+              <h3 class="font-bold">Is there a startup discount?</h3>
+              <p class="mt-2 text-sm leading-6 text-ink/65">
+                Early-stage teams can request credits for the Team plan after completing identity verification.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-ink text-paper">
+      <div class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-7 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        <p class="font-semibold">StackPilot</p>
+        <p class="text-paper/68">Pricing shown in USD. Taxes may apply.</p>
+      </div>
+    </footer>
+
+    <script>
+      const billingButtons = document.querySelectorAll('.billing-option');
+      const priceBlocks = document.querySelectorAll('[data-plan]');
+      let activeBilling = 'monthly';
+
+      function formatPrice(value) {
+        return Number(value) === 0 ? '$0' : `$${value}`;
+      }
+
+      function setBilling(nextBilling) {
+        if (nextBilling === activeBilling) return;
+        activeBilling = nextBilling;
+        document.body.classList.add('is-changing');
+
+        window.setTimeout(() => {
+          billingButtons.forEach((button) => {
+            const isActive = button.dataset.billing === nextBilling;
+            button.setAttribute('aria-pressed', String(isActive));
+            button.classList.toggle('bg-ink', isActive);
+            button.classList.toggle('text-white', isActive);
+            button.classList.toggle('shadow-sm', isActive);
+            button.classList.toggle('text-ink/70', !isActive);
+          });
+
+          priceBlocks.forEach((block) => {
+            const price = block.querySelector('.price-value');
+            const period = block.querySelector('.period-value');
+            const note = block.parentElement.querySelector('.billing-note');
+            price.textContent = formatPrice(price.dataset[nextBilling]);
+            period.textContent = period.dataset[nextBilling];
+            note.textContent = note.dataset[nextBilling];
+          });
+
+          document.body.classList.remove('is-changing');
+        }, 150);
+      }
+
+      billingButtons.forEach((button) => {
+        button.addEventListener('click', () => setBilling(button.dataset.billing));
+      });
+
+      billingButtons.forEach((button) => {
+        const isActive = button.dataset.billing === activeBilling;
+        button.classList.toggle('bg-ink', isActive);
+        button.classList.toggle('text-white', isActive);
+        button.classList.toggle('shadow-sm', isActive);
+        button.classList.toggle('text-ink/70', !isActive);
+      });
+    </script>
+  </body>
+</html>

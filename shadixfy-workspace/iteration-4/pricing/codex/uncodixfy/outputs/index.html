@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devtool Pricing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0f0f0f;
+        --surface: #1a1a1a;
+        --surface-2: #222222;
+        --border: #303030;
+        --border-strong: #3d3d3d;
+        --text: #f5f5f5;
+        --muted: #b6b6b6;
+        --muted-2: #858585;
+        --primary: #00d4aa;
+        --primary-dark: #0da687;
+        --accent: #ff6b9d;
+      }
+
+      body {
+        font-family: "IBM Plex Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .billing-toggle[data-billing="monthly"] .monthly-button,
+      .billing-toggle[data-billing="annual"] .annual-button {
+        background: var(--text);
+        color: var(--bg);
+        border-color: var(--text);
+      }
+
+      .billing-toggle[data-billing="monthly"] .annual-button,
+      .billing-toggle[data-billing="annual"] .monthly-button {
+        background: transparent;
+        color: var(--muted);
+        border-color: transparent;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-[#0f0f0f] text-[#f5f5f5]">
+    <main class="mx-auto w-full max-w-6xl px-5 py-8 sm:px-6 lg:px-8">
+      <header class="mb-8 flex flex-col gap-5 border-b border-[#303030] pb-6 md:flex-row md:items-end md:justify-between">
+        <div class="max-w-2xl">
+          <h1 class="text-3xl font-semibold leading-tight tracking-normal text-[#f5f5f5] sm:text-4xl">
+            Pricing
+          </h1>
+          <p class="mt-3 max-w-xl text-base leading-7 text-[#b6b6b6]">
+            Plans for local agents, automated reviews, and team workflows.
+          </p>
+        </div>
+
+        <div
+          class="billing-toggle grid w-full grid-cols-2 gap-1 rounded-lg border border-[#303030] bg-[#1a1a1a] p-1 sm:w-[260px]"
+          data-billing="monthly"
+          role="group"
+          aria-label="Billing period"
+        >
+          <button
+            class="monthly-button rounded-md border px-4 py-2 text-sm font-medium transition-colors duration-150"
+            type="button"
+            data-plan-toggle="monthly"
+            aria-pressed="true"
+          >
+            Monthly
+          </button>
+          <button
+            class="annual-button rounded-md border px-4 py-2 text-sm font-medium transition-colors duration-150"
+            type="button"
+            data-plan-toggle="annual"
+            aria-pressed="false"
+          >
+            Annual
+          </button>
+        </div>
+      </header>
+
+      <section aria-label="Plans" class="grid gap-4 lg:grid-cols-3">
+        <article class="rounded-lg border border-[#303030] bg-[#1a1a1a] p-5">
+          <div class="flex min-h-[132px] flex-col justify-between gap-4">
+            <div>
+              <h2 class="text-lg font-semibold text-[#f5f5f5]">Free</h2>
+              <p class="mt-2 text-sm leading-6 text-[#b6b6b6]">
+                Start with local projects and core automation.
+              </p>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-semibold tracking-normal text-[#f5f5f5]" data-price="free">$0</span>
+                <span class="text-sm text-[#858585]">/ month</span>
+              </div>
+              <p class="mt-1 text-sm text-[#858585]" data-note="free">No card required</p>
+            </div>
+          </div>
+          <a
+            href="#"
+            class="mt-6 flex h-10 items-center justify-center rounded-lg border border-[#3d3d3d] px-4 text-sm font-medium text-[#f5f5f5] transition-colors duration-150 hover:bg-[#222222] focus:outline-none focus:ring-2 focus:ring-[#00d4aa] focus:ring-offset-2 focus:ring-offset-[#1a1a1a]"
+          >
+            Get started
+          </a>
+          <ul class="mt-6 space-y-3 text-sm leading-6 text-[#d7d7d7]">
+            <li>5 active projects</li>
+            <li>100 agent runs per month</li>
+            <li>Basic code review checks</li>
+            <li>Community support</li>
+          </ul>
+        </article>
+
+        <article class="rounded-lg border border-[#00d4aa] bg-[#1a1a1a] p-5">
+          <div class="flex min-h-[132px] flex-col justify-between gap-4">
+            <div>
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="text-lg font-semibold text-[#f5f5f5]">Pro</h2>
+                <span class="text-sm font-medium text-[#00d4aa]">
+                  Recommended
+                </span>
+              </div>
+              <p class="mt-2 text-sm leading-6 text-[#b6b6b6]">
+                Higher limits for developers shipping across repos.
+              </p>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-semibold tracking-normal text-[#f5f5f5]" data-price="pro">$16</span>
+                <span class="text-sm text-[#858585]">/ month</span>
+              </div>
+              <p class="mt-1 text-sm text-[#858585]" data-note="pro">Per developer</p>
+            </div>
+          </div>
+          <a
+            href="#"
+            class="mt-6 flex h-10 items-center justify-center rounded-lg bg-[#00d4aa] px-4 text-sm font-semibold text-[#0f0f0f] transition-colors duration-150 hover:bg-[#0da687] focus:outline-none focus:ring-2 focus:ring-[#00d4aa] focus:ring-offset-2 focus:ring-offset-[#1a1a1a]"
+          >
+            Start Pro
+          </a>
+          <ul class="mt-6 space-y-3 text-sm leading-6 text-[#d7d7d7]">
+            <li>25 active projects</li>
+            <li>2,000 agent runs per month</li>
+            <li>Advanced review rules</li>
+            <li>Private project memory</li>
+          </ul>
+        </article>
+
+        <article class="rounded-lg border border-[#303030] bg-[#1a1a1a] p-5">
+          <div class="flex min-h-[132px] flex-col justify-between gap-4">
+            <div>
+              <h2 class="text-lg font-semibold text-[#f5f5f5]">Team</h2>
+              <p class="mt-2 text-sm leading-6 text-[#b6b6b6]">
+                Shared controls for engineering teams and agencies.
+              </p>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-semibold tracking-normal text-[#f5f5f5]" data-price="team">$32</span>
+                <span class="text-sm text-[#858585]">/ seat</span>
+              </div>
+              <p class="mt-1 text-sm text-[#858585]" data-note="team">Per seat, monthly</p>
+            </div>
+          </div>
+          <a
+            href="#"
+            class="mt-6 flex h-10 items-center justify-center rounded-lg border border-[#3d3d3d] px-4 text-sm font-medium text-[#f5f5f5] transition-colors duration-150 hover:bg-[#222222] focus:outline-none focus:ring-2 focus:ring-[#00d4aa] focus:ring-offset-2 focus:ring-offset-[#1a1a1a]"
+          >
+            Contact sales
+          </a>
+          <ul class="mt-6 space-y-3 text-sm leading-6 text-[#d7d7d7]">
+            <li>Unlimited active projects</li>
+            <li>10,000 agent runs per month</li>
+            <li>Team policy management</li>
+            <li>Priority support</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="mt-10" aria-label="Feature comparison">
+        <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 class="text-xl font-semibold text-[#f5f5f5]">Compare features</h2>
+            <p class="mt-2 text-sm leading-6 text-[#b6b6b6]">
+              Core limits and controls by plan.
+            </p>
+          </div>
+          <p class="text-sm text-[#858585]" data-billing-copy>Monthly billing</p>
+        </div>
+
+        <div class="overflow-x-auto rounded-lg border border-[#303030] bg-[#1a1a1a]">
+          <table class="w-full min-w-[720px] border-collapse text-left text-sm">
+            <thead>
+              <tr class="border-b border-[#303030]">
+                <th class="w-[34%] px-4 py-3 font-semibold text-[#f5f5f5]">Feature</th>
+                <th class="px-4 py-3 font-semibold text-[#f5f5f5]">Free</th>
+                <th class="px-4 py-3 font-semibold text-[#f5f5f5]">Pro</th>
+                <th class="px-4 py-3 font-semibold text-[#f5f5f5]">Team</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#303030]">
+              <tr class="transition-colors duration-150 hover:bg-[#222222]">
+                <td class="px-4 py-4 font-medium text-[#f5f5f5]">Active projects</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">5</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">25</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Unlimited</td>
+              </tr>
+              <tr class="transition-colors duration-150 hover:bg-[#222222]">
+                <td class="px-4 py-4 font-medium text-[#f5f5f5]">Agent runs</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">100 / month</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">2,000 / month</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">10,000 / month</td>
+              </tr>
+              <tr class="transition-colors duration-150 hover:bg-[#222222]">
+                <td class="px-4 py-4 font-medium text-[#f5f5f5]">Code review rules</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Basic</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Advanced</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Custom policies</td>
+              </tr>
+              <tr class="transition-colors duration-150 hover:bg-[#222222]">
+                <td class="px-4 py-4 font-medium text-[#f5f5f5]">Repository access</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Public</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Public and private</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Public and private</td>
+              </tr>
+              <tr class="transition-colors duration-150 hover:bg-[#222222]">
+                <td class="px-4 py-4 font-medium text-[#f5f5f5]">Project memory</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">7 days</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">90 days</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Custom retention</td>
+              </tr>
+              <tr class="transition-colors duration-150 hover:bg-[#222222]">
+                <td class="px-4 py-4 font-medium text-[#f5f5f5]">Team permissions</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Not included</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Not included</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Included</td>
+              </tr>
+              <tr class="transition-colors duration-150 hover:bg-[#222222]">
+                <td class="px-4 py-4 font-medium text-[#f5f5f5]">Support</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Community</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Email</td>
+                <td class="px-4 py-4 text-[#d7d7d7]">Priority</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const pricing = {
+        monthly: {
+          free: { price: "$0", note: "No card required" },
+          pro: { price: "$16", note: "Per developer" },
+          team: { price: "$32", note: "Per seat, monthly" },
+          copy: "Monthly billing",
+        },
+        annual: {
+          free: { price: "$0", note: "No card required" },
+          pro: { price: "$13", note: "Per developer, billed annually" },
+          team: { price: "$26", note: "Per seat, billed annually" },
+          copy: "Annual billing saves about 20%",
+        },
+      };
+
+      const toggle = document.querySelector(".billing-toggle");
+      const buttons = document.querySelectorAll("[data-plan-toggle]");
+      const billingCopy = document.querySelector("[data-billing-copy]");
+
+      function setBilling(period) {
+        toggle.dataset.billing = period;
+        buttons.forEach((button) => {
+          const selected = button.dataset.planToggle === period;
+          button.setAttribute("aria-pressed", selected.toString());
+        });
+
+        Object.entries(pricing[period]).forEach(([plan, values]) => {
+          if (plan === "copy") return;
+          document.querySelector(`[data-price="${plan}"]`).textContent = values.price;
+          document.querySelector(`[data-note="${plan}"]`).textContent = values.note;
+        });
+
+        billingCopy.textContent = pricing[period].copy;
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => setBilling(button.dataset.planToggle));
+      });
+    </script>
+  </body>
+</html>

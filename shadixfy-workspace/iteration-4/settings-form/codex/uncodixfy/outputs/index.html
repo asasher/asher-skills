@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        color-scheme: dark;
+        --page: #0f0f0f;
+        --surface: #1a1a1a;
+        --surface-2: #202020;
+        --border: #303030;
+        --border-strong: #3f3f3f;
+        --text: #f5f5f5;
+        --muted: #a3a3a3;
+        --primary: #00d4aa;
+        --primary-dark: #00a887;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--page);
+        color: var(--text);
+        font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: 0;
+      }
+
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #111111;
+        color: var(--text);
+        outline: none;
+        transition:
+          border-color 140ms ease,
+          box-shadow 140ms ease,
+          background-color 140ms ease;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.14);
+        background: #101010;
+      }
+
+      textarea {
+        resize: vertical;
+      }
+
+      .toggle {
+        position: relative;
+        display: inline-flex;
+        width: 42px;
+        height: 24px;
+        flex: 0 0 auto;
+      }
+
+      .toggle input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .toggle-track {
+        position: absolute;
+        inset: 0;
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        background: #121212;
+        transition:
+          background-color 140ms ease,
+          border-color 140ms ease;
+      }
+
+      .toggle-thumb {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 16px;
+        height: 16px;
+        border-radius: 6px;
+        background: #d4d4d4;
+        transition:
+          left 140ms ease,
+          background-color 140ms ease;
+      }
+
+      .toggle input:checked + .toggle-track {
+        border-color: var(--primary-dark);
+        background: var(--primary-dark);
+      }
+
+      .toggle input:checked + .toggle-track .toggle-thumb {
+        left: 20px;
+        background: #081513;
+      }
+
+      .toggle input:focus-visible + .toggle-track {
+        box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.18);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mx-auto min-h-screen w-full max-w-5xl px-5 py-8 sm:px-8">
+      <div class="mb-8 flex flex-col gap-4 border-b border-[var(--border)] pb-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 class="text-[24px] font-semibold leading-8 text-[var(--text)]">Account settings</h1>
+          <p class="mt-1 max-w-2xl text-[15px] leading-6 text-[var(--muted)]">
+            Manage your personal details, password, and notification defaults.
+          </p>
+        </div>
+        <div class="text-[14px] leading-5 text-[var(--muted)]">Signed in as eva.martin@example.com</div>
+      </div>
+
+      <form class="space-y-0" action="#" method="post">
+        <section class="grid gap-5 border-b border-[var(--border)] py-7 md:grid-cols-[220px_1fr]">
+          <div>
+            <h2 class="text-[16px] font-semibold leading-6 text-[var(--text)]">Profile</h2>
+            <p class="mt-1 text-[14px] leading-5 text-[var(--muted)]">These details appear on your workspace profile.</p>
+          </div>
+
+          <div class="max-w-2xl space-y-5">
+            <div>
+              <label for="name" class="mb-2 block text-[14px] font-medium leading-5 text-[var(--text)]">Name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                value="Eva Martin"
+                class="h-10 px-3 text-[15px]"
+              />
+            </div>
+
+            <div>
+              <label for="email" class="mb-2 block text-[14px] font-medium leading-5 text-[var(--text)]">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                value="eva.martin@example.com"
+                class="h-10 px-3 text-[15px]"
+              />
+            </div>
+
+            <div>
+              <label for="bio" class="mb-2 block text-[14px] font-medium leading-5 text-[var(--text)]">Bio</label>
+              <textarea
+                id="bio"
+                name="bio"
+                rows="4"
+                class="min-h-[112px] px-3 py-2 text-[15px] leading-6"
+              >Product lead focused on planning, research, and launch quality.</textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid gap-5 border-b border-[var(--border)] py-7 md:grid-cols-[220px_1fr]">
+          <div>
+            <h2 class="text-[16px] font-semibold leading-6 text-[var(--text)]">Password change</h2>
+            <p class="mt-1 text-[14px] leading-5 text-[var(--muted)]">Use at least 12 characters for the new password.</p>
+          </div>
+
+          <div class="max-w-2xl space-y-5">
+            <div>
+              <label for="current-password" class="mb-2 block text-[14px] font-medium leading-5 text-[var(--text)]">
+                Current password
+              </label>
+              <input
+                id="current-password"
+                name="current-password"
+                type="password"
+                autocomplete="current-password"
+                class="h-10 px-3 text-[15px]"
+              />
+            </div>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label for="new-password" class="mb-2 block text-[14px] font-medium leading-5 text-[var(--text)]">
+                  New password
+                </label>
+                <input
+                  id="new-password"
+                  name="new-password"
+                  type="password"
+                  autocomplete="new-password"
+                  class="h-10 px-3 text-[15px]"
+                />
+              </div>
+
+              <div>
+                <label for="confirm-password" class="mb-2 block text-[14px] font-medium leading-5 text-[var(--text)]">
+                  Confirm password
+                </label>
+                <input
+                  id="confirm-password"
+                  name="confirm-password"
+                  type="password"
+                  autocomplete="new-password"
+                  class="h-10 px-3 text-[15px]"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid gap-5 border-b border-[var(--border)] py-7 md:grid-cols-[220px_1fr]">
+          <div>
+            <h2 class="text-[16px] font-semibold leading-6 text-[var(--text)]">Notification preferences</h2>
+            <p class="mt-1 text-[14px] leading-5 text-[var(--muted)]">Choose which updates should reach your inbox.</p>
+          </div>
+
+          <div class="max-w-2xl divide-y divide-[var(--border)] rounded-lg border border-[var(--border)] bg-[var(--surface)]">
+            <label class="flex cursor-pointer items-start justify-between gap-5 p-4">
+              <span>
+                <span class="block text-[15px] font-medium leading-6 text-[var(--text)]">Product updates</span>
+                <span class="block text-[14px] leading-5 text-[var(--muted)]">Changes to plans, releases, and workspace features.</span>
+              </span>
+              <span class="toggle mt-1">
+                <input type="checkbox" name="product-updates" checked />
+                <span class="toggle-track">
+                  <span class="toggle-thumb"></span>
+                </span>
+              </span>
+            </label>
+
+            <label class="flex cursor-pointer items-start justify-between gap-5 p-4">
+              <span>
+                <span class="block text-[15px] font-medium leading-6 text-[var(--text)]">Security alerts</span>
+                <span class="block text-[14px] leading-5 text-[var(--muted)]">New sign-ins, password changes, and recovery activity.</span>
+              </span>
+              <span class="toggle mt-1">
+                <input type="checkbox" name="security-alerts" checked />
+                <span class="toggle-track">
+                  <span class="toggle-thumb"></span>
+                </span>
+              </span>
+            </label>
+
+            <label class="flex cursor-pointer items-start justify-between gap-5 p-4">
+              <span>
+                <span class="block text-[15px] font-medium leading-6 text-[var(--text)]">Weekly summary</span>
+                <span class="block text-[14px] leading-5 text-[var(--muted)]">A short digest of account and team activity.</span>
+              </span>
+              <span class="toggle mt-1">
+                <input type="checkbox" name="weekly-summary" />
+                <span class="toggle-track">
+                  <span class="toggle-thumb"></span>
+                </span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <div class="flex flex-col-reverse gap-3 py-6 sm:flex-row sm:justify-end">
+          <button
+            type="reset"
+            class="h-10 rounded-lg border border-[var(--border-strong)] px-4 text-[14px] font-medium text-[var(--text)] transition-colors duration-150 hover:bg-[var(--surface-2)] focus:outline-none focus:ring-2 focus:ring-[var(--border-strong)] focus:ring-offset-2 focus:ring-offset-[var(--page)]"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="h-10 rounded-lg border border-[var(--primary-dark)] bg-[var(--primary)] px-4 text-[14px] font-semibold text-[#071412] transition-colors duration-150 hover:bg-[var(--primary-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--page)]"
+          >
+            Save changes
+          </button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

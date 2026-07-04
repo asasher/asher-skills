@@ -1,0 +1,5 @@
+Built [index.html](/private/var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.nnA2tr6ix4/index.html) as a single standalone dashboard file.
+
+It includes the Northstar sidebar, top bar, key metrics, chart area, recent activity, and a supporting accounts table. No dev server is needed; open `index.html` directly in a browser. It uses Tailwind CDN and Google Fonts as requested.
+
+Verification: confirmed the file exists and scanned for the banned decorative UI patterns. Local `tidy` is too old for HTML5/SVG, so its tag errors were not actionable.

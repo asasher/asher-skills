@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Northstar Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+            colors: {
+              ink: "#1b1f23",
+              field: "#f5f6f2",
+              line: "#d8ddd2",
+              pine: "#25433b",
+              teal: "#1f9d8a",
+              coral: "#d85f45",
+              gold: "#c4941f",
+              sky: "#4f7fc9",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+        background:
+          linear-gradient(135deg, rgba(37, 67, 59, 0.08), transparent 38%),
+          linear-gradient(315deg, rgba(216, 95, 69, 0.08), transparent 34%),
+          #f5f6f2;
+        color: #1b1f23;
+        letter-spacing: 0;
+      }
+
+      .scrollbar-thin::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      .scrollbar-thin::-webkit-scrollbar-thumb {
+        background: #c9d1c4;
+        border-radius: 999px;
+      }
+
+      .chart-grid {
+        background-image:
+          linear-gradient(to right, rgba(27, 31, 35, 0.07) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(27, 31, 35, 0.07) 1px, transparent 1px);
+        background-size: 72px 44px;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        border-radius: 8px;
+        padding: 0.72rem 0.8rem;
+        color: rgba(255, 255, 255, 0.78);
+        transition:
+          background-color 160ms ease,
+          color 160ms ease,
+          transform 160ms ease;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        background: rgba(255, 255, 255, 0.13);
+        color: #ffffff;
+      }
+
+      .nav-item.active {
+        box-shadow: inset 3px 0 0 #f0bf4a;
+      }
+
+      .metric-card {
+        min-height: 154px;
+        border: 1px solid #d8ddd2;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.86);
+        box-shadow: 0 16px 40px rgba(37, 67, 59, 0.08);
+      }
+
+      .focus-ring:focus-visible {
+        outline: 3px solid rgba(31, 157, 138, 0.34);
+        outline-offset: 2px;
+      }
+
+      @media (max-width: 767px) {
+        .mobile-nav {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 0.5rem;
+        }
+
+        .mobile-nav .nav-label {
+          display: none;
+        }
+
+        .mobile-nav .nav-item {
+          justify-content: center;
+          padding: 0.7rem 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="min-h-screen lg:grid lg:grid-cols-[276px_minmax(0,1fr)]">
+      <aside class="bg-pine text-white lg:min-h-screen lg:sticky lg:top-0">
+        <div class="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-4 sm:px-6 lg:h-screen lg:px-5 lg:py-6">
+          <div class="flex items-center justify-between">
+            <a href="#" class="flex min-w-0 items-center gap-3" aria-label="Northstar dashboard home">
+              <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-white text-pine">
+                <svg viewBox="0 0 24 24" class="size-6" aria-hidden="true">
+                  <path
+                    d="M12 2.75l2.54 6.71 6.71 2.54-6.71 2.54L12 21.25l-2.54-6.71-6.71-2.54 6.71-2.54L12 2.75z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </span>
+              <span class="min-w-0">
+                <span class="block truncate text-lg font-extrabold leading-5">Northstar</span>
+                <span class="block truncate text-xs font-medium text-white/55">Analytics Command</span>
+              </span>
+            </a>
+            <button
+              class="focus-ring grid size-9 place-items-center rounded-lg bg-white/10 text-white lg:hidden"
+              aria-label="Open workspace menu"
+            >
+              <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+              </svg>
+            </button>
+          </div>
+
+          <nav class="mobile-nav lg:flex lg:flex-col lg:gap-1" aria-label="Primary navigation">
+            <a class="nav-item active" href="#">
+              <svg viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 13h6V4H4v9zm10 7h6V4h-6v16zM4 20h6v-3H4v3z" stroke-linejoin="round" />
+              </svg>
+              <span class="nav-label text-sm font-semibold">Overview</span>
+            </a>
+            <a class="nav-item" href="#">
+              <svg viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 19V5m0 14h16M8 16l3-5 4 3 5-8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="nav-label text-sm font-semibold">Revenue</span>
+            </a>
+            <a class="nav-item" href="#">
+              <svg viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21a8 8 0 0116 0" stroke-linecap="round" />
+              </svg>
+              <span class="nav-label text-sm font-semibold">Customers</span>
+            </a>
+            <a class="nav-item" href="#">
+              <svg viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 20V10M18 20V4M6 20v-6" stroke-linecap="round" />
+              </svg>
+              <span class="nav-label text-sm font-semibold">Reports</span>
+            </a>
+          </nav>
+
+          <div class="hidden border-t border-white/10 pt-5 lg:block">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-white/40">Workspaces</p>
+            <div class="mt-3 space-y-2">
+              <button class="focus-ring flex w-full items-center justify-between rounded-lg bg-white/10 px-3 py-3 text-left">
+                <span>
+                  <span class="block text-sm font-semibold">Enterprise</span>
+                  <span class="block text-xs text-white/50">38 tracked accounts</span>
+                </span>
+                <svg viewBox="0 0 24 24" class="size-4 text-white/60" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+              <button class="focus-ring flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-white/75 hover:bg-white/10">
+                <span>
+                  <span class="block text-sm font-semibold">Scaleups</span>
+                  <span class="block text-xs text-white/50">91 tracked accounts</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-auto hidden rounded-lg border border-white/10 bg-white/10 p-4 lg:block">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="text-sm font-bold">Data health</p>
+                <p class="mt-1 text-xs leading-5 text-white/60">Last warehouse sync completed 18 minutes ago.</p>
+              </div>
+              <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-teal/20 text-teal">
+                <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="min-w-0">
+        <header class="sticky top-0 z-20 border-b border-line bg-field/90 backdrop-blur">
+          <div class="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:px-6 xl:px-8 md:flex-row md:items-center md:justify-between">
+            <div class="min-w-0">
+              <p class="text-xs font-bold uppercase tracking-[0.18em] text-pine/55">Analytics</p>
+              <h1 class="mt-1 truncate text-2xl font-extrabold text-ink sm:text-3xl">Growth Overview</h1>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <label class="relative min-w-[220px] flex-1 sm:flex-none">
+                <span class="sr-only">Search accounts and reports</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-ink/45"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M21 21l-4.3-4.3M10.8 18a7.2 7.2 0 100-14.4 7.2 7.2 0 000 14.4z" stroke-linecap="round" />
+                </svg>
+                <input
+                  class="focus-ring h-10 w-full rounded-lg border border-line bg-white pl-10 pr-3 text-sm font-medium text-ink placeholder:text-ink/40"
+                  placeholder="Search accounts"
+                  type="search"
+                />
+              </label>
+              <button
+                class="focus-ring grid size-10 place-items-center rounded-lg border border-line bg-white text-ink hover:border-teal/50 hover:text-teal"
+                aria-label="View notifications"
+              >
+                <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M18 8a6 6 0 10-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+              <button
+                class="focus-ring inline-flex h-10 items-center gap-2 rounded-lg bg-pine px-3 text-sm font-bold text-white hover:bg-[#1c342e]"
+              >
+                <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+                </svg>
+                <span>New report</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 xl:px-8">
+          <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4" aria-label="Key metrics">
+            <article class="metric-card p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-sm font-bold text-ink/60">Monthly Recurring Revenue</p>
+                  <p class="mt-3 text-3xl font-extrabold text-ink">$482.6K</p>
+                </div>
+                <span class="grid size-10 place-items-center rounded-lg bg-teal/10 text-teal">
+                  <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7H14a3.5 3.5 0 010 7H6" stroke-linecap="round" />
+                  </svg>
+                </span>
+              </div>
+              <div class="mt-6 flex items-center justify-between">
+                <span class="rounded-full bg-teal/10 px-2.5 py-1 text-xs font-extrabold text-teal">+12.8%</span>
+                <span class="text-xs font-semibold text-ink/50">vs. last month</span>
+              </div>
+            </article>
+
+            <article class="metric-card p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-sm font-bold text-ink/60">Net Revenue Retention</p>
+                  <p class="mt-3 text-3xl font-extrabold text-ink">118.4%</p>
+                </div>
+                <span class="grid size-10 place-items-center rounded-lg bg-sky/10 text-sky">
+                  <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M3 17l6-6 4 4 8-8M15 7h6v6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </div>
+              <div class="mt-6 flex items-center justify-between">
+                <span class="rounded-full bg-sky/10 px-2.5 py-1 text-xs font-extrabold text-sky">+4.2 pts</span>
+                <span class="text-xs font-semibold text-ink/50">expansion led</span>
+              </div>
+            </article>
+
+            <article class="metric-card p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-sm font-bold text-ink/60">Active Customers</p>
+                  <p class="mt-3 text-3xl font-extrabold text-ink">8,742</p>
+                </div>
+                <span class="grid size-10 place-items-center rounded-lg bg-gold/10 text-gold">
+                  <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21a8 8 0 0116 0" stroke-linecap="round" />
+                  </svg>
+                </span>
+              </div>
+              <div class="mt-6 flex items-center justify-between">
+                <span class="rounded-full bg-gold/10 px-2.5 py-1 text-xs font-extrabold text-[#8a650b]">+326</span>
+                <span class="text-xs font-semibold text-ink/50">new this quarter</span>
+              </div>
+            </article>
+
+            <article class="metric-card p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-sm font-bold text-ink/60">Gross Churn</p>
+                  <p class="mt-3 text-3xl font-extrabold text-ink">2.1%</p>
+                </div>
+                <span class="grid size-10 place-items-center rounded-lg bg-coral/10 text-coral">
+                  <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M4 7h16M7 7v12a2 2 0 002 2h6a2 2 0 002-2V7M10 11v6M14 11v6M9 7V4h6v3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </div>
+              <div class="mt-6 flex items-center justify-between">
+                <span class="rounded-full bg-teal/10 px-2.5 py-1 text-xs font-extrabold text-teal">-0.6 pts</span>
+                <span class="text-xs font-semibold text-ink/50">improving</span>
+              </div>
+            </article>
+          </section>
+
+          <section class="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1.7fr)_minmax(360px,0.9fr)]">
+            <article class="rounded-lg border border-line bg-white/90 shadow-[0_18px_50px_rgba(37,67,59,0.08)]">
+              <div class="flex flex-col gap-3 border-b border-line px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <h2 class="text-base font-extrabold text-ink">Revenue and Pipeline</h2>
+                  <p class="mt-1 text-sm font-medium text-ink/50">MRR trend, qualified pipeline, and target pacing.</p>
+                </div>
+                <div class="inline-flex w-fit rounded-lg border border-line bg-field p-1">
+                  <button class="focus-ring rounded-md bg-white px-3 py-1.5 text-sm font-extrabold text-pine shadow-sm">12M</button>
+                  <button class="focus-ring rounded-md px-3 py-1.5 text-sm font-bold text-ink/60 hover:text-ink">6M</button>
+                  <button class="focus-ring rounded-md px-3 py-1.5 text-sm font-bold text-ink/60 hover:text-ink">30D</button>
+                </div>
+              </div>
+
+              <div class="grid gap-5 p-5 lg:grid-cols-[minmax(0,1fr)_168px]">
+                <div class="chart-grid relative min-h-[350px] overflow-hidden rounded-lg border border-line bg-[#fbfcf8] p-4">
+                  <div class="absolute inset-x-4 bottom-12 top-6">
+                    <svg viewBox="0 0 720 280" class="h-full w-full overflow-visible" preserveAspectRatio="none" aria-label="Revenue line chart">
+                      <defs>
+                        <linearGradient id="areaRevenue" x1="0" x2="0" y1="0" y2="1">
+                          <stop offset="0%" stop-color="#1f9d8a" stop-opacity="0.26" />
+                          <stop offset="100%" stop-color="#1f9d8a" stop-opacity="0" />
+                        </linearGradient>
+                      </defs>
+                      <path
+                        d="M0 242 C52 228 72 210 116 214 C162 218 180 176 226 182 C278 189 294 148 342 143 C396 137 408 109 462 118 C516 127 536 82 580 77 C632 71 658 42 720 48 L720 280 L0 280 Z"
+                        fill="url(#areaRevenue)"
+                      />
+                      <path
+                        d="M0 242 C52 228 72 210 116 214 C162 218 180 176 226 182 C278 189 294 148 342 143 C396 137 408 109 462 118 C516 127 536 82 580 77 C632 71 658 42 720 48"
+                        fill="none"
+                        stroke="#1f9d8a"
+                        stroke-width="6"
+                        stroke-linecap="round"
+                      />
+                      <path
+                        d="M0 230 C48 222 88 218 126 206 C178 190 188 171 236 166 C280 162 310 156 350 131 C392 105 416 116 466 101 C516 86 538 94 584 63 C628 34 674 42 720 30"
+                        fill="none"
+                        stroke="#d85f45"
+                        stroke-width="4"
+                        stroke-linecap="round"
+                        stroke-dasharray="12 12"
+                      />
+                      <g fill="#1f9d8a" stroke="#fbfcf8" stroke-width="5">
+                        <circle cx="116" cy="214" r="7" />
+                        <circle cx="226" cy="182" r="7" />
+                        <circle cx="342" cy="143" r="7" />
+                        <circle cx="462" cy="118" r="7" />
+                        <circle cx="580" cy="77" r="7" />
+                        <circle cx="720" cy="48" r="7" />
+                      </g>
+                    </svg>
+                  </div>
+
+                  <div class="absolute bottom-3 left-4 right-4 grid grid-cols-6 text-xs font-bold text-ink/40">
+                    <span>Jan</span>
+                    <span>Mar</span>
+                    <span>May</span>
+                    <span>Jul</span>
+                    <span>Sep</span>
+                    <span class="text-right">Dec</span>
+                  </div>
+                  <div class="absolute left-4 top-4 rounded-lg border border-line bg-white/92 px-3 py-2 shadow-sm">
+                    <p class="text-xs font-bold text-ink/50">December forecast</p>
+                    <p class="mt-1 text-lg font-extrabold text-pine">$612K</p>
+                  </div>
+                </div>
+
+                <div class="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                  <div class="rounded-lg border border-line bg-field p-4">
+                    <p class="text-xs font-bold uppercase tracking-[0.14em] text-ink/45">ARR run rate</p>
+                    <p class="mt-2 text-2xl font-extrabold">$5.79M</p>
+                    <div class="mt-4 h-2 overflow-hidden rounded-full bg-white">
+                      <span class="block h-full w-[78%] rounded-full bg-teal"></span>
+                    </div>
+                  </div>
+                  <div class="rounded-lg border border-line bg-field p-4">
+                    <p class="text-xs font-bold uppercase tracking-[0.14em] text-ink/45">Pipeline cover</p>
+                    <p class="mt-2 text-2xl font-extrabold">3.4x</p>
+                    <div class="mt-4 h-2 overflow-hidden rounded-full bg-white">
+                      <span class="block h-full w-[64%] rounded-full bg-sky"></span>
+                    </div>
+                  </div>
+                  <div class="rounded-lg border border-line bg-field p-4">
+                    <p class="text-xs font-bold uppercase tracking-[0.14em] text-ink/45">Target gap</p>
+                    <p class="mt-2 text-2xl font-extrabold">$38K</p>
+                    <div class="mt-4 h-2 overflow-hidden rounded-full bg-white">
+                      <span class="block h-full w-[31%] rounded-full bg-coral"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <aside class="rounded-lg border border-line bg-white/90 shadow-[0_18px_50px_rgba(37,67,59,0.08)]">
+              <div class="flex items-center justify-between border-b border-line px-5 py-4">
+                <div>
+                  <h2 class="text-base font-extrabold text-ink">Recent Activity</h2>
+                  <p class="mt-1 text-sm font-medium text-ink/50">Signals from the last 24 hours.</p>
+                </div>
+                <button
+                  class="focus-ring grid size-9 place-items-center rounded-lg border border-line bg-field text-ink/70 hover:text-pine"
+                  aria-label="Filter activity"
+                >
+                  <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M4 6h16M7 12h10M10 18h4" stroke-linecap="round" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="scrollbar-thin max-h-[466px] overflow-auto px-5 py-2">
+                <ol class="divide-y divide-line">
+                  <li class="flex gap-3 py-4">
+                    <span class="mt-1 grid size-9 shrink-0 place-items-center rounded-lg bg-teal/10 text-teal">
+                      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-sm font-extrabold text-ink">BrightLayer upgraded to Enterprise</p>
+                      <p class="mt-1 text-sm leading-5 text-ink/60">$42K expansion from additional product seats.</p>
+                      <p class="mt-2 text-xs font-bold text-ink/40">12 minutes ago</p>
+                    </div>
+                  </li>
+                  <li class="flex gap-3 py-4">
+                    <span class="mt-1 grid size-9 shrink-0 place-items-center rounded-lg bg-sky/10 text-sky">
+                      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M12 20V10M18 20V4M6 20v-6" stroke-linecap="round" />
+                      </svg>
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-sm font-extrabold text-ink">Usage crossed milestone</p>
+                      <p class="mt-1 text-sm leading-5 text-ink/60">Enterprise workspace reports reached 1.2M API events.</p>
+                      <p class="mt-2 text-xs font-bold text-ink/40">38 minutes ago</p>
+                    </div>
+                  </li>
+                  <li class="flex gap-3 py-4">
+                    <span class="mt-1 grid size-9 shrink-0 place-items-center rounded-lg bg-gold/10 text-gold">
+                      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M12 8v5l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-sm font-extrabold text-ink">Renewal review scheduled</p>
+                      <p class="mt-1 text-sm leading-5 text-ink/60">OrbitWorks enters 45-day renewal window with high intent.</p>
+                      <p class="mt-2 text-xs font-bold text-ink/40">2 hours ago</p>
+                    </div>
+                  </li>
+                  <li class="flex gap-3 py-4">
+                    <span class="mt-1 grid size-9 shrink-0 place-items-center rounded-lg bg-coral/10 text-coral">
+                      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M12 9v4M12 17h.01M10.3 4.5L2.6 18a2 2 0 001.7 3h15.4a2 2 0 001.7-3L13.7 4.5a2 2 0 00-3.4 0z" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-sm font-extrabold text-ink">Risk score increased</p>
+                      <p class="mt-1 text-sm leading-5 text-ink/60">Acme Cloud has three inactive admin users this week.</p>
+                      <p class="mt-2 text-xs font-bold text-ink/40">4 hours ago</p>
+                    </div>
+                  </li>
+                  <li class="flex gap-3 py-4">
+                    <span class="mt-1 grid size-9 shrink-0 place-items-center rounded-lg bg-teal/10 text-teal">
+                      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M8 12h8M12 8v8M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-sm font-extrabold text-ink">New account created</p>
+                      <p class="mt-1 text-sm leading-5 text-ink/60">NimbleOps started a 30-seat Team plan trial.</p>
+                      <p class="mt-2 text-xs font-bold text-ink/40">7 hours ago</p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </aside>
+          </section>
+
+          <section class="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.75fr)]">
+            <article class="rounded-lg border border-line bg-white/90 p-5 shadow-[0_18px_50px_rgba(37,67,59,0.08)]">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 class="text-base font-extrabold text-ink">Segment Performance</h2>
+                  <p class="mt-1 text-sm font-medium text-ink/50">Weighted contribution by customer tier.</p>
+                </div>
+                <button class="focus-ring rounded-lg border border-line bg-field px-3 py-2 text-sm font-bold text-ink/70 hover:text-pine">
+                  Export CSV
+                </button>
+              </div>
+
+              <div class="scrollbar-thin mt-5 overflow-x-auto rounded-lg border border-line">
+                <table class="w-full min-w-[620px] text-left text-sm">
+                  <thead class="bg-field text-xs font-extrabold uppercase tracking-[0.12em] text-ink/50">
+                    <tr>
+                      <th class="px-4 py-3">Segment</th>
+                      <th class="px-4 py-3">MRR</th>
+                      <th class="px-4 py-3">NRR</th>
+                      <th class="px-4 py-3">Health</th>
+                      <th class="px-4 py-3">Owner</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-line bg-white">
+                    <tr>
+                      <td class="px-4 py-4 font-extrabold text-ink">Enterprise</td>
+                      <td class="px-4 py-4 font-bold">$291.4K</td>
+                      <td class="px-4 py-4 font-bold text-teal">124%</td>
+                      <td class="px-4 py-4">
+                        <span class="rounded-full bg-teal/10 px-2.5 py-1 text-xs font-extrabold text-teal">Strong</span>
+                      </td>
+                      <td class="px-4 py-4 font-semibold text-ink/60">Maya Chen</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-4 font-extrabold text-ink">Mid-Market</td>
+                      <td class="px-4 py-4 font-bold">$139.8K</td>
+                      <td class="px-4 py-4 font-bold text-sky">116%</td>
+                      <td class="px-4 py-4">
+                        <span class="rounded-full bg-sky/10 px-2.5 py-1 text-xs font-extrabold text-sky">Stable</span>
+                      </td>
+                      <td class="px-4 py-4 font-semibold text-ink/60">Eli Brooks</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-4 font-extrabold text-ink">Startup</td>
+                      <td class="px-4 py-4 font-bold">$51.4K</td>
+                      <td class="px-4 py-4 font-bold text-coral">97%</td>
+                      <td class="px-4 py-4">
+                        <span class="rounded-full bg-coral/10 px-2.5 py-1 text-xs font-extrabold text-coral">Watch</span>
+                      </td>
+                      <td class="px-4 py-4 font-semibold text-ink/60">Noah Patel</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="rounded-lg border border-line bg-white/90 p-5 shadow-[0_18px_50px_rgba(37,67,59,0.08)]">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h2 class="text-base font-extrabold text-ink">Goal Pacing</h2>
+                  <p class="mt-1 text-sm font-medium text-ink/50">Quarterly target attainment.</p>
+                </div>
+                <span class="text-2xl font-extrabold text-pine">82%</span>
+              </div>
+              <div class="mt-5 space-y-4">
+                <div>
+                  <div class="flex items-center justify-between text-sm font-bold">
+                    <span>Expansion</span>
+                    <span class="text-ink/50">91%</span>
+                  </div>
+                  <div class="mt-2 h-3 rounded-full bg-field">
+                    <span class="block h-full w-[91%] rounded-full bg-teal"></span>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between text-sm font-bold">
+                    <span>New business</span>
+                    <span class="text-ink/50">74%</span>
+                  </div>
+                  <div class="mt-2 h-3 rounded-full bg-field">
+                    <span class="block h-full w-[74%] rounded-full bg-sky"></span>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between text-sm font-bold">
+                    <span>Retention</span>
+                    <span class="text-ink/50">88%</span>
+                  </div>
+                  <div class="mt-2 h-3 rounded-full bg-field">
+                    <span class="block h-full w-[88%] rounded-full bg-gold"></span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

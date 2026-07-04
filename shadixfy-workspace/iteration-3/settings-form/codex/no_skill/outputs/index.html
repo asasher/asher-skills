@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"]
+          },
+          colors: {
+            ink: "#172033",
+            muted: "#647084",
+            line: "#d9e0e8",
+            canvas: "#f6f4ef",
+            panel: "#fffefa",
+            teal: "#18706b",
+            coral: "#c95636"
+          },
+          boxShadow: {
+            soft: "0 22px 60px rgba(31, 40, 55, 0.08)"
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(246, 244, 239, 0.96)),
+        repeating-linear-gradient(90deg, rgba(23, 32, 51, 0.035) 0, rgba(23, 32, 51, 0.035) 1px, transparent 1px, transparent 32px);
+      color: #172033;
+      font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .field:focus,
+    .toggle-input:focus-visible + .toggle-track,
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(24, 112, 107, 0.24);
+      outline-offset: 2px;
+    }
+
+    .toggle-track {
+      transition: background 160ms ease, border-color 160ms ease;
+    }
+
+    .toggle-dot {
+      transition: transform 160ms ease;
+    }
+
+    .toggle-input:checked + .toggle-track {
+      background: #18706b;
+      border-color: #18706b;
+    }
+
+    .toggle-input:checked + .toggle-track + .toggle-dot {
+      transform: translateX(1.375rem);
+    }
+
+    .toast {
+      transform: translateY(1rem);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.is-visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <main class="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-5 sm:px-6 lg:px-8">
+    <header class="flex flex-col gap-4 border-b border-line pb-5 md:flex-row md:items-center md:justify-between">
+      <div class="min-w-0">
+        <p class="text-xs font-semibold uppercase text-coral">Account</p>
+        <h1 class="mt-2 text-2xl font-semibold text-ink sm:text-3xl">Settings</h1>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden text-right sm:block">
+          <p class="text-sm font-semibold text-ink">Avery Stone</p>
+          <p class="text-xs text-muted">avery.stone@example.com</p>
+        </div>
+        <div class="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line bg-teal text-sm font-bold text-white shadow-soft" aria-hidden="true">
+          AS
+        </div>
+      </div>
+    </header>
+
+    <div class="grid flex-1 gap-6 py-6 lg:grid-cols-[15rem_minmax(0,1fr)]">
+      <aside class="lg:sticky lg:top-6 lg:h-fit">
+        <nav class="flex gap-2 overflow-x-auto rounded-lg border border-line bg-panel p-2 shadow-soft lg:flex-col lg:overflow-visible" aria-label="Settings sections">
+          <a class="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-md px-3 text-sm font-semibold text-teal hover:bg-teal/10" href="#profile">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M20 21a8 8 0 0 0-16 0"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Profile
+          </a>
+          <a class="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-md px-3 text-sm font-semibold text-muted hover:bg-ink/5 hover:text-ink" href="#password">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="4" y="11" width="16" height="9" rx="2"></rect>
+              <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+            </svg>
+            Password
+          </a>
+          <a class="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-md px-3 text-sm font-semibold text-muted hover:bg-ink/5 hover:text-ink" href="#notifications">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"></path>
+              <path d="M13.7 21a2 2 0 0 1-3.4 0"></path>
+            </svg>
+            Notifications
+          </a>
+        </nav>
+      </aside>
+
+      <form id="settingsForm" class="min-w-0 overflow-hidden rounded-lg border border-line bg-panel shadow-soft" novalidate>
+        <div class="flex flex-col gap-3 border-b border-line bg-white/70 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div>
+            <h2 class="text-lg font-semibold text-ink">Account details</h2>
+            <p id="formStatus" class="mt-1 min-h-5 text-sm text-muted" aria-live="polite">No pending changes</p>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" id="cancelTop" class="inline-flex min-h-10 items-center justify-center gap-2 rounded-md border border-line bg-white px-4 text-sm font-semibold text-ink transition hover:border-muted hover:bg-canvas disabled:cursor-not-allowed disabled:opacity-45" disabled>
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M3 7v6h6"></path>
+                <path d="M21 17a9 9 0 0 0-15-6.7L3 13"></path>
+              </svg>
+              Cancel
+            </button>
+            <button type="submit" id="saveTop" class="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-teal px-4 text-sm font-semibold text-white transition hover:bg-[#125b57] disabled:cursor-not-allowed disabled:opacity-45" disabled>
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path>
+                <path d="M17 21v-8H7v8"></path>
+                <path d="M7 3v5h8"></path>
+              </svg>
+              Save
+            </button>
+          </div>
+        </div>
+
+        <section id="profile" class="scroll-mt-6 border-b border-line px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid gap-6 xl:grid-cols-[15rem_minmax(0,1fr)]">
+            <div>
+              <h3 class="text-base font-semibold text-ink">Profile</h3>
+              <p class="mt-1 text-sm leading-6 text-muted">Public account identity and contact details.</p>
+            </div>
+
+            <div class="grid gap-5">
+              <div class="grid gap-5 md:grid-cols-2">
+                <label class="block">
+                  <span class="text-sm font-semibold text-ink">Full name</span>
+                  <input id="fullName" name="fullName" type="text" autocomplete="name" value="Avery Stone" class="field mt-2 min-h-11 w-full rounded-md border border-line bg-white px-3 text-sm text-ink shadow-sm transition placeholder:text-muted/70 hover:border-muted focus:border-teal" required>
+                </label>
+
+                <label class="block">
+                  <span class="text-sm font-semibold text-ink">Email</span>
+                  <input id="email" name="email" type="email" autocomplete="email" value="avery.stone@example.com" class="field mt-2 min-h-11 w-full rounded-md border border-line bg-white px-3 text-sm text-ink shadow-sm transition placeholder:text-muted/70 hover:border-muted focus:border-teal" required>
+                </label>
+              </div>
+
+              <label class="block">
+                <span class="text-sm font-semibold text-ink">Bio</span>
+                <textarea id="bio" name="bio" rows="5" maxlength="220" class="field mt-2 w-full resize-y rounded-md border border-line bg-white px-3 py-3 text-sm leading-6 text-ink shadow-sm transition placeholder:text-muted/70 hover:border-muted focus:border-teal">Product lead focused on analytics, customer feedback, and sharper launch routines.</textarea>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section id="password" class="scroll-mt-6 border-b border-line px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid gap-6 xl:grid-cols-[15rem_minmax(0,1fr)]">
+            <div>
+              <h3 class="text-base font-semibold text-ink">Password</h3>
+              <p class="mt-1 text-sm leading-6 text-muted">Credential updates for this account.</p>
+            </div>
+
+            <div class="grid gap-5">
+              <label class="block">
+                <span class="text-sm font-semibold text-ink">Current password</span>
+                <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" class="field mt-2 min-h-11 w-full rounded-md border border-line bg-white px-3 text-sm text-ink shadow-sm transition hover:border-muted focus:border-teal">
+              </label>
+
+              <div class="grid gap-5 md:grid-cols-2">
+                <label class="block">
+                  <span class="text-sm font-semibold text-ink">New password</span>
+                  <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" minlength="8" class="field mt-2 min-h-11 w-full rounded-md border border-line bg-white px-3 text-sm text-ink shadow-sm transition hover:border-muted focus:border-teal">
+                </label>
+
+                <label class="block">
+                  <span class="text-sm font-semibold text-ink">Confirm password</span>
+                  <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" class="field mt-2 min-h-11 w-full rounded-md border border-line bg-white px-3 text-sm text-ink shadow-sm transition hover:border-muted focus:border-teal">
+                </label>
+              </div>
+
+              <p id="passwordMessage" class="min-h-5 text-sm text-muted" aria-live="polite"></p>
+            </div>
+          </div>
+        </section>
+
+        <section id="notifications" class="scroll-mt-6 px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid gap-6 xl:grid-cols-[15rem_minmax(0,1fr)]">
+            <div>
+              <h3 class="text-base font-semibold text-ink">Notifications</h3>
+              <p class="mt-1 text-sm leading-6 text-muted">Email, security, and device preferences.</p>
+            </div>
+
+            <div class="divide-y divide-line rounded-lg border border-line bg-white">
+              <label class="flex min-h-[4.75rem] cursor-pointer items-center justify-between gap-4 px-4 py-3 sm:px-5">
+                <span class="min-w-0">
+                  <span class="block text-sm font-semibold text-ink">Product updates</span>
+                  <span class="mt-1 block text-sm leading-5 text-muted">New releases and roadmap notes.</span>
+                </span>
+                <span class="relative inline-flex h-7 w-14 shrink-0 items-center">
+                  <input class="toggle-input peer sr-only" type="checkbox" name="productUpdates" checked>
+                  <span class="toggle-track absolute inset-0 rounded-full border border-line bg-[#d7dde2]"></span>
+                  <span class="toggle-dot absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow"></span>
+                </span>
+              </label>
+
+              <label class="flex min-h-[4.75rem] cursor-pointer items-center justify-between gap-4 px-4 py-3 sm:px-5">
+                <span class="min-w-0">
+                  <span class="block text-sm font-semibold text-ink">Billing alerts</span>
+                  <span class="mt-1 block text-sm leading-5 text-muted">Invoices, receipts, and payment status.</span>
+                </span>
+                <span class="relative inline-flex h-7 w-14 shrink-0 items-center">
+                  <input class="toggle-input peer sr-only" type="checkbox" name="billingAlerts" checked>
+                  <span class="toggle-track absolute inset-0 rounded-full border border-line bg-[#d7dde2]"></span>
+                  <span class="toggle-dot absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow"></span>
+                </span>
+              </label>
+
+              <label class="flex min-h-[4.75rem] cursor-pointer items-center justify-between gap-4 px-4 py-3 sm:px-5">
+                <span class="min-w-0">
+                  <span class="block text-sm font-semibold text-ink">Weekly summary</span>
+                  <span class="mt-1 block text-sm leading-5 text-muted">Account activity and team highlights.</span>
+                </span>
+                <span class="relative inline-flex h-7 w-14 shrink-0 items-center">
+                  <input class="toggle-input peer sr-only" type="checkbox" name="weeklySummary">
+                  <span class="toggle-track absolute inset-0 rounded-full border border-line bg-[#d7dde2]"></span>
+                  <span class="toggle-dot absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow"></span>
+                </span>
+              </label>
+
+              <label class="flex min-h-[4.75rem] cursor-pointer items-center justify-between gap-4 px-4 py-3 sm:px-5">
+                <span class="min-w-0">
+                  <span class="block text-sm font-semibold text-ink">Push notifications</span>
+                  <span class="mt-1 block text-sm leading-5 text-muted">Important events on trusted devices.</span>
+                </span>
+                <span class="relative inline-flex h-7 w-14 shrink-0 items-center">
+                  <input class="toggle-input peer sr-only" type="checkbox" name="pushNotifications">
+                  <span class="toggle-track absolute inset-0 rounded-full border border-line bg-[#d7dde2]"></span>
+                  <span class="toggle-dot absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow"></span>
+                </span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <div class="sticky bottom-0 flex items-center justify-between gap-3 border-t border-line bg-panel/95 px-4 py-3 backdrop-blur sm:px-6 lg:px-8">
+          <p class="hidden text-sm text-muted sm:block">Changes stay on this device until saved.</p>
+          <div class="ml-auto flex gap-2">
+            <button type="button" id="cancelBottom" class="inline-flex min-h-10 items-center justify-center gap-2 rounded-md border border-line bg-white px-4 text-sm font-semibold text-ink transition hover:border-muted hover:bg-canvas disabled:cursor-not-allowed disabled:opacity-45" disabled>
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M3 7v6h6"></path>
+                <path d="M21 17a9 9 0 0 0-15-6.7L3 13"></path>
+              </svg>
+              Cancel
+            </button>
+            <button type="submit" id="saveBottom" class="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-teal px-4 text-sm font-semibold text-white transition hover:bg-[#125b57] disabled:cursor-not-allowed disabled:opacity-45" disabled>
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path>
+                <path d="M17 21v-8H7v8"></path>
+                <path d="M7 3v5h8"></path>
+              </svg>
+              Save changes
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="toast" class="toast fixed bottom-5 left-1/2 z-20 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 rounded-md border border-line bg-ink px-4 py-3 text-sm font-semibold text-white shadow-soft" role="status" aria-live="polite">
+    Settings saved
+  </div>
+
+  <script>
+    const form = document.getElementById("settingsForm");
+    const statusText = document.getElementById("formStatus");
+    const passwordMessage = document.getElementById("passwordMessage");
+    const toast = document.getElementById("toast");
+    const saveButtons = [document.getElementById("saveTop"), document.getElementById("saveBottom")];
+    const cancelButtons = [document.getElementById("cancelTop"), document.getElementById("cancelBottom")];
+    let savedState = readState();
+    let toastTimer;
+
+    function readState() {
+      const data = new FormData(form);
+      return {
+        fullName: data.get("fullName") || "",
+        email: data.get("email") || "",
+        bio: data.get("bio") || "",
+        currentPassword: data.get("currentPassword") || "",
+        newPassword: data.get("newPassword") || "",
+        confirmPassword: data.get("confirmPassword") || "",
+        productUpdates: data.has("productUpdates"),
+        billingAlerts: data.has("billingAlerts"),
+        weeklySummary: data.has("weeklySummary"),
+        pushNotifications: data.has("pushNotifications")
+      };
+    }
+
+    function sameState(a, b) {
+      return Object.keys(a).every((key) => a[key] === b[key]);
+    }
+
+    function setButtonsEnabled(enabled) {
+      [...saveButtons, ...cancelButtons].forEach((button) => {
+        button.disabled = !enabled;
+      });
+    }
+
+    function updateDirtyState() {
+      const dirty = !sameState(readState(), savedState);
+      setButtonsEnabled(dirty);
+      statusText.textContent = dirty ? "Unsaved changes" : "No pending changes";
+      statusText.className = dirty ? "mt-1 min-h-5 text-sm font-semibold text-coral" : "mt-1 min-h-5 text-sm text-muted";
+      validatePassword(false);
+    }
+
+    function validatePassword(showEmptyMessage) {
+      const current = form.currentPassword.value;
+      const next = form.newPassword.value;
+      const confirm = form.confirmPassword.value;
+      const passwordTouched = current || next || confirm;
+
+      passwordMessage.className = "min-h-5 text-sm text-muted";
+      passwordMessage.textContent = "";
+
+      if (!passwordTouched) {
+        if (showEmptyMessage) passwordMessage.textContent = "";
+        return true;
+      }
+
+      if (!current) {
+        passwordMessage.textContent = "Enter your current password.";
+        passwordMessage.className = "min-h-5 text-sm font-semibold text-coral";
+        return false;
+      }
+
+      if (next.length < 8) {
+        passwordMessage.textContent = "Use at least 8 characters.";
+        passwordMessage.className = "min-h-5 text-sm font-semibold text-coral";
+        return false;
+      }
+
+      if (next !== confirm) {
+        passwordMessage.textContent = "Passwords do not match.";
+        passwordMessage.className = "min-h-5 text-sm font-semibold text-coral";
+        return false;
+      }
+
+      passwordMessage.textContent = "Password ready to update.";
+      passwordMessage.className = "min-h-5 text-sm font-semibold text-teal";
+      return true;
+    }
+
+    function applyState(state) {
+      form.fullName.value = state.fullName;
+      form.email.value = state.email;
+      form.bio.value = state.bio;
+      form.currentPassword.value = state.currentPassword;
+      form.newPassword.value = state.newPassword;
+      form.confirmPassword.value = state.confirmPassword;
+      form.productUpdates.checked = state.productUpdates;
+      form.billingAlerts.checked = state.billingAlerts;
+      form.weeklySummary.checked = state.weeklySummary;
+      form.pushNotifications.checked = state.pushNotifications;
+      updateDirtyState();
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("is-visible");
+      clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => {
+        toast.classList.remove("is-visible");
+      }, 2200);
+    }
+
+    form.addEventListener("input", updateDirtyState);
+    form.addEventListener("change", updateDirtyState);
+
+    cancelButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        applyState(savedState);
+        showToast("Changes canceled");
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      if (!validatePassword(true)) {
+        return;
+      }
+
+      savedState = readState();
+      savedState.currentPassword = "";
+      savedState.newPassword = "";
+      savedState.confirmPassword = "";
+      applyState(savedState);
+      showToast("Settings saved");
+    });
+  </script>
+</body>
+</html>
