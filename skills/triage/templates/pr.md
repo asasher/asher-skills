@@ -1,0 +1,19 @@
+# Playbook: Pull Requests
+
+> Project playbook for this repo. The issue loop's create-PR step reads this file for the body structure; the orchestration constraints (ready-for-review not draft, base branch, the deferred evidence capture) are in the skill's `reference/issue-loop.md`. Tailor the outline to this team's conventions.
+
+## Body outline
+
+The body is the index for this change's evidence. In order:
+
+- `Closes #<issue-number>` and the work-type.
+- **Summary** — what changed and why, in the issue's terms, including any scope discovery that shaped the change (e.g. "the backend already supported this end to end, so this is frontend-only").
+- **Changes** — the significant files/modules with the design reasoning a reviewer needs (why a save lands on this action, why a component was extracted), not a raw file list.
+- **Plan** (enhancements) — SHA-pinned link to the committed plan, noting where it was approved.
+- **Checks run** — each command and its result.
+- **Verification** — what stack the criteria were exercised against and the per-criterion outcome, including the verify step's recorded caveats: any criterion verified through a workaround names the gap and the substitute observation, framed as environment gaps vs product issues. Disclosed limitations, never silent claims.
+- **Evidence** — a placeholder: "Captured after review converges." Filled by the evidence step per `evidence.md`.
+
+## This repo
+
+- Title convention, required sections beyond the outline, or an existing PR template to honor: _<add yours, or "none">_.

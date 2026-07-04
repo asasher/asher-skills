@@ -24,27 +24,20 @@ Each branch below hands off to a bundled reference (`reference/<name>.md`) for t
 
 4. Verify behavior → follow `reference/verify.md`.
    - This is a loop: verify runs the checks and exercises the change against its acceptance criteria, handing failures back to the branch that built the change (`implement.md`, `diagnose.md`, or `refactor.md`) until every criterion passes or it hits its cap.
-   - Delegate the whole loop to a subagent filling the delegate role per `verify.md`'s staffing rule; this thread stays coordinator and takes back any failure the subagent escalates as non-mechanical or twice-failed.
+   - Delegate the whole loop to a subagent filling the **delegate** role per `reference/staffing.md`; this thread stays coordinator and takes back any failure the subagent escalates per `verify.md`'s triggers.
    - Completion criterion: every acceptance criterion passes, or the verify loop ends at its cap or an explicit blocker (reported, no PR opened).
 
 5. Create the PR.
    - Open a ready-for-review PR, not a draft, once implementation and verification are complete. Target the base branch named in `docs/agents/environment.md`.
-   - Body outline, in order — the body is the index for this change's evidence:
-     - `Closes #<issue-number>` and the work-type.
-     - **Summary** — what changed and why, in the issue's terms, including any scope discovery that shaped the change (e.g. "the backend already supported this end to end, so this is frontend-only").
-     - **Changes** — the significant files/modules with the design reasoning a reviewer needs (why a save lands on this action, why a component was extracted), not a raw file list.
-     - **Plan** (enhancements) — SHA-pinned link to the committed plan, noting where it was approved.
-     - **Checks run** — each command and its result.
-     - **Verification** — what stack the criteria were exercised against and the per-criterion outcome, including the verify step's recorded caveats: any criterion verified through a workaround names the gap and the substitute observation, framed as environment gaps vs product issues. Disclosed limitations, never silent claims.
-     - **Evidence** — a placeholder: "Captured after review converges." Evidence is deliberately deferred to step 7 so it is captured once, against the reviewed HEAD.
+   - Build the body per `docs/agents/pr.md`: it closes the issue, carries the checks and per-criterion verification with the verify step's caveats, and holds an evidence placeholder — evidence is deferred to step 7.
    - Completion criterion: a ready-for-review PR exists whose body can close the issue.
 
 6. Adversarial review → follow `reference/adversarial-review.md` against the new PR.
-   - The verify loop (step 4) checks behavior against criteria; this loop reviews the diff for correctness and quality. If a fixer commit changes user-facing behavior, re-verify the affected criteria (evidence has not been captured yet, so nothing goes stale).
+   - The verify loop (step 4) checks behavior against criteria; this loop reviews the diff for correctness and quality. If a fixer commit changes user-facing behavior, re-verify the affected criteria.
    - Completion criterion: review reaches `LGTM`, hits its iteration cap, or reports an explicit blocker.
 
 7. Capture evidence → follow `reference/evidence.md`.
-   - Runs once, after the review loop ends, against the branch's final HEAD — so the captured proof matches what merges. Skip if the playbook requires no evidence beyond green checks. Delegate per `evidence.md`'s staffing rule (the delegate role).
+   - Runs once, after the review loop ends, against the branch's final HEAD; `reference/evidence.md` carries the timing rationale. Skip if the playbook requires no evidence beyond green checks. Delegate the capture to the **delegate** role per `reference/staffing.md`.
    - Commits after the Reviewer's `LGTM` may touch only `evidence/` — never product code — so the approval stays valid.
    - Replace the PR body's evidence placeholder with the verified ready-to-paste block (`gh pr edit` or equivalent) — do not rebuild or reformat the block. If a browser driver in `environment.md` can reach GitHub, eyeball the rendered body after the edit.
    - Completion criterion: the evidence is committed and pushed, and the PR body carries the verified block in place of the placeholder — or none is required.

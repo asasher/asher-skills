@@ -2,7 +2,7 @@
 
 Target: a PR. Runs standalone (`triage adversarial-review <PR>`) or as the final step of the loop.
 
-Staffing: both subagents fill the **delegate** role — one capability tier below this thread, never below the floor. Read the Model staffing section of `docs/agents/environment.md` for who fills the role in the running harness. The Fixer may go to an external CLI delegate when the playbook allows it and the PR touches only backend code; the Reviewer must satisfy the full criteria in `pr-reviewer.md`, frontend included, so it takes only delegates the playbook clears for review. If the staffing section is missing, the harness offers no model override, or no tier fits between this thread's model and the floor, spawn both on the current model rather than skipping review.
+Staffing: both subagents fill the **delegate** role — see `reference/staffing.md` for the role, the Reviewer constraint, and the fallback ladder, and the Model staffing section of `docs/agents/environment.md` for the roster.
 
 Spawn two subagents, Reviewer and Fixer, both working only on this PR. The Reviewer's criteria, comment conduct, and approval bar live in `docs/agents/pr-reviewer.md`; the Fixer's fix-and-reply conduct in `docs/agents/pr-fixer.md`, with `docs/agents/environment.md` to run and test the app. If a required playbook is missing, report a setup gap and stop.
 
