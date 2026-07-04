@@ -1,0 +1,7 @@
+interface:
+  display_name: "Good Work"
+  short_description: "Define good work, then go get it"
+  default_prompt: "Use $goodwork to interview me and figure out what work is right for me."
+
+policy:
+  allow_implicit_invocation: true
