@@ -33,7 +33,13 @@ See `README.md` for the full walkthrough. In brief, from this directory:
 
 ## Cost Boundary
 
-Codex cells run via the `codex exec` CLI (subscription-billed) and Claude cells via in-session subagents —
-neither should incur per-token API billing by default, but both consume real model usage. Be explicit with
-the user before a run. Grading is done later by a human against `reference/article-key.md`; agents never see
-that file.
+Both participant types draw on usage that is **already included in a subscription**: Codex cells via `codex exec`
+(the ChatGPT plan's allowance) and Claude cells via in-session subagents (the orchestrator's session quota). This
+is real model usage but **not metered** — it adds no per-token API billing, so it needs no per-run sign-off.
+
+The pre-run approval gate is for **extra** usage only — a run that would bill per token or spin up a
+separately-metered session, in practice the hard-gated `claude -p` fallback (see Agent execution). Flag that
+loudly and get explicit approval before it. For ordinary subscription-included runs, just say what you're about
+to run; you don't need permission to spend allowance that's already paid for.
+
+Grading is done later by a human against `reference/article-key.md`; agents never see that file.

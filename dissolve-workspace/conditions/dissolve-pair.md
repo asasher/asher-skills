@@ -18,8 +18,12 @@ You never talk directly; you communicate only through two files in the working d
 This is a debate in service of a dissolution, not a fight to win a side. Your job each turn:
 
 - **Build on** what your partner got right — don't restate it.
-- **Challenge** what looks weak: a sub-question that's really two, an "empty" verdict that smuggles a value
-  judgment, a taboo that quietly re-imports the banned word, a missing part of the bundle.
+- **Challenge** what looks weak. The recurring three, worth checking every turn: a **strand assumed as a
+  premise** — a sub-question stated as a background fact ("drinks *despite harm*") instead of split out and
+  tested; a **"value" that's really empirical** (or an empirical strand smuggling a metaphysical residue like
+  "could not have done otherwise"); and a **resolution leaning on desert** — settling a value strand by what's
+  *deserved* rather than by which stance produces better outcomes. Also: a sub-question that's really two, an
+  "empty" verdict that smuggles a value judgment, a taboo that re-imports the banned word.
 - **Converge honestly.** You're done only when the page holds a decomposition *you both* accept and the
   lingering-confusion gate passes for both of you. If you still feel a pull, say so in `discussion.md` rather
   than rubber-stamp.

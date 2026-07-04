@@ -15,15 +15,20 @@ Run these five moves in order (loop back when a later move exposes an earlier on
    Where you **cannot** rewrite without smuggling the word back, you've *located* the confusion.
 3. **Stack-trace & unbundle.** Trace, step by step, how a mind arrives at the feeling of this question. Then
    unbundle: a single contested word usually packs several *independent* questions. List them as distinct
-   sub-questions and diagram the split (a Mermaid `graph TD`).
+   sub-questions and diagram the split (a Mermaid `graph TD`). Pull out the strand you were about to **assume**:
+   if a sub-question shows up anywhere in your own prose as a background fact ("drinks *despite harm*"), it isn't
+   unbundled yet — give it its own yes/no. Every strand gets tested, especially the one that felt like a premise.
 4. **Reduce to anticipated experience.** For each sub-question, state what you'd actually *expect to observe*
    if the answer were yes vs. no. If both predict the **same** experience, the sub-question is **empty** —
    dissolved on contact. Otherwise it is real; mark it *empirical* (a fact) or *value-laden* (a preference/ethics
    call).
 5. **Resolve & run the gate.** State what remains of the original once the word is tabooed and the parts
-   separated (empty? a bundle of sharper questions? a relocated value disagreement?). Then run the gate: reread
-   the original question and check honestly whether **any lingering feeling of a hanging question** remains. If
-   yes, it is not dissolved — say where the pull is and loop back to move 2.
+   separated (empty? a bundle of sharper questions? a relocated value disagreement?). Where a surviving part is a
+   value/decision question, settle it by **consequences** — which stance produces better outcomes (blame by what
+   *helps*, not what's deserved) — not by hunting a hidden fact; showing it's *a decision, not a discovery* is
+   the dissolution, not a verdict you impose. Then run the gate: reread the original question and check honestly
+   whether **any lingering feeling of a hanging question** remains. If yes, it is not dissolved — say where the
+   pull is and loop back to move 2.
 
 ## Output — fill the provided page
 
