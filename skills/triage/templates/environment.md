@@ -60,3 +60,4 @@
 
 - Verdict: _<parallel-safe | serialize-verification>_.
 - If serialized, the shared resource that forces it: _<add yours>_.
+- Serialized exception lane: _<issue classes that must serialize even when parallel-safe — destructive shared-tenant operations, real third-party endpoints, deliberately distinct users; or "none">_.

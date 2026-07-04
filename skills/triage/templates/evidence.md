@@ -4,23 +4,32 @@
 
 ## What to capture
 
-- What evidence this repo expects for a change, beyond green checks (e.g. before/after for visual changes; none for pure logic): _<add yours>_.
-- Captured once, after the verify loop converges, each artifact mapped to the acceptance criterion it proves.
+Per change type — the shipped baseline; tune to this repo:
+
+- Pure logic or backend fix: nothing beyond green checks — the targeted test is the proof.
+- UI change: before/after screenshots of the changed surface; a short GIF for flows.
+- Workflow or auth change: an app-level walkthrough naming the account/state used, the expected result, and the observed result.
+- Data or migration change: the migration/command result plus before/after proof that the affected store is safe.
+- Repo-specific expectations beyond these: _<add yours, or "none">_.
+
+Captured once, after adversarial review converges, each artifact mapped to the acceptance criterion it proves.
 
 ## Format and storage
 
 - Static states: PNG or JPEG screenshots.
 - Flows: record MP4 for local inspection, then convert the seconds that show the criterion (≤ ~10s) to a GIF with a two-pass palette — `ffmpeg -i in.mp4 -filter_complex "fps=12,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse" out.gif` — and keep it well under 10 MB, GitHub's rendering ceiling.
 - Commit the PNG/JPEG/GIF artifacts under `evidence/<slug>/` — never the MP4: GitHub cannot render a committed video inline at all, in any form.
+- Name files `c<criterion>-<what-it-shows>.png` — they also render in the PR's Files-changed tab.
 
 ## Presentation — artifacts must render inline
 
-> Mode set by `setup` from the repo's visibility. GitHub renders committed images inline only through SHA-pinned raw URLs, and only in public repos — its image proxy cannot authenticate to private ones, and there is no API or CLI path to the drag-and-drop attachment CDN.
+> GitHub renders committed images inline through same-origin `github.com` blob URLs with `?raw=1` — those are not camo-proxied, so they render on public and private repos alike (private: for viewers with repo access). `raw.githubusercontent.com` and `/raw/<sha>/` URLs ARE camo-proxied and 404 on private repos; there is no API or CLI path to the drag-and-drop attachment CDN.
 
-- **This step is detached from PR creation.** The PR body holds an evidence placeholder waiting for it (see `pr.md`); standalone there may be no PR at all. Either way the deliverable is a ready-to-paste markdown block: commit the artifacts, push the branch (the URLs below only resolve for a pushed SHA), build the block against that commit, verify it mechanically, and hand it back to the invoking thread — do not post, attach, or comment anything from this step. The thread swaps the block in for the PR body's placeholder.
-- Presentation mode: _<public-inline | private-links>_.
-- **public-inline** — one line per artifact, destined for the PR body: `![<criterion>](https://github.com/<owner>/<repo>/raw/<commit-sha>/evidence/<slug>/<file>.png)`. Always image syntax with a `/raw/<commit-sha>/` URL: a blob URL or a bare link renders as a link the human must click through, which defeats the evidence. Pin to the commit SHA (survives rebases and branch deletion) and push before posting — an unpushed commit shows a broken image. For an oversized capture, `<img src="…" width="700">` keeps it readable in place.
-- **private-links** — inline embeds render broken in private-repo PR bodies (the image proxy cannot authenticate), so present labeled per-criterion links and say why. Open the evidence section with `Committed under evidence/<slug>/ at <short-sha> (plain links — private repo)`, then one line per criterion: `Criterion N (<what it proves>): [<file>](https://github.com/<owner>/<repo>/blob/<commit-sha>/evidence/<slug>/<file>.png)` — the blob page renders the artifact for anyone with repo access. When artifacts are many, additionally commit `evidence/<slug>/index.md` referencing them by relative path with `![]` syntax and one caption per criterion — that page renders everything inline, one click total — and link it at the top of the section.
+- **This step is detached from PR creation.** The PR body holds an evidence placeholder waiting for it (see `pr.md`); standalone there may be no PR at all. Either way the deliverable is a ready-to-paste markdown block: commit the artifacts, push the branch (the URLs below only resolve for a pushed SHA), build the block against that commit, verify it mechanically, and hand it back to the invoking thread — do not post, attach, or comment anything from this step.
+- Embed form — one line per artifact, wrapped so the inline image click-opens full size:
+  `[![<criterion>](https://github.com/<owner>/<repo>/blob/<commit-sha>/evidence/<slug>/<file>.png?raw=1)](https://github.com/<owner>/<repo>/blob/<commit-sha>/evidence/<slug>/<file>.png)`
+- Never `raw.githubusercontent.com`, never `/raw/<sha>/`, never a plain non-embedded link — a click-through defeats the evidence.
+- SHA reachability is the one failure mode: a rebase or force-push orphans the pinned commit and GitHub 404s the blob. Pin to the branch-head SHA at capture time and re-pin after any history rewrite. A broken embed is almost always an orphaned SHA — re-pin it (or use a branch-name ref `.../blob/<branch>/...?raw=1`, which follows head); do not "fix" it by switching to plain links.
 - Group artifacts by the acceptance criterion they prove, one caption each.
-- **Verify mechanically, not by eye** — the agent often cannot view the rendered page (no authenticated browser session; `gh` returns raw markdown, not the render). Before handing the embed block to the PR step, check each artifact: image syntax with a `/raw/<commit-sha>/` URL (no blob URLs, no bare links); the SHA is on the remote (`gh api repos/<owner>/<repo>/commits/<sha>` — 404 means unpushed); the file exists at that path in that commit (`git cat-file -e <sha>:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4. In `private-links` mode the same SHA and path checks apply to each blob link, and to every relative reference in `index.md` if one was committed. These checks catch every known failure mode without a browser.
+- **Verify mechanically, not by eye** — the agent often cannot view the rendered page (`gh` returns raw markdown, not the render). Before handing the block back, check each artifact: image syntax with a `blob/<commit-sha>/…?raw=1` URL; the SHA is on the remote (`gh api repos/<owner>/<repo>/commits/<sha>` — 404 means unpushed or orphaned); the file exists at that path in that commit (`git cat-file -e <sha>:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4. These checks catch every known failure mode without a browser.
 - When `environment.md` names a browser driver that can reach GitHub, additionally eyeball the rendered PR body after posting — but never substitute the eyeball for the mechanical checks.

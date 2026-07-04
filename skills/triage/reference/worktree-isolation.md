@@ -44,3 +44,5 @@ Setup records one verdict in `environment.md`; `run` reads it before dispatch:
 
 - **parallel-safe** — local-isolatable and isolation exists or was scaffolded. Issue threads may verify concurrently.
 - **serialize-verification** — cloud-singleton, or local-isolatable but not yet isolated. Dispatch may still fan out worktrees, but only one may stand up the stack and verify at a time; the others queue on that resource. State which shared resource forces serialization.
+
+A `parallel-safe` verdict may carry a **serialized exception lane**: named classes of issues that must serialize anyway — destructive operations on a shared tenant, real third-party endpoints without per-worktree credentials, features needing deliberately distinct users. Setup records the lane in `environment.md`; `run` tells any dispatched thread whose issue falls in it to serialize its verification.

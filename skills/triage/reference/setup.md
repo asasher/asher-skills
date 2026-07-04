@@ -10,7 +10,7 @@ Prepares a repo for the loop. It scaffolds the project playbooks, provisions the
    - Completion criterion: every template exists at `docs/agents/`, either freshly written or already present and left untouched.
 
 2. Provision GitHub labels.
-   - Reconcile the role→label mapping in `docs/agents/triage-policy.md` with the repo's actual GitHub labels: list the existing labels, map each role (readiness: `ready-for-agent`, `ready-for-human`, `needs-info`; work-type: `bug`, `enhancement`, `refactor`; exclusions) to an existing label where one already fits, and create the missing ones — with a clear name and description — on the user's approval.
+   - Reconcile the role→label mapping in `docs/agents/triage-policy.md` with the repo's actual GitHub labels: list the existing labels, map each role (readiness: `ready-for-agent`, `ready-for-human`, `needs-info`; work-type: `bug`, `enhancement`, `refactor`; exclusions) to an existing label where one already fits, and create the missing ones with a clear name and description. Label creation is an upsert, not an approval gate — creating a label is cheap and reversible; report what was created.
    - Write the final mapping back into `triage-policy.md` so the skill's roles resolve to real labels.
    - When GitHub tools are unavailable, list the labels the user must create and the role each fills, and record it as a blocker.
    - Completion criterion: every role resolves to a label that exists in the repo, or the missing labels are listed as an explicit blocker.
@@ -22,7 +22,8 @@ Prepares a repo for the loop. It scaffolds the project playbooks, provisions the
      - Already isolated → `parallel-safe`; defer to it.
      - Local-isolatable but not isolated → offer to scaffold the isolation layer. Write isolation code only with explicit approval; approved → `parallel-safe`, declined → `serialize-verification`.
      - Cloud-singleton with no per-worktree cloud envs → local isolation can't make it safe; explain why, record `serialize-verification`, and note the manual path to true parallel (per-worktree deployment + auth tenant).
-   - Completion criterion: the parallelism verdict is set, matches what the repo can actually support, and any approved isolation scaffolding is in place.
+   - Even when `parallel-safe`, agree with the user which classes of issues must still serialize — destructive operations on a shared tenant, real third-party endpoints without per-worktree credentials, features needing deliberately distinct users — and record them as the **serialized exception lane**.
+   - Completion criterion: the parallelism verdict and its exception lane are set, match what the repo can actually support, and any approved isolation scaffolding is in place.
 
 4. Identify seed and checks.
    - Determine how an empty stack is brought to a state that exercises the product's features: a real seed command, a load-from-checked-in-dataset command, or none (state is produced by driving the app). Do not assume a `db:seed` exists — most repos lack one.
@@ -41,7 +42,7 @@ Prepares a repo for the loop. It scaffolds the project playbooks, provisions the
    - Completion criterion: every app surface the loop will verify has a named driver, capture method, and auth path — or an explicit blocker.
 
 6. Write the contracts into the playbooks.
-   - Record the results in `docs/agents/environment.md`: dev-stack startup, isolation regime and how to bring up an isolated stack, seed regime and command, auth/session minting, the app drivers and evidence-capture tooling from the access audit, the parallelism verdict, and the model-staffing roster (lead/delegate/floor per harness the loop runs from). Record the check commands in `verifying.md`, and set the **presentation mode** in `evidence.md` from the repo's visibility: `public-inline` for a public repo, `private-links` for a private one (GitHub's image proxy cannot render committed images inline in private-repo PR bodies).
+   - Record the results in `docs/agents/environment.md`: dev-stack startup, isolation regime and how to bring up an isolated stack, seed regime and command, auth/session minting, the app drivers and evidence-capture tooling from the access audit, the parallelism verdict with its serialized exception lane, and the model-staffing roster (lead/delegate/floor per harness the loop runs from). Record the check commands in `verifying.md` and the repo's evidence expectations in `evidence.md`.
    - Offer to fill the remaining baselines — the dependency convention in `triage-policy.md`, branch conventions, plan format, review criteria — with this repo's real values. The templates are baselines, not the contract.
    - Completion criterion: `environment.md` states the isolation, seed, and parallelism contracts the loop reads, or the user has chosen to keep a baseline section.
 
