@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goodwork Diff</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f7f7f2;color:#1f211f}
+    main{max-width:1100px;margin:auto;padding:16px}h1{font-size:1.4rem}.grid{display:grid;gap:12px}
+    pre{white-space:pre-wrap;background:#fff;border:1px solid #ddd8ce;border-radius:8px;padding:12px;min-height:160px}
+    .line.add{background:#e4f4e9}.line.del{background:#fae3df}.line.same{color:#545750}
+    #pierre-diffs{min-height:1px}@media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<main>
+  <h1 id="title">Application diff</h1>
+  <div id="pierre-diffs" aria-label="@pierre/diffs mount"></div>
+  <section id="fallback" class="grid"></section>
+</main>
+<script>
+const data = __GOODWORK_BOOTSTRAP__;
+const item = data.item || {};
+document.getElementById("title").textContent = item.title || item.id || "Application diff";
+const before = item.before || item.original || "";
+const after = item.after || item.revised || item.content || "";
+function renderFallback() {
+  const left = document.createElement("pre");
+  const right = document.createElement("pre");
+  left.innerHTML = before.split("\n").map(l => `<div class="line del">${escapeHtml(l || " ")}</div>`).join("");
+  right.innerHTML = after.split("\n").map(l => `<div class="line add">${escapeHtml(l || " ")}</div>`).join("");
+  document.getElementById("fallback").replaceChildren(left, right);
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+function mountOrFallback() {
+  if (window.PierreDiffs && typeof window.PierreDiffs.mount === "function") {
+    window.PierreDiffs.mount(document.getElementById("pierre-diffs"), {before, after, evidence:item.evidence || []});
+  } else {
+    renderFallback();
+  }
+}
+const vendored = document.createElement("script");
+vendored.src = `/static/@pierre/diffs/index.js?token=${encodeURIComponent(data.token)}`;
+vendored.onload = mountOrFallback;
+vendored.onerror = renderFallback;
+document.head.appendChild(vendored);
+</script>
+</body>
+</html>

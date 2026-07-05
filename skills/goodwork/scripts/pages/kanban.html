@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goodwork Pipeline</title>
+  <style>
+    *{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f4f4ef;color:#20211f}
+    main{padding:14px}h1{font-size:1.45rem;margin:0 0 14px}.board{display:grid;gap:12px}.col{background:#fff;border:1px solid #ddd9cf;border-radius:8px;padding:10px}
+    h2{font-size:1rem;margin:0 0 8px}.card{border-top:1px solid #ece8df;padding:10px 0}.card:first-of-type{border-top:0}
+    .meta{color:#555851;font-size:.92rem}.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.badge{background:#ece8df;border-radius:999px;padding:2px 7px;font-size:.78rem}
+    @media(min-width:760px){.board{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));align-items:start}}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Pipeline</h1>
+  <section id="board" class="board"></section>
+</main>
+<script>
+const data = __GOODWORK_BOOTSTRAP__;
+const stages = ["researching","outreach","conversation","referral","applied","screen","interview","offer","closed_won","closed_lost","retired"];
+const cards = (data.pipeline && data.pipeline.cards) || [];
+const grouped = Object.fromEntries(stages.map(s => [s, []]));
+cards.forEach(card => (grouped[card.stage] || (grouped[card.stage] = [])).push(card));
+const board = document.getElementById("board");
+Object.entries(grouped).filter(([,list]) => list.length).forEach(([stage, list]) => {
+  const col = document.createElement("section");
+  col.className = "col";
+  col.innerHTML = `<h2>${stage.replace("_", " ")}</h2>`;
+  list.forEach(card => {
+    const badges = [];
+    if ((card.approval_ids || []).length === 0 && (card.artifact_ids || []).length) badges.push("approval needed");
+    if ((card.proof_ids || []).length === 0 && card.stage === "applied") badges.push("proof missing");
+    if ((card.replies || []).length) badges.push("reply waiting");
+    const el = document.createElement("article");
+    el.className = "card";
+    el.innerHTML = `<strong>${escapeHtml(card.role || card.id || "Untitled")}</strong>
+      <div class="meta">${escapeHtml(card.next_action || "")}</div>
+      <div class="meta">due ${escapeHtml(card.due_at || "none")} · ${escapeHtml(card.warmth || "cold")}</div>
+      <div class="badges">${badges.map(b => `<span class="badge">${b}</span>`).join("")}</div>`;
+    col.appendChild(el);
+  });
+  board.appendChild(col);
+});
+if (!board.children.length) board.textContent = "No pipeline cards.";
+function escapeHtml(s){return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+</script>
+</body>
+</html>

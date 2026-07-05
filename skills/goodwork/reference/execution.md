@@ -2,6 +2,8 @@
 
 This is the single source of truth for executing outbound Goodwork actions. Read it before any command creates a Gmail draft, sends, submits, publishes, uses ATS endpoints, or automates authenticated browser work.
 
+Use `scripts/server.py`, `scripts/await.py`, and `scripts/validate_approval.py` as the execution implementation; run them from the project root instead of rewriting local equivalents.
+
 ## Execution Ladder
 
 Consult `capabilities.json`; use the best available rung for the specific item.

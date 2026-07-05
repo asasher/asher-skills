@@ -6,6 +6,8 @@ This is the single source of truth for Goodwork v2 state. If a matcher, schedule
 
 One project folder is one person. The `goodwork/` folder holds state, vendored UI assets, the persistent Chrome profile, and a gitignored `.env`. Never install Goodwork globally. Degrade to draft-and-instruct when a capability is absent.
 
+Initialize missing v2 state with `scripts/init_workspace.py` from the project root before writing workspace files.
+
 ## Writer rule
 
 The agent is the sole writer of state files. The server never mutates JSON or Markdown and never appends approvals; it only appends user request events to `events.jsonl`. The agent drains events, validates them, and writes resulting state changes.

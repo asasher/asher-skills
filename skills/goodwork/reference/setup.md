@@ -2,6 +2,8 @@
 
 Run once per person, and rerun when capabilities change. `setup` can run before a profile exists because it prepares the operating layer.
 
+Use `scripts/init_workspace.py`, `scripts/server.py`, and `scripts/await.py` as the setup implementation; run them from the project root instead of rewriting local equivalents.
+
 ## Steps
 
 1. Create or locate the one-person `goodwork/` workspace. Ensure `.env` is gitignored, initialize missing v2 state files from [state.md](state.md), and record any legacy Markdown files that need migration.
