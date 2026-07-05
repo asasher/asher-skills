@@ -51,6 +51,7 @@ Learners left alone block-practice what already feels good. You run the interlea
    subjective notes** from the learner ("jaw tension", "easier after the third block"). The subjective line
    catches what the metrics miss.
 2. **Update drill state** in each drill file: score history, last-practiced, stage or criterion changes.
-3. **Harvest if the loop itself failed** — a latency violation, a rubric that stopped discriminating, a
-   drill too big. One line to `LEARNINGS.md` about the *design*, not the learner.
+3. **Revise the spec if the loop itself failed** — a latency violation, a rubric that stopped
+   discriminating, a drill too big. Fix the design and note what changed in the drill spec's revision log;
+   the failure was the design's, not the learner's.
 4. **Name the next session's likely set** in one sentence, so the learner ends knowing what's coming.

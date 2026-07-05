@@ -9,8 +9,8 @@ measure, drill, progression. The agent works with a competent self-learner to en
 (including building the rig — scripts, third-party tools, physical setups), runs live rep-by-rep practice
 sessions, and schedules drills using motor-learning science rather than flashcard intervals.
 
-Install once per learning workspace. Each deployed workspace maintains a `LEARNINGS.md` recording what its
-*loop designs* got wrong; those get harvested back into this skill — every instance doubles as an eval run.
+Install once per learning workspace. The skill is self-contained: all state lives in the workspace (drill
+specs carry their own scheduling state and revision logs), nothing phones home.
 
 ## Layout
 
@@ -21,4 +21,4 @@ Install once per learning workspace. Each deployed workspace maintains a `LEARNI
 - `reference/scheduling.md` — spaced practice for drills (not cards): cold checks, ratchets, retirement
 - `reference/modality-audio.md` — the strong playbook (capture, praat/librosa, A/B loopback, ElevenLabs)
 - `reference/modality-movement.md` — the honest playbook (body tests, physical rigs, human checkpoints)
-- `templates/` — workspace scaffold: MISSION, drill spec, rubric, decomposition, LEARNINGS
+- `templates/` — workspace scaffold: MISSION, drill spec, rubric, decomposition

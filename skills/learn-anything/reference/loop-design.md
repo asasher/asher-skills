@@ -73,7 +73,8 @@ changes.
 
 The spec is a draft until it survives real reps. Run one session; the first one always exposes something —
 latency too high, rubric ambiguous, drill too big, criterion miscalibrated. Revise the spec, and if the
-*design* was wrong (not just the learner unpracticed), write one line to `LEARNINGS.md` saying what and why.
+*design* was wrong (not just the learner unpracticed), add a line to the spec's revision log saying what
+changed and why — future loops for this learner should inherit the lesson.
 
 ## Worked example — audio (Scottish accent: the tapped /r/)
 
@@ -91,7 +92,7 @@ latency too high, rubric ambiguous, drill too big, criterion miscalibrated. Revi
    agent blind-tests 5 pairs and separates them 5/5 at this coarse grain → agent-perceptual approved for
    triage only.
 6. **Pilot:** first session shows 3-second capture truncates "tomorrow" — bump to 5 seconds. Rubric point 2
-   ("somewhere between") never used — collapse to pass/fail. One line to `LEARNINGS.md`.
+   ("somewhere between") never used — collapse to pass/fail. Both noted in the spec's revision log.
 
 ## Worked example — movement (dance: weight transfer in a basic step)
 
@@ -110,8 +111,8 @@ latency too high, rubric ambiguous, drill too big, criterion miscalibrated. Revi
    later — separates them. Rubric approved.
 6. **Pilot:** freeze-drill works but 30-second films are too long to review between reps → review every 5
    reps instead; per-rep feedback is the proprioceptive lift-test. Latency budget met by moving the trap to
-   a sampling role. One line to `LEARNINGS.md`: *per-rep video review violates the latency budget; use body
-   tests per rep, video per block.*
+   a sampling role. Revision log: *per-rep video review violates the latency budget; use body tests per
+   rep, video per block.*
 
 ## Failure patterns
 

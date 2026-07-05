@@ -3,8 +3,7 @@
 Dance, posture, sport technique, stagecraft. This is the **honest-and-thin** playbook: machine-objective
 measures are scarce and high-friction, so the center of gravity shifts to *trained self-assessment*,
 *physical rigs*, and *human checkpoints*. Say that plainly in loop design rather than promising precision
-the tooling can't deliver. This file should grow fastest as deployed instances teach us things — harvest
-aggressively to `LEARNINGS.md`.
+the tooling can't deliver.
 
 ## Capture (the trap)
 

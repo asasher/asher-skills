@@ -1,7 +1,7 @@
 ---
 name: learn-anything
 description: Learn any skill — not just facts. Pairs teaching (knowledge into the head) with coaching (skill into the body). Works with a competent self-learner to decompose a skill, engineer honest feedback loops (target, trap, gap measure, drill, progression), build the rig — scripts, third-party tools, physical setups — run live practice sessions rep by rep, and schedule drills with spaced, interleaved practice. For embodied skills (accents, instruments, dance, voice acting) as much as cerebral ones. Stateful and resumable; install once per learning workspace.
-argument-hint: "[setup \"<mission>\"] | [loop] | [session] | [teach \"<topic>\"] | [status] | [harvest]"
+argument-hint: "[setup \"<mission>\"] | [loop] | [session] | [teach \"<topic>\"] | [status]"
 user-invocable: true
 disable-model-invocation: true
 ---
@@ -73,7 +73,6 @@ tell good from bad launders noise into confidence — worse than no rig.
   rig/                # scripts the agent built: capture, score, A/B playback
   lessons/            # teacher-hat lessons (numbered HTML, short, cited)
   practice-log/       # per-session logs + captured performances
-  LEARNINGS.md        # what we learned about *loop design itself* — harvested upstream
   ```
 
 - **State lives in the drill files.** Each drill carries its own stage, criterion, score history, and
@@ -84,8 +83,7 @@ tell good from bad launders noise into confidence — worse than no rig.
   recording A/B loop, a scoring script, tape marks on the floor. Software rigs go in `rig/`; physical rigs
   are designed in the drill spec. Ask consent before installing anything.
 - **Modality playbooks.** Audio (accents, voice, instruments) is strong today — `reference/modality-audio.md`.
-  Movement (dance, posture, sport) is honest-and-thin — `reference/modality-movement.md`. The playbooks grow
-  as deployed instances teach us things.
+  Movement (dance, posture, sport) is honest-and-thin — `reference/modality-movement.md`.
 
 ## Commands
 
@@ -96,7 +94,6 @@ tell good from bad launders noise into confidence — worse than no rig.
 | `session` | Run a live practice session: assemble the due set, rig check, rep-by-rep coaching per `reference/session-protocol.md`, log and update drill state. The default inside an established workspace. |
 | `teach "<topic>"` | Teacher hat: a short, cited lesson in `lessons/` for the cognitive stage of a sub-skill (what rhoticity *is*, how a chord is voiced). Brief — it front-ends practice, never replaces it. |
 | `status` | Report the mission, drills by mastery stage, what's due and why, upcoming human checkpoints. The default at a glance. |
-| `harvest` | Update `LEARNINGS.md`: what about our *loop designs* was wrong and what we changed — not what the learner learned. This file is mined back into the skill. |
 
 ## Routing
 
@@ -120,7 +117,8 @@ tell good from bad launders noise into confidence — worse than no rig.
   exemplar, the first drill is perceptual discrimination, not performance.
 - **Expect practice to feel worse when it's working.** Interleaving and faded feedback depress in-session
   performance and improve retention. Say so up front, or the learner will optimize for the wrong signal.
-- **Log every session; harvest every failure.** Scores and one line of subjective notes to `practice-log/`;
-  loop-design failures to `LEARNINGS.md`. The subjective line catches what the metrics miss.
+- **Log every session; keep specs honest.** Scores and one line of subjective notes to `practice-log/` —
+  the subjective line catches what the metrics miss. When a *loop design* fails (not the learner), revise
+  the drill spec and note what changed and why in its revision log.
 - **Human checkpoints are the ground truth.** Schedule them into the mission; prepare the learner for them;
   recalibrate the rig and the rubrics against what they reveal.

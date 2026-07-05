@@ -27,3 +27,8 @@ status: active          # active | consolidating | maintenance | retired
 ## Rig notes
 
 <!-- Adopted tools and why; physical rig design; deferred options and the condition that revisits them. -->
+
+## Revision log
+
+<!-- One line per design change: what about THIS LOOP'S DESIGN was wrong and what changed — not learner
+     progress (that's history/practice-log). Format: - YYYY-MM-DD: <what was wrong> → <what changed> -->
