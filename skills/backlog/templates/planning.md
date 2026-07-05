@@ -1,6 +1,6 @@
 # Playbook: Planning Enhancements
 
-> Project playbook for this repo. The triage `plan` subskill reads this file for the threshold, format, review conduct, and approval; the gates are in the skill's `reference/plan.md`. The plan structure below draws on Matt Pocock's `to-prd` skill (MIT) — tailor everything to this team's conventions.
+> Project playbook for this repo. The backlog `plan` subskill reads this file for the threshold, format, review conduct, and approval; the gates are in the skill's `reference/plan.md`. The plan structure below draws on Matt Pocock's `to-prd` skill (MIT) — tailor everything to this team's conventions.
 
 ## Plan-size threshold
 
@@ -43,4 +43,4 @@ _Adjust these triggers to this team._
 - Open the rendered HTML for the human — a browser, the harness's preview, whatever the environment offers. Who approves and how: _<add yours>_.
 - If approval changes scope, update the plan before coding.
 - Once approved, **commit the plan to the work branch before implementation is dispatched** — implementing agents must find it on disk.
-- Posterity: after approval, comment a compact markdown digest of the plan on the issue — headings, the acceptance criteria, and Mermaid blocks (GitHub renders those) — plus a repo link to the committed HTML. Any screenshots in the digest follow the presentation contract in `evidence.md`. _Adjust or drop this write if this team doesn't want plans mirrored to the tracker._
+- Posterity: after approval, comment a compact markdown digest of the plan on the issue — headings, the acceptance criteria, and Mermaid blocks where the tracker renders them (GitHub does; a local issue file holds them as source) — plus a repo link to the committed HTML. Any screenshots in the digest follow the presentation contract in `evidence.md`. On the local binding this digest is a PR-bound lifecycle write: it rides the work branch per `platform.md`. _Adjust or drop this write if this team doesn't want plans mirrored to the tracker._

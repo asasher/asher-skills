@@ -1,6 +1,6 @@
 # Model Staffing
 
-The skill defines roles by **workflow stage** and, within build-out, by **work surface**; the Model staffing section of `docs/agents/environment.md` (written by `triage setup`) records which model fills each role, because the roster depends on the harness the loop runs in — a harness that cannot reach another vendor's models fills every role from its own lineup. One model may fill several roles: separation is by thread, not by model — delegating into separate threads is what keeps the orchestrator's context coordinative.
+The skill defines roles by **workflow stage** and, within build-out, by **work surface**; the Model staffing section of `docs/agents/environment.md` (written by `backlog setup`) records which model fills each role, because the roster depends on the harness the loop runs in — a harness that cannot reach another vendor's models fills every role from its own lineup. One model may fill several roles: separation is by thread, not by model — delegating into separate threads is what keeps the orchestrator's context coordinative.
 
 ## Roles
 

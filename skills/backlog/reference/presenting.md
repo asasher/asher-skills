@@ -1,6 +1,6 @@
 # Presenting to the Human
 
-Interactive review — a plan awaiting approval, a prototype awaiting driving — reaches the human through the repo's **presentation surface**, chosen by where the human is, not where the agent runs. The surface contract lives in the Presenting section of `docs/agents/environment.md`, written by `triage setup`. Evidence is not presented here: it is durable proof and follows `docs/agents/evidence.md` into the repo and the PR.
+Interactive review — a plan awaiting approval, a prototype awaiting driving — reaches the human through the repo's **presentation surface**, chosen by where the human is, not where the agent runs. The surface contract lives in the Presenting section of `docs/agents/environment.md`, written by `backlog setup`. Evidence is not presented here: it is durable proof and follows `docs/agents/evidence.md` into the repo and the PR.
 
 ## Contract
 

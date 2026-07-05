@@ -1,6 +1,6 @@
 # Prototype
 
-Target: a design question — stated directly (`triage prototype "<question>"`), extracted from an issue, or handed over by `reference/plan.md` when planning hits something paper cannot settle. A prototype is **throwaway code that answers a question**; the answer is the only deliverable.
+Target: a design question — stated directly (`backlog prototype "<question>"`), extracted from an issue, or handed over by `reference/plan.md` when planning hits something paper cannot settle. A prototype is **throwaway code that answers a question**; the answer is the only deliverable.
 
 The technique — the two prototype shapes and their rules — lives in `docs/agents/prototyping.md`; the app drivers for building and capturing live in `docs/agents/environment.md`. If either is missing, report a setup gap and stop.
 

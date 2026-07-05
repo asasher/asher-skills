@@ -1,6 +1,6 @@
 # Playbook: PR Fixer Conventions
 
-> Project playbook for this repo. The triage `adversarial-review` Fixer subagent reads this file for how this team fixes and responds to review; the loop mechanics are in the skill's `reference/adversarial-review.md`.
+> Project playbook for this repo. The backlog `adversarial-review` Fixer subagent reads this file for how this team fixes and responds to review; the loop mechanics are in the skill's `reference/adversarial-review.md`.
 
 ## Fix
 

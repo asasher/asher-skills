@@ -1,12 +1,12 @@
 # Playbook: Pull Requests
 
-> Project playbook for this repo. The issue loop's create-PR step reads this file for the body structure; the orchestration constraints (ready-for-review not draft, base branch, the deferred evidence capture) are in the skill's `reference/issue-loop.md`. Tailor the outline to this team's conventions.
+> Project playbook for this repo. The issue loop's create-PR step reads this file for the body structure; the orchestration constraints (ready-for-review not draft, base branch, the deferred evidence capture) are in the skill's `reference/issue-loop.md`, and where the PR physically lives — GitHub, a committed review file, elsewhere — in `platform.md` § Change review. Tailor the outline to this team's conventions.
 
 ## Body outline
 
 The body is the index for this change's evidence. In order:
 
-- `Closes #<issue-number>` and the work-type.
+- The close linkage per `platform.md` (GitHub: `Closes #<issue-number>`; local: name the issue whose `state` flip rides this branch) and the work-type.
 - **Summary** — what changed and why, in the issue's terms, including any scope discovery that shaped the change (e.g. "the backend already supported this end to end, so this is frontend-only").
 - **Changes** — the significant files/modules with the design reasoning a reviewer needs (why a save lands on this action, why a component was extracted), not a raw file list.
 - **Plan** (enhancements) — SHA-pinned link to the committed plan, noting where it was approved.

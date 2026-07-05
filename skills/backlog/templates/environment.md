@@ -1,10 +1,10 @@
 # Playbook: Environment
 
-> Project playbook for this repo. Shared — read by any triage subskill that builds a branch, runs, or tests the app (`implement`, `verify`, `evidence`, `diagnose`, the PR step, the review fixer) and by `run` for the parallelism verdict. Tailor every section to this codebase. `setup` fills the isolation, seed, and parallelism sections from its audit.
+> Project playbook for this repo. Shared — read by any backlog subskill that builds a branch, runs, or tests the app (`implement`, `verify`, `evidence`, `diagnose`, the PR step, the review fixer) and by `run` for the parallelism verdict. Tailor every section to this codebase. `setup` fills the isolation, seed, and parallelism sections from its audit.
 
 ## Branching & deploys
 
-- Base branch: _<e.g. main, or staging>_ — create worktrees and work branches from it, and target PRs at it. Pull its latest remote state before branching.
+- Base branch: _<e.g. main, or staging>_ — create worktrees and work branches from it, and target PRs at it. Sync it per `platform.md` § Version control before branching (on the local tracker binding, `run`'s claim commit is the fork point).
 - Branch naming: _<e.g. `<issue-number>-<slug>`>_.
 - What a PR produces: _<e.g. a preview deployment per PR, or nothing>_.
 - What a merge produces: _<e.g. merge to staging → staging deployment; promotion path to production>_.
@@ -51,8 +51,8 @@
 
 - Surface: _<tailnet | local-only | custom>_.
 - Root URL: _<e.g. `https://<machine>.<tailnet>.ts.net/review`; "n/a" for local-only>_.
-- Document server: _<e.g. a static server rooted at `~/.triage/surface`, kept alive by the OS (LaunchAgent), proxied once via `tailscale serve --bg --set-path /review http://localhost:<port>` — the sandboxed macOS tailscale app cannot serve file paths directly>_.
-- Publish a document: _<e.g. `ln -sfn <absolute path to the committed file> ~/.triage/surface/<repo>/<issue>/<name>.html`>_.
+- Document server: _<e.g. a static server rooted at `~/.backlog/surface`, kept alive by the OS (LaunchAgent), proxied once via `tailscale serve --bg --set-path /review http://localhost:<port>` — the sandboxed macOS tailscale app cannot serve file paths directly>_.
+- Publish a document: _<e.g. `ln -sfn <absolute path to the committed file> ~/.backlog/surface/<repo>/<issue>/<name>.html`>_.
 - Expose a live prototype: _<e.g. `tailscale serve --bg --set-path /<repo>/<issue>/proto http://localhost:<port>`>_.
 - Reap rule: _<e.g. remove the worktree's symlinks under the surface directory and `tailscale serve --set-path <path> off` for its proxies; `tailscale serve status` lists handlers for the orphan sweep>_.
 - Keep-awake: _<the user's setup choice. Default: none — the surface is up when the machine is awake (harnesses hold sleep assertions during active runs). If the user wants planned AFK reviews to survive long pauses or lid-closed on battery, record their chosen mechanism here.>_.

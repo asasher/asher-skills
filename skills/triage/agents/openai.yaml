@@ -1,7 +1,0 @@
-interface:
-  display_name: "Triage"
-  short_description: "Groom the GitHub backlog, then run ready-for-agent issues through the issue loop to reviewed PRs"
-  default_prompt: "Use $triage to triage the open issues in this repo."
-
-policy:
-  allow_implicit_invocation: false

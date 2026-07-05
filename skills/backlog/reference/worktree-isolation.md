@@ -1,6 +1,8 @@
 # Worktree Isolation
 
-The loop dispatches one issue thread per issue, each in its own git worktree, and each verifies its change against a running app. That only works if N worktrees can stand up and exercise the dev stack at once without corrupting each other. This file is the contract `setup` audits against and the pattern it scaffolds toward. It also defines the **parallelism verdict** that `run` reads before dispatching.
+The loop dispatches one issue thread per issue, each in its own worktree, and each verifies its change against a running app. That only works if N worktrees can stand up and exercise the dev stack at once without corrupting each other. This file is the contract `setup` audits against and the pattern it scaffolds toward. It also defines the **parallelism verdict** that `run` reads before dispatching.
+
+"Worktree" here is the role noun for an isolated working copy; the mechanics — `git worktree add`, a jj workspace, whatever the repo uses — live in the version-control binding of `docs/agents/platform.md`. The regimes, probes, and scaffold below are about the *stack*, not the VCS, and apply unchanged across bindings.
 
 Do not impose a scheme blindly. First classify the regime, then detect whether the repo already solves it, then — only with approval — scaffold.
 
