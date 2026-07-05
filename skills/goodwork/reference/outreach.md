@@ -1,6 +1,10 @@
-# outreach — conversations that carry the search
+# outreach - conversations that carry the search
 
-Referrals and weak ties carry most opportunity; portals carry volume. This command runs the human layer: the listening tour, informational interviews, referral asks, cold outreach, and follow-up cadence. Nothing sends without the user's approval of the final text.
+Referrals and weak ties carry most opportunity; portals carry volume. This command runs the human layer: the listening tour, informational interviews, referral asks, cold outreach, and follow-up cadence. Execution behavior lives in [execution.md](execution.md).
+
+## Execution
+
+Read `capabilities.json` and [execution.md](execution.md) before turning any message into a Gmail draft, LinkedIn message, or manual send package. Log the chosen rung, draft metadata, and resulting thread IDs back to `pipeline.json`.
 
 ## The listening tour (before asking for anything)
 
@@ -23,7 +27,7 @@ Rules: one specific true compliment-of-substance, one clear small ask, no CV att
 
 - No reply → follow up after **3 business days** → again **~7 days** later → then archive to monthly low-touch nurture. Never more.
 - After a conversation: thank-you within 24–72 hours, send anything promised, report back outcomes later ("took your advice, here's what happened" — the most underused relationship builder).
-- Log every touch in `PIPELINE.md` with a next-action date; `daily` surfaces what's due.
+- Log every touch in `pipeline.json` with a next-action date; `daily` surfaces what's due.
 
 ## Quotas (defaults, tune in `review`)
 
@@ -31,4 +35,4 @@ Rules: one specific true compliment-of-substance, one clear small ask, no CV att
 
 ## Output
 
-Drafts for approval, per-conversation prep sheets (their background, why-them, the 10 questions), call debriefs appended to `goodwork/PIPELINE.md`, and niche-hypothesis updates flagged for `NICHE.md`.
+Drafts or approved send packages, per-conversation prep sheets (their background, why-them, the 10 questions), call debriefs recorded against `pipeline.json` cards, and niche-hypothesis updates flagged for `NICHE.md`.

@@ -52,6 +52,11 @@ People enter anywhere. Someone mid-search can start at `targets` and backfill th
 
 ## Workspace
 
-All state lives in a `goodwork/` directory in the working directory (or where the user says): `PROFILE.md`, `ODYSSEYS.md`, `EXPERIMENTS.md`, `NICHE.md`, `TARGETS.md`, `PIPELINE.md`, `JOURNAL.md`. Create files on first use. Update, don't regenerate — these accumulate evidence over weeks. Treat their contents as sensitive personal data: never share or publish them without explicit instruction.
+Goodwork v2 is one project folder per person. The `goodwork/` folder holds two tiers of state:
+
+- Operational JSON/JSONL consumed by matchers, schedulers, approvals, and UI projections.
+- Narrative Markdown consumed by the person, interview, and weekly reflection.
+
+The state model, file inventory, schemas, ID rules, agent-sole-writer rule, and evidence inbox live in [state.md](state.md). Create files on first use. Update cumulatively; don't regenerate. Treat contents as sensitive personal data: never share or publish them without explicit instruction.
 
 The full source list behind this synthesis lives in the skill's `README.md`.

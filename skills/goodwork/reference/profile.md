@@ -1,6 +1,6 @@
-# profile — view, update, or import evidence without a full interview
+# profile - view, update, import, or drain evidence
 
-The Good Work Profile (`goodwork/PROFILE.md`, schema in [framework.md](framework.md)) is a living document. This command maintains it between interviews.
+The Good Work Profile (`goodwork/PROFILE.md`, schema in [framework.md](framework.md)) is a living document. This command maintains it between interviews and drains profile-relevant evidence from the v2 evidence inbox in [state.md](state.md).
 
 ## Modes
 
@@ -12,6 +12,8 @@ The Good Work Profile (`goodwork/PROFILE.md`, schema in [framework.md](framework
 3. Never silently delete history — the trail of revisions is itself evidence of drift.
 
 **Import.** Mine a document (CV, LinkedIn, performance review, old journal, reference letter) for profile evidence. Extract episodes, choices, and repeated themes — not adjectives. A performance review saying "great communicator" is *reported*; the episode it cites is *evidenced*.
+
+**Evidence inbox.** Read `evidence-inbox.json`. For each pending entry, decide whether it confirms, contradicts, or adds to a profile section. Apply dated updates to `PROFILE.md`, preserve the old claim when drift matters, and mark the inbox entry drained or dismissed.
 
 **Backfill.** After a short-form interview, pick the weakest one or two sections and run just those acts from [interview.md](interview.md) — same mechanics, 10–15 minutes.
 
@@ -29,4 +31,4 @@ Suggest a profile review (not necessarily a full interview) when:
 
 ## Output
 
-Updated `goodwork/PROFILE.md`, a one-paragraph changelog at the bottom of the file (dated), and — if confidence in a load-bearing section dropped — a proposed cheapest test to re-evidence it.
+Updated `goodwork/PROFILE.md`, drained evidence inbox entries in `evidence-inbox.json`, a one-paragraph dated changelog, and — if confidence in a load-bearing section dropped — a proposed cheapest test to re-evidence it.

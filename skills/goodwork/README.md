@@ -1,6 +1,6 @@
 # Good Work
 
-A complete career ops skill: interview the person to define what good work means for them, then run the operation to find it — futures, prototypes, positioning, target lists, outreach, applications, pipeline, and a daily practice.
+A local career ops skill: interview the person to define what good work means for them, then operate the search from one folder for one person — setup, futures, prototypes, positioning, targets, scouting, outreach, applications, reconciliation, pipeline, approvals, and daily/weekly loops.
 
 ## Sources
 
@@ -11,3 +11,7 @@ Interview mechanics adapted from [grilling](https://github.com/mattpocock/skills
 ## Companions
 
 Document mechanics (resume compile/tailor/ATS, cover letters, LinkedIn, salary negotiation) delegate to the `eloquent` skill when available. Independent-income paths pair well with `smallbets`.
+
+## v2 Operator Notes
+
+Operational state is JSON/JSONL; narrative state stays Markdown. The agent is the sole state writer, with the local server limited to appending request events. Outbound work uses the execution ladder and hard gates in `reference/execution.md`.
