@@ -50,10 +50,11 @@
 > Read by `plan` and `prototype` when they pause for review; contract in the skill's `reference/presenting.md`. Set by `setup` — the shipped default is a singular tailnet surface; local-only and custom channels are legitimate alternates.
 
 - Surface: _<tailnet | local-only | custom>_.
-- Root URL: _<e.g. `https://<machine>.<tailnet>.ts.net`; "n/a" for local-only>_.
-- Publish a document: _<e.g. `tailscale serve --bg --set-path /<repo>/<issue>/plan <absolute path to the committed file>`>_.
+- Root URL: _<e.g. `https://<machine>.<tailnet>.ts.net/review`; "n/a" for local-only>_.
+- Document server: _<e.g. a static server rooted at `~/.triage/surface`, kept alive by the OS (LaunchAgent), proxied once via `tailscale serve --bg --set-path /review http://localhost:<port>` — the sandboxed macOS tailscale app cannot serve file paths directly>_.
+- Publish a document: _<e.g. `ln -sfn <absolute path to the committed file> ~/.triage/surface/<repo>/<issue>/<name>.html`>_.
 - Expose a live prototype: _<e.g. `tailscale serve --bg --set-path /<repo>/<issue>/proto http://localhost:<port>`>_.
-- Reap rule: _<how a worktree's path handlers are removed at teardown, e.g. `tailscale serve --set-path <path> off`>_.
+- Reap rule: _<e.g. remove the worktree's symlinks under the surface directory and `tailscale serve --set-path <path> off` for its proxies; `tailscale serve status` lists handlers for the orphan sweep>_.
 - Keep-awake for unattended runs: _<e.g. `caffeinate -dimsu` while `run` is active; or "not needed">_.
 
 ## Model staffing
