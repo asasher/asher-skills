@@ -8,7 +8,7 @@ This is the orchestrator: discover the queue, dispatch issue threads, report han
    - The loop needs the playbooks under `docs/agents/`. If they are absent, tell the user to run `triage setup` and stop.
    - Read the parallelism verdict in `docs/agents/environment.md`. If it is absent, the isolation audit hasn't run — tell the user to run `triage setup` and stop.
    - Read the Model staffing section of `docs/agents/environment.md`. Apply its succession line first: a role whose model is unreachable resolves to the successor the roster names. If the section is missing, or a role stays unfilled after succession, tell the user to re-run `triage setup` to fix the roster and stop — the fallback ladder in `reference/staffing.md` is for mid-thread surprises, not a roster known bad at dispatch.
-   - Completion criterion: every template in this skill's `templates/` has its `docs/agents/` counterpart, the parallelism verdict is known, and the staffing roster resolves in this harness — or the user has been told to run setup.
+   - Completion criterion: every `templates/*.md` in this skill has its `docs/agents/` counterpart, the parallelism verdict is known, and the staffing roster resolves in this harness — or the user has been told to run setup.
 
 2. Build the queue.
    - If the user named issue numbers or URLs, use exactly those.

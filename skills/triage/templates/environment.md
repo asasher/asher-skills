@@ -45,6 +45,17 @@
 - Supporting tools: _<e.g. agentmail for OTP/magic-link inboxes; others>_.
 - Gaps: _<surfaces the agent cannot drive or capture, and the fallback; or "none">_.
 
+## Presenting to the human
+
+> Read by `plan` and `prototype` when they pause for review; contract in the skill's `reference/presenting.md`. Set by `setup` — the shipped default is a singular tailnet surface; local-only and custom channels are legitimate alternates.
+
+- Surface: _<tailnet | local-only | custom>_.
+- Root URL: _<e.g. `https://<machine>.<tailnet>.ts.net`; "n/a" for local-only>_.
+- Publish a document: _<e.g. `tailscale serve --bg --set-path /<repo>/<issue>/plan <absolute path to the committed file>`>_.
+- Expose a live prototype: _<e.g. `tailscale serve --bg --set-path /<repo>/<issue>/proto http://localhost:<port>`>_.
+- Reap rule: _<how a worktree's path handlers are removed at teardown, e.g. `tailscale serve --set-path <path> off`>_.
+- Keep-awake for unattended runs: _<e.g. `caffeinate -dimsu` while `run` is active; or "not needed">_.
+
 ## Model staffing
 
 > Read by `run` at dispatch and by every reference that spawns work. The skill defines the roles (`reference/staffing.md`: orchestrator, builder by surface, checker, floor); this section maps them to models **per harness** — list only models each harness can actually reach, since one harness usually cannot spawn another vendor's models. One model may fill several roles.
