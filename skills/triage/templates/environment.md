@@ -55,7 +55,7 @@
 - Publish a document: _<e.g. `ln -sfn <absolute path to the committed file> ~/.triage/surface/<repo>/<issue>/<name>.html`>_.
 - Expose a live prototype: _<e.g. `tailscale serve --bg --set-path /<repo>/<issue>/proto http://localhost:<port>`>_.
 - Reap rule: _<e.g. remove the worktree's symlinks under the surface directory and `tailscale serve --set-path <path> off` for its proxies; `tailscale serve status` lists handlers for the orphan sweep>_.
-- Keep-awake for unattended runs: _<e.g. `caffeinate -dimsu` while `run` is active; or "not needed">_.
+- Keep-awake: _<usually unneeded while a harness is active (e.g. Claude Code holds rolling caffeinate assertions; the Codex app a continuous one). Name the fallback for a long review pause with no harness active — keep the app open, stay plugged in with display-off sleep disabled, or `caffeinate` — and note that a closed lid on battery sleeps regardless.>_.
 
 ## Model staffing
 
