@@ -39,6 +39,6 @@ This is the orchestrator: discover the queue, claim it, dispatch issue threads, 
 
 6. Report the handoff table.
    - One row per issue: id, title, reference, thread or pending worktree id, blocker if any.
-   - Stay available as the serialized tracker writer while threads run when the binding needs one: an issue thread's abort (`needs-info`, blocker) is written to the tracker here — clear `in-flight`, apply the reported role and comment. On bindings where threads write the tracker directly (GitHub), this is only bookkeeping.
-   - Stop after handoff unless the user explicitly asks this thread to monitor the issue threads.
-   - Completion criterion: every claimed issue appears in the table with a terminal handoff state.
+   - On bindings where threads write the tracker directly (GitHub), stop after handoff unless the user explicitly asks this thread to monitor; abort reports arriving later are only bookkeeping.
+   - On bindings that need a serialized main writer (local), staying available *is* the handoff: this thread remains the sole tracker writer until every issue thread reaches a terminal state, applying each abort as it is reported — clear `in-flight`, set the reported role (`needs-info` for missing information, `ready-for-human` for verify caps and blockers per `backlog-policy.md`), and commit the comment on main.
+   - Completion criterion: every claimed issue appears in the table, and every abort reported so far is written to the tracker; on the local binding this thread stays available as writer while threads still fly.

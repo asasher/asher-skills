@@ -35,15 +35,15 @@ The contract is binding-independent: the deliverable is a **ready-to-paste block
 - Never `raw.githubusercontent.com`, never `/raw/<sha>/`, never a plain non-embedded link.
 - SHA reachability is the one failure mode: a rebase or force-push orphans the pinned commit and GitHub 404s the blob. Pin to the branch-head SHA at capture time and re-pin after any history rewrite. A broken embed is almost always an orphaned SHA — re-pin it (or use a branch-name ref `.../blob/<branch>/...?raw=1`, which follows head); do not "fix" it by switching to plain links.
 - **Verify mechanically, not by eye** — the agent often cannot view the rendered page (`gh` returns raw markdown, not the render). Before handing the block back, check each artifact: image syntax with a `blob/<commit-sha>/…?raw=1` URL; the SHA is on the remote (`gh api repos/<owner>/<repo>/commits/<sha>` — 404 means unpushed or orphaned); the file exists at that path in that commit (`git cat-file -e <sha>:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4. These checks catch every known failure mode without a browser.
-- When `environment.md` names a browser driver that can reach GitHub, additionally eyeball the rendered PR body after posting — but never substitute the eyeball for the mechanical checks.
+- When `environment.md` names a browser driver that can reach GitHub, the invoking thread additionally eyeballs the rendered PR body after it swaps the block in — this step posts nothing, and the eyeball never substitutes for the mechanical checks.
 
 ### Local binding
 
 The review file (`platform.md` § Change review) lives on the same branch as the artifacts, so embeds are **repo-relative paths** — `![<criterion>](../../evidence/<slug>/<file>.png)` relative to the review file — which render in any markdown viewer and on the presentation surface alike, with no SHA pinning and no proxy pitfalls.
 
 - Mechanical checks before handing the block back: each path resolves from the review file's location at the branch's HEAD (`git cat-file -e HEAD:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4.
-- When the human reviews away from the machine, the evidence step may additionally publish the rendered review file to the presentation surface (`environment.md` § Presenting) — the committed file stays the source of truth, served in place per `reference/presenting.md`.
+- When the human reviews away from the machine, the evidence step may additionally publish the rendered review file to the presentation surface (`environment.md` § Presenting) — the committed file stays the source of truth, served in place per `reference/presenting.md`. Publishing must preserve relative-path resolution: expose the review file *with* its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
 
 ### Other bindings
 
-Recorded by `backlog setup` when the review surface is neither of the above: the embed form that renders inline there, its known failure modes, and a mechanical check per artifact — verified during setup's smoke test, per `platform.md` § Custom bindings.
+Recorded by `backlog setup` when the review surface is neither of the above: the embed form that renders inline there, its known failure modes, and a mechanical check per artifact — verified at setup, per `platform.md` § Custom bindings.

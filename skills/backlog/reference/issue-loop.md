@@ -41,7 +41,7 @@ Tracker write discipline: on the local binding, this thread writes only its own 
 
 7. Capture evidence → follow `reference/evidence.md`.
    - Runs once, after the review loop ends, against the branch's final HEAD; `reference/evidence.md` carries the timing rationale. Skip if the playbook requires no evidence beyond green checks. Delegate the capture to the **checker** role per `reference/staffing.md`.
-   - Commits after the Reviewer's `LGTM` may touch only `evidence/` and, on the local binding, the review file — never product code — so the approval stays valid.
+   - Commits after the Reviewer's `LGTM` may touch only `evidence/`, the review file, and — on the local binding — the issue file's closing flip: set `state: closed` on this branch now, so the merge carries closure to main per `platform.md`'s close linkage. Never product code, so the approval stays valid.
    - Replace the PR body's evidence placeholder with the verified ready-to-paste block via the binding's edit-body verb — do not rebuild or reformat the block. If a browser driver in `environment.md` can reach the review surface, eyeball the rendered body after the edit.
    - Completion criterion: the evidence is committed and published, and the PR body carries the verified block in place of the placeholder — or none is required.
 

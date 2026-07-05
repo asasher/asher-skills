@@ -4,13 +4,13 @@ Target: the open issue backlog, or a named subset. The interactive pre-flight ph
 
 Read `docs/agents/backlog-policy.md` for this repo's label-role mapping, how it records dependencies, and the readiness-decision rule, and `docs/agents/platform.md` for the tracker binding — the verbs that read and write issues. If either is missing, report a setup gap and stop.
 
-This phase is human-in-the-loop: the agent proposes and may self-apply any role except `ready-for-agent`, which it applies only to issues the human confirms (step 5). Grooming runs in the primary checkout; on the local tracker binding its writes land on the main branch, and it never edits an issue that is `in-flight` — a change for one goes through the run thread or waits (`platform.md` § The local binding).
+This phase is human-in-the-loop: the agent proposes and may self-apply any role except `ready-for-agent`, which it applies only to issues the human confirms (step 5). Grooming runs in the primary checkout; on the local tracker binding its writes land on the main branch, and it never edits an issue that is `in-flight` — a change for one goes through the run thread or waits (`platform.md` § The local binding) — with one exception: the human-confirmed orphan reset in step 1, safe because the claim is dead.
 
 ## Steps
 
 1. Pull the backlog.
    - If issues were named, use exactly those. Otherwise take every open issue that is not already excluded, closed, or `in-flight`.
-   - Sweep for orphans while listing: an `in-flight` issue whose recorded branch no longer exists, or is quiet past the policy playbook's horizon, is surfaced to the human as a candidate reset per `backlog-policy.md` § In-flight hygiene — never reset silently.
+   - Sweep for orphans while listing: an `in-flight` issue whose recorded branch no longer exists, or is quiet past the policy playbook's horizon, is surfaced to the human as a candidate reset per `backlog-policy.md` § In-flight hygiene — never reset silently. A reset the human confirms is applied here as a grooming write (on main, on the local binding) — the dead claim cannot race it.
    - Completion criterion: a working set of open issues, each fetched with title, body, comments, and labels, and any in-flight orphans surfaced.
 
 2. Propose a work-type per issue.

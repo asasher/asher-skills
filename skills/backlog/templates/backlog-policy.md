@@ -9,10 +9,12 @@ Two independent axes, plus exclusions. Readiness decides *whether and who* picks
 **Readiness / ownership** — map each to this repo's label:
 
 - `ready-for-agent` — groomed and released: the agent may work it. Requires a work-type. Default label `ready-for-agent` — _<your label>_.
-- `in-flight` — dispatched: an issue thread owns it, so `run` never selects it. Set by `run` at dispatch, replacing `ready-for-agent`; records what's flying (branch name and dispatch date — local: frontmatter; GitHub: a comment alongside the label). Cleared by the run thread on abort, or superseded by closure when the change merges. Default `in-flight` — _<your label>_.
-- `ready-for-human` — only a human; the agent skips it entirely. Default `ready-for-human` — _<your label>_.
+- `in-flight` — dispatched: an issue thread owns it, so `run` never selects it. Set by `run` at dispatch, replacing `ready-for-agent`; records what's flying (branch name and dispatch date — local: frontmatter; GitHub: a comment alongside the label). Cleared by the run thread on abort, superseded by closure when the change merges, or reset by `groom`'s human-confirmed orphan sweep (§ In-flight hygiene). Default `in-flight` — _<your label>_.
+- `ready-for-human` — only a human; the agent skips it entirely. Also the abort target for verify caps and environment blockers: the agent hands the issue back with the blocker commented, since a human must look before it can be re-released. Default `ready-for-human` — _<your label>_.
 - `needs-info` — parked, waiting on the reporter. Default `needs-info` — _<your label>_.
 - *(no readiness label)* — not yet groomed; a target for `backlog groom`, not for `run`.
+
+Two further lifecycle values appear only where the tracker has no native equivalent (the local binding's `state:` field), written by the loop, never by grooming: `in-review` (a PR is open for it — set on the work branch at PR-open) and `closed` (set on the work branch once review converges; the merge carries it to main). On trackers with native state (GitHub), an open PR and native closure express these.
 
 **Work-type** — required for `ready-for-agent`; decides the branch:
 
