@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Constraint: {{SYSTEM}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!--
+  ============================================================
+  A CONSTRAINT INVESTIGATION - one self-contained page = the
+  whole state. The agent edits the marked regions directly;
+  there is no separate state file. Each <section> carries
+  data-status ("empty" | "active" | "done"); on resume, read
+  these plus the dashboard to see where the work stands.
+  Edit only between the  <!== FILL: name ==>  markers.
+  Diagrams: write Mermaid inside a <pre class="mermaid">.
+
+  Shared diagram classDefs - copy into any new diagram:
+    classDef constraint fill:#f6d3c4,stroke:#b0491f,stroke-width:2.5px,color:#7a2e12
+    classDef queue fill:#fdf0d4,stroke:#b07d1a,color:#7a5510
+    classDef ude fill:#fdeaea,stroke:#b04a4a,color:#7a2323
+    classDef core fill:#f6d3c4,stroke:#b0491f,stroke-width:2.5px,color:#7a2e12
+    classDef and fill:#eceae3,stroke:#8a847a,color:#4d4842
+    classDef obj fill:#e3efe9,stroke:#2f7d72,color:#1d4f48
+    classDef want fill:#fdf0d4,stroke:#b07d1a,color:#7a5510
+    classDef inj fill:#e3efe9,stroke:#2f7d72,stroke-width:2.5px,color:#1d4f48
+  ============================================================
+-->
+<style>
+  :root{
+    --ink:#22201d; --ink-soft:#4d4842; --paper:#faf8f4; --bg:#eceae3;
+    --grey:#8a847a; --hair:#e2ddd2; --rule:#26221d;
+    --accent:#b0491f; --accent-2:#cf6a3c;     /* the bottleneck hue */
+    --done:#2f7d72; --active:#b07d1a; --empty:#cfcabf;
+    --card:#fffdf9;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+    font-family:"Newsreader","Georgia",serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 22px 90px}
+  .label{font-family:"Inter",sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
+
+  /* masthead */
+  header.mast{padding:44px 0 26px;border-bottom:2px solid var(--rule);margin-bottom:8px}
+  .mast .kicker{color:var(--accent)}
+  h1{font-size:38px;line-height:1.08;font-weight:600;letter-spacing:-.02em;margin:10px 0 0}
+  .meta{font-family:"Inter",sans-serif;font-size:12px;color:var(--grey);margin-top:14px;display:flex;gap:18px;flex-wrap:wrap}
+  .meta b{color:var(--ink-soft);font-weight:600}
+
+  /* dashboard */
+  .dash{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
+  .dash .tile{background:var(--card);border:1px solid var(--hair);border-radius:10px;padding:10px 16px;min-width:110px;flex:1}
+  .dash .tile b{display:block;font-family:"Inter",sans-serif;font-size:14px;font-weight:600;color:var(--ink);margin-top:3px}
+  .dash .tile.hot{border-color:var(--accent)}
+  .dash .tile.hot b{color:var(--accent)}
+
+  /* progress rail */
+  .rail{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
+  .rail a{font-family:"Inter",sans-serif;font-size:11px;font-weight:600;text-decoration:none;color:var(--grey);
+    border:1px solid var(--hair);background:var(--card);border-radius:20px;padding:5px 13px;display:flex;align-items:center;gap:7px}
+  .rail a .dot{width:8px;height:8px;border-radius:50%;background:var(--empty)}
+  .rail a[data-s="active"]{color:var(--active);border-color:var(--active)}
+  .rail a[data-s="active"] .dot{background:var(--active)}
+  .rail a[data-s="done"]{color:var(--done);border-color:var(--done)}
+  .rail a[data-s="done"] .dot{background:var(--done)}
+
+  /* sections */
+  section{background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:26px 30px;margin:16px 0;
+    box-shadow:0 1px 2px rgba(50,40,28,.04)}
+  section[data-status="empty"]{opacity:.62}
+  .sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--hair);padding-bottom:12px;margin-bottom:16px}
+  .sec-head .n{font-family:"Inter",sans-serif;font-weight:700;color:var(--accent);font-size:14px}
+  .sec-head h2{font-size:22px;font-weight:600;margin:0;letter-spacing:-.01em;flex:1}
+  .sec-head .st{font-family:"Inter",sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;color:#fff;background:var(--empty)}
+  /* arc-section chips render their text from data-status — leave those .st spans empty */
+  section[data-status="empty"] .sec-head .st:empty::after{content:"empty"}
+  section[data-status="active"] .sec-head .st{background:var(--active)}
+  section[data-status="active"] .sec-head .st:empty::after{content:"active"}
+  section[data-status="done"] .sec-head .st{background:var(--done)}
+  section[data-status="done"] .sec-head .st:empty::after{content:"done"}
+  .hint{font-family:"Inter",sans-serif;font-size:12.5px;color:var(--grey);margin:-6px 0 14px;font-style:normal}
+
+  p{margin:0 0 14px} ul,ol{margin:0 0 14px;padding-left:22px} li{margin:5px 0}
+  em{color:var(--accent);font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:15px;margin:6px 0 14px;font-family:"Inter",sans-serif}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--hair);vertical-align:top}
+  th{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);font-weight:700}
+  blockquote{margin:0 0 14px;padding:12px 18px;background:#f4f1ea;border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+  pre.mermaid{background:#f4f1ea;border:1px solid var(--hair);border-radius:8px;padding:16px;text-align:center;font-family:"Inter",sans-serif}
+  cite{font-style:normal}
+  a.cite{font-family:"Inter",sans-serif;font-size:12px;color:var(--accent);text-decoration:none;vertical-align:super;font-weight:600}
+
+  /* confidence marks */
+  .mark{font-family:"Inter",sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    padding:2px 9px;border-radius:20px;border:1px solid var(--grey);color:var(--grey);white-space:nowrap}
+  .mark[data-m="evidenced"]{border-color:var(--active);color:var(--active)}
+  .mark[data-m="validated"]{border-color:var(--done);color:var(--done)}
+
+  /* verdict block */
+  .verdict{font-size:20px;line-height:1.45;font-weight:500;padding:14px 18px;background:#faf3ef;
+    border:1.5px solid var(--accent);border-radius:10px}
+
+  /* checklist in plan */
+  ul.moves{list-style:none;padding-left:2px}
+  ul.moves li{padding-left:26px;position:relative}
+  ul.moves li::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border:1.5px solid var(--grey);border-radius:4px}
+  ul.moves li.adopted::before{background:var(--done);border-color:var(--done)}
+  ul.moves li.adopted::after{content:"✓";position:absolute;left:2.5px;top:1px;color:#fff;font-size:11px;font-weight:700;font-family:"Inter",sans-serif}
+
+  /* elevate gate */
+  .gate{border:1.5px dashed var(--grey);border-radius:10px;padding:14px 18px;margin:6px 0 14px}
+  .gate .label{display:block;margin-bottom:8px}
+
+  /* experiment cards */
+  .xp{border:1px solid var(--hair);border-left:4px solid var(--empty);border-radius:10px;padding:16px 20px;margin:0 0 14px;background:#fefcf8}
+  .xp-head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+  .xp-head h3{font-size:17px;font-weight:600;margin:0;flex:1}
+  .xp-id{font-family:"Inter",sans-serif;font-size:11px;font-weight:700;color:var(--grey)}
+  .xp .st{font-family:"Inter",sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;color:#fff;background:var(--empty)}
+  .xp .st::after{content:"planned"}
+  .xp[data-state="running"]{border-left-color:var(--active)}
+  .xp[data-state="running"] .st{background:var(--active)} .xp[data-state="running"] .st::after{content:"running"}
+  .xp[data-state="adopted"]{border-left-color:var(--done)}
+  .xp[data-state="adopted"] .st{background:var(--done)} .xp[data-state="adopted"] .st::after{content:"adopted"}
+  .xp[data-state="abandoned"]{border-left-color:#b04a4a;opacity:.75}
+  .xp[data-state="abandoned"] .st{background:#b04a4a} .xp[data-state="abandoned"] .st::after{content:"abandoned"}
+  .xp .hyp{font-size:16px}
+  dl.xp-meta{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:4px 12px;font-family:"Inter",sans-serif;font-size:13.5px;margin:8px 0 0}
+  dl.xp-meta dt{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);font-weight:700;align-self:baseline}
+  dl.xp-meta dd{margin:0}
+
+  /* cycle history */
+  .cycle{border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:0 0 18px}
+  .cycle .when{font-family:"Inter",sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+
+  /* log + refs */
+  .log-entry{border-left:2px solid var(--hair);padding:2px 0 2px 16px;margin:0 0 16px}
+  .log-entry .when{font-family:"Inter",sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--grey)}
+  ol.refs{font-family:"Inter",sans-serif;font-size:14px} ol.refs li{margin:8px 0}
+  ol.refs a{color:var(--accent)}
+
+  @media print{body{background:#fff}section{box-shadow:none;break-inside:avoid}.rail{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="label kicker">A Constraint Investigation</div>
+    <!-- FILL: system — the system under study, as the user names it -->
+    <h1 id="system">{{SYSTEM}}</h1>
+    <!-- /FILL: system -->
+    <div class="meta">
+      <span>Started <b>{{DATE}}</b></span>
+      <span>Updated <b id="updated">{{DATE}}</b></span>
+    </div>
+    <!-- FILL: dash — keep every tile true after each session -->
+    <div class="dash">
+      <div class="tile hot"><span class="label">Current constraint</span><b id="d-constraint">hunting…</b></div>
+      <div class="tile"><span class="label">Type</span><b id="d-type">—</b></div>
+      <div class="tile"><span class="label">Confidence</span><b id="d-conf">—</b></div>
+      <div class="tile"><span class="label">Cycle</span><b id="d-cycle">1</b></div>
+      <div class="tile"><span class="label">Next review</span><b id="d-review">—</b></div>
+    </div>
+    <!-- /FILL: dash -->
+    <nav class="rail">
+      <a href="#goal"        data-s="empty"><span class="dot"></span>1 · Goal</a>
+      <a href="#map"         data-s="empty"><span class="dot"></span>2 · Map</a>
+      <a href="#find"        data-s="empty"><span class="dot"></span>3 · Find</a>
+      <a href="#plan"        data-s="empty"><span class="dot"></span>4 · Plan</a>
+      <a href="#experiments" data-s="empty"><span class="dot"></span>5 · Experiments</a>
+      <a href="#loop"        data-s="empty"><span class="dot"></span>6 · Loop</a>
+    </nav>
+  </header>
+
+  <!-- 1 ─────────────────────────────────────────────── -->
+  <section id="goal" data-status="empty">
+    <div class="sec-head"><span class="n">1</span><h2>The goal</h2><span class="st"></span></div>
+    <p class="hint">The system and its boundary, the goal in the user's words, the <em>throughput unit</em> in bold —
+    the countable thing that means the system got better — and the necessary conditions no experiment may break.
+    Without a goal there is no constraint.</p>
+    <!-- FILL: goal -->
+    <p></p>
+    <!-- /FILL: goal -->
+  </section>
+
+  <!-- 2 ─────────────────────────────────────────────── -->
+  <section id="map" data-status="empty">
+    <div class="sec-head"><span class="n">2</span><h2>The flow</h2><span class="st"></span></div>
+    <p class="hint">How a unit of value actually travels from demand to done — waits are stages too. Queue counts and
+    wait times live on the nodes; the constraint node turns red when Find names it. Below the map, the scan table:
+    what the queue / scarcity / policy scans surfaced, each with its observable.</p>
+    <!-- FILL: map -->
+    <pre class="mermaid">
+flowchart LR
+  classDef constraint fill:#f6d3c4,stroke:#b0491f,stroke-width:2.5px,color:#7a2e12
+  classDef queue fill:#fdf0d4,stroke:#b07d1a,color:#7a5510
+  demand[Demand] --> s1[Stage] --> done[Goal met]
+</pre>
+    <table><thead><tr><th>Scan</th><th>Finding</th><th>Observable behind it</th></tr></thead>
+    <tbody></tbody></table>
+    <!-- /FILL: map -->
+  </section>
+
+  <!-- 3 ─────────────────────────────────────────────── -->
+  <section id="find" data-status="empty">
+    <div class="sec-head"><span class="n">3</span><h2>The hunt</h2><span class="st"></span></div>
+    <p class="hint">Doubling tests first (capacity ×2? demand ×2?), then the suspects board — evidence against counts
+    as much as evidence for. Trees from <em>dig</em> land here. Ends in the verdict: one constraint, typed and
+    confidence-marked. Suspects are never people; they are dependencies.</p>
+    <!-- FILL: find -->
+    <table><thead><tr><th>Suspect</th><th>Type</th><th>Evidence for</th><th>Evidence against</th><th>Mark</th></tr></thead>
+    <tbody></tbody></table>
+    <p class="verdict" hidden></p>
+    <!-- /FILL: find -->
+  </section>
+
+  <!-- 4 ─────────────────────────────────────────────── -->
+  <section id="plan" data-status="empty">
+    <div class="sec-head"><span class="n">4</span><h2>Exploit &amp; subordinate</h2><span class="st"></span></div>
+    <p class="hint">Squeeze the constraint without spending (moves check off as they become standing practice), then the
+    subordination rules that make the rest of the system serve it. Clouds from <em>cloud</em> land here. Elevation
+    waits in the gate until the free moves are exhausted.</p>
+    <!-- FILL: plan -->
+    <p><span class="label">Exploit moves</span></p>
+    <ul class="moves"></ul>
+    <p><span class="label">Subordination rules</span></p>
+    <ul></ul>
+    <div class="gate">
+      <span class="label">Elevate — gated until exploit + subordinate have run and the constraint still binds</span>
+      <table><thead><tr><th>Option</th><th>Cost class</th><th>ΔT vs ΔI + ΔOE</th></tr></thead><tbody></tbody></table>
+    </div>
+    <!-- /FILL: plan -->
+  </section>
+
+  <!-- 5 ─────────────────────────────────────────────── -->
+  <section id="experiments" data-status="empty">
+    <div class="sec-head"><span class="n">5</span><h2>Experiments</h2><span class="st"></span></div>
+    <p class="hint">Every intervention is a falsifiable card: one change, a baseline, a numeric prediction with a date, a
+    guardrail, a pre-committed decision rule. Cards are never deleted — an abandoned card is evidence about where the
+    constraint isn't.</p>
+    <!-- FILL: experiments -->
+    <!-- /FILL: experiments -->
+  </section>
+
+  <!-- 6 ─────────────────────────────────────────────── -->
+  <section id="loop" data-status="empty">
+    <div class="sec-head"><span class="n">6</span><h2>The loop</h2><span class="st"></span></div>
+    <p class="hint">Constraints break, then move — one entry per closed cycle, newest first: what the constraint was,
+    what broke it, what throughput did, where it went, and which now-obsolete rules were retired (the inertia sweep).
+    Rules built for yesterday's constraint are today's first suspects.</p>
+    <!-- FILL: loop — prepend newest cycle at the top -->
+    <!-- /FILL: loop -->
+  </section>
+
+  <!-- SESSION LOG ────────────────────────────────────── -->
+  <section id="log" data-status="active">
+    <div class="sec-head"><span class="n">·</span><h2>Session log</h2><span class="st">running</span></div>
+    <p class="hint">One dated entry per working session: what moved, what the user reported or decided, the pick-up
+    point for next time.</p>
+    <!-- FILL: log — prepend newest entry at the top -->
+    <div class="log-entry"><div class="when">{{DATE}}</div><p>Started. System named; opening the goal conversation.</p></div>
+    <!-- /FILL: log -->
+  </section>
+
+  <!-- REFERENCES ─────────────────────────────────────── -->
+  <section id="refs" data-status="active">
+    <div class="sec-head"><span class="n">·</span><h2>Evidence &amp; references</h2><span class="st">sources</span></div>
+    <p class="hint">Evidence that can't live inline — exports, screenshots, queue snapshots — sits in <code>sources/</code>;
+    cite it in the sections above as <a class="cite">[n]</a>.</p>
+    <!-- FILL: refs -->
+    <ol class="refs"></ol>
+    <!-- /FILL: refs -->
+  </section>
+
+</div>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({startOnLoad:true, theme:"neutral", themeVariables:{fontFamily:"Inter, sans-serif", primaryColor:"#faf3ef", primaryBorderColor:"#cf6a3c", lineColor:"#8a847a"}});
+</script>
+</body>
+</html>
