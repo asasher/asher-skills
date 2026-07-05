@@ -9,4 +9,4 @@ Interactive review — a plan awaiting approval, a prototype awaiting driving �
 - **Publish, don't fork.** A presented document is the committed file, served in place — never a diverging copy.
 - **Reap with the worktree.** A worktree's path handlers are removed at its teardown, alongside its stack; an orphaned handler on a tailnet surface is clutter, not exposure — the setup health check also sweeps them.
 - **Local fallback.** When no surface is recorded, or the section says local-only, open the rendered file or running app on the machine and say remote review is unavailable — never improvise a public tunnel.
-- **The surface is only as awake as the machine.** For an unattended run meant to be reviewed remotely, keep the machine awake for the run's duration per the environment playbook's keep-awake rule.
+- **The surface is only as awake as the machine.** That is the accepted default — harnesses hold sleep assertions while runs are active, and an awake machine serves. Whether to keep it awake beyond that (long pauses, lid-closed on battery) is the user's setup-time choice, recorded as the environment playbook's keep-awake line.

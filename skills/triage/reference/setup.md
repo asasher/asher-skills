@@ -50,7 +50,8 @@ Prepares a repo for the loop — and reconciles a repo an earlier version alread
 
 7. Set the presentation surface.
    - Present the shipped default from `reference/presenting.md` — a singular tailnet surface (`tailscale serve`): one stable URL root private to the user's devices, documents as static paths, live prototypes as port proxies, Funnel off. Ask whether the user wants the default, local-only, or something else — and design the alternative with them if so.
-   - For the tailnet default: confirm `tailscale` is installed and logged in, capture the machine's URL root, record the publish / expose / reap commands verified against the installed version, and agree the keep-awake rule for unattended runs.
+   - For the tailnet default: confirm `tailscale` is installed and logged in, capture the machine's URL root, and record the publish / expose / reap commands verified against the installed version.
+   - Ask whether the machine should stay awake for review pauses the harness isn't covering — including lid-closed on battery, which needs more than `caffeinate` — or whether "the surface is up when the machine is" is fine. Record the choice as the keep-awake line; no keep-awake machinery is part of the default path.
    - Completion criterion: the Presenting section of `environment.md` records a working surface or an explicit local-only choice.
 
 8. Write the contracts into the playbooks.
