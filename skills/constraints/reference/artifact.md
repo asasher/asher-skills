@@ -52,8 +52,8 @@ isn't saved.
 - **plan** — exploit moves as a checked/unchecked task list (unchecked = not yet running), subordination rules
   as policy sentences ("release no new X until…"), any `cloud` diagrams, and the elevate options table — each
   option with its ΔT vs ΔI+ΔOE test — visually gated behind the exploit list.
-- **experiments** — one `.xp` card per experiment (markup below). Cards are never deleted; a dead one gets
-  `data-state="abandoned"` and a one-line epitaph.
+- **experiments** — one `.xp` card per experiment (markup below), newest first. Cards are never deleted; a
+  dead one gets `data-state="abandoned"` and a one-line epitaph.
 - **loop** — one `.cycle` entry per completed cycle, newest on top: the constraint that was, what broke it,
   what the system metric did, where the constraint moved, and the **inertia sweep** — which rules/buffers/
   metrics built for that constraint were retired (unretired ones are next cycle's first suspects).
