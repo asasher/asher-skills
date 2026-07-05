@@ -1,0 +1,9 @@
+M1. **watch-video** — The user shares a `.mov` of a bug and asks to find where the flow goes wrong on screen.
+
+M2. **none** — This is video compression for emailing, not understanding video content.
+
+M3. **none** — It is an audio-only `mp3`; no listed skill covers podcast/audio summarization.
+
+M4. **watch-video** — Screen recording plus “what I clicked right before” requires inspecting video content.
+
+M5. **learn-anything** — The user wants to learn video editing as a skill, not analyze a provided video.

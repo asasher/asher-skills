@@ -1,0 +1,44 @@
+1. **P1**
+Run segmented index sheets:
+```sh
+skills/watch-video/scripts/framesheet.py session.mp4 session-index-0000s-1200s.png --start 0 --duration 1200 --frames 80
+skills/watch-video/scripts/framesheet.py session.mp4 session-index-1200s-2400s.png --start 1200 --duration 1200 --frames 80
+skills/watch-video/scripts/framesheet.py session.mp4 session-index-2400s-2820s.png --start 2400 --duration 420 --frames 80
+```
+Cite: `skills/watch-video/SKILL.md`: “Past ~25 minutes, build one 80-frame sheet per ~20-minute segment so no tile stands in for more than ~20s.”
+
+2. **P2**
+No, do not answer from the tile. Loupe the text frame:
+```sh
+ffmpeg -ss 351 -i VIDEO -frames:v 1 error-toast-0551.png
+```
+Cite: `skills/watch-video/SKILL.md`: “Mandatory before asserting on-screen text, counts, identity, or anything small — at tile resolution those are hypotheses, not answers.”
+
+3. **P3**
+No. Answer from the index sheet if it fully answers the summary request; no window sheets are required.
+Cite: `skills/watch-video/SKILL.md`: “Stop at the shallowest pass that answers the question; most questions die at 1 or 2.”
+
+4. **P4**
+This is an audio/speech question. The skill does not provide a concrete transcription command; I would flag that sheets are silent and use a transcription tool only if one exists.
+Cite: `skills/watch-video/SKILL.md`: “If the question hinges on speech or sound, flag it now — sheets are silent; transcribe the audio track separately if a tool exists, and say plainly when the answer omits audio.”
+
+5. **P5**
+Run scene-cut detection, then window around returned cut times:
+```sh
+ffmpeg -i clip.mp4 -vf "select='gt(scene,0.3)',showinfo" -f null - 2>&1 | grep pts_time
+```
+Cite: `skills/watch-video/SKILL.md`: “Hunting a beat the index didn't surface: `ffmpeg -i VIDEO -vf "select='gt(scene,0.3)',showinfo" -f null - 2>&1 | grep pts_time` lists scene cuts; window around them.”
+
+6. **P6**
+Yes. Cite by burned-in timestamp, not grid position.
+Cite: `skills/watch-video/SKILL.md`: “Grid order — cite tiles by their burned-in timestamp, never by grid position; position guesses transpose.”
+
+7. **P7**
+For YouTube with `yt-dlp` not installed, the skill does not license a fallback download procedure. I would say the gap plainly and ask for a local file or for `yt-dlp` to be installed/enabled.
+Cite: `skills/watch-video/SKILL.md`: “A URL gets downloaded first (`curl -L`; `yt-dlp` for streaming sites, if installed).”
+
+8. **P8**
+```sh
+skills/watch-video/scripts/framesheet.py clip.mp4 clip-0400-0445-window.png --start 240 --duration 45 --frames 18
+```
+Cite: `skills/watch-video/SKILL.md`: “A tile every 2–3 seconds at window tile sizes reads as a causal chain — expressions, motion blur, cause and effect.”
