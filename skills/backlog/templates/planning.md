@@ -14,8 +14,11 @@ _Adjust these triggers to this team._
 
 ## Format and location
 
-- Plans are **HTML documents** committed to the repo: `plans/<issue-number>-<slug>.html` (or this repo's convention: _<add yours>_). HTML is the surface for both sides: Mermaid diagrams, syntax-highlighted code, embedded prototype screenshots — whatever makes the plan easiest for a human to review — and the implementing agents read the same file from disk.
-- Keep the file self-contained (inline styles/scripts, no external fetches) so it renders anywhere, including a plain browser open.
+- Plans are **HTML documents** committed to the repo: `plans/<issue-number>-<slug>.html` (or this repo's convention: _<add yours>_). HTML is the surface for both sides: diagrams, syntax-highlighted code, embedded prototype screenshots — whatever makes the plan easiest for a human to review — and the implementing agents read the same file from disk. Start from the skill's `templates/plan-skeleton.html`.
+- **Visual first, minimalist.** Every screen of prose costs approval attention: lead each section with the diagram or table that carries it — a state machine, a sequence, a before/after data shape — one sentence of prose beneath, secondary detail folded into `<details>`. If a diagram can carry it, a diagram does.
+- **Diagrams are inline SVG**, pre-rendered at write time (e.g. `mmdc` for Mermaid sources, or hand-drawn) — never ship a rendering library in the plan. Color by meaning, not decoration.
+- **Stable anchors.** Every section and every individually-reviewable item — each acceptance criterion, each implementation decision — carries a stable `id` that never changes across revisions. Acceptance criteria are `<li id="ac-N" data-criterion>` rows. The review loop's annotations anchor to these ids, and verify/evidence key on the criterion ids downstream.
+- Keep the file self-contained (inline styles, inline SVG, no external fetches) so it renders anywhere, including a plain browser open.
 
 ## What a plan covers
 
@@ -40,7 +43,9 @@ _Adjust these triggers to this team._
 
 ## Review, approval, and commit
 
-- Open the rendered HTML for the human — a browser, the harness's preview, whatever the environment offers. Who approves and how: _<add yours>_.
-- If approval changes scope, update the plan before coding.
+- Present the plan through the review loop (`reference/presenting.md` § Review loop): serve it with the skill's review server, end the pause message with the plan URL and the hub URL, and block on the await script. Who approves: _<add yours; default: the human driving the session>_.
+- On **request changes**: revise the plan and write a ledger disposition for every annotation — `changed` (what changed), `kept` (why), or `orphaned` — before re-awaiting. Never revise without the ledger.
+- Approval is the **approve event** — hash-bound to the version the human saw. If approval changes scope, update the plan before coding.
+- Local fallback: when no surface is recorded, open the rendered HTML for the human directly and take the verdict in conversation.
 - Once approved, **commit the plan to the work branch before implementation is dispatched** — implementing agents must find it on disk.
 - Posterity: after approval, comment a compact markdown digest of the plan on the issue — headings, the acceptance criteria, and Mermaid blocks where the tracker renders them (GitHub does; a local issue file holds them as source) — plus a repo link to the committed HTML. Any screenshots in the digest follow the presentation contract in `evidence.md`. On the local binding this digest is a PR-bound lifecycle write: it rides the work branch per `platform.md`. _Adjust or drop this write if this team doesn't want plans mirrored to the tracker._

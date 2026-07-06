@@ -53,6 +53,8 @@
 - Root URL: _<e.g. `https://<machine>.<tailnet>.ts.net/review`; "n/a" for local-only>_.
 - Document server: _<e.g. a static server rooted at `~/.backlog/surface`, kept alive by the OS (LaunchAgent), proxied once via `tailscale serve --bg --set-path /review http://localhost:<port>` — the sandboxed macOS tailscale app cannot serve file paths directly>_.
 - Publish a document: _<e.g. `ln -sfn <absolute path to the committed file> ~/.backlog/surface/<repo>/<issue>/<name>.html`>_.
+- Review server (interactive review — plans, prototype answer sheets; contract: the skill's `reference/presenting.md` § Review loop): _<e.g. `python3 <skill>/scripts/review-server.py --doc <file> --title "…" --issue <n> --surface ~/.backlog/surface/<repo> --public-url <root URL>/<repo>/<issue>/review`, port proxied like a live prototype; the agent blocks on `scripts/review-await.py --state <state dir>`>_.
+- Hub: _<the surface root serves the generated `index.html` beside `registry.json` — e.g. `<root URL>/<repo>/`; swept by `review-server.py --sweep --surface <dir>`>_.
 - Expose a live prototype: _<e.g. `tailscale serve --bg --set-path /<repo>/<issue>/proto http://localhost:<port>`>_.
 - Reap rule: _<e.g. remove the worktree's symlinks under the surface directory and `tailscale serve --set-path <path> off` for its proxies; `tailscale serve status` lists handlers for the orphan sweep>_.
 - Keep-awake: _<the user's setup choice. Default: none — the surface is up when the machine is awake (harnesses hold sleep assertions during active runs). If the user wants planned AFK reviews to survive long pauses or lid-closed on battery, record their chosen mechanism here.>_.

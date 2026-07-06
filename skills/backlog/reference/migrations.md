@@ -2,6 +2,15 @@
 
 Read by `setup` when a playbook's version stamp — the `<!-- backlog-templates: ... -->` comment on line 1 (or its retired `<!-- triage-templates: ... -->` form) — predates the current `templates/VERSION`, or is absent. Each entry says what changed and how to reconcile it without losing repo values. An entry retires once no live deployment can predate it.
 
+## v2026-07-05.1 → v2026-07-06
+
+The interactive review loop shipped (`reference/presenting.md` § Review loop and § Hub; assets under the skill's `scripts/`). Apply all of:
+
+- **planning.md format section** — gains the visual-first rules (diagram-first sections, pre-rendered inline SVG, `templates/plan-skeleton.html` as the starting point) and the stable-anchor conventions (section ids, `<li id="ac-N" data-criterion>` criteria). Keep the repo's plan directory and naming.
+- **planning.md review section** — "open the rendered HTML" becomes the review-loop presentation: serve via `scripts/review-server.py`, both links in the pause message, ledger dispositions on every revision, approval as the hash-bound approve event. Keep the repo's approver line; the local fallback remains for repos without a surface.
+- **environment.md Presenting section** — gains the "Review server" and "Hub" lines; setup step 7 fills them (surface directory, public-URL proxying, sweep command).
+- **Stamp** — add the current version stamp to every playbook this pass touches or confirms current.
+
 ## v2026-07-05 → v2026-07-05.1
 
 The skill was renamed `triage` → `backlog` and made platform-agnostic. Apply all of:
