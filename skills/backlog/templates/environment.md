@@ -40,9 +40,10 @@
 > Set by `setup`'s app-access audit; read by `verify` (to exercise the app) and `evidence` (to capture proof). One entry per surface the loop verifies.
 
 - Form factor(s): _<CLI | web | mobile | desktop — list every surface issues touch>_.
-- Driver per surface: _<e.g. shell + the CLI entrypoint; agent-browser / Playwright MCP for the web app; iOS simulator + driver for mobile; computer-use tooling for desktop>_.
+- Driver per surface: _<defaults: shell + the CLI entrypoint; agent-browser for the web app; a simulator + driver for mobile; computer-use tooling for desktop. Adjust to this repo>_.
+- Independent runtime verification: _<default: delegate to `codex exec` with a self-contained prompt when a check needs real UI interaction, screenshots, simulator state, or a second opinion outside the orchestrator's context (mechanics in `AGENTS.md` § Picking models); "n/a" when codex is unreachable>_.
 - Evidence capture per surface: _<e.g. driver screenshots for static states; screen recording → GIF for flows; terminal transcripts for CLI>_.
-- Supporting tools: _<e.g. agentmail for OTP/magic-link inboxes; others>_.
+- Supporting tools: _<default: agentmail for OTP/magic-link inboxes; add yours>_.
 - Gaps: _<surfaces the agent cannot drive or capture, and the fallback; or "none">_.
 
 ## Presenting to the human
@@ -61,14 +62,14 @@
 
 ## Model staffing
 
-> Read by `run` at dispatch and by every reference that spawns work. The skill defines the roles (`reference/staffing.md`: orchestrator, builder by surface, checker, floor); this section maps them to models **per harness** — list only models each harness can actually reach, since one harness usually cannot spawn another vendor's models. One model may fill several roles.
+> Read by `run` at dispatch and by every reference that spawns work. The skill defines the roles (`reference/staffing.md`: orchestrator, builder by surface, checker, floor); the general rankings and routing rules live in this repo's `AGENTS.md` § Picking models, installed by `setup`. This section is the **compiled roster** — those rules crossed with this repo's surfaces and what each harness can actually reach; list only reachable models, since one harness usually cannot spawn another vendor's models. One model may fill several roles.
 
 - Floor: _<minimum capability class; nothing staffs below it in any role>_.
 - From _<harness, e.g. Claude Code>_:
-  - Orchestrator: _<model, usually the session model>_.
-  - Builder (backend): _<model + how to spawn it, e.g. an external CLI + effort>_.
-  - Builder (ui): _<model + how to spawn it, e.g. subagent model override>_.
-  - Checker: _<model per surface; the Reviewer must handle the full review criteria, frontend included>_.
+  - Orchestrator: _<default: the session model>_.
+  - Builder (backend): _<default: gpt-5.5 via `codex exec` + how to spawn it>_.
+  - Builder (ui): _<default: a Claude model clearing taste ≥ 7, via subagent model override>_.
+  - Checker: _<default: mechanical verify⇆fix and evidence capture on gpt-5.5 via `codex exec`; review judgment on a Claude model. The Reviewer must handle the full review criteria, frontend included>_.
 - From _<other harness, e.g. Codex>_: _<mapping; when no other tier is reachable above the floor, every role collapses onto the session model — still delegated into separate threads>_.
 - Succession: _<who steps up to orchestrate when the orchestrator's model is unreachable, and which roles they keep>_.
 

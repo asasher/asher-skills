@@ -2,6 +2,8 @@
 
 The skill defines roles by **workflow stage** and, within build-out, by **work surface**; the Model staffing section of `docs/agents/environment.md` (written by `backlog setup`) records which model fills each role, because the roster depends on the harness the loop runs in — a harness that cannot reach another vendor's models fills every role from its own lineup. One model may fill several roles: separation is by thread, not by model — delegating into separate threads is what keeps the orchestrator's context coordinative.
 
+The roster is compiled, not invented. The rankings and routing rules it derives from live in the repo's `AGENTS.md` § Picking models — installed by `setup` from this skill's `templates/sections/`, with harness-specific mechanics overlaid in the harness's own memory file (e.g. `CLAUDE.md` for Claude Code) — so the same rules serve workflows and ad-hoc sessions, not just this loop. Mid-thread staffing questions resolve against the roster; the rules are for setup-time compilation and for judging escalations — judge the output, not the price tag.
+
 ## Roles
 
 - **Orchestrator** — the most capable model reachable. Owns judgment, not production: groom, `run` dispatch, orient, plan, prototype decisions, hard diagnosis, and every escalation. Do not spend it on routine build-out.

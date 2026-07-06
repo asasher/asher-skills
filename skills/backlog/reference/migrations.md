@@ -2,6 +2,15 @@
 
 Read by `setup` when a playbook's version stamp — the `<!-- backlog-templates: ... -->` comment on line 1 (or its retired `<!-- triage-templates: ... -->` form) — predates the current `templates/VERSION`, or is absent. Each entry says what changed and how to reconcile it without losing repo values. An entry retires once no live deployment can predate it.
 
+## v2026-07-06 → v2026-07-06.1
+
+Model-picking guidance moved out of the roster into the repo's memory files. Apply all of:
+
+- **Picking-models sections added** — setup now installs stamped `<!-- backlog-section: ... -->` blocks from `templates/sections/` into the repo's `AGENTS.md` (rankings table + routing rules + Codex CLI mechanics, harness-neutral) and `CLAUDE.md` (Claude-specific mechanics overlay). Install both per setup step 8; where the repo's existing Model staffing section recorded model choices that diverge from the shipped defaults, seed the table and rules from them.
+- **Model staffing section slimmed** — `environment.md` § Model staffing becomes the compiled roster (floor, per-harness role→model mapping, succession) deriving from `AGENTS.md` § Picking models; move any general rules or rationale prose out of the roster into the AGENTS.md section, preserving the repo's model choices.
+- **Driving-the-app defaults gain codex** — `environment.md` § Driving the app gains an "Independent runtime verification" line (default: delegate to `codex exec`), and `verifying.md` § Checks a matching second-opinion line; keep the repo's recorded drivers and checks.
+- **Stamp** — add the current version stamp to every playbook this pass touches or confirms current.
+
 ## v2026-07-05.1 → v2026-07-06
 
 The interactive review loop shipped (`reference/presenting.md` § Review loop and § Hub; assets under the skill's `scripts/`). Apply all of:

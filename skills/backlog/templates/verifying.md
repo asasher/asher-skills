@@ -11,6 +11,7 @@ Run narrowest-first, then broaden by touched surface. This repo's commands (popu
 - Type check: _<add yours>_.
 - Build: _<add yours>_.
 - Full / aggregate gate (before PR): _<e.g. a single `check` command that runs lint+typecheck+test>_.
+- Independent second-opinion verification: _<default: delegate to `codex exec` per `environment.md` § Driving the app when a criterion needs real UI interaction, screenshots, or a runtime check outside the current context; checks the session can run directly stay local>_.
 
 ## Acceptance criteria
 
