@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "backlog": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "4e252d2fd671c236bf78e407afe2bd88839ac980e96e45a24e4cd77d64c1dab1"
+    },
     "skill-loop": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",

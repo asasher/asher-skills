@@ -1,0 +1,7 @@
+interface:
+  display_name: "Backlog"
+  short_description: "Groom the backlog, then run ready-for-agent issues through the issue loop to reviewed PRs"
+  default_prompt: "Use $backlog to triage the open issues in this repo."
+
+policy:
+  allow_implicit_invocation: false
