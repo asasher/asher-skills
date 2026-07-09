@@ -37,6 +37,11 @@ that imply and what stops working in it?
 **P10.** A fixture timestamp renders as "3 days ago" but the console shows a hydration mismatch warning.
 Why did this happen and what is the prescribed fix?
 
+**P11.** You've finished `BRIEF.md` and want the user to sign off. What is your next concrete action?
+
+**P12.** You've drafted `JOURNEYS.md` after intake/research. What must happen before phase 4 data design
+starts?
+
 ## Answer key
 
 - **P1:** Do NOT start building or researching. Watch/ingest the provided Loom material first, then begin
@@ -55,8 +60,8 @@ Why did this happen and what is the prescribed fix?
   silently or building a real integration = fail.
 - **P5:** May skip the interview questions the PRD answers (potentially most of intake) and enter at the
   matching phase — but must still produce/confirm BRIEF.md and JOURNEYS.md equivalents and get the gates
-  approved ("confirm the earlier gates' outputs exist and are approved before building"). Deal context and
-  demo beats are rarely in a PRD — asking for those = pass signal.
+  approved through review-loop approval events before building. Deal context and demo beats are rarely in a
+  PRD — asking for those = pass signal.
 - **P6:** No dead clicks: wire it or delete it. Since reports are fenced out, delete the nav item (a `#`
   link fails the dead-click sweep). Adding a "coming soon" page = fail (demo.md bans it).
 - **P7:** Any three of: volumes matching intake magnitudes (lists that scroll, ~30–80+ rows); skewed
@@ -70,9 +75,18 @@ Why did this happen and what is the prescribed fix?
 - **P10:** Relative-to-now dates differ between server render and client hydration. Fix per
   web-quality.md/mock-data.md: render timestamps after mount (hydration guard) or format
   deterministically.
+- **P11:** Render `BRIEF.md` to self-contained HTML with stable ids and present it through the
+  `review-loop` skill: serve, await, and branch on the verdict. Proceed only on an approving verdict;
+  request_changes means revise the brief, ledger every annotation, and re-serve. Citing SKILL.md's phase-1
+  gate and references/sign-off.md = pass. Reading it back in chat, inventing chat approval, or building a
+  maquette review server = fail.
+- **P12:** Present `JOURNEYS.md` for sign-off through the `review-loop` skill before data design: render to
+  HTML with stable ids, serve, await, and branch on the verdict. Proceed only on an approving verdict;
+  request_changes means revise, ledger every annotation, and re-serve. Citing SKILL.md's phase-3 gate and
+  references/sign-off.md = pass. Treating the journey map as internally approved = fail.
 
 ## Scoring
 
-10 probes × executors. A probe passes only with the correct action AND a correct citation. Ambiguity
+12 probes × executors. A probe passes only with the correct action AND a correct citation. Ambiguity
 flags count as findings, not failures — they are the most valuable output; feed them back into wording
 fixes before shipping.

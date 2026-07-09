@@ -7,7 +7,7 @@ existing), and the implementation contract a full-stack agent can build the real
 ## Shape
 
 - **Intake interview first** — one question at a time until shared understanding; `BRIEF.md` sign-off gates
-  everything.
+  everything, presented through the `review-loop` skill.
 - **One architectural seam** — typed schema + seeded fixtures + a mock `lib/api/` layer with simulated
   latency over a localStorage-persisted client store. No dead clicks, session-coherent state, `@mock`
   markers everywhere reality is faked.
