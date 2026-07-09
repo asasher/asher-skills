@@ -1,0 +1,278 @@
+<!doctype html>
+<!-- Plan for issue #9 — build the `to-tickets` skill. Self-contained: inline styles, inline SVG,
+     no external fetches. Stable ids per review-loop's convention; acceptance criteria are
+     <li id="ac-N" data-criterion>. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #9 — to-tickets: split a spec into backlog-ready tickets</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --ok: #0a7d4d; --warn: #b45309; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --ok: #34d399; --warn: #fbbf24; } }
+:root[data-theme="dark"] { color-scheme: dark; --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --ok: #34d399; --warn: #fbbf24; }
+:root[data-theme="light"] { color-scheme: light; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --ok: #0a7d4d; --warn: #b45309; }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.4rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2.1rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg { max-width: 100%; height: auto; display: block; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: var(--fg); }
+svg .muted { fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+.tag { font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.tag.core { color: var(--ok); }
+.tag.exc { color: var(--warn); }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "☐"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li b { color: var(--accent); font-weight: 600; }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .3rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>to-tickets — split a spec into backlog-ready tickets with blocking edges</h1>
+  <p class="problem">A spec captures a decided direction but nothing pickup-able; someone still has to cut it into tracer-bullet tickets, order them, and wire the blocking edges by hand. <code>to-tickets</code> automates that split — the second half of the discussion → work bridge that <code>to-spec</code> (#8) opens.</p>
+  <div class="chips"><span class="chip">issue #9</span><span class="chip">enhancement</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="position">
+  <h2>Where it sits</h2>
+  <p>The consumer half of the spec→tickets pair. Its primary input is <code>to-spec</code>'s output (a spec at <code>docs/specs/&lt;name&gt;.md</code>); it can also take a <code>plan</code> (#4) or the raw current conversation. It publishes into the bound tracker in dependency order, blockers first.</p>
+  <figure id="pipeline-diagram">
+    <svg viewBox="0 0 700 210" role="img" aria-label="Pipeline: spec/plan/conversation to to-tickets to tracker">
+      <!-- three inputs -->
+      <rect x="8" y="18" width="150" height="34" rx="8" fill="var(--card)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="83" y="39" text-anchor="middle">spec (to-spec #8)</text>
+      <rect x="8" y="83" width="150" height="34" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="83" y="104" text-anchor="middle" class="muted">plan (#4)</text>
+      <rect x="8" y="148" width="150" height="34" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="83" y="169" text-anchor="middle" class="muted">conversation</text>
+
+      <!-- to-tickets -->
+      <rect x="255" y="62" width="160" height="86" rx="8" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/>
+      <text x="335" y="90" text-anchor="middle" font-weight="600">to-tickets</text>
+      <text x="335" y="108" text-anchor="middle" class="muted">draft slices · quiz</text>
+      <text x="335" y="124" text-anchor="middle" class="muted">order · wire edges</text>
+
+      <!-- tracker -->
+      <rect x="512" y="62" width="180" height="86" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="602" y="88" text-anchor="middle">bound tracker</text>
+      <text x="602" y="106" text-anchor="middle" class="muted" font-size="11">tickets, blockers first</text>
+      <text x="602" y="123" text-anchor="middle" class="muted" font-size="11">Depends on #N edges</text>
+
+      <!-- arrows in -->
+      <line x1="158" y1="35" x2="253" y2="88" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="158" y1="100" x2="253" y2="103" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="158" y1="165" x2="253" y2="120" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- arrow out -->
+      <line x1="415" y1="105" x2="510" y2="105" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar)"/>
+
+      <defs>
+        <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="var(--muted)"/>
+        </marker>
+      </defs>
+    </svg>
+    <figcaption>Solid input = the primary path (a spec). The dependency edges emitted are backlog's recorded convention, so <code>backlog run</code> reads them and skips blocked work. Self-contained at the file level — inputs are composed by name, the convention comes from a project playbook.</figcaption>
+  </figure>
+</section>
+
+<section id="slices">
+  <h2>The split — vertical slices, with a wide-refactor exception</h2>
+  <p>Default: draft <b>tracer-bullet</b> tickets — each a narrow-but-complete path through every layer, demoable on its own, sized to one fresh context window. The one exception is a mechanical, high-blast-radius change, which is sequenced instead of sliced.</p>
+  <figure id="slices-diagram">
+    <svg viewBox="0 0 700 196" role="img" aria-label="Vertical slice default vs wide-refactor exception">
+      <rect x="250" y="8" width="200" height="42" rx="8" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/>
+      <text x="350" y="26" text-anchor="middle" font-weight="600">shape the tickets</text>
+      <text x="350" y="42" text-anchor="middle" class="muted" font-size="10">vertical slice, or wide refactor?</text>
+
+      <!-- default -->
+      <rect x="24" y="104" width="300" height="80" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="174" y="126" text-anchor="middle" font-weight="600">default — vertical slice</text>
+      <text x="174" y="144" text-anchor="middle" class="muted" font-size="11">narrow, complete path through every layer</text>
+      <text x="174" y="160" text-anchor="middle" class="muted" font-size="11">demoable alone · one fresh context window</text>
+      <text x="174" y="176" text-anchor="middle" class="muted" font-size="11">tracer-bullet</text>
+
+      <!-- exception -->
+      <rect x="376" y="104" width="300" height="80" rx="8" fill="var(--card)" stroke="var(--warn)"/>
+      <text x="526" y="126" text-anchor="middle" font-weight="600">exception — wide refactor</text>
+      <text x="526" y="144" text-anchor="middle" class="muted" font-size="11">mechanical, high blast radius</text>
+      <text x="526" y="164" text-anchor="middle" class="muted" font-size="11">expand → migrate-in-batches → contract</text>
+
+      <line x1="320" y1="50" x2="200" y2="102" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar2)"/>
+      <line x1="380" y1="50" x2="500" y2="102" stroke="var(--warn)" stroke-width="1.5" marker-end="url(#ar2)"/>
+      <text x="228" y="84" class="muted" font-size="10">vertical</text>
+      <text x="440" y="84" class="muted" font-size="10">wide / mechanical</text>
+      <defs>
+        <marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="var(--muted)"/>
+        </marker>
+      </defs>
+    </svg>
+    <figcaption>The slice keeps each ticket independently demoable; the refactor exception avoids forcing a vertical slice onto a change that is inherently horizontal, sequencing it safely instead.</figcaption>
+  </figure>
+</section>
+
+<section id="edges">
+  <h2>Dependency edges + publish order</h2>
+  <p>After the quiz settles granularity and edges, tickets are published <b>blockers first</b> so each blocker already has a tracker id its dependents can reference. Each dependent carries a <code>- [ ] Depends on #N</code> line — backlog's recorded convention (<code>backlog-policy.md</code> § Dependencies), which <code>backlog run</code> reads to skip blocked work.</p>
+  <figure id="edges-diagram">
+    <svg viewBox="0 0 700 168" role="img" aria-label="Dependency graph published blockers first">
+      <!-- A -->
+      <rect x="40" y="64" width="130" height="46" rx="8" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/>
+      <text x="105" y="84" text-anchor="middle" font-weight="600">#N  ticket A</text>
+      <text x="105" y="100" text-anchor="middle" class="muted" font-size="10">blocker · created first</text>
+      <!-- B -->
+      <rect x="300" y="18" width="150" height="46" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="375" y="38" text-anchor="middle">#N+1  ticket B</text>
+      <text x="375" y="54" text-anchor="middle" class="muted" font-size="10">Depends on #N</text>
+      <!-- C -->
+      <rect x="300" y="108" width="150" height="46" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="375" y="128" text-anchor="middle">#N+2  ticket C</text>
+      <text x="375" y="144" text-anchor="middle" class="muted" font-size="10">Depends on #N</text>
+      <!-- run -->
+      <rect x="540" y="63" width="130" height="46" rx="8" fill="var(--card)" stroke="var(--line)" stroke-dasharray="4 3"/>
+      <text x="605" y="83" text-anchor="middle" class="muted">backlog run</text>
+      <text x="605" y="99" text-anchor="middle" class="muted" font-size="10">skips blocked</text>
+
+      <line x1="170" y1="78" x2="298" y2="45" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <line x1="170" y1="96" x2="298" y2="128" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <line x1="450" y1="45" x2="538" y2="78" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar3)"/>
+      <line x1="450" y1="128" x2="538" y2="94" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar3)"/>
+      <defs>
+        <marker id="ar3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="var(--muted)"/>
+        </marker>
+      </defs>
+    </svg>
+    <figcaption>Published in dependency order so <code>Depends on #N</code> resolves to a real, earlier id. "Ticket" == backlog's "issue" role; the skill publishes in whatever format the tracker binding (<code>platform.md</code>) records — here GitHub via <code>gh</code>.</figcaption>
+  </figure>
+</section>
+
+<section id="layout">
+  <h2>Skill layout — mirrors the shipped primitives</h2>
+  <p>Laid out to match <code>skills/to-spec/</code> and <code>skills/staffing/</code>. Self-contained at the file level; composes siblings by name only.</p>
+  <table>
+    <thead><tr><th>Path</th><th>Holds</th></tr></thead>
+    <tbody>
+      <tr><td><code>SKILL.md</code></td><td>Command surface + the three-part dependency surface.</td></tr>
+      <tr><td><code>README.md</code></td><td>One-paragraph what/why, mirroring to-spec's.</td></tr>
+      <tr><td><code>agents/openai.yaml</code></td><td>Codex manifest; <code>allow_implicit_invocation: false</code>.</td></tr>
+      <tr><td><code>reference/slicing.md</code></td><td>The split method: vertical slices, wide-refactor exception, the quiz, dependency ordering + backlog's edge convention, readiness default, never-modify-parent, no-stale-content.</td></tr>
+      <tr><td><code>reference/template-guide.md</code></td><td>What each field of a ticket / the tickets file holds.</td></tr>
+      <tr><td><code>templates/ticket.md</code></td><td>Fillable single-ticket scaffold (title, intent, slice, done, deps).</td></tr>
+      <tr><td><code>templates/tickets.md</code></td><td>The whole-split file: ordered tickets + edge list, pre-publish.</td></tr>
+      <tr><td><code>evals/probes.md</code></td><td>Dual-executor situated probes + pre-written answer key.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>User stories</h2>
+  <ul class="plain">
+    <li id="story-1">As <em>an agent holding a decided spec</em>, I want to <em>split it into tracer-bullet tickets with blocking edges</em>, so that <em>backlog can pick the work up in the right order without me wiring it by hand</em>.</li>
+    <li id="story-2">As <em>the person driving the session</em>, I want <em>to be quizzed on granularity and blocking edges and iterate until I approve</em>, so that <em>the split matches my judgement before anything is published</em>.</li>
+    <li id="story-3">As <em>a maintainer facing a wide mechanical change</em>, I want <em>it sequenced expand → migrate → contract instead of forced into a vertical slice</em>, so that <em>a high-blast-radius refactor lands safely in batches</em>.</li>
+    <li id="story-4">As <em>backlog run</em>, I want <em>each dependent ticket to carry a <code>Depends on #N</code> edge in the recorded convention</em>, so that <em>I skip blocked work and dispatch blockers first</em>.</li>
+    <li id="story-5">As <em>whoever grooms the backlog</em>, I want <em>readiness left to <code>backlog groom</code> by default</em>, so that <em>a fresh split doesn't auto-release work I haven't blessed — while still letting me apply it on approval when I want.</em></li>
+    <li id="story-6">As <em>the author of the source spec</em>, I want <em>to-tickets to never touch my spec or the parent issue</em>, so that <em>the source of truth is preserved.</em></li>
+    <li id="story-7">As <em>someone without a spec</em>, I want <em>to feed a plan or just the current conversation instead</em>, so that <em>I can still get a clean split.</em></li>
+    <li id="story-8">As <em>a Codex user</em>, I want <em>the skill to present correctly when installed into Codex</em>, so that <em>it works across harnesses.</em></li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Implementation decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><b>New standalone skill</b> <code>skills/to-tickets/</code>, laid out to match the shipped <code>skills/to-spec/</code> and <code>skills/staffing/</code> primitives (SKILL.md, README.md, agents/openai.yaml, reference/, templates/, evals/). Adapted from Matt Pocock's <code>to-tickets</code> and shipped as our own — the standing invariant: we never install an external skill. Self-contained at the file level; composes siblings by name only.</li>
+    <li id="dec-2"><b>Primary input = a spec</b> at <code>docs/specs/&lt;name&gt;.md</code> (to-spec's output). Also accepts a <code>plan</code> (#4) or the raw current conversation. The three inputs are read the same way — mine the decided direction, then split.</li>
+    <li id="dec-3"><b>Draft vertical slices.</b> Default output is tracer-bullet tickets: each a narrow-but-complete path through every layer, demoable on its own, sized to one fresh context window. The slicing reference makes this the default shape.</li>
+    <li id="dec-4"><b>Wide-refactor exception.</b> A mechanical, high-blast-radius change is sequenced expand → migrate-in-batches → contract instead of being forced into a vertical slice. The reference names the trigger and the three-phase shape.</li>
+    <li id="dec-5"><b>Quiz the user — the human-confirmation step.</b> Unlike to-spec (pure synthesis, no interview), to-tickets <em>does</em> interview: it quizzes the user on granularity and blocking edges and iterates until approved. Nothing publishes before approval.</li>
+    <li id="dec-6"><b>Publish in the bound tracker's format, in dependency order.</b> Publishing goes through the tracker binding recorded in <code>docs/agents/platform.md</code> (here: GitHub via <code>gh</code>). Tickets are created blockers-first so each <code>Depends on #N</code> resolves to a real earlier id.</li>
+    <li id="dec-7"><b>Edges in backlog's recorded convention.</b> Each dependent ticket carries a <code>- [ ] Depends on #N</code> body line per <code>backlog-policy.md</code> § Dependencies, so <code>backlog run</code> reads it and skips blocked work. The convention comes from a <em>project playbook</em>, not a skill import — to-tickets stays self-contained.</li>
+    <li id="dec-8"><b>Generic "ticket" vocabulary.</b> "Ticket" throughout; ticket == backlog's "issue" role (same thing, tracker-agnostic word). The skill never assumes GitHub-specific vocabulary in its own text.</li>
+    <li id="dec-9"><b>Readiness default = leave it to <code>backlog groom</code>.</b> A fresh split does not auto-apply <code>ready-for-agent</code>; the skill notes the option to apply it on approval (Matt's posture) but recommends leaving it to groom. This is the decided default.</li>
+    <li id="dec-10"><b>No stale content; never modify the parent.</b> Tickets carry no file paths or code snippets (the single prototype-validated-snippet exception is preserved). The skill never edits the source spec or the parent issue.</li>
+    <li id="dec-11"><b>Three-part dependency surface</b> declared in SKILL.md: <em>bundled references</em> (ticket + tickets-file templates, the slicing/template guides), <em>project playbooks</em> (<code>backlog-policy.md</code> § Dependencies convention, <code>platform.md</code> tracker binding, the presentation/vocabulary conventions), <em>sibling skills</em> (consumes <code>to-spec</code>; can also take a <code>plan</code> (#4) or a raw conversation — inputs composed by name, no hard skill import).</li>
+    <li id="dec-12"><b>Codex manifest</b> <code>agents/openai.yaml</code> per <code>docs/patterns/codex-compat.md</code>, <code>allow_implicit_invocation: false</code> (an operator skill that publishes to a tracker, not implicitly fired).</li>
+    <li id="dec-13"><b>Pre-deployment probe eval</b> <code>evals/probes.md</code>: situated dry-run probes with a pre-written answer key, dual-executor (Opus in-session + <code>codex exec</code>), per <code>docs/patterns/probe-evals.md</code>, covering the criteria below.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done — acceptance criteria</h2>
+  <p>Each is checkable pass/fail: situated probe dry-runs against both executors (Opus in-session + <code>codex exec</code>) with correct-action-<em>and</em>-citation grading, plus file/grep checks for the structural ones.</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><b>Skill shape.</b> <code>skills/to-tickets/SKILL.md</code> frontmatter identifies a user-invocable skill (<code>name: to-tickets</code>, <code>user-invocable: true</code>, a description that reads as splitting a spec/plan/conversation into backlog-ready tickets); the directory mirrors the shipped primitives (SKILL.md, README.md, agents/openai.yaml, reference/, templates/, evals/); and no file in the skill imports or reads another skill's files (grep finds no cross-skill paths).</li>
+    <li id="ac-2" data-criterion><b>Dependency surface.</b> SKILL.md declares all three pointer kinds — bundled references, project playbooks (naming <code>backlog-policy.md</code> § Dependencies and the <code>platform.md</code> tracker binding), and sibling skills — and states the sibling relationship as <b>consumes <code>to-spec</code>'s output; also accepts a <code>plan</code> (#4) or a raw conversation</b>, composed by name, self-contained at the file level.</li>
+    <li id="ac-3" data-criterion><b>Inputs.</b> A probe confirms the primary input is a spec at <code>docs/specs/&lt;name&gt;.md</code>, and that a plan or the current conversation are accepted alternates. Citable.</li>
+    <li id="ac-4" data-criterion><b>Vertical slices.</b> A probe on a multi-layer feature resolves to: draft tracer-bullet tickets — each a narrow-but-complete path through every layer, demoable on its own, sized to one fresh context window. Citable.</li>
+    <li id="ac-5" data-criterion><b>Wide-refactor exception.</b> A probe on a mechanical, high-blast-radius change resolves to: sequence expand → migrate-in-batches → contract instead of forcing a vertical slice. Citable, with the trigger named.</li>
+    <li id="ac-6" data-criterion><b>Quiz the user.</b> A probe confirms to-tickets quizzes the user on granularity and blocking edges and iterates until approved — the human-confirmation step — and that nothing publishes before approval. It explicitly does <em>not</em> behave like to-spec's no-interview rule. Citable.</li>
+    <li id="ac-7" data-criterion><b>Dependency edges, correct convention + order.</b> A probe splitting a spec into ≥3 tickets where two depend on a third emits each dependent's edge as a <code>- [ ] Depends on #N</code> body line per <code>backlog-policy.md</code> § Dependencies, publishes blockers first so the ids resolve, and states the edges let <code>backlog run</code> skip blocked work. Correct edges + order = pass; wrong convention, wrong direction, or blocker-last = fail.</li>
+    <li id="ac-8" data-criterion><b>Publish through the bound tracker.</b> A probe confirms publishing goes through the tracker binding in <code>docs/agents/platform.md</code> (GitHub via <code>gh</code> here), in dependency order, using generic "ticket" vocabulary (ticket == backlog's issue role).</li>
+    <li id="ac-9" data-criterion><b>Readiness default.</b> A probe confirms the default is to leave <code>ready-for-agent</code> to <code>backlog groom</code>, with the noted option to apply it on approval. Choosing to auto-release by default = fail.</li>
+    <li id="ac-10" data-criterion><b>No stale content; never modify the parent.</b> A probe confirms tickets carry no file paths / code snippets (prototype-validated-snippet exception preserved) and that the skill never edits the source spec or parent issue. Citable.</li>
+    <li id="ac-11" data-criterion><b>Codex manifest.</b> <code>skills/to-tickets/agents/openai.yaml</code> parses and is well-formed per <code>docs/patterns/codex-compat.md</code>, with <code>allow_implicit_invocation: false</code>.</li>
+    <li id="ac-12" data-criterion><b>Probe eval ships.</b> <code>skills/to-tickets/evals/probes.md</code> exists with a pre-written answer key covering ac-1..ac-11, dual-executor (Opus in-session + <code>codex exec</code>), per <code>docs/patterns/probe-evals.md</code>.</li>
+  </ul>
+</section>
+
+<section id="seams">
+  <h2>Test seams</h2>
+  <p>This ships a skill (a prompt-driven procedure), so the seam is the <b>probe eval</b>, not a code test — the highest existing seam for skills in this repo (<code>environment.md</code> § Driving the app, <code>docs/patterns/probe-evals.md</code>). Every acceptance criterion is exercised by at least one situated dry-run probe against both executors, graded correct-action-and-citation; structural criteria (ac-1, ac-2, ac-11, ac-12) are additionally confirmed by file / grep / YAML-parse check. The two behaviour-heavy probes — the spec→tickets split with correct <code>Depends on #N</code> edges (ac-7) and the wide-refactor expand/migrate/contract path (ac-5) — are the load-bearing ones. No new script or runtime is introduced, so there is nothing else to seam.</p>
+</section>
+
+<section id="evidence-required">
+  <h2>Evidence required</h2>
+  <ul class="plain">
+    <li id="ev-1">The probe-eval transcript from both executors (Opus in-session + <code>codex exec</code>) with a pass/fail verdict table mapping each probe → its criterion.</li>
+    <li id="ev-2">A grep / YAML-parse check log for the structural criteria (no cross-skill imports, three-part dependency surface present, openai.yaml well-formed).</li>
+    <li id="ev-3">A sample split produced from a real spec (this decomposition spec is the canonical input) showing ordered tickets with correct <code>Depends on #N</code> edges, plus one wide-refactor case showing the expand/migrate/contract sequencing — rendered end-to-end without publishing to the live tracker.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>Publishing writes to the <em>live</em> GitHub tracker (real issues). The probe eval is read-only / dry-run (executors describe the next action + cite), so no test run creates stray issues; the sample split (ev-3) renders to the tickets file, not the tracker.</li>
+    <li>The quiz (interview) is the opposite posture to to-spec (no interview). Mitigation: the SKILL.md and slicing reference state the contrast explicitly, and ac-6 grades it.</li>
+    <li>"Vertical slice" vs "wide-refactor exception" can blur on a change that is partly both. Mitigation: the reference names a concrete trigger for the exception (mechanical + high blast radius) and ac-5/ac-4 grade both branches.</li>
+    <li>Blocker-first ordering depends on the tracker assigning ids at creation. Mitigation: the method makes ordering a publish-time step, and ac-7 grades that blockers are created first.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>Changing <code>backlog</code>'s dependency convention or the <code>run</code> selection logic — to-tickets emits into the existing convention, it doesn't redefine it.</li>
+    <li>Standardizing the whole repo on "ticket" instead of "issue" — the issue notes this as eventual, not required here.</li>
+    <li>Grooming / releasing the tickets (<code>ready-for-agent</code>) — left to <code>backlog groom</code> by default (dec-9).</li>
+    <li>Installing or vendoring Matt Pocock's skill — we adapt and ship our own; no external skill is installed.</li>
+    <li>Changes to <code>to-spec</code>, <code>plan</code>, or the backlog loop themselves.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
