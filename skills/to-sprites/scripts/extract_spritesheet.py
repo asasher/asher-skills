@@ -269,10 +269,15 @@ class _UnionFind:
         return label
 
     def find(self, label: int) -> int:
-        parent = self.parent[label]
-        if parent != label:
-            self.parent[label] = self.find(parent)
-        return self.parent[label]
+        root = label
+        while self.parent[root] != root:
+            root = self.parent[root]
+
+        while self.parent[label] != label:
+            parent = self.parent[label]
+            self.parent[label] = root
+            label = parent
+        return root
 
     def union(self, a: int, b: int) -> None:
         ra = self.find(a)
@@ -285,38 +290,44 @@ class _UnionFind:
 
 
 def _connected_component_bboxes(mask: np.ndarray) -> list[Rect]:
-    height, width = mask.shape
-    labels = np.zeros((height, width), dtype=np.int32)
+    opaque = np.asarray(mask, dtype=bool)
+    height, _ = opaque.shape
     uf = _UnionFind()
+    prev_runs: list[tuple[int, int, int]] = []
+    runs: list[tuple[int, int, int, int]] = []
 
     for y in range(height):
-        for x in range(width):
-            if not mask[y, x]:
-                continue
-            neighbors: list[int] = []
-            if x > 0 and labels[y, x - 1]:
-                neighbors.append(int(labels[y, x - 1]))
-            if y > 0 and labels[y - 1, x]:
-                neighbors.append(int(labels[y - 1, x]))
-            if not neighbors:
-                labels[y, x] = uf.make()
-                continue
-            chosen = min(neighbors)
-            labels[y, x] = chosen
-            for other in neighbors:
-                uf.union(chosen, other)
+        edges = np.diff(opaque[y].astype(np.int8), prepend=0, append=0)
+        starts = np.flatnonzero(edges == 1).tolist()
+        ends = np.flatnonzero(edges == -1).tolist()
+        current_runs: list[tuple[int, int, int]] = []
+        prev_index = 0
+
+        for start, end in zip(starts, ends):
+            label = uf.make()
+            current_runs.append((start, end, label))
+            runs.append((y, start, end, label))
+
+            while prev_index < len(prev_runs) and prev_runs[prev_index][1] <= start:
+                prev_index += 1
+            overlap_index = prev_index
+            while overlap_index < len(prev_runs) and prev_runs[overlap_index][0] < end:
+                _, prev_end, prev_label = prev_runs[overlap_index]
+                if prev_end > start:
+                    uf.union(label, prev_label)
+                overlap_index += 1
+        prev_runs = current_runs
 
     boxes: dict[int, list[int]] = {}
-    ys, xs = np.where(labels > 0)
-    for y, x in zip(ys.tolist(), xs.tolist()):
-        root = uf.find(int(labels[y, x]))
+    for y, start, end, label in runs:
+        root = uf.find(label)
         if root not in boxes:
-            boxes[root] = [x, y, x + 1, y + 1]
+            boxes[root] = [start, y, end, y + 1]
         else:
             box = boxes[root]
-            box[0] = min(box[0], x)
+            box[0] = min(box[0], start)
             box[1] = min(box[1], y)
-            box[2] = max(box[2], x + 1)
+            box[2] = max(box[2], end)
             box[3] = max(box[3], y + 1)
     return [Rect(x0, y0, x1 - x0, y1 - y0) for x0, y0, x1, y1 in boxes.values()]
 
@@ -370,7 +381,6 @@ def _slice_grid(
     rects, cols, rows, tile = _grid_rects(width, height, cols, rows, tile, margin, spacing)
     elements: list[Element] = []
     empty_cells: list[dict] = []
-    sheet_limit = Rect(0, 0, width, height)
     total = len(rects)
 
     for row, col, cell in rects:
@@ -660,7 +670,7 @@ def _run_generator(subject: str, out_path: Path, generator_cmd: str) -> None:
         )
     if not out_path.exists():
         raise GenerationError(
-            "generator command finished but did not write {out}. "
+            f"generator command finished but did not write {out_path}. "
             "Ensure --generator-cmd contains the {out} placeholder."
         )
 
