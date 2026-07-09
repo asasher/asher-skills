@@ -42,7 +42,7 @@ The contract is binding-independent: the deliverable is a **ready-to-paste block
 The review file (`platform.md` § Change review) lives on the same branch as the artifacts, so embeds are **repo-relative paths** — `![<criterion>](../../evidence/<slug>/<file>.png)` relative to the review file — which render in any markdown viewer and on the presentation surface alike, with no SHA pinning and no proxy pitfalls.
 
 - Mechanical checks before handing the block back: each path resolves from the review file's location at the branch's HEAD (`git cat-file -e HEAD:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4.
-- When the human reviews away from the machine, the evidence step may additionally publish the rendered review file to the presentation surface (`environment.md` § Presenting) — the committed file stays the source of truth, served in place per `reference/presenting.md`. Publishing must preserve relative-path resolution: expose the review file *with* its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
+- When the human reviews away from the machine, the evidence step may additionally publish the rendered review file to the presentation surface (`environment.md` § Presenting) — the committed file stays the source of truth, served in place by the `review-loop` skill. Publishing must preserve relative-path resolution: expose the review file *with* its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
 
 ### Other bindings
 

@@ -4,7 +4,8 @@ Groom the backlog with the human, then run each ready-for-agent issue through th
 
 ## File locations
 
-- **Bundled reference** (`reference/`, `templates/`) ships with the skill; it is not looked for in the target repo. References hold only orchestration — targets, gates, staffing, handoffs.
+- **Bundled reference** (`reference/`, `templates/`) ships with the skill; it is not looked for in the target repo. References hold only orchestration — targets, gates, handoffs — resolving staffing, review, planning, and prototyping against sibling skills by name.
+- **Sibling skills** — `backlog` composes the `staffing` (roster/roles/fallback), `review-loop` (presentation + interactive review), `plan` (planning + approval gate), and `prototype` (throwaway design questions) skills **by plain name**; `backlog setup` ensures they are present (dependency surface).
 - **Project playbook** (`docs/agents/*.md`) lives in the target repo and holds the working instructions for each step: the technique (shipped inlined, no external skills required) plus this codebase's conventions and platform bindings. Created by `backlog setup`; override a step by editing its playbook.
 
 ## Use
@@ -15,7 +16,7 @@ backlog groom                     # triage the backlog with you; label what's re
 backlog run                       # work every ready-for-agent, unblocked issue
 backlog                           # groom, then offer to run the ready ones
 backlog diagnose 42               # run a single subcommand standalone
-backlog prototype "does optimistic locking fit this editor?"
+backlog prototype "does optimistic locking fit this editor?"   # delegates to the prototype sibling skill
 backlog adversarial-review 88
 ```
 
@@ -23,4 +24,4 @@ backlog adversarial-review 88
 
 ## Credits
 
-The technique inlined in the shipped playbooks adapts Matt Pocock's [`diagnosing-bugs`, `tdd`, `code-review`, `prototype`, and `to-prd` skills](https://github.com/mattpocock/skills) (MIT) and the review bar of Cursor's [thermo-nuclear code-quality review](https://github.com/cursor/plugins).
+The technique inlined in the shipped playbooks adapts Matt Pocock's [`diagnosing-bugs`, `tdd`, and `code-review` skills](https://github.com/mattpocock/skills) (MIT) and the review bar of Cursor's [thermo-nuclear code-quality review](https://github.com/cursor/plugins).

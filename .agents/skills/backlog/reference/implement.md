@@ -2,7 +2,7 @@
 
 Target: an approved plan, or a small enhancement that skipped planning. Runs standalone or as the build step of the `enhancement` branch.
 
-Staffing: build-out fills the **builder** role for its surface — see `reference/staffing.md`; in the loop, the issue thread dispatches it rather than building in its own context.
+Staffing: build-out fills the **builder** role for its surface, resolved by the `staffing` skill (by name); in the loop, the issue thread dispatches it rather than building in its own context.
 
 The technique — the test-first build loop, commit style, code conventions — lives in `docs/agents/implementing.md`; the base branch, branch naming, and how to run locally in `docs/agents/environment.md`. If either is missing, report a setup gap and stop.
 
