@@ -1,0 +1,52 @@
+# Structural file-checks — plan skill @ 61956ab
+# ac-1,2,3,4,5,6,7,8,10 — grep/parse over skills/plan/
+
+## ac-1  layout present, NO scripts/ dir
+skills/plan/README.md
+skills/plan/SKILL.md
+skills/plan/agents/openai.yaml
+skills/plan/evals/probes.md
+skills/plan/reference/authoring.md
+skills/plan/reference/plan-contract.md
+skills/plan/templates/plan-skeleton.html
+=> PASS: no scripts/ dir
+
+## ac-3  no bundled server/await scripts, no cross-skill path import
+=> PASS: no path imports of sibling files
+=> PASS: no script files shipped
+
+## ac-4  terminal gate = Approved; commit/implement/posterity only out-of-scope
+16:### 1. Decided
+29:### 2. Design questions answered
+43:### 3. Written
+51:### 4. Approved
+-- commit/implement/posterity lines (all under 'What this skill does not do' / playbook) --
+13:The sequence is four gates and **stops at Approved**. There is no "commit" or "implement" gate — see § What
+86:- **Committing the plan** to a branch or store so downstream agents read it from disk.
+87:- **Starting the work** the plan describes — implementing, executing, running it.
+88:- **Mirroring the plan** to a tracker for posterity.
+90:A generic plan skill stops when a human has approved a plan. A dev workflow that wants the commit-and-build
+99:verify/evidence the criteria feed, and the post-approval commit-and-implement tail). Read it when present and
+
+## ac-5  domain-neutral: dev-terms only as neutrality/out-of-scope/playbook refs
+skills/plan/reference/authoring.md:3:What a plan covers and the house format. Domain-neutral: a plan reads the same whether the undertaking is a
+skills/plan/reference/plan-contract.md:4:compositions. Domain-neutral: nothing here assumes code, a repo, or a running app. A project playbook (below)
+
+## ac-6  two-layer + local fallback
+67:**Local fallback.** When no presentation surface is recorded (no `review-loop` reachable, or the playbook
+93:## Project playbook (delta-only)
+100:apply its deltas on top of this contract. Absent a playbook, this contract stands unchanged.
+
+## ac-7  skeleton stable ids + self-contained + neutral header
+data-criterion rows: 4
+external fetch/script tags: 0
+backlog mentions: 0
+
+## ac-8  openai.yaml well-formed, allow_implicit_invocation=false
+  display_name: "Plan"
+  short_description: "Turn an intent worth planning into a reviewed plan artifact, then hold it at a human approval gate"
+  default_prompt: "Use $plan to decide whether this needs a plan, write one, and get it approved before any work starts."
+  allow_implicit_invocation: false
+
+## ac-10 backlog plan files untouched by this branch
+(empty stat above = untouched)

@@ -1,0 +1,235 @@
+<!doctype html>
+<!-- Plan #4 — Extract plan into a standalone thin-composer skill. Stable ids never change
+     across revisions; acceptance criteria are <li id="ac-N" data-criterion>. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #4 — Extract plan</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --ok: #0f9d58; --warn: #b8860b; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --ok: #4ade80; --warn: #fbbf24; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+svg .edge-label { font-size: 10.5px; fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li .how { display: block; font-size: .8rem; color: var(--muted); margin-top: .2rem; }
+ul.criteria li .tag { font-size: .68rem; text-transform: uppercase; letter-spacing: .04em; border: 1px solid currentColor; border-radius: 99px; padding: 0 .4rem; margin-left: .3rem; }
+.tag.file { color: var(--accent); }
+.tag.probe { color: var(--warn); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .35rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+.tree { font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre; margin: 0; }
+.new { color: var(--ok); }
+.moved { color: var(--warn); }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Extract <code>plan</code> into a standalone thin-composer skill</h1>
+  <p class="problem">The planning step — decide whether a plan is warranted, settle blocking design questions, write a reviewable plan artifact, and hold it at an approval gate — is buried inside <code>backlog</code> and coded for a dev branch. Any effort worth planning (a research sprint, an ops change, a product bet — not only code) wants it, so it should be an extracted <em>thin composer</em>: it produces the plan artifact and borrows sign-off from <code>review-loop</code> and role selection from <code>staffing</code>, both by name.</p>
+  <div class="chips"><span class="chip">issue #4</span><span class="chip">enhancement</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="approach">
+  <h2>Approach</h2>
+  <p>Unlike <code>review-loop</code> (which owns machinery — a server, scripts, a hub), <code>plan</code> owns <strong>no runtime of its own</strong>. It is a <em>thin composer</em>: it authors an HTML plan and then <strong>delegates</strong> — presentation and the annotate→revise→approve gate to <code>review-loop</code> by name, and "who should author/build this" to <code>staffing</code> by name. The extraction lifts <code>backlog</code>'s <code>reference/plan.md</code> gates, <code>templates/planning.md</code> format, and <code>plan-skeleton.html</code> into a standalone skill shaped like the shipped <code>staffing</code>/<code>review-loop</code>, genericizes the dev-isms, and <strong>strips the dev-only tail</strong> (the "commit the plan to the branch / implementing agents read it from disk / posterity tracker-write" steps belong to <code>backlog</code>, not a generic plan skill). It is deliberately <strong>non-breaking</strong>: <code>backlog</code> keeps its own bundled plan step unchanged; rewiring it to consume this skill by name is a separate issue.</p>
+  <figure id="compose-diagram">
+    <svg viewBox="0 0 680 210" role="img" aria-label="Plan composes review-loop and staffing by name">
+      <rect x="250" y="16" width="180" height="58" rx="8" fill="none" stroke="var(--ok)"/>
+      <text x="266" y="40" font-weight="600" fill="var(--ok)">plan (thin composer)</text>
+      <text x="266" y="58" class="edge-label">authors the HTML artifact</text>
+
+      <rect x="40" y="140" width="200" height="52" rx="8" fill="none" stroke="var(--accent)"/>
+      <text x="54" y="164" font-weight="600">review-loop</text>
+      <text x="54" y="182" class="edge-label">serve · annotate · approve gate</text>
+
+      <rect x="440" y="140" width="200" height="52" rx="8" fill="none" stroke="var(--accent)"/>
+      <text x="454" y="164" font-weight="600">staffing</text>
+      <text x="454" y="182" class="edge-label">who authors / builds</text>
+
+      <path d="M300 74 L180 140" stroke="var(--muted)" fill="none" marker-end="url(#a)"/>
+      <path d="M380 74 L500 140" stroke="var(--muted)" fill="none" marker-end="url(#a)"/>
+      <text x="150" y="112" class="edge-label">"present it via review-loop"</text>
+      <text x="470" y="112" class="edge-label">"staff via staffing"</text>
+      <text x="230" y="206" class="edge-label">composed by plain name — no import, no bundled scripts</text>
+      <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="var(--muted)"/></marker></defs>
+    </svg>
+    <figcaption>The composer produces an artifact and borrows two capabilities by name; it ships neither a review server nor a roster of its own.</figcaption>
+  </figure>
+</section>
+
+<section id="gates-diagram">
+  <h2>The gates it keeps — and the tail it drops</h2>
+  <p>The generic composer runs four gates and <strong>stops at Approved</strong>. <code>backlog</code>'s dev-only 5th gate (commit + hand to implementation) is not the plan skill's job.</p>
+  <figure>
+    <svg viewBox="0 0 680 150" role="img" aria-label="Plan gates: decide, design questions, write, approve; commit is stripped">
+      <rect x="8" y="55" width="110" height="42" rx="6" fill="none" stroke="var(--accent)"/>
+      <text x="22" y="72">1 Decide</text>
+      <text x="22" y="88" class="edge-label">plan or skip</text>
+      <rect x="140" y="55" width="120" height="42" rx="6" fill="none" stroke="var(--accent)"/>
+      <text x="154" y="72">2 Design Qs</text>
+      <text x="154" y="88" class="edge-label">settle blockers</text>
+      <rect x="282" y="55" width="110" height="42" rx="6" fill="none" stroke="var(--accent)"/>
+      <text x="296" y="72">3 Write</text>
+      <text x="296" y="88" class="edge-label">HTML + AC</text>
+      <rect x="414" y="55" width="120" height="42" rx="6" fill="none" stroke="var(--ok)"/>
+      <text x="428" y="72" fill="var(--ok)">4 Approve</text>
+      <text x="428" y="88" class="edge-label">via review-loop</text>
+      <rect x="556" y="55" width="116" height="42" rx="6" fill="none" stroke="var(--warn)" stroke-dasharray="5 4"/>
+      <text x="568" y="72" fill="var(--warn)">5 Commit</text>
+      <text x="568" y="88" class="edge-label">caller's job</text>
+      <path d="M118 76 L140 76" stroke="var(--muted)" marker-end="url(#b)"/>
+      <path d="M260 76 L282 76" stroke="var(--muted)" marker-end="url(#b)"/>
+      <path d="M392 76 L414 76" stroke="var(--muted)" marker-end="url(#b)"/>
+      <path d="M534 76 L556 76" stroke="var(--warn)" stroke-dasharray="5 4" marker-end="url(#b)"/>
+      <text x="470" y="130" class="edge-label">deliverable = the approval record (verdict · hash · timestamp)</text>
+      <defs><marker id="b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="var(--muted)"/></marker></defs>
+    </svg>
+    <figcaption>The dashed gate 5 (commit-and-implement) is stripped: it is a dev-workflow concern that <code>backlog</code> re-adds around the composer.</figcaption>
+  </figure>
+</section>
+
+<section id="layout">
+  <h2>File layout</h2>
+  <p>New skill under <code>skills/plan/</code>, mirroring <code>staffing</code>/<code>review-loop</code>'s shape. Nothing is deleted from <code>backlog</code>. Note the absence of a <code>scripts/</code> dir — the composer ships no runtime.</p>
+  <figure>
+<pre class="tree"><span class="new">skills/plan/</span>
+&#9500;&#9472;&#9472; SKILL.md              entry point &#183; command surface &#183; three-part dependency surface
+&#9500;&#9472;&#9472; README.md             what it is &#183; install &#183; quick use
+&#9500;&#9472;&#9472; reference/
+&#9474;   &#9500;&#9472;&#9472; plan-contract.md   THE contract: the four gates, plan-or-skip threshold, composition of review-loop + staffing &#8212; domain-neutral
+&#9474;   &#9492;&#9472;&#9472; authoring.md       the house format: what a plan covers, visual-first, stable ids, ac-N criteria (generic of backlog's planning.md)
+&#9500;&#9472;&#9472; templates/
+&#9474;   &#9492;&#9472;&#9472; plan-skeleton.html  <span class="moved">authoritative</span> plan document skeleton (stable-id contract, ac-N criteria), dev-isms lifted out
+&#9500;&#9472;&#9472; agents/openai.yaml    Codex compat (docs/patterns/codex-compat.md)
+&#9492;&#9472;&#9472; evals/probes.md       situated dry-run probes + answer key
+<span class="edge-label">(no scripts/ &#8212; presentation runtime is borrowed from review-loop by name)</span></pre>
+    <figcaption>The plan skeleton is authoritative here (plan owns the plan document shape); <code>review-loop</code> ships only a demonstrative copy of the stable-id contract.</figcaption>
+  </figure>
+</section>
+
+<section id="changes">
+  <h2>What generalizes (before &#8594; after)</h2>
+  <table>
+    <thead><tr><th>Backlog-ism today</th><th>After extraction</th></tr></thead>
+    <tbody>
+      <tr><td>Gate 4 approval is "presented through <code>presenting.md</code> / the backlog review server"</td><td>Gate 4 delegates to the <code>review-loop</code> skill by name (present &#183; annotate &#183; verdict-coded await &#183; ledger)</td></tr>
+      <tr><td>Gate 5: "commit the plan to the work branch; implementing agents read it from disk" + posterity tracker-write</td><td><strong>Dropped</strong> from the generic contract; named as the <em>caller's</em> concern (what <code>backlog</code> does after approval)</td></tr>
+      <tr><td>Staffing named inline ("orchestrator authors; builder implements") against <code>reference/staffing.md</code></td><td>Defers "who authors/builds" to the <code>staffing</code> skill by name</td></tr>
+      <tr><td>Acceptance criteria "checkable pass/fail <em>against a running app</em>"; test seams, verify/evidence downstream</td><td>Criteria are "checkable pass/fail" for any effort; running-app/verify/evidence framing lives only in the project playbook, not the bundled contract</td></tr>
+      <tr><td>Threshold/format/location read from <code>docs/agents/planning.md</code> (must exist or hard-stop)</td><td>Full defaults bundled in <code>reference/</code>; the playbook is <strong>delta-only</strong> (overrides threshold, file location, approval authority) &#8212; skill runs standalone with no playbook</td></tr>
+      <tr><td>Blocking design questions routed to backlog's <code>reference/prototype.md</code></td><td>Gate 2 stays but is means-neutral: "settle blockers by a spike/prototype/research the caller has" &#8212; not a hard dependency on any one sibling</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>User stories</h2>
+  <ul class="plain">
+    <li id="story-1">As <em>anyone planning an effort</em> (a research sprint, an ops migration, a product change &#8212; not only code), I want to invoke <code>plan</code> by name and get a reviewable plan artifact with explicit acceptance criteria, so that I think before I build without adopting a dev workflow.</li>
+    <li id="story-2">As a <em>skill author</em> (backlog, goodwork, a research skill), I want to compose <code>plan</code> by name to produce and get sign-off on a plan, so that I don't fork the planning gates into my skill.</li>
+    <li id="story-3">As an <em>agent</em>, I want the composer to present the plan through <code>review-loop</code> and block on its verdict, so that I proceed only on an explicit human approve and revise on request-changes &#8212; without the composer re-implementing a review server.</li>
+    <li id="story-4">As an <em>agent</em>, I want "who should author or build this" answered by <code>staffing</code> by name, so that role selection stays consistent with the machine's roster instead of being hardcoded in the plan skill.</li>
+    <li id="story-5">As <em>a user with a tiny, low-risk change</em>, I want the composer to <em>skip</em> planning per a stated threshold, so that planning is applied where it pays and not as ceremony.</li>
+    <li id="story-6">As <em>a user with no project playbook and no review surface</em>, I want the skill to still run on bundled defaults and fall back to opening the rendered plan locally, so that it is usable outside this repo.</li>
+    <li id="story-7">As a <em>Codex user</em>, I want the skill to present via <code>agents/openai.yaml</code>, so that it works when installed into Codex.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Implementation decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><strong>Standalone skill at <code>skills/plan/</code></strong>, shaped like <code>staffing</code>/<code>review-loop</code>: SKILL.md + README + <code>reference/</code> + <code>templates/</code> + <code>agents/openai.yaml</code> + <code>evals/</code>. <strong>No <code>scripts/</code></strong> &#8212; the composer ships no runtime.</li>
+    <li id="dec-2"><strong>Thin composer, delegation by name.</strong> The approval gate says "present via <code>review-loop</code>"; role questions say "resolve via <code>staffing</code>." No <code>review-server.py</code>/<code>review-await.py</code> is copied in, and no path-import of another skill's files &#8212; composition is by plain name only, per <code>AGENTS.md</code> &#167; the composition model.</li>
+    <li id="dec-3"><strong>Contract split into two references.</strong> <code>reference/plan-contract.md</code> carries the four gates, the plan-or-skip threshold, and the two compositions (review-loop for gate 4, staffing for authorship). <code>reference/authoring.md</code> carries what a plan covers and the house format (visual-first, stable ids, <code>ac-N</code> criteria, self-contained HTML) &#8212; the domain-neutral rewrite of backlog's <code>planning.md</code> &#167; Format/What-a-plan-covers.</li>
+    <li id="dec-4"><strong>Strip the dev-only tail.</strong> The bundled contract's terminal gate is <em>Approved</em> (the approval record). "Commit the plan to the work branch," "implementing agents read it from disk," and the posterity tracker-write are removed and explicitly labelled as the <em>caller's</em> post-approval concern &#8212; what <code>backlog</code> wraps around the composer.</li>
+    <li id="dec-5"><strong>Domain-neutral by default.</strong> The bundled contract and skeleton read for any effort. Acceptance criteria are "checkable pass/fail" without assuming a running app; test-seams / verify / evidence / repo-path framing is <em>not</em> in the bundled contract &#8212; it belongs to the project playbook.</li>
+    <li id="dec-6"><strong>Two-layer, standalone-usable (like <code>staffing</code>).</strong> Bundled references carry the full default contract (threshold, format, gates) so the skill works with <em>no</em> project playbook. The playbook (<code>docs/agents/planning.md</code>) is <strong>delta-only</strong>: it overrides the threshold, the plan-file location convention, and the approval authority. When no playbook and no review surface exist, the contract states the local fallback (open the rendered plan on the machine, take the verdict in conversation).</li>
+    <li id="dec-7"><strong>Authoritative plan skeleton.</strong> <code>templates/plan-skeleton.html</code> is the plan's own document shape (plan owns it). It carries stable section ids and <code>&lt;li id="ac-N" data-criterion&gt;</code> criteria, inline styles + inline SVG, no external fetches; the backlog-specific comment header ("backlog plans", <code>templates/planning.md</code>) is degeneralized.</li>
+    <li id="dec-8"><strong>Gate 2 is means-neutral.</strong> Blocking design questions are settled before writing "by whatever the caller has &#8212; a prototype, a spike, research," and the answer is folded into the plan. <code>prototype</code> is <em>not</em> a declared dependency of this skill (only <code>review-loop</code> and <code>staffing</code> are).</li>
+    <li id="dec-9"><strong>Three-part dependency surface declared in SKILL.md:</strong> <em>bundled references</em> (its own gates + format + skeleton) &#183; <em>project playbook</em> (<code>docs/agents/planning.md</code>, delta-only) &#183; <em>sibling skills</em> (<code>review-loop</code> = the sign-off gate; <code>staffing</code> = who authors/builds).</li>
+    <li id="dec-10"><strong>Non-breaking.</strong> <code>backlog</code>'s <code>reference/plan.md</code>, <code>templates/planning.md</code>, and <code>plan-skeleton.html</code> are untouched; it still plans as today. Rewiring <code>backlog</code> to consume this skill by name (and deleting its copy) is a separate issue.</li>
+    <li id="dec-11"><strong>Staffing of this build:</strong> plan authorship (this artifact) is orchestrator work. Build-out delegates &#8212; the taste surface (SKILL/README/reference copy, skeleton degeneralization) to a Claude builder (opus-4.8/fable-5); any mechanical lift/format work to the backend builder (gpt-5.5 via <code>codex exec</code>). Probe checking runs on both a Claude and a gpt-5.5 executor.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <p>Tags: <span class="tag file">file</span> a file/content check on the tree &#183; <span class="tag probe">probe</span> a dry-run eval graded against an answer key. (No <span class="tag" style="color:var(--ok)">runtime</span> tag: the composer ships no scripts of its own &#8212; the review runtime is <code>review-loop</code>'s, exercised by issue #2.)</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion>The skill exists at <code>skills/plan/</code> with SKILL.md, README.md, both <code>reference/</code> docs (<code>plan-contract.md</code>, <code>authoring.md</code>), <code>templates/plan-skeleton.html</code>, <code>agents/openai.yaml</code>, and <code>evals/probes.md</code>. There is <em>no</em> <code>scripts/</code> directory.<span class="tag file">file</span></li>
+    <li id="ac-2" data-criterion>SKILL.md declares all three dependency-surface kinds explicitly and by name &#8212; <em>bundled references</em> (its gates + format + skeleton), <em>project playbook</em> (<code>docs/agents/planning.md</code>, described as delta-only), and <em>sibling skills</em> (<code>review-loop</code> with its role = the sign-off gate; <code>staffing</code> with its role = who authors/builds).<span class="tag file">file</span></li>
+    <li id="ac-3" data-criterion><strong>Thin-composer boundary:</strong> the contract presents the plan for sign-off by invoking <code>review-loop</code> by plain name and resolves role questions via <code>staffing</code> by plain name; a grep shows no bundled <code>review-server.py</code>/<code>review-await.py</code>, no <code>scripts/</code> dir, and no filesystem-path import of another skill's files under <code>skills/plan/</code>.<span class="tag file">file</span></li>
+    <li id="ac-4" data-criterion><strong>Dev-only tail stripped:</strong> the bundled contract's terminal gate is <em>Approved</em> (the approval record). It contains no "commit the plan to the work branch," no "implementing agents read it from disk," and no required posterity tracker-write; any such step is named as the <em>caller's</em> concern, not the generic skill's.<span class="tag file">file</span></li>
+    <li id="ac-5" data-criterion><strong>Domain-neutral:</strong> the bundled contract and skeleton read for any effort (research, ops, product), not only code &#8212; acceptance criteria are defined as "checkable pass/fail" with no assumption of a running app, and dev-specific terms (running app, verify/evidence, repo branch/paths) do not appear in the bundled contract (they may appear only in the project-playbook reference to it).<span class="tag file">file</span></li>
+    <li id="ac-6" data-criterion><strong>Two-layer / standalone-usable:</strong> the bundled references carry the full default contract (threshold, format, gates) so the skill functions with <em>no</em> project playbook; the contract states that the playbook overrides only (threshold, plan-file location, approval authority) and states the local fallback when neither a playbook nor a review surface is present.<span class="tag file">file</span></li>
+    <li id="ac-7" data-criterion><strong>Authoritative, self-contained skeleton:</strong> <code>templates/plan-skeleton.html</code> carries the stable-id contract (stable section ids; <code>&lt;li id="ac-N" data-criterion&gt;</code> criteria), uses inline styles + inline SVG with no external fetches, and renders correctly on a plain browser open; its header comment carries no backlog-specific identity.<span class="tag file">file</span></li>
+    <li id="ac-8" data-criterion><code>agents/openai.yaml</code> is present, parses as valid YAML, and presents the skill for Codex per <code>docs/patterns/codex-compat.md</code>.<span class="tag file">file</span></li>
+    <li id="ac-9" data-criterion><strong>Probe eval passes:</strong> <code>evals/probes.md</code> holds situated dry-run probes with an answer key; on <em>both</em> a Claude executor and a gpt-5.5 (<code>codex exec</code>) executor the core probes route correctly &#8212; (a) "plan a non-code effort" &#8594; run the gates, produce the HTML artifact, present via <code>review-loop</code> by name (don't fork a server); (b) "tiny, low-risk change" &#8594; skip planning per the threshold; (c) "who should author this plan?" &#8594; resolve via <code>staffing</code> by name; (d) "changes requested at the gate" &#8594; revise and re-present, delegating the annotation ledger to <code>review-loop</code>; (e) "plan approved" &#8594; stop at the approval record &#8212; do not commit or start implementing. All core probes pass on both executors.<span class="tag probe">probe</span></li>
+    <li id="ac-10" data-criterion><strong>Non-breaking:</strong> <code>backlog</code>'s own <code>reference/plan.md</code>, <code>templates/planning.md</code>, and <code>plan-skeleton.html</code> are byte-unchanged and it still plans as before; the rewire to consume the <code>plan</code> skill by name is explicitly deferred and noted (in the skill README or an out-of-scope note).<span class="tag file">file</span></li>
+  </ul>
+</section>
+
+<section id="seams">
+  <h2>Test seams</h2>
+  <ul class="plain">
+    <li id="seam-1"><strong>File/content checks (primary seam).</strong> ac-1 through ac-8 and ac-10 are grep/parse assertions over the shipped tree: layout, the three-part dependency declaration, the composition-by-name boundary (no copied scripts), the stripped tail, domain-neutral wording, the self-contained skeleton, valid <code>openai.yaml</code>, and backlog left untouched. A skill that ships no runtime is verified structurally, not by driving a process.</li>
+    <li id="seam-2"><strong>Probe eval (routing seam).</strong> The skill's real value &#8212; does an agent invoke it, honor the threshold, compose <code>review-loop</code> and <code>staffing</code> by name, and stop at approval &#8212; is judged by dual-executor dry-runs per <code>docs/patterns/probe-evals.md</code> (ac-9).</li>
+    <li id="seam-3"><strong>Deliberately untested:</strong> the review runtime (serve, annotate, verdict-coded await, hash-binding) &#8212; that is <code>review-loop</code>'s surface, exercised by issue #2, and this skill only names it. Re-testing it here would test the wrong skill. Likewise the taste of the generated plan copy is covered by the human's own review pass, not automation.</li>
+  </ul>
+</section>
+
+<section id="evidence-required">
+  <h2>Evidence required</h2>
+  <ul class="plain">
+    <li id="ev-1">A file-tree listing + the grep transcripts backing ac-1 through ac-8 and ac-10 (layout present, three-part surface declared, no copied scripts, stripped tail, neutral wording, valid <code>openai.yaml</code>, backlog untouched).</li>
+    <li id="ev-2">The dual-executor probe transcript + a pass/fail table mapping each probe to its answer-key criterion (ac-9).</li>
+    <li id="ev-3">A screenshot of <code>templates/plan-skeleton.html</code> rendered on a plain browser open, proving it is self-contained (ac-7).</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>Transitional duplication: backlog's plan step and the new <code>plan</code> skill coexist until the rewire issue lands. Mitigation: the deferral is noted; the duplication is intentional and tracked, not drift.</li>
+    <li>Over-thinning: stripping too much dev context could leave the generic contract unable to reconstitute a rigorous dev plan. Mitigation: the dev specifics live in the project playbook (<code>docs/agents/planning.md</code>) that the contract composes over, so a dev caller still gets the full rigor; the bundled default is the floor, not the ceiling.</li>
+    <li>Composition-by-name is a convention, not an enforced import &#8212; a careless caller could ignore <code>review-loop</code>/<code>staffing</code>. Mitigation: the probe eval (ac-9) is exactly the check that agents route to the siblings rather than reinventing them.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>Rewiring <code>backlog</code> to consume <code>plan</code> by name and deleting backlog's bundled plan step &#8212; a separate rewire issue.</li>
+    <li>Extracting <code>prototype</code> as a sibling skill; gate 2 stays means-neutral and depends on no prototype skill here.</li>
+    <li>A <code>setup</code> command that installs the delta-only planning playbook into a fresh repo &#8212; for this repo the playbook already exists as <code>docs/agents/planning.md</code>.</li>
+    <li>Any change to <code>review-loop</code> or <code>staffing</code> themselves, or to the tailnet surface config in <code>docs/agents/environment.md</code>.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
