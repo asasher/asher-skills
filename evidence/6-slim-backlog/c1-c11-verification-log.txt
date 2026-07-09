@@ -1,0 +1,41 @@
+# Verification log — #6 slim backlog (deterministic checks)
+Generated 2026-07-09T18:12:17Z against branch 6-slim-backlog HEAD.
+
+## ac-1 removal complete
+removed  reference/staffing.md
+removed  reference/presenting.md
+removed  reference/plan.md
+removed  reference/prototype.md
+removed  scripts/review-server.py
+removed  scripts/review-await.py
+removed  scripts/pages
+removed  templates/plan-skeleton.html
+removed  templates/planning.md
+removed  templates/prototyping.md
+removed  templates/sections/picking-models.md
+removed  templates/sections/claude-md-overlay.md
+
+## ac-3 no live dangling pointers (grep; migrations.md historical excluded)
+(no hits outside migrations.md) -> PASS
+
+## ac-8 pointer resolution (non-migrations)
+OK reference/adversarial-review.md
+OK reference/diagnose.md
+OK reference/evidence.md
+OK reference/groom.md
+OK reference/implement.md
+OK reference/issue-loop.md
+OK reference/migrations.md
+OK reference/refactor.md
+OK reference/run.md
+OK reference/setup.md
+OK reference/verify.md
+OK reference/worktree-isolation.md
+siblings:
+OK skills/staffing
+OK skills/review-loop
+OK skills/plan
+OK skills/prototype
+
+## ac-11 mirror byte-identical
+diff -rq exit 0 -> PASS
