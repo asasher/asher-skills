@@ -1,0 +1,30 @@
+ac-6 — end-to-end review-loop serve dry-run (issue #3)
+Captured against branch 3-maquette-review-loop HEAD 45afb8c (final, post-review).
+
+ENVIRONMENT GAP (disclosed): headless-Chrome screenshotting is SIGKILLed in this
+environment. Per the plan (ac-6) and matching issue #2's evidence handling, the
+visual review is verified through a curl/DOM transcript instead of a screenshot.
+
+Procedure: a sample BRIEF-style HTML page (sections each carrying a stable id) was
+served through the real primitive:
+  python3 skills/review-loop/scripts/review-server.py \
+    --doc <sample brief.html> --title "Maquette BRIEF dry-run" \
+    --issue 3-mq-verify --kind maquette --state <scratch> --surface <scratch> --port 8523
+
+(a) ROOT  http://127.0.0.1:8523/?token=...  -> HTTP 200
+    __REVIEW_BOOTSTRAP__ occurrences: 2            (annotation chrome injected)
+    stable ids survived serving: product, the-deal, personas, journeys, look-and-feel  (5/5)
+
+(b) /version  ->  {"hash":"6c6df81f45147906"}     HTTP 200   (content-hash endpoint live)
+
+(c) surface/index.html + registry.json generated
+    hub index lists entry: "Maquette BRIEF dry-run" / issue 3-mq-verify / kind maquette
+
+Script sanity: python3 -m py_compile skills/review-loop/scripts/review-server.py
+               skills/review-loop/scripts/review-await.py   -> COMPILE CLEAN
+
+Conclusion: a maquette-rendered deliverable ('--kind maquette') served through the
+review-loop skill produces the injected annotation chrome, preserves the artifact's
+stable ids, exposes the content-hash /version endpoint, and registers in the hub —
+i.e. maquette's sign-off gate lands end-to-end through the shared surface.
+Server killed and scratch removed after capture.
