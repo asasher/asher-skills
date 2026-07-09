@@ -1,0 +1,249 @@
+<!doctype html>
+<!-- Plan #2 — Extract review-loop into a standalone primitive skill. Stable ids never change
+     across revisions; acceptance criteria are <li id="ac-N" data-criterion>. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #2 — Extract review-loop</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --ok: #0f9d58; --warn: #b8860b; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --ok: #4ade80; --warn: #fbbf24; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+svg .edge-label { font-size: 10.5px; fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "☐"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li .how { display: block; font-size: .8rem; color: var(--muted); margin-top: .2rem; }
+ul.criteria li .tag { font-size: .68rem; text-transform: uppercase; letter-spacing: .04em; border: 1px solid currentColor; border-radius: 99px; padding: 0 .4rem; margin-left: .3rem; }
+.tag.runtime { color: var(--ok); }
+.tag.file { color: var(--accent); }
+.tag.probe { color: var(--warn); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .35rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+.tree { font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre; margin: 0; }
+.new { color: var(--ok); }
+.moved { color: var(--warn); }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Extract <code>review-loop</code> into a standalone primitive skill</h1>
+  <p class="problem">The annotate-over-tailnet review surface — serve an HTML artifact, let the human mark it up in-page, block until a verdict — is buried inside <code>backlog</code>. Any skill that needs a human to sign off on a rendered artifact wants it, so it should be an extracted primitive composed by name, not forked into every caller.</p>
+  <div class="chips"><span class="chip">issue #2</span><span class="chip">enhancement</span><span class="chip">plan v2 — approved + path-prefix fix</span></div>
+</header>
+
+<section id="approach">
+  <h2>Approach</h2>
+  <p>The machinery is already ~90% artifact-agnostic — the extraction is mostly a <em>move + generalize the shallow backlog-isms</em>, plus a real skill wrapper (SKILL/README/references/evals/openai.yaml) modelled on the shipped <code>staffing</code> skill. The extraction is deliberately <strong>non-breaking</strong>: <code>backlog</code> keeps its own bundled copy and keeps presenting exactly as today; rewiring <code>backlog</code> to consume <code>review-loop</code> by name is a separate issue (see Out of scope).</p>
+  <figure id="module-diagram">
+    <svg viewBox="0 0 680 250" role="img" aria-label="Before and after module diagram">
+      <text x="10" y="18" font-weight="600">Today</text>
+      <rect x="10" y="30" width="200" height="140" rx="8" fill="none" stroke="var(--line)"/>
+      <text x="20" y="50" font-weight="600">backlog</text>
+      <rect x="24" y="62" width="172" height="44" rx="6" fill="none" stroke="var(--accent)"/>
+      <text x="34" y="80">review-server.py</text>
+      <text x="34" y="96" class="edge-label">await · pages · skeleton</text>
+      <text x="34" y="130" class="edge-label">presenting.md (contract)</text>
+      <text x="34" y="150" class="edge-label">baked into the caller</text>
+
+      <text x="360" y="18" font-weight="600">After</text>
+      <rect x="360" y="30" width="200" height="96" rx="8" fill="none" stroke="var(--ok)"/>
+      <text x="370" y="50" font-weight="600" fill="var(--ok)">review-loop (primitive)</text>
+      <rect x="374" y="62" width="172" height="44" rx="6" fill="none" stroke="var(--ok)"/>
+      <text x="384" y="80">review-server.py</text>
+      <text x="384" y="96" class="edge-label">artifact-agnostic</text>
+
+      <rect x="360" y="150" width="90" height="40" rx="6" fill="none" stroke="var(--line)"/>
+      <text x="372" y="174">backlog</text>
+      <rect x="470" y="150" width="90" height="40" rx="6" fill="none" stroke="var(--line)"/>
+      <text x="482" y="174">maquette</text>
+      <rect x="580" y="150" width="90" height="40" rx="6" fill="none" stroke="var(--line)"/>
+      <text x="592" y="174">prototype…</text>
+      <path d="M405 150 L440 126" stroke="var(--muted)" fill="none" marker-end="url(#a)"/>
+      <path d="M515 150 L470 126" stroke="var(--muted)" fill="none" marker-end="url(#a)"/>
+      <path d="M625 150 L510 126" stroke="var(--muted)" fill="none" marker-end="url(#a)"/>
+      <text x="300" y="200" class="edge-label">callers compose by name — "present it via review-loop"</text>
+      <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="var(--muted)"/></marker></defs>
+    </svg>
+    <figcaption>The capability moves to its own directory and is referenced by name; existing forks (backlog, goodwork) migrate later via their own rewire issues.</figcaption>
+  </figure>
+</section>
+
+<section id="layout">
+  <h2>File layout</h2>
+  <p>New skill under <code>skills/review-loop/</code>, mirroring <code>staffing</code>'s shape. Nothing is deleted from <code>backlog</code>.</p>
+  <figure>
+<pre class="tree"><span class="new">skills/review-loop/</span>
+├── SKILL.md              entry point · command surface · three-part dependency surface
+├── README.md             what it is · install · quick use
+├── reference/
+│   ├── review-loop.md    THE contract: serve→annotate→await→revise/approve, hash-binding, ledger
+│   ├── surface-and-hub.md one-surface-one-root · publish-don't-fork · local /hub fallback · hub
+│   └── scripts.md        CLI surface of both scripts (args, verdict codes, --sweep)
+├── scripts/
+│   ├── review-server.py  <span class="moved">generalized</span> (artifact-agnostic kind, generic branding, scope tag)
+│   ├── review-await.py   <span class="moved">verbatim</span> (already generic)
+│   └── pages/chrome.{css,js}  <span class="moved">verbatim</span> (kind already rendered dynamically)
+├── templates/
+│   └── plan-skeleton.html  ONE example caller template (stable-id contract), header degeneralized
+├── agents/openai.yaml    Codex compat (docs/patterns/codex-compat.md)
+└── evals/probes.md       situated dry-run probes + script-behavior checks</pre>
+    <figcaption>The plan skeleton ships as one <em>example</em> caller, not a server dependency — the server serves any HTML that carries stable element ids.</figcaption>
+  </figure>
+</section>
+
+<section id="loop-diagram">
+  <h2>The loop it preserves</h2>
+  <p>Behavior is unchanged from today — only the home and the branding generalize.</p>
+  <figure>
+    <svg viewBox="0 0 680 150" role="img" aria-label="Annotate, revise, approve loop">
+      <rect x="10" y="55" width="120" height="40" rx="6" fill="none" stroke="var(--accent)"/>
+      <text x="24" y="72">serve HTML</text>
+      <text x="24" y="88" class="edge-label">+chrome injected</text>
+      <rect x="180" y="55" width="120" height="40" rx="6" fill="none" stroke="var(--accent)"/>
+      <text x="194" y="79">human annotates</text>
+      <rect x="350" y="55" width="120" height="40" rx="6" fill="none" stroke="var(--accent)"/>
+      <text x="364" y="72">agent awaits</text>
+      <text x="364" y="88" class="edge-label">verdict code</text>
+      <rect x="520" y="20" width="150" height="36" rx="6" fill="none" stroke="var(--ok)"/>
+      <text x="534" y="42" fill="var(--ok)">approve (0/3) → done</text>
+      <rect x="520" y="94" width="150" height="36" rx="6" fill="none" stroke="var(--warn)"/>
+      <text x="534" y="116" fill="var(--warn)">changes (10) → revise</text>
+      <path d="M130 75 L180 75" stroke="var(--muted)" marker-end="url(#b)"/>
+      <path d="M300 75 L350 75" stroke="var(--muted)" marker-end="url(#b)"/>
+      <path d="M470 70 L520 45" stroke="var(--muted)" marker-end="url(#b)"/>
+      <path d="M470 80 L520 108" stroke="var(--muted)" marker-end="url(#b)"/>
+      <path d="M595 130 C595 148, 60 148, 60 100" stroke="var(--muted)" fill="none" marker-end="url(#b)"/>
+      <text x="250" y="146" class="edge-label">revise + write ledger disposition, then re-serve</text>
+      <defs><marker id="b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="var(--muted)"/></marker></defs>
+    </svg>
+    <figcaption>Reconciliation is LLM audit — the ledger + hash-bound approval, no version stamps.</figcaption>
+  </figure>
+</section>
+
+<section id="changes">
+  <h2>What generalizes (before → after)</h2>
+  <table>
+    <thead><tr><th>Backlog-ism today</th><th>After extraction</th></tr></thead>
+    <tbody>
+      <tr><td><code>--kind</code> restricted to <code>choices=("plan","prototype")</code></td><td>Any kind string (plan · prototype · maquette · doc · …); default still <code>plan</code></td></tr>
+      <tr><td>Server docstring "Backlog review server"; hub H1 hardcodes "· backlog"</td><td>Generic naming; optional <code>--surface-label</code> for the hub suffix, default none</td></tr>
+      <tr><td><code>--issue</code> framed as a backlog issue number</td><td>Same flag (backward-compatible), documented as an optional scope tag — issue, ticket, or any grouping key</td></tr>
+      <tr><td>Skeleton header cites "backlog plans" / <code>templates/planning.md</code></td><td>Header cites review-loop's stable-id contract; shipped as one example caller</td></tr>
+      <tr><td>Contract lives in backlog's <code>presenting.md</code></td><td>Contract is review-loop's own <code>reference/review-loop.md</code> + <code>surface-and-hub.md</code></td></tr>
+      <tr><td>Pattern doc <code>review-surface.md</code> says "copy this; canonical = backlog"</td><td>Superseded → pointer to the <code>review-loop</code> skill (compose by name)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>User stories</h2>
+  <ul class="plain">
+    <li id="story-1">As a <em>skill author</em> (maquette, prototype, a doc-review skill), I want to present any rendered HTML for human sign-off by invoking <code>review-loop</code> by name, so that I don't fork the review machinery into my skill.</li>
+    <li id="story-2">As an <em>agent</em>, I want to serve an arbitrary artifact and block on a verdict-coded await, so that I proceed only on an explicit approve and revise on request-changes.</li>
+    <li id="story-3">As <em>Asher reviewing</em>, I want to annotate the artifact in-page and get a batch verdict with hash-bound approval, so that I never approve a version I didn't see.</li>
+    <li id="story-4">As <em>Asher away from the machine</em>, I want the tailnet port-proxy public URL and a repo-scoped hub listing everything awaiting me, with a local <code>/hub</code> fallback, so that reviews are findable from my phone.</li>
+    <li id="story-5">As a <em>maintainer</em>, I want the old copyable pattern superseded by a pointer to this skill, so that future skills extract the primitive instead of copying it.</li>
+    <li id="story-6">As a <em>Codex user</em>, I want the skill to present via <code>agents/openai.yaml</code>, so that it works when installed into Codex.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Implementation decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><strong>Standalone skill at <code>skills/review-loop/</code></strong>, shaped like <code>staffing</code>: SKILL.md + README + <code>reference/</code> + <code>scripts/</code> + <code>templates/</code> + <code>agents/openai.yaml</code> + <code>evals/</code>.</li>
+    <li id="dec-2"><strong>Scripts become the canonical home.</strong> <code>review-server.py</code> is generalized (per the before→after table); <code>review-await.py</code>, <code>chrome.css/js</code> move verbatim (already generic — chrome renders <code>kind</code> dynamically). Stdlib-only Python 3 preserved. No "Adapted from" header — as the extracted primitive, review-loop <em>is</em> the source of truth.</li>
+    <li id="dec-3"><strong>Contract split into two references.</strong> <code>reference/review-loop.md</code> carries the annotate→revise→approve loop (serve-time chrome, batch verdicts, await gate, ledger, hash-binding); <code>reference/surface-and-hub.md</code> carries one-surface-one-root, publish-don't-fork, local fallback, and the hub. Both are artifact-agnostic rewrites of backlog's <code>presenting.md</code> §§ Contract/Review loop/Hub. A third <code>reference/scripts.md</code> documents the CLI so callers can invoke the bundled scripts.</li>
+    <li id="dec-4"><strong>Plan skeleton is one example caller, not baked in.</strong> It ships under <code>templates/</code> to demonstrate the stable-id contract the chrome anchors to; the server serves any HTML with stable ids and does not require it.</li>
+    <li id="dec-5"><strong>Three-part dependency surface declared in SKILL.md:</strong> <em>bundled references</em> (its own contract incl. the scripts) · <em>project playbooks</em> (a <code>docs/agents/</code> surface-config playbook; on this repo it resolves to the existing <code>environment.md</code> § Presenting) · <em>sibling skills</em> (<strong>none</strong> — review-loop is a root primitive).</li>
+    <li id="dec-6"><strong>Supersede, don't delete-and-break.</strong> <code>docs/patterns/review-surface.md</code> is replaced by a short pointer to the <code>review-loop</code> skill per <code>AGENTS.md</code> § Conventions ("copy a pattern; extract a primitive"); the <code>docs/patterns/README.md</code> table row is updated. Existing forks (backlog, goodwork) are noted as migrating via their own rewire issues.</li>
+    <li id="dec-7"><strong>Backlog rewire is deferred.</strong> Backlog keeps its bundled scripts and presenting.md and works unchanged; consuming review-loop by name (and deleting backlog's copy) is a separate issue, so this extraction ships non-breaking.</li>
+    <li id="dec-9"><strong>Path-prefix submit fix (folded in during plan review).</strong> The chrome posts to <em>root-absolute</em> URLs (<code>fetch('/event')</code>, <code>fetch('/version')</code>), which resolve to the domain root and 404 when the page is served under a tailnet path prefix (<code>/asher-skills/&lt;n&gt;/review</code>) — the real deployment shape. The extracted <code>chrome.js</code> builds every client→server call <strong>mount-relative</strong>: derive a base from <code>window.location.pathname</code> (the directory of the served page) so requests resolve correctly whether served at <code>/</code> (loopback) or under a prefix; the <code>/hub</code> fallback link is made mount-relative too. Confirmed empirically that <code>tailscale serve --set-path</code> <em>strips</em> the prefix before forwarding (backend sees <code>/event</code>), so the client fix alone restores submit; additionally the server matches its endpoints (<code>/event</code>, <code>/version</code>, <code>/hub</code>, doc-root) <strong>suffix-tolerantly</strong> so a proxy that instead <em>preserves</em> the prefix is also handled. <strong>Backlog's bundled copy carries the identical bug and is deliberately not touched here</strong> (stays non-breaking per ac-12); it inherits the fix only when the deferred #6 rewire makes backlog consume <code>review-loop</code>.</li>
+    <li id="dec-8"><strong>Staffing:</strong> plan authorship is orchestrator work (this thread). Build-out delegates — the mechanical <code>review-server.py</code> generalization + file moves to the backend builder (gpt-5.5 via <code>codex exec</code>); the taste surface (SKILL/README/reference copy, skeleton header, superseded pattern doc) to a Claude builder (opus-4.8/fable-5). Verify/probe checking to the checker role.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <p>Tags: <span class="tag runtime">runtime</span> a genuine <code>python3</code> exercise of the shipped scripts · <span class="tag file">file</span> a file/content check · <span class="tag probe">probe</span> a dry-run eval graded against an answer key.</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion>The skill exists at <code>skills/review-loop/</code> with SKILL.md, README.md, at least the three <code>reference/</code> docs, <code>scripts/review-server.py</code>, <code>scripts/review-await.py</code>, <code>scripts/pages/chrome.{css,js}</code>, a <code>templates/</code> caller skeleton, <code>agents/openai.yaml</code>, and <code>evals/probes.md</code>.<span class="tag file">file</span></li>
+    <li id="ac-2" data-criterion>SKILL.md declares all three dependency-surface kinds explicitly — bundled references (incl. the scripts), project playbooks (a <code>docs/agents/</code> surface-config playbook), and sibling skills (states "none — root primitive").<span class="tag file">file</span></li>
+    <li id="ac-3" data-criterion><strong>Artifact-agnostic kind:</strong> <code>review-server.py --kind maquette --doc &lt;any.html&gt; --title T --surface &lt;tmp&gt; --port 0</code> starts and prints JSON with <code>url</code>/<code>hub</code>/<code>port</code>; a non-plan/prototype kind is <em>not</em> rejected.<span class="tag runtime">runtime</span></li>
+    <li id="ac-4" data-criterion><strong>Serves arbitrary HTML, committed file stays pure:</strong> for a minimal <code>&lt;html&gt;&lt;body&gt;&lt;p id="x"&gt;hi&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</code>, GET <code>/</code> (with token) returns the body with <code>__REVIEW_BOOTSTRAP__</code> + chrome css/js injected before <code>&lt;/body&gt;</code>, and the on-disk file is byte-identical afterward.<span class="tag runtime">runtime</span></li>
+    <li id="ac-5" data-criterion><strong>Verdict-coded await:</strong> posting <code>approve</code> (matching hash) → <code>review-await.py</code> exits 0; <code>approve_with_nits</code> → 3; <code>request_changes</code> → 10; no event before deadline → 124.<span class="tag runtime">runtime</span></li>
+    <li id="ac-6" data-criterion><strong>Hash-bound approval (load-bearing invariant):</strong> an approve POST whose <code>doc_hash</code> ≠ the current document hash returns HTTP 409 <code>{"error":"stale"}</code>; editing the doc after a page load invalidates a prior-hash approval.<span class="tag runtime">runtime</span></li>
+    <li id="ac-7" data-criterion><strong>Hub + local fallback:</strong> on start <code>registry.json</code> and <code>index.html</code> are written under the surface dir and the entry is removed on clean exit; GET <code>/hub</code> returns the generated index; <code>--sweep</code> drops dead entries and prints <code>{"swept":[…]}</code>.<span class="tag runtime">runtime</span></li>
+    <li id="ac-8" data-criterion><strong>No baked-in backlog/plan identity:</strong> the server docstring and the hub H1 carry no hardcoded "backlog"; the chrome copy reads neutrally for any artifact kind; the plan skeleton is shipped as a template, not required by the server (proven by ac-4 serving a skeleton-free doc).<span class="tag file">file</span></li>
+    <li id="ac-9" data-criterion><strong>Pattern superseded:</strong> <code>docs/patterns/review-surface.md</code> is replaced by a short pointer to the <code>review-loop</code> skill (compose by name), and <code>docs/patterns/README.md</code>'s table row is updated per <code>AGENTS.md</code> § Conventions.<span class="tag file">file</span></li>
+    <li id="ac-10" data-criterion><code>agents/openai.yaml</code> is present and parses as valid YAML, presenting the skill for Codex per <code>docs/patterns/codex-compat.md</code>.<span class="tag file">file</span></li>
+    <li id="ac-11" data-criterion><strong>Probe eval passes:</strong> <code>evals/probes.md</code> holds situated dry-run probes with an answer key; both a Claude executor and a gpt-5.5 (<code>codex exec</code>) executor route correctly on the core probes — e.g. "sign off on a rendered maquette" → serve via review-server + block on review-await (don't reinvent); "no surface recorded" → local fallback; "changes requested" → revise + write ledger before re-await. All core probes pass on both executors.<span class="tag probe">probe</span></li>
+    <li id="ac-12" data-criterion><strong>Non-breaking:</strong> <code>backlog</code>'s own scripts and <code>presenting.md</code> are untouched and it still presents as before; the rewire to consume review-loop by name is explicitly deferred and noted in the superseded pattern doc.<span class="tag file">file</span></li>
+    <li id="ac-13" data-criterion><strong>Submit works under a path-prefix mount (the real bug):</strong> (a) <em>runtime</em> — with the review server behind a simulated stripping proxy that mounts the doc at a prefix (e.g. <code>/asher-skills/2/review/</code>), POSTing a verdict to the <em>prefixed</em> <code>/event</code> path is accepted and the verdict-coded <code>review-await.py</code> exit still fires (0/3/10); (b) <em>file</em> — <code>chrome.js</code> contains no root-absolute <code>fetch('/event'</code> or <code>fetch('/version'</code>, and constructs those URLs from a mount base derived from <code>location</code>. Both loopback-root and prefixed serving submit successfully.<span class="tag runtime">runtime</span><span class="tag file">file</span></li>
+  </ul>
+</section>
+
+<section id="seams">
+  <h2>Test seams</h2>
+  <ul class="plain">
+    <li id="seam-1"><strong>Script CLI (highest-value seam).</strong> ac-3 through ac-7 drive <code>review-server.py</code> and <code>review-await.py</code> directly with <code>python3</code> over loopback — real HTTP GET/POST, real event log, real registry files in a tmp surface dir. This is the load-bearing behavior and it is genuinely runtime-checkable.</li>
+    <li id="seam-1b"><strong>Path-prefix mount (ac-13) — the seam the v1 checks missed.</strong> Loopback-root POSTs never exercise the prefix that broke submit in production. The v2 runtime test puts a tiny stdlib stripping proxy in front of the server, mounts the doc under a prefix, and POSTs the verdict to the prefixed path — asserting the verdict-coded await still fires. Paired with a static assertion that <code>chrome.js</code> builds mount-relative URLs.</li>
+    <li id="seam-2"><strong>File/content checks.</strong> Layout, dependency-surface declaration, neutral branding, superseded pattern, openai.yaml — grepped/parsed against the tree.</li>
+    <li id="seam-3"><strong>Probe eval.</strong> The skill's <em>routing</em> value (does an author invoke it correctly, honor fallback, write the ledger) is judged by dual-executor dry-runs per <code>docs/patterns/probe-evals.md</code>.</li>
+    <li id="seam-4"><strong>Deliberately untested:</strong> the in-browser chrome interaction (drag-to-annotate, auto-reload) — no headless browser in this repo; it moves verbatim and is covered by the human's own review pass on the tailnet surface, not automation.</li>
+  </ul>
+</section>
+
+<section id="evidence-required">
+  <h2>Evidence required</h2>
+  <ul class="plain">
+    <li id="ev-1">Terminal transcript of the script-behavior checks (ac-3 – ac-7): server start JSON, an injected-chrome GET, the three verdict exit codes + timeout, the 409 stale path, and a <code>--sweep</code> run.</li>
+    <li id="ev-2">The dual-executor probe transcript + a pass/fail table mapping each probe to its answer-key criterion (ac-11).</li>
+    <li id="ev-3">A screenshot of a non-plan artifact (e.g. a trivial doc) served with chrome, rendered on the surface — proof of artifact-agnostic serving.</li>
+    <li id="ev-4">Terminal transcript of the path-prefix submit test (ac-13): a verdict POSTed through a prefixed mount, the accepted response, and the matching verdict-coded await exit — proof the production failure mode is closed.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>Transitional duplication: two copies of the scripts (backlog + review-loop) until the rewire issue lands. Mitigation: the superseded pattern doc names backlog/goodwork as pending-migration forks so the duplication is intentional and tracked, not drift.</li>
+    <li>Over-generalizing the server introduces a regression in the exact loop backlog depends on. Mitigation: the changes are surgical (kind/branding/scope only); the runtime criteria exercise the invariants (hash-binding, verdict codes, sweep) that a regression would break.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>Rewiring <code>backlog</code> to consume <code>review-loop</code> by name and deleting backlog's bundled copy — a separate rewire issue (kin to the #6 composer rewire).</li>
+    <li>Migrating <code>goodwork</code>'s multi-page workspace variant onto review-loop — its own issue; review-loop's first cut is the single-document loop.</li>
+    <li>A <code>setup</code> command that installs the surface-config playbook into a fresh repo — for this repo the playbook already exists as <code>environment.md</code> § Presenting; a standalone installer is future work.</li>
+    <li>Any change to the tailnet/surface config in <code>docs/agents/environment.md</code>.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
