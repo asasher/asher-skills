@@ -1,0 +1,246 @@
+<!doctype html>
+<!-- Plan #1 — Extract staffing into a standalone global-capable primitive skill.
+     Conventions: stable ids everywhere; acceptance criteria are <li id="ac-N" data-criterion>;
+     diagram-first; self-contained (inline styles + inline SVG, no external fetches). -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #1 — Extract staffing skill</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --good: #16a34a; --warn: #d97706; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --good: #4ade80; --warn: #fbbf24; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+svg .muted { fill: var(--muted); }
+svg .box { fill: var(--card); stroke: var(--line); }
+svg .accent { fill: none; stroke: var(--accent); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "☐"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li b { color: var(--fg); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .3rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+.q { color: var(--warn); font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Extract <code>staffing</code> into a standalone, global-capable primitive skill</h1>
+  <p class="problem">The model-roster machinery — roles, rankings, routing, fallback — is trapped inside the <code>backlog</code> dev monolith, so non-dev projects and other people can't borrow it, and its table is hardcoded to one machine.</p>
+  <div class="chips"><span class="chip">issue #1</span><span class="chip">enhancement</span><span class="chip">plan v1</span><span class="chip">decomposition · move #1</span></div>
+</header>
+
+<section id="summary">
+  <h2>What we're building</h2>
+  <p>A new standalone skill <code>skills/staffing/</code> that <em>owns</em> the staffing primitive: it derives its roster from a <b>fresh machine audit</b> (not Asher's baked-in models), installs a <b>global base</b> with <b>sparse project overrides</b>, keeps <b>capabilities</b> and <b>task-pins</b> as first-class structures separate from the higher=better rankings, and <b>reconciles by LLM audit</b> with no version stamps. This is the cheap proof-of-shape for the whole backlog decomposition. Rewiring <code>backlog</code> to consume it by name is <a href="#out-of-scope">issue&nbsp;#6, out of scope here</a>.</p>
+</section>
+
+<!-- Diagram 1: the two-layer install architecture -->
+<section id="architecture">
+  <h2>Two-layer install</h2>
+  <p>A machine audit fills a <b>global base</b> (harness-coupled) once; each project carries only its <b>deltas</b>.</p>
+  <figure id="fig-layers">
+    <svg viewBox="0 0 680 300" width="680" height="300" role="img" aria-label="Two-layer install architecture">
+      <!-- audit -->
+      <rect class="box" x="20" y="120" width="150" height="60" rx="8"/>
+      <text x="95" y="145" text-anchor="middle">machine audit</text>
+      <text class="muted" x="95" y="163" text-anchor="middle" font-size="10.5">reachable models?</text>
+      <text class="muted" x="95" y="176" text-anchor="middle" font-size="10.5">codex installed?</text>
+      <!-- arrow -->
+      <line class="accent" x1="170" y1="150" x2="230" y2="150" stroke-width="1.5" marker-end="url(#a)"/>
+      <!-- global base -->
+      <rect class="box" x="235" y="55" width="215" height="190" rx="8" stroke-dasharray="0"/>
+      <text x="342" y="80" text-anchor="middle" font-weight="600">GLOBAL BASE</text>
+      <text class="muted" x="342" y="96" text-anchor="middle" font-size="10.5">harness-coupled · written once</text>
+      <rect class="box" x="252" y="110" width="182" height="34" rx="6"/>
+      <text x="343" y="131" text-anchor="middle" font-size="11">rankings table (audited)</text>
+      <rect class="box" x="252" y="150" width="182" height="34" rx="6"/>
+      <text x="343" y="171" text-anchor="middle" font-size="11">generic routing + pins</text>
+      <rect class="box" x="252" y="190" width="182" height="34" rx="6"/>
+      <text x="343" y="211" text-anchor="middle" font-size="11">CLI / tools mechanics</text>
+      <text class="muted" x="342" y="240" text-anchor="middle" font-size="10">~/.claude/CLAUDE.md + global AGENTS layer</text>
+      <!-- arrow -->
+      <line class="accent" x1="450" y1="150" x2="510" y2="150" stroke-width="1.5" marker-end="url(#a)"/>
+      <!-- project override -->
+      <rect class="box" x="515" y="95" width="150" height="110" rx="8"/>
+      <text x="590" y="120" text-anchor="middle" font-weight="600" font-size="11">PROJECT</text>
+      <text x="590" y="136" text-anchor="middle" font-weight="600" font-size="11">OVERRIDE</text>
+      <text class="muted" x="590" y="158" text-anchor="middle" font-size="10.5">deltas only</text>
+      <text class="muted" x="590" y="174" text-anchor="middle" font-size="10.5">e.g. floor,</text>
+      <text class="muted" x="590" y="187" text-anchor="middle" font-size="10.5">extra pin</text>
+      <defs>
+        <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="var(--accent)" stroke-width="1.5"/></marker>
+      </defs>
+    </svg>
+    <figcaption>The audit runs per machine; overrides never re-copy the base, they only record what differs — so a project file stays small and drift is obvious.</figcaption>
+  </figure>
+</section>
+
+<!-- Diagram 2: routing resolution order -->
+<section id="routing">
+  <h2>How a staffing question resolves</h2>
+  <p>Pins and capabilities are checked <em>before</em> the ranking tie-break — they are gates, not rows in the rankings table.</p>
+  <figure id="fig-routing">
+    <svg viewBox="0 0 680 220" width="680" height="220" role="img" aria-label="Routing resolution order">
+      <rect class="box" x="15" y="90" width="140" height="50" rx="8"/>
+      <text x="85" y="112" text-anchor="middle" font-size="11">1 · task-type pin?</text>
+      <text class="muted" x="85" y="128" text-anchor="middle" font-size="10">bulk → gpt-5.5</text>
+      <line class="accent" x1="155" y1="115" x2="195" y2="115" stroke-width="1.5" marker-end="url(#b)"/>
+      <rect class="box" x="200" y="90" width="150" height="50" rx="8"/>
+      <text x="275" y="108" text-anchor="middle" font-size="11">2 · capability gate</text>
+      <text class="muted" x="275" y="124" text-anchor="middle" font-size="10">browser/computer use</text>
+      <line class="accent" x1="350" y1="115" x2="390" y2="115" stroke-width="1.5" marker-end="url(#b)"/>
+      <rect class="box" x="395" y="90" width="160" height="50" rx="8"/>
+      <text x="475" y="108" text-anchor="middle" font-size="11">3 · rank tie-break</text>
+      <text class="muted" x="475" y="124" text-anchor="middle" font-size="10">intel &gt; taste &gt; cost</text>
+      <line class="accent" x1="555" y1="115" x2="595" y2="115" stroke-width="1.5" marker-end="url(#b)"/>
+      <rect class="box" x="600" y="90" width="65" height="50" rx="8"/>
+      <text x="632" y="112" text-anchor="middle" font-size="11">model</text>
+      <!-- pin shortcut -->
+      <path class="accent" d="M85,90 C85,40 632,40 632,88" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#b)"/>
+      <text class="muted" x="360" y="34" text-anchor="middle" font-size="10">a pin short-circuits ranking</text>
+      <!-- fallback -->
+      <rect class="box" x="395" y="165" width="160" height="42" rx="8" stroke-dasharray="4 3"/>
+      <text x="475" y="183" text-anchor="middle" font-size="11">unreachable?</text>
+      <text class="muted" x="475" y="198" text-anchor="middle" font-size="10">→ succession ladder</text>
+      <line class="accent" x1="475" y1="140" x2="475" y2="163" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#b)"/>
+      <defs>
+        <marker id="b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="var(--accent)" stroke-width="1.5"/></marker>
+      </defs>
+    </svg>
+    <figcaption>Capabilities are booleans, so they filter the candidate set; only the survivors go through the intelligence&nbsp;&gt;&nbsp;taste&nbsp;&gt;&nbsp;cost ordering. Mixing them into the table would corrupt that tie-break — the reason the issue wants them split out.</figcaption>
+  </figure>
+</section>
+
+<section id="limits">
+  <h2>Before → after</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Today (in <code>backlog</code>)</th><th>After #1</th></tr></thead>
+    <tbody>
+      <tr><td>Home</td><td>3 files inside <code>backlog</code>: <code>reference/staffing.md</code>, <code>templates/sections/picking-models.md</code>, <code>claude-md-overlay.md</code></td><td>Standalone <code>skills/staffing/</code>, invoked by name</td></tr>
+      <tr><td>Roster</td><td>Hardcoded to Asher's four models</td><td>Derived from a fresh machine audit at install</td></tr>
+      <tr><td>Scope</td><td>Project-only, dev-coupled</td><td>Global base + sparse project overrides</td></tr>
+      <tr><td>Capabilities</td><td>Not modeled (computer/browser use absent)</td><td>Separate boolean matrix, distinct from rankings</td></tr>
+      <tr><td>Task pins</td><td>Mixed into prose routing rules</td><td>First-class pin list, checked before ranking</td></tr>
+      <tr><td>Reconcile</td><td>Version stamps (<code>&lt;!-- …-templates: vNN --&gt;</code>)</td><td>LLM audit of installed-vs-repo; no stamps</td></tr>
+      <tr><td>Reach</td><td>Only this repo</td><td>Anyone pointing at the public repo</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>User stories</h2>
+  <ul class="plain">
+    <li id="story-1">As an <em>agent mid-workflow</em>, I want to resolve "who should do this task" against one roster, so that delegation is consistent across the loop and ad-hoc sessions.</li>
+    <li id="story-2">As <em>someone installing from the public repo on a different machine</em>, I want the skill to audit <em>my</em> reachable models and Codex install, so that the roster fits my environment instead of Asher's.</li>
+    <li id="story-3">As a <em>user with existing global staffing rules</em>, I want the setup flow to show them and offer project overrides, so that I extend rather than clobber.</li>
+    <li id="story-4">As a <em>user with a project that differs only slightly</em> (e.g. a stricter floor), I want to record just the delta, so that the override file stays small and legible.</li>
+    <li id="story-5">As an <em>agent routing a browser-driving or computer-use task</em>, I want capabilities checked as booleans separate from the rankings, so that the intelligence&nbsp;&gt;&nbsp;taste&nbsp;&gt;&nbsp;cost tie-break stays intact.</li>
+    <li id="story-6">As a <em>user re-invoking the skill later</em>, I want it to audit installed-vs-repo and report drift or conflict, so that I trust the config without hunting for version markers.</li>
+    <li id="story-7">As a <em>Codex-driven session</em>, I want the skill to present correctly, so that Codex threads read the same roster.</li>
+    <li id="story-8">As a <em>composer skill (plan, prototype, backlog)</em>, I want to reference <code>staffing</code> by plain name and find its dependency surface declared, so that I can rely on it without importing files.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Implementation decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><b>Source home.</b> The skill's canonical source is <code>skills/staffing/</code> (repo convention; <code>.claude/skills/</code> and <code>.agents/skills/</code> are install mirrors). It ships <code>SKILL.md</code>, <code>README.md</code>, bundled <code>reference/</code>, <code>agents/openai.yaml</code>, and <code>evals/</code>.</li>
+    <li id="dec-2"><b>Content lift, then generalize.</b> The roles + fallback ladder (from <code>backlog/reference/staffing.md</code>), the rankings + routing rules (<code>picking-models.md</code>), and the harness mechanics (<code>claude-md-overlay.md</code>) move into bundled references. Asher's concrete four-model table becomes an <em>example of audit output</em>, never the authoritative shipped table.</li>
+    <li id="dec-3"><b>Machine-audit procedure.</b> A documented, prompt-driven procedure the skill runs at install: probe which models the harness can reach and whether Codex is installed, then write the rankings table from that. No scripts required — it is agent-driven, matching the LLM-audit posture. Cost/taste/intelligence numbers for audited models come from a documented default seed the user can tune, since those are judgments the machine can't probe.</li>
+    <li id="dec-4"><b>Two layers, delta-only overrides.</b> Global base lives harness-coupled: <code>~/.claude/CLAUDE.md</code> plus a global AGENTS layer, holding the audited table, generic routing, pins, and CLI/tools mechanics. Project overrides live in the project's <code>docs/agents/</code> (and repo memory files) and carry <em>only</em> deltas — a resolver reads base, then applies overrides.</li>
+    <li id="dec-5"><b>Capabilities as a separate matrix.</b> Computer-use / browser-use are boolean columns in their own matrix, keyed by model, never merged into the higher=better rankings table. Routing checks the matrix as a filter gate (diagram 2, step 2).</li>
+    <li id="dec-6"><b>Task-type pins as a first-class list.</b> Pins (e.g. mechanical/bulk → gpt-5.5) are an explicit named list resolved before ranking (diagram 2, step 1), distinct from the ranking-derived defaults.</li>
+    <li id="dec-7"><b>Scope-decision flow.</b> On setup/invoke: if global rules already exist, show them and offer to add project overrides; if none exist, ask global-with-overrides vs project-only. Branch is chosen from the audit of what's already installed.</li>
+    <li id="dec-8"><b>Reconciliation is LLM audit.</b> Re-invoking compares installed base + overrides against the skill's repo definition and reports drift/conflict in prose. No version stamps or markers are introduced as the reconciliation mechanism (a deliberate departure from backlog's <code>vNN</code> template stamps).</li>
+    <li id="dec-9"><b>Dependency surface declared.</b> <code>SKILL.md</code> names all three pointer kinds: bundled references (own contract), project playbooks it installs into <code>docs/agents/</code>, and sibling skills (none required — staffing is a root primitive). Self-contained at the file level; composes by name.</li>
+    <li id="dec-10"><b>Codex compatibility.</b> Ships <code>agents/openai.yaml</code> per <code>docs/patterns/codex-compat.md</code>, because Codex-driven threads must read the same roster.</li>
+    <li id="dec-11"><b>Pre-deployment probe eval.</b> An <code>evals/</code> scenario set + answer key per <code>docs/patterns/probe-evals.md</code>, run dual-executor (Opus in-session + gpt-5.5 via <code>codex exec</code>) before first real use. This is the verify/evidence contract for the criteria below.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <p>Each is checkable pass/fail by a probe-eval executor reading <code>skills/staffing/</code> and/or by a structural file check (per <code>environment.md</code> § Driving the app).</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><b>Skill exists and is self-contained.</b> <code>skills/staffing/SKILL.md</code> exists with valid frontmatter (<code>name: staffing</code>, invocable, global-capable description); the directory imports no other skill's files (grep finds no cross-skill file paths).</li>
+    <li id="ac-2" data-criterion><b>Dependency surface declared.</b> <code>SKILL.md</code> explicitly names all three pointer kinds — bundled references, project playbooks (under <code>docs/agents/</code>), sibling skills (stating "none — root primitive").</li>
+    <li id="ac-3" data-criterion><b>Roles + fallback preserved.</b> A probe posing a staffing question the old <code>backlog/reference/staffing.md</code> answered (e.g. "the ui builder is unreachable — who takes it?") gets an equivalent answer from the new skill, citing the succession ladder.</li>
+    <li id="ac-4" data-criterion><b>Rankings vs capabilities are separate structures.</b> The rankings table contains only cost/intelligence/taste; computer-use and browser-use appear only in a distinct capability matrix. A probe routing a browser-driving task resolves via the matrix as a gate, then the <code>intelligence &gt; taste &gt; cost</code> tie-break, and the executor points to each structure by location.</li>
+    <li id="ac-5" data-criterion><b>Task-pins distinct from ranking routing.</b> A named pin list exists; a probe ("who does a bulk mechanical edit?") returns the pinned model and the executor cites the pin, not a ranking derivation.</li>
+    <li id="ac-6" data-criterion><b>Machine-audit procedure, not a hardcoded roster.</b> The skill body carries an audit procedure that probes reachable models + Codex presence and writes the table from it; no fixed machine-specific roster is shipped as authoritative (Asher's models appear only as labeled example output). A dry-run probe on a hypothetical different machine (no Codex, different models) follows the procedure and produces a coherent table.</li>
+    <li id="ac-7" data-criterion><b>Two-layer install with delta-only overrides.</b> The skill specifies a global base (<code>~/.claude/CLAUDE.md</code> + global AGENTS layer) and project overrides carrying only deltas. A probe ("install for a project whose only difference is a stricter floor") produces an override containing just that delta, not a full copy of the base.</li>
+    <li id="ac-8" data-criterion><b>Scope-decision flow both branches.</b> A probe where global rules already exist drives the "show + offer overrides" branch; a probe with none drives the "ask global-with-overrides vs project-only" branch. The executor takes the correct branch in each.</li>
+    <li id="ac-9" data-criterion><b>LLM-audit reconciliation, no version stamps.</b> Re-invoking against a deliberately-drifted installed section detects and reports the drift/conflict in prose; the skill introduces no <code>vNN</code>-style stamp as its reconciliation mechanism (grep confirms none).</li>
+    <li id="ac-10" data-criterion><b>Codex compatibility.</b> <code>skills/staffing/agents/openai.yaml</code> exists and is well-formed per <code>docs/patterns/codex-compat.md</code>.</li>
+    <li id="ac-11" data-criterion><b>Probe eval green.</b> <code>skills/staffing/evals/</code> ships a scenario set + answer key; the dual-executor run (Opus in-session + gpt-5.5 via <code>codex exec</code>) passes every probe, with a pass/fail verdict table mapping each probe to its criterion.</li>
+  </ul>
+</section>
+
+<section id="seams">
+  <h2>Test seams</h2>
+  <p>The skill is a prompt-driven procedure, so the criteria are tested at two seams: <b>probe scenarios</b> in <code>evals/</code> driven through an executor model and graded against the answer key (ac-3 through ac-9), and <b>structural file checks</b> — presence, frontmatter, grep for cross-skill imports / version stamps, YAML well-formedness (ac-1, ac-2, ac-6's no-hardcode clause, ac-10). No runtime app, no scripts to unit-test (reconciliation is deliberately LLM-driven, not scripted). Deliberately untested: the subjective quality of the seeded cost/taste/intelligence numbers — those are user-tunable judgments, not mechanically gradable.</p>
+</section>
+
+<section id="evidence-required">
+  <h2>Evidence required</h2>
+  <ul class="plain">
+    <li id="ev-1">The dual-executor eval transcript (Opus in-session + gpt-5.5 via <code>codex exec</code>).</li>
+    <li id="ev-2">A pass/fail verdict table mapping each acceptance criterion to its probe or file check.</li>
+    <li id="ev-3">The rendered plan screenshot (for this plan's own approval record).</li>
+  </ul>
+</section>
+
+<details id="open-questions">
+  <summary>Open questions / scope decisions for the reviewer</summary>
+  <ul class="plain">
+    <li><span class="q">Q1 — dogfood this repo now, or defer?</span> Should #1 also re-home <em>this</em> repo's <code>CLAUDE.md § Staffing</code> into the new two-layer form (global base + a thin project override), or leave it untouched as the input it currently is and let a later pass migrate it? <b>Proposed:</b> build + install the global base and prove it with the eval, but leave the existing <code>CLAUDE.md § Staffing</code> in place this issue (migrating it risks disrupting live staffing mid-decomposition). Flagging because it touches your global <code>~/.claude/</code>.</li>
+    <li><span class="q">Q2 — global writes to <code>~/.claude/</code>.</span> The global base writes to your home-dir memory files. Acceptable for the install to write there during this issue's eval, or should the eval exercise the procedure against a scratch/dummy global path only? <b>Proposed:</b> eval against a scratch path; real global install happens when you choose, not automatically.</li>
+    <li><span class="q">Q3 — seed numbers.</span> The audit can detect <em>which</em> models are reachable but not their cost/taste/intelligence. <b>Proposed:</b> ship a documented default seed (your current four-model numbers as the reference row shape) that the user edits, rather than trying to infer. Confirm that's the right call vs. prompting interactively for every model.</li>
+    <li><span class="q">Q4 — backlog left duplicated.</span> Until #6 rewires <code>backlog</code>, its three staffing files stay in place, so the machinery briefly lives in two spots. <b>Proposed:</b> accept the transient duplication (backlog keeps working unchanged); #6 removes it. Confirm you don't want #1 to also drop backlog's copies now.</li>
+  </ul>
+</details>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>Global install has real side effects on <code>~/.claude/</code>; mitigated by auditing before writing and by Q2's scratch-path eval.</li>
+    <li>LLM-audit reconciliation is fuzzier than version stamps; mitigated by ac-9's deliberately-drifted probe proving detection works.</li>
+    <li>Over-generalization — building for hypothetical machines we can't test. Mitigated by the ac-6 dry-run probe standing in for a second environment.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li><b>Rewiring <code>backlog</code></b> to consume <code>staffing</code> by name — that is issue #6 (backlog-slim), which depends on this.</li>
+    <li><b>The <code>review-loop</code> primitive</b> (issue #2) and the thin composers <code>plan</code>/<code>prototype</code> (#4/#5).</li>
+    <li><b>The <code>setup-asher-skills</code> installer</b> (#7) that will orchestrate installing this and its siblings.</li>
+    <li>Any change to models this repo actually staffs work on today.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
