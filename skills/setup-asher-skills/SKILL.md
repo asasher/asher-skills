@@ -27,8 +27,12 @@ by name, never by importing another skill's files (`AGENTS.md` § Conventions).
   installed (project + global), and report overlap, drift, broken closures, and scope conflicts, proposing
   fixes one at a time. Load [audit-mode](reference/audit-mode.md).
 
-Invoked with no argument on a project that has no `## Agent skills` block yet, run `setup`; on a project that
-already has one, run `audit`.
+Invoked with no argument, route on prior-install evidence, not the block alone. **Greenfield** — no
+`## Agent skills` block and no installed asher-skills anywhere — runs `setup`. **Has block** — a
+`## Agent skills` block — runs `audit`; **has skills, no block** — a `skills-lock.json` with asher-skills
+entries, a skill under `.claude/skills/` or `.agents/skills/` traceable to this repo, or the repo itself being
+`asasher/asher-skills` — also runs `audit`. There is no third mode: audit repairs that last case with a
+**Missing map** finding whose proposed fix writes the block.
 
 ## The four phases (setup)
 
@@ -37,9 +41,11 @@ write**, and nothing touches disk until the user approves the whole plan at conf
 
 1. **Audit — three surfaces, silently.** Before recommending anything, audit **three things**: the **repo**
    (git remotes, `AGENTS.md`/`CLAUDE.md` and any existing `## Agent skills` block, skills installed both
-   project and global, `docs/agents/` playbooks); the **machine** (the reachable models + whether the Codex
-   CLI is present — done by invoking the **`staffing`** skill by name, not by re-deriving a roster); and the
-   **user/project** (one question: *what is this project for?*).
+   project and global — project `skills-lock.json`, `.claude/skills/`, `.agents/skills/`; global
+   `~/.claude/skills/`, `~/.agents/skills/` — resolving symlinks before comparing, plus `docs/agents/`
+   playbooks); the **machine** (the reachable models + whether the Codex CLI is present — done by invoking
+   the **`staffing`** skill by name, not by re-deriving a roster); and the **user/project** (one question:
+   *what is this project for?*).
 2. **Interview — one decision at a time.** Recommend a skill set keyed to the project type, then walk the
    decisions **one at a time**, each with a **plain-language explainer** that assumes the user doesn't know
    the term. Accepting a composer **auto-pulls its sibling closure and says so** in plain language — never a

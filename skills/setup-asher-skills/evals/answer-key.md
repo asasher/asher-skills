@@ -42,3 +42,28 @@ compares a version stamp as the drift mechanism.
 staffing's consent gate), asking about scope only for staffing. Cite `reference/catalog.md` § Scope —
 project-first and/or `reference/interview.md` § Phase 2. FAIL if it offers `backlog` global, installs staffing
 global without consent, or makes everything global.
+
+**P7 — routing paradox.** PASS if the executor routes to **audit** (not setup) because installed asher-skills
+are prior-install evidence even without a `## Agent skills` block, and notes that audit's Missing-map finding
+writes the block. Cite `SKILL.md` routing. FAIL if it routes to setup.
+
+**P8 — `.agents/skills/` scan.** PASS if the executor reads both `.claude/skills/` and `.agents/skills/` at
+project scope and both `~/.claude/skills/` and `~/.agents/skills/` at global scope, and therefore reports the
+`.agents`-only skill as installed. Cite `reference/audit-mode.md` step 2 and/or `reference/interview.md`
+Phase 1. FAIL if it reads only `.claude/skills/` and misses it.
+
+**P9 — cross-harness overlap.** PASS if the executor names the cross-harness-duplication category and
+classifies the symlinked pair as benign/note-only (one underlying skill), distinct from independent copies
+(flag + consolidate). Cite `reference/audit-mode.md` step 3 Overlap. FAIL if it reports the symlinked pair as
+drift, or has no cross-harness category.
+
+**P10 — foreign source.** PASS if the executor raises a Foreign-source finding, honors pull-only by offering
+our equivalent or saying we don't ship it, never reinstalls from `mattpocock/skills`, and treats it as
+advise-only with no auto-remove. Cite `reference/audit-mode.md` step 3 Foreign source and
+`reference/catalog.md` § Pull only from this repo. FAIL if it proposes a `mattpocock` reinstall or auto-removes
+the skill.
+
+**P11 — self-catalog.** PASS if the executor uses the local `skills/` working tree as the catalog, not the
+fetched remote, because the repo is the source and a local branch ahead of origin would disagree; it must also
+state branch-vs-origin. Cite `reference/audit-mode.md` step 1 self-host. FAIL if it diffs against the fetched
+remote and reports the local branch's skills as drift.
