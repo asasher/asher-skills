@@ -56,10 +56,12 @@ write**, and nothing touches disk until the user approves the whole plan at conf
    edit it. Nothing is written until this is approved.
 4. **Write.** For each skill in the closure, `npx skills add https://github.com/asasher/asher-skills --skill
    <name> -y` (add `-g` for a consented global staffing install: `-g -y`; project-local is the default) —
-   **only this repo's endpoint**. The `-y` skips the confirmation prompt since the user already confirmed at
-   phase 3. Then run each installed skill's own setup (staffing's roster, review-loop's surface config,
-   backlog's `docs/agents/` suite), write the `## Agent skills` block into the harness memory file, and write
-   the repo pointer.
+   **only this repo's endpoint**. In the self-host case, do not run `npx skills add` against this repo's own
+   `skills/`; after each command, verify the skill landed on the filesystem rather than trusting the exit
+   code, and fall back to self-host placement on a miss. The `-y` skips the confirmation prompt since the user
+   already confirmed at phase 3. Then run each installed skill's own setup (staffing's roster, review-loop's
+   surface config, backlog's `docs/agents/` suite), write the `## Agent skills` block into the harness memory
+   file, and write the repo pointer.
 
 ## How it composes
 

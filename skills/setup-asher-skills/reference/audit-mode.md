@@ -25,7 +25,9 @@ tool's concern, not setup's reconciliation mechanism. setup does not add or read
    repo being audited is the source itself (git remote is `asasher/asher-skills`, or a local `skills/` dir
    holds these skills), use the local `skills/` working tree as the catalog instead of the fetched remote, and
    state the branch-vs-origin relationship (for example, "local is ahead of origin") so local work does not
-   look like fleet-wide drift.
+   look like fleet-wide drift. This is the single shared **repo is the source** detection consumed by both the
+   READ path here (which catalog to diff) and the WRITE path in [interview](interview.md) Phase 4 (the install
+   guard), so the two cannot diverge.
 2. **Read what's installed.** Both scopes: project (`skills-lock.json`, `.claude/skills/`, `.agents/skills/`)
    and global (`~/.claude/skills/`, `~/.agents/skills/`); the `## Agent skills` block; and the `docs/agents/`
    playbooks. Resolve symlinks before comparing, so a symlinked `.claude/skills/<name>` and
@@ -33,7 +35,9 @@ tool's concern, not setup's reconciliation mechanism. setup does not add or read
    instead of double-counting as two installs.
 3. **Compare and report — in prose.** Describe each finding and what to do about it:
    - **Drift** — a skill installed here whose content diverges from the repo's current version (read both and
-     judge; don't diff a stamp).
+     judge; don't diff a stamp). A fallback-origin `skills-lock.json` entry, hand-placed because the tool
+     could not install the skill, is expected, not drift: its `computedHash` is intentionally uncomputed, so
+     do not flag it as drifted.
    - **Overlap** — a skill installed both project and global, or listed twice; say which scope should win
      (project-first: keep local, drop the redundant global unless it is `staffing`). Also report
      **cross-harness duplication** when the same skill appears in both `.claude/skills/` and `.agents/skills/`:

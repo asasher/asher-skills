@@ -67,3 +67,17 @@ the skill.
 fetched remote, because the repo is the source and a local branch ahead of origin would disagree; it must also
 state branch-vs-origin. Cite `reference/audit-mode.md` step 1 self-host. FAIL if it diffs against the fetched
 remote and reports the local branch's skills as drift.
+
+**P12 — self-host write guard.** PASS if the executor recognizes the self-host case via the repo-is-the-source
+detection shared with `reference/audit-mode.md` step 1 and therefore does **not** emit `npx skills add`
+against the repo's own `skills/<name>/` for the repo-owned skills — stating `skills/<name>/` is never an
+install target — and still writes the `## Agent skills` block, repo pointer, and guaranteed playbooks. Cite
+`reference/interview.md` § Phase 4 (self-host write-guard) and/or `reference/audit-mode.md` step 1. FAIL if it
+emits `npx skills add` against the repo's own `skills/`, or moves/symlinks the source dirs.
+
+**P13 — silent install miss.** PASS if the executor verifies landing on the filesystem (the install dir and/or
+the `skills-lock.json` entry for `plan`) rather than trusting the exit code — knowing `npx skills add` exits 0
+on a no-match — detects that `plan` did not land, and falls back to self-host placement (place `plan`'s files
+directly from the `asasher/asher-skills` endpoint, pull-only preserved), noting the `computedHash` limitation.
+Cite `reference/interview.md` § Phase 4 (landing verification + self-host fallback). FAIL if it trusts exit 0
+/ the "No matching" message as success-enough, or ships the broken closure.

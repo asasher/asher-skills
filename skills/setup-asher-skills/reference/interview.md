@@ -73,11 +73,36 @@ Completion criterion: the user has approved the resolved plan (as-is or after ed
 Execute the approved plan:
 
 1. **Install, from this repo only.** For each skill in the closure:
-   `npx skills add https://github.com/asasher/asher-skills --skill <name> -y` — project-local by default (the
-   tool's project install; `-y` skips the prompt the user already answered at phase 3), or `-g -y` for a
-   consented global `staffing` install (`-g` is scope, `-y` still skips the prompt — they are orthogonal).
-   Flags verified against `skills` v1.5.15 (`-s/--skill`, `-g/--global`, `-y/--yes`). **Every install command targets `asasher/asher-skills` and nothing else** — see
+   first establish whether this is the **self-host case** using the canonical "repo is the source" detection
+   in [audit-mode](audit-mode.md) step 1 (the repo's git remote is `asasher/asher-skills`, or a local
+   `skills/` dir holds these skills). This is one shared notion consumed by the READ path (audit's catalog
+   choice) and this WRITE path (Phase 4's install guard), so the two cannot diverge.
+
+   In the self-host case, check each skill before installing. If the skill is repo-owned — its install source
+   would be this repo's own `skills/<name>/` — **guard**: do not run `npx skills add` for it. `skills/<name>/`
+   is never an install target, and the skill is already present as source. Still write the `## Agent skills`
+   block, the repo pointer, and the guaranteed playbooks.
+
+   For every skill not guarded, run `npx skills add https://github.com/asasher/asher-skills --skill <name> -y`
+   — project-local by default (the tool's project install; `-y` skips the prompt the user already answered at
+   phase 3), or `-g -y` for a consented global `staffing` install (`-g` is scope, `-y` still skips the prompt
+   — they are orthogonal). Flags verified against `skills` v1.5.15 (`-s/--skill`, `-g/--global`,
+   `-y/--yes`). **Every install command targets `asasher/asher-skills` and nothing else** — see
    [catalog](catalog.md) § Pull only from this repo.
+
+   After each `npx skills add`, verify `<name>` actually landed on the filesystem: check the project install
+   dir (`.claude/skills/<name>/` or `.agents/skills/<name>/`) and/or the `skills-lock.json` entry for
+   `<name>`. Do not trust the exit code: `npx skills add` can print `✖ No matching skills found` and exit 0
+   after installing nothing, and `-y` mode can under-report the count (it reported "Installed 3 skills" when
+   4 were requested).
+
+   On a verified miss, place the skill's files directly instead of trusting the failed install. This is the
+   **self-host fallback**: use this repo's own `skills/<name>/` in the self-host case, else fetch the skill
+   from the `https://github.com/asasher/asher-skills` endpoint. It never breaks pull-only-from-this-repo, and
+   uses the same direct-placement mechanism as the self-host guard. If you hand-place a `skills-lock.json`
+   fallback entry, do not fabricate `computedHash`: it is not a plain sha256 of `SKILL.md`, so mark the
+   entry's fallback origin and tell the user this is a rough edge. `audit-mode` treats a fallback-origin entry
+   as expected, not drift.
 2. **Guarantee the playbooks by delegation.** Run each installed skill's own setup so its `docs/agents/`
    playbooks land: `staffing` writes the roster (global base + project delta, with consent); `review-loop`
    (or `backlog setup`, which composes it) writes the presentation surface config; `backlog setup` writes its
