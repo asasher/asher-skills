@@ -1,0 +1,203 @@
+<!doctype html>
+<!-- Plan for issue #5 — extract `prototype` into a standalone thin-composer skill.
+     Self-contained: inline styles, inline SVG, no external fetches. Stable ids per
+     review-loop's contract; acceptance criteria are <li id="ac-N" data-criterion>. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #5 — Extract prototype into a standalone thin-composer skill</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --good: #15803d; --warn: #b45309; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --good: #4ade80; --warn: #fbbf24; } }
+:root[data-theme="dark"] { color-scheme: dark; --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --good: #4ade80; --warn: #fbbf24; }
+:root[data-theme="light"] { color-scheme: light; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --good: #15803d; --warn: #b45309; }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+svg .edge-label { font-size: 10.5px; fill: var(--muted); }
+svg .muted { fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li b { color: var(--accent); font-weight: 600; }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .35rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+.tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; padding: 0 .35rem; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Extract <code>prototype</code> into a standalone thin-composer skill</h1>
+  <p class="problem">The prototype technique is trapped inside the <code>backlog</code> monolith and its dev loop; it should be a standalone skill that answers one design question with a throwaway artifact — for a document, a maquette, or a UI, not only code.</p>
+  <div class="chips"><span class="chip">issue #5</span><span class="chip">enhancement</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="problem">
+  <h2>Problem &amp; solution</h2>
+  <p>Part of the asher-skills decomposition. <code>backlog</code> carries prototyping as an internal step: gates in <code>reference/prototype.md</code>, technique in the project playbook <code>docs/agents/prototyping.md</code>. It only ever fires from inside the enhancement branch, and its technique is written for code artifacts.</p>
+  <p>Solution: lift it into a self-contained <code>skills/prototype/</code> skill — a <b>thin composer</b> that frames one design question, builds a throwaway artifact to answer it, presents it for feedback via <b>review-loop</b>, staffs the build via <b>staffing</b> (both by plain name), captures the answer, and deletes the artifact. Modeled file-for-file on the shipped <code>skills/staffing/</code> and <code>skills/review-loop/</code>.</p>
+</section>
+
+<section id="composition">
+  <h2>Composition model — the three-part dependency surface</h2>
+  <p>Unlike the root primitives <code>staffing</code> and <code>review-loop</code> (sibling dependency: none), <code>prototype</code> is a <b>composer</b>: it declares real siblings and invokes them by name, importing no file.</p>
+  <figure id="composition-diagram">
+  <svg viewBox="0 0 680 300" width="100%" role="img" aria-label="prototype composer and its three-part dependency surface">
+    <!-- center node -->
+    <rect x="270" y="120" width="140" height="56" rx="10" fill="none" stroke="var(--accent)" stroke-width="2"/>
+    <text x="340" y="144" text-anchor="middle" font-weight="600">prototype</text>
+    <text x="340" y="162" text-anchor="middle" class="muted" font-size="10.5">composer skill</text>
+
+    <!-- bundled references (left) -->
+    <rect x="30" y="30" width="200" height="66" rx="8" fill="var(--card)" stroke="var(--line)"/>
+    <text x="42" y="52" font-weight="600">Bundled references</text>
+    <text x="42" y="70" class="muted" font-size="10.5">reference/prototyping.md —</text>
+    <text x="42" y="84" class="muted" font-size="10.5">the technique (authoritative)</text>
+    <line x1="230" y1="70" x2="272" y2="130" stroke="var(--accent)" stroke-width="1.5"/>
+    <text x="232" y="104" class="edge-label">owns</text>
+
+    <!-- project playbook (top right) -->
+    <rect x="450" y="30" width="200" height="66" rx="8" fill="var(--card)" stroke="var(--line)"/>
+    <text x="462" y="52" font-weight="600">Project playbook</text>
+    <text x="462" y="70" class="muted" font-size="10.5">docs/agents/prototyping.md —</text>
+    <text x="462" y="84" class="muted" font-size="10.5">repo placement &amp; tooling only</text>
+    <line x1="450" y1="70" x2="410" y2="130" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="420" y="104" class="edge-label">reads (degrades)</text>
+
+    <!-- siblings (bottom) -->
+    <rect x="180" y="228" width="150" height="46" rx="8" fill="var(--card)" stroke="var(--accent)"/>
+    <text x="255" y="250" text-anchor="middle" font-weight="600">review-loop</text>
+    <text x="255" y="266" text-anchor="middle" class="muted" font-size="10.5">present the answer</text>
+    <line x1="315" y1="176" x2="270" y2="228" stroke="var(--accent)" stroke-width="1.5"/>
+    <text x="250" y="206" class="edge-label">by name</text>
+
+    <rect x="350" y="228" width="150" height="46" rx="8" fill="var(--card)" stroke="var(--accent)"/>
+    <text x="425" y="250" text-anchor="middle" font-weight="600">staffing</text>
+    <text x="425" y="266" text-anchor="middle" class="muted" font-size="10.5">staff the build</text>
+    <line x1="365" y1="176" x2="410" y2="228" stroke="var(--accent)" stroke-width="1.5"/>
+    <text x="398" y="206" class="edge-label">by name</text>
+  </svg>
+    <figcaption>The technique moves <b>into</b> the skill (bundled, universal) so it works outside dev; the playbook slot shrinks to repo-specific placement and degrades to defaults when absent — exactly how <code>review-loop</code> treats its surface config.</figcaption>
+  </figure>
+</section>
+
+<section id="layout">
+  <h2>Layout — mirrors the shipped siblings</h2>
+  <table>
+    <thead><tr><th>File</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td><code>SKILL.md</code></td><td>Gate-driven flow (4 gates), entry points, and the three-part <b>Dependency surface</b> declaration.</td></tr>
+      <tr><td><code>README.md</code></td><td>When to use / Shape / Layout / Install — sibling shape; Layout line names the composer's siblings.</td></tr>
+      <tr><td><code>reference/prototyping.md</code></td><td>The bundled, authoritative technique: the two generalized shapes + throwaway rules. Imports no other skill's files.</td></tr>
+      <tr><td><code>agents/openai.yaml</code></td><td>Codex manifest, mirroring the siblings'.</td></tr>
+      <tr><td><code>evals/probes.md</code></td><td>Pre-deployment probe eval (situated scenarios + answer key).</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="beforeafter">
+  <h2>Before &rarr; after</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Today (inside backlog)</th><th>Planned (standalone)</th></tr></thead>
+    <tbody>
+      <tr><td>Invocation</td><td>Only from the enhancement branch / plan step</td><td>Standalone skill, invoked by name or directly with a design question</td></tr>
+      <tr><td>Technique home</td><td>Project playbook <code>docs/agents/prototyping.md</code></td><td>Bundled <code>reference/prototyping.md</code> (self-contained); playbook = repo placement only</td></tr>
+      <tr><td>Scope</td><td>Written for throwaway <em>code</em></td><td>Throwaway <em>artifact</em> — document, layout, maquette, UI, or code</td></tr>
+      <tr><td>Present / staff</td><td>Inline references inside backlog</td><td>Composes <code>review-loop</code> + <code>staffing</code> by plain name, no imports</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>User stories</h2>
+  <ul class="plain">
+    <li id="story-1">As a <em>developer planning an enhancement</em>, I want to hand a blocking design question to <code>prototype</code>, so that a throwaway artifact settles it and its answer folds into my plan.</li>
+    <li id="story-2">As a <em>writer or designer outside a codebase</em>, I want to prototype a document layout or design question, so that I can pick a direction from real variants without assuming any dev stack.</li>
+    <li id="story-3">As a <em>skill author</em>, I want <code>prototype</code> to present its answer via <code>review-loop</code> and staff its build via <code>staffing</code>, so that I reuse the shipped primitives instead of forking review or routing machinery.</li>
+    <li id="story-4">As a <em>maintainer</em>, I want the throwaway artifact deleted (or its validated core absorbed) once the answer is captured, so that nothing throwaway ships in the repo.</li>
+    <li id="story-5">As a <em>consumer installing the skill on a fresh repo</em>, I want it self-contained, so that it works even with no <code>docs/agents/prototyping.md</code> playbook, degrading to sensible defaults.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Implementation decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><b>Technique moves into the skill as a bundled reference.</b> <code>reference/prototyping.md</code> becomes the authoritative, universal technique — this is what makes the skill usable outside dev. The project-playbook slot (<code>docs/agents/prototyping.md</code>) is declared but read only for repo-specific placement (task runner, routing, where throwaway artifacts live); absent one, the skill degrades to a self-contained artifact in a scratch/workspace dir rather than improvising repo structure.</li>
+    <li id="dec-2"><b>Generalize beyond code.</b> The opening reframes a prototype as a throwaway <em>artifact</em> answering one design question (medium usually but not only code). The two shapes generalize: a <b>behavior/logic shape</b> ("does this model/flow feel right under real cases?" — a driven reducer for code, a hand-driven state table or scenario run otherwise) and a <b>form/look shape</b> ("what should this look like / how structured?" — <code>?variant=</code> on a real page for web UI, structural variant sheets for a document/layout).</li>
+    <li id="dec-3"><b>Compose siblings by plain name, no imports.</b> <code>review-loop</code> presents the answer (serve the artifact/answer sheet for annotated feedback; live interactive prototypes are driven directly but announced on the surface). <code>staffing</code> resolves who builds the artifact/variants (mechanical &rarr; gpt-5.5; ui/taste &rarr; Claude). Question-framing/diagnosis stays with the invoking thread. No path reference to any sibling file.</li>
+    <li id="dec-4"><b>Preserve the four gates, generalized.</b> Question stated &rarr; built &amp; handed over &rarr; answer captured &rarr; cleaned up. Keep the "throwaway from day one — keep the answer, delete the artifact" framing verbatim in spirit.</li>
+    <li id="dec-5"><b>Do not rewire or gut backlog (scope decision).</b> backlog keeps its own <code>reference/prototype.md</code> and the full technique in <code>docs/agents/prototyping.md</code> until the separate backlog-dissolution work lands. The standalone skill carries its own bundled copy of the technique; the transient duplication is intentional so the monolith keeps working mid-decomposition. Rewiring backlog to compose the new skill is out of scope.</li>
+    <li id="dec-6"><b>Ship the sibling artifacts.</b> <code>agents/openai.yaml</code> and <code>evals/probes.md</code> mirror the shipped siblings so the skill is Codex-runnable and probe-gated before deployment.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done — acceptance criteria</h2>
+  <p class="muted" style="font-size:.85rem">This is a skills repo: "running the app" = file/structure checks + probe scenarios driven through an executor per <code>environment.md</code> &sect; Driving the app. Each criterion is checkable pass/fail.</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><b>Layout.</b> <code>skills/prototype/</code> exists with <code>SKILL.md</code>, <code>README.md</code>, <code>reference/prototyping.md</code>, <code>agents/openai.yaml</code>, and <code>evals/probes.md</code> — matching the file layout of shipped <code>skills/staffing/</code> and <code>skills/review-loop/</code>. <em>Check: file listing.</em></li>
+    <li id="ac-2" data-criterion><b>Frontmatter.</b> <code>SKILL.md</code> frontmatter parses and has <code>name: prototype</code>, <code>user-invocable: true</code>, an <code>argument-hint</code>, and a description stating it is a thin composer producing a throwaway artifact that answers one design question, usable beyond code. <em>Check: YAML parse + content.</em></li>
+    <li id="ac-3" data-criterion><b>Three-part dependency surface.</b> <code>SKILL.md</code> has a Dependency surface section declaring exactly three parts — bundled references, project playbook (<code>docs/agents/prototyping.md</code>), and sibling skills naming <b>review-loop</b> and <b>staffing</b> — and states prototype is a composer (siblings: not none). <em>Check: content.</em></li>
+    <li id="ac-4" data-criterion><b>Composition by name only.</b> No file in <code>skills/prototype/</code> imports or path-references another skill's files (no <code>skills/review-loop/&hellip;</code> or <code>skills/staffing/&hellip;</code> path); the siblings appear by plain name. <em>Check: grep across the skill dir.</em></li>
+    <li id="ac-5" data-criterion><b>Generalized beyond code.</b> <code>reference/prototyping.md</code> opens by framing a prototype as a throwaway <em>artifact</em> (not only code) answering one design question, and gives at least one worked non-code example (e.g. a document/layout variant sheet). <em>Check: content.</em></li>
+    <li id="ac-6" data-criterion><b>Framing &amp; gates preserved.</b> The skill keeps the "throwaway from day one — keep the answer, delete the artifact" framing and the four gates (question stated &rarr; built &amp; handed over &rarr; answer captured &rarr; cleaned up). <em>Check: content.</em></li>
+    <li id="ac-7" data-criterion><b>Probe (code question).</b> Given a code design-question scenario, an executor (Claude subagent + gpt-5.5 via <code>codex exec</code>, dual-executor) produces a flow that states one question, picks the correct shape, presents via review-loop by name, staffs the build via staffing by name, captures the answer durably, and deletes the throwaway — graded pass against <code>evals/probes.md</code>. <em>Check: probe transcript vs answer key.</em></li>
+    <li id="ac-8" data-criterion><b>Probe (non-code / outside dev).</b> Given a non-code design question (e.g. which of three layouts a document should use), an executor produces a valid prototype flow with no codebase assumed — form shape, structural variants, present via review-loop — proving usability outside dev. <em>Check: probe transcript vs answer key.</em></li>
+    <li id="ac-9" data-criterion><b>No regression to backlog.</b> <code>backlog</code>'s <code>reference/prototype.md</code> and <code>docs/agents/prototyping.md</code> are unchanged; backlog's prototype step still resolves its technique. <em>Check: git diff shows those files untouched.</em></li>
+  </ul>
+</section>
+
+<section id="seams">
+  <h2>Test seams</h2>
+  <p>Primary seam: the skill's files themselves (layout, frontmatter, dependency-surface content) checked directly, plus the <code>evals/probes.md</code> scenarios driven through the dual executor (Claude in-session + gpt-5.5 via <code>codex exec</code>) and graded against the answer key. Deliberately untested: the review-loop server and staffing resolver internals — they are shipped, separately probe-gated primitives; this skill only invokes them by name, so their behavior is out of scope here.</p>
+</section>
+
+<section id="evidence-required">
+  <h2>Evidence required</h2>
+  <ul class="plain">
+    <li id="ev-1">File listing of <code>skills/prototype/</code> proving the layout (ac-1) and the grep proving name-only composition (ac-4).</li>
+    <li id="ev-2">Probe eval transcript + a pass/fail verdict table mapping each probe scenario to its answer-key criterion (ac-7, ac-8), from both executors.</li>
+    <li id="ev-3">Git diff confirming backlog's prototype files are untouched (ac-9).</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>Transient technique duplication (bundled ref vs backlog's playbook) drifts if edited in one place only — mitigated by the deferred backlog-dissolution work that removes backlog's copy.</li>
+    <li>Over-generalizing the technique could dilute the sharp two-shape guidance — mitigated by keeping the two shapes concrete with worked examples, code and non-code.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>Rewiring <code>backlog</code> to compose the new skill, and slimming <code>docs/agents/prototyping.md</code> to repo-config-only — deferred to backlog-dissolution.</li>
+    <li>Changes to <code>review-loop</code> or <code>staffing</code> themselves.</li>
+    <li>The <code>setup-asher-skills</code> installer and any lockfile/registration wiring beyond the skill's own directory.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
