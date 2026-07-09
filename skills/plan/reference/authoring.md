@@ -28,7 +28,7 @@ what goes in it and how it should read. A project playbook may add domain-specif
 The plan is a document a human reviews under time pressure, then a durable reference. Optimize for the review.
 
 - **HTML, self-contained.** Inline styles, inline SVG, no external fetches — it renders anywhere, including a
-  plain browser open, and needs no server to read. Committed as a single file.
+  plain browser open, and needs no server to read. Kept as a single self-contained file.
 - **Visual first, minimalist.** Every screen of prose costs review attention. Lead each section with the
   diagram or table that carries it — a state machine, a sequence, a before/after shape — one sentence of prose
   beneath, secondary detail folded into `<details>`. If a diagram can carry it, a diagram does.

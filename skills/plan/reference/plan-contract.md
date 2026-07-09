@@ -53,12 +53,12 @@ a checkable pass/fail. These criteria are the contract any downstream verificati
 The rendered plan is presented for human sign-off **through the `review-loop` skill, by name** — plan does
 not re-implement a review surface:
 
-- **Present** the committed HTML via review-loop (it serves the file, injects the annotation layer at serve
-  time, registers it in the review hub, and returns the URL). End the pause message with **two links** — the
-  plan URL first, the hub URL second — per review-loop's presentation contract.
-- **Block** on review-loop's verdict-coded await. The verdict is one of: **approve**, **approve-with-nits**
-  (apply the nits, no re-review), or **request-changes** (a full revision round).
-- **On request-changes**, revise the plan and, before re-presenting, write a **ledger disposition** for every
+- **Present** the rendered plan file via review-loop (it serves the file, injects the annotation layer at
+  serve time, registers it in the review hub, and returns the URL). End the pause message with **two links** —
+  the plan URL first, the hub URL second — per review-loop's presentation contract.
+- **Block** on review-loop's verdict-coded await. The verdict is one of: **`approve`**, **`approve_with_nits`**
+  (apply the nits, no re-review), or **`request_changes`** (a full revision round).
+- **On `request_changes`**, revise the plan and, before re-presenting, write a **ledger disposition** for every
   annotation — `changed` / `kept` / `orphaned`. The ledger is a mechanic review-loop owns; honor it. Never
   revise without it.
 - **Approval is the approve event** — verdict, content hash, timestamp — bound to the exact version the human
