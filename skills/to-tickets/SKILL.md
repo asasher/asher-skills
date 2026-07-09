@@ -48,7 +48,7 @@ The full method is in [slicing](reference/slicing.md); the shape:
    coarse? too fine?) and blocking edges (what truly blocks what?). Iterate until approved. Nothing publishes
    before approval.
 4. **Order and wire the edges.** Sort the approved tickets into dependency order — **blockers first** — so each
-   each dependency edge resolves to a real, earlier id. Emit each dependency **exactly as backlog's
+   dependency edge resolves to a real, earlier id. Emit each dependency **exactly as backlog's
    recorded convention writes the marker** (`docs/agents/backlog-policy.md` § Dependencies — a
    `- [ ] depends on #N` body line, copied verbatim) so `backlog run` reads it and skips blocked work.
 5. **Publish in the bound tracker's format.** Create the tickets through the tracker binding recorded in
