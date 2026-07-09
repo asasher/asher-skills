@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #3 — Retrofit maquette onto review-loop</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --add: #15803d; --del: #b91c1c; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --add: #4ade80; --del: #f87171; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "☐"; position: absolute; left: .75rem; color: var(--accent); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .35rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+.add { color: var(--add); } .del { color: var(--del); }
+.file { font-size: .82rem; color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Retrofit maquette to consume the review-loop primitive</h1>
+  <p class="problem">Maquette's human sign-off gates reinvent an approve-in-chat loop in prose; they should defer to the shared <code>review-loop</code> skill so the same annotate→verdict→approve surface serves a maquette as it serves a plan.</p>
+  <div class="chips"><span class="chip">issue #3</span><span class="chip">enhancement</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="thesis">
+  <h2>What this actually is</h2>
+  <p>Maquette carries <strong>no server and no scripts</strong> — its "presentation loop" is informal gate prose ("write <code>BRIEF.md</code>, read it back to the user, the intake ends when the user approves"). That prose <em>reinvents</em> an annotate→revise→approve loop in words. This change deletes that reinvented prose and points the two human sign-off gates at the <code>review-loop</code> skill by plain name. Nothing is copied out of review-loop; maquette imports none of its files.</p>
+</section>
+
+<section id="composition">
+  <h2>Before → after (the gate mechanism)</h2>
+  <figure id="composition-diagram">
+    <svg viewBox="0 0 680 250" width="680" height="250" role="img" aria-label="Before and after gate composition">
+      <!-- BEFORE -->
+      <text x="10" y="20" class="del" font-weight="700">BEFORE — reinvented in prose</text>
+      <rect x="10" y="34" width="150" height="40" rx="8" fill="none" stroke="currentColor"/>
+      <text x="85" y="58" text-anchor="middle">write BRIEF.md</text>
+      <line x1="160" y1="54" x2="200" y2="54" stroke="currentColor"/>
+      <rect x="200" y="34" width="160" height="40" rx="8" fill="none" stroke="currentColor"/>
+      <text x="280" y="58" text-anchor="middle">read back in chat</text>
+      <line x1="360" y1="54" x2="400" y2="54" stroke="currentColor"/>
+      <rect x="400" y="34" width="180" height="40" rx="8" fill="none" stroke="currentColor"/>
+      <text x="490" y="52" text-anchor="middle">"user approves"</text>
+      <text x="490" y="67" text-anchor="middle" class="del" font-size="10">no ids · no hash · no ledger</text>
+      <!-- AFTER -->
+      <text x="10" y="120" class="add" font-weight="700">AFTER — deferred to review-loop</text>
+      <rect x="10" y="134" width="150" height="46" rx="8" fill="none" stroke="currentColor"/>
+      <text x="85" y="153" text-anchor="middle">render deliverable</text>
+      <text x="85" y="169" text-anchor="middle" font-size="10">HTML · stable ids</text>
+      <line x1="160" y1="157" x2="196" y2="157" stroke="currentColor"/>
+      <rect x="196" y="128" width="290" height="90" rx="10" fill="none" stroke="var(--accent)" stroke-dasharray="4 3"/>
+      <text x="341" y="146" text-anchor="middle" class="add" font-weight="700">review-loop skill (by name)</text>
+      <rect x="210" y="156" width="120" height="34" rx="6" fill="none" stroke="currentColor"/>
+      <text x="270" y="177" text-anchor="middle" font-size="11">serve</text>
+      <line x1="330" y1="173" x2="352" y2="173" stroke="currentColor"/>
+      <rect x="352" y="156" width="120" height="34" rx="6" fill="none" stroke="currentColor"/>
+      <text x="412" y="177" text-anchor="middle" font-size="11">await → verdict</text>
+      <text x="341" y="210" text-anchor="middle" font-size="10">annotate · hash-bound approve · ledger on revision</text>
+      <line x1="486" y1="173" x2="520" y2="173" stroke="currentColor"/>
+      <rect x="520" y="150" width="150" height="46" rx="8" fill="none" stroke="var(--add)"/>
+      <text x="595" y="169" text-anchor="middle" class="add">approve → next phase</text>
+      <text x="595" y="184" text-anchor="middle" font-size="10">changes → revise+ledger</text>
+    </svg>
+    <figcaption>The approve mechanics move out of maquette's prose and into review-loop, invoked by name. Maquette's contribution is only the render step and the by-name pointer.</figcaption>
+  </figure>
+</section>
+
+<section id="scope-map">
+  <h2>What changes, per file</h2>
+  <table>
+    <thead><tr><th>File</th><th>Change</th></tr></thead>
+    <tbody>
+      <tr><td class="file">skills/maquette/SKILL.md</td><td>Phase-1 and Phase-3 gates name the <code>review-loop</code> skill as the approve surface (serve→await→branch); the pipeline preamble's "explicit user sign-off gates" sentence points at the mechanism; one Operating-rules/Non-negotiable line states maquette carries no review server of its own.</td></tr>
+      <tr><td class="file">skills/maquette/references/intake.md</td><td>Exit gate routes brief sign-off through review-loop; "corrections loop back into questions" is re-expressed as <code>request_changes</code> → revise + ledger → re-serve, keeping "no work on an unapproved brief."</td></tr>
+      <tr><td class="file"><span class="add">+ skills/maquette/references/sign-off.md</span></td><td>NEW small reference: the single place documenting how maquette composes review-loop — render the gate deliverable to self-contained HTML with a stable id per section/journey/screen, invoke review-loop's <code>serve --kind maquette --issue &lt;slug&gt;</code>, branch on the await exit code, write a ledger on revision. States plainly: no server is built or copied; no review-loop files are imported.</td></tr>
+      <tr><td class="file">skills/maquette/README.md</td><td>The two "sign-off gate" mentions gain a half-line: gates present via the review-loop skill.</td></tr>
+      <tr><td class="file">skills/maquette/evals/*</td><td>Hard-gate wording treats gate approval as a review-loop <em>approve verdict</em>; add a probe expecting the model to reach for the review-loop skill by name at a gate rather than inventing a chat approval.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="decisions">
+  <h2>Implementation decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><strong>The reviewable artifact is a rendered HTML view of the deliverable, not the markdown.</strong> <code>BRIEF.md</code> / <code>JOURNEYS.md</code> stay the canonical repo deliverables (HANDOFF and the pipeline reference them by name). At each gate maquette renders the current deliverable to a self-contained HTML page whose sections/journeys/screens each carry a stable <code>id</code>, and serves <em>that</em>. Forced by review-loop: it binds approval to the served HTML's content hash and anchors annotations to stable ids — markdown has neither.</li>
+    <li id="dec-2"><strong>Point at review-loop by plain name, never by copying its scripts.</strong> Maquette imports no review-loop files; it invokes the skill's <code>serve</code>/<code>await</code> per review-loop's own <code>reference/scripts.md</code>. This is the decomposition contract — review-loop is a root primitive, consumers reference it by name.</li>
+    <li id="dec-3"><strong>The three verdicts map onto maquette's gate semantics.</strong> <code>approve</code> → proceed to the next phase; <code>approve_with_nits</code> → apply notes and proceed without a re-review round; <code>request_changes</code> → revise the deliverable, write a ledger disposition per annotation, re-serve, re-await. This <em>is</em> maquette's old "corrections loop back into questions," now mechanized.</li>
+    <li id="dec-4"><strong>Gated scope = the two existing human sign-off gates only.</strong> BRIEF (phase 1) and JOURNEYS (phase 3). The dead-click sweep (phase 6) stays an agent-run internal gate, not a human review — untouched. HANDOFF (phase 7) has no human gate today; left as-is (a future opt-in review at most).</li>
+    <li id="dec-5"><strong>Surface config is inherited, not defined.</strong> Maquette relies on the repo's <code>docs/agents/environment.md</code> § Presenting (the tailnet surface) exactly as review-loop's dependency surface specifies; absent a surface config, review-loop degrades to local-only. Maquette adds no surface knowledge of its own.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done — acceptance criteria</h2>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion>SKILL.md phase-1 and phase-3 gates name the <code>review-loop</code> skill as the approve surface (serve→await→branch on verdict); neither gate still instructs "read it back in chat and wait for the user to say approve" as the mechanism.</li>
+    <li id="ac-2" data-criterion>intake.md Exit gate routes brief sign-off through review-loop and expresses the corrections loop as <code>request_changes</code> → revise + ledger → re-serve, preserving "no work on an unapproved brief."</li>
+    <li id="ac-3" data-criterion>Exactly one maquette reference documents the composition (render → HTML with stable ids → review-loop <code>serve --kind maquette</code> → await exit-code branch → ledger on revision) and states maquette carries no review server of its own and imports no review-loop files.</li>
+    <li id="ac-4" data-criterion><code>grep -rn "review-loop" skills/maquette</code> shows matches only as a by-name sibling pointer; no copied <code>review-server.py</code>, <code>review-await.py</code>, or <code>chrome.*</code> exists under <code>skills/maquette/</code>.</li>
+    <li id="ac-5" data-criterion>No reinvented-loop prose remains: maquette no longer describes its own annotate/verdict/approve mechanics independent of review-loop.</li>
+    <li id="ac-6" data-criterion>End-to-end dry-run: a sample BRIEF rendered to HTML and served via <code>skills/review-loop/scripts/review-server.py --kind maquette --issue &lt;slug&gt;</code> yields a review URL on the tailnet surface + a hub entry, and <code>review-await.py</code> gates on the verdict. Headless-Chrome screenshotting is SIGKILLed here, so visual verification is substituted by a curl/DOM transcript (chrome injected, stable ids present, <code>/version</code> hash endpoint live) — disclosed as an environment gap, matching #2's evidence handling.</li>
+    <li id="ac-7" data-criterion>maquette's evals assert the gate-through-review-loop behavior — at least one probe expects the model to reach for the review-loop skill by name at a sign-off gate — and the build-eval hard gate treats gate approval as a review-loop approve verdict.</li>
+    <li id="ac-8" data-criterion>No regression: intake grilling, research, data design, build, demo hardening (dead-click sweep intact), and handoff are unchanged except for the gate mechanism; <code>BRIEF.md</code> and <code>JOURNEYS.md</code> remain the named canonical deliverables.</li>
+  </ul>
+</section>
+
+<section id="seams">
+  <h2>Test seams</h2>
+  <p>Grep-able prose assertions (ac-1, ac-2, ac-4, ac-5), the composition reference (ac-3), the eval files (ac-7), and a live review-loop server invocation against a sample BRIEF (ac-6). Deliberately untested: the browser annotation UX itself (environment cannot screenshot — substituted by a DOM transcript) and a full maquette build (the expensive build-eval tier is out of this enhancement's scope).</p>
+</section>
+
+<section id="evidence-required">
+  <h2>Evidence required</h2>
+  <ul class="plain">
+    <li id="ev-1">Diff of SKILL.md + intake.md + the new sign-off.md showing the by-name pointer replacing the reinvented prose.</li>
+    <li id="ev-2">grep transcripts backing ac-4 and ac-5.</li>
+    <li id="ev-3">curl/DOM transcript of a sample BRIEF.html served through review-loop (URL, hub entry, chrome injected, stable ids, <code>/version</code> hash) — with the Chrome-screenshot environment gap disclosed.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>The markdown→HTML render step is new surface. Keep it a documented convention (a stable id per section), not a script, so maquette does not grow its own machinery. If it later needs code, that is a follow-up issue.</li>
+    <li>Two forms of the deliverable (canonical <code>.md</code> + rendered <code>.html</code> for the gate) risk drift. Mitigate by rendering at gate time from the current <code>.md</code> and treating the <code>.html</code> as ephemeral — not a committed deliverable.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>Building or copying any server into maquette.</li>
+    <li>Changing review-loop itself — #2 shipped it; this issue only consumes it.</li>
+    <li>Gating HANDOFF.md or the dead-click sweep through review-loop.</li>
+    <li>Running the full build-eval tier.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
