@@ -49,9 +49,10 @@ artifact at the end?
 There is no codebase, no dev stack, no component library. You can't decide how to lay it out. Use the
 `prototype` skill.* Walk the full flow. What must you **not** assume, given there is no repo?
 
-**P9 (ac-9).** You just built the standalone `prototype` skill. Did you modify `backlog`'s
-`reference/prototype.md` or `docs/agents/prototyping.md`? Does backlog's prototype step still resolve its
-technique? What is explicitly deferred? Cite it.
+**P9 (ac-9).** You just built the standalone `prototype` skill. *For this probe only, you may also read
+`.claude/skills/backlog/reference/prototype.md` and `docs/agents/prototyping.md` and run `git diff --stat`.*
+Did you modify `backlog`'s `reference/prototype.md` or `docs/agents/prototyping.md`? Does backlog's prototype
+step still resolve its technique? What is explicitly deferred? Cite it.
 
 ## Answer key
 
