@@ -1,0 +1,235 @@
+<!doctype html>
+<!-- Plan for issue #8 — build the `to-spec` skill. Self-contained: inline styles, inline SVG,
+     no external fetches. Stable ids per review-loop's convention; acceptance criteria are
+     <li id="ac-N" data-criterion>. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #8 — to-spec: synthesize a conversation into a spec</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --ok: #0a7d4d; --warn: #b45309; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --ok: #34d399; --warn: #fbbf24; } }
+:root[data-theme="dark"] { color-scheme: dark; --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --ok: #34d399; --warn: #fbbf24; }
+:root[data-theme="light"] { color-scheme: light; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --ok: #0a7d4d; --warn: #b45309; }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.4rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2.1rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg { max-width: 100%; height: auto; display: block; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: var(--fg); }
+svg .muted { fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+.tag { font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.tag.always { color: var(--ok); }
+.tag.dev { color: var(--warn); }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "☐"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li b { color: var(--accent); font-weight: 600; }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .3rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>to-spec — synthesize a conversation into a spec</h1>
+  <p class="problem">A long design conversation with the agent ends with a decision but no durable artifact; the next step (splitting it into pickup-able work) has nothing to read. <code>to-spec</code> captures the decided direction as a repo spec — pure synthesis, no re-interview.</p>
+  <div class="chips"><span class="chip">issue #8</span><span class="chip">enhancement</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="position">
+  <h2>Where it sits</h2>
+  <p>Root of the spec→tickets pair: <code>to-spec</code> turns the conversation into one high-level direction doc that <code>to-tickets</code> (#9) later splits. No interview — it captures what was already decided.</p>
+  <figure id="pipeline-diagram">
+    <svg viewBox="0 0 700 200" role="img" aria-label="Pipeline: conversation to spec to tickets">
+      <!-- nodes -->
+      <rect x="8" y="70" width="150" height="58" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="83" y="94" text-anchor="middle">conversation +</text>
+      <text x="83" y="112" text-anchor="middle">codebase understanding</text>
+
+      <rect x="205" y="62" width="150" height="74" rx="8" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/>
+      <text x="280" y="90" text-anchor="middle" font-weight="600">to-spec</text>
+      <text x="280" y="108" text-anchor="middle" class="muted">pure synthesis</text>
+      <text x="280" y="124" text-anchor="middle" class="muted">no interview</text>
+
+      <rect x="402" y="70" width="150" height="58" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="477" y="90" text-anchor="middle">docs/specs/</text>
+      <text x="477" y="108" text-anchor="middle">&lt;name&gt;.md</text>
+      <text x="477" y="123" text-anchor="middle" class="muted" font-size="10">the spec (direction)</text>
+
+      <rect x="600" y="62" width="92" height="74" rx="8" fill="var(--card)" stroke="var(--line)" stroke-dasharray="4 3"/>
+      <text x="646" y="94" text-anchor="middle">to-tickets</text>
+      <text x="646" y="112" text-anchor="middle" class="muted" font-size="10">#9</text>
+
+      <!-- arrows -->
+      <line x1="158" y1="99" x2="203" y2="99" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="355" y1="99" x2="400" y2="99" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="552" y1="99" x2="598" y2="99" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+
+      <!-- optional review-loop branch -->
+      <rect x="402" y="8" width="150" height="34" rx="8" fill="var(--card)" stroke="var(--line)" stroke-dasharray="4 3"/>
+      <text x="477" y="29" text-anchor="middle" class="muted">review-loop (optional)</text>
+      <line x1="477" y1="70" x2="477" y2="44" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#ar)"/>
+      <text x="560" y="30" class="muted" font-size="10">AFK sign-off</text>
+
+      <defs>
+        <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="var(--muted)"/>
+        </marker>
+      </defs>
+    </svg>
+    <figcaption>to-spec is a root primitive (no upstream deps). review-loop is composed by name and only when the user is AFK; otherwise approval is inline.</figcaption>
+  </figure>
+</section>
+
+<section id="devness">
+  <h2>Dev vs non-dev — one template, sections gated</h2>
+  <p>The skill classifies the work, then keeps or drops the dev-only sections. Our skills aren't all dev, so the template must serve non-dev direction docs too.</p>
+  <figure id="devness-diagram">
+    <svg viewBox="0 0 700 176" role="img" aria-label="Dev vs non-dev branching">
+      <rect x="270" y="8" width="160" height="42" rx="8" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/>
+      <text x="350" y="26" text-anchor="middle" font-weight="600">classify the work</text>
+      <text x="350" y="42" text-anchor="middle" class="muted" font-size="10">dev or non-dev?</text>
+
+      <rect x="60" y="98" width="260" height="66" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="190" y="120" text-anchor="middle" font-weight="600">dev spec</text>
+      <text x="190" y="138" text-anchor="middle" class="muted" font-size="11">+ Testing decisions, + Test seams</text>
+      <text x="190" y="154" text-anchor="middle" class="muted" font-size="11">sketch seams → prefer highest existing</text>
+
+      <rect x="380" y="98" width="260" height="66" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="510" y="120" text-anchor="middle" font-weight="600">non-dev spec</text>
+      <text x="510" y="138" text-anchor="middle" class="muted" font-size="11">dev-only sections skipped</text>
+      <text x="510" y="154" text-anchor="middle" class="muted" font-size="11">core sections only</text>
+
+      <line x1="330" y1="50" x2="210" y2="96" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar2)"/>
+      <line x1="370" y1="50" x2="490" y2="96" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar2)"/>
+      <text x="238" y="78" class="muted" font-size="10">dev</text>
+      <text x="440" y="78" class="muted" font-size="10">non-dev</text>
+      <defs>
+        <marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="var(--muted)"/>
+        </marker>
+      </defs>
+    </svg>
+    <figcaption>Matt Pocock's "sketch the test seams, prefer the highest existing seam" step is kept — but only for dev specs.</figcaption>
+  </figure>
+</section>
+
+<section id="template-map">
+  <h2>Spec template — adapted from Matt's, gated for non-dev</h2>
+  <p>Adapted from Matt Pocock's <code>to-spec</code> and shipped as our own (invariant: we never install external skills). Core sections are always present; dev-only sections are skipped when they don't apply.</p>
+  <table>
+    <thead><tr><th>Section</th><th>When</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Problem</td><td><span class="tag always">always</span></td><td>The problem from the user's perspective.</td></tr>
+      <tr><td>Solution</td><td><span class="tag always">always</span></td><td>The decided direction, same perspective.</td></tr>
+      <tr><td>User stories</td><td><span class="tag always">always</span></td><td>Actor / feature / benefit; full surface, not just happy path.</td></tr>
+      <tr><td>Implementation decisions</td><td><span class="tag always">always</span></td><td>Decisions taken, with the constraint that forces each. No file paths / code (prototype-snippet exception).</td></tr>
+      <tr><td>Testing decisions</td><td><span class="tag dev">dev only</span></td><td>Skipped when N/A.</td></tr>
+      <tr><td>Test seams</td><td><span class="tag dev">dev only</span></td><td>Sketch the seams; prefer the highest existing seam. Skipped for non-dev.</td></tr>
+      <tr><td>Out of scope</td><td><span class="tag always">always</span></td><td>Each exclusion says what it is.</td></tr>
+      <tr><td>Notes</td><td><span class="tag always">always</span></td><td>Open questions / gaps flagged rather than interviewed.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>User stories</h2>
+  <ul class="plain">
+    <li id="story-1">As <em>an agent finishing a long design conversation</em>, I want to <em>synthesize what was decided into a spec doc</em>, so that <em>the direction is captured durably without re-interviewing the user</em>.</li>
+    <li id="story-2">As <em>the person driving the session</em>, I want <em>the spec to record only what we actually decided, with gaps flagged</em>, so that <em>I'm not asked questions I already answered and open points are visible</em>.</li>
+    <li id="story-3">As <em>to-tickets (#9)</em>, I want <em>a predictable spec doc at a known path</em>, so that <em>I can split it into pickup-able tickets</em>.</li>
+    <li id="story-4">As <em>someone writing a non-dev spec</em> (a process, a piece of content, a decision), I want <em>the dev-only sections skipped</em>, so that <em>the template fits my work</em>.</li>
+    <li id="story-5">As <em>the person driving the session, but AFK</em>, I want <em>the spec presented for sign-off through the review surface</em>, so that <em>I can approve it from my phone; when I'm present, inline approval is enough</em>.</li>
+    <li id="story-6">As <em>a maintainer</em>, I want <em>the spec to carry no file paths or code snippets</em>, so that <em>it doesn't rot as the codebase moves</em>.</li>
+    <li id="story-7">As <em>a Codex user</em>, I want <em>the skill to present correctly when installed into Codex</em>, so that <em>it works across harnesses.</em></li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Implementation decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><b>New standalone skill</b> <code>skills/to-spec/</code>, laid out to match the shipped <code>skills/staffing/</code> and <code>skills/review-loop/</code> primitives: <code>SKILL.md</code> (command surface), <code>README.md</code>, <code>agents/openai.yaml</code>, <code>reference/</code> (the synthesis method + template-section guide), <code>templates/</code> (the fillable spec scaffold), <code>evals/probes.md</code>. Self-contained at the file level; composes siblings by name only.</li>
+    <li id="dec-2"><b>Pure synthesis, no interview.</b> SKILL.md and the synthesis reference mine the current conversation + codebase understanding and capture what's already decided; they forbid re-interviewing. Unresolved points are <em>flagged in the spec's Notes</em>, not turned into questions to the user.</li>
+    <li id="dec-3"><b>Artifact = a repo doc</b> at <code>docs/specs/&lt;name&gt;.md</code> (markdown), described as the high-level direction doc that <code>to-tickets</code> consumes. The skill scaffolds it from <code>templates/spec.md</code>.</li>
+    <li id="dec-4"><b>Generic vocabulary.</b> "spec" and "ticket" throughout — never GitHub-specific "issue." The pair is spec→tickets.</li>
+    <li id="dec-5"><b>Dev/non-dev gating.</b> The synthesis method classifies the work; dev specs include Testing decisions + Test seams and run the "sketch seams, prefer the highest existing seam" step; non-dev specs skip both. The template marks those sections optional.</li>
+    <li id="dec-6"><b>No file paths / code snippets in the spec</b> (they go stale); the single prototype-validated-snippet exception is preserved, mirroring the plan/PRD rule.</li>
+    <li id="dec-7"><b>Optional review-loop for sign-off.</b> Declared as an <em>optional</em> sibling: when the user is AFK, to-spec renders the markdown spec to a self-contained review HTML and presents it through <code>review-loop</code> (composed by name, per the presentation surface); when present, approval is inline. Skipping review-loop still yields a valid committed spec — no hard dependency.</li>
+    <li id="dec-8"><b>Dependency surface</b> declared in SKILL.md with all three categories: <em>bundled references</em> (synthesis method + spec template), <em>project playbooks</em> (the repo's spec-location / vocabulary convention — defaults to <code>docs/specs/</code>; presentation-surface config when review-loop is used), <em>sibling skills</em> (optional <code>review-loop</code> only).</li>
+    <li id="dec-9"><b>Codex manifest.</b> <code>agents/openai.yaml</code> per <code>docs/patterns/codex-compat.md</code>, <code>allow_implicit_invocation: false</code> (a synthesis operator skill that writes repo docs, not implicitly fired).</li>
+    <li id="dec-10"><b>Pre-deployment probe eval</b> <code>evals/probes.md</code>: situated dry-run probes with a pre-written answer key, dual-executor (Opus in-session + <code>codex exec</code>), per <code>docs/patterns/probe-evals.md</code>, covering the criteria below.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done — acceptance criteria</h2>
+  <p>Each is checkable pass/fail: probe dry-runs against executor models (Opus in-session + <code>codex exec</code>) with correct-action-AND-citation grading, plus file/grep checks for structural ones.</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><b>Skill shape.</b> <code>skills/to-spec/SKILL.md</code> frontmatter identifies a user-invocable synthesis skill (<code>name: to-spec</code>, <code>user-invocable: true</code>, a description that reads as pure conversation→spec synthesis); the directory mirrors the shipped primitives (SKILL.md, README.md, agents/openai.yaml, reference/, templates/, evals/); and no file in the skill imports or reads another skill's files (grep finds no cross-skill paths).</li>
+    <li id="ac-2" data-criterion><b>Dependency surface.</b> SKILL.md declares all three pointer kinds — bundled references, project playbooks, sibling skills — and states sibling skills as <b>optional <code>review-loop</code></b> (for AFK sign-off; else inline), with no other sibling dependency.</li>
+    <li id="ac-3" data-criterion><b>No interview.</b> A probe in which the user left a point undecided resolves to: synthesize from what's decided and <b>flag the gap in the spec's Notes</b> — do not re-interview. SKILL.md / synthesis reference forbid re-interviewing, citably.</li>
+    <li id="ac-4" data-criterion><b>Artifact.</b> The output is a spec written as a repo doc at <code>docs/specs/&lt;name&gt;.md</code>, described as the direction doc <code>to-tickets</code> consumes — not a ticket, not a GitHub issue.</li>
+    <li id="ac-5" data-criterion><b>Generic vocabulary.</b> The skill and template use "spec" and "ticket," never GitHub-specific "issue" as the unit of work; a grep over the shipped skill confirms it.</li>
+    <li id="ac-6" data-criterion><b>Adapted template.</b> The bundled spec template carries the section set — Problem, Solution, User stories, Implementation decisions, Testing decisions, Out of scope, Notes — with the dev-only sections (Testing decisions, Test seams) explicitly marked optional / skip-when-N/A, so it's usable for non-dev work.</li>
+    <li id="ac-7" data-criterion><b>Dev-only seams step.</b> A probe on a non-dev spec confirms the "sketch test seams / prefer the highest existing seam" step and the dev-only sections are skipped; a probe on a dev spec confirms they're applied.</li>
+    <li id="ac-8" data-criterion><b>No stale content.</b> The synthesis method states the spec carries no file paths or code snippets, with the single prototype-validated-snippet exception preserved; a probe asking whether to inline a file path resolves to "no, describe it in prose."</li>
+    <li id="ac-9" data-criterion><b>Optional sign-off.</b> A probe with the user AFK routes sign-off through <code>review-loop</code>; a probe with the user present approves inline. The skill does not hard-depend on review-loop — skipping it still produces a valid committed spec.</li>
+    <li id="ac-10" data-criterion><b>Codex manifest.</b> <code>skills/to-spec/agents/openai.yaml</code> parses and is well-formed per <code>docs/patterns/codex-compat.md</code>, with <code>allow_implicit_invocation: false</code>.</li>
+    <li id="ac-11" data-criterion><b>Probe eval ships.</b> <code>skills/to-spec/evals/probes.md</code> exists with a pre-written answer key covering ac-1..ac-10, dual-executor, per <code>docs/patterns/probe-evals.md</code>.</li>
+  </ul>
+</section>
+
+<section id="seams">
+  <h2>Test seams</h2>
+  <p>This ships a skill (a prompt-driven procedure), so the seam is the <b>probe eval</b>, not a code test — the highest existing seam for skills in this repo (per <code>environment.md</code> § Driving the app and <code>docs/patterns/probe-evals.md</code>). Each acceptance criterion is exercised by at least one situated dry-run probe against both executors, graded correct-action-AND-citation, with structural criteria (ac-1, ac-5, ac-10) additionally confirmed by file/grep/YAML-parse check. No new script or runtime is introduced, so there is nothing else to seam.</p>
+</section>
+
+<section id="evidence-required">
+  <h2>Evidence required</h2>
+  <ul class="plain">
+    <li id="ev-1">The probe-eval transcript from both executors (Opus in-session + <code>codex exec</code>) with a pass/fail verdict table mapping each probe → its criterion.</li>
+    <li id="ev-2">A grep/YAML-parse check log for the structural criteria (cross-skill imports, "issue" vocabulary, openai.yaml well-formedness).</li>
+    <li id="ev-3">A sample spec produced from a real conversation (this decomposition is the canonical input) to show the template renders end-to-end for a dev case, and one non-dev case to show the gating.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>review-loop serves HTML with stable ids, but the spec is markdown — the AFK path needs a render step (dec-7). Kept optional so the core path (inline approval) never blocks on it.</li>
+    <li>"Adaptable to non-dev" can drift into vagueness. Mitigation: the template ships concrete non-dev guidance and a probe (ac-7) grades the gating both ways.</li>
+    <li>Overlap with the existing <code>plan</code> playbook (both synthesize direction). Distinction held explicitly: a spec is a coarser, pre-ticket direction doc; a plan is per-issue and gated for approval before implement.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li><code>to-tickets</code> (#9) — the consumer that splits a spec into tickets. Separate issue; this plan only fixes the spec's shape and path as its contract.</li>
+    <li>Any interview / elicitation flow — explicitly excluded; to-spec is pure synthesis.</li>
+    <li>Installing or vendoring Matt Pocock's skill — we adapt and ship our own; no external skill is installed.</li>
+    <li>Changes to the backlog loop, staffing, or review-loop skills themselves.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
