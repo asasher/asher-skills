@@ -1,0 +1,702 @@
+{
+  "source": "/Users/asher/Projects/asher-skills-wt/10-sprite-sheet-extractor/skills/to-sprites/evals/fixtures/iso-4x4.png",
+  "sheet": {
+    "width": 1024,
+    "height": 1024
+  },
+  "slicing": {
+    "mode": "grid",
+    "cols": 4,
+    "rows": 4,
+    "tile": [
+      256,
+      256
+    ],
+    "margin": [
+      0,
+      0
+    ],
+    "spacing": [
+      0,
+      0
+    ]
+  },
+  "key": {
+    "color": "#00FF00",
+    "method": "border-sample"
+  },
+  "elements": [
+    {
+      "name": "tile_01_grass",
+      "index": 0,
+      "row": 0,
+      "col": 0,
+      "sheet_rect": {
+        "x": 46,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 46,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_01_grass.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-46px -52px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 46,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_02_dirt",
+      "index": 1,
+      "row": 0,
+      "col": 1,
+      "sheet_rect": {
+        "x": 302,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 302,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_02_dirt.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-302px -52px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 302,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_03_stone",
+      "index": 2,
+      "row": 0,
+      "col": 2,
+      "sheet_rect": {
+        "x": 558,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 558,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_03_stone.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-558px -52px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 558,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_04_sand",
+      "index": 3,
+      "row": 0,
+      "col": 3,
+      "sheet_rect": {
+        "x": 814,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 814,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_04_sand.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-814px -52px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 814,
+        "y": 52,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_05_water",
+      "index": 4,
+      "row": 1,
+      "col": 0,
+      "sheet_rect": {
+        "x": 46,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 46,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_05_water.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-46px -308px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 46,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_06_shoreline",
+      "index": 5,
+      "row": 1,
+      "col": 1,
+      "sheet_rect": {
+        "x": 302,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 302,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_06_shoreline.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-302px -308px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 302,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_07_roads",
+      "index": 6,
+      "row": 1,
+      "col": 2,
+      "sheet_rect": {
+        "x": 558,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 558,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_07_roads.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-558px -308px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 558,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_08_wood",
+      "index": 7,
+      "row": 1,
+      "col": 3,
+      "sheet_rect": {
+        "x": 814,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 814,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_08_wood.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-814px -308px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 814,
+        "y": 308,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_09_lava",
+      "index": 8,
+      "row": 2,
+      "col": 0,
+      "sheet_rect": {
+        "x": 46,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 46,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_09_lava.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-46px -564px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 46,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_10_snow",
+      "index": 9,
+      "row": 2,
+      "col": 1,
+      "sheet_rect": {
+        "x": 302,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 302,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_10_snow.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-302px -564px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 302,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_11_forest",
+      "index": 10,
+      "row": 2,
+      "col": 2,
+      "sheet_rect": {
+        "x": 558,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 558,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_11_forest.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-558px -564px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 558,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_12_mountain",
+      "index": 11,
+      "row": 2,
+      "col": 3,
+      "sheet_rect": {
+        "x": 814,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 814,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_12_mountain.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-814px -564px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 814,
+        "y": 564,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_13_farmland",
+      "index": 12,
+      "row": 3,
+      "col": 0,
+      "sheet_rect": {
+        "x": 46,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 46,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_13_farmland.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-46px -820px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 46,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_14_bridge",
+      "index": 13,
+      "row": 3,
+      "col": 1,
+      "sheet_rect": {
+        "x": 302,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 302,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_14_bridge.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-302px -820px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 302,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_15_cliff",
+      "index": 14,
+      "row": 3,
+      "col": 2,
+      "sheet_rect": {
+        "x": 558,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 558,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_15_cliff.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-558px -820px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 558,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      }
+    },
+    {
+      "name": "tile_16_ice",
+      "index": 15,
+      "row": 3,
+      "col": 3,
+      "sheet_rect": {
+        "x": 814,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      },
+      "trimmed_bounds": {
+        "x": 814,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      },
+      "asset": "assets/tile_16_ice.png",
+      "size": [
+        165,
+        153
+      ],
+      "anchor": [
+        82,
+        153
+      ],
+      "pivot": [
+        0.5,
+        1.0
+      ],
+      "css": {
+        "background-position": "-814px -820px",
+        "width": 165,
+        "height": 153
+      },
+      "frame": {
+        "x": 814,
+        "y": 820,
+        "w": 165,
+        "h": 153
+      }
+    }
+  ]
+}

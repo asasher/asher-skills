@@ -1,0 +1,25 @@
+# selfcheck.py transcript — issue #10 to-sprites, final HEAD 3c86490
+$ python3 skills/to-sprites/evals/selfcheck.py
+PASS ac-1 keyed source exports transparent-corner PNG assets
+PASS ac-2 regular 4x4 grid exports 16 row-major assets
+PASS ac-3 non-destructive overwrite refusal preserves source bytes
+PASS ac-4 CLI help documents every flag
+PASS ac-5 manifest schema is complete
+PASS ac-5 sanity trimmed_bounds stay within sheet_rect
+PASS ac-6 validation passes expected count and fails wrong count
+PASS ac-7 auto explicit hex and none key modes work
+PASS ac-8 components mode extracts multiple blobs
+PASS ac-9 naming and ordering are deterministic
+PASS ac-10 webp and both formats preserve alpha
+PASS ac-11 prompt guidance is documented
+PASS ac-12 contact sheet writes a valid PNG
+PASS ac-13 Codex openai.yaml surface is present
+PASS ac-14 generate-source handoff records provenance and fails cleanly
+ALL PASS
+exit=0
+--- also: extractor validation run on fixture ---
+PASS asset-count: expected 16, got 16
+PASS empty-cells: 0 empty cell(s)
+PASS alpha-corners: all corners transparent
+PASS key-remnants: no keyed remnants
+wrote 16 element(s) to /var/folders/m5/3dysrch16gg6ckzt3tbjn3jw0000gn/T/tmp.Sdr5r35Lj1/o
