@@ -9,7 +9,7 @@ against the key. **The answer key is written before any runs** and graded agains
 criteria (`plans/8-to-spec.html`, ids ac-1..ac-11) — the plan is the source of truth; do not grade against
 looser criteria.
 
-Each probe names the criterion it exercises. Between them the 12 probes cover ac-1..ac-11.
+Each probe names the criterion it exercises. Between them the 13 probes cover ac-1..ac-11.
 
 ## Probes
 
@@ -122,7 +122,7 @@ State what you checked.
 
 ## Scoring
 
-12 probes × 2 executors (Opus in-session + `codex exec`). A probe passes only with the **correct action AND a
+13 probes × 2 executors (Opus in-session + `codex exec`). A probe passes only with the **correct action AND a
 correct citation**. Ambiguity flags are recorded as findings, not failures — they are the most valuable output
 and should drive wording fixes before ship. Report a verdict table mapping each probe → its criterion →
 pass/fail per executor. Structural criteria are additionally confirmed by file check: ac-1 (frontmatter + grep
