@@ -1,0 +1,282 @@
+<!doctype html>
+<!-- Plan #7 — setup-asher-skills. House style: plan skill reference/authoring.md.
+     Self-contained: inline styles, inline SVG, no external fetches. Stable ids on every
+     section and every acceptance criterion (ac-N data-criterion) and decision (dec-N). -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #7 — setup-asher-skills</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --ok: #15803d; --warn: #b45309; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --ok: #4ade80; --warn: #fbbf24; } }
+:root[data-theme="dark"] { --fg:#e4e4e7; --muted:#94949c; --bg:#121216; --card:#1a1a20; --line:#2c2c34; --accent:#818cf8; --ok:#4ade80; --warn:#fbbf24; }
+:root[data-theme="light"] { --fg:#1a1a1e; --muted:#6b6b74; --bg:#fafafa; --card:#fff; --line:#e4e4e7; --accent:#4f46e5; --ok:#15803d; --warn:#b45309; }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 760px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.4rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: .2rem 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+h3 { font-size: .95rem; margin: 1.1rem 0 .3rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: var(--fg); }
+svg .mut { fill: var(--muted); }
+svg .edge-label { font-size: 10.5px; fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .8rem; top:.5rem; color: var(--accent); }
+ul.criteria li .tag { font-size:.68rem; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); display:inline-block; margin-right:.4rem; border:1px solid var(--line); border-radius:5px; padding:0 .3rem; }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .3rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+pre { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .7rem .9rem; overflow-x: auto; font-size: .82rem; }
+.pill { font-size:.7rem; border-radius:5px; padding:.02rem .35rem; border:1px solid currentColor; }
+.pill.local { color: var(--ok); }
+.pill.global { color: var(--warn); }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>setup-asher-skills — the prompt-driven installer</h1>
+  <p class="problem">Wiring the right asher-skills into a new project today means hand-copying skills, guessing which siblings each one needs, and hand-writing the context blocks and playbooks — error-prone, and nobody remembers the dependency graph.</p>
+  <p class="problem"><strong>Solution:</strong> one prompt-driven skill that audits the repo, the machine, and the project, interviews the user one plain-language decision at a time, then installs a dependency-complete skill set from this repo only and writes the project's skill map — and on re-invocation, audits the install for drift.</p>
+  <div class="chips"><span class="chip">#7</span><span class="chip">plan v1</span><span class="chip">enhancement</span><span class="chip">capstone</span></div>
+</header>
+
+<!-- ============ THE SHAPE ============ -->
+<section id="model">
+  <h2>The shape — four phases, stop at confirm</h2>
+  <p>Explore three surfaces silently, then interview one decision at a time, confirm the whole write, and only then touch disk. Modeled on <code>setup-matt-pocock-skills</code> (explore → decide-one-at-a-time → confirm → write), adapted as ours.</p>
+  <figure id="flow-diagram">
+  <svg viewBox="0 0 720 260" width="100%" role="img" aria-label="Four-phase flow">
+    <!-- Phase A: Explore -->
+    <rect x="10" y="20" width="170" height="150" rx="10" fill="none" stroke="var(--accent)"/>
+    <text x="24" y="42" font-weight="bold">A · Audit (silent)</text>
+    <text x="24" y="66">1 · Repo</text><text class="mut" x="24" y="82" font-size="10.5">remotes · AGENTS/CLAUDE.md · installed skills (proj+global) · docs/agents</text>
+    <text x="24" y="108">2 · Machine</text><text class="mut" x="24" y="124" font-size="10.5">compose staffing → reachable models + Codex</text>
+    <text x="24" y="148">3 · User/project</text><text class="mut" x="24" y="164" font-size="10.5">"what is this project for?"</text>
+    <!-- Phase B: Interview -->
+    <rect x="205" y="20" width="170" height="150" rx="10" fill="none" stroke="var(--accent)"/>
+    <text x="219" y="42" font-weight="bold">B · Interview</text>
+    <text class="mut" x="219" y="66" font-size="11">Recommend a set by</text>
+    <text class="mut" x="219" y="80" font-size="11">project type. Then one</text>
+    <text class="mut" x="219" y="94" font-size="11">decision at a time, each</text>
+    <text class="mut" x="219" y="108" font-size="11">with a plain-language</text>
+    <text class="mut" x="219" y="122" font-size="11">explainer. Accept a</text>
+    <text class="mut" x="219" y="136" font-size="11">composer ⇒ auto-pull</text>
+    <text class="mut" x="219" y="150" font-size="11">its siblings, and say so.</text>
+    <!-- Phase C: Confirm -->
+    <rect x="400" y="20" width="150" height="150" rx="10" fill="none" stroke="var(--accent)"/>
+    <text x="414" y="42" font-weight="bold">C · Confirm</text>
+    <text class="mut" x="414" y="66" font-size="11">Show the whole plan:</text>
+    <text class="mut" x="414" y="80" font-size="11">skills + scope, the</text>
+    <text class="mut" x="414" y="94" font-size="11">Agent-skills block,</text>
+    <text class="mut" x="414" y="108" font-size="11">the playbooks, the</text>
+    <text class="mut" x="414" y="122" font-size="11">pointer. Edit before</text>
+    <text class="mut" x="414" y="136" font-size="11">any write.</text>
+    <!-- Phase D: Write -->
+    <rect x="575" y="20" width="135" height="150" rx="10" fill="none" stroke="var(--ok)"/>
+    <text x="589" y="42" font-weight="bold" fill="var(--ok)">D · Write</text>
+    <text class="mut" x="589" y="66" font-size="11">npx skills add</text>
+    <text class="mut" x="589" y="80" font-size="11">(this repo only),</text>
+    <text class="mut" x="589" y="94" font-size="11">run each skill's</text>
+    <text class="mut" x="589" y="108" font-size="11">own setup, write</text>
+    <text class="mut" x="589" y="122" font-size="11">## Agent skills</text>
+    <text class="mut" x="589" y="136" font-size="11">+ pointer.</text>
+    <!-- arrows -->
+    <line x1="180" y1="95" x2="205" y2="95" stroke="var(--muted)" marker-end="url(#ar)"/>
+    <line x1="375" y1="95" x2="400" y2="95" stroke="var(--muted)" marker-end="url(#ar)"/>
+    <line x1="550" y1="95" x2="575" y2="95" stroke="var(--muted)" marker-end="url(#ar)"/>
+    <!-- re-invoke loop -->
+    <path d="M642 170 L642 210 L360 210 L360 210" fill="none" stroke="var(--warn)" stroke-dasharray="4 3" marker-end="url(#arw)"/>
+    <text x="366" y="234" fill="var(--warn)" font-size="11">Re-invoke = audit mode: fetch repo catalog, diff against installed, report drift/conflict, propose updates one at a time — no version stamps.</text>
+    <defs>
+      <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--muted)"/></marker>
+      <marker id="arw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--warn)"/></marker>
+    </defs>
+  </svg>
+  <figcaption>The pause after C is a confirmation gate: nothing is written until the user approves the whole plan.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ SIBLING GRAPH ============ -->
+<section id="deps">
+  <h2>The dependency graph it guarantees</h2>
+  <p>Accepting a composer silently pulls its siblings — the invariant the skill enforces so no half-wired install ships. Two root primitives depend on nothing; everything else closes over them.</p>
+  <figure id="dep-diagram">
+  <svg viewBox="0 0 720 250" width="100%" role="img" aria-label="Sibling dependency graph">
+    <!-- roots -->
+    <rect x="280" y="200" width="120" height="34" rx="8" fill="none" stroke="var(--ok)"/><text x="299" y="222" fill="var(--ok)">staffing</text>
+    <rect x="430" y="200" width="130" height="34" rx="8" fill="none" stroke="var(--ok)"/><text x="449" y="222" fill="var(--ok)">review-loop</text>
+    <text class="mut" x="565" y="222" font-size="10.5">← root primitives</text>
+    <!-- composers -->
+    <rect x="250" y="120" width="90" height="32" rx="8" fill="none" stroke="var(--accent)"/><text x="272" y="141">plan</text>
+    <rect x="360" y="120" width="110" height="32" rx="8" fill="none" stroke="var(--accent)"/><text x="378" y="141">prototype</text>
+    <rect x="490" y="120" width="110" height="32" rx="8" fill="none" stroke="var(--accent)"/><text x="503" y="141">maquette</text>
+    <!-- top: backlog -->
+    <rect x="300" y="30" width="120" height="34" rx="8" fill="none" stroke="var(--accent)" stroke-width="1.5"/><text x="322" y="52" font-weight="bold">backlog</text>
+    <!-- edges plan/proto -> roots -->
+    <line x1="290" y1="152" x2="320" y2="200" stroke="var(--muted)" marker-end="url(#ar2)"/>
+    <line x1="300" y1="152" x2="470" y2="200" stroke="var(--muted)" marker-end="url(#ar2)"/>
+    <line x1="410" y1="152" x2="360" y2="200" stroke="var(--muted)" marker-end="url(#ar2)"/>
+    <line x1="420" y1="152" x2="480" y2="200" stroke="var(--muted)" marker-end="url(#ar2)"/>
+    <!-- maquette -> review-loop only -->
+    <line x1="540" y1="152" x2="510" y2="200" stroke="var(--muted)" marker-end="url(#ar2)"/>
+    <!-- backlog -> plan, prototype, and (implied) both roots -->
+    <line x1="330" y1="64" x2="300" y2="120" stroke="var(--accent)" marker-end="url(#ar3)"/>
+    <line x1="380" y1="64" x2="410" y2="120" stroke="var(--accent)" marker-end="url(#ar3)"/>
+    <text class="mut" x="120" y="52" font-size="11" text-anchor="end">backlog ⇒ ensure ALL:</text>
+    <text class="mut" x="120" y="68" font-size="11" text-anchor="end">staffing · review-loop</text>
+    <text class="mut" x="120" y="84" font-size="11" text-anchor="end">· plan · prototype</text>
+    <text class="mut" x="150" y="141" font-size="11" text-anchor="end">plan|prototype ⇒</text>
+    <text class="mut" x="150" y="157" font-size="11" text-anchor="end">review-loop + staffing</text>
+    <defs>
+      <marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--muted)"/></marker>
+      <marker id="ar3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--accent)"/></marker>
+    </defs>
+  </svg>
+  <figcaption>Confirmed against each SKILL.md's dependency surface. Soft edges (to-tickets reads backlog conventions; to-sprites → codex-imagegen for <code>--generate</code>) are noted, not force-installed.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ BEFORE / AFTER ============ -->
+<section id="before-after">
+  <h2>Before &#8594; after</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Today (hand-wired)</th><th>With setup-asher-skills</th></tr></thead>
+    <tbody>
+      <tr><td>Install</td><td>Copy each skill by hand; remember which repo</td><td>Guided <code>npx skills add https://github.com/asasher/asher-skills</code>, this repo only</td></tr>
+      <tr><td>Dependencies</td><td>Guess which siblings a composer needs</td><td>Transitive closure guaranteed automatically</td></tr>
+      <tr><td>Fit</td><td>Install everything or nothing</td><td>Recommended set by project type, one decision at a time</td></tr>
+      <tr><td>Context block</td><td>Hand-write the skill map</td><td><code>## Agent skills</code> block written into AGENTS.md/CLAUDE.md</td></tr>
+      <tr><td>Scope</td><td>Ad-hoc global vs project</td><td>Project-local default; global (consent-gated) only for staffing</td></tr>
+      <tr><td>Drift</td><td>No way to tell what's stale</td><td>Re-invoke = LLM audit vs the live repo catalog</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ SKILL LAYOUT ============ -->
+<section id="layout">
+  <h2>Skill shape &amp; layout</h2>
+  <p>Modeled on the shipped skills (SKILL.md + <code>reference/</code> full contract + <code>templates/</code> seeds + <code>evals/</code> probes + <code>agents/openai.yaml</code>). Composes siblings <em>by name</em>; imports no other skill's files.</p>
+  <pre>skills/setup-asher-skills/
+  SKILL.md          frontmatter · command surface · four gates · composition · 3-part dependency surface
+  reference/
+    interview.md    the authoritative interview contract: 3-part audit → one-decision-at-a-time → confirm → write
+    catalog.md      installable skills mapped by project type · the sibling graph + closure rules · this-repo-only invariant
+    audit-mode.md   re-invoke contract: LLM diff of repo catalog vs installed (proj+global) — NO version stamps
+  templates/
+    agent-skills-block.md   seed for the ## Agent skills context block (per-project map, no ask-asher router)
+    repo-pointer.md         seed for the pointer back to github.com/asasher/asher-skills
+  evals/probes.md   dual-executor Tier-1 probes (Opus in-session + gpt-5.5 via codex exec); answer key kept separate
+  agents/openai.yaml  Codex-compat presentation
+  README.md</pre>
+</section>
+
+<!-- ============ STORIES ============ -->
+<section id="stories">
+  <h2>Stories</h2>
+  <ul class="plain">
+    <li id="story-1">As a developer starting a fresh project, I want the installer to audit my repo, my machine, and ask what the project is for, so its recommendation fits before it writes anything.</li>
+    <li id="story-2">As a user who doesn't know the skill names, I want each decision presented one at a time with a plain-language explainer, so I can say yes or no without reading docs.</li>
+    <li id="story-3">As someone who accepts <code>plan</code>, I want <code>review-loop</code> and <code>staffing</code> pulled in automatically and told to me, so I never end up with a half-wired composer.</li>
+    <li id="story-4">As the repo owner, I want every install to come from this repo's public endpoint only, so no external skill is ever silently added.</li>
+    <li id="story-5">As a returning user, I want the installer to prefer project-local scope and only offer global for a genuinely reusable skill (staffing) with my consent, so my home directory stays clean.</li>
+    <li id="story-6">As a user re-running months later, I want an audit of what drifted from the live repo — not a version-number check — with fixes proposed one at a time.</li>
+    <li id="story-7">As the next agent working this repo, I want a <code>## Agent skills</code> map and a repo pointer written into the harness memory file, so I know what's installed and where it came from.</li>
+  </ul>
+</section>
+
+<!-- ============ KEY DECISIONS ============ -->
+<section id="decisions">
+  <h2>Key decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><strong>Compose, don't reimplement, the machine audit.</strong> The machine half of the audit invokes the <code>staffing</code> skill by name for the reachable-models + Codex probe, rather than re-deriving a roster — staffing owns that, including the consent-gated global write.</li>
+    <li id="dec-2"><strong>setup authors only the cross-cutting artifacts; skills own their own playbooks.</strong> setup writes the <code>## Agent skills</code> map and the repo pointer directly (no skill owns these), and <em>guarantees</em> the <code>docs/agents/</code> playbooks by running each installed skill's own setup (staffing roster, review-loop surface config, backlog's docs/agents suite) — it never re-copies another skill's templates. This keeps composition by-name and avoids template drift.</li>
+    <li id="dec-3"><strong>Project-first scope.</strong> Everything installs project-local by default. Global is offered only for <code>staffing</code> (the one genuinely cross-project roster) and only with consent, delegated to staffing's own scope-decision flow. No other skill is offered global.</li>
+    <li id="dec-4"><strong>Guarantee the closure at accept time.</strong> Accepting a composer computes its transitive sibling closure and installs it: <code>plan</code>|<code>prototype</code> ⇒ ensure review-loop + staffing; <code>backlog</code> ⇒ ensure {staffing, review-loop, plan, prototype}; <code>maquette</code> ⇒ ensure review-loop. The pull is surfaced in plain language, never silent-and-hidden.</li>
+    <li id="dec-5"><strong>This-repo-only is a hard invariant.</strong> Every install command targets <code>https://github.com/asasher/asher-skills</code> and nothing else. External good ideas are already adapted and shipped here (e.g. <code>to-spec</code>), so the skill never emits an install for <code>mattpocock/*</code> or any other host — it offers our equivalent or says we don't ship it.</li>
+    <li id="dec-6"><strong>Reconciliation is an LLM audit, no version stamps.</strong> Re-invoke fetches the repo's current skill catalog, reads what's installed (project <code>skills-lock.json</code> + <code>.claude/skills/</code>, global <code>~/.claude/skills/</code>), reads the <code>## Agent skills</code> block, and reports overlap/drift/broken-closure/scope-conflict in prose. No <code>vNN</code> stamp, no hash marker as the drift mechanism — the model reads and judges (matching staffing/review-loop, rejecting backlog's stamp idiom).</li>
+    <li id="dec-7"><strong>The context block is a map, not a router.</strong> The <code>## Agent skills</code> section is a plain per-project list (skill + one-line purpose + the sibling relationships + the repo pointer), written into whichever memory file exists (prefer AGENTS.md, else CLAUDE.md). No separate <code>ask-asher</code> dispatcher skill.</li>
+  </ul>
+</section>
+
+<!-- ============ DEFINITION OF DONE ============ -->
+<section id="criteria">
+  <h2>Definition of done — acceptance criteria</h2>
+  <p>Two seams: <strong>structure/grep checks</strong> against the skill's files, and <strong>dual-executor Tier-1 probes</strong> (Opus in-session + gpt-5.5 via <code>codex exec</code>), each graded pass/fail against an answer key written before any run. A probe passes only if <em>both</em> executors pass it.</p>
+
+  <h3>Structure &amp; invariant checks (mechanical)</h3>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><span class="tag">file</span><code>skills/setup-asher-skills/SKILL.md</code> exists with valid frontmatter: <code>name: setup-asher-skills</code>, a <code>description</code>, an <code>argument-hint</code>, and <code>user-invocable: true</code>.</li>
+    <li id="ac-2" data-criterion><span class="tag">file</span>SKILL.md has a <code>## Dependency surface</code> section declaring all three parts: bundled references (interview + catalog + audit-mode + the seed templates), the project artifacts it writes (the <code>## Agent skills</code> block + the guaranteed <code>docs/agents/</code> playbooks + the pointer), and the sibling skills it installs/guarantees.</li>
+    <li id="ac-3" data-criterion><span class="tag">file</span>The layout exists: <code>reference/interview.md</code>, <code>reference/catalog.md</code>, <code>reference/audit-mode.md</code>, <code>templates/agent-skills-block.md</code>, <code>templates/repo-pointer.md</code>, <code>evals/probes.md</code>, and <code>agents/openai.yaml</code> are all present.</li>
+    <li id="ac-4" data-criterion><span class="tag">grep</span>Every install/pull command across the skill's files references only <code>asasher/asher-skills</code> (slug or full <code>github.com/asasher/asher-skills</code> URL); grep finds no other host or repo slug inside an install command.</li>
+    <li id="ac-5" data-criterion><span class="tag">grep</span>The sibling-closure rules are stated in <code>reference/catalog.md</code>: text asserting <code>plan</code>|<code>prototype</code> ⇒ review-loop + staffing, and <code>backlog</code> ⇒ {staffing, review-loop, plan, prototype}.</li>
+    <li id="ac-6" data-criterion><span class="tag">grep</span><code>reference/audit-mode.md</code> contains no version-stamp mechanism — no instruction to write or compare a <code>vNN</code> / <code>-templates:</code> / hash marker as the drift signal — and states reconciliation is an LLM audit.</li>
+    <li id="ac-7" data-criterion><span class="tag">file</span><code>evals/probes.md</code> defines at least the six probes below, names both executor targets (Opus in-session + <code>codex exec</code>), and keeps its answer key separate (not inline with the probes).</li>
+  </ul>
+
+  <h3>Behavioral probes (dual-executor; both must pass each)</h3>
+  <ul class="criteria">
+    <li id="ac-8" data-criterion><span class="tag">probe P1</span>Invoked fresh, the executor audits <strong>three</strong> surfaces — repo, machine (by composing <code>staffing</code> for the model/Codex probe), and user/project — and cites the file+sentence that says so.</li>
+    <li id="ac-9" data-criterion><span class="tag">probe P2</span>Given a user who accepts <code>plan</code>, the executor installs <code>plan</code> <em>and</em> auto-pulls <code>review-loop</code> + <code>staffing</code>, presents it one decision at a time with a plain-language explainer, and tells the user the siblings were pulled.</li>
+    <li id="ac-10" data-criterion><span class="tag">probe P3</span>Asked for an external skill (e.g. Matt Pocock's TDD), the executor refuses to install from any host but <code>asasher/asher-skills</code> — offering our adapted equivalent or stating we don't ship it — and never emits an external install command.</li>
+    <li id="ac-11" data-criterion><span class="tag">probe P4</span>After the interview, the executor writes a <code>## Agent skills</code> block into AGENTS.md/CLAUDE.md (prefer existing), guarantees the <code>docs/agents/</code> playbooks via each installed skill's setup, and writes the repo pointer — with no <code>ask-asher</code> router.</li>
+    <li id="ac-12" data-criterion><span class="tag">probe P5</span>Re-invoked on a repo it set up before, the executor runs audit mode: fetches the repo's current catalog, diffs against installed (project + global), reports overlap/drift/broken-closure/scope-conflict, and proposes updates one at a time — using no version stamps.</li>
+    <li id="ac-13" data-criterion><span class="tag">probe P6</span>Given a user accepting <code>staffing</code> and <code>backlog</code>, the executor scopes everything project-local by default and offers <code>staffing</code> global only with consent, keeping <code>backlog</code> and the rest project-local.</li>
+  </ul>
+</section>
+
+<!-- ============ HOW CHECKED ============ -->
+<section id="checks">
+  <h2>How it will be checked</h2>
+  <p>AC-1…7 are confirmed at the file seam — <code>ls</code>/<code>grep</code>/read against <code>skills/setup-asher-skills/</code>, no model in the loop. AC-8…13 are confirmed at the probe seam per <code>docs/patterns/probe-evals.md</code>: each probe is run in a Claude subagent (Agent tool, in-session) and via <code>codex exec -s read-only</code>, graded against the pre-written key; both executors must pass. Deliberately unchecked: the <em>subjective quality</em> of the interview copy and the recommendation's taste — those get a human review pass on the presentation surface, not a mechanical grade (consistent with <code>environment.md</code> § Driving the app, "a skill whose value is subjective can't be fully graded mechanically").</p>
+</section>
+
+<!-- ============ REQUIRED ============ -->
+<section id="required">
+  <h2>What's required on completion</h2>
+  <ul class="plain">
+    <li id="req-1">The eval transcript (both executors) plus a per-probe pass/fail table mapping each probe to its answer-key criterion — the evidence <code>evidence.md</code> consumes.</li>
+    <li id="req-2">A screenshot of the rendered plan is not required for the skill itself; the skill produces no visual artifact of its own (it writes markdown + runs installs).</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks &amp; mitigations</summary>
+  <ul class="plain">
+    <li><strong>Composition drift:</strong> setup could accidentally re-copy a sibling's playbook templates and rot. Mitigation: dec-2 — setup delegates to each skill's own setup and authors only the map+pointer; AC checks it writes no sibling template verbatim.</li>
+    <li><strong>Executors misread "audit three things" as one big audit.</strong> Mitigation: P1 requires citing the exact sentence; if executors conflate, tighten interview.md wording before ship (probe-evals loop).</li>
+    <li><strong>Global write surprises the user.</strong> Mitigation: dec-3 routes any global write through staffing's consent gate; P6 checks it.</li>
+    <li><strong>The <code>npx skills</code> tool's exact flags (<code>-g</code>/<code>-y</code>) or lockfile behavior differ from assumption.</strong> Mitigation: verify the command form against the repo README + a dry run before ship; the skill states the command, not a bespoke installer.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li><strong>The meta dogfood</strong> — removing <code>backlog</code> from this repo's working checkout and running <code>setup-asher-skills</code> against this repo — is a separate follow-on step, not this issue's build.</li>
+    <li><strong>Changing any installed skill</strong> (staffing, review-loop, plan, prototype, backlog, etc.). This issue ships the installer that composes them as they are.</li>
+    <li><strong>A new <code>npx skills</code> installer binary or lockfile format.</strong> The skill drives the existing <code>skills</code> tooling; it does not replace it.</li>
+    <li><strong>An <code>ask-asher</code> router skill.</strong> Explicitly excluded — the <code>## Agent skills</code> block is the per-project map.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
