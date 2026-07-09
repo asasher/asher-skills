@@ -263,7 +263,7 @@ class ReviewHandler(BaseHTTPRequestHandler):
         query = parse_qs(parsed.query)
         if parsed.path.endswith("/hub") or parsed.path == "/hub":
             # Local fallback only — the real hub is surface/index.html served
-            # statically at the surface root (reference/presenting.md § Hub).
+            # statically at the surface root (reference/surface-and-hub.md § Hub).
             index = self.app["surface"] / "index.html"
             if not index.exists():
                 regen_index(self.app["surface"])
