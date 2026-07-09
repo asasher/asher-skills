@@ -1,0 +1,38 @@
+# ac-1  SKILL await surface documents delegated watcher subagent
+29:  **Do not block the orchestrator on this inline.** Hold the watch on a **dedicated watcher subagent** that
+
+# ac-2  dependency surface names staffing sibling scoped to the watch
+70:- **Sibling skills** — **`staffing` (by name), and only for the watch.** The serve/annotate/hash-bound
+
+# ac-3  staffed at roster Floor, read directly, NOT a generic route; never hardcoded
+30:- **The watcher's model is a staffing decision, never hardcoded — staff it at the roster Floor.** Compose the
+36:  `intelligence > taste > cost`, so `route` returns the **most capable** reachable model (cost is only a
+39:  **Codex-driven** run, where Claude models are unreachable, the roster collapses to `gpt-5.5`. If the Floor
+
+# ac-4  loop-until-verdict + re-arm/124 + lossless cursor + no script change
+49:The watcher **loops-until-verdict** rather than relying on one long single-timeout:
+52:2. On exit **`124`** (no verdict yet) → **re-arm**: invoke it again. A timeout is *keep waiting*, never
+56:Re-arm is **lossless** because `review-await.py` is cursor-tracked (`state/.await-cursor`): a verdict
+59:at once: the `--timeout` exit and the harness Bash-tool ceiling are just re-arm boundaries, not the end of
+60:the watch, so an arbitrarily long AFK review survives. **No change to `review-await.py` is needed** — the
+61:existing cursor already makes cross-turn re-arming safe; the loop lives in the watcher's contract, not the
+75:`events.jsonl` + `.await-cursor` remain the **durable backstop**, not the primary path. If the watcher dies
+
+# ac-5  wake without polling + durable backstop
+68:gate — proceed on `approve`/`approve_with_nits`, revise on `request_changes`. **The parent never polls
+75:`events.jsonl` + `.await-cursor` remain the **durable backstop**, not the primary path. If the watcher dies
+77:re-drains it from the cursor. The event log is the crash-safe record; the watcher's completion is the live
+
+# ac-6  both gates
+7:covers the plan/prototype approval gate and the PR-merge watch.
+80:## Both gates
+84:- **The plan/prototype approval gate** — the watcher holds `review-await.py` for the served artifact and
+86:- **The PR-merge watch** — the watcher holds the merge poll (the `ScheduleWakeup` / `Monitor` loop named in
+
+# ac-9a  scripts byte-identical to main
+(empty diff above = unchanged)
+# ac-9b  no model name embedded in scripts
+(none — clean)
+
+# staffing skill untouched by this branch
+(empty diff above = staffing untouched)

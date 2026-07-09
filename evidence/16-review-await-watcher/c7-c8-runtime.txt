@@ -1,0 +1,6 @@
+
+===== RUNTIME VERIFICATION (issue #16) =====
+[PASS] ac-7: first-await=124 (want 124); submit HTTP=200 (want 200); re-armed-await=0 (want 0) -> verdict survived the timeout via cursor
+[PASS] ac-8: served-through-prefix=True; approve: prefixed-POST HTTP=200, await-exit=0 (want 0) OK | approve_with_nits: prefixed-POST HTTP=200, await-exit=3 (want 3) OK | request_changes: prefixed-POST HTTP=200, await-exit=10 (want 10) OK
+============================================
+ALL PASS
