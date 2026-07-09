@@ -4,8 +4,8 @@ Splits a decided direction into **backlog-ready tickets** with blocking edges �
 discussion → work bridge that `to-spec` opens. Its primary input is a **spec** (to-spec's output at
 `docs/specs/<name>.md`); it also accepts a **plan** or the **raw current conversation**. It drafts vertical
 slices, quizzes the user until the granularity and edges are approved, then publishes the tickets into the bound
-tracker in dependency order — blockers first — with `Depends on #N` edges that `backlog run` reads to skip
-blocked work.
+tracker in dependency order — blockers first — with `depends on #N` edges (backlog's recorded convention) that
+`backlog run` reads to skip blocked work.
 
 ## When to use
 
@@ -26,7 +26,7 @@ Not for writing the direction itself — that's `to-spec`. To-tickets consumes a
 - **Quiz the user — the human-confirmation step.** Unlike to-spec's pure synthesis, to-tickets **interviews**:
   it quizzes on granularity and blocking edges and iterates until approved. Nothing publishes before approval.
 - **Publish blockers-first, in backlog's edge convention.** Tickets are created in dependency order so each
-  `- [ ] Depends on #N` line (per `backlog-policy.md` § Dependencies) resolves to a real earlier id.
+  `- [ ] depends on #N` line (verbatim per `backlog-policy.md` § Dependencies) resolves to a real earlier id.
 - **Readiness left to groom.** A fresh split does not auto-apply `ready-for-agent`; the option to apply it on
   approval (Matt's posture) is noted, but the default leaves readiness to `backlog groom`.
 - **Generic vocabulary; no stale content; parent untouched.** "Ticket" throughout (ticket == the tracker's

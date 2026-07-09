@@ -1,6 +1,6 @@
 ---
 name: to-tickets
-description: Split a decided direction into backlog-ready tickets with blocking edges. Its primary input is a spec (to-spec's output at docs/specs/<name>.md); it can also consume a plan or the raw current conversation. It drafts vertical slices — tracer-bullet tickets, each a narrow-but-complete path through every layer, demoable on its own, sized to one fresh context window — with a wide-refactor exception that sequences mechanical high-blast-radius changes as expand→migrate-in-batches→contract instead. Unlike to-spec's pure synthesis, to-tickets quizzes the user on granularity and blocking edges and iterates until approved — that quiz is the human-confirmation step. It then publishes in the bound tracker's format, in dependency order (blockers first), emitting each blocking edge in backlog's recorded convention (Depends on #N) so backlog run skips blocked work. Speaks generic "ticket" vocabulary (ticket == the tracker's issue). Readiness is left to backlog groom by default. No file paths or code in tickets (prototype-snippet exception). Never modifies the parent spec or issue. Adapted from Matt Pocock's to-tickets and shipped as our own — never installs an external skill. Use to turn a spec, plan, or conversation into pickup-able tickets. Not for writing the direction itself — that's to-spec.
+description: Split a decided direction into backlog-ready tickets with blocking edges. Its primary input is a spec (to-spec's output at docs/specs/<name>.md); it can also consume a plan or the raw current conversation. It drafts vertical slices — tracer-bullet tickets, each a narrow-but-complete path through every layer, demoable on its own, sized to one fresh context window — with a wide-refactor exception that sequences mechanical high-blast-radius changes as expand→migrate-in-batches→contract instead. Unlike to-spec's pure synthesis, to-tickets quizzes the user on granularity and blocking edges and iterates until approved — that quiz is the human-confirmation step. It then publishes in the bound tracker's format, in dependency order (blockers first), emitting each blocking edge in backlog's recorded convention (a verbatim `- [ ] depends on #N` line) so backlog run skips blocked work. Speaks generic "ticket" vocabulary (ticket == the tracker's issue). Readiness is left to backlog groom by default. No file paths or code in tickets (prototype-snippet exception). Never modifies the parent spec or issue. Adapted from Matt Pocock's to-tickets and shipped as our own — never installs an external skill. Use to turn a spec, plan, or conversation into pickup-able tickets. Not for writing the direction itself — that's to-spec.
 argument-hint: "[<path to a spec, or nothing to use the conversation>]"
 user-invocable: true
 ---
@@ -48,9 +48,9 @@ The full method is in [slicing](reference/slicing.md); the shape:
    coarse? too fine?) and blocking edges (what truly blocks what?). Iterate until approved. Nothing publishes
    before approval.
 4. **Order and wire the edges.** Sort the approved tickets into dependency order — **blockers first** — so each
-   `Depends on #N` resolves to a real, earlier id. Emit each dependency in **backlog's recorded convention**
-   (`docs/agents/backlog-policy.md` § Dependencies — a `- [ ] Depends on #N` body line) so `backlog run` reads it
-   and skips blocked work.
+   each dependency edge resolves to a real, earlier id. Emit each dependency **exactly as backlog's
+   recorded convention writes the marker** (`docs/agents/backlog-policy.md` § Dependencies — a
+   `- [ ] depends on #N` body line, copied verbatim) so `backlog run` reads it and skips blocked work.
 5. **Publish in the bound tracker's format.** Create the tickets through the tracker binding recorded in
    `docs/agents/platform.md`, blockers first, in generic "ticket" vocabulary. **Readiness** (`ready-for-agent`)
    is left to `backlog groom` by default; note the option to apply it on approval (Matt's posture).

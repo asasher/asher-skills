@@ -16,9 +16,9 @@ set is adapted from Matt Pocock's `to-tickets` and shipped as our own.
   contract). No file paths or code (prototype-validated-snippet exception only).
 - **Done** — the checkable outcome that means the slice is delivered: what a demo shows. Direction for
   acceptance, not a test plan.
-- **Depends on** — the blocking edges, in the repo's recorded dependency convention (default
-  `- [ ] Depends on #N`). Omitted when the ticket is a root with no blockers. These are what `backlog run` reads
-  to skip blocked work.
+- **Depends on** — the blocking edges, copied verbatim from the repo's recorded dependency convention (default
+  `- [ ] depends on #N`, per `backlog-policy.md` § Dependencies). Omitted when the ticket is a root with no
+  blockers. These are what `backlog run` reads to skip blocked work.
 - **Work-type (optional)** — if the tracker's routing wants it (`bug` / `enhancement` / `refactor`), name it so
   grooming has a head start. Left off when unknown — grooming sets it.
 
@@ -36,12 +36,12 @@ The pre-publish artifact, drafted before the quiz and revised through it:
   above but numbered locally (T1, T2, …) since tracker ids don't exist until publish.
 - **Edge list** — the dependency graph as a compact list (`T2 depends on T1`, `T3 depends on T1`), so the user
   can eyeball the blocking structure during the quiz. On publish, local Tn labels become tracker ids and the
-  edges become `Depends on #N` lines in dependency order.
+  edges become `- [ ] depends on #N` lines (the playbook's verbatim form) in dependency order.
 - **Wide-refactor note** — if any part is sequenced expand→migrate→contract, call it out so the user confirms
   the phasing, not just the granularity.
 
 ## Order and altitude
 
-Publish order is the topological sort of the edge list — blockers first — so each `Depends on #N` resolves to a
+Publish order is the topological sort of the edge list — blockers first — so each `depends on #N` resolves to a
 real, earlier id. The tickets file exists to make the quiz concrete: one artifact, ordered, with the edges
 visible, that the user approves before anything reaches the tracker.

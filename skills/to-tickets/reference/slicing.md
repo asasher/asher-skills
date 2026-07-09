@@ -64,17 +64,16 @@ ordered artifact to react to, revise it against their feedback, and re-present u
 ## Order and wire the edges
 
 Once the split is approved, sort the tickets into **dependency order — blockers first.** This matters because
-the tracker assigns an id at creation time: a ticket can only reference `Depends on #N` once `#N` exists, so
+the tracker assigns an id at creation time: a ticket can only reference its blocker once that id exists, so
 every blocker must be **created before its dependents.** Topologically sort the graph; publish in that order.
 
-Emit each dependency in **backlog's recorded convention** — written **exactly as the playbook records it** —
-so `backlog run` reads it and skips blocked work. In this repo that convention
-(`docs/agents/backlog-policy.md` § Dependencies) is a **`- [ ] Depends on #N` task-list line in the ticket
-body** (`run` matches the marker case-insensitively — real issues in this repo write `Depends on #N`); `run`
-treats a ticket with any unchecked, unclosed dependency as blocked and skips it. The convention is a **project
-playbook**, not a `backlog` import: to-tickets emits *into* it, so the playbook's wording is the authority. A
-repo that records a different convention (native blocking links, a `deps:` frontmatter) is honored per its
-`docs/agents/`.
+Emit each dependency **exactly as the repo's dependency playbook records the marker** — verbatim, so
+`backlog run` reads it and skips blocked work. In this repo that convention
+(`docs/agents/backlog-policy.md` § Dependencies) is a **`- [ ] depends on #N` task-list line in the ticket
+body**; `run` treats a ticket with any unchecked, unclosed dependency as blocked and skips it. Copy the
+playbook's literal form — don't restyle it. The convention is a **project playbook**, not a `backlog` import:
+to-tickets emits *into* it, so the playbook's wording is the authority. A repo that records a different
+convention (native blocking links, a `deps:` frontmatter) is honored per its `docs/agents/`.
 
 ## Publish in the bound tracker's format
 
@@ -82,7 +81,7 @@ Create the tickets through the **tracker binding** recorded in `docs/agents/plat
 this repo that binding is GitHub via `gh` (`gh issue create --title '...' --body '...'`), and a ticket is a
 GitHub issue — but the skill's own text stays generic: a **ticket** is the tracker's issue role in a
 tracker-agnostic word. Publish the body from [templates/ticket.md](../templates/ticket.md), carrying the
-`Depends on #N` edges.
+dependency edges in the playbook's recorded form.
 
 ## Readiness alignment — leave it to groom
 

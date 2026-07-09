@@ -19,9 +19,10 @@
 
 ## Depends on
 
-<!-- Blocking edges in the repo's recorded convention (default below). Omit this section for a root ticket
-     with no blockers. These are what `backlog run` reads to skip blocked work. -->
+<!-- Blocking edges copied VERBATIM from the repo's recorded convention (default below, per
+     backlog-policy.md § Dependencies). Omit this section for a root ticket with no blockers. These are what
+     `backlog run` reads to skip blocked work. -->
 
-- [ ] Depends on #N
+- [ ] depends on #N
 
 <!-- Work-type (optional): bug / enhancement / refactor — name it if known, else grooming sets it. -->

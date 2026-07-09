@@ -96,13 +96,14 @@ ac-1..ac-11, and is the method dual-executor (Opus in-session + `codex exec`) an
   `to-spec`, which is pure synthesis and never interviews. Cite `reference/slicing.md` § "Quiz the user" (or
   SKILL.md). Publishing before the quiz, or missing the contrast with to-spec, = fail.
 - **P7 (ac-7) — load-bearing:** (a) Create **A first**, then B and C — **blockers first** — because the tracker
-  assigns an id at creation, so `Depends on #A` can only reference A once A exists. (b) B and C **each** carry a
-  **`- [ ] Depends on #<A's id>`** task-list line **in the ticket body** (backlog's recorded convention,
-  `backlog-policy.md` § Dependencies); B and C carry **no** edge to each other (independent). (c) `backlog run`
+  assigns an id at creation, so a dependent can only reference A once A exists. (b) B and C **each** carry a
+  **`- [ ] depends on #<A's id>`** task-list line **in the ticket body** — the marker copied **verbatim** from
+  backlog's recorded convention (`backlog-policy.md` § Dependencies records the literal lowercase
+  `- [ ] depends on #123`); B and C carry **no** edge to each other (independent). (c) `backlog run`
   treats a ticket with any unchecked, unclosed dependency as **blocked and skips it**, so B and C are skipped
   until A closes. Cite `reference/slicing.md` § "Order and wire the edges" (convention + blockers-first) and
-  `backlog-policy.md` § Dependencies. Wrong order (blocker last), wrong convention, an edge between B and C, or
-  omitting the run-skips-blocked effect = fail.
+  `backlog-policy.md` § Dependencies. Wrong order (blocker last), a restyled marker that doesn't match the
+  playbook's literal form, an edge between B and C, or omitting the run-skips-blocked effect = fail.
 - **P8 (ac-8):** Publish through the **tracker binding in `docs/agents/platform.md`** — on this repo **GitHub via
   `gh`** (`gh issue create`), so a "ticket" is concretely a **GitHub issue** — **in dependency order, blockers
   first**. The skill's own text uses the generic word **"ticket"** (ticket == the tracker's issue role). Cite

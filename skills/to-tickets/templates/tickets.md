@@ -2,7 +2,8 @@
 
 <!-- The whole split, drafted BEFORE publishing — the artifact the user reacts to during the quiz. Revise it
      against their feedback on granularity and blocking edges; re-present until approved. Only then publish,
-     blockers first, turning local Tn labels into tracker ids and the edge list into `Depends on #N` lines. -->
+     blockers first, turning local Tn labels into tracker ids and the edge list into `- [ ] depends on #N`
+     lines copied verbatim from the repo's dependency playbook. -->
 
 > Source: <spec path / plan / "this conversation">. Read as direction — never modified by to-tickets.
 
@@ -28,7 +29,7 @@
 ## Edge list
 
 <!-- The dependency graph, compact, so the blocking structure is eyeball-able during the quiz. On publish these
-     become `Depends on #N` lines in the recorded convention, in dependency order. -->
+     become `- [ ] depends on #N` lines in the recorded convention, in dependency order. -->
 
 - T2 depends on T1
 - T3 depends on T1
