@@ -1,0 +1,16 @@
+$ python3 skills/review-loop/scripts/review-server.py --kind doc --title 'Release notes v3.2' ...  (a NON-plan artifact)
+startup: {"url": "http://127.0.0.1:8408/?token=e6BuNwhIaxQU3pjAoUIszw", "local_url": "http://127.0.0.1:8408/?token=e6BuNwhIaxQU3pjAoUIszw", "hub": "http://127.0.0.1:8408/hub", "port": 8408, "token": "e6BuNwhIaxQU3pjAoUIszw"}
+
+$ curl -s '<url>' | grep -o '"kind":"[a-z]*"'   # chrome bootstrap carries the free-form kind
+"kind":"doc"
+
+$ curl -s '<url>' | grep -c '__REVIEW_BOOTSTRAP__'  # chrome injected into an arbitrary artifact
+2
+
+$ curl -s '<url>' | grep -oE 'id="(doc-header|hl-body|fx-body)"'   # the artifact's own stable ids are served intact
+id="doc-header"
+id="hl-body"
+id="fx-body"
+
+$ hub H1 (surface-label rendered):
+<h1>Awaiting review <small>· asher-skills</small>
