@@ -44,7 +44,7 @@
 - Binding: **Claude Code** — the loop runs from Claude Code; the model roster per harness is in `environment.md` § Model staffing.
 - Create an issue thread with a prompt and a working directory: the Agent tool (`subagent_type: claude` or `general-purpose`), `isolation: 'worktree'` when a thread must isolate; gpt-5.5 threads run via `codex exec --cd <dir>` (Codex mechanics in `CLAUDE.md` § Staffing → Mechanics; the workflow-wrapper detail is in `environment.md` § Model staffing).
 - Can a spawned thread read this skill's bundled references from disk? Yes — at `.claude/skills/backlog/reference/` and `docs/agents/` in the checkout.
-- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; the review loop blocks on `scripts/review-await.py`.
+- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; the review loop awaits `scripts/review-await.py`. The watch is **held on a dedicated staffing-resolved watcher subagent that loops-until-verdict**, not the orchestrator inline — contract in `skills/review-loop/reference/watch.md` (applies to both the approval gate and the PR-merge watch).
 
 ## The local binding — tracker contract
 

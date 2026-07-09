@@ -45,7 +45,7 @@ _Adjust these triggers to this team._
 
 ## Review, approval, and commit
 
-- Present the plan through the review loop (`reference/presenting.md` § Review loop): serve it with the skill's review server, end the pause message with the plan URL and the hub URL, and block on the await script. Who approves: Asher (the human driving the session).
+- Present the plan through the review loop (`reference/presenting.md` § Review loop): serve it with the skill's review server, end the pause message with the plan URL and the hub URL, and await the verdict. **Hold the watch on a dedicated staffing-resolved watcher subagent, not the orchestrator inline** — the delegated-watch contract is `skills/review-loop/reference/watch.md`. Who approves: Asher (the human driving the session).
 - On **request changes**: revise the plan and write a ledger disposition for every annotation — `changed` (what changed), `kept` (why), or `orphaned` — before re-awaiting. Never revise without the ledger.
 - Approval is the **approve event** — hash-bound to the version the human saw. If approval changes scope, update the plan before coding.
 - Local fallback: when no surface is recorded, open the rendered HTML for the human directly and take the verdict in conversation.

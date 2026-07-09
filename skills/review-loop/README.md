@@ -33,13 +33,15 @@ artifact composes it by name instead of forking the review machinery.
 ## Layout
 
 `SKILL.md` is the command surface (serve / await / sweep) and points into `reference/`:
-`review-loop.md` (the loop contract), `surface-and-hub.md` (surface + hub), `scripts.md` (the CLI).
+`review-loop.md` (the loop contract), `surface-and-hub.md` (surface + hub), `scripts.md` (the CLI),
+`watch.md` (the delegated-watch contract — who holds the await, on what model, how it wakes the parent).
 `scripts/` holds `review-server.py`, `review-await.py`, and `pages/chrome.{css,js}`. `templates/` ships
 `plan-skeleton.html` as one example caller template demonstrating the stable-id contract.
 `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
 
-Self-contained at the file level; composes by name. **Sibling dependency: none — review-loop is a root
-primitive** (invoked by siblings, depends on none).
+Self-contained at the file level; composes by name. **Sibling dependency: `staffing`, and only for the
+watch** — the review machinery is a root primitive; the delegated watch composes `staffing` by name to pick
+the watcher's (floor-class) model. Absent staffing the watch degrades to the current model in a subagent.
 
 ## Install
 

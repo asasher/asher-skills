@@ -164,3 +164,101 @@ The behavioral criteria are additionally confirmed outside the probes:
 | ac-11 | this file (the eval) | — |
 | ac-12 | P12       | file check (backlog untouched) |
 | ac-13 | P11       | runtime (prefixed-mount POST) + file check (`chrome.js` mount-relative) |
+
+---
+
+# The delegated watch (issue #16) — probes
+
+Method as above (dual executor — an Opus subagent + `codex exec --sandbox read-only` — cite the deciding
+sentence, flag ambiguity as a finding). **Answer key written before any runs**, graded against
+`plans/16-review-await-watcher.html` ids **ac-1..ac-11** (that plan is the source of truth here — its ac
+numbering is distinct from the extraction plan's above). This section hardens the review-await watch so it is
+held on a cheap dedicated watcher subagent that loops-until-verdict, and verifies approval delivery through a
+path-prefixed mount (absorbs #23).
+
+The runtime criteria (**ac-7**, **ac-8**) are confirmed by direct `python3` exercises of the shipped scripts
+(a real re-arm across a `124` timeout; a real submit→await→resume through a stripping path-prefix proxy). The
+file criteria (**ac-1, ac-2, ac-3, ac-4, ac-5, ac-6, ac-9**) are confirmed by grep/parse against the tree.
+The probes below exercise the *routing* of the watcher contract where a reasoning probe adds value.
+
+## Probes
+
+**W1 (ac-10).** You've served a plan for review and must now await the verdict. Do you block on
+`review-await.py` in your own (orchestrator) thread? If not, what do you do instead, what is the watcher's
+model, and how do you learn the verdict? Cite the file and sentence that decides each part.
+
+**W2 (ac-3, ac-11).** You are running this loop **from Codex, not Claude Code.** What model holds the watch,
+and where is that decided? Is the watcher hardcoded to `sonnet`? Name the mechanism that picks the model and
+the role it routes to. Cite it.
+
+**W3 (ac-4).** Your watcher's `review-await.py --timeout 540` just exited `124` and no verdict was submitted
+yet. What does the watcher do, and how is a verdict that lands *between* two blocks not lost? Does this
+require a change to `review-await.py`? Cite the sentence.
+
+**W4 (ac-5, ac-6).** A verdict finally lands. How does the waiting parent thread find out — does it poll
+`events.jsonl`? What is the durable backstop if the watcher process dies before waking the parent? And does
+this same watch contract cover the **PR-merge** wait, or only the plan approval gate? Cite it.
+
+## Answer key
+
+- **W1 (ac-10):** **No — do not block the orchestrator inline.** Spawn a **dedicated watcher subagent** whose
+  only job is the wait (so it neither abandons it to save tokens nor drops it to a timeout). Its model is a
+  **staffing decision** — the floor/watcher role (cheapest reachable), resolved by composing the `staffing`
+  skill by name. You learn the verdict from the **watcher's completion** — the subagent returns the verdict
+  and its code — **without polling `events.jsonl`**. Cite `reference/watch.md` §§ Who holds it / The wake and
+  SKILL.md § Command surface (await). Blocking the orchestrator inline, hardcoding a model, or saying you
+  poll the log = fail.
+- **W2 (ac-3, ac-11):** From Codex the watcher runs on **`gpt-5.5`** (Claude models unreachable → the floor
+  collapses onto it). It is **not** hardcoded to `sonnet`: the model is picked by composing the **`staffing`**
+  skill, which routes a watcher task to the **floor/watcher role** (cheapest reachable); model names appear
+  only as per-harness resolutions of that role. Cite `reference/watch.md` § Who holds it ("never hardcoded …
+  from a Codex-driven run … collapses onto `gpt-5.5`"). Answering "sonnet" as a fixed watcher, or missing
+  that staffing decides it, = fail.
+- **W3 (ac-4):** It **re-arms** — invokes `review-await.py` again; a `124` timeout is *keep waiting*, never
+  *give up* (loop-until-verdict). A verdict submitted between blocks is **not lost** because the script is
+  **cursor-tracked** (`state/.await-cursor`) and the next call drains it. This needs **no change to
+  `review-await.py`** — the cursor already makes re-arm lossless. Cite `reference/watch.md` §
+  Loop-until-verdict. Saying the verdict is lost, or that a script change is required, = fail.
+- **W4 (ac-5, ac-6):** The parent finds out from the **watcher's completion** (the Agent-tool result carries
+  the verdict) — it does **not** poll `events.jsonl`. The durable backstop if the watcher dies is
+  `events.jsonl` + `.await-cursor`: the verdict is already appended, and a fresh watcher re-drains it from
+  the cursor, so nothing is lost. The contract covers **both** the plan/prototype approval gate **and** the
+  PR-merge watch. Cite `reference/watch.md` §§ The wake / Both gates. Saying the parent polls the log, or
+  that only the approval gate is covered, = fail.
+
+## Scoring
+
+4 probes × 2 executors (Opus in-session + `codex exec`). Pass only with the **correct action AND a correct
+citation**; ambiguity flags are findings, not failures. Report a verdict table mapping each probe → its
+criterion → pass/fail per executor.
+
+The behavioral criteria are additionally confirmed outside the probes:
+
+- **Runtime** (direct `python3` exercises): **ac-7** — `review-await.py --timeout <short>` exits `124`, is
+  re-armed, then a verdict submitted mid-gap returns the correct code (0/3/10) on the re-armed call (re-arm
+  is lossless). **ac-8** — with `review-server.py` behind a stripping proxy mounting the doc at
+  `/asher-skills/16/review/`, each of `approve`/`approve_with_nits`/`request_changes` POSTed to the
+  *prefixed* `/event` is accepted, and a re-arm-loop await fires with the matching code; the verdict is read
+  from the exit code alone, no `events.jsonl` parse (submit→await→resume through a path-prefix mount).
+- **File check** (grep/parse against the tree): **ac-1** (SKILL.md `await` surface documents the delegated
+  watcher subagent), **ac-2** (dependency surface names `staffing` as the sibling, scoped to the watch),
+  **ac-3** (the watch contract routes the model via `staffing`/floor role and says "never hardcoded"; no bare
+  model default), **ac-4/ac-5/ac-6** (`reference/watch.md` states loop-until-verdict + lossless cursor,
+  wake-without-polling + durable backstop, and both-gates coverage), **ac-9** (`review-await.py` /
+  `review-server.py` unchanged vs. `main`; no model name embedded in the scripts).
+
+### Criterion coverage map
+
+| criterion | probe(s) | also confirmed by |
+|-----------|----------|-------------------|
+| ac-1  | W1        | file check (await surface) |
+| ac-2  | W1        | file check (staffing sibling) |
+| ac-3  | W2        | file check (no hardcoded model; routes via floor role) |
+| ac-4  | W3        | runtime (lossless re-arm across 124) + file check |
+| ac-5  | W4        | runtime (verdict from exit code, no log read) + file check |
+| ac-6  | W4        | file check (both-gates statement) |
+| ac-7  | W3        | runtime (re-arm lossless) |
+| ac-8  | —         | runtime (path-prefix submit→await→resume, 3 verdicts) |
+| ac-9  | —         | file check (scripts unchanged vs. main) |
+| ac-10 | W1        | — |
+| ac-11 | W2        | file check (staffing route → floor class) |

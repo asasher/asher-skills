@@ -24,8 +24,13 @@ one caller is baked in — callers pass a free-form `--kind` and `--issue` scope
   with chrome injected, registers in the hub, and prints its URL/hub/port/token as JSON. Point the human at
   the URL. Exact flags and defaults are in [scripts](reference/scripts.md); the loop it drives is in
   [review-loop](reference/review-loop.md).
-- **await** — block on the verdict with `scripts/review-await.py --state <dir> --timeout <secs>`. Exit code
+- **await** — get the verdict from `scripts/review-await.py --state <dir> --timeout <secs>`. Exit code
   *is* the verdict: `0` approve, `3` approve-with-nits, `10` request-changes, `124` timeout. Branch on it.
+  **Do not block the orchestrator on this inline.** Hold the watch on a **dedicated watcher subagent** that
+  loops-until-verdict — its whole job is the wait, so it neither abandons it to save tokens nor drops it to a
+  timeout ceiling. The watcher's model is a **staffing decision** (the floor/watcher role), and its
+  completion wakes the parent with the verdict — no `events.jsonl` polling. The full contract, including the
+  PR-merge watch, is in [watch](reference/watch.md).
 - **sweep** — `scripts/review-server.py --sweep --surface <dir>` probes every hub entry, drops the dead,
   regenerates the index, and prints `{"swept":[…]}`. Run by a repo's setup health check.
 
@@ -60,5 +65,9 @@ the shape:
   resolves to the existing `docs/agents/environment.md` § Presenting to the human. A fresh install needs
   such a surface-config playbook; absent one, review-loop degrades to a local-only fallback (open the file
   on the machine, say remote review is unavailable) rather than improvising a public tunnel.
-- **Sibling skills** — **none — `review-loop` is a root primitive.** It is invoked *by* siblings such as
-  backlog, maquette, and prototype, but depends on no other skill and imports no other skill's files.
+- **Sibling skills** — **`staffing` (by name), and only for the watch.** The serve/annotate/hash-bound
+  review *machinery* is a root primitive — it imports no other skill's files and is invoked *by* siblings
+  such as backlog, maquette, and prototype. The one composition is the **delegated watch** ([watch](reference/watch.md)):
+  it composes `staffing` by name to resolve the watcher's model (the floor/watcher role — cheapest reachable,
+  never hardcoded). Staffing degrades gracefully (missing roster → fallback + report), so this is a soft
+  dependency; absent staffing the watch still runs on the current model in a subagent.
