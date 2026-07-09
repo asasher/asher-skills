@@ -7,7 +7,7 @@ This is the orchestrator: discover the queue, claim it, dispatch issue threads, 
 1. Confirm the project is set up.
    - The loop needs the playbooks under `docs/agents/`. If they are absent — `platform.md` included — tell the user to run `backlog setup` and stop.
    - Read the parallelism verdict in `docs/agents/environment.md`. If it is absent, the isolation audit hasn't run — tell the user to run `backlog setup` and stop.
-   - Read the Model staffing section of `docs/agents/environment.md`. Apply its succession line first: a role whose model is unreachable resolves to the successor the roster names. If the section is missing, or a role stays unfilled after succession, tell the user to re-run `backlog setup` to fix the roster and stop — the fallback ladder in `reference/staffing.md` is for mid-thread surprises, not a roster known bad at dispatch.
+   - Read the roster the `staffing` skill (by name) owns — recorded for this harness in `docs/agents/environment.md` § Model staffing. Apply its succession line first: a role whose model is unreachable resolves to the successor the roster names. If the roster is missing, or a role stays unfilled after succession, tell the user to re-run `backlog setup` to fix the roster and stop — the `staffing` skill's fallback ladder is for mid-thread surprises, not a roster known bad at dispatch.
    - Completion criterion: every `templates/*.md` in this skill has its `docs/agents/` counterpart, the parallelism verdict is known, and the staffing roster resolves in this harness — or the user has been told to run setup.
 
 2. Build the queue.
@@ -33,7 +33,7 @@ This is the orchestrator: discover the queue, claim it, dispatch issue threads, 
    - Title each thread `backlog #<issue-id>: <issue-title>`.
    - Prompt each thread with the issue reference and an instruction to follow this skill's `reference/issue-loop.md`, spawned per the harness binding in `platform.md`. If the binding says threads cannot read the bundled references from disk, paste the reference's contents into the prompt.
    - One issue per thread. Never batch.
-   - Dispatch threads on the **orchestrator** role per `reference/staffing.md` and the roster in `docs/agents/environment.md` — staffing down happens inside a thread's delegated stages (build, verify, evidence, review), never at dispatch.
+   - Dispatch threads on the **orchestrator** role, resolved by the `staffing` skill (by name) against the roster in `docs/agents/environment.md` — staffing down happens inside a thread's delegated stages (build, verify, evidence, review), never at dispatch.
    - Honor the parallelism verdict. When it is `serialize-verification`, the threads may still be created, but only one may stand up the stack and verify at a time — tell each thread which shared resource is serialized and that it must acquire it before its verify step. When it is `parallel-safe`, threads run fully concurrently — except issues in the playbook's serialized exception lane: tell those threads they must serialize their verification on the named resource.
    - Completion criterion: every claimed issue has a worktree off the right fork point with a created thread id, the parallelism constraint is passed to the threads, or an explicit creation blocker is recorded.
 

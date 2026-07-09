@@ -2,6 +2,15 @@
 
 Read by `setup` when a playbook's version stamp — the `<!-- backlog-templates: ... -->` comment on line 1 (or its retired `<!-- triage-templates: ... -->` form) — predates the current `templates/VERSION`, or is absent. Each entry says what changed and how to reconcile it without losing repo values. An entry retires once no live deployment can predate it.
 
+## v2026-07-06.1 → v2026-07-09.1
+
+Primitives extracted to sibling skills. backlog no longer owns staffing, the review surface, planning, or prototyping — each is a standalone skill composed by name (`staffing`, `review-loop`, `plan`, `prototype`). Apply all of:
+
+- **Setup ensures siblings, not sections** — setup no longer installs the picking-models `<!-- backlog-section: ... -->` blocks, the planning/prototyping playbooks, or the tailnet presentation surface. On reconcile, ensure the four siblings are present and let each own its playbook; leave any already-installed sections as repo practice — do NOT delete them unless the user runs the sibling's own setup/reconcile.
+- **environment.md sections become sibling-owned** — § Model staffing and § Presenting are now pointers: the roster is the `staffing` skill's, and § Presenting reduces to a pointer to `review-loop`. Preserve the repo's recorded model choices and surface config.
+- **Bundled machinery removed** — `reference/{staffing,presenting,plan,prototype}.md`, `scripts/review-*`, `scripts/pages/`, `templates/{plan-skeleton.html,planning.md,prototyping.md}`, and `templates/sections/` are removed from the skill; callers point at the siblings by name.
+- **Stamp** — bump touched playbooks to `v2026-07-09.1`.
+
 ## v2026-07-06 → v2026-07-06.1
 
 Model-picking guidance moved out of the roster into the repo's memory files. Apply all of:

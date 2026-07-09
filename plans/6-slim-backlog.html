@@ -1,0 +1,227 @@
+<!doctype html>
+<!-- Plan #6 — Slim backlog into a dev workflow that composes the primitives by name.
+     House style per docs/agents/planning.md. Stable ids never change across revisions. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #6 — Slim backlog into a composing dev workflow</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --keep: #15803d; --drop: #b91c1c; --keep-bg: #dcfce7; --drop-bg: #fee2e2; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --keep: #4ade80; --drop: #f87171; --keep-bg: #14351f; --drop-bg: #3a1717; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 760px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.4rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2.2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+code { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .84em; }
+.tag { font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; border-radius: 5px; padding: .05rem .4rem; white-space: nowrap; }
+.tag.keep { color: var(--keep); background: var(--keep-bg); }
+.tag.drop { color: var(--drop); background: var(--drop-bg); }
+.tag.rewire { color: var(--accent); background: transparent; border: 1px solid currentColor; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "☐"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li b { color: var(--accent); font-weight: 600; }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .35rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+.qflag { border-left: 3px solid var(--accent); padding-left: .8rem; margin: .6rem 0; }
+.qflag b { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Slim <code>backlog</code> into a dev workflow that composes the primitives by name</h1>
+  <p class="problem">Today <code>backlog</code> <em>owns</em> staffing, the review surface, planning, and prototyping as bundled machinery; four sibling skills now own those capabilities, so <code>backlog</code> should <em>compose them by name</em> and keep only the dev-specific glue.</p>
+  <div class="chips"><span class="chip">issue #6</span><span class="chip">enhancement</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="composition-model">
+  <h2>What changes: own → compose-by-name</h2>
+  <p>Four bundled capabilities leave <code>backlog</code> and become plain-name pointers to already-shipped siblings; the dev loop stays inside.</p>
+  <figure id="composition-diagram">
+  <svg viewBox="0 0 720 340" width="100%" role="img" aria-label="backlog composes four sibling skills by name and retains the dev loop">
+    <!-- backlog box -->
+    <rect x="20" y="20" width="330" height="300" rx="12" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <text x="36" y="44" font-weight="700">backlog — dev workflow (kept)</text>
+    <text x="36" y="70" fill="#6b6b74">groom · run · issue-loop (dispatch)</text>
+    <text x="36" y="90" fill="#6b6b74">diagnose · implement · refactor</text>
+    <text x="36" y="110" fill="#6b6b74">verify · evidence · adversarial-review</text>
+    <text x="36" y="130" fill="#6b6b74">setup · migrations · worktree isolation</text>
+    <text x="36" y="150" fill="#6b6b74">PR / branch machinery · dev playbooks</text>
+    <text x="36" y="182" font-style="italic" fill="#6b6b74">enhancement branch keeps the dev tail:</text>
+    <text x="36" y="200" font-style="italic" fill="#6b6b74">commit approved plan → tracker digest</text>
+    <!-- by-name pointers -->
+    <text x="36" y="238" font-weight="600" fill="#4f46e5">composes by name ↓</text>
+    <line x1="350" y1="70"  x2="470" y2="70"  stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <line x1="350" y1="130" x2="470" y2="130" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <line x1="350" y1="200" x2="470" y2="200" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <line x1="350" y1="260" x2="470" y2="260" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <!-- sibling boxes -->
+    <rect x="470" y="48"  width="230" height="44" rx="8" fill="none" stroke="#4f46e5" stroke-width="1.3"/>
+    <text x="484" y="68" font-weight="600">staffing</text><text x="484" y="85" fill="#6b6b74">roster · roles · fallback</text>
+    <rect x="470" y="108" width="230" height="44" rx="8" fill="none" stroke="#4f46e5" stroke-width="1.3"/>
+    <text x="484" y="128" font-weight="600">review-loop</text><text x="484" y="145" fill="#6b6b74">present · annotate · verdict</text>
+    <rect x="470" y="178" width="230" height="44" rx="8" fill="none" stroke="#4f46e5" stroke-width="1.3"/>
+    <text x="484" y="198" font-weight="600">plan</text><text x="484" y="215" fill="#6b6b74">plan-or-skip · HTML · approval</text>
+    <rect x="470" y="238" width="230" height="44" rx="8" fill="none" stroke="#4f46e5" stroke-width="1.3"/>
+    <text x="484" y="258" font-weight="600">prototype</text><text x="484" y="275" fill="#6b6b74">answer one design question</text>
+  </svg>
+    <figcaption>The dashed edges are runtime pointers resolved by plain name — never file imports. <code>backlog</code> keeps the loop; the four siblings keep the capability.</figcaption>
+  </figure>
+</section>
+
+<section id="before-after">
+  <h2>Before → after</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Today (monolith)</th><th>Planned (composer)</th></tr></thead>
+    <tbody>
+      <tr><td>Staffing roster/roles</td><td><code>reference/staffing.md</code> + <code>templates/sections/*</code></td><td>compose <code>staffing</code> by name</td></tr>
+      <tr><td>Review surface</td><td><code>reference/presenting.md</code> + <code>scripts/review-*</code> + <code>scripts/pages/</code></td><td>compose <code>review-loop</code> by name</td></tr>
+      <tr><td>Planning</td><td><code>reference/plan.md</code> + <code>templates/planning.md</code> + <code>plan-skeleton.html</code></td><td>compose <code>plan</code> by name</td></tr>
+      <tr><td>Prototyping</td><td><code>reference/prototype.md</code> + <code>templates/prototyping.md</code></td><td>compose <code>prototype</code> by name</td></tr>
+      <tr><td>SKILL.md command table</td><td>universal router (owns all steps)</td><td>dev-scoped map; declares 3-part dependency surface</td></tr>
+      <tr><td><code>backlog setup</code></td><td>installs picking-models/presenting/planning sections directly</td><td>ensures the four siblings are present; defers their playbooks to them</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="inventory">
+  <h2>Remove / keep / rewire inventory</h2>
+  <p>Every path is under <code>skills/backlog/</code> (source of truth; the byte-identical <code>.agents/skills/backlog/</code> mirror is synced in dec-6).</p>
+  <table>
+    <thead><tr><th>Path</th><th></th><th>Becomes / stays</th></tr></thead>
+    <tbody>
+      <tr id="inv-staffing"><td><code>reference/staffing.md</code></td><td><span class="tag drop">remove</span></td><td>→ <code>staffing</code> skill by name</td></tr>
+      <tr id="inv-presenting"><td><code>reference/presenting.md</code></td><td><span class="tag drop">remove</span></td><td>→ <code>review-loop</code> skill by name</td></tr>
+      <tr id="inv-planref"><td><code>reference/plan.md</code></td><td><span class="tag drop">remove</span></td><td>→ <code>plan</code> skill by name</td></tr>
+      <tr id="inv-protoref"><td><code>reference/prototype.md</code></td><td><span class="tag drop">remove</span></td><td>→ <code>prototype</code> skill by name</td></tr>
+      <tr id="inv-scripts"><td><code>scripts/review-server.py</code>, <code>review-await.py</code>, <code>scripts/pages/</code></td><td><span class="tag drop">remove</span></td><td>owned by <code>review-loop</code></td></tr>
+      <tr id="inv-skeleton"><td><code>templates/plan-skeleton.html</code></td><td><span class="tag drop">remove</span></td><td>owned by <code>plan</code></td></tr>
+      <tr id="inv-tpl-plan"><td><code>templates/planning.md</code>, <code>templates/prototyping.md</code></td><td><span class="tag drop">remove</span></td><td><code>plan</code>/<code>prototype</code> install their own playbooks</td></tr>
+      <tr id="inv-sections"><td><code>templates/sections/picking-models.md</code>, <code>claude-md-overlay.md</code> (+ empty <code>sections/</code>)</td><td><span class="tag drop">remove</span></td><td><code>staffing</code> owns the roster install</td></tr>
+      <tr id="inv-devrefs"><td><code>reference/{issue-loop,groom,run,diagnose,implement,refactor,verify,evidence,adversarial-review,worktree-isolation,setup,migrations}.md</code></td><td><span class="tag keep">keep</span></td><td>dev glue (setup + migrations rewired; see below)</td></tr>
+      <tr id="inv-devplaybooks"><td><code>templates/{backlog-policy,platform,environment,implementing,verifying,refactoring,diagnosing-bugs,evidence,pr,pr-reviewer,pr-fixer}.md</code>, <code>VERSION</code></td><td><span class="tag keep">keep</span></td><td>dev playbooks (<code>environment.md</code> revised — dec-4)</td></tr>
+      <tr id="inv-skill"><td><code>SKILL.md</code>, <code>README.md</code></td><td><span class="tag rewire">rewire</span></td><td>dev-scoped command map + 3-part dependency surface</td></tr>
+      <tr id="inv-rewire"><td>kept refs pointing at removed files (<code>implement/refactor/verify/evidence/diagnose/adversarial-review/issue-loop/run/setup</code>)</td><td><span class="tag rewire">rewire</span></td><td>plain-name pointers to the siblings</td></tr>
+    </tbody>
+  </table>
+  <details id="rewire-detail"><summary>Exact rewire points (kept files that referenced deleted machinery)</summary>
+  <ul class="plain">
+    <li><b>SKILL.md</b> — command table drops the owned <code>plan</code>/<code>prototype</code> reference+playbook columns and presents them as by-name siblings; the "Model staffing … <code>reference/staffing.md</code>" and "presentation surface … <code>reference/presenting.md</code>" paragraph becomes the dependency-surface declaration.</li>
+    <li><b>issue-loop.md</b> — step 3 <em>enhancement</em> composes <code>plan</code> (and <code>prototype</code>) by name and keeps the dev tail (commit the approved plan to the work branch + tracker posterity digest) before <code>implement</code>; <code>reference/staffing.md</code> role pointers → the <code>staffing</code> skill; the review-surface eyeball → <code>review-loop</code>.</li>
+    <li><b>implement.md · refactor.md · adversarial-review.md · diagnose.md · evidence.md · verify.md · run.md</b> — each <code>reference/staffing.md</code> pointer → the <code>staffing</code> skill by name (orchestrator/builder/checker/floor vocabulary now lives there).</li>
+    <li><b>setup.md</b> — step 7 (presentation surface) → ensure <code>review-loop</code> present; step 8 (model-picking) → ensure <code>staffing</code> present; add ensure <code>plan</code> + <code>prototype</code>; step 9 stops writing the presenting/staffing contracts into <code>environment.md</code>; step 11 sweep runs via <code>review-loop</code>.</li>
+    <li><b>migrations.md</b> — add an extraction migration entry so a repo prepared by an older <code>backlog</code> reconciles: setup recognises the now-sibling-owned sections and defers to the siblings rather than reinstalling them.</li>
+    <li><b>templates/environment.md</b> — § Model staffing and § Presenting are sibling-owned (dec-4).</li>
+  </ul></details>
+</section>
+
+<section id="stories">
+  <h2>User stories</h2>
+  <ul class="plain">
+    <li id="story-1">As a <em>skill maintainer</em>, I want <code>backlog</code> to reference staffing/review/plan/prototype by plain name, so that improving a primitive improves every caller without forking machinery.</li>
+    <li id="story-2">As an <em>issue thread</em> running the enhancement branch, I want to invoke the <code>plan</code> skill for the gated plan and keep the commit-and-implement tail in <code>backlog</code>, so that the dev workflow is unbroken.</li>
+    <li id="story-3">As a <em>reader of the slimmed <code>backlog</code></em>, I want every bundled-reference and sibling pointer to resolve to something that exists, so that no step dead-ends on a deleted file.</li>
+    <li id="story-4">As someone <em>running <code>backlog setup</code> on a fresh repo</em>, I want setup to ensure the four siblings are present rather than install their sections itself, so that each capability is provisioned by its owner.</li>
+    <li id="story-5">As a <em>maintainer reading <code>SKILL.md</code></em>, I want the command table to be a dev-scoped map that declares the three-part dependency surface, so that the composition is legible.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Implementation decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><b>Delete-not-stub the four references + review scripts + extracted templates.</b> The siblings carry the full contract; leaving stubs would re-introduce the fork. Removal is verified by absence (ac-1) and by zero dangling pointers (ac-3).</li>
+    <li id="dec-2"><b>Roles vocabulary moves to <code>staffing</code>.</b> orchestrator/builder/checker/floor + fallback ladder now resolve against the <code>staffing</code> skill by name; kept dev refs point to it, not a bundled file. (<code>plan</code>/<code>prototype</code> already phrase staffing this way.)</li>
+    <li id="dec-3"><b>The enhancement dev-tail stays in <code>backlog</code>.</b> The <code>plan</code> skill stops at approval ("committing the plan and starting the work are the caller's concern"), so <code>backlog</code>'s issue-loop owns committing the approved plan to the work branch and the tracker posterity digest. Folded into <code>issue-loop.md</code> step 3 — no new reference file (minimalism); alternative flagged in Q4.</li>
+    <li id="dec-4"><b><code>templates/environment.md</code> § Model staffing and § Presenting become sibling-owned.</b> § Model staffing is removed (staffing installs the roster via its own two-layer install); § Presenting reduces to a pointer noting <code>review-loop</code> owns the surface config (review-loop's contract already resolves to <code>environment.md § Presenting</code>). Exact ownership of that section couples to review-loop's setup — Q3.</li>
+    <li id="dec-5"><b>Scope = the skill, not this repo's already-installed playbooks.</b> #6 rewrites the templates and <code>setup.md</code> instructions; it does <em>not</em> re-run setup to slim this repo's live <code>docs/agents/planning.md</code>, <code>prototyping.md</code>, <code>environment.md</code>, <code>AGENTS.md § Picking models</code>, or <code>CLAUDE.md</code>. That reconcile-on-existing-repo pass is the separate installer / setup-re-run work — Q2.</li>
+    <li id="dec-6"><b>Keep the <code>.agents/skills/backlog/</code> mirror byte-identical</b> to the <code>skills/backlog/</code> source via mechanical copy, preserving the current invariant (<code>diff -rq</code> → 0). <code>npx skills add</code> is not used (it would pull from the parent checkout, which this worktree must not touch) — Q1.</li>
+    <li id="dec-7"><b>No prototype needed (plan gate 2 clears).</b> The composition boundary is settled on paper by reading the four sibling contracts; there is no unresolved state model or UI to see.</li>
+  </ul>
+  <div class="qflag" id="open-questions">
+    <p><b>Open questions / scope decisions for approval</b> — each has a recommended path baked into the plan; confirm or redirect:</p>
+    <ul class="plain">
+      <li id="q1"><b>Q1 mirror sync</b> — keep <code>.agents/skills/backlog</code> byte-identical in-PR (recommended, dec-6) vs leave stale for post-merge regen?</li>
+      <li id="q2"><b>Q2 repo re-provisioning</b> — confirm #6 is skill-content only and does <em>not</em> slim this repo's already-installed <code>docs/agents</code>/<code>AGENTS.md</code>/<code>CLAUDE.md</code> (dec-5), leaving that to the installer work?</li>
+      <li id="q3"><b>Q3 environment.md § Presenting</b> — reduce to a pointer that <code>review-loop</code> fills (recommended) vs keep the full section as review-loop's read target (dec-4)?</li>
+      <li id="q4"><b>Q4 dev-tail placement</b> — fold the compose-plan + commit + digest tail into <code>issue-loop.md</code> (recommended, dec-3) vs a small new <code>reference/enhancement.md</code>?</li>
+    </ul>
+  </div>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <p>Each is checkable pass/fail. "Run" for this skills repo = file-check (grep/ls) plus a probe-eval driven through an executor per <code>docs/agents/environment.md § Driving the app</code>.</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><b>Removal complete.</b> Under <code>skills/backlog/</code>, none of these exist: <code>reference/{staffing,presenting,plan,prototype}.md</code>, <code>scripts/review-server.py</code>, <code>scripts/review-await.py</code>, <code>scripts/pages/</code>, <code>templates/plan-skeleton.html</code>, <code>templates/planning.md</code>, <code>templates/prototyping.md</code>, <code>templates/sections/picking-models.md</code>, <code>templates/sections/claude-md-overlay.md</code>. (ls/git-check)</li>
+    <li id="ac-2" data-criterion><b>Dev glue kept.</b> All kept references and dev-playbook templates in the inventory still exist; <code>diagnose.md</code> + <code>diagnosing-bugs.md</code> are present and unchanged in contract. (ls check)</li>
+    <li id="ac-3" data-criterion><b>No dangling file pointers.</b> A grep of <code>skills/backlog/</code> for the deleted paths returns zero hits — except <code>migrations.md</code>, which may name them as historically removed. (grep check)</li>
+    <li id="ac-4" data-criterion><b>Composition is by name.</b> Every rewired kept file names the sibling skill in plain language (<code>staffing</code> / <code>review-loop</code> / <code>plan</code> / <code>prototype</code>) where it used to point at a deleted reference. (grep + read)</li>
+    <li id="ac-5" data-criterion><b>Dependency surface declared.</b> <code>SKILL.md</code> declares all three kinds — bundled references · project playbooks (<code>docs/agents/*.md</code>) · sibling skills naming <code>staffing</code>, <code>review-loop</code>, <code>plan</code>, <code>prototype</code>. (read)</li>
+    <li id="ac-6" data-criterion><b>Command table is dev-scoped.</b> The <code>SKILL.md</code> table lists the dev commands and no longer presents <code>plan</code>/<code>prototype</code>/staffing/presenting as owned bundled references; <code>plan</code> &amp; <code>prototype</code> appear as by-name sibling compositions. (read)</li>
+    <li id="ac-7" data-criterion><b>Setup ensures siblings.</b> <code>setup.md</code> no longer instructs installing the extracted sections/templates; steps 7 &amp; 8 (and a plan/prototype step) ensure <code>review-loop</code>, <code>staffing</code>, <code>plan</code>, <code>prototype</code> are present and defer their playbooks to them. (read + grep)</li>
+    <li id="ac-8" data-criterion><b>References resolve (dry-run).</b> A resolution sweep over the slimmed <code>backlog</code>: every <code>reference/*.md</code> mention resolves to a file on disk, and every sibling-skill name resolves to a real <code>skills/&lt;name&gt;/</code>. Zero unresolved pointers. (script/grep dry-run)</li>
+    <li id="ac-9" data-criterion><b>Enhancement branch composes end-to-end.</b> A probe executor reading <code>SKILL.md</code> + <code>issue-loop.md</code> can narrate the enhancement flow — invoke <code>plan</code> by name → (optional <code>prototype</code>) → commit approved plan → <code>implement</code> → <code>verify</code> → PR → review → evidence — with no dangling reference and the dev tail intact. (probe-eval)</li>
+    <li id="ac-10" data-criterion><b>Loop still runs.</b> A probe executor confirms the kept dev loop (groom→run→dispatch, diagnose/implement/refactor/verify/evidence/adversarial-review) resolves its staffing pointers to <code>staffing</code> and its review pointers to <code>review-loop</code>, and can narrate the full groom→reviewed-change loop. (probe-eval, dual executor: Opus in-session + gpt-5.5 via codex)</li>
+    <li id="ac-11" data-criterion><b>Mirror consistent.</b> <code>diff -rq skills/backlog .agents/skills/backlog</code> exits 0 (dec-6). (command check)</li>
+  </ul>
+</section>
+
+<section id="seams">
+  <h2>Test seams</h2>
+  <p>The seams the criteria are checked at, highest-point-first:</p>
+  <ul class="plain">
+    <li>ac-1..8, ac-11 — <b>file/grep seam</b>: <code>ls</code>/<code>git status</code>, a grep sweep for deleted paths, a pointer-resolution script over <code>skills/backlog/</code>, and <code>diff -rq</code> on the mirror. Deterministic, no executor needed.</li>
+    <li>ac-9, ac-10 — <b>probe-eval seam</b>: a situated dry-run scenario ("you are an issue thread on an enhancement issue; narrate the branch from SKILL.md + issue-loop.md") through an executor model, graded against an answer key per <code>docs/patterns/probe-evals.md</code>. Dual executor (Opus + gpt-5.5/codex).</li>
+    <li>Deliberately untested: the siblings' own internal behavior (covered by their own evals) and this repo's already-installed <code>docs/agents</code> playbooks (out of scope, dec-5).</li>
+  </ul>
+</section>
+
+<section id="evidence-required">
+  <h2>Evidence required</h2>
+  <ul class="plain">
+    <li id="ev-1">The grep/ls/diff transcript proving ac-1..8, ac-11 (removal, no dangling pointers, mirror consistent).</li>
+    <li id="ev-2">The probe-eval transcript(s) + a pass/fail table mapping ac-9 and ac-10 to their answer-key criteria (dual executor).</li>
+    <li id="ev-3">This approved plan, committed to the work branch before implementation (the dev tail, per dec-3).</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>Self-modification: <code>backlog</code> is editing itself, but only in this worktree — the live orchestrator reads the primary checkout and is unaffected until #6 merges.</li>
+    <li>A rewired pointer that names a sibling the repo hasn't installed degrades silently. Mitigation: ac-8's resolution sweep + the dependency-surface declaration (ac-5) make the requirement explicit; setup (ac-7) ensures presence.</li>
+    <li>Boundary drift: if <code>review-loop</code>/<code>staffing</code> change their playbook-install shape later, dec-4's environment.md pointer could go stale — Q3 keeps that ownership explicit.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>Re-running <code>backlog setup</code> against this repo to slim its already-installed <code>docs/agents</code>/<code>AGENTS.md</code>/<code>CLAUDE.md</code> (dec-5 / Q2) — separate installer work.</li>
+    <li>Installing the four siblings into this repo's <code>.agents/skills/</code> runtime mirror so its own dogfooded <code>backlog</code> resolves them (an install/setup action, not a skill-content edit).</li>
+    <li>Any change to the four sibling skills themselves — they ship complete.</li>
+    <li>The <code>goodwork</code> review-surface migration (tracked under its own issue).</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>

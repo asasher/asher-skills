@@ -20,14 +20,14 @@ Tracker write discipline: on the local binding, this thread writes only its own 
 3. Execute the branch.
    - **bug** → follow `reference/diagnose.md`.
    - **refactor** → follow `reference/refactor.md`.
-   - **enhancement** → follow `reference/plan.md`; it decides whether a plan is needed, may hand a blocking design question to `reference/prototype.md`, and holds the approval gate. Once it returns an approved, committed plan or a skip decision, follow `reference/implement.md`.
-   - Any branch — not just enhancement — may hand a blocking design question to `reference/prototype.md`; the branch's own reference states when.
-   - Staffing: build-out — `implement.md`, `refactor.md`, and fix commits — runs on the **builder** role for its surface per `reference/staffing.md`, dispatched out of this thread; diagnosis is orchestrator work and stays here.
+   - **enhancement** → invoke the **`plan` skill** by name: it decides plan-or-skip, settles blocking design questions (itself composing the `prototype` skill by name), writes the HTML plan, and holds the approval gate. The `plan` skill stops at approval — **backlog owns the dev-tail**: on an approved plan, commit it to the work branch before dispatching build, and write the tracker posterity digest per `docs/agents/planning.md`/`platform.md` conventions (this dev-tail was formerly the plan step's gate 5 + posterity — it stays here now). Then follow `reference/implement.md`. On a skip decision, go straight to `reference/implement.md`.
+   - Any branch — not just enhancement — may hand a blocking design question to the `prototype` skill (by name); the branch's own reference states when.
+   - Staffing: build-out — `implement.md`, `refactor.md`, and fix commits — runs on the **builder** role for its surface, resolved by the `staffing` skill (by name), dispatched out of this thread; diagnosis is orchestrator work and stays here.
    - Completion criterion: the branch's own completion criterion is met, or the thread is paused at the enhancement approval gate.
 
 4. Verify behavior → follow `reference/verify.md`.
    - This is a loop: verify runs the checks and exercises the change against its acceptance criteria, handing failures back to the branch that built the change (`implement.md`, `diagnose.md`, or `refactor.md`) until every criterion passes or it hits its cap.
-   - Delegate the whole loop to a subagent filling the **checker** role per `reference/staffing.md`; this thread stays coordinator and takes back any failure the subagent escalates per `verify.md`'s triggers.
+   - Delegate the whole loop to a subagent filling the **checker** role, resolved by the `staffing` skill (by name); this thread stays coordinator and takes back any failure the subagent escalates per `verify.md`'s triggers.
    - Completion criterion: every acceptance criterion passes, or the verify loop ends at its cap or an explicit blocker (reported, no PR opened).
 
 5. Create the PR.
@@ -40,7 +40,7 @@ Tracker write discipline: on the local binding, this thread writes only its own 
    - Completion criterion: review reaches `LGTM`, hits its iteration cap, or reports an explicit blocker.
 
 7. Capture evidence → follow `reference/evidence.md`.
-   - Runs once, after the review loop ends, against the branch's final HEAD; `reference/evidence.md` carries the timing rationale. Skip if the playbook requires no evidence beyond green checks. Delegate the capture to the **checker** role per `reference/staffing.md`.
+   - Runs once, after the review loop ends, against the branch's final HEAD; `reference/evidence.md` carries the timing rationale. Skip if the playbook requires no evidence beyond green checks. Delegate the capture to the **checker** role, resolved by the `staffing` skill (by name).
    - Commits after the Reviewer's `LGTM` may touch only `evidence/`, the review file, and — on the local binding — the issue file's closing flip: set `state: closed` on this branch now, so the merge carries closure to main per `platform.md`'s close linkage. Never product code, so the approval stays valid.
    - Replace the PR body's evidence placeholder with the verified ready-to-paste block via the binding's edit-body verb — do not rebuild or reformat the block. If a browser driver in `environment.md` can reach the review surface, eyeball the rendered body after the edit.
    - Completion criterion: the evidence is committed and published, and the PR body carries the verified block in place of the placeholder — or none is required.

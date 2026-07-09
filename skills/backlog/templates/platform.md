@@ -40,7 +40,7 @@
 
 ## Harness — how threads are spawned
 
-- Binding: _<e.g. Claude Code | Codex | other — usually the harness the loop runs from; the model roster per harness is in `environment.md` § Model staffing>_.
+- Binding: _<e.g. Claude Code | Codex | other — usually the harness the loop runs from; the model roster is owned by the `staffing` skill (see `environment.md` § Model staffing)>_.
 - Create an issue thread with a prompt and a working directory: _<e.g. the harness's task/agent tool with `isolation: worktree`, or `codex exec --cd <worktree> ...`>_.
 - Can a spawned thread read this skill's bundled references from disk? _<yes at <path>; if no, the dispatcher pastes the reference into the prompt>_.
 - Durable monitor / wakeup for review round-trips: _<the harness mechanism `adversarial-review` may use, or "polling only">_.
