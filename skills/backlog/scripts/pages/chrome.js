@@ -3,6 +3,10 @@
 (function () {
   'use strict';
   var B = window.__REVIEW_BOOTSTRAP__ || {};
+  // Resolve API calls relative to the page's mount dir, not the domain root — the
+  // review surface serves this page under a path prefix (e.g. /asher-skills/<n>/review/)
+  // that the proxy strips, so a root-absolute '/event' escapes the mount and 404s.
+  var BASE = window.location.pathname.replace(/[^/]*$/, '');
   var KEY = 'rv-drafts:' + (B.issue || 'doc');
   var drafts = [];
   try { drafts = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { drafts = []; }
@@ -186,7 +190,7 @@
   function post(verdict) {
     var annotations = drafts.filter(function (d) { return d.text.trim(); })
       .map(function (d) { return { anchor: d.anchor, label: d.label, quote: d.quote, text: d.text.trim() }; });
-    fetch('/event', {
+    fetch(BASE + 'event', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: B.token, type: 'feedback_submitted', verdict: verdict, doc_hash: B.docHash, annotations: annotations })
@@ -222,7 +226,7 @@
 
   // --- version polling ---------------------------------------------------------------
   setInterval(function () {
-    fetch('/version?token=' + encodeURIComponent(B.token)).then(function (r) { return r.json(); }).then(function (v) {
+    fetch(BASE + 'version?token=' + encodeURIComponent(B.token)).then(function (r) { return r.json(); }).then(function (v) {
       if (v.hash && v.hash !== B.docHash) {
         if (drafts.some(function (d) { return d.text.trim(); })) {
           banner('A new version landed. Finish your comments, or <button onclick="location.reload()">reload now</button> (drafts are kept).', 'rv-warn');
