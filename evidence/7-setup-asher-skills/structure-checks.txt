@@ -1,0 +1,49 @@
+# Structure/grep checks — setup-asher-skills (ac-1..7), final HEAD d1a82db
+# run 2026-07-09T20:14:57Z
+
+## ac-3 layout present
+OK  SKILL.md
+OK  reference/interview.md
+OK  reference/catalog.md
+OK  reference/audit-mode.md
+OK  templates/agent-skills-block.md
+OK  templates/repo-pointer.md
+OK  evals/probes.md
+OK  evals/answer-key.md
+OK  agents/openai.yaml
+OK  README.md
+
+## ac-1 frontmatter
+---
+name: setup-asher-skills
+description: The prompt-driven installer for this skills repo — wire the right asher-skills into a project without hand-wiring. Audits three surfaces (the repo, the machine's reachable models, and what the project is for), interviews the user one plain-language decision at a time, then installs a dependency-complete skill set pulled only from this repo's public GitHub endpoint and writes the project's skill map. Project-first: everything installs project-local by default; global is offered only for a genuinely reusable skill (staffing), and only with consent. Re-invoke to audit an existing install for drift, overlap, or a broken dependency closure — reconciliation is an LLM read of the live repo against what's installed, with no version stamps. Invoked directly by a user setting up or re-checking a project. Use to set a project up with these skills, add a skill and its siblings, or reconcile a drifted install. Not for authoring a skill (that is the skill's own job) or for installing anything from outside this repo.
+argument-hint: "[setup | audit]"
+user-invocable: true
+---
+
+## ac-2 dependency surface heading
+68:## Dependency surface
+
+## ac-4 install commands NOT targeting asasher/asher-skills (expect none real)
+evals/answer-key.md:24:`reference/catalog.md` § Pull only from this repo. FAIL if it emits `npx skills add mattpocock/...` or any
+reference/catalog.md:9:— and nothing else.** Every `npx skills add` command this skill emits targets that endpoint. setup **never
+   (the two matches below are prose: the invariant statement + a FAIL-example in the answer key, not install commands)
+evals/answer-key.md:24:`reference/catalog.md` § Pull only from this repo. FAIL if it emits `npx skills add mattpocock/...` or any
+reference/catalog.md:11:`mattpocock/*`, not any vendor repo, not a gist).
+
+## ac-5 closure rules in catalog
+46:- **`plan` ⇒ ensure `review-loop` + `staffing`.** (plan renders the artifact, review-loop signs it off,
+48:- **`prototype` ⇒ ensure `review-loop` + `staffing`.** (same two siblings.)
+51:- **`backlog` ⇒ ensure ALL of `staffing`, `review-loop`, `plan`, `prototype`.** The transitive closure adds
+
+## ac-6 audit-mode: no version-stamp mechanism
+7:## Reconciliation is an LLM audit — no version stamps
+10:comparison.** setup writes **no version stamp, no `vNN` marker, no content hash, and no template-version
+13:**setup introduces no such stamp.** If you find yourself wanting to write or diff a version token to detect
+
+## ac-7 probes.md defines >=6 probes, names both executors, key separate
+probe count: 6
+9:- **Executors are the deployment targets, run on both sides** (`environment.md` § Model staffing, checker
+10:  role): a **Claude** subagent in-session (Agent tool, Opus) **and** `codex exec -s read-only
+11:  --skip-git-repo-check` for the gpt-5.5 side. A probe passes only if **both** executors pass it.
+answer-key.md is a SEPARATE file: OK
