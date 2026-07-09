@@ -1,0 +1,15 @@
+[PASS] ac-3 free-form --kind maquette accepted; startup JSON has url/hub/port — boot keys=['hub', 'local_url', 'port', 'token', 'url']
+[PASS] ac-4 serves arbitrary HTML, chrome injected before </body>, file byte-identical — status=200 injected=True before_body=True file_pure=True
+[PASS] ac-6 approve with stale doc_hash -> HTTP 409 stale — status=409 body={"error":"stale","current_hash":"bf643a02b9d58e74"}
+[PASS] ac-5a request_changes POST 200 and await exit 10 — post=200 await=10
+[PASS] ac-5b approve_with_nits POST 200 and await exit 3 — post=200 await=3
+[PASS] ac-5c approve POST 200 and await exit 0 — post=200 await=0
+[PASS] ac-5d no event before deadline -> await exit 124 — await=124
+[PASS] ac-13a verdict POST to prefixed /asher-skills/2/review/event accepted (200) + await exit 10 — post=200 await=10
+[PASS] ac-7a registry.json+index.html written; /hub returns index; label in hub — entries=1 idx=True hub_status=200
+[PASS] ac-7b registry entry removed on clean server exit — entries_after_exit=0
+[PASS] ac-7c --sweep drops dead entry and prints {swept:[...]} — stdout={"swept": ["dead-1"], "remaining": []}
+
+=== SUMMARY ===
+11/11 checks passed
+ALL RUNTIME CHECKS PASSED
