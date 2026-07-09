@@ -28,9 +28,11 @@ one caller is baked in — callers pass a free-form `--kind` and `--issue` scope
   *is* the verdict: `0` approve, `3` approve-with-nits, `10` request-changes, `124` timeout. Branch on it.
   **Do not block the orchestrator on this inline.** Hold the watch on a **dedicated watcher subagent** that
   loops-until-verdict — its whole job is the wait, so it neither abandons it to save tokens nor drops it to a
-  timeout ceiling. The watcher's model is a **staffing decision** (the floor/watcher role), and its
-  completion wakes the parent with the verdict — no `events.jsonl` polling. The full contract, including the
-  PR-merge watch, is in [watch](reference/watch.md).
+  timeout ceiling. The watcher's model is a **staffing decision** (staffed at the roster Floor), and its
+  completion wakes the parent with the verdict — no `events.jsonl` polling. The watcher is **staffed at the
+  roster Floor** (the cheapest class staffing names, read directly — *not* a generic capability-ranked
+  `route`, which would return the most capable model). The full contract, including the PR-merge watch, is in
+  [watch](reference/watch.md).
 - **sweep** — `scripts/review-server.py --sweep --surface <dir>` probes every hub entry, drops the dead,
   regenerates the index, and prints `{"swept":[…]}`. Run by a repo's setup health check.
 
@@ -68,6 +70,8 @@ the shape:
 - **Sibling skills** — **`staffing` (by name), and only for the watch.** The serve/annotate/hash-bound
   review *machinery* is a root primitive — it imports no other skill's files and is invoked *by* siblings
   such as backlog, maquette, and prototype. The one composition is the **delegated watch** ([watch](reference/watch.md)):
-  it composes `staffing` by name to resolve the watcher's model (the floor/watcher role — cheapest reachable,
-  never hardcoded). Staffing degrades gracefully (missing roster → fallback + report), so this is a soft
-  dependency; absent staffing the watch still runs on the current model in a subagent.
+  it composes `staffing` by name and staffs the watcher at the roster **Floor** — the cheapest class staffing
+  names, read directly from the roster (never hardcoded, and *not* a generic capability-ranked `route`, which
+  ranks by intelligence and returns the most capable model). Staffing degrades gracefully (missing roster →
+  fallback + report), so this is a soft dependency; absent staffing the watch still runs on the current model
+  in a subagent.

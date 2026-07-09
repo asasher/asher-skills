@@ -27,13 +27,19 @@ The caller spawns a **dedicated watcher subagent** whose *only* task is to hold 
 *is* its whole job, it never abandons the wait to save tokens, and it is cheap enough to park for a long
 time without draining the orchestrator's budget or context.
 
-- **The watcher's model is a staffing decision, never hardcoded.** Compose the `staffing` skill by name to
-  route a watcher task to the **floor/watcher role** — the cheapest reachable model, no capability gate
-  (the watcher only runs `review-await.py` and reports a code). Do **not** bake in a model name: the floor
-  differs by harness. From **Claude Code** it resolves to the roster floor (`sonnet-5` on this repo — never
-  Haiku); from a **Codex-driven** run, where Claude models are unreachable, it collapses onto `gpt-5.5`. If
-  the floor is unreachable, staffing's fallback ladder steps to the next reachable model, and if none is
-  reachable the watch runs on the current model in a subagent — never skip the watch.
+- **The watcher's model is a staffing decision, never hardcoded — staff it at the roster Floor.** Compose the
+  `staffing` skill by name and take the watcher's model from the roster's **Floor** — the cheapest capability
+  class staffing names (`roles-and-fallback.md`: the minimum, "nothing staffs below it"). The watch task
+  justifies the Floor exactly: it needs no intelligence, taste, or capability above the minimum — it only
+  runs `review-await.py` and reports an exit code. **Do not resolve the watcher with a generic
+  `staffing route` of the watch task:** an unpinned, no-capability task is ranked by
+  `intelligence > taste > cost`, so `route` returns the **most capable** reachable model (cost is only a
+  tie-break) — the opposite of a cheap park. Read the Floor value the roster publishes instead. Do **not**
+  bake in a model name: the Floor differs by harness — `sonnet-5` from **Claude Code** (never Haiku); from a
+  **Codex-driven** run, where Claude models are unreachable, the roster collapses to `gpt-5.5`. If the Floor
+  model is unreachable, walk staffing's succession ladder to the next reachable model, and if none is
+  reachable run the watch on the current model in a subagent — never skip the watch. (No `staffing` change is
+  needed: the Floor is already a named roster value; the watcher reads it, it does not add a pin or a role.)
 - **Separation is by thread, not by model.** Even if the same model would nominally orchestrate and watch,
   delegating the watch into its own thread is what keeps the orchestrator free — not parked, not burning
   context on a wait.

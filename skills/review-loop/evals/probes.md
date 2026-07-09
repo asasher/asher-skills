@@ -188,8 +188,8 @@ The probes below exercise the *routing* of the watcher contract where a reasonin
 model, and how do you learn the verdict? Cite the file and sentence that decides each part.
 
 **W2 (ac-3, ac-11).** You are running this loop **from Codex, not Claude Code.** What model holds the watch,
-and where is that decided? Is the watcher hardcoded to `sonnet`? Name the mechanism that picks the model and
-the role it routes to. Cite it.
+and where is that decided? Is the watcher hardcoded to `sonnet`? Name the staffing concept that decides it —
+and would a generic `staffing route` of the watch task give you the model you want? Cite it.
 
 **W3 (ac-4).** Your watcher's `review-await.py --timeout 540` just exited `124` and no verdict was submitted
 yet. What does the watcher do, and how is a verdict that lands *between* two blocks not lost? Does this
@@ -203,17 +203,20 @@ this same watch contract cover the **PR-merge** wait, or only the plan approval 
 
 - **W1 (ac-10):** **No — do not block the orchestrator inline.** Spawn a **dedicated watcher subagent** whose
   only job is the wait (so it neither abandons it to save tokens nor drops it to a timeout). Its model is a
-  **staffing decision** — the floor/watcher role (cheapest reachable), resolved by composing the `staffing`
-  skill by name. You learn the verdict from the **watcher's completion** — the subagent returns the verdict
+  **staffing decision** — staffed at the roster **Floor** (the cheapest class staffing names), resolved by
+  composing the `staffing` skill by name. You learn the verdict from the **watcher's completion** — the subagent returns the verdict
   and its code — **without polling `events.jsonl`**. Cite `reference/watch.md` §§ Who holds it / The wake and
   SKILL.md § Command surface (await). Blocking the orchestrator inline, hardcoding a model, or saying you
   poll the log = fail.
-- **W2 (ac-3, ac-11):** From Codex the watcher runs on **`gpt-5.5`** (Claude models unreachable → the floor
-  collapses onto it). It is **not** hardcoded to `sonnet`: the model is picked by composing the **`staffing`**
-  skill, which routes a watcher task to the **floor/watcher role** (cheapest reachable); model names appear
-  only as per-harness resolutions of that role. Cite `reference/watch.md` § Who holds it ("never hardcoded …
-  from a Codex-driven run … collapses onto `gpt-5.5`"). Answering "sonnet" as a fixed watcher, or missing
-  that staffing decides it, = fail.
+- **W2 (ac-3, ac-11):** From Codex the watcher runs on **`gpt-5.5`** (Claude models unreachable → the roster
+  Floor collapses onto it). It is **not** hardcoded to `sonnet`: the watcher is **staffed at the roster
+  Floor** — the cheapest capability class staffing names — read directly from the roster by composing
+  `staffing` by name. A generic **`staffing route`** of the watch task would **not** give the model you want:
+  an unpinned, no-capability task ranks by `intelligence > taste > cost`, so `route` returns the **most
+  capable** model (cost is only a tie-break) — the opposite of a cheap park. Cite `reference/watch.md`
+  § Who holds it ("Do **not** resolve the watcher with a generic `staffing route` … returns the **most
+  capable** … Read the Floor value the roster publishes instead"). Answering "sonnet" as a fixed watcher,
+  claiming a generic `route` yields the cheapest, or missing that it is the Floor value, = fail.
 - **W3 (ac-4):** It **re-arms** — invokes `review-await.py` again; a `124` timeout is *keep waiting*, never
   *give up* (loop-until-verdict). A verdict submitted between blocks is **not lost** because the script is
   **cursor-tracked** (`state/.await-cursor`) and the next call drains it. This needs **no change to
@@ -242,8 +245,8 @@ The behavioral criteria are additionally confirmed outside the probes:
   from the exit code alone, no `events.jsonl` parse (submit→await→resume through a path-prefix mount).
 - **File check** (grep/parse against the tree): **ac-1** (SKILL.md `await` surface documents the delegated
   watcher subagent), **ac-2** (dependency surface names `staffing` as the sibling, scoped to the watch),
-  **ac-3** (the watch contract routes the model via `staffing`/floor role and says "never hardcoded"; no bare
-  model default), **ac-4/ac-5/ac-6** (`reference/watch.md` states loop-until-verdict + lossless cursor,
+  **ac-3** (the watch contract staffs the model at the roster Floor read from `staffing`, says "never
+  hardcoded", and warns off a generic capability-ranked `route`; no bare model default), **ac-4/ac-5/ac-6** (`reference/watch.md` states loop-until-verdict + lossless cursor,
   wake-without-polling + durable backstop, and both-gates coverage), **ac-9** (`review-await.py` /
   `review-server.py` unchanged vs. `main`; no model name embedded in the scripts).
 
@@ -253,7 +256,7 @@ The behavioral criteria are additionally confirmed outside the probes:
 |-----------|----------|-------------------|
 | ac-1  | W1        | file check (await surface) |
 | ac-2  | W1        | file check (staffing sibling) |
-| ac-3  | W2        | file check (no hardcoded model; routes via floor role) |
+| ac-3  | W2        | file check (no hardcoded model; staffed at roster Floor, not a generic route) |
 | ac-4  | W3        | runtime (lossless re-arm across 124) + file check |
 | ac-5  | W4        | runtime (verdict from exit code, no log read) + file check |
 | ac-6  | W4        | file check (both-gates statement) |
@@ -261,4 +264,4 @@ The behavioral criteria are additionally confirmed outside the probes:
 | ac-8  | —         | runtime (path-prefix submit→await→resume, 3 verdicts) |
 | ac-9  | —         | file check (scripts unchanged vs. main) |
 | ac-10 | W1        | — |
-| ac-11 | W2        | file check (staffing route → floor class) |
+| ac-11 | W2        | file check (watcher staffed at roster Floor; generic route → most capable, avoided) |
