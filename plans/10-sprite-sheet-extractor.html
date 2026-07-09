@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #10 — to-sprites skill</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --key: #16a34a; --alpha: #0ea5e9; --slice: #d97706; --export: #db2777; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --key: #4ade80; --alpha: #38bdf8; --slice: #fbbf24; --export: #f472b6; } }
+:root[data-theme="dark"] { color-scheme: dark; --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --key: #4ade80; --alpha: #38bdf8; --slice: #fbbf24; --export: #f472b6; }
+:root[data-theme="light"] { color-scheme: light; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --key: #16a34a; --alpha: #0ea5e9; --slice: #d97706; --export: #db2777; }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: var(--fg); }
+svg .lbl { font-size: 10.5px; fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "☐"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li b { color: var(--accent); font-weight: 600; }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .35rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+pre { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .75rem 1rem; overflow-x: auto; font-size: .82em; }
+pre code { border: 0; background: none; padding: 0; }
+img { max-width: 100%; border-radius: 8px; }
+.tree { font-size: .82em; line-height: 1.4; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>to-sprites — keyed sheets → transparent assets + manifest</h1>
+  <p class="problem">A generated sprite sheet is a single flat-background image; using its elements on the web or in an engine means hand-slicing, keying, and bookkeeping every frame's coordinates.</p>
+  <div class="chips"><span class="chip">issue #10</span><span class="chip">enhancement</span><span class="chip">plan v2 · nits folded</span><span class="chip">Codex skill · Python</span></div>
+</header>
+
+<section id="revision-note">
+  <h2>Revision v2 — nits folded (approve-with-nits)</h2>
+  <ul class="plain">
+    <li><b>Renamed</b> the skill <code>sprite-sheet-extractor</code> → <code>to-sprites</code> (fits the <code>to-spec</code>/<code>to-tickets</code> family). Branch name stays <code>10-sprite-sheet-extractor</code> (cosmetic; noted in the PR).</li>
+    <li><b>Added</b> an optional first stage: <em>prompt → <code>codex-imagegen</code> → source sheet → [existing pipeline]</em>. <code>codex-imagegen</code> is composed by plain name as an optional sibling (see <a href="#generate-source">Optional generate-source</a>, <a href="#dec-11">dec-11</a>, <a href="#ac-14">ac-14</a>).</li>
+  </ul>
+</section>
+
+<section id="overview">
+  <h2>What ships</h2>
+  <p>A standalone, Codex-first skill <code>skills/to-sprites/</code> whose value is a real runnable Python script: feed it a sprite sheet, it removes a flat chroma key, slices the sheet, trims each element, exports transparent PNG/WebP, and writes a <code>spritesheet.json</code> manifest — with an optional contact-sheet preview for QA. An optional front stage lets the starting point be a <em>text prompt</em>, generating the source sheet via the sibling <code>codex-imagegen</code> skill before the pipeline runs.</p>
+</section>
+
+<section id="generate-source">
+  <h2>Optional generate-source stage</h2>
+  <p>The starting point can be a prompt instead of a file. When <code>--generate "&lt;subject&gt;"</code> is passed, <code>to-sprites</code> composes the sibling <code>codex-imagegen</code> skill <b>by plain name</b> (no file import) to produce the source sheet, then feeds it into the unchanged key→slice→export→manifest pipeline.</p>
+  <figure id="generate-diagram">
+    <svg viewBox="0 0 700 84" width="700" role="img" aria-label="Optional prompt to source-sheet front stage">
+      <defs>
+        <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker>
+      </defs>
+      <rect x="8" y="20" width="120" height="46" rx="8" fill="var(--card)" stroke="var(--line)" stroke-dasharray="4 3"/>
+      <text x="68" y="40" text-anchor="middle">prompt</text>
+      <text x="68" y="55" text-anchor="middle" class="lbl">--generate "…"</text>
+      <rect x="196" y="20" width="150" height="46" rx="8" fill="var(--card)" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="271" y="40" text-anchor="middle">codex-imagegen</text>
+      <text x="271" y="55" text-anchor="middle" class="lbl">sibling · flat key bg</text>
+      <rect x="414" y="20" width="130" height="46" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="479" y="40" text-anchor="middle">source sheet</text>
+      <text x="479" y="55" text-anchor="middle" class="lbl">→ pipeline</text>
+      <rect x="596" y="20" width="96" height="46" rx="8" fill="var(--card)" stroke="var(--slice)"/>
+      <text x="644" y="43" text-anchor="middle">key→…→manifest</text>
+      <line x1="128" y1="43" x2="194" y2="43" stroke="var(--muted)" marker-end="url(#arrow2)"/>
+      <line x1="346" y1="43" x2="412" y2="43" stroke="var(--muted)" marker-end="url(#arrow2)"/>
+      <line x1="544" y1="43" x2="594" y2="43" stroke="var(--muted)" marker-end="url(#arrow2)"/>
+    </svg>
+    <figcaption>The prompt guidance in <a href="#ac-11">documented prompts</a> doubles as the <code>codex-imagegen</code> subject guidance — one flat-key, isolated-elements, consistent-grid spec serves both generation and extraction. Dashed = optional / cross-skill.</figcaption>
+  </figure>
+</section>
+
+<section id="pipeline">
+  <h2>Extraction pipeline</h2>
+  <p>One deterministic pass over the sheet; each stage is a flag-gated step in <code>extract_spritesheet.py</code>. Color = stage family.</p>
+  <figure id="pipeline-diagram">
+    <svg viewBox="0 0 700 250" width="700" role="img" aria-label="Extraction pipeline from source sheet to assets and manifest">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/>
+        </marker>
+      </defs>
+      <!-- row 1 -->
+      <rect x="8" y="20" width="96" height="46" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="56" y="40" text-anchor="middle">source</text>
+      <text x="56" y="55" text-anchor="middle" class="lbl">sheet.png</text>
+
+      <rect x="140" y="20" width="120" height="46" rx="8" fill="var(--card)" stroke="var(--key)" stroke-width="1.5"/>
+      <text x="200" y="40" text-anchor="middle">key removal</text>
+      <text x="200" y="55" text-anchor="middle" class="lbl">auto | #hex | none</text>
+
+      <rect x="296" y="20" width="120" height="46" rx="8" fill="var(--card)" stroke="var(--slice)" stroke-width="1.5"/>
+      <text x="356" y="40" text-anchor="middle">slice</text>
+      <text x="356" y="55" text-anchor="middle" class="lbl">grid | components</text>
+
+      <rect x="452" y="20" width="110" height="46" rx="8" fill="var(--card)" stroke="var(--alpha)" stroke-width="1.5"/>
+      <text x="507" y="40" text-anchor="middle">trim + name</text>
+      <text x="507" y="55" text-anchor="middle" class="lbl">bbox · pivot</text>
+
+      <rect x="598" y="20" width="94" height="46" rx="8" fill="var(--card)" stroke="var(--export)" stroke-width="1.5"/>
+      <text x="645" y="40" text-anchor="middle">export</text>
+      <text x="645" y="55" text-anchor="middle" class="lbl">PNG/WebP</text>
+
+      <line x1="104" y1="43" x2="138" y2="43" stroke="var(--muted)" marker-end="url(#arrow)"/>
+      <line x1="260" y1="43" x2="294" y2="43" stroke="var(--muted)" marker-end="url(#arrow)"/>
+      <line x1="416" y1="43" x2="450" y2="43" stroke="var(--muted)" marker-end="url(#arrow)"/>
+      <line x1="562" y1="43" x2="596" y2="43" stroke="var(--muted)" marker-end="url(#arrow)"/>
+
+      <!-- outputs -->
+      <line x1="645" y1="66" x2="645" y2="110" stroke="var(--muted)" marker-end="url(#arrow)"/>
+      <rect x="470" y="112" width="222" height="46" rx="8" fill="var(--card)" stroke="var(--export)" stroke-width="1.5"/>
+      <text x="581" y="132" text-anchor="middle">assets/*.png + spritesheet.json</text>
+      <text x="581" y="147" text-anchor="middle" class="lbl">per-element files + manifest</text>
+
+      <!-- validation / contact sheet branch -->
+      <line x1="470" y1="135" x2="360" y2="135" stroke="var(--muted)" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+      <rect x="196" y="112" width="160" height="46" rx="8" fill="var(--card)" stroke="var(--line)" stroke-dasharray="4 3"/>
+      <text x="276" y="132" text-anchor="middle">validate (opt)</text>
+      <text x="276" y="147" text-anchor="middle" class="lbl">corners · count · remnants</text>
+
+      <line x1="276" y1="158" x2="276" y2="196" stroke="var(--muted)" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+      <rect x="196" y="198" width="160" height="42" rx="8" fill="var(--card)" stroke="var(--line)" stroke-dasharray="4 3"/>
+      <text x="276" y="216" text-anchor="middle">contact sheet (opt)</text>
+      <text x="276" y="230" text-anchor="middle" class="lbl">QA preview.png</text>
+    </svg>
+    <figcaption>Non-destructive: the source is read-only input; every output lands in a separate out dir and existing files are refused unless <code>--force</code>. Dashed = opt-in stages.</figcaption>
+  </figure>
+</section>
+
+<section id="layout">
+  <h2>Skill layout</h2>
+  <p>Modeled on shipped <code>skills/staffing/</code> and <code>skills/review-loop/</code>; Codex-first (ships <code>agents/openai.yaml</code>). Keying lineage traces to the sibling <code>codex-imagegen</code> skill but is re-implemented here (cross-skill script imports are disallowed; codex-imagegen keys only magenta/green). <code>codex-imagegen</code> is also composed by name for the optional generate-source stage.</p>
+  <pre class="tree"><code>skills/to-sprites/
+  SKILL.md                      # doc + command surface
+  README.md                     # install / one-liner
+  agents/openai.yaml            # Codex surface (implicit-invocation off)
+  scripts/
+    extract_spritesheet.py      # the CLI entrypoint + importable extract()
+  reference/
+    slicing.md                  # grid vs connected-components
+    manifest.md                 # spritesheet.json schema + CSS/engine mapping
+    prompts.md                  # extractable-sheet prompts == codex-imagegen guidance
+    validation.md               # corners / empty cells / key remnants / count
+  evals/
+    probes.md                   # dual-executor probe scenarios + answer key
+    make_fixture.py             # deterministic Pillow-drawn 4x4 iso sheet
+    fixtures/iso-4x4.png        # committed test fixture (generated, no network)</code></pre>
+</section>
+
+<section id="manifest">
+  <h2>Manifest schema — <code>spritesheet.json</code></h2>
+  <p>One object per sheet; <code>elements[]</code> carries every field the issue lists. <code>sheet_rect</code>/<code>frame</code> are sheet coordinates (for CSS-sprite / atlas use); the exported PNG is the trimmed content.</p>
+  <pre><code>{
+  "source": "in/iso-4x4.png",
+  "sheet": { "width": 1024, "height": 1024 },
+  "slicing": { "mode": "grid", "cols": 4, "rows": 4,
+               "tile": [256,256], "margin": [0,0], "spacing": [0,0] },
+  "key": { "color": "#00FF00", "method": "border-sample" },
+  "elements": [{
+    "name": "tile_01_grass", "index": 0, "row": 0, "col": 0,
+    "sheet_rect":     { "x":0, "y":0, "w":256, "h":256 },   // original cell
+    "trimmed_bounds": { "x":18, "y":40, "w":220, "h":150 }, // content bbox in sheet
+    "asset": "assets/tile_01_grass.png", "size": [220,150],
+    "anchor": [110,150], "pivot": [0.5,1.0],                // bottom-center default
+    "css":   { "background-position": "-18px -40px", "width":220, "height":150 },
+    "frame": { "x":18, "y":40, "w":220, "h":150 }           // engine/atlas frame
+  }]
+}</code></pre>
+  <figcaption style="font-size:.8rem;color:var(--muted)">CSS <code>background-position</code> targets the original sheet as a background image; <code>frame</code> is TexturePacker/Phaser-style atlas data. Both derive from the same rect, so a consumer can use either the standalone PNG or the sheet.</figcaption>
+</section>
+
+<section id="stories">
+  <h2>User stories</h2>
+  <ul class="plain">
+    <li id="story-1">As a game-asset maker, I want a keyed 4×4 iso tile sheet sliced into 16 named transparent PNGs, so that I can drop tiles straight into an engine.</li>
+    <li id="story-2">As a web dev, I want a manifest with CSS <code>background-position</code> per element, so that I can use the sheet as a CSS sprite without measuring pixels by hand.</li>
+    <li id="story-3">As a prototyper, I want the background auto-detected from the sheet border, so that I don't have to know the exact key hex.</li>
+    <li id="story-4">As a user with an irregular packed sheet, I want connected-component slicing, so that elements without a fixed grid still come out as separate assets.</li>
+    <li id="story-5">As a careful user, I want the original never overwritten and existing outputs refused unless I force it, so that a re-run can't destroy work.</li>
+    <li id="story-6">As a QA reviewer, I want a contact-sheet preview and a validation report, so that I can spot empty cells, key remnants, or a wrong element count at a glance — without a browser.</li>
+    <li id="story-7">As a Codex user, I want the skill invocable from the Codex CLI with a documented entrypoint, so that gpt-5.5 can run the extraction for me.</li>
+    <li id="story-8">As a user starting from nothing, I want to hand the skill a text prompt and have it generate the source sheet (via codex-imagegen) before extracting, so that prompt→assets is one flow.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Implementation decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><b>Runtime:</b> Python 3 + <code>numpy</code> + <code>Pillow</code> only (both present on this machine: numpy 2.4.4, Pillow 12.2.0). No scipy — matches the codex-imagegen dep floor. Documented as <code>pip install numpy pillow</code>.</li>
+    <li id="dec-2"><b>Connected components</b> are labeled in-house (numpy 4-connectivity two-pass union-find) since scipy is absent; adequate for sprite-sheet-scale images.</li>
+    <li id="dec-3"><b>Keying</b> is generalized to an arbitrary flat key: <code>--key auto</code> (dominant border color by sampling the sheet's border ring), <code>--key #RRGGBB</code> (supplied), or <code>--key none</code>. Euclidean RGB distance with hi/lo alpha ramp + despill, re-implemented from codex-imagegen's magenta/green keyer.</li>
+    <li id="dec-4"><b>Slicing</b> has two modes: <code>grid</code> (cols×rows or tile size + margin + spacing) and <code>components</code> (label opaque blobs post-key). Grid handles the 4×4 iso fixture; both feed the same trim/name/export/manifest tail.</li>
+    <li id="dec-5"><b>Naming:</b> a provided list (<code>--names a,b,…</code> or <code>--names file</code>) maps row-major; otherwise stable auto names <code>tile_NN</code>, or <code>tile_NN_&lt;name&gt;</code> when a list is given (e.g. <code>tile_01_grass.png</code>). Ordering is deterministic across runs.</li>
+    <li id="dec-6"><b>Non-destructive:</b> source is opened read-only; outputs go to <code>--out</code> (default a new sibling dir); the writer refuses to clobber existing files unless <code>--force</code>. The source is never a write target.</li>
+    <li id="dec-7"><b>Export:</b> <code>--format png|webp|both</code>, all with alpha. Anchor/pivot default bottom-center (iso-friendly), overridable.</li>
+    <li id="dec-8"><b>Entrypoint shape:</b> one <code>extract_spritesheet.py</code> exposing both a CLI (<code>--help</code> documents all flags) and an importable <code>extract(...) -&gt; manifest dict</code> so probes/tests assert on the returned manifest, not stdout.</li>
+    <li id="dec-9"><b>Test fixture</b> is generated deterministically by <code>evals/make_fixture.py</code> (Pillow draws 16 distinct iso diamonds on a flat green key) and committed — offline and reproducible, since headless-Chrome and live image-gen are unavailable/nondeterministic here. Real generated sheets remain the production input; the fixture only anchors verification.</li>
+    <li id="dec-10"><b>Validation</b> (<code>--validate</code>, with <code>--expect N</code>) checks alpha corners, empty cells, residual key-color remnants, and asset count; exits nonzero on failure so it doubles as the verify seam.</li>
+    <li id="dec-11"><b>Optional generate-source</b> (<code>--generate "&lt;subject&gt;"</code>) composes the sibling <code>codex-imagegen</code> by plain name — it shells to that skill's <code>scripts/codex_imagegen.py --subject … --key … --out &lt;tmp sheet&gt;</code>, then runs the normal pipeline on the result. No file import; <code>codex-imagegen</code> is declared an <b>optional sibling</b> in the SKILL.md three-part dependency surface (bundled references · project playbooks · <em>optional sibling: codex-imagegen</em>). Absent/unreachable codex-imagegen degrades cleanly: the flag errors with guidance, the file-input path is unaffected.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <p>Each is checkable pass/fail by running <code>extract_spritesheet.py</code> against the committed fixture and asserting on exported files + the manifest.</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><b>Keyed→transparent→assets:</b> given a keyed source PNG with grid params, the entrypoint writes N individual PNGs whose four corner pixels are alpha=0.</li>
+    <li id="ac-2" data-criterion><b>Regular grid:</b> on <code>iso-4x4.png</code> with <code>--cols 4 --rows 4</code>, exactly 16 assets are written and the manifest lists 16 elements with row/col each in 0–3, row-major.</li>
+    <li id="ac-3" data-criterion><b>Non-destructive:</b> a run leaves the source file byte-identical and refuses to overwrite existing outputs unless <code>--force</code> is passed.</li>
+    <li id="ac-4" data-criterion><b>CLI entrypoint:</b> a single documented <code>extract_spritesheet.py</code> runs end-to-end from the skill and <code>--help</code> lists every flag.</li>
+    <li id="ac-5" data-criterion><b>Manifest completeness:</b> <code>spritesheet.json</code> carries per element — source sheet path, asset path, name, row/col, sheet_rect, trimmed_bounds, anchor/pivot, CSS background-position, and engine frame data — verified against a schema assertion.</li>
+    <li id="ac-6" data-criterion><b>Validation:</b> <code>--validate --expect 16</code> reports pass/fail for alpha corners, empty cells, key-color remnants, and asset count, exiting nonzero on any failure.</li>
+    <li id="ac-7" data-criterion><b>Keying modes:</b> background removal works by supplied hex (<code>--key #RRGGBB</code>) and by border auto-sample (<code>--key auto</code>); <code>--key none</code> slices without keying.</li>
+    <li id="ac-8" data-criterion><b>Connected components:</b> <code>--slice components</code> on a gridless sheet extracts each disconnected opaque blob as its own named element.</li>
+    <li id="ac-9" data-criterion><b>Naming:</b> a provided <code>--names</code> list yields names like <code>tile_01_grass.png</code>; absent a list, stable auto names; ordering identical across repeated runs.</li>
+    <li id="ac-10" data-criterion><b>Export formats:</b> <code>--format webp</code> and <code>both</code> produce alpha WebP alongside PNG.</li>
+    <li id="ac-11" data-criterion><b>Documented prompts:</b> the skill documents prompts for generating easy-to-extract sheets (flat key bg, consistent grid, isolated non-touching elements).</li>
+    <li id="ac-12" data-criterion><b>Contact sheet:</b> <code>--contact-sheet preview.png</code> writes a labeled QA preview image of the extracted elements.</li>
+    <li id="ac-13" data-criterion><b>Codex surface:</b> <code>agents/openai.yaml</code> is present and well-formed, exposing the skill in the Codex CLI.</li>
+    <li id="ac-14" data-criterion><b>Generate-source composition:</b> with <code>--generate "&lt;subject&gt;"</code>, the entrypoint invokes <code>codex-imagegen</code> by name to produce a source sheet and then runs the full pipeline on it, recording <code>source.generated: true</code> and the subject in the manifest. Verified by a mocked/stubbed codex-imagegen invocation (the composition + handoff, not live pixel output); absent codex-imagegen, the flag fails with actionable guidance and the file-input path still works.</li>
+  </ul>
+</section>
+
+<section id="seams">
+  <h2>Test seams</h2>
+  <ul class="plain">
+    <li><b>Primary — the importable <code>extract()</code> API</b> and the committed <code>iso-4x4.png</code> fixture: tests call <code>extract()</code>, then assert on the returned manifest dict and on the files written to a temp out dir (corner alpha via Pillow, element count, schema keys, row/col grid). Highest, most stable seam; no stdout parsing.</li>
+    <li><b>Secondary — the CLI</b>: one end-to-end <code>python3 extract_spritesheet.py …</code> run plus <code>--help</code>, to cover argument wiring, non-destructive refusal, and exit codes (AC-3, AC-4, AC-6).</li>
+    <li><b>Deliberately untested:</b> the <em>aesthetic</em> quality of despill fringing and contact-sheet layout — checked only structurally (no key remnants above threshold, file exists and is a valid image), not pixel-exact, since visual taste isn't mechanically gradable (per <code>environment.md</code> § Gaps).</li>
+  </ul>
+</section>
+
+<section id="verification">
+  <h2>Verification plan</h2>
+  <p>Real image I/O on the fixture, dual-executor per the repo's probe-eval design. No browser needed — evidence is the manifest, the file listing, and the contact-sheet PNG.</p>
+  <table>
+    <thead><tr><th>Step</th><th>How</th></tr></thead>
+    <tbody>
+      <tr><td>Build fixture</td><td><code>evals/make_fixture.py</code> → deterministic <code>iso-4x4.png</code> (16 iso diamonds on green key), committed.</td></tr>
+      <tr><td>Drive (Claude)</td><td>In-session subagent reads SKILL.md, runs the skill on the fixture, asserts manifest + files against the answer key.</td></tr>
+      <tr><td>Drive (gpt-5.5)</td><td><code>codex exec -s workspace-write</code> runs the same probe independently — second executor.</td></tr>
+      <tr><td>Assertions</td><td>16 assets; every corner alpha=0; schema-complete manifest; trimmed_bounds ⊂ sheet_rect; <code>--validate --expect 16</code> exits 0; a re-run without <code>--force</code> exits nonzero and leaves source unchanged.</td></tr>
+      <tr><td>Generate-source</td><td>Mocked/stubbed <code>codex-imagegen</code> invocation (live generation is nondeterministic): assert <code>to-sprites</code> shells the sibling by name, hands its output into the pipeline, and records <code>source.generated</code>; assert clean failure when codex-imagegen is absent. Composition + handoff, not pixel output.</td></tr>
+      <tr><td>Evidence</td><td>manifest JSON + <code>ls</code> of assets + contact-sheet PNG (screenshot of rendered output per <code>environment.md</code>).</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="evidence-required">
+  <h2>Evidence required</h2>
+  <ul class="plain">
+    <li id="ev-1">The generated <code>spritesheet.json</code> for the fixture (16 elements, all fields present).</li>
+    <li id="ev-2">Directory listing of the 16 exported PNGs (+ WebP for the format check).</li>
+    <li id="ev-3">The contact-sheet preview PNG.</li>
+    <li id="ev-4">The dual-executor probe transcripts + a per-criterion pass/fail table.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>Auto border-sampling misfires on sheets whose border isn't the key color → mitigated by explicit <code>--key #hex</code> and a validation remnant check.</li>
+    <li>Connected-components merges touching iso tiles into one blob → grid mode is the default for regular sheets; components is opt-in for gridless input.</li>
+    <li>numpy 2.x / Pillow 12.x API drift on other machines → pin only a floor, keep to stable APIs, document deps.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>Non-flat / gradient / photographic background removal — only a flat chroma key.</li>
+    <li>Animation assembly (GIF/APNG/spritesheet re-pack) — frame data is emitted, but no atlas repacking or animation output.</li>
+    <li>Normal maps, 3D, or multi-layer PSD input.</li>
+    <li>Implementing image generation itself — the optional <code>--generate</code> stage <em>delegates</em> to <code>codex-imagegen</code> by name; <code>to-sprites</code> owns no image model.</li>
+  </ul>
+</details>
+
+<section id="scope-decisions">
+  <h2>Scope decisions (resolved at approval)</h2>
+  <ul class="plain">
+    <li id="q-0"><b>Name (resolved):</b> skill named <code>to-sprites</code> per Asher's nit. ✓</li>
+    <li id="q-1"><b>Fixture:</b> commit a deterministic synthetic iso sheet (my recommendation — offline, reproducible) vs a real codex-generated sheet. Recommend synthetic for the committed test; note real sheets are production input.</li>
+    <li id="q-2"><b>Scope for v1:</b> WebP export + contact sheet + connected-components are all in the plan. If you'd rather ship grid+PNG+manifest first and defer WebP/components/contact-sheet to a follow-up, I'll cut AC-8/10/12. Recommend keeping all — they're cheap on top of the same tail.</li>
+    <li id="q-3"><b>AC count:</b> 13 criteria, one per issue requirement. Happy to consolidate if that's more than you want to track.</li>
+  </ul>
+</section>
+
+</main>
+</body>
+</html>
