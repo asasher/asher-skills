@@ -9,7 +9,7 @@ pass/fail against the key. **The answer key is written before any runs** and gra
 acceptance criteria (`plans/1-extract-staffing.html`, ids ac-1..ac-11) — the plan is the source of truth; do
 not grade against looser criteria.
 
-Each probe names the criterion it exercises. Between them the 13 probes cover ac-1..ac-11.
+Each probe names the criterion it exercises. Between them the 14 probes cover ac-1..ac-11.
 
 ## Probes
 
@@ -60,6 +60,12 @@ mechanism.
 **P13 (ac-10).** Read `skills/staffing/agents/openai.yaml`. Is it well-formed per
 `docs/patterns/codex-compat.md`, and is `allow_implicit_invocation` set correctly for an operator/config
 primitive? State the value and why it is right.
+
+**P14 (ac-4).** A task needs **user-facing onboarding copy and a public API surface designed** — no browser
+or other capability required. Walk the resolution order and name, by location, each structure and gate you
+consult and in what order. Suppose the roster's highest-intelligence reachable model sits at taste 5 while a
+lower-intelligence model clears taste ≥ 7: which one gets the work, and at exactly which step is the taste-5
+model removed from contention? Does the `intelligence > taste > cost` tie-break ever get to reconsider it?
 
 ## Answer key
 
@@ -121,10 +127,20 @@ primitive? State the value and why it is right.
   correct because staffing is an operator/config primitive (it writes global memory), not a lightweight
   advisory skill — codex-compat.md says default `false` for operator-style skills. Saying `true` is fine, or
   the YAML being malformed, = fail.
+- **P14 (ac-4):** Order is pin → gates → rank. No pin matches (step 1). At the **gates** (step 2) the task is
+  user-facing, so the **taste gate** applies: filter the candidates to **taste ≥ 7**, which **removes the
+  taste-5 model from contention before any ranking**. (No capability gate triggers — no browser/computer
+  requirement.) Only then does step 3 rank the survivors by `intelligence > taste > cost`, so the
+  **lower-intelligence, taste-≥7 model gets the work**; the taste-5 model's higher intelligence is
+  irrelevant because it was already dropped in step 2 and ranking **never resurrects a gated-out model**.
+  The taste ≥ 7 floor is a **hard gate, not a soft default** — cite the taste gate in the resolution order
+  (`reference/rankings-and-routing.md`, step 2) and its "ranking never resurrects a model a gate removed"
+  clause. Answering that the taste-5 model wins on intelligence, treating taste ≥ 7 as a mere tie-break or
+  soft default, or applying the floor only after ranking = fail.
 
 ## Scoring
 
-13 probes × 2 executors (Opus in-session + `codex exec`). A probe passes only with the **correct action AND
+14 probes × 2 executors (Opus in-session + `codex exec`). A probe passes only with the **correct action AND
 a correct citation**. Ambiguity flags are recorded as findings, not failures — they are the most valuable
 output and should drive wording fixes before ship. Report a verdict table mapping each probe → its criterion
 → pass/fail per executor. Structural criteria are additionally confirmed by file check: ac-1 (frontmatter +
@@ -137,7 +153,7 @@ grep no cross-skill imports), ac-9 (grep finds no `vNN`/version stamp), ac-10 (Y
 | ac-1      | P1                    |
 | ac-2      | P2                    |
 | ac-3      | P3                    |
-| ac-4      | P4, P6                |
+| ac-4      | P4, P6, P14           |
 | ac-5      | P5                    |
 | ac-6      | P7, P8                |
 | ac-7      | P9                    |

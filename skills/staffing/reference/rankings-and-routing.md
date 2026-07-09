@@ -54,11 +54,22 @@ covers. Do not "double-check" a pinned choice against the rankings — that defe
 Resolve every "which model?" question in this exact order:
 
 1. **Task-type pin?** If the task matches a pin, return the pinned model. **Stop** — skip steps 2–3.
-2. **Capability gate.** If the task requires a capability (e.g. a browser-driving task needs `browser-use`),
-   filter the candidate models to those the capability matrix marks true for it. This yields the survivor
-   set. A task with no capability requirement keeps all candidates.
+2. **Gates — filter the candidate set before ranking.** Both gates are **hard constraints**, not
+   preferences: they remove models from contention, they do not merely nudge the tie-break. Apply whichever
+   the task triggers (a task may trigger both, one, or neither):
+   - **Capability gate.** If the task requires a capability (e.g. a browser-driving task needs `browser-use`),
+     filter the candidate models to those the capability matrix marks true for it. A task with no capability
+     requirement keeps all candidates.
+   - **Taste gate.** If the task is **user-facing** (UI, copy, API design), filter the candidates to those
+     with **taste ≥ 7**. This is a floor, not a tie-break: a model below taste 7 is out of contention for
+     user-facing work no matter how high its intelligence. A task that is not user-facing keeps all
+     candidates.
+
+   The models that survive both applicable gates are the survivor set.
 3. **Rank the survivors** by `intelligence > taste > cost`: highest intelligence wins; ties broken by taste;
-   remaining ties broken by cost (cheaper wins). Cost is a tie-breaker **only**.
+   remaining ties broken by cost (cheaper wins). Cost is a tie-breaker **only**. Ranking never resurrects a
+   model a gate removed — a taste-5 model cannot win user-facing work on intelligence, because the taste gate
+   already dropped it in step 2.
 4. **Fallback ladder.** If the chosen model is unreachable from the current harness, apply the succession
    line in [roles-and-fallback](roles-and-fallback.md): the next most capable reachable survivor takes the
    role; if none is reachable, run on the current model in a subagent. A model the harness cannot reach is
@@ -86,7 +97,10 @@ the table for it.
 - Use cheaper models to gather information and try things first, then move the work up if needed — don't let
   cost keep work off the right model.
 - **Cost is a tie-breaker only.** When axes conflict for anything that ships: `intelligence > taste > cost`.
-- Anything user-facing (UI, copy, API design) needs **taste ≥ 7**.
+- Anything user-facing (UI, copy, API design) needs **taste ≥ 7** — and this is a **hard gate, not a soft
+  default**: it is enforced in step 2 of the resolution order (the taste gate), which filters out any model
+  below the floor *before* the `intelligence > taste > cost` ranking runs. Unlike cost (a soft default you
+  may escalate past freely), the user-facing taste floor is never overridden by a higher-intelligence model.
 - Orchestration, design, and hard diagnosis go to the most capable reachable model.
 - Reviews go to a high-taste/high-intelligence model, optionally a second independent model as an extra
   perspective.
