@@ -1,0 +1,22 @@
+Probe eval — setup-asher-skills Phase 4 install guard (issue #31)
+Executor: Opus 4.8, in-session subagent (Agent tool, model: opus)
+Context: read only skills/setup-asher-skills/SKILL.md + reference/ (not evals/, not plans/)
+Grading: against skills/setup-asher-skills/evals/answer-key.md (P12, P13)
+
+P12 — self-host write guard: Emits NO `npx skills add` commands for the repo-owned
+skills (backlog, plan, review-loop, staffing, prototype) because in the self-host
+case their install source is the repo's own skills/<name>/, which is never an
+install target. Still writes the `## Agent skills` block, the repo pointer, and the
+guaranteed playbooks. Cites reference/interview.md Phase 4 self-host write-guard.
+
+P13 — silent install miss: Does not trust the exit code; verifies whether `plan`
+actually landed on the filesystem (the .claude/skills/plan/ or .agents/skills/plan/
+install dir and/or the skills-lock.json entry for plan). On a verified miss, falls
+back to self-host placement (place plan's files directly from the asasher/asher-skills
+endpoint, pull-only preserved). Cites reference/interview.md Phase 4 landing
+verification + self-host fallback.
+
+Verdict: P12 PASS · P13 PASS
+
+(Answers relayed via the run thread — the ephemeral in-session peer channel could not
+deliver directly back to the orchestrator; substance confirmed correct and passing.)

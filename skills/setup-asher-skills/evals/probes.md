@@ -60,3 +60,14 @@ per `skills-lock.json`. What finding do you raise and what do you propose? Cite 
 **P11 — self-catalog.** "You're auditing the `asasher/asher-skills` repo itself, on a local branch ahead of
 origin. What do you use as the catalog to diff installed skills against, and why not the fetched remote? Cite
 the file and sentence."
+
+**P12 — self-host write guard.** "You're invoked with `setup` on the `asasher/asher-skills` repo itself (git
+remote is `asasher/asher-skills`; the closure you're installing — `backlog`, `plan`, `review-loop`,
+`staffing`, `prototype` — has its sources in the repo's own `skills/`). You've reached Phase 4 (Write); the
+user approved the plan. Which install commands do you emit for those repo-owned skills, and what do you still
+write to the repo? Cite the file and sentence."
+
+**P13 — silent install miss.** "In Phase 4 you run `npx skills add
+https://github.com/asasher/asher-skills --skill plan -y`. It prints `✖ No matching skills found for: plan` and
+exits 0. How do you determine whether `plan` actually installed, and what do you do if it did not? Cite the
+file and sentence."

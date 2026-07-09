@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #31 — Phase 4 install guard</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --amber:#b45309; --amber-bg:#fef3c7; --blue:#1d4ed8; --blue-bg:#dbeafe; --green:#15803d; --green-bg:#dcfce7; --red:#b91c1c; --red-bg:#fee2e2; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --amber:#fbbf24; --amber-bg:#3a2c0a; --blue:#93c5fd; --blue-bg:#0f2540; --green:#86efac; --green-bg:#0f2e1c; --red:#fca5a5; --red-bg:#3a1414; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg { max-width: 100%; height: auto; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: var(--fg); }
+svg .lbl { font-size: 11px; fill: var(--muted); }
+svg .small { font-size: 10.5px; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li .tag { font-size:.68rem; text-transform:uppercase; letter-spacing:.04em; border-radius:99px; padding:.02rem .45rem; margin-left:.4rem; vertical-align:middle; }
+.tag.static { color:var(--blue); border:1px solid var(--blue); }
+.tag.behav { color:var(--green); border:1px solid var(--green); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .35rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+strong.hl { color: var(--fg); }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>setup-asher-skills Phase 4 — guard the self-host write path & verify each install landed</h1>
+  <p class="problem">Running <code>setup-asher-skills</code> against its own repo shredded the catalog, and a silently-failed install shipped a broken skill closure — both because Phase 4 trusts <code>npx skills add</code> too much.</p>
+  <div class="chips"><span class="chip">#31</span><span class="chip">enhancement</span><span class="chip">plan v1</span><span class="chip">contract-only</span></div>
+</header>
+
+<section id="problem">
+  <h2>Problem</h2>
+  <p>The real dogfood (2026-07-10) proved the routing/audit logic sound but exposed the delegated <strong class="hl">install layer</strong> (Phase 4, driving <code>skills</code> CLI v1.5.15) as unsafe in two ways:</p>
+  <ul class="plain">
+    <li><strong class="hl">HIGH-1 — self-host clobber.</strong> When the target repo <em>is</em> <code>asasher/asher-skills</code>, <code>npx skills add</code> treated the repo's own <code>skills/&lt;name&gt;/</code> <em>source</em> dirs as install targets, <strong class="hl">moved</strong> them into <code>.agents/skills/</code> and replaced each with a symlink — corrupting the source of truth, silently.</li>
+    <li><strong class="hl">HIGH-2 — silent miss.</strong> <code>npx skills add --skill plan</code> prints <code>✖ No matching skills found</code> and <strong class="hl">exits 0</strong>, installing nothing; a real run then ships <code>backlog</code> with a broken closure. <code>-y</code> mode reported "Installed 3 skills" for 4 requested, with no error.</li>
+    <li><strong class="hl">LOW — hash gap.</strong> A self-host fallback entry can't recompute <code>skills-lock.json</code> <code>computedHash</code> (not a plain sha256), so a later reconcile misreads it as drift.</li>
+  </ul>
+  <p>The fix is <strong class="hl">prompt/contract hardening only</strong> — edits to <code>setup-asher-skills</code>'s reference and eval files. The skill ships no runtime; it just needs to stop trusting the CLI blindly.</p>
+</section>
+
+<section id="model">
+  <h2>The shape — Phase 4, per skill in the closure</h2>
+  <p>Two new gates wrap every install: a <span style="color:var(--amber)">self-host guard</span> before, and <span style="color:var(--blue)">landing verification</span> after — with a single <span style="color:var(--amber)">self-host fallback</span> serving both the guarded case and a verified miss.</p>
+  <figure id="model-diagram">
+    <svg viewBox="0 0 580 430" role="img" aria-label="Phase 4 decision flow: self-host guard, install, landing verification, self-host fallback, converging on skill present and mapped.">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0L10 5L0 10z" fill="var(--muted)"/>
+        </marker>
+      </defs>
+      <!-- title bar -->
+      <rect x="20" y="10" width="540" height="32" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="290" y="30" text-anchor="middle" font-weight="600">Phase 4 · Write — for each skill in the closure</text>
+
+      <!-- D1 self-host decision -->
+      <rect x="30" y="60" width="300" height="62" rx="8" fill="none" stroke="var(--amber)" stroke-width="1.5"/>
+      <text x="180" y="82" text-anchor="middle" font-weight="600">Self-host install?</text>
+      <text x="180" y="99" text-anchor="middle" class="small lbl">repo is asasher/asher-skills, or the skill's</text>
+      <text x="180" y="113" text-anchor="middle" class="small lbl">source is the repo's own skills/&lt;name&gt;/</text>
+
+      <!-- GUARD box (right) -->
+      <rect x="360" y="58" width="200" height="66" rx="8" fill="var(--amber-bg)" stroke="var(--amber)"/>
+      <text x="460" y="78" text-anchor="middle" font-weight="600" fill="var(--amber)">GUARD</text>
+      <text x="460" y="95" text-anchor="middle" class="small">do NOT npx skills add.</text>
+      <text x="460" y="109" text-anchor="middle" class="small">skills/&lt;name&gt;/ is never a target;</text>
+      <text x="460" y="120" text-anchor="middle" class="small">already present as source.</text>
+
+      <!-- INSTALL -->
+      <rect x="30" y="150" width="300" height="40" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="180" y="169" text-anchor="middle" class="small">npx skills add …/asher-skills</text>
+      <text x="180" y="183" text-anchor="middle" class="small">--skill &lt;name&gt; -y</text>
+
+      <!-- D2 landing verify -->
+      <rect x="30" y="212" width="300" height="66" rx="8" fill="none" stroke="var(--blue)" stroke-width="1.5"/>
+      <text x="180" y="233" text-anchor="middle" font-weight="600" fill="var(--blue)">Landed?</text>
+      <text x="180" y="250" text-anchor="middle" class="small lbl">check install dir + skills-lock.json entry</text>
+      <text x="180" y="264" text-anchor="middle" class="small lbl">for &lt;name&gt; — NEVER the exit code</text>
+
+      <!-- FALLBACK (right) -->
+      <rect x="360" y="212" width="200" height="80" rx="8" fill="var(--amber-bg)" stroke="var(--amber)"/>
+      <text x="460" y="232" text-anchor="middle" font-weight="600" fill="var(--amber)">SELF-HOST FALLBACK</text>
+      <text x="460" y="249" text-anchor="middle" class="small">place &lt;name&gt;'s files directly</text>
+      <text x="460" y="263" text-anchor="middle" class="small">(local skills/ or the endpoint);</text>
+      <text x="460" y="277" text-anchor="middle" class="small">mark fallback origin, skip hash.</text>
+
+      <!-- DONE full width -->
+      <rect x="30" y="360" width="530" height="42" rx="8" fill="var(--green-bg)" stroke="var(--green)"/>
+      <text x="295" y="385" text-anchor="middle" font-weight="600" fill="var(--green)">Skill present + mapped in the ## Agent skills block</text>
+
+      <!-- arrows -->
+      <!-- D1 -> INSTALL (no) -->
+      <line x1="180" y1="122" x2="180" y2="150" stroke="var(--muted)" marker-end="url(#ah)"/>
+      <text x="192" y="140" class="lbl">no</text>
+      <!-- D1 -> GUARD (yes) -->
+      <line x1="330" y1="91" x2="360" y2="91" stroke="var(--muted)" marker-end="url(#ah)"/>
+      <text x="338" y="83" class="lbl">yes</text>
+      <!-- INSTALL -> D2 -->
+      <line x1="180" y1="190" x2="180" y2="212" stroke="var(--muted)" marker-end="url(#ah)"/>
+      <!-- D2 -> DONE (landed) -->
+      <line x1="180" y1="278" x2="180" y2="360" stroke="var(--muted)" marker-end="url(#ah)"/>
+      <text x="192" y="322" class="lbl">landed</text>
+      <!-- D2 -> FALLBACK (miss) -->
+      <line x1="330" y1="245" x2="360" y2="248" stroke="var(--muted)" marker-end="url(#ah)"/>
+      <text x="332" y="238" class="lbl">miss</text>
+      <!-- GUARD -> DONE (down far-right rail) -->
+      <path d="M460 124 L460 150 L572 150 L572 381 L560 381" fill="none" stroke="var(--muted)" marker-end="url(#ah)"/>
+      <!-- FALLBACK -> DONE -->
+      <path d="M460 292 L460 381 L560 381" fill="none" stroke="var(--muted)" marker-end="url(#ah)"/>
+    </svg>
+    <figcaption>The self-host guard and the miss-fallback are the same mechanism — place the skill's files directly rather than trust the tool. One detection ("repo is the source") gates both the READ path (audit) and this WRITE path.</figcaption>
+  </figure>
+</section>
+
+<section id="before-after">
+  <h2>Before &#8594; after</h2>
+  <table>
+    <thead><tr><th>Situation</th><th>Today (v2026-07-06.1)</th><th>Planned</th></tr></thead>
+    <tbody>
+      <tr><td>Target repo <em>is</em> asher-skills</td><td><code>npx skills add</code> moves <code>skills/&lt;name&gt;/</code> into <code>.agents/skills/</code> — catalog corrupted</td><td>Guard: no <code>npx skills add</code> for repo-owned skills; source left untouched; map still written</td></tr>
+      <tr><td><code>add --skill plan</code> exits 0, installs nothing</td><td>Trusted as success; broken closure ships silently</td><td>Landing check on the filesystem catches the miss; self-host fallback places the files</td></tr>
+      <tr><td>Self-host fallback lock entry</td><td>n/a (no fallback path)</td><td>Entry marked fallback-origin, <code>computedHash</code> left uncomputed; audit treats it as expected, not drift</td></tr>
+      <tr><td>Detection of "repo is the source"</td><td>Exists for READ (audit) only — <code>audit-mode.md</code> step 1</td><td>Lifted to one shared, named notion consumed by both READ and WRITE</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>Stories</h2>
+  <ul class="plain">
+    <li id="story-1">As the <em>maintainer of asher-skills</em>, I want <code>setup</code> run against my own repo to leave <code>skills/</code> untouched, so that self-configuring the catalog never corrupts the catalog.</li>
+    <li id="story-2">As a <em>user setting up a normal project</em>, I want a skill that <code>npx skills add</code> failed to install to be caught and installed another way, so that I never ship a composer with a silently-broken sibling closure.</li>
+    <li id="story-3">As a <em>user re-auditing later</em>, I want a self-host fallback entry to read as expected rather than drifted, so that reconcile doesn't flag noise I can't resolve.</li>
+    <li id="story-4">As the <em>next agent editing setup</em>, I want the "repo is the source" test to live in one place, so that the READ and WRITE paths can't drift apart again.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Key decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><strong class="hl">Reuse, don't duplicate, the self-host detection.</strong> Lift <code>audit-mode.md</code> step 1's "repo is the source" test (git remote <code>asasher/asher-skills</code>, or a local <code>skills/</code> holding these skills) to a single named notion referenced by both the audit READ path and Phase 4's WRITE path. Two divergent copies are exactly how the READ path ended up guarded while the WRITE path stayed exposed.</li>
+    <li id="dec-2"><strong class="hl">Guard by skill-source, not just repo identity.</strong> The write-guard skips <code>npx skills add</code> for any skill whose install source would be the repo's own <code>skills/&lt;name&gt;/</code>. Per-skill and source-based, so it holds even if only some closure members are repo-owned — the source dir is never an install target.</li>
+    <li id="dec-3"><strong class="hl">Verify landing on the filesystem, never the exit code.</strong> After each install, confirm <code>&lt;name&gt;</code> is actually present via the install dir <em>and/or</em> its <code>skills-lock.json</code> entry. The contract states explicitly that <code>npx skills add</code> exits 0 on a no-match and under-reports counts under <code>-y</code>, so the exit status is not evidence.</li>
+    <li id="dec-4"><strong class="hl">One fallback mechanism — self-host placement — for both cases.</strong> When the tool won't (miss) or shouldn't (self-host repo) install, place the skill's files directly: from the repo's own <code>skills/&lt;name&gt;/</code> in the self-host case, else fetched from the <code>asasher/asher-skills</code> endpoint. Never break the pull-only-from-this-repo invariant.</li>
+    <li id="dec-5"><strong class="hl">Accept the <code>computedHash</code> gap explicitly.</strong> A hand-placed entry can't reproduce <code>skills-lock.json</code>'s <code>computedHash</code>. Rather than fabricate a wrong hash that reads as drift, mark the entry's origin as fallback and have <code>audit-mode</code> treat a fallback-origin entry as expected, not drift. Degrade gracefully; note the limitation to the user.</li>
+    <li id="dec-6"><strong class="hl">Contract-only, no runtime.</strong> All changes are to <code>setup-asher-skills</code>'s <code>reference/interview.md</code>, <code>reference/audit-mode.md</code> (and a light <code>SKILL.md</code> mention), plus two new probes in <code>evals/</code>. No scripts — the skill drives <code>npx skills</code>, it does not wrap it in code.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <p class="lbl"><span class="tag static">static</span> = confirmed by reading the changed contract text · <span class="tag behav">behavioral</span> = confirmed by a dual-executor probe (Opus in-session + gpt-5.5 via <code>codex exec</code>), passing only if <em>both</em> executors pass.</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><span class="tag static">static</span> <code>interview.md</code> Phase 4 states a self-host precondition that gates the <code>npx skills add</code> write path, and names the same "repo is the source" detection as <code>audit-mode.md</code> step 1 (git remote <code>asasher/asher-skills</code>, or a local <code>skills/</code> holds these skills).</li>
+    <li id="ac-2" data-criterion><span class="tag static">static</span> The contract states that in the self-host case a skill whose source is the repo's own <code>skills/&lt;name&gt;/</code> is never passed to <code>npx skills add</code> — the source dir is never an install target — and that the map, pointer, and playbooks are still written.</li>
+    <li id="ac-3" data-criterion><span class="tag static">static</span> Phase 4 requires per-skill landing verification after each install by checking the install dir and/or the <code>skills-lock.json</code> entry for <code>&lt;name&gt;</code>, and states explicitly that <code>npx skills add</code> can exit 0 having installed nothing and can under-report counts under <code>-y</code>, so the exit code is not trusted.</li>
+    <li id="ac-4" data-criterion><span class="tag static">static</span> On a verified miss, Phase 4 specifies the self-host fallback — place the skill's files directly (from the repo's own <code>skills/&lt;name&gt;/</code> when self-host, else fetched from the <code>asasher/asher-skills</code> endpoint) — rather than trusting the failed install, without violating pull-only-from-this-repo.</li>
+    <li id="ac-5" data-criterion><span class="tag static">static</span> The <code>computedHash</code> limitation is documented: a self-host fallback entry cannot recompute <code>skills-lock.json</code> <code>computedHash</code> by hand; the contract says to mark the fallback origin (not fabricate a hash) and <code>audit-mode</code> treats a fallback-origin entry as expected, not drift.</li>
+    <li id="ac-6" data-criterion><span class="tag static">static</span> The self-host detection exists as one shared, named notion referenced by both <code>audit-mode.md</code> (READ) and <code>interview.md</code> Phase 4 (WRITE) — not two independently-worded copies.</li>
+    <li id="ac-7" data-criterion><span class="tag behav">behavioral</span> A new probe (self-host write) is in <code>evals/probes.md</code> with an <code>answer-key.md</code> entry: an executor invoked with <code>setup</code> on the <code>asasher/asher-skills</code> repo itself must guard the write path — emit no <code>npx skills add</code> against the repo's own <code>skills/</code> — while still writing the map/pointer, citing the file and sentence. Both executors pass.</li>
+    <li id="ac-8" data-criterion><span class="tag behav">behavioral</span> A new probe (silent miss) is in <code>evals/probes.md</code> with an <code>answer-key.md</code> entry: given <code>npx skills add --skill plan</code> exiting 0 with nothing landed, the executor must detect the miss via filesystem landing verification (not the exit code) and fall back to self-host placement, citing the file and sentence. Both executors pass.</li>
+  </ul>
+</section>
+
+<section id="checks">
+  <h2>How it will be checked</h2>
+  <p>Two seams, the fewest that prove the criteria:</p>
+  <ul class="plain">
+    <li><strong class="hl">Static — the contract text.</strong> AC-1…6 are read directly against the four changed files in <code>skills/setup-asher-skills/</code>. The skill <em>is</em> its prose, so the text is the artifact under test.</li>
+    <li><strong class="hl">Behavioral — the probe harness.</strong> AC-7…8 run the two new probes through the existing dual-executor design (<code>docs/patterns/probe-evals.md</code>, <code>environment.md</code> § Model staffing checker role): an Opus subagent in-session and gpt-5.5 via <code>codex exec -s read-only</code>, each pointed at <code>skills/setup-asher-skills/</code>, graded against <code>answer-key.md</code>. A probe passes only if both executors pass.</li>
+  </ul>
+  <p class="lbl">Deliberately unchecked: the actual <code>skills</code> CLI runtime behavior (v1.5.15 bugs) — out of our control, hardened <em>around</em>, not fixed here; and the exact <code>skills-lock.json</code> schema — verification is described by behavior (an entry for <code>&lt;name&gt;</code> exists) so it survives minor CLI-version drift.</p>
+</section>
+
+<section id="required">
+  <h2>What's required on completion</h2>
+  <ul class="plain">
+    <li id="req-1">A prose read of the four changed files confirming AC-1…6, and the two probe transcripts (both executors, each probe) with a pass/fail table mapping each behavioral criterion to its answer-key entry.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks &amp; mitigations</summary>
+  <ul class="plain">
+    <li><strong>The self-host repo's catalog skills stay only in <code>skills/</code>, not a harness-discoverable dir.</strong> That is the intended state — the guard's job is to <em>not</em> move source. Wiring individual catalog skills into <code>.claude/skills/</code> for the repo's own harness use is a deliberate, separate choice, called out as out of scope. Mitigation: the guard still writes the <code>## Agent skills</code> map, so the map is correct even when discovery is handled elsewhere.</li>
+    <li><strong><code>skills-lock.json</code> schema is the CLI's, not ours.</strong> Mitigation (dec-3): verification keys on "an entry for <code>&lt;name&gt;</code> is present" behaviorally, not an exact field layout.</li>
+    <li><strong>Over-triggering the guard</strong> could skip a legitimate install in a repo that merely has a <code>skills/</code> dir. Mitigation (dec-2): the guard is per-skill and source-based — it only skips a skill whose install source <em>is</em> the repo's own <code>skills/&lt;name&gt;/</code>, not any repo with a <code>skills/</code> folder.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li><strong>Filing the upstream <code>skills</code> CLI bug</strong> (the <code>plan</code>-token no-match + exit-0, and the <code>-y</code> under-count). A follow-up action the issue notes, not a contract change here.</li>
+    <li><strong>Fixing the <code>skills</code> CLI itself.</strong> We harden <code>setup</code> around it.</li>
+    <li><strong>Wiring the self-host repo's catalog skills into <code>.claude/skills/</code></strong> for its own harness use — a deliberate maintainer choice, not <code>setup</code>'s job.</li>
+    <li><strong>Any change to routing or the three-surface audit</strong> (#7, #27) — those are sound; this is only the delegated install layer.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>

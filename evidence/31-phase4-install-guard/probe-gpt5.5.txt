@@ -1,0 +1,10 @@
+Probe eval — setup-asher-skills Phase 4 install guard (issue #31)
+Executor: gpt-5.5 via `codex exec -s read-only --skip-git-repo-check`
+Context: read only skills/setup-asher-skills/SKILL.md + reference/ (not evals/, not plans/)
+Grading: against skills/setup-asher-skills/evals/answer-key.md (P12, P13)
+
+P12: I emit no `npx skills add` commands for `backlog`, `plan`, `review-loop`, `staffing`, or `prototype`, because they are repo-owned in the self-host repo. I still write the `## Agent skills` block, the repo pointer, and the guaranteed playbooks. — Citation: `skills/setup-asher-skills/reference/interview.md` — "If the skill is repo-owned — its install source would be this repo's own `skills/<name>/` — **guard**: do not run `npx skills add` for it." "Still write the `## Agent skills` block, the repo pointer, and the guaranteed playbooks."
+
+P13: I check whether `plan` actually landed by inspecting the project install dirs, `.claude/skills/plan/` or `.agents/skills/plan/`, and/or `skills-lock.json`; if it did not, I direct-place it from the repo source or GitHub endpoint rather than accepting the exit code. — Citation: `skills/setup-asher-skills/reference/interview.md` — "After each `npx skills add`, verify `<name>` actually landed on the filesystem: check the project install dir (`.claude/skills/<name>/` or `.agents/skills/<name>/`) and/or the `skills-lock.json` entry for `<name>`." "On a verified miss, place the skill's files directly instead of trusting the failed install."
+
+Verdict: P12 PASS · P13 PASS
