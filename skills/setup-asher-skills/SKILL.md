@@ -49,7 +49,7 @@ write**, and nothing touches disk until the user approves the whole plan at conf
    `## Agent skills` block draft, the playbooks that will be guaranteed, the repo pointer — and let the user
    edit it. Nothing is written until this is approved.
 4. **Write.** For each skill in the closure, `npx skills add https://github.com/asasher/asher-skills --skill
-   <name> -y` (swap `-y` for `-g` on a consented global staffing install; project-local is the default) —
+   <name> -y` (add `-g` for a consented global staffing install: `-g -y`; project-local is the default) —
    **only this repo's endpoint**. The `-y` skips the confirmation prompt since the user already confirmed at
    phase 3. Then run each installed skill's own setup (staffing's roster, review-loop's surface config,
    backlog's `docs/agents/` suite), write the `## Agent skills` block into the harness memory file, and write

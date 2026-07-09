@@ -72,9 +72,9 @@ Execute the approved plan:
 
 1. **Install, from this repo only.** For each skill in the closure:
    `npx skills add https://github.com/asasher/asher-skills --skill <name> -y` — project-local by default (the
-   tool's project install; `-y` skips the prompt the user already answered at phase 3), or `-g` for a
-   consented global `staffing` install. Flags verified against `skills` v1.5.15 (`-s/--skill`, `-g/--global`,
-   `-y/--yes`). **Every install command targets `asasher/asher-skills` and nothing else** — see
+   tool's project install; `-y` skips the prompt the user already answered at phase 3), or `-g -y` for a
+   consented global `staffing` install (`-g` is scope, `-y` still skips the prompt — they are orthogonal).
+   Flags verified against `skills` v1.5.15 (`-s/--skill`, `-g/--global`, `-y/--yes`). **Every install command targets `asasher/asher-skills` and nothing else** — see
    [catalog](catalog.md) § Pull only from this repo.
 2. **Guarantee the playbooks by delegation.** Run each installed skill's own setup so its `docs/agents/`
    playbooks land: `staffing` writes the roster (global base + project delta, with consent); `review-loop`
