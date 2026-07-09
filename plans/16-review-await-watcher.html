@@ -1,0 +1,230 @@
+<!doctype html>
+<!-- Plan #16 — Hold the review-await watch on a cheap dedicated watcher subagent (model via staffing).
+     Stable ids never change across revisions; acceptance criteria are <li id="ac-N" data-criterion>. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #16 — Review-await watcher</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --ok: #0f9d58; --warn: #b8860b; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --ok: #4ade80; --warn: #fbbf24; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+svg .edge-label { font-size: 10.5px; fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li .how { display: block; font-size: .8rem; color: var(--muted); margin-top: .2rem; }
+ul.criteria li .tag { font-size: .68rem; text-transform: uppercase; letter-spacing: .04em; border: 1px solid currentColor; border-radius: 99px; padding: 0 .4rem; margin-left: .3rem; white-space: nowrap; }
+.tag.runtime { color: var(--ok); }
+.tag.file { color: var(--accent); }
+.tag.probe { color: var(--warn); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .35rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+.tree { font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre; margin: 0; }
+.new { color: var(--ok); }
+.moved { color: var(--warn); }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Hold the review-await watch on a cheap dedicated watcher subagent</h1>
+  <p class="problem">When a thread pauses at a human-approval gate, something must <em>hold the watch</em> on the review. Today the capable orchestrator holds it inline — so it either rightly abandons the wait to save tokens, or a single <code>review-await.py --timeout</code> / Bash-tool ceiling drops a long AFK review. The verdict then lands server-side but never reaches the agent, and we fall back to approving in chat or hand-polling <code>events.jsonl</code>.</p>
+  <div class="chips"><span class="chip">issue #16</span><span class="chip">enhancement</span><span class="chip">absorbs #23</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="approach">
+  <h2>Approach</h2>
+  <p>Move the watch off the orchestrator and onto a <strong>dedicated watcher subagent</strong> whose only job is to hold it — so it never "rightly abandons" the wait (holding it <em>is</em> its whole task) and it costs almost nothing to park. Its model is a <strong>staffing decision, not a hardcoded "sonnet"</strong>: <code>review-loop</code> composes the <code>staffing</code> skill by name to route a watcher task to the cheapest reachable <em>floor-class</em> model — which differs by harness. The watcher <strong>loops-until-verdict</strong>, re-arming <code>review-await.py</code> after each timeout, so no single timeout ceiling can drop a long wait. On a real verdict the subagent completes, and its completion carries the verdict back to the parent, which resumes the gate — <strong>without manually polling <code>events.jsonl</code></strong> (the fix that absorbs #23). The change is a contract + a composition, not a rewrite: the scripts already make this lossless.</p>
+  <figure id="before-after">
+    <svg viewBox="0 0 680 250" role="img" aria-label="Before and after watch-holding diagram">
+      <text x="10" y="18" font-weight="600">Today</text>
+      <rect x="10" y="30" width="300" height="90" rx="8" fill="none" stroke="var(--warn)"/>
+      <text x="22" y="52" font-weight="600">orchestrator (opus, expensive)</text>
+      <text x="22" y="72" class="edge-label">blocks on review-await.py --timeout inline</text>
+      <text x="22" y="90" class="edge-label">abandons to save tokens, OR</text>
+      <text x="22" y="106" class="edge-label">one timeout / Bash ceiling drops the wait</text>
+      <text x="22" y="142" fill="var(--warn)">verdict recorded server-side → never reaches the agent</text>
+
+      <text x="10" y="182" font-weight="600">After</text>
+      <rect x="10" y="192" width="180" height="46" rx="8" fill="none" stroke="var(--accent)"/>
+      <text x="22" y="214" font-weight="600">orchestrator</text>
+      <text x="22" y="230" class="edge-label">free — not parked</text>
+      <rect x="230" y="192" width="200" height="46" rx="8" fill="none" stroke="var(--ok)"/>
+      <text x="242" y="212" font-weight="600" fill="var(--ok)">watcher subagent</text>
+      <text x="242" y="230" class="edge-label">floor model · loops-until-verdict</text>
+      <rect x="470" y="192" width="200" height="46" rx="8" fill="none" stroke="var(--line)"/>
+      <text x="482" y="212">review-await.py</text>
+      <text x="482" y="230" class="edge-label">re-arm on 124 · cursor-tracked</text>
+      <path d="M190 215 L230 215" stroke="var(--muted)" marker-end="url(#a)"/>
+      <path d="M430 215 L470 215" stroke="var(--muted)" marker-end="url(#a)"/>
+      <path d="M330 192 C330 170, 100 170, 100 192" stroke="var(--ok)" fill="none" marker-end="url(#a)"/>
+      <text x="150" y="164" class="edge-label" fill="var(--ok)">verdict returned on completion → parent resumes, no polling</text>
+      <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="var(--muted)"/></marker></defs>
+    </svg>
+    <figcaption>The watch leaves the expensive, context-heavy orchestrator and lands on a cheap dedicated subagent whose completion <em>is</em> the wake signal.</figcaption>
+  </figure>
+</section>
+
+<section id="loop">
+  <h2>Loop-until-verdict (why no timeout can drop the wait)</h2>
+  <p>The watcher re-arms after every timeout; the <code>.await-cursor</code> makes each re-arm lossless, so a verdict submitted between blocks is drained by the next one. It exits only on a real verdict.</p>
+  <figure id="loop-diagram">
+    <svg viewBox="0 0 680 170" role="img" aria-label="Watcher loop-until-verdict state machine">
+      <rect x="20" y="60" width="150" height="46" rx="8" fill="none" stroke="var(--accent)"/>
+      <text x="34" y="82" font-weight="600">await.py</text>
+      <text x="34" y="98" class="edge-label">--timeout &lt; Bash ceiling</text>
+      <rect x="250" y="60" width="150" height="46" rx="8" fill="none" stroke="var(--muted)"/>
+      <text x="264" y="82">exit code?</text>
+      <rect x="480" y="16" width="180" height="42" rx="8" fill="none" stroke="var(--ok)"/>
+      <text x="494" y="42" fill="var(--ok)">0 / 3 / 10 → return verdict</text>
+      <rect x="480" y="108" width="180" height="42" rx="8" fill="none" stroke="var(--warn)"/>
+      <text x="494" y="134" fill="var(--warn)">124 → re-arm (cursor kept)</text>
+      <path d="M170 83 L250 83" stroke="var(--muted)" marker-end="url(#b)"/>
+      <path d="M400 78 L480 45" stroke="var(--muted)" marker-end="url(#b)"/>
+      <path d="M400 88 L480 122" stroke="var(--muted)" marker-end="url(#b)"/>
+      <path d="M570 108 C570 150, 95 150, 95 106" stroke="var(--warn)" fill="none" marker-end="url(#b)"/>
+      <text x="250" y="167" class="edge-label" fill="var(--warn)">re-arm loops back — no verdict is ever missed (.await-cursor)</text>
+      <defs><marker id="b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="var(--muted)"/></marker></defs>
+    </svg>
+    <figcaption>Investigated: neither <code>review-await.py --timeout</code> (exit 124) nor the harness Bash-tool ceiling (~10&nbsp;min/call) can drop the wait, because a timeout is <em>re-arm</em>, never <em>give up</em>. The existing cursor-tracking already makes re-arm lossless — no script change is required for correctness.</figcaption>
+  </figure>
+</section>
+
+<section id="staffing">
+  <h2>The watcher model is a staffing decision (not "sonnet")</h2>
+  <p><code>review-loop</code> composes <code>staffing</code> by name to route a <em>watcher</em> task to the <strong>floor role</strong> — the cheapest reachable model, no capability gate. The literal model is resolved per harness at run time, never baked in.</p>
+  <table id="staffing-table">
+    <thead><tr><th>Harness</th><th>Floor / watcher model (resolved by staffing)</th></tr></thead>
+    <tbody>
+      <tr><td>Claude Code (this loop)</td><td><code>sonnet-5</code> — the roster floor (never Haiku)</td></tr>
+      <tr><td>Codex-driven run</td><td><code>gpt-5.5</code> — every role collapses onto it; Claude models unreachable</td></tr>
+      <tr><td>fallback (floor unreachable)</td><td>next reachable model per the staffing ladder; never skip the watch</td></tr>
+    </tbody>
+  </table>
+  <figcaption style="font-size:.8rem;color:var(--muted);margin-top:.5rem">The contract cites the <em>floor/watcher role</em>, not a model name. A grep of the watch contract finds no hardcoded <code>sonnet</code>/<code>gpt-5</code>.</figcaption>
+</section>
+
+<section id="changes">
+  <h2>What changes</h2>
+  <table>
+    <thead><tr><th>Surface</th><th>Change</th></tr></thead>
+    <tbody>
+      <tr><td><code>review-loop/SKILL.md</code> · <code>await</code> command</td><td>Documents the <strong>delegated watch</strong>: held by a dedicated watcher subagent staffed via <code>staffing</code>, loops-until-verdict, wakes the parent on completion — not an inline orchestrator block.</td></tr>
+      <tr><td><code>review-loop/SKILL.md</code> · dependency surface</td><td>Adds <code>staffing</code> as a <strong>sibling skill</strong> (by name), scoped to resolving the watcher model. The core serve/annotate/hash machinery stays a root primitive; only the watch composes a sibling.</td></tr>
+      <tr><td><span class="new">new</span> <code>review-loop/reference/watch.md</code></td><td>The delegated-watch contract: who holds it (floor-staffed watcher), loop-until-verdict + re-arm semantics, the wake mechanism (subagent completion carries the verdict; <code>events.jsonl</code> is the durable backstop), applies to <em>both</em> the approval gate and the PR-merge watch, and the timeout-ceiling investigation finding.</td></tr>
+      <tr><td><code>review-loop/evals/probes.md</code></td><td>New probes (dual-executor) + runtime harness entries for the watcher delegation, re-arm losslessness, and the path-prefix submit→await→resume integration test.</td></tr>
+      <tr><td><code>docs/agents/planning.md</code>, <code>platform.md</code> (await lines)</td><td>One-line pointer at each existing "block on the await script" site to the delegated-watch contract, so plan/PR-merge callers inherit it. No behavior baked into the playbooks.</td></tr>
+      <tr><td><code>review-await.py</code> / <code>review-server.py</code></td><td><strong>Unchanged.</strong> Cursor-tracking already makes re-arm lossless; the fix is contract + composition, keeping backlog's bundled copy and all callers non-breaking.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>User stories</h2>
+  <ul class="plain">
+    <li id="story-1">As an <em>orchestrator at an approval gate</em>, I want to hand the watch to a cheap dedicated subagent, so that I neither burn my budget parking on the wait nor abandon it.</li>
+    <li id="story-2">As a <em>watcher subagent</em>, I want to loop-until-verdict by re-arming <code>review-await.py</code>, so that no single timeout or Bash-tool ceiling drops a long AFK review.</li>
+    <li id="story-3">As <em>Asher approving in-page hours later</em>, I want my <code>approve</code> / <code>approve_with_nits</code> / <code>request_changes</code> to reliably wake the waiting thread, so that I never have to prod the agent or hand-poll a log (absorbs #23).</li>
+    <li id="story-4">As a <em>skill author on Codex</em>, I want the watcher's model chosen by <code>staffing</code> for my harness, so that the watch runs on the cheapest reachable model (gpt-5.5), not a hardcoded sonnet the harness can't reach.</li>
+    <li id="story-5">As the <em>parent thread</em>, I want to resume from the watcher's returned verdict, so that I proceed on approve and revise on request-changes without reading <code>events.jsonl</code> myself.</li>
+    <li id="story-6">As a <em>maintainer of the PR-merge watch</em>, I want the same delegated-watcher pattern to cover the merge poll, so that both gates share one hardened mechanism.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Implementation decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><strong>The watch is delegated, not held inline.</strong> <code>review-loop</code>'s <code>await</code> command surface documents that the block on <code>review-await.py</code> is held by a dedicated watcher subagent spawned by the caller, whose sole task is the watch — so it never abandons it. The orchestrator/issue-thread stays free.</li>
+    <li id="dec-2"><strong>Model via <code>staffing</code>, never hardcoded.</strong> The watch composes the <code>staffing</code> skill by name to route a watcher task to the <em>floor role</em> (cheapest reachable, no capability gate). Resolves to <code>sonnet-5</code> on Claude Code, <code>gpt-5.5</code> on Codex, next-reachable on fallback. No model name is baked into review-loop or the scripts.</li>
+    <li id="dec-3"><strong>Reuse staffing's existing <code>floor</code> role — no staffing change.</strong> "Cheapest reachable, nothing below it" is exactly what a watcher needs; staffing already answers it. review-loop cites the floor/watcher role rather than adding a new role or task-pin (a task-pin is a possible future ergonomic, out of scope here).</li>
+    <li id="dec-4"><strong>Loop-until-verdict via re-arm; no script change.</strong> The watcher passes <code>--timeout</code> under the Bash ceiling and, on exit 124, re-invokes <code>review-await.py</code>. The existing <code>.await-cursor</code> drains any verdict submitted between blocks, so re-arm is lossless. Investigation confirmed both the <code>--timeout</code> exit <em>and</em> the ~10&nbsp;min Bash-tool ceiling are defanged by re-arm, so <code>review-await.py</code>/<code>review-server.py</code> stay byte-identical — keeping backlog's bundled copy and every caller non-breaking.</li>
+    <li id="dec-5"><strong>Wake = subagent completion.</strong> On a real verdict (0/3/10) the watcher returns the verdict as its final message; the Agent-tool result carries it to the parent, which resumes the gate. <code>events.jsonl</code> + <code>.await-cursor</code> remain the durable backstop: a dead watcher loses nothing — a fresh watcher re-drains from the cursor. The parent never polls the log itself (this is the #23 fix).</li>
+    <li id="dec-6"><strong>New bundled reference <code>reference/watch.md</code>.</strong> Carries the delegated-watch contract in one place, cited by SKILL.md's <code>await</code> command; keeps the existing <code>review-loop.md</code> await-gate section as the low-level exit-code contract and layers the "who holds it / how it wakes" contract on top.</li>
+    <li id="dec-7"><strong>Covers both gates.</strong> The contract states it applies to the plan/prototype approval gate <em>and</em> the PR-merge watch (the <code>ScheduleWakeup</code>/<code>Monitor</code> poll named in <code>platform.md</code>): both delegate the hold to a floor-staffed watcher that loops-until-signal and wakes the parent.</li>
+    <li id="dec-8"><strong>Verification through a path-prefixed mount.</strong> The absorbed-#23 acceptance is a runtime submit→await→resume test through the real deployment shape (a stripping proxy mounting the doc under <code>/asher-skills/16/review/</code>), exercising all three verdicts and asserting the parent gets the verdict from the await exit code alone — no <code>events.jsonl</code> read.</li>
+    <li id="dec-9"><strong>Staffing of this build-out.</strong> Plan authorship + the contract prose (SKILL/watch.md — taste surface) is orchestrator/Claude-builder work (opus-4.8/fable-5); the runtime test harness in <code>evals/</code> is mechanical (gpt-5.5 via <code>codex exec</code>); probe grading is dual-executor (Claude + codex exec) per <code>probe-evals.md</code>.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <p>Tags: <span class="tag runtime">runtime</span> a genuine <code>python3</code> exercise of the shipped scripts · <span class="tag file">file</span> a file/content check · <span class="tag probe">probe</span> a dual-executor dry-run graded against an answer key.</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><strong>Delegated watch documented.</strong> <code>review-loop/SKILL.md</code>'s <code>await</code> command surface states the watch is held by a <em>dedicated watcher subagent</em> that loops-until-verdict, not by the orchestrator blocking inline.<span class="tag file">file</span></li>
+    <li id="ac-2" data-criterion><strong>Staffing declared as a sibling.</strong> <code>SKILL.md</code>'s dependency surface names <code>staffing</code> as a <em>sibling skill</em> (by name), scoped to resolving the watcher model; the core serve/annotate/hash machinery is still described as a root primitive.<span class="tag file">file</span></li>
+    <li id="ac-3" data-criterion><strong>Model not hardcoded.</strong> The watch contract routes the watcher model through <code>staffing</code>'s floor/watcher role and states it differs by harness (Claude Code → sonnet-5 floor; Codex → gpt-5.5); a grep of the watch contract finds no hardcoded <code>sonnet</code>/<code>gpt-5</code> as <em>the</em> watcher model.<span class="tag file">file</span></li>
+    <li id="ac-4" data-criterion><strong>Loop-until-verdict contract.</strong> <code>reference/watch.md</code> specifies: watcher re-arms <code>review-await.py</code> on exit 124, the <code>.await-cursor</code> makes re-arm lossless, it returns only on a real verdict (0/3/10), and this defangs both the <code>--timeout</code> exit and the Bash-tool ceiling.<span class="tag file">file</span></li>
+    <li id="ac-5" data-criterion><strong>Wake without polling (absorbed #23, contract).</strong> The contract states the watcher's completion carries the verdict to the parent, which resumes the gate <em>without manually polling <code>events.jsonl</code></em>; <code>events.jsonl</code>/<code>.await-cursor</code> remain the durable backstop for a dead watcher.<span class="tag file">file</span></li>
+    <li id="ac-6" data-criterion><strong>Both gates.</strong> The contract explicitly applies to <em>both</em> the plan/prototype approval gate <em>and</em> the PR-merge watch.<span class="tag file">file</span></li>
+    <li id="ac-7" data-criterion><strong>Re-arm is lossless (runtime).</strong> A harness where <code>review-await.py --timeout &lt;short&gt;</code> first exits 124, is re-armed, then a verdict is submitted, returns the correct verdict code (0/3/10) on the re-armed call — proving a verdict submitted between blocks is not lost.<span class="tag runtime">runtime</span></li>
+    <li id="ac-8" data-criterion><strong>Submit→await→resume through a path-prefix mount (runtime; absorbed #23).</strong> With <code>review-server.py</code> behind a stripping proxy mounting the doc under <code>/asher-skills/16/review/</code>, POSTing each of <code>approve</code>/<code>approve_with_nits</code>/<code>request_changes</code> to the <em>prefixed</em> <code>/event</code> is accepted, and a re-arm-loop await fires with the matching exit code — the "parent" obtains the verdict from the exit code alone, reading no <code>events.jsonl</code>.<span class="tag runtime">runtime</span></li>
+    <li id="ac-9" data-criterion><strong>Non-breaking.</strong> <code>review-await.py</code> and <code>review-server.py</code> default behavior is unchanged and no watcher model name is embedded in the scripts; <code>backlog</code>'s bundled copy and existing callers are untouched.<span class="tag file">file</span></li>
+    <li id="ac-10" data-criterion><strong>Routing understood (probe).</strong> At an approval gate, a dual-executor probe confirms the agent delegates the watch to a floor-staffed watcher subagent (does not park the orchestrator), re-arms on 124, and resumes on the returned verdict without polling <code>events.jsonl</code>; and staffs the watcher per harness (sonnet-5 on Claude Code, gpt-5.5 on Codex). Passes on both a Claude executor and <code>codex exec</code>, each citing the deciding sentence.<span class="tag probe">probe</span></li>
+    <li id="ac-11" data-criterion><strong>Staffing composition resolves (probe/file).</strong> <code>staffing route "hold a review watch"</code> resolves to the floor-class model (not the orchestrator), and <code>review-loop</code> cites the floor/watcher role rather than a literal model — confirmed by a routing probe and by grep against the contract.<span class="tag probe">probe</span></li>
+  </ul>
+</section>
+
+<section id="seams">
+  <h2>Test seams</h2>
+  <ul class="plain">
+    <li id="seam-1"><strong>Script CLI over loopback + stripping proxy (highest value).</strong> ac-7 and ac-8 drive <code>review-server.py</code>/<code>review-await.py</code> directly with <code>python3</code> — real HTTP POST of each verdict, a real re-arm loop across a timeout, and a tiny stdlib stripping proxy mounting the doc under a prefix. This is the load-bearing behavior and it is genuinely runtime-checkable without a browser.</li>
+    <li id="seam-2"><strong>Contract file checks.</strong> ac-1–ac-6 and ac-9 are grepped/parsed against the tree: the <code>await</code> command surface, the dependency surface's <code>staffing</code> sibling, the no-hardcoded-model check, the loop/wake/both-gates statements, and the scripts' unchanged defaults.</li>
+    <li id="seam-3"><strong>Dual-executor probe.</strong> The skill's routing value — does an agent delegate the watch, re-arm, staff the model per harness, and resume without polling — is judged by Claude + <code>codex exec</code> dry-runs per <code>docs/patterns/probe-evals.md</code> (ac-10, ac-11).</li>
+    <li id="seam-4"><strong>Deliberately untested:</strong> a live long-lived subagent parked for hours across real turns — no harness fixture drives multi-hour subagent scheduling in this repo; the re-arm <em>mechanism</em> is proven at the script seam (ac-7) and the delegation <em>routing</em> at the probe seam, which together cover the behavior a live park would exercise.</li>
+  </ul>
+</section>
+
+<section id="evidence-required">
+  <h2>Evidence required</h2>
+  <ul class="plain">
+    <li id="ev-1">Terminal transcript of the re-arm losslessness test (ac-7): a 124 timeout, a re-arm, then a verdict submitted mid-gap draining to the correct exit code.</li>
+    <li id="ev-2">Terminal transcript of the path-prefix submit→await→resume test (ac-8): each verdict POSTed through the prefixed mount, the accepted response, and the matching verdict-coded await exit — proof the #23 stall is closed.</li>
+    <li id="ev-3">The dual-executor probe transcript + a pass/fail table mapping each probe to its answer-key criterion (ac-10, ac-11).</li>
+    <li id="ev-4">Grep output for the file criteria (ac-1–ac-6, ac-9): the delegated-watch command surface, the <code>staffing</code> sibling line, the no-hardcoded-model result, and the scripts' unchanged defaults.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>A contract-only change relies on callers actually spawning the watcher. Mitigation: the pointer lands at every existing "block on the await script" site (planning.md, platform.md) and the probe grades that an agent routes it correctly, so the contract is discoverable at the point of use.</li>
+    <li>review-loop was a pure root primitive; adding a <code>staffing</code> sibling widens its dependency surface. Mitigation: the sibling is scoped strictly to resolving the watcher model — the serve/annotate/hash core takes no new dependency — and staffing degrades gracefully (missing roster → fallback + report, never a hard stop).</li>
+    <li>The machine sleeping mid-review still stalls a real AFK wait (the existing keep-awake gap in environment.md). Mitigation: out of scope here — the watcher hardens the <em>agent-side</em> drop; the sleep gap is a separate setup choice, noted below.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>Rewiring <code>backlog</code>'s bundled review copy to consume <code>review-loop</code> by name — the separate #6 rewire; this plan keeps backlog non-breaking.</li>
+    <li>Any change to <code>review-await.py</code>/<code>review-server.py</code> behavior or a new <code>--loop</code> flag — the investigation found the cursor already makes re-arm lossless, so no script change is warranted.</li>
+    <li>Adding a named <code>watcher</code> role or task-pin to <code>staffing</code> — the existing floor role answers it; a pin is a future ergonomic.</li>
+    <li>The machine keep-awake gap for reviews that outlast an active run — a <code>docs/agents/environment.md</code> § Presenting setup choice, not this ticket.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
