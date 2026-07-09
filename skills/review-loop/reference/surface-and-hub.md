@@ -30,6 +30,40 @@ artifact-agnostic contract those settings implement.
   assertions while runs are active, and an awake machine serves. Keeping it awake beyond that (long pauses,
   lid-closed on battery) is the user's setup-time choice, recorded as the playbook's keep-awake line.
 
+## Bringing the tailnet up
+
+The tailnet surface presumes the machine's tailscale node is **logged in and connected** — `tailscale serve`
+only proxies a path once the node is on the tailnet, so it is a separate concern from *publishing* a path
+(`tailscale up` brings the node onto the tailnet; `tailscale serve` mounts the path). When the node is
+logged out or stopped, every published URL and the review server's proxy fail with opaque network errors
+rather than a clear "tailnet down." So the **serve step owns a connectivity precondition**: before it
+publishes an artifact or starts the review server, it confirms the node is up and brings it up only when it
+is not.
+
+- **Detect, don't assume.** This applies only when the surface binding is a tailnet — a local-only or custom
+  surface skips it entirely. Before publishing, check node state: `tailscale status` exits non-zero and
+  prints `Logged out.` / `Tailscale is stopped.` when the node is down. A `tailscale serve` that errors, or a
+  freshly published URL that is unreachable, is the same signal caught later. The repo's surface-config
+  playbook records the exact check command.
+- **Bring it up only as a publish precondition.** Run `tailscale up` only when all three hold: (a) the
+  surface is a tailnet, (b) a review is actually being published right now, and (c) the check shows the node
+  down or logged out. It is not a warm-up step to run speculatively at the top of a loop.
+- **Never toggle a healthy connection.** If the check shows the node already connected (`tailscale status`
+  succeeds and lists peers), do nothing — proceed straight to publish. A bare `tailscale up` on a connected
+  node is a no-op worth skipping anyway, and one run with flags that differ from the live config can
+  silently reconfigure the node; never `tailscale down` then `up` as a "reset." Check first, act only on a
+  down node.
+- **Interactive auth or a hard failure falls back to local.** `tailscale up` may print an auth URL and wait
+  for an interactive login, or fail outright (expired key, SSO required, admin approval). An agent cannot
+  complete an interactive login headless and must not loop retrying. Surface the auth URL or the failure to
+  the human as the thing that unblocks the review, and **fall back to the local-only review** — open the
+  rendered file on the machine and say remote review is unavailable, the same degradation as an unrecorded
+  surface. **Never enable Funnel or improvise a public tunnel** to route around a down tailnet.
+
+This is the connectivity companion to *The surface is only as awake as the machine* above: that bullet
+covers a sleeping machine, this covers a disconnected node. Both keep the surface honest — a review only
+publishes to a URL the human can actually reach.
+
 ## Path-prefix mounts
 
 The real deployment serves the artifact under a tailnet path prefix (e.g. `/asher-skills/2/review/`), not at
