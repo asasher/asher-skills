@@ -61,6 +61,7 @@
 > Read by `plan` and `prototype` when they pause for review; contract in the skill's `reference/presenting.md`. Set by `setup` — the shipped default is a singular tailnet surface; local-only and custom channels are legitimate alternates.
 
 - Surface: **tailnet** (`tailscale serve`, Funnel off — private to Asher's own devices: this MacBook + iphone-14-pro-max).
+- **Always open in the browser:** whenever a plan or prototype is published for review, open its URL locally with `open <url>` immediately after presenting — standing instruction from Asher, every presentation, no need to ask.
 - Root URL: `https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills` (machine root `https://ashers-macbook-pro.tail045dd5.ts.net`; tailscale 1.98.8).
 - Surface directory: `~/.backlog/surface/asher-skills` — holds `registry.json` and the generated `index.html` (the hub) at its root, plus each issue's published static docs under `<issue>/`.
 - Document server: the sandboxed macOS tailscale app cannot serve file paths, so static docs are served by a stdlib static server rooted at the surface dir and proxied once:
