@@ -13,10 +13,12 @@ Before recommending anything, audit **three things** and hold the findings; ask 
 the single project question in (3).
 
 1. **The repo.** Read: the git remotes (`git remote -v`) — this is also how you confirm the pull endpoint;
-   `AGENTS.md` and `CLAUDE.md`, including any existing `## Agent skills` block (its presence flips you into
-   `audit` mode — see [audit-mode](audit-mode.md)); the skills already installed **both project and global**
-   (project: `skills-lock.json` and `.claude/skills/`; global: `~/.claude/skills/`); and the `docs/agents/`
-   playbooks present.
+   `AGENTS.md` and `CLAUDE.md`, including any existing `## Agent skills` block; prior-install evidence, not
+   the block alone, decides routing: greenfield (no block and no installed asher-skills) runs `setup`, while a
+   block or installed asher-skills routes to `audit` — see [audit-mode](audit-mode.md). Read the skills
+   already installed **both project and global** (project: `skills-lock.json`, `.claude/skills/`,
+   `.agents/skills/`; global: `~/.claude/skills/`, `~/.agents/skills/`), resolving symlinks before comparing;
+   and the `docs/agents/` playbooks present.
 2. **The machine.** Determine the **reachable models** and whether the **Codex CLI** is installed — the
    staffing probe. **Do this by invoking the `staffing` skill by name**, not by re-deriving a roster:
    staffing owns the machine audit, the rankings seed, and the consent-gated global write. If `staffing`

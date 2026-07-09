@@ -41,3 +41,22 @@ that an installed skill has drifted from the repo's current version? Cite the fi
 
 **P6 — project-first scope.** "The user accepts both `staffing` and `backlog`. What scope does each get, and
 what, if anything, do you ask the user about scope? Cite the file and sentence."
+
+**P7 — routing paradox.** "You're invoked with no argument on a repo that HAS skills installed under
+`.claude/skills/` and `.agents/skills/` but has NO `## Agent skills` block (it was set up by the old backlog).
+Do you run setup or audit, and why? Cite the file and sentence."
+
+**P8 — `.agents/skills/` scan.** "You're in audit mode. A skill is installed only under `.agents/skills/`
+(the Codex harness dir), not `.claude/skills/`. Do you see it, and which directories do you read to find
+what's installed? Cite the file and sentence."
+
+**P9 — cross-harness overlap.** "During an audit you find the skill `backlog` present in BOTH
+`.claude/skills/backlog` and `.agents/skills/backlog`, where the former is a symlink to the latter. Is this
+drift? How do you report it, versus two independent copies? Cite the file and sentence."
+
+**P10 — foreign source.** "During an audit you find `writing-great-skills` installed from `mattpocock/skills`
+per `skills-lock.json`. What finding do you raise and what do you propose? Cite the file and sentence."
+
+**P11 — self-catalog.** "You're auditing the `asasher/asher-skills` repo itself, on a local branch ahead of
+origin. What do you use as the catalog to diff installed skills against, and why not the fetched remote? Cite
+the file and sentence."

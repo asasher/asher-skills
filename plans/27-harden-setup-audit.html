@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #27 — Harden setup-asher-skills audit-mode</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --new: #0d9488; --old: #b45309; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --new: #2dd4bf; --old: #f59e0b; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+h3 { font-size: .95rem; margin: 1.2rem 0 .3rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: var(--fg); }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li b { color: var(--accent); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .35rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+.tag { font-size: .7rem; font-weight: 600; padding: .05rem .4rem; border-radius: 4px; white-space: nowrap; }
+.tag.new { color: var(--new); border: 1px solid currentColor; }
+.tag.file { color: var(--muted); border: 1px solid var(--line); font-family: ui-monospace, monospace; }
+img { max-width: 100%; border-radius: 8px; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Harden <code>setup-asher-skills</code> audit-mode: 5 dogfood gaps</h1>
+  <p class="problem">Re-invoking the installer on a repo that already has asher-skills (including its own home) can never reach audit-mode, and even when it does the audit is blind to the Codex harness dir, cross-harness duplicates, foreign-source installs, and the self-catalog case.</p>
+  <div class="chips"><span class="chip">#27</span><span class="chip">enhancement</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="model">
+  <h2>The sharpest fix — routing (gap A)</h2>
+  <p>Route on <em>evidence of a prior install</em>, not on the <code>## Agent skills</code> block alone; a missing block becomes an audit <em>finding</em>, not a one-way ticket back to setup.</p>
+  <figure id="model-diagram">
+  <svg viewBox="0 0 680 300" width="680" role="img" aria-label="Routing state machine before and after">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/>
+      </marker>
+      <marker id="arrn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--new)"/>
+      </marker>
+    </defs>
+
+    <!-- TODAY -->
+    <text x="0" y="16" font-weight="600" fill="var(--old)">TODAY — two states, keyed on the block</text>
+    <rect x="0" y="30" width="150" height="42" rx="8" fill="var(--card)" stroke="var(--line)"/>
+    <text x="75" y="55" text-anchor="middle">re-invoke</text>
+    <rect x="230" y="30" width="150" height="42" rx="8" fill="var(--card)" stroke="var(--line)"/>
+    <text x="305" y="50" text-anchor="middle">block present?</text>
+    <line x1="150" y1="51" x2="230" y2="51" stroke="var(--muted)" marker-end="url(#arr)"/>
+    <rect x="470" y="8" width="150" height="42" rx="8" fill="var(--card)" stroke="var(--line)"/>
+    <text x="545" y="33" text-anchor="middle" fill="var(--new)">audit</text>
+    <line x1="380" y1="45" x2="470" y2="32" stroke="var(--muted)" marker-end="url(#arr)"/>
+    <text x="425" y="30" font-size="10" fill="var(--muted)">yes</text>
+    <rect x="470" y="60" width="150" height="42" rx="8" fill="var(--card)" stroke="var(--old)"/>
+    <text x="545" y="85" text-anchor="middle" fill="var(--old)">setup (wrong!)</text>
+    <line x1="380" y1="58" x2="470" y2="78" stroke="var(--old)" marker-end="url(#arr)"/>
+    <text x="415" y="80" font-size="10" fill="var(--old)">no block, but skills exist</text>
+
+    <!-- AFTER -->
+    <text x="0" y="150" font-weight="600" fill="var(--new)">AFTER — three states, keyed on install evidence</text>
+    <rect x="0" y="164" width="150" height="42" rx="8" fill="var(--card)" stroke="var(--line)"/>
+    <text x="75" y="189" text-anchor="middle">re-invoke</text>
+    <rect x="210" y="164" width="190" height="42" rx="8" fill="var(--card)" stroke="var(--line)"/>
+    <text x="305" y="184" text-anchor="middle">any prior-install</text>
+    <text x="305" y="199" text-anchor="middle">evidence?</text>
+    <line x1="150" y1="185" x2="210" y2="185" stroke="var(--muted)" marker-end="url(#arr)"/>
+
+    <rect x="470" y="120" width="200" height="42" rx="8" fill="var(--card)" stroke="var(--line)"/>
+    <text x="570" y="145" text-anchor="middle">setup (greenfield)</text>
+    <line x1="400" y1="176" x2="470" y2="150" stroke="var(--muted)" marker-end="url(#arr)"/>
+    <text x="410" y="150" font-size="10" fill="var(--muted)">none</text>
+
+    <rect x="470" y="172" width="200" height="42" rx="8" fill="var(--card)" stroke="var(--new)"/>
+    <text x="570" y="190" text-anchor="middle" fill="var(--new)">audit</text>
+    <text x="570" y="205" text-anchor="middle" font-size="10" fill="var(--muted)">missing block &#8594; repair finding</text>
+    <line x1="400" y1="192" x2="470" y2="193" stroke="var(--new)" marker-end="url(#arrn)"/>
+    <text x="410" y="185" font-size="10" fill="var(--new)">skills and/or block</text>
+  </svg>
+  <figcaption>The new path (teal): skills installed but no block routes to <b>audit</b>, whose first proposed fix writes the missing map — instead of looping to setup forever.</figcaption>
+  </figure>
+</section>
+
+<section id="predicate">
+  <h2>The routing predicate — before &#8594; after</h2>
+  <table>
+    <thead><tr><th>Repo state</th><th>Today routes to</th><th>Planned routes to</th></tr></thead>
+    <tbody>
+      <tr><td>No block, no skills installed anywhere (greenfield)</td><td>setup</td><td>setup <span class="tag file">(unchanged)</span></td></tr>
+      <tr><td>Has <code>## Agent skills</code> block</td><td>audit</td><td>audit <span class="tag file">(unchanged)</span></td></tr>
+      <tr><td>Skills installed (lock file / harness dir / is-the-source-repo) but <b>no block</b> — legacy old-backlog install, or this repo itself</td><td><b style="color:var(--old)">setup (unreachable audit)</b></td><td><b style="color:var(--new)">audit</b>, first fix = write the missing block</td></tr>
+    </tbody>
+  </table>
+  <p>"Prior-install evidence" = any of: a <code>## Agent skills</code> block; a <code>skills-lock.json</code> with asher-skills entries; a skill under <code>.claude/skills/</code> <em>or</em> <code>.agents/skills/</code> traceable to this repo; or the repo <em>being</em> <code>asasher/asher-skills</code> (self-host).</p>
+</section>
+
+<section id="gap-map">
+  <h2>The five gaps &#8594; where each is fixed</h2>
+  <table>
+    <thead><tr><th>Gap</th><th>Fix in the contract</th><th>File(s)</th></tr></thead>
+    <tbody>
+      <tr><td><b>A</b> routing paradox</td><td>Three-state routing on install-evidence; missing block becomes an audit "missing map" finding, not a setup trigger</td><td><span class="tag file">SKILL.md</span> <span class="tag file">interview.md</span> <span class="tag file">audit-mode.md</span></td></tr>
+      <tr><td><b>B</b> <code>.agents/</code> blind spot</td><td>Enumerate <code>.agents/skills/</code> beside <code>.claude/skills/</code> at both project and global scope wherever "read what's installed" appears; resolve symlinks so a symlinked pair isn't double-counted</td><td><span class="tag file">audit-mode.md</span> <span class="tag file">interview.md</span> <span class="tag file">SKILL.md</span></td></tr>
+      <tr><td><b>C</b> overlap taxonomy</td><td>Add a <em>cross-harness duplication</em> category (same skill in <code>.claude</code> + <code>.agents</code>), splitting benign symlinked-pair from divergent independent copies</td><td><span class="tag file">audit-mode.md</span></td></tr>
+      <tr><td><b>D</b> foreign-source finding</td><td>New audit finding: a skill whose <code>skills-lock.json</code> source &#8800; <code>asasher/asher-skills</code>; honor the pull-only invariant (offer our adapted equivalent or say we don't ship it; never reinstall from the foreign repo)</td><td><span class="tag file">audit-mode.md</span></td></tr>
+      <tr><td><b>E</b> self-catalog</td><td>When the audited repo <em>is</em> the source, the catalog is the local <code>skills/</code> tree, not the fetched remote; note local-branch-ahead-of-origin instead of reporting false drift</td><td><span class="tag file">audit-mode.md</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>Stories</h2>
+  <ul class="plain">
+    <li id="story-1">As someone who set a repo up with the <em>old</em> backlog (skills but no map block), I want a re-invoke to run the audit, so that the installer can reconcile my drift instead of looping back to a fresh setup.</li>
+    <li id="story-2">As a maintainer auditing a dual-harness repo, I want <code>.agents/skills/</code> read alongside <code>.claude/skills/</code>, so that Codex-side copies aren't invisible to the audit.</li>
+    <li id="story-3">As a maintainer, I want a skill installed in <em>both</em> harness dirs called out as its own overlap category, so that I know whether it's a benign symlink or two copies that can drift apart.</li>
+    <li id="story-4">As a maintainer, I want a pre-existing external install (e.g. <code>writing-great-skills</code> from <code>mattpocock/skills</code>) surfaced by the audit, so that the pull-only invariant is enforced on reconcile, not just on install.</li>
+    <li id="story-5">As someone auditing the skills repo itself, I want the local <code>skills/</code> dir used as the catalog, so that a local branch ahead of origin doesn't produce false "new in repo" / drift findings.</li>
+    <li id="story-6">As a maintainer, I want each fix confirmed by a probe that two different executor models both pass, so that the contract change is real behavior, not just reworded prose.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Key decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><b>Route on install-evidence, three states.</b> The block stops being the sole routing signal. The predicate is "any evidence of a prior asher-skills install." Forced by gap A: the block is written only at the end of a setup, so a legacy or self-host install has skills but no block and must still reach audit.</li>
+    <li id="dec-2"><b>A missing block is an audit finding, not a setup trigger.</b> Rather than a fourth "repair" mode, the populated-but-no-block case enters audit, and audit gains a <em>Missing map</em> finding whose proposed fix writes the block. Keeps two run-modes (setup/audit) and reuses audit's one-fix-at-a-time discipline.</li>
+    <li id="dec-3"><b>Harness dirs are enumerated, not discovered.</b> The contract names the exact set to scan — <code>.claude/skills/</code> and <code>.agents/skills/</code> at project, <code>~/.claude/skills/</code> and <code>~/.agents/skills/</code> at global — and resolves symlinks before comparing, so a symlinked pair is one skill with two mount points, not two installs. Chosen over globbing "any <code>*/skills/</code>" to stay explicit and predictable.</li>
+    <li id="dec-4"><b>Cross-harness duplication splits benign from divergent.</b> Symlinked pair (one underlying file, this repo's own layout) → note only, not drift. Two independent copies that can diverge → flag with a recommendation to consolidate. Prevents the audit from crying wolf on the intended dual-harness symlink layout.</li>
+    <li id="dec-5"><b>Foreign source is read from <code>skills-lock.json</code>.</b> The lock file records each skill's source repo; the audit keys the finding off <code>source &#8800; asasher/asher-skills</code>. Surface-and-advise, never auto-remove — an external skill may be intentional; the pull-only invariant governs what setup <em>installs</em>, and the finding offers our adapted equivalent (or an honest "we don't ship it") without ever reinstalling from the foreign repo.</li>
+    <li id="dec-6"><b>Self-host swaps the catalog source, doesn't skip the audit.</b> Detect self-host via the git remote (or a local <code>skills/</code> holding these skills); then read the catalog from the local working tree and state the branch-vs-origin relationship, so a branch ahead of origin reads as "local is ahead," not as fleet-wide drift.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <p>Each criterion is confirmed two ways: a <b>file-check</b> (the contract prose says it) and, where behavioral, a <b>dual-executor probe</b> (Opus in-session + gpt-5.5 via <code>codex exec</code>, per <code>docs/patterns/probe-evals.md</code>) that both executors pass against a fixture repo state.</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><b>Gap A — routing.</b> SKILL.md and interview.md state a three-state routing keyed on prior-install evidence (not the block alone), and a probe presenting a "skills installed, no <code>## Agent skills</code> block" repo state has <b>both</b> executors route to <b>audit</b> (not setup); audit-mode names a <em>Missing map</em> finding whose fix writes the block.</li>
+    <li id="ac-2" data-criterion><b>Gap B — <code>.agents/</code> scan.</b> Every "read what's installed" surface (audit-mode.md step 2, interview.md phase 1, SKILL.md phase 1) enumerates <code>.agents/skills/</code> alongside <code>.claude/skills/</code> at both project and global scope; a probe on a repo whose skill exists only under <code>.agents/skills/</code> has both executors report that skill as installed (not "nothing installed").</li>
+    <li id="ac-3" data-criterion><b>Gap C — overlap taxonomy.</b> audit-mode.md step 3's Overlap finding includes a cross-harness-duplication category that distinguishes a symlinked pair (note only) from divergent independent copies (flag + consolidate); a probe on a skill present in both <code>.claude</code> and <code>.agents</code> has both executors name the cross-harness category and correctly classify the symlinked case as benign.</li>
+    <li id="ac-4" data-criterion><b>Gap D — foreign source.</b> audit-mode.md step 3 defines a Foreign-source finding keyed on <code>skills-lock.json</code> source &#8800; <code>asasher/asher-skills</code>, advising per the pull-only invariant and never proposing a foreign reinstall; a probe on a repo with <code>writing-great-skills</code> from <code>mattpocock/skills</code> has both executors surface it as foreign-source and offer our equivalent-or-honest-no, not a reinstall from mattpocock.</li>
+    <li id="ac-5" data-criterion><b>Gap E — self-catalog.</b> audit-mode.md step 1 handles self-host: catalog source is the local <code>skills/</code> tree when the repo is <code>asasher/asher-skills</code>, with branch-vs-origin stated; a probe auditing this repo has both executors use local <code>skills/</code> as the catalog and not report the local branch's own skills as "new in repo" drift.</li>
+    <li id="ac-6" data-criterion><b>No regression &amp; no runtime.</b> The greenfield case (no block, no installed skills) still routes to setup; no version stamp / hash / <code>vNN</code> marker is introduced (the no-stamp invariant holds); and the change adds no script — the skill stays prompt-driven. The setup skill's existing probes in <code>evals/</code> still pass.</li>
+  </ul>
+</section>
+
+<section id="checks">
+  <h2>How it will be checked</h2>
+  <p><b>Seam 1 — the contract prose.</b> Grep/read each changed file for the required clause (routing predicate, harness-dir enumeration, each new finding). Cheap, exact, catches "did the words land."</p>
+  <p><b>Seam 2 — dual-executor probes.</b> The load-bearing seam. New/updated scenarios in <code>skills/setup-asher-skills/evals/probes.md</code> + <code>answer-key.md</code>, one per behavioral gap (A–E), each driven through <b>both</b> an in-session Claude executor and gpt-5.5 via <code>codex exec</code> and graded against the answer key. This repo is a ready-made fixture: it exhibits A (no block, has skills), B/C (symlinked <code>.claude</code>&#8594;<code>.agents</code>), D (<code>writing-great-skills</code> foreign), and E (is the source). Left deliberately unchecked: no automated CI exists (§ environment) — every check is agent-driven on demand; that's the repo's accepted posture, not a gap this plan closes.</p>
+</section>
+
+<section id="required">
+  <h2>What's required</h2>
+  <ul class="plain">
+    <li id="req-1">Edited contract files: <code>SKILL.md</code>, <code>reference/audit-mode.md</code>, <code>reference/interview.md</code>.</li>
+    <li id="req-2">New/updated probe scenarios + answer key under <code>skills/setup-asher-skills/evals/</code>, one behavioral probe per gap A–E.</li>
+    <li id="req-3">Evidence: the dual-executor transcripts and a pass/fail table mapping each probe to its answer-key criterion (per <code>environment.md</code> § Driving the app).</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks &amp; mitigations</summary>
+  <ul class="plain">
+    <li><b>Over-broad routing predicate</b> — treating a stray unrelated <code>skills/</code> dir as an asher-skills install and mis-routing to audit. Mitigation: the predicate requires evidence <em>traceable to this repo</em> (lock-file source, or the remote being asasher/asher-skills), not just any skills dir.</li>
+    <li><b>Symlink double-count</b> — reading <code>.claude</code> and <code>.agents</code> naively reports every skill twice on this repo. Mitigation: dec-3 resolves symlinks before comparing; dec-4's benign-symlink classification is exercised by the gap-C probe.</li>
+    <li><b>Prose-only change that doesn't move behavior</b> — reworded contract, unchanged model behavior. Mitigation: every behavioral criterion is gated on a dual-executor probe both models must pass, not on the prose alone.</li>
+    <li><b>Scope creep into setup's install path</b> — gap D could tempt auto-removing foreign skills. Mitigation: dec-5 fixes it as surface-and-advise only; removal stays the user's decision.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>Actually running a setup/audit against this repo to fix its real drift (missing block, 3-of-24 registered, broken <code>backlog</code> closure) — the issue defers that to <code>groom</code>; this plan hardens the skill, it doesn't remediate the repo.</li>
+    <li>Introducing any version stamp, hash, or drift-token mechanism — explicitly forbidden by audit-mode's no-stamp invariant.</li>
+    <li>Adding a runtime, server, or installer script — the skill stays prompt-driven.</li>
+    <li>Changing the closure rules, catalog, or the pull-only invariant itself (only adding an audit-side finding that enforces it).</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
