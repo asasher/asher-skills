@@ -1,0 +1,49 @@
+**P1**
+ACTION: Audit repo, machine, and user/project before recommending. For models, invoke `staffing` by name; do not infer the roster myself.
+
+CITATION: `skills/setup-asher-skills/reference/interview.md` — “Before recommending anything, audit **three things** and hold the findings; ask the user nothing yet except the single project question in (3).”  
+`skills/setup-asher-skills/reference/interview.md` — “Do this by invoking the `staffing` skill by name, not by re-deriving a roster: staffing owns the machine audit, the rankings seed, and the consent-gated global write.”
+
+AMBIGUITY: None.
+
+**P2**
+ACTION: Even though a shipping product would normally seed `backlog`, accepting `plan` installs `plan` plus `review-loop` and `staffing`. I tell the user: adding `plan` also brings `review-loop` for approval and `staffing` to pick the model.
+
+CITATION: `skills/setup-asher-skills/reference/catalog.md` — “**`plan` ⇒ ensure `review-loop` + `staffing`.**”  
+`skills/setup-asher-skills/reference/interview.md` — “When the user accepts a skill that depends on others, add the whole closure ([catalog](catalog.md) § The closure rules) and **tell the user in plain language which siblings came along and why**.”
+
+AMBIGUITY: Slight: the project type points to `backlog`, but the probe says the user accepts `plan`, so I act on the accepted skill’s closure.
+
+**P3**
+ACTION: Do not install from Matt Pocock’s repo. Offer an adapted equivalent only if this repo ships one; otherwise say plainly that this repo does not ship that TDD skill.
+
+CITATION: `skills/setup-asher-skills/reference/catalog.md` — “setup **never installs, recommends, or emits an install command for a skill from any other host or account** (not `mattpocock/*`, not any vendor repo, not a gist).”  
+`skills/setup-asher-skills/reference/catalog.md` — “So when a user asks for an external skill by name — "install the TDD skill" — the move is: **offer our adapted equivalent if we ship one, or say plainly that we don't ship it. Never reach out to the external repo.**”
+
+AMBIGUITY: None from the allowed catalog; it does not list a TDD equivalent.
+
+**P4**
+ACTION: Write the `## Agent skills` block into `AGENTS.md` if present, otherwise `CLAUDE.md`. Fill one row per installed skill, include sibling relationships, and link/keep the repo pointer. Write the repo pointer alongside that block, in the same memory file or a linked note. Do not write `docs/agents/` playbooks directly; run each installed skill’s setup so those playbooks land.
+
+CITATION: `skills/setup-asher-skills/reference/interview.md` — “From `templates/agent-skills-block.md`, write the per-project skill map into the harness memory file — **prefer `AGENTS.md` if it exists, else `CLAUDE.md`.**”  
+`skills/setup-asher-skills/reference/interview.md` — “Run each installed skill's own setup so its `docs/agents/` playbooks land: `staffing` writes the roster (global base + project delta, with consent); `review-loop` (or `backlog setup`, which composes it) writes the presentation surface config; `backlog setup` writes its `docs/agents/` suite.”
+
+AMBIGUITY: None.
+
+**P5**
+ACTION: Run `audit`. Fetch the current repo catalog, read installed project/global skills, the `## Agent skills` block, and `docs/agents/`, then report drift/overlap/broken closure/scope conflicts one fix at a time. Detect drift by reading the installed skill content and the repo’s current version and judging divergence, not by stamps, hashes, or version comments.
+
+CITATION: `skills/setup-asher-skills/reference/audit-mode.md` — “Re-invoking setup on a project that already has a `## Agent skills` block runs `audit`: compare what's installed against this repo's current catalog and report what drifted, overlaps, or broke — then propose fixes one at a time.”  
+`skills/setup-asher-skills/reference/audit-mode.md` — “**Reconciliation is the model reading the live repo against what's installed and judging it — not a number comparison.**”  
+`skills/setup-asher-skills/reference/audit-mode.md` — “**Drift** — a skill installed here whose content diverges from the repo's current version (read both and judge; don't diff a stamp).”
+
+AMBIGUITY: None.
+
+**P6**
+ACTION: `backlog` is project-local. Its closure skills `plan`, `prototype`, and `review-loop` are also project-local. `staffing` is project-local by default, but I ask whether they want it global because it is the only reusable cross-project roster. I do not ask about global scope for `backlog`.
+
+CITATION: `skills/setup-asher-skills/reference/catalog.md` — “**`backlog` ⇒ ensure ALL of `staffing`, `review-loop`, `plan`, `prototype`.**”  
+`skills/setup-asher-skills/reference/catalog.md` — “**Project-local by default.** Every skill installs into the project unless it is `staffing`.”  
+`skills/setup-asher-skills/reference/catalog.md` — “**Global only for `staffing`, only with consent.**”
+
+AMBIGUITY: None.
