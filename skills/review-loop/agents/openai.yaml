@@ -1,0 +1,7 @@
+interface:
+  display_name: "Review Loop"
+  short_description: "Serve any HTML artifact for human sign-off with in-page annotation, then block on a verdict-coded await"
+  default_prompt: "Use $review-loop to present this rendered artifact for review and block until I approve or request changes."
+
+policy:
+  allow_implicit_invocation: false

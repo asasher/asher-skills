@@ -19,7 +19,7 @@ adopt it. Two rules govern the directory:
 
 | Pattern | One line | Canonical |
 |---|---|---|
-| [review-surface.md](review-surface.md) | Local HTML review surface with in-page feedback and an await gate that blocks the agent until a verdict | backlog |
+| [review-surface.md](review-surface.md) | **Superseded** — extracted into the `review-loop` skill; compose it by name, don't copy scripts | `review-loop` skill (extracted primitive) |
 | [probe-evals.md](probe-evals.md) | Situated dry-run probes against executor models before shipping a skill; scripted invariant dry-runs for tool mechanics | maquette / fair-deal |
 | [multi-session-state.md](multi-session-state.md) | Resumable workspace state so a bare command picks up exactly where the last session left off | bayes / goodwork |
 | [codex-compat.md](codex-compat.md) | Ship `agents/openai.yaml` so the skill presents correctly when installed into Codex | backlog |
