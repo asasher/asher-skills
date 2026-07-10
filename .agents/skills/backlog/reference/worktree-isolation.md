@@ -15,15 +15,28 @@ A repo can be local-isolatable for its DB yet still depend on a shared external 
 
 ## Audit probes — what collides
 
-Look for each; every hit is a collision point to report:
+Look for each; every hit is a collision point to report. The probes split into two families: **infra singletons** (containers, ports, datastores, cloud backends) and **local-filesystem singletons** (install dirs, build caches, on-disk state) — a repo with no containers at all can still collide hard on the second family, which is the family a naive "it's just a Node app, worktrees are free copies" read misses.
+
+Infra singletons:
 
 - **Fixed container names** — `container_name:` in compose. Two stacks can't both create the same named container.
 - **Hardcoded host ports** — fixed `HOST:CONTAINER` ports in compose, `.env`, or app config. Second stack fails to bind.
 - **No compose project namespace** — no `name:` / `COMPOSE_PROJECT_NAME`, so containers, volumes, and networks aren't namespaced per worktree.
 - **Single shared datastore URL** — one `DATABASE_URL` / Redis URL reused across worktrees, so they read and write the same data even when ports differ.
+- **Shared test database** — a fixed test-DB name/URL every run truncates and repopulates; two verifications at once see each other's fixtures mid-run. Collides even when the dev DB is namespaced.
 - **Shared dev proxy hostnames** — a single proxy (e.g. portless on `:1355`) with hostnames hardcoded in `package.json`/`.env` (`app.<name>.localhost`). Worktrees claim the same route. Isolate by per-worktree subdomain, not by moving the proxy port.
 - **Hardcoded shared cloud IDs** — a pinned managed-deployment id or hosted auth tenant key (e.g. a Convex deployment, a Clerk instance) shared by every worktree. This is the cloud-singleton signal.
-- **Copy-without-remap setup** — a worktree setup script that copies `.env*` into the new worktree but rewrites nothing. Present-but-insufficient: it makes every worktree point at the same resources.
+- **Copy-without-remap setup** — a worktree setup script that copies `.env*` into the new worktree but rewrites nothing. Present-but-insufficient: it makes every worktree point at the same infra resources (the datastore URLs, ports, and cloud IDs above) rather than isolating them.
+
+Local-filesystem singletons:
+
+- **Shared install directory** — a `node_modules`/`.venv`/`vendor`/`target` dir shared across worktrees (a hoisted monorepo store, a symlinked `node_modules`, a shared package cache written during install). One worktree's `install`/upgrade mutates what another is running against.
+- **Shared build cache** — a build/output dir two worktrees write concurrently: `.next`, `dist`, `build`, `out`, `.turbo`, `.gradle`, `target`, `__pycache__`, `.pytest_cache`, coverage dirs. Interleaved writes corrupt each other's artifacts and flake the checks.
+- **Shared on-disk state / locks** — a fixed local data dir, SQLite file, or lockfile path (e.g. a dev DB written to a repo-absolute path, a single `.pid`/socket file) that isn't derived per worktree.
+
+### The shared-singleton list — the required output
+
+The probes above are not just a report; they compile into an explicit **shared-singleton list** that setup records in `environment.md` § Worktree isolation and that `run` reads before dispatch. One row per resource, each carrying: the resource, its collision mode, and whether local namespacing can isolate it (locally-isolatable vs. not). An empty list is a real result for a greenfield repo with no stack; a real application never produces one. The list *gates* the parallelism verdict below asymmetrically: a `parallel-safe` verdict must be backed by a list with no un-isolated collision (a parallel verdict without a clear list behind it is unverified), while `serialize-verification` may equally be a plain user preference to serialize — the list is what licenses parallel, not what forbids serialize.
 
 ## Detect an existing solution before scaffolding
 
@@ -42,9 +55,11 @@ Offer, and write only with explicit approval, an isolation layer with these part
 
 ## Parallelism verdict
 
-Setup records one verdict in `environment.md`; `run` reads it before dispatch:
+Setup records one verdict in `environment.md`, derived from the shared-singleton list; `run` reads it before dispatch:
 
-- **parallel-safe** — local-isolatable and isolation exists or was scaffolded. Issue threads may verify concurrently.
-- **serialize-verification** — cloud-singleton, or local-isolatable but not yet isolated. Dispatch may still fan out worktrees, but only one may stand up the stack and verify at a time; the others queue on that resource. State which shared resource forces serialization.
+- **parallel-safe** — local-isolatable and every singleton on the list is isolated (existing isolation or scaffolded). Never granted by preference alone. Issue threads may verify concurrently.
+- **serialize-verification** — cloud-singleton; or local-isolatable but at least one listed singleton is not yet isolated; or the user simply chose to serialize. Dispatch may still fan out worktrees, but only one may stand up the stack and verify at a time; the others queue on that resource. When singletons force it, **name the exact ones** — pulled from the list, not left abstract; when it is a pure preference (the list is clear), say so.
+
+When the list holds un-isolated singletons, `serialize-verification` is a **hard constraint, not a policy choice**: the resources genuinely collide, so a parallel fan-out that ignores it corrupts shared state (interleaved DB writes, clobbered build artifacts, a mid-run install pulled out from under a running check). A user preference for parallel does not override a shared datastore or a shared build cache — the only routes to `parallel-safe` are isolating every listed singleton or removing it.
 
 A `parallel-safe` verdict may carry a **serialized exception lane**: named classes of issues that must serialize anyway — destructive operations on a shared tenant, real third-party endpoints without per-worktree credentials, features needing deliberately distinct users. Setup records the lane in `environment.md`; `run` tells any dispatched thread whose issue falls in it to serialize its verification.

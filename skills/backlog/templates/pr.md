@@ -10,7 +10,8 @@ The body is the index for this change's evidence. In order:
 - **Summary** — what changed and why, in the issue's terms, including any scope discovery that shaped the change (e.g. "the backend already supported this end to end, so this is frontend-only").
 - **Changes** — the significant files/modules with the design reasoning a reviewer needs (why a save lands on this action, why a component was extracted), not a raw file list.
 - **Plan** (enhancements) — SHA-pinned link to the committed plan, noting where it was approved.
-- **Checks run** — each command and its result.
+- **Checks run** — each local command (from `verifying.md` § Checks) and its result.
+- **CI status** — the host CI merge-gate (`verifying.md` § CI merge gate) and whether it is green. The PR is a merge candidate only once CI passes; a red or pending gate is disclosed here, not omitted. Where there is no CI, say so.
 - **Verification** — what stack the criteria were exercised against and the per-criterion outcome, including the verify step's recorded caveats: any criterion verified through a workaround names the gap and the substitute observation, framed as environment gaps vs product issues. Disclosed limitations, never silent claims.
 - **Evidence** — a placeholder: "Captured after review converges." Filled by the evidence step per `evidence.md`.
 

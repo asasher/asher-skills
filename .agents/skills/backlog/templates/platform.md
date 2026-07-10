@@ -12,7 +12,9 @@
   - Set / clear a role label: _<e.g. `gh issue edit <n> --add-label/--remove-label`; local: edit the `state:`/`work-type:` frontmatter>_.
   - Create an issue: _<e.g. `gh issue create`; local: new file per the shape below — created only by a serialized main-branch writer>_.
   - Close an issue: _<e.g. `gh issue close <n>`, or via the close linkage below; local: flip `state: closed` — on the work branch when a PR carries it, on the main branch otherwise>_.
-  - Dependencies and duplicate links: recorded per `backlog-policy.md` § Dependencies.
+  - Read an issue's unresolved blockers (so `run` skips blocked work): _<github/local: parse the `- [ ] depends on #N` task-list lines / `deps` frontmatter per `backlog-policy.md` § Dependencies; a tracker with a native relation (Jira `is blocked by`, Linear `blocked-by`): the API call that lists an issue's incomplete blocker links — verified live, or shipped as a prose contract flagged "verify at first use" when the API is unreachable at setup>_.
+  - Write a blocker link between two issues: _<github/local: append the task-list line / `deps` id; native relation: the API call that creates the blocker link>_.
+  - Duplicate links: recorded per `backlog-policy.md` § Dependencies.
 - Close-on-merge linkage: _<github: `Closes #<n>` in the PR body closes the issue at merge; local: the issue file's `state: closed` flip is committed on the work branch and lands with the merge — closure is atomic with the change by construction; custom: state how closure follows a merged change, or that it is manual>_.
 
 ## Change review — where a change is proposed and reviewed
@@ -60,4 +62,4 @@
 
 ## Custom bindings
 
-For a platform this skill has no shipped default for, `backlog setup` derives the binding interactively: name the tool or API, exercise every verb above live, and record only commands that worked. A verb the platform cannot express is recorded as a gap with its fallback (e.g. no close-on-merge → the run thread closes issues after merge), so downstream steps inherit the degradation explicitly rather than discovering it.
+For a platform this skill has no shipped default for, `backlog setup` derives the binding interactively: name the tool or API, exercise every verb above live, and record only commands that worked. A verb the platform cannot express is recorded as a gap with its fallback (e.g. no close-on-merge → the run thread closes issues after merge), so downstream steps inherit the degradation explicitly rather than discovering it. When such a tracker has a **native dependency relation** (Jira `is blocked by`, Linear `blocked-by`), bind it as the blocker read/write verbs above rather than falling back to the task-list convention — that relation is what `run` reads to skip blocked work. Where the tracker's live API is not reachable at setup time, record the relation as a prose contract naming the link type and the intended read/write calls, flagged "verify against the live tracker at first use" — never a fabricated command presented as verified.

@@ -29,11 +29,14 @@ Two further lifecycle values appear only where the tracker has no native equival
 
 - `wontfix`, `duplicate`, `superseded`, `invalid` — _<your labels>_.
 
-**Neutral** — every other label (priority, area, size, etc.); ignored for selection and routing.
+**Neutral** — every other label; ignored for selection and routing. On an inherited tracker this is *most* labels (priority, area/component, size, team, release). The default is **neutral**: a label maps to a role only when `setup` explicitly bound it: _<list the role→label mappings here; leave everything else neutral>_.
+
+**Aliases** — when several existing labels fill one role, one is canonical and the loop treats the others as that role too: _<e.g. `type:bug` and `defect` both → `bug`; or "none">_. Setup reuses existing labels rather than minting duplicates.
 
 ## Dependencies
 
-- How this repo records that one issue is blocked by another, so `run` can skip blocked work: _<e.g. a `- [ ] depends on #123` task-list line in the body, a `blocked` label plus the linked issue, native issue dependencies where the tracker has them; local: the `deps:` frontmatter list>_.
+- How this repo records that one issue is blocked by another, so `run` can skip blocked work: _<pick the binding — a `- [ ] depends on #123` task-list line in the body (GitHub default); the `deps:` frontmatter list (local); or the tracker's **native dependency relation** where it has one (Jira `is blocked by`, Linear `blocked-by`), read via the blocker verbs in `platform.md`>_.
+- `run` treats an issue with any unresolved (open/incomplete) blocker as blocked and skips it. Duplicate/supersede links: _<the convention — a `duplicate of #N` / `superseded by #N` body line plus the exclusion label, or the tracker's native link>_.
 
 ## Readiness decision
 

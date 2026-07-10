@@ -1,6 +1,19 @@
 # Migrations
 
-Read by `setup` when a playbook's version stamp — the `<!-- backlog-templates: ... -->` comment on line 1 (or its retired `<!-- triage-templates: ... -->` form) — predates the current `templates/VERSION`, or is absent. Each entry says what changed and how to reconcile it without losing repo values. An entry retires once no live deployment can predate it.
+Read by `setup` when a playbook's version stamp — the `<!-- backlog-templates: ... -->` comment on line 1 (or its retired `<!-- triage-templates: ... -->` form) — predates the current `templates/VERSION`, or is absent. Each entry says what changed and how to reconcile it without losing repo values. **Reconcile applies every entry between the stamp and current `templates/VERSION`, in order** — never just the newest. So a playbook must not be re-stamped to the current version until every intervening entry has actually been applied to it; advancing the stamp past an unabsorbed entry silently strands that entry's changes, since the stamp is what tells reconcile the entry is still pending. An entry retires once no live deployment can predate it.
+
+## v2026-07-09.1 → v2026-07-10.1
+
+Setup hardened for existing non-trivial code projects: the audits now bind to a real inherited codebase instead of passing trivially on a greenfield one. The playbook slots the audits write into gain structure. Apply all of, preserving every repo value:
+
+- **verifying.md — verified checks + CI merge gate** — § Checks gains the "discovered and verified by running" discipline (record only commands seen to run; no guessed slots), and a new **§ CI merge gate** section records the host CI required-checks as a merge precondition distinct from the local checks. Keep the repo's existing recorded commands; add the CI-gate section (or "none — no CI").
+- **environment.md — singleton list, drive-to-feature, verdict derivation** — § Worktree isolation's lone "shared singletons" line becomes the enumerated **shared-singleton list** table (resource · collision mode · locally-isolatable); § Seed data gains an explicit **drive-to-feature path** line; § Parallelism verdict is reworded to derive from the list and name the forcing singletons. Preserve the repo's recorded regime, seed, and verdict — reshape them into the new slots, don't blank them.
+- **evidence.md — real-app evidence over probes** — § What to capture gains the leading rule that for a runnable app, evidence is real check output + artifacts driven through the app, with agent-authored probes named a greenfield-only fallback. Additive; keep the repo's per-change-type expectations.
+- **platform.md — dependency-relation verbs** — the Tracker binding gains explicit blocker read/write verbs, and § Custom bindings gains the native-relation guidance (Jira/Linear) with the "verify at first use" prose-contract rule. Keep the repo's recorded verbs; add the blocker verbs (task-list/frontmatter for github/local).
+- **backlog-policy.md — neutral-by-default + aliases + dependency binding** — § Label roles gains the neutral-by-default rule and an Aliases line; § Dependencies is restated per-binding (task-list / frontmatter / native relation). **Do not touch the work-type role list** during this migration beyond re-stamping — reconcile only the Neutral/Aliases and Dependencies areas, so an install that has customized work-types keeps them.
+- **pr.md — CI status line** — the body outline gains a **CI status** item after Checks run (the merge-gate green/red/pending, disclosed). Additive; keep the repo's title convention and required sections.
+- **setup.md / worktree-isolation.md / groom.md** — bundled references, replaced wholesale on install (not repo-authored); no per-repo reconciliation, they ship at the new version.
+- **Stamp** — bump every reconciled playbook to `v2026-07-10.1`. A section verbatim-identical to the older shipped default updates to the new default; a diverged section is repo practice — leave it and flag only where a listed change touches its contract.
 
 ## v2026-07-06.1 → v2026-07-09.1
 

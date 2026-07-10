@@ -4,6 +4,8 @@
 
 ## What to capture
 
+For a repo with a real running app, evidence is **real check/test output plus artifacts driven through the actual app** — screenshots and recordings of the running surface, terminal transcripts of the real check commands. An agent-authored probe or dry-run transcript that reasons about what *would* happen is **not** evidence here; it is a greenfield-only fallback for a repo that has no runnable surface to drive at all (e.g. a skills/docs repo with no app, no CI, no tests). Where a runnable surface exists, drive it — do not substitute a probe for a screenshot.
+
 Per change type — the shipped baseline; tune to this repo:
 
 - Pure logic or backend fix: nothing beyond green checks — the targeted test is the proof.
