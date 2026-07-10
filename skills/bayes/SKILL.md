@@ -1,6 +1,6 @@
 ---
 name: bayes
-description: Work through a complicated, uncertain question the honest way — Bayesian updating over as many sessions as the evidence takes. The user brings the question; the skill carries the discipline and the math: it checks the question is answerable at all (and helps rework it if not), builds a board of competing hypotheses, gets priors from base rates in plain "out of 100 cases" language, pre-registers what each observation would mean *before* anyone looks, does all the odds arithmetic itself, and keeps an append-only record of every update. Use for "will X happen", "why did X happen", "how likely is it that", "is this vendor/hire/bet going to work out", contested explanations, and any belief a decision hangs on. Install once in a bayes workspace; resumable across sessions.
+description: Work a big uncertain question honestly — Bayesian updating across sessions, with the agent carrying the discipline and the math.
 argument-hint: "[new \"<question>\"] | [resume] | [list] | [frame|hunt|update|check|resolve] | [log \"<claim>\" <p%> <date>]"
 user-invocable: true
 disable-model-invocation: true

@@ -1,6 +1,6 @@
 ---
 name: learn-anything
-description: Learn any skill — not just facts. Pairs teaching (knowledge into the head) with coaching (skill into the body). Works with a competent self-learner to decompose a skill, engineer honest feedback loops (target, trap, gap measure, drill, progression), build the rig — scripts, third-party tools, physical setups — run live practice sessions rep by rep, and schedule drills with spaced, interleaved practice. For embodied skills (accents, instruments, dance, voice acting) as much as cerebral ones. Stateful and resumable; install once per learning workspace.
+description: Teach + coach any skill — decompose it, engineer honest feedback loops, run rep-by-rep practice sessions, schedule drills.
 argument-hint: "[setup \"<mission>\"] | [loop] | [session] | [teach \"<topic>\"] | [status]"
 user-invocable: true
 disable-model-invocation: true
@@ -108,8 +108,7 @@ tell good from bad launders noise into confidence — worse than no rig.
 - **Latency and friction budgets are hard constraints.** Rep-to-feedback must be seconds, not minutes;
   starting a session must be one command or zero. A loop that violates either will not survive week two —
   redesign it, don't exhort the learner.
-- **Calibrate before trust.** No gap measure is used until it has separated a known-good from a known-bad
-  sample. Re-calibrate when the rig or the learner's level changes.
+- **Calibrate before trust** — and re-calibrate when the rig or the learner's level changes (§ Feedback fidelity).
 - **One cue per rep,** external-focus where possible ("land the note on the click", not "tense your soft
   palate"). The agent runs the interleaving and the difficulty; learners left alone block-practice what
   already feels good. See `reference/session-protocol.md` and `reference/motor-learning.md`.

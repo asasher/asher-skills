@@ -1,6 +1,6 @@
 ---
 name: shadixfy
-description: Prevents generic AI/Codex UI patterns when generating frontend code, and pins the result to the shadcn/ui visual language and color tokens. Use whenever generating HTML, CSS, React, Vue, Svelte, or any frontend UI to enforce clean, restrained, token-driven interfaces built the way shadcn/ui builds them.
+description: Pin generated frontend UI to the shadcn/ui visual language and tokens, stripping the default AI aesthetic. Use whenever generating or restyling any frontend UI.
 ---
 
 # Shadixfy
@@ -65,27 +65,30 @@ Build it like you'd `npx shadcn@latest add` the component and use it as-is. Don'
 
 ## Hard No
 
-- Everything you reflexively reach for and treat as an automatic "yes."
-- No oversized rounded corners. One `--radius`, derived consistently.
-- No pill overload.
-- No floating glassmorphism shells as the default language.
-- No soft corporate gradients used to fake taste.
-- No generic dark SaaS composition with radial-gradient backgrounds and cyan accents.
-- No decorative sidebar blobs or workspace CTA blocks in the rail.
-- No "control room" cosplay unless explicitly requested.
-- No serif headline + system sans fallback as a shortcut to "premium."
-- No `Inter`, `Roboto`, `Segoe UI`, `Trebuchet MS`, `Arial`, or safe default stacks. Use **Geist** (Geist Sans / Geist Mono) — or whatever font the project already ships.
-- Default-blue AI color — **no.** Stay on a neutral base, then use at most one deliberate shadcn palette accent. Blue/cyan/indigo are allowed only when the product domain already demands them.
-- No metric-card grid as the first instinct.
-- No fake charts that exist only to fill space.
-- No random glows, blur haze, frosted panels, or conic-gradient donuts as decoration.
-- No hero section inside an internal UI without a real product reason.
-- No alignment that manufactures dead space to look expensive.
-- No overpadded layouts. No mobile collapse that stacks everything into one long sandwich.
-- No ornamental labels ("live pulse", "night shift", "operator checklist") unless they come from the product voice.
-- No generic startup copy. No style decision made because it's easy to generate.
+Everything you reflexively reach for and treat as an automatic "yes." Refuse all of it:
 
-- No headlines-with-eyebrow blocks of any sort:
+- Oversized decorative radii — the 20–32px range across everything, or the same fat rounded rectangle repeated on sidebar, cards, buttons, and panels. One `--radius`, derived consistently.
+- Glass, glow, and haze as decoration: floating glassmorphism shells as the default language, frosted panels, blur haze, random glows, conic-gradient donuts.
+- Soft corporate gradients used to fake taste. Brand marks with gradient backgrounds (`linear-gradient(135deg, …)`). Pipeline/progress bars with gradient fills; quota panels with progress bars as decoration.
+- Generic dark SaaS: radial-gradient backgrounds, blue-black "premium dark mode" gradients, cyan/indigo accents as the default reflex (see Color for when a cool accent is earned).
+- `Inter`, `Roboto`, `Segoe UI`, `Trebuchet MS`, `Arial`, or safe default stacks. Use **Geist** (Geist Sans / Geist Mono) — or whatever font the project already ships.
+- Metric/KPI-card grid as the first instinct or default dashboard layout.
+- Fake charts that exist only to fill space — e.g. a canvas/donut dropped into a glass card with no product reason, paired with hand-wavy percentages.
+- Hero section inside an internal UI without a real product reason — hero strips and decorative page headers like "Operational clarity without the clutter."
+- Alignment that manufactures dead space to look expensive; mixed alignment where some content hugs the left and some floats center-ish.
+- Mobile collapse that stacks everything into one long sandwich.
+- Decorative sidebar blobs or workspace CTA blocks in the rail; a right rail with a "Today" schedule; multiple nested panel types (`panel`, `panel-2`, `rail-panel`, `table-panel`).
+- "Control room" cosplay unless explicitly requested.
+- Ornamental labels ("live pulse", "night shift", "operator checklist") unless they come from the product voice. Section notes and mini-notes everywhere explaining what the UI does. "Team focus" / "Recent activity" panels with decorative internal copy. Footer meta lines ("Northstar dashboard • dark mode • single-file HTML"). Generic startup copy, or any style decision made because it's easy to generate.
+- Eyebrow labels — uppercase + letter-spacing kickers like "MARCH SNAPSHOT".
+- Dramatic box shadows (`0 24px 60px rgba(0,0,0,.35)`). Cap at `shadow-sm`/`shadow-md`.
+- Transform animations on hover (`translateX(2px)` on nav links). Use `transition-colors` only.
+- Status dots via `::before` pseudo-elements; muted uppercase + letter-spacing labels.
+- Muted gray-blue text that weakens contrast — use `muted-foreground`, which is tuned for it.
+- Tables that slap a colored tag badge on every row. Trend indicators as colored text classes (`trend-up`, `trend-flat`).
+- Sticky headers/top bars that copy shadcn block glass (`bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60`). Even if a registry block ships it, use solid `bg-background` with `border-b` instead.
+
+No headlines-with-eyebrow blocks of any sort. `<small>` eyebrow headers are not allowed; rounded decorative `span`s are not allowed:
 
 ```html
 <div class="headline">
@@ -95,9 +98,7 @@ Build it like you'd `npx shadcn@latest add` the component and use it as-is. Don'
 </div>
 ```
 
-Not allowed. `<small>` eyebrow headers are not allowed. Rounded decorative `span`s are not allowed.
-
-- This card structure is the biggest no:
+This card structure is the biggest no:
 
 ```html
 <div class="team-note">
@@ -106,32 +107,6 @@ Not allowed. `<small>` eyebrow headers are not allowed. Rounded decorative `span
 </div>
 ```
 
-## Specifically Banned
-
-- Border radii in the 20–32px range across everything; or the same fat rounded rectangle repeated on sidebar, cards, buttons, and panels.
-- Floating detached sidebar with a rounded outer shell.
-- Canvas/donut chart dropped into a glass card with no product reason, paired with hand-wavy percentages.
-- Cards using glows instead of `border`/`bg-card` hierarchy.
-- Mixed alignment where some content hugs the left and some floats center-ish.
-- Overuse of muted gray-blue text that weakens contrast — use `muted-foreground`, which is tuned for it.
-- "Premium dark mode" that means blue-black gradients plus cyan accents.
-- Eyebrow labels — uppercase + letter-spacing kickers like "MARCH SNAPSHOT".
-- Hero strips and decorative page headers like "Operational clarity without the clutter."
-- Section notes and mini-notes everywhere explaining what the UI does.
-- Transform animations on hover (`translateX(2px)` on nav links). Use `transition-colors` only.
-- Dramatic box shadows (`0 24px 60px rgba(0,0,0,.35)`). Cap at `shadow-sm`/`shadow-md`.
-- Status dots via `::before` pseudo-elements; muted uppercase + letter-spacing labels.
-- Pipeline/progress bars with gradient fills; quota panels with progress bars as decoration.
-- KPI cards in a grid as the default dashboard layout.
-- Sticky headers/top bars that copy shadcn block glass (`bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60`). Even if a registry block ships it, use solid `bg-background` with `border-b` instead.
-- "Team focus" / "Recent activity" panels with decorative internal copy.
-- Tables that slap a colored tag badge on every row.
-- Brand marks with gradient backgrounds (`linear-gradient(135deg, …)`).
-- Nav badges showing counts or "Live" status as decoration.
-- Footer meta lines ("Northstar dashboard • dark mode • single-file HTML").
-- Trend indicators as colored text classes (`trend-up`, `trend-flat`).
-- Right rail with a "Today" schedule; multiple nested panel types (`panel`, `panel-2`, `rail-panel`, `table-panel`).
-
 ## Color
 
 If a UI choice feels like a default AI move, ban it and pick the cleaner option. Colors can exist, but they must behave like shadcn tokens, not decoration. Start neutral, add one restrained accent when it helps the product, and keep everything wired through CSS variables.
@@ -139,7 +114,7 @@ If a UI choice feels like a default AI move, ban it and pick the cleaner option.
 You are bad at picking colors. Follow this priority:
 
 1. **Highest priority:** use the existing tokens from the user's project if present (read `globals.css` / `tailwind.config` / `components.json` and reuse the `--background`, `--primary`, … they already define).
-2. If the project has none, **adopt one of the shadcn base palettes below** verbatim. Default to **Zinc**. Pick **Neutral** for pure gray, **Stone** for a warm gray.
+2. If the project has none, **adopt one of the shadcn base palettes** verbatim. Copy it from [references/palettes.md](references/palettes.md) — **Zinc** (default), **Neutral** (pure gray), or **Stone** (warm gray).
 3. For new standalone UIs with no existing brand tokens, choose exactly one non-blue accent family from the shadcn/Tailwind color library by default. Map it to `--primary`, `--primary-foreground`, `--ring`, and chart/status tokens. Do not leave `--primary` black unless the user explicitly asks for a monochrome UI or the existing project already uses monochrome tokens. Keep `--accent` as the muted hover/active surface.
 4. Do **not** invent random color combinations. Do not use gradients or colored shadows to make the accent feel bigger. Everything still sits on the neutral ramp.
 
@@ -166,94 +141,5 @@ Good accent examples from shadcn v3 HSL values:
 ```
 
 For charts, use 2–4 shadcn palette stops plus neutral grid/text tokens. For status, use semantic color only when the status exists (`destructive`, success, warning); do not color every badge or row just because a palette is available.
-
-These neutral bases are shadcn/ui (v3) tokens in `H S% L%` form, dropped straight into `:root` and `.dark`, with `--radius: 0.5rem`. Wire Tailwind to them with `hsl(var(--token))`.
-
-### Zinc (default)
-
-```css
-:root {
-  --background: 0 0% 100%;            --foreground: 240 10% 3.9%;
-  --card: 0 0% 100%;                  --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;               --popover-foreground: 240 10% 3.9%;
-  --primary: 240 5.9% 10%;            --primary-foreground: 0 0% 98%;
-  --secondary: 240 4.8% 95.9%;        --secondary-foreground: 240 5.9% 10%;
-  --muted: 240 4.8% 95.9%;            --muted-foreground: 240 3.8% 46.1%;
-  --accent: 240 4.8% 95.9%;           --accent-foreground: 240 5.9% 10%;
-  --destructive: 0 84.2% 60.2%;       --destructive-foreground: 0 0% 98%;
-  --border: 240 5.9% 90%;             --input: 240 5.9% 90%;
-  --ring: 240 10% 3.9%;               --radius: 0.5rem;
-}
-.dark {
-  --background: 240 10% 3.9%;         --foreground: 0 0% 98%;
-  --card: 240 10% 3.9%;              --card-foreground: 0 0% 98%;
-  --popover: 240 10% 3.9%;           --popover-foreground: 0 0% 98%;
-  --primary: 0 0% 98%;               --primary-foreground: 240 5.9% 10%;
-  --secondary: 240 3.7% 15.9%;       --secondary-foreground: 0 0% 98%;
-  --muted: 240 3.7% 15.9%;           --muted-foreground: 240 5% 64.9%;
-  --accent: 240 3.7% 15.9%;          --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;      --destructive-foreground: 0 0% 98%;
-  --border: 240 3.7% 15.9%;          --input: 240 3.7% 15.9%;
-  --ring: 240 4.9% 83.9%;
-}
-```
-
-### Neutral (pure gray)
-
-```css
-:root {
-  --background: 0 0% 100%;            --foreground: 0 0% 3.9%;
-  --card: 0 0% 100%;                  --card-foreground: 0 0% 3.9%;
-  --popover: 0 0% 100%;               --popover-foreground: 0 0% 3.9%;
-  --primary: 0 0% 9%;                 --primary-foreground: 0 0% 98%;
-  --secondary: 0 0% 96.1%;            --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 96.1%;                --muted-foreground: 0 0% 45.1%;
-  --accent: 0 0% 96.1%;               --accent-foreground: 0 0% 9%;
-  --destructive: 0 84.2% 60.2%;       --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 89.8%;               --input: 0 0% 89.8%;
-  --ring: 0 0% 3.9%;                  --radius: 0.5rem;
-}
-.dark {
-  --background: 0 0% 3.9%;            --foreground: 0 0% 98%;
-  --card: 0 0% 3.9%;                  --card-foreground: 0 0% 98%;
-  --popover: 0 0% 3.9%;              --popover-foreground: 0 0% 98%;
-  --primary: 0 0% 98%;               --primary-foreground: 0 0% 9%;
-  --secondary: 0 0% 14.9%;           --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 14.9%;               --muted-foreground: 0 0% 63.9%;
-  --accent: 0 0% 14.9%;              --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;      --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 14.9%;              --input: 0 0% 14.9%;
-  --ring: 0 0% 83.1%;
-}
-```
-
-### Stone (warm gray)
-
-```css
-:root {
-  --background: 0 0% 100%;            --foreground: 20 14.3% 4.1%;
-  --card: 0 0% 100%;                  --card-foreground: 20 14.3% 4.1%;
-  --popover: 0 0% 100%;               --popover-foreground: 20 14.3% 4.1%;
-  --primary: 24 9.8% 10%;             --primary-foreground: 60 9.1% 97.8%;
-  --secondary: 60 4.8% 95.9%;         --secondary-foreground: 24 9.8% 10%;
-  --muted: 60 4.8% 95.9%;             --muted-foreground: 25 5.3% 44.7%;
-  --accent: 60 4.8% 95.9%;            --accent-foreground: 24 9.8% 10%;
-  --destructive: 0 84.2% 60.2%;       --destructive-foreground: 60 9.1% 97.8%;
-  --border: 20 5.9% 90%;              --input: 20 5.9% 90%;
-  --ring: 20 14.3% 4.1%;              --radius: 0.5rem;
-}
-.dark {
-  --background: 20 14.3% 4.1%;        --foreground: 60 9.1% 97.8%;
-  --card: 20 14.3% 4.1%;             --card-foreground: 60 9.1% 97.8%;
-  --popover: 20 14.3% 4.1%;          --popover-foreground: 60 9.1% 97.8%;
-  --primary: 60 9.1% 97.8%;          --primary-foreground: 24 9.8% 10%;
-  --secondary: 12 6.5% 15.1%;        --secondary-foreground: 60 9.1% 97.8%;
-  --muted: 12 6.5% 15.1%;            --muted-foreground: 24 5.4% 63.9%;
-  --accent: 12 6.5% 15.1%;           --accent-foreground: 60 9.1% 97.8%;
-  --destructive: 0 62.8% 30.6%;      --destructive-foreground: 60 9.1% 97.8%;
-  --border: 12 6.5% 15.1%;           --input: 12 6.5% 15.1%;
-  --ring: 24 5.7% 82.9%;
-}
-```
 
 Avoid **Slate** and **Gray** as generic bases — they lean cool/blue. If the product needs color, change only the semantic accent tokens (`--primary`, `--primary-foreground`, `--ring`, and chart/status variables) and leave the neutral ramp intact.

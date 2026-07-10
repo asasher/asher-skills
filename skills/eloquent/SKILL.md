@@ -1,6 +1,6 @@
 ---
 name: eloquent
-description: Use when the user wants help with resumes, CVs, ATS optimization, resume bullets, job description analysis, resume tailoring, cover letters, LinkedIn profiles, interview prep, salary negotiation, offer comparison, references, portfolios, academic CVs, executive resumes, technical resumes, creative resumes, career changes, or resume version management. Provides one entry point with subcommands that load focused reference guidance only when needed.
+description: Career-document and job-search workflows through one command surface — resumes/CVs (creation, ATS optimization, tailoring), cover letters, LinkedIn, job-description analysis, interview prep, salary negotiation, and offer comparison.
 argument-hint: "[command] [target]"
 user-invocable: true
 ---

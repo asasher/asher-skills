@@ -1,6 +1,6 @@
 ---
 name: constraints
-description: Find the constraint — the one thing currently limiting a system (a business, a team, a delivery pipeline, a personal workflow) — and work it with the Theory of Constraints. A user-involved, stateful facilitation. The whole state is one visual HTML page (flow map, suspects board, logic trees, experiment cards) that the user and agent co-develop. Use for "why aren't we growing/shipping/finishing more", bottleneck hunts, "where should I focus", overloaded-person/approval-queue diagnoses, and running exploit/subordinate experiments. Install once in a constraints workspace; resumable across sessions.
+description: Find and work the one constraint limiting a system, Theory-of-Constraints style, on a shared visual HTML page.
 argument-hint: "[new \"<system>\"] | [resume] | [list] | [map|find|dig|cloud|plan|experiment|review]"
 user-invocable: true
 disable-model-invocation: true

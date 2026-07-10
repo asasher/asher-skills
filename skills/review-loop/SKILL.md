@@ -1,6 +1,6 @@
 ---
 name: review-loop
-description: Present any HTML artifact — a plan, prototype, maquette, or doc — to a human for sign-off, and block until a verdict. Serves the committed file over the presentation surface (a tailnet path proxy to a public URL, with a local /hub fallback), injects an in-page annotation layer at serve time, batches feedback into one of three verdicts, and gates the agent on a verdict-coded await. Approvals are bound to the document's content hash — a version the human didn't see is refused — and reconciliation is LLM audit over a response ledger, with no version stamps. Invoked by name by sibling skills (backlog, maquette, prototype) and directly by a user who wants a rendered artifact reviewed. Use to serve an artifact for review, block on its verdict, or sweep dead hub entries. Not for writing the artifact — only for reviewing one already rendered.
+description: Present a rendered HTML artifact — a plan, prototype, maquette, or doc — to a human for sign-off, and block until a verdict. Use to serve an artifact for review, await the verdict, or sweep dead hub entries — directly or from a sibling skill that needs a sign-off gate. Not for writing the artifact.
 argument-hint: "[serve <artifact.html> | await | sweep]"
 user-invocable: true
 ---
@@ -28,11 +28,10 @@ one caller is baked in — callers pass a free-form `--kind` and `--issue` scope
   *is* the verdict: `0` approve, `3` approve-with-nits, `10` request-changes, `124` timeout. Branch on it.
   **Do not block the orchestrator on this inline.** Hold the watch on a **dedicated watcher subagent** that
   loops-until-verdict — its whole job is the wait, so it neither abandons it to save tokens nor drops it to a
-  timeout ceiling. The watcher's model is a **staffing decision** (staffed at the roster Floor), and its
-  completion wakes the parent with the verdict — no `events.jsonl` polling. The watcher is **staffed at the
-  roster Floor** (the cheapest class staffing names, read directly — *not* a generic capability-ranked
-  `route`, which would return the most capable model). The full contract, including the PR-merge watch, is in
-  [watch](reference/watch.md).
+  timeout ceiling. The watcher is **staffed at the roster Floor** — the cheapest class staffing names, read
+  directly (*not* a generic capability-ranked `route`, which would return the most capable model) — and its
+  completion wakes the parent with the verdict; no `events.jsonl` polling. The full contract, including the
+  PR-merge watch, is in [watch](reference/watch.md).
 - **sweep** — `scripts/review-server.py --sweep --surface <dir>` probes every hub entry, drops the dead,
   regenerates the index, and prints `{"swept":[…]}`. Run by a repo's setup health check.
 
@@ -68,10 +67,8 @@ the shape:
   such a surface-config playbook; absent one, review-loop degrades to a local-only fallback (open the file
   on the machine, say remote review is unavailable) rather than improvising a public tunnel.
 - **Sibling skills** — **`staffing` (by name), and only for the watch.** The serve/annotate/hash-bound
-  review *machinery* is a root primitive — it imports no other skill's files and is invoked *by* siblings
-  such as backlog, maquette, and prototype. The one composition is the **delegated watch** ([watch](reference/watch.md)):
-  it composes `staffing` by name and staffs the watcher at the roster **Floor** — the cheapest class staffing
-  names, read directly from the roster (never hardcoded, and *not* a generic capability-ranked `route`, which
-  ranks by intelligence and returns the most capable model). Staffing degrades gracefully (missing roster →
-  fallback + report), so this is a soft dependency; absent staffing the watch still runs on the current model
-  in a subagent.
+  review *machinery* is a root primitive — it imports no other skill's files and is invoked *by* sibling
+  skills. The one composition is the **delegated watch** ([watch](reference/watch.md)): it composes
+  `staffing` by name to staff the watcher at the roster Floor (see `await` above). Staffing degrades
+  gracefully (missing roster → fallback + report), so this is a soft dependency; absent staffing the watch
+  still runs on the current model in a subagent.

@@ -1,6 +1,6 @@
 ---
 name: to-spec
-description: Turn the current conversation into a spec — the high-level direction document a long design discussion earned but never wrote down. Pure synthesis, no interview: it mines what's already on the table (the conversation plus codebase/project understanding), captures what was decided, and writes a repo doc at docs/specs/<name>.md that to-tickets then splits into pickup-able tickets. Adapted from Matt Pocock's to-spec and shipped as our own — never installs an external skill. Speaks generic vocabulary (spec/ticket, not GitHub issue) and adapts to non-dev work: the dev-only sections (testing decisions, test seams) are skipped when they don't apply. Invoked by name by sibling skills (to-tickets) and directly by a user closing out a design conversation. Use to synthesize a decided direction into a spec. Not for eliciting requirements — only for capturing ones already decided.
+description: Turn the current conversation into a spec — the direction document a design discussion earned but never wrote down. Pure synthesis, no interview; writes docs/specs/<name>.md for to-tickets to split into tickets. Use when closing out a conversation that reached a decision. Not for eliciting requirements.
 argument-hint: "[<name for the spec>]"
 user-invocable: true
 ---
@@ -76,6 +76,3 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
   spec to a self-contained review HTML and presents it for sign-off through `review-loop`, composed by name.
   When the user is present, approval is inline. This is the sole sibling and it is **not** a hard dependency:
   skipping review-loop still produces a valid, committed spec. To-spec depends on no other skill.
-
-To-spec is **self-contained at the file level** — every reference and template it needs ships in its own
-directory, and no file here imports or reads another skill's files. It composes siblings by name only.

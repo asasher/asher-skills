@@ -43,5 +43,3 @@ Background the commands draw on — the auth, access, and Shared-Drive model —
 - **gws**: the Google Workspace CLI (`@googleworkspace/cli`). Raw passthrough to every Workspace API method: `gws <service> <resource> <method> --params <JSON> --json <JSON>`.
 - **Managed version**: a new file content uploaded under the **same fileId** via `drive.files.update`, tracked in revision history — not a duplicate sibling file.
 - **Shared Drive**: an org-owned Drive (not a My-Drive folder) — the right home for a team workspace.
-</content>
-</invoke>
