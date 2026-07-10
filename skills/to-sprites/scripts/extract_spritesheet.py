@@ -24,8 +24,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 DEFAULT_GENERATOR_CMD = (
-    "python3 skills/codex-imagegen/scripts/codex_imagegen.py "
-    "--subject {subject} --key magenta --out {out}"
+    "python3 {imagegen} --subject {subject} --key magenta --out {out}"
 )
 ALPHA_THRESHOLD = 10
 
@@ -642,20 +641,28 @@ def _print_validation_report(report: dict) -> None:
         print(f"{status} {check['name']}: {check['detail']}")
 
 
+def _sibling_imagegen_script() -> Path:
+    """Resolve the codex-imagegen sibling by name, beside this skill's own
+    install directory — works in the source repo (skills/) and in any
+    installed layout (.claude/skills/, .agents/skills/, ...)."""
+    return _repo_root() / "codex-imagegen" / "scripts" / "codex_imagegen.py"
+
+
 def _run_generator(subject: str, out_path: Path, generator_cmd: str) -> None:
     repo_root = _repo_root()
-    if generator_cmd == DEFAULT_GENERATOR_CMD:
-        default_script = repo_root / "skills/codex-imagegen/scripts/codex_imagegen.py"
-        if not default_script.exists():
-            raise GenerationError(
-                "--generate needs the optional sibling skill codex-imagegen. "
-                "Install it, pass --in instead, or provide --generator-cmd for a stub/CI generator."
-            )
+    imagegen_script = _sibling_imagegen_script()
+    if generator_cmd == DEFAULT_GENERATOR_CMD and not imagegen_script.exists():
+        raise GenerationError(
+            "--generate needs the optional sibling skill codex-imagegen "
+            f"(looked for {imagegen_script}). "
+            "Install it, pass --in instead, or provide --generator-cmd for a stub/CI generator."
+        )
 
     try:
         command = generator_cmd.format(
             subject=shlex.quote(subject),
             out=shlex.quote(str(out_path)),
+            imagegen=shlex.quote(str(imagegen_script)),
         )
     except KeyError as exc:
         raise GenerationError(f"--generator-cmd placeholder not recognized: {exc}") from exc

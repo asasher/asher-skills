@@ -10,8 +10,8 @@ alone.
 
 **Reconciliation is the model reading the live repo against what's installed and judging it — not a number
 comparison.** setup writes **no version stamp, no `vNN` marker, no content hash, and no template-version
-comment** as the drift-detection mechanism, and it does not look for one. This is a deliberate departure from
-backlog, which stamps installed playbooks with `<!-- ...: vNN -->` and reconciles by comparing versions.
+comment** as the drift-detection mechanism, and it does not look for one. This is the shared posture across
+this repo's operator skills (backlog's earlier `vNN` stamps are retired; its setup reconciles the same way).
 **setup introduces no such stamp.** If you find yourself wanting to write or diff a version token to detect
 drift, that is the wrong mechanism for this skill: read the installed text and the repo, and judge.
 

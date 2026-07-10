@@ -14,7 +14,7 @@ Run these probes and record the results:
    models the session and its config can run). List each reachable model by name. A model the harness cannot
    reach is **not** a roster candidate — record only reachable ones.
 2. **Is the Codex CLI installed?** Probe for it (e.g. `codex --version`). Codex is the path some harnesses
-   use to reach a model they can't call natively (e.g. Claude Code reaching gpt-5.5 only via `codex exec`).
+   use to reach a model they can't call natively (e.g. Claude Code reaching gpt-5.6-sol/terra only via `codex exec`).
    Record present/absent — it decides which CLI mechanics the base includes (see
    [install-and-reconcile](install-and-reconcile.md) § CLI and tools mechanics).
 3. **Which harness memory layer exists?** Detect which global memory file the harness uses
@@ -42,29 +42,39 @@ output*, never the authoritative table — a different machine produces a differ
 
 ```
 # Rankings (higher = better) — SEED VALUES, tune to your machine
-| model    | cost | intelligence | taste |
-|----------|------|--------------|-------|
-| gpt-5.5  | 7    | 8            | 5     |
-| sonnet-5 | 5    | 5            | 7     |
-| opus-4.8 | 4    | 7            | 8     |
-| fable-5  | 2    | 9            | 9     |
+| model         | cost | intelligence | taste |
+|---------------|------|--------------|-------|
+| gpt-5.6-sol   | 4    | 9            | 5     |
+| gpt-5.6-terra | 6    | 5            | 3     |
+| sonnet-5      | 5    | 5            | 5     |
+| opus-4.8      | 3    | 7            | 7     |
+| fable-5       | 1    | 9            | 9     |
 
 # Capabilities (booleans) — separate matrix, one row per model
 | model    | browser-use | computer-use |
 |----------|-------------|--------------|
 | ...      | (probe/fill)| (probe/fill) |
 
-# Task-pins
-| task type            | pinned model |
-|----------------------|--------------|
-| mechanical / bulk    | gpt-5.5      |
+# Capability pins — resolve at step 1, before ranking; the matrix gates only unpinned capabilities
+| capability   | pinned model  |
+|--------------|---------------|
+| browser-use  | gpt-5.6-terra |
+| computer-use | gpt-5.6-terra |
 
-# Reachability / Codex: gpt-5.5 reachable only via the Codex CLI (installed).
+# Task-pins
+| task type         | pinned model |
+|-------------------|--------------|
+| mechanical / bulk | gpt-5.6-sol  |
+
+# Floor: sonnet-5 (Claude-side) / gpt-5.6-terra (Codex-side). Watcher/cron duty runs at the Floor per
+# harness — a Floor assignment, not a pin (review-loop reads the Floor directly for its watcher).
+
+# Reachability / Codex: gpt-5.6-sol/terra reachable only via the Codex CLI (installed).
 ```
 
 Everything above is **audit output for one environment**. On a machine with, say, no Codex CLI and a
 different model lineup, the audit produces a different table, different pins, and different CLI mechanics.
-Never present the four-model rows as the canonical staffing roster; they are a labeled example of what step
+Never present the five-model rows as the canonical staffing roster; they are a labeled example of what step
 (1) plus the seed produces here.
 
 ## Writing the roster from the audit

@@ -1,7 +1,7 @@
 # Rankings, capabilities, pins, and the resolution order
 
 Three structures drive routing, and **they are deliberately separate**: a rankings table, a capability
-matrix, and a task-pin list. Keeping them apart is the whole point — mixing them corrupts the tie-break
+matrix, and a pin list (task-type and capability pins). Keeping them apart is the whole point — mixing them corrupts the tie-break
 (explained below). The concrete rows come from the machine audit and any project override; this file defines
 what each structure *is* and how a routing question resolves against them.
 
@@ -36,14 +36,17 @@ smarter one on an unrelated task, or (b) let raw intelligence override a hard ca
 a model that physically cannot do the job. Either way the `intelligence > taste > cost` ordering stops
 meaning what it says. So capabilities **gate** (filter the candidate set); they never **rank**.
 
-## Task-pins — a separate, first-class list
+## Pins — a separate, first-class list
 
-A **pin** binds a task *type* to a specific model, resolved **before** any ranking. Pins are an explicit
-named list, kept distinct from ranking-derived defaults:
+A **pin** binds a task *type* — or a required *capability* — to a specific model, resolved **before** any
+ranking. Pins are an explicit named list, kept distinct from ranking-derived defaults:
 
-- **mechanical / bulk work** (clear-spec implementation, migrations, data analysis, bulk edits) → the pinned
-  bulk model.
-- (projects add their own pins as deltas.)
+- **Task-type pins** — e.g. **mechanical / bulk work** (clear-spec implementation, migrations, data
+  analysis, bulk edits) → the pinned bulk model.
+- **Capability pins** — e.g. **browser-use → the pinned browser model**, **computer-use → the pinned
+  computer-use model**. A task requiring a pinned capability routes straight to that model; the capability
+  matrix gates only capabilities that carry **no** pin.
+- (projects add their own pins of either kind as deltas.)
 
 A pin **short-circuits the ranking**: if the task matches a pin, you return the pinned model and do **not**
 derive a choice from the table. A pin is a routing decision already made; ranking is for tasks no pin
@@ -53,13 +56,14 @@ covers. Do not "double-check" a pinned choice against the rankings — that defe
 
 Resolve every "which model?" question in this exact order:
 
-1. **Task-type pin?** If the task matches a pin, return the pinned model. **Stop** — skip steps 2–3.
+1. **Pin?** If the task matches a task-type pin, or requires a capability that carries a capability pin,
+   return the pinned model. **Stop** — skip steps 2–3.
 2. **Gates — filter the candidate set before ranking.** Both gates are **hard constraints**, not
    preferences: they remove models from contention, they do not merely nudge the tie-break. Apply whichever
    the task triggers (a task may trigger both, one, or neither):
-   - **Capability gate.** If the task requires a capability (e.g. a browser-driving task needs `browser-use`),
-     filter the candidate models to those the capability matrix marks true for it. A task with no capability
-     requirement keeps all candidates.
+   - **Capability gate.** If the task requires a capability that has **no pin** (step 1 already handled
+     pinned ones), filter the candidate models to those the capability matrix marks true for it. A task with
+     no capability requirement keeps all candidates.
    - **Taste gate.** If the task is **user-facing** (UI, copy, API design), filter the candidates to those
      with **taste ≥ 7**. This is a floor, not a tie-break: a model below taste 7 is out of contention for
      user-facing work no matter how high its intelligence. A task that is not user-facing keeps all
@@ -77,11 +81,12 @@ Resolve every "which model?" question in this exact order:
 
 ### Worked example — a browser-driving task
 
-"Who drives this browser-automation task?" First check pins (step 1): no bulk/mechanical match, so continue.
-Capability gate (step 2): the task requires `browser-use`, so filter to models the **capability matrix**
-marks `browser-use: true` — that is the deciding structure, cited by its matrix location. Then rank *those
-survivors only* (step 3) by intelligence > taste > cost. The smartest model overall is irrelevant if it is
-not in the browser-capable survivor set — that is exactly the corruption the separation prevents.
+"Who drives this browser-automation task?" First check pins (step 1): no task-type match — but if the roster
+carries a **capability pin** for `browser-use`, that model wins here and resolution stops. Only when
+`browser-use` has no pin does the capability gate (step 2) decide: filter to models the **capability matrix**
+marks `browser-use: true` — cited by its matrix location — then rank *those survivors only* (step 3) by
+intelligence > taste > cost. The smartest model overall is irrelevant if it is not in the browser-capable
+survivor set — that is exactly the corruption the separation prevents.
 
 ### Worked example — a bulk mechanical edit
 

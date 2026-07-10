@@ -24,7 +24,7 @@ the shipped-primitive layout (SKILL.md, README.md, agents/, reference/, template
 what it says about **sibling skills** (which inputs, composed how) and how it models **`backlog`** — as an
 imported sibling, or as something else. Cite it.
 
-**P3 (ac-3).** A user runs the skill and points it at a spec at `docs/specs/foo.md`. Is that the right primary
+**P3 (ac-3).** A user runs the skill and points it at a spec at `docs/specs/foo.html`. Is that the right primary
 input? What two other inputs does the skill accept when there's no spec? Cite the sentence.
 
 **P4 (ac-4).** You're splitting a spec for a feature that spans a data layer, business logic, and a UI. A
@@ -78,7 +78,7 @@ ac-1..ac-11, and is the method dual-executor (Opus in-session + `codex exec`) an
   composed by name). On `backlog` it must say to-tickets emits **into** backlog's convention (a **project
   playbook**), **not** an imported sibling — keeping the skill self-contained. Missing any of the three, or
   calling backlog a sibling import, = fail.
-- **P3 (ac-3):** **Yes** — a spec at `docs/specs/<name>.md` (to-spec's output) is the **primary** input. The two
+- **P3 (ac-3):** **Yes** — a spec at `docs/specs/<name>.html` (to-spec's output) is the **primary** input. The two
   alternates are a **plan** and the **raw current conversation**. Cite SKILL.md § "How a split happens" step 1 or
   `reference/slicing.md` § "Read the direction." Naming the wrong primary path, or missing the alternates, =
   fail.

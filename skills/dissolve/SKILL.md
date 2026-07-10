@@ -1,6 +1,6 @@
 ---
 name: dissolve
-description: Take a confusing question or contested concept and dissolve it — rather than pick a side, deconstruct the mental algorithm that makes it feel like a question, taboo the loaded word, and unbundle the disguised sub-questions until no confusion remains. Defaults to a two-agent debate (optionally with a human in the loop), since a lone reasoner smuggles in its own assumptions. Use for "what is X really?", free-will / consciousness / disease / fairness-type puzzles, definitional deadlocks, and stuck conceptual arguments. Stateful and resumable across sessions; the whole state is one shareable HTML page. Install once in a dissolve workspace.
+description: Dissolve a malformed question via two-agent debate — taboo the loaded word, unbundle the sub-questions — instead of answering it.
 argument-hint: "[debate \"<question>\"] | [new \"<question>\"] | [resume] | [list]"
 user-invocable: true
 disable-model-invocation: true
@@ -19,8 +19,7 @@ assumptions. By default you dissolve *with a second agent* (a different model or
 you share one `dissolution.html` and challenge each other's cuts, turn by turn, in a `discussion.md` log. Debate
 isn't decoration — a second agent reliably catches a strand you assumed as a premise and a resolution leaning on
 desert, sharpenings a single pass misses. Optionally a **human joins the loop** — posing the question, owning the
-itch, weighing in each turn. Whoever is present, completion stays subjective: the gate (move 5) is the human's
-when there is one, else the two agents' explicit agreement that the question has stopped being a question. The
+itch, weighing in each turn. Either way completion stays subjective; who owns the gate is a Core rule below. The
 whole state lives in **one self-contained HTML page** that doubles as the shareable artifact; `discussion.md` is
 working scratch, and the HTML is what's true.
 
@@ -50,10 +49,11 @@ starting a dissolution or when a move stalls.
 5. **Resolve & run the gate.** State what's left of the original once the word is tabooed and the parts
    separated. Where a surviving part is a value/decision question, settle it by **consequences** — which stance
    produces better outcomes (blame by what *helps*, not what's deserved) — not by hunting a hidden fact; showing
-   it's *a decision, not a discovery* is the dissolution, not a verdict you impose. Then the **gate**: ask the
-   human whether *any lingering feeling of a hanging question* remains. Any
+   it's *a decision, not a discovery* is the dissolution, not a verdict you impose. Then the **gate**: ask
+   whoever owns the itch — the human when present, else the two agents' explicit agreement (Core rules) —
+   whether *any lingering feeling of a hanging question* remains. Any
    residual "but still…" means it is **not** dissolved — record where the pull is and loop back.
-   *Done when:* the human reports no lingering confusion, or the open thread is logged for next session.
+   *Done when:* the gate's owner reports no lingering confusion. A logged open thread is a paused, resumable state — not completion.
 
 The moves are a loop, not a staircase — tabooing often exposes a new sub-question that sends you back to move 2.
 

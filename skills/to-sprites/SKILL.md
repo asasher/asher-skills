@@ -1,6 +1,6 @@
 ---
 name: to-sprites
-description: Extract flat-keyed sprite sheets into transparent per-element PNG/WebP assets plus spritesheet.json manifests. Use when Codex needs to slice generated or hand-made sprite sheets, remove a chroma key background by auto border sample or supplied hex color, trim and name tiles, produce CSS/engine frame metadata, validate extraction quality, create a contact sheet, or optionally start from a prompt by composing the codex-imagegen sibling skill before extraction. Codex-first asset pipeline for game, web, and prototype sprites.
+description: Extract flat-keyed sprite sheets into transparent per-element PNG/WebP assets plus a spritesheet.json manifest. Use to slice a generated or hand-made sheet, remove a chroma-key background, trim and name tiles, emit CSS/engine frame metadata, validate extraction — or generate the source sheet first via the codex-imagegen sibling.
 argument-hint: "[--in sheet.png | --generate subject] [--cols N --rows N] [--names a,b,...]"
 ---
 
@@ -64,10 +64,13 @@ extracted sprite. Each element carries `name`, `index`, `row`, `col`, `sheet_rec
 
 ## Generate Source
 
-With `--generate "SUBJECT"`, the script shells out by command template instead of importing another skill:
+With `--generate "SUBJECT"`, the script shells out by command template instead of importing another skill.
+The default template resolves the `codex-imagegen` sibling **by name at runtime** — it looks for
+`codex-imagegen/scripts/codex_imagegen.py` beside this skill's own install directory, so it works wherever
+the skill set is installed:
 
 ```sh
-python3 skills/codex-imagegen/scripts/codex_imagegen.py --subject {subject} --key magenta --out {out}
+python3 {imagegen} --subject {subject} --key magenta --out {out}
 ```
 
 The generated source is handed into the normal pipeline, and the manifest records `source.generated: true`
@@ -87,5 +90,6 @@ new sheet, because the same flat-key prompt rules make generation and extraction
   [manifest](reference/manifest.md), [prompts](reference/prompts.md), and
   [validation](reference/validation.md), plus `scripts/extract_spritesheet.py` and the offline evals.
 - **Project playbooks** — none. `to-sprites` does not install repo-specific playbooks.
-- **Optional sibling skill** — `codex-imagegen`, composed by name/subprocess only for `--generate`. The
-  extractor imports no sibling files and degrades cleanly when the sibling is absent.
+- **Optional sibling skill** — `codex-imagegen`, composed only for `--generate`: the sibling's script is
+  resolved by name at runtime (beside this skill's install directory) and run as a subprocess — no file
+  imports, no path baked to one repo layout. Degrades cleanly when the sibling is absent.

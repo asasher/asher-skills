@@ -1,17 +1,22 @@
 # Install, scope decision, reconciliation, and harness mechanics
 
-## Two-layer install
+## The install shapes
 
-The roster installs in two layers so the audited machine-wide truth is written once and each project records
-only what differs.
+Where the roster lives is the **human's scope decision** (see the scope-decision flow below): **project-only**
+— one project playbook holds the whole roster, no global write — or **global-with-overrides** — the audited
+machine-wide truth written once as a global base, each project recording only what differs. Both are
+legitimate; the two-layer structure below describes the global-with-overrides shape.
 
 - **Global base** — harness-coupled, written once from the [machine audit](machine-audit.md). It holds the
-  full roster: the **audited rankings table**, the **generic routing rules**, the **task-pins**, the
-  **capability matrix**, and the **CLI/tools mechanics**. Location depends on the harness the audit detected:
+  full roster: the **audited rankings table**, the **generic routing rules**, the **pins** (task-type and
+  capability), the **capability matrix**, and the **CLI/tools mechanics**. Location depends on the harness
+  the audit detected:
   - **Claude Code** → `~/.claude/CLAUDE.md`.
   - **Codex** → the global AGENTS layer, e.g. `~/.codex/AGENTS.md`.
-  - If both harness layers exist on the machine, write the base to each so every harness reads the same
-    roster.
+  - If both harness layers exist on the machine, write the base to each — **the same rankings, filtered per
+    harness to only the models that harness can reach**: the AGENTS layer omits Claude models (unreachable
+    from Codex), while the CLAUDE layer includes Codex-CLI-reachable OpenAI models. The numbers are
+    harness-independent; only the row set differs.
 - **Project override** — lives in the project's `docs/agents/` (a staffing playbook). It carries **only
   deltas** from the base — for example a stricter floor, one extra pin, or a capability correction for this
   repo. **It never re-copies the base.** If a project override restates the whole table, that is a bug: strip
@@ -69,27 +74,28 @@ tools the audit found present. A project override may specialize these; keep the
 
 ### Codex CLI (include only if the audit found Codex installed)
 
-- Some models are reachable only through the Codex CLI (e.g. gpt-5.5). Delegate with a self-contained prompt:
+- Some models are reachable only through the Codex CLI (e.g. gpt-5.6-sol). Delegate with a self-contained prompt:
   `codex exec -s read-only --skip-git-repo-check` for investigation and review; `-s workspace-write` when it
   must edit. Add `-c tools.web_search=true -o <outfile>` for research runs.
-- Codex runs can outlive shell timeouts — pass an explicit timeout, or run in the background and poll the
-  outfile.
+- Codex runs can outlive shell timeouts — pass an explicit timeout, and hold every delegated run in a
+  watched wrapper subagent (below) so its completion wakes the orchestrator. No fire-and-forget background
+  shells for delegated work.
 - Codex bills to its own subscription, which is why research and bulk fan-outs route there rather than to
   in-harness subagent fleets.
 
 ### Harness-specific mechanics (a project or harness base specializes this)
 
 The generic rule: **Claude-family models run via the harness's native model dispatch; a non-native model
-(e.g. gpt-5.5) is reached through its CLI, wrapped so the harness can drive it.** The Claude Code
+(e.g. gpt-5.6-sol) is reached through its CLI, wrapped so the harness can drive it.** The Claude Code
 specialization, written into `~/.claude/CLAUDE.md` when that harness is detected:
 
 - Claude models run via the Agent/Workflow `model` parameter.
-- gpt-5.5 inside workflows/subagents needs a **wrapper**: the `model` parameter takes only Claude models, so
+- gpt-5.6-sol inside workflows/subagents needs a **wrapper**: the `model` parameter takes only Claude models, so
   spawn a thin wrapper agent (`model: 'sonnet', effort: 'low'`) whose prompt writes a self-contained codex
   prompt, runs `codex exec` via Bash, and returns the report (use a `schema` for structured output).
-- **Label** these agents with a `gpt-5.5:` prefix (e.g. `{label: 'gpt-5.5:review-auth'}`) — the UI shows the
-  wrapper's Claude model, so the label is the only signal the real worker is gpt-5.5.
-- Parallel gpt-5.5 implementation agents use `isolation: 'worktree'` so codex edits don't collide.
+- **Label** these agents with a `gpt-5.6-sol:` prefix (e.g. `{label: 'gpt-5.6-sol:review-auth'}`) — the UI shows the
+  wrapper's Claude model, so the label is the only signal the real worker is gpt-5.6-sol.
+- Parallel gpt-5.6-sol implementation agents use `isolation: 'worktree'` so codex edits don't collide.
 - Token budgets count only Claude tokens; codex work is free and invisible to the budget.
 
 A different harness writes its own equivalent into its own memory layer; the generic rule above is what a

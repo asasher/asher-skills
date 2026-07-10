@@ -1,6 +1,6 @@
 ---
 name: maquette
-description: Build a sellable, high-fidelity, browser-only prototype of a greenfield product — every user journey clickable, realistic mock data, simulated network feel, a live MCP demo surface, and a handoff contract a full-stack agent can implement from. Use when the user wants a demo-quality prototype to pitch/sell a product idea, a clickable greenfield app prototype, or a pre-implementation product mockup. Not for MVPs, real backends, or changes to existing products.
+description: Build a sellable, high-fidelity, browser-only maquette of a greenfield product — every journey clickable, realistic mock data, a live MCP demo surface, and a handoff contract an agent can implement from. Use to pitch a product before it exists. Not for MVPs, real backends, or changes to existing products.
 argument-hint: "[product idea or brief]"
 user-invocable: true
 ---
@@ -62,7 +62,9 @@ Only as deep as the intake agreed. Typical briefs: how practitioners in this dom
 business process today, competitor teardowns (screens, terminology, pricing pages), the vocabulary and data
 fields users expect to see. Use whatever parallel research capability the environment provides; verify
 load-bearing claims from a second source. Fold findings back into `BRIEF.md` as amendments — flag anything
-that contradicts what the user said in intake rather than silently overriding.
+that contradicts what the user said in intake rather than silently overriding. **Done when:** every brief
+in the intake's research mandate is answered and cited in `BRIEF.md`, and every finding that contradicts
+intake is flagged rather than silently folded in.
 
 ### 3. Journey and screen design — load [ux-rules](references/ux-rules.md)
 
@@ -84,14 +86,17 @@ change; built screens are not.
 
 Write `lib/schema.ts` (the domain types — this is the future database schema) and the seeded fixture
 generators. Get volumes, distributions, edge cases, and cross-references right here; realism is engineered,
-not sprinkled.
+not sprinkled. **Done when:** `lib/schema.ts` plus fixtures cover every screen and state listed in
+`JOURNEYS.md` (populated / loading / empty / error) and every cross-referenced entity resolves.
 
 ### 5. Build — load [architecture](references/architecture.md), [design-language](references/design-language.md), [web-quality](references/web-quality.md)
 
 Scaffold per the architecture recipe, then build screens in journey order (demo-critical first). Design
 language: the client's brand tokens if intake produced them, otherwise stock shadcn/ui — never invent a
-third option. When the screens work, do a dedicated **details pass** with [feel](references/feel.md):
-motion, typography, depth, perceived latency. Fidelity is an explicit pass, not an ambient hope.
+third option. Once every approved journey runs end-to-end from the seeded store with no dead ends, do a
+dedicated **details pass** with [feel](references/feel.md): motion, typography, depth, perceived latency.
+Fidelity is an explicit pass, not an ambient hope. **Done when:** every approved journey runs end-to-end
+and every demo-beat screen has been through the details pass.
 
 ### 6. Demo hardening — load [demo](references/demo.md)
 

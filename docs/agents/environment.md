@@ -1,5 +1,3 @@
-<!-- backlog-templates: v2026-07-06.1 -->
-
 # Playbook: Environment
 
 > Project playbook for this repo. Shared — read by any backlog subskill that builds a branch, runs, or tests the app (`implement`, `verify`, `evidence`, `diagnose`, the PR step, the review fixer) and by `run` for the parallelism verdict. Tailor every section to this codebase. `setup` fills the isolation, seed, and parallelism sections from its audit.
@@ -45,7 +43,7 @@
 
 - Auth model: **none for exercising skills** — running a skill against a scenario needs no login. Two credentials support the loop's infrastructure, both already provisioned on this machine:
   - GitHub tracker/PRs: `gh` CLI, authed as `asasher` (keyring). Mints nothing per-run.
-  - gpt-5.5 executor: the Codex CLI, authed to its own subscription (`codex --version` → 0.140.0). Billed separately from the session.
+  - Codex executor (gpt-5.6-sol / gpt-5.6-terra): the Codex CLI, authed to its own subscription (`codex --version` → 0.144.1). Billed separately from the session.
 - How an agent mints a session: n/a — no app session to mint.
 - Test accounts / where credentials live: `gh` keyring and `~/.codex/`; never hardcode, never echo them.
 
@@ -56,7 +54,7 @@
 - Form factor(s): **skill** — a Claude Code / Codex skill (SKILL.md + references/scripts). Not CLI/web/mobile/desktop. The thing under test is a prompt-driven procedure, so "driving the app" means running the skill against a scenario and judging the transcript.
 - Driver per surface:
   - **In-session executor (Claude):** spawn a subagent (Agent tool, `subagent_type: claude` or `general-purpose`) that reads the target skill's `SKILL.md` and works a probe scenario. This is the primary driver — Opus/Fable in-session.
-  - **Independent executor (gpt-5.5):** `codex exec -s read-only --skip-git-repo-check` (or `-s workspace-write` when the run must edit) with a self-contained prompt that points at the skill and scenario. A second, differently-modeled executor per `docs/patterns/probe-evals.md`.
+  - **Independent executor (gpt-5.6-sol):** `codex exec -s read-only --skip-git-repo-check` (or `-s workspace-write` when the run must edit) with a self-contained prompt that points at the skill and scenario. A second, differently-modeled executor per `docs/patterns/probe-evals.md`.
   - Any stdlib script a skill ships (e.g. `review-server.py`) is driven directly with `python3`.
 - Independent runtime verification: delegate a scenario to `codex exec` for a second executor outside the orchestrator's context (mechanics in `CLAUDE.md` § Staffing → Mechanics). Reading skill files, grading transcripts against an answer key, and running a skill's `scripts/` stay local.
 - Evidence capture per surface: the **eval transcript** (the executor's run) plus a **pass/fail verdict table** mapping each probe to its answer-key criterion. For a skill that produces a visual artifact (e.g. `maquette`, a rendered plan), also a screenshot of the rendered HTML. Terminal transcripts for script behavior.
@@ -86,14 +84,17 @@
 
 > Read by `run` at dispatch and by every reference that spawns work. The skill defines the roles (`reference/staffing.md`: orchestrator, builder by surface, checker, floor); the general rankings and routing rules live in this repo's **`CLAUDE.md` § Staffing** (hand-authored — at setup the user chose to keep it as the single source rather than install the marked `AGENTS.md` § Picking models section, so Codex-driven threads read the roster from here instead). This section is the **compiled roster** — those rules crossed with this repo's surfaces and what each harness can actually reach; list only reachable models, since one harness usually cannot spawn another vendor's models. One model may fill several roles.
 
-- Floor: **sonnet-5** — never Haiku (`CLAUDE.md` § Staffing). Nothing staffs below sonnet-5 in any role.
+- Floor: **sonnet-5** (Claude-side) or **gpt-5.6-terra** (Codex-side) — never Haiku (`CLAUDE.md` § Staffing). Nothing staffs below the Floor in any role.
+- **One thread pattern everywhere: orchestrator + subagents.** Every delegated thread — Claude or Codex — runs as an Agent-tool subagent the orchestrator watches; completion wakes the orchestrator, so it also watches the threads. A Codex thread is held by a thin wrapper subagent (`model: 'sonnet', effort: 'low'`, labeled `gpt-5.6-sol:…`) that composes a self-contained codex prompt, runs `codex exec` via Bash, and returns the report. No raw fire-and-forget background shells for delegated work.
 - From **Claude Code** (this loop's harness):
-  - Orchestrator: the session model — **opus-4.8** in this session; the most capable reachable Claude model in general.
-  - Builder (backend / mechanical — clear-spec skill edits, reference rewrites, bulk work): **gpt-5.5 via `codex exec`** (`CLAUDE.md` § Staffing → Mechanics). Inside a Workflow/subagent, since the `model` param takes only Claude models, spawn a thin wrapper agent (`model: 'sonnet', effort: 'low'`, labeled `gpt-5.5:…`) whose prompt writes a self-contained codex prompt, runs `codex exec` via Bash, and returns the report. Parallel gpt-5.5 edit agents use `isolation: 'worktree'`.
-  - Builder (ui / taste ≥ 7 — SKILL copy, plan/prototype HTML, anything user-facing): a Claude model via the Agent `model` override — **fable-5** (taste 9) or **opus-4.8** (taste 8).
-  - Checker: probe-eval executor runs on **both** gpt-5.5 (`codex exec`) and a Claude model in-session, per `docs/patterns/probe-evals.md`'s dual-executor design; verify⇆fix mechanics on gpt-5.5; review/grading judgment on **fable-5 or opus-4.8** (skill reviews and probe grading, per `AGENTS.md`). The Reviewer handles the full criteria including rendered artifacts.
-- From **Codex** (if the loop is ever driven from Codex instead): Claude models are unreachable, so every role collapses onto **gpt-5.5**, still delegated into separate threads.
-- Succession: if the session model is unreachable, the most capable reachable Claude model orchestrates (**fable-5**, then opus-4.8, then sonnet-5), keeping all Claude-side roles; **gpt-5.5 via `codex exec`** remains the mechanical builder/checker regardless, since it bills to its own subscription.
+  - Orchestrator: the session model — **fable-5** in current sessions; the most capable reachable Claude model in general.
+  - Builder (backend / mechanical — clear-spec skill edits, reference rewrites, bulk work): **gpt-5.6-sol via `codex exec`** (`CLAUDE.md` § Staffing → Mechanics), through the wrapper-subagent pattern above. Parallel codex edit agents use `isolation: 'worktree'`.
+  - Builder (ui / taste ≥ 7 — SKILL copy, plan/prototype HTML, anything user-facing): a Claude model via the Agent `model` override — **fable-5** (taste 9) or **opus-4.8** (taste 7).
+  - Checker: probe-eval executor runs on **both** gpt-5.6-sol (`codex exec`) and a Claude model in-session, per `docs/patterns/probe-evals.md`'s dual-executor design; verify⇆fix mechanics on gpt-5.6-sol; review/grading judgment on **fable-5 or opus-4.8** (skill reviews and probe grading, per `AGENTS.md`). The Reviewer handles the full criteria including rendered artifacts.
+  - Watcher / cron (review-verdict watches, PR-merge watches, scheduled check-ins): the Floor — **sonnet-5** in-session; **gpt-5.6-terra** for Codex-side scheduled jobs. Watchers only wait and relay; judgment escalates to the orchestrator.
+  - Capability pins (gates before ranking): **browser-use → gpt-5.6-terra**, **computer-use → gpt-5.6-terra**, both via the Codex computer-use client (Claude-side headless Chrome is blocked on this machine).
+- From **Codex** (if the loop is ever driven from Codex instead): Claude models are unreachable, so every role collapses onto **gpt-5.6-sol** (terra for watch/cron). The **same orchestrator-subagent pattern holds**: the Codex orchestrator delegates each thread to its native agent-thread facility (`[agents]` in `~/.codex/config.toml` — max_depth 3, max_threads 20 on this machine) and watches them — no fire-and-forget shells there either.
+- Succession: if the session model is unreachable, the most capable reachable Claude model orchestrates (**fable-5**, then opus-4.8, then sonnet-5), keeping all Claude-side roles; **gpt-5.6-sol via `codex exec`** remains the mechanical builder/checker regardless, since it bills to its own subscription.
 
 ## Parallelism verdict
 

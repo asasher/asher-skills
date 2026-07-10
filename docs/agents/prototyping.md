@@ -1,5 +1,3 @@
-<!-- backlog-templates: v2026-07-06.1 -->
-
 # Playbook: Prototyping
 
 > Project playbook for this repo. The backlog `prototype` subskill reads this file for the technique; the gates are in the skill's `reference/prototype.md`. The two shapes below are the shipped default (adapted from Matt Pocock's `prototype` skill, MIT) — tailor the **This repo** section; replace the technique if this team prototypes differently.

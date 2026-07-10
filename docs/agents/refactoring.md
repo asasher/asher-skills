@@ -1,5 +1,3 @@
-<!-- backlog-templates: v2026-07-06.1 -->
-
 # Playbook: Refactoring
 
 > Project playbook for this repo. The backlog `refactor` subskill reads this file for the technique; the gates are in the skill's `reference/refactor.md`. Tailor the **This repo** section; replace the technique with house practice if this team refactors differently.

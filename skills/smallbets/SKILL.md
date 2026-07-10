@@ -1,6 +1,6 @@
 ---
 name: smallbets
-description: Use when the user wants help with early-stage business ideas, founder strategy, community selection, idea validation, manual-first MVPs, processizing a service before building software, first customers, pricing, content marketing, sustainable growth, hiring, company values, bootstrapping, or reviewing a business decision through The Minimalist Entrepreneur style of small, profitable, community-led bets. Provides one entry point with subcommands that load focused reference guidance only when needed.
+description: Minimalist-entrepreneur founder workflows — community-first validation, manual MVPs, first customers, pricing, sustainable growth.
 argument-hint: "[command] [business, idea, or decision]"
 user-invocable: true
 disable-model-invocation: true

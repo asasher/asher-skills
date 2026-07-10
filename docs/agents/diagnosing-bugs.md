@@ -1,5 +1,3 @@
-<!-- backlog-templates: v2026-07-06.1 -->
-
 # Playbook: Diagnosing Bugs
 
 > Project playbook for this repo. The backlog `diagnose` subskill reads this file for the whole diagnosis discipline; the gates it must clear are in the skill's `reference/diagnose.md`. The technique below is the shipped default (adapted from Matt Pocock's `diagnosing-bugs` skill, MIT) — replace any of it with house practice; the **This repo** section is always yours.

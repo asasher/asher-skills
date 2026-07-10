@@ -14,17 +14,20 @@ workflow skill, an ad-hoc session, and any harness — not just one dev loop.
 ## Shape
 
 - **Compiled, not hardcoded.** A machine audit probes which models the harness can reach and whether the
-  Codex CLI is installed, then writes the table from that. Asher's four-model table exists only as a *labeled
-  example of audit output*, never as the shipped roster. Cost/intelligence/taste are seeded and user-tuned.
+  Codex CLI is installed, then writes the table from that. The example table in `machine-audit.md` exists
+  only as a *labeled example of audit output*, never as the shipped roster. Cost/intelligence/taste are
+  seeded and user-tuned.
 - **Three separate structures.** A rankings table (cost/intelligence/taste, higher = better), a distinct
-  capability matrix (browser-use/computer-use booleans), and a first-class task-pin list. They stay apart so
-  the `intelligence > taste > cost` tie-break isn't corrupted by mixing a boolean into a ranked axis.
-- **One resolution order.** pin → capability gate → rank tie-break → fallback ladder.
-- **Two-layer install.** A global base (harness-coupled: `~/.claude/CLAUDE.md` or `~/.codex/AGENTS.md`) plus
-  sparse project overrides in `docs/agents/` that carry only deltas. A resolver reads base, then applies
-  deltas.
-- **Reconcile by LLM audit, no version stamps** — a deliberate departure from backlog's `vNN` template
-  stamps.
+  capability matrix (browser-use/computer-use booleans), and a first-class pin list (task-type and
+  capability pins). They stay apart so the `intelligence > taste > cost` tie-break isn't corrupted by mixing
+  a boolean into a ranked axis.
+- **One resolution order.** pin (task-type or capability) → capability/taste gates → rank tie-break →
+  fallback ladder.
+- **Scope is the human's choice.** Project-only (one project playbook, no global write) or
+  global-with-overrides: a global base (harness-coupled: `~/.claude/CLAUDE.md` or `~/.codex/AGENTS.md`, each
+  filtered to the models that harness can reach) plus sparse project overrides in `docs/agents/` that carry
+  only deltas. A resolver reads base, then applies deltas.
+- **Reconcile by LLM audit, no version stamps** — the shared posture across this repo's operator skills.
 - **Global writes are consent-gated** via a scope-decision flow.
 
 ## Layout

@@ -1,5 +1,3 @@
-<!-- backlog-templates: v2026-07-06.1 -->
-
 # Playbook: Platform Bindings
 
 > Project playbook for this repo. Shared — read by every subcommand that touches the tracker (`groom`, `run`, the issue loop), proposes or edits a PR (the create-PR step, `adversarial-review`, `evidence`), or creates and publishes working copies (`run`, `implement`, the fixer). The skill's references speak in **role nouns** — issue, label, PR, branch, worktree, push — and this file binds each role to this repo's real platform. Bindings are prose contracts, not adapter code: each verb records the working command (or harness tool call) verified by `backlog setup` — live at binding time, end-to-end when the smoke test runs. A recorded command that no longer exists is drift — re-run `backlog setup`.
@@ -23,7 +21,7 @@
 
 - Binding: **github** — pull requests on `asasher/asher-skills`.
 - Verbs:
-  - Open a PR (ready for review, with a body per `pr.md`): `gh pr create --title '...' --body-file <file>`.
+  - Open a PR (ready for review, with a body per `change-description.md`): `gh pr create --title '...' --body-file <file>`.
   - Edit the PR body: `gh pr edit <n> --body-file <file>`.
   - Read review comments since a SHA: `gh pr view <n> --comments`; for inline threads `gh api repos/asasher/asher-skills/pulls/<n>/comments`.
   - Post a review comment / reply: `gh pr comment <n> --body '...'`.
@@ -44,7 +42,7 @@
 ## Harness — how threads are spawned
 
 - Binding: **Claude Code** — the loop runs from Claude Code; the model roster per harness is in `environment.md` § Model staffing.
-- Create an issue thread with a prompt and a working directory: the Agent tool (`subagent_type: claude` or `general-purpose`), `isolation: 'worktree'` when a thread must isolate; gpt-5.5 threads run via `codex exec --cd <dir>` (Codex mechanics in `CLAUDE.md` § Staffing → Mechanics; the workflow-wrapper detail is in `environment.md` § Model staffing).
+- Create an issue thread with a prompt and a working directory: the Agent tool (`subagent_type: claude` or `general-purpose`), `isolation: 'worktree'` when a thread must isolate; Codex (gpt-5.6-sol) threads run via `codex exec --cd <dir>`, held by a wrapper subagent so the orchestrator watches them like any other thread (Codex mechanics in `CLAUDE.md` § Staffing → Mechanics; the wrapper detail is in `environment.md` § Model staffing).
 - Can a spawned thread read this skill's bundled references from disk? Yes — at `.claude/skills/backlog/reference/` and `docs/agents/` in the checkout.
 - Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; the review loop awaits `scripts/review-await.py`. The watch is **held on a dedicated staffing-resolved watcher subagent that loops-until-verdict**, not the orchestrator inline — contract in `skills/review-loop/reference/watch.md` (applies to both the approval gate and the PR-merge watch).
 

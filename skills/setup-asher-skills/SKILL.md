@@ -1,6 +1,6 @@
 ---
 name: setup-asher-skills
-description: The prompt-driven installer for this skills repo — wire the right asher-skills into a project without hand-wiring. Audits three surfaces (the repo, the machine's reachable models, and what the project is for), interviews the user one plain-language decision at a time, then installs a dependency-complete skill set pulled only from this repo's public GitHub endpoint and writes the project's skill map. Project-first: everything installs project-local by default; global is offered only for a genuinely reusable skill (staffing), and only with consent. Re-invoke to audit an existing install for drift, overlap, or a broken dependency closure — reconciliation is an LLM read of the live repo against what's installed, with no version stamps. Invoked directly by a user setting up or re-checking a project. Use to set a project up with these skills, add a skill and its siblings, or reconcile a drifted install. Not for authoring a skill (that is the skill's own job) or for installing anything from outside this repo.
+description: The prompt-driven installer for this skills repo. Use to set a project up with the right asher-skills, add a skill with its sibling closure, or audit an existing install for drift — an interview, one decision at a time, project-local by default, pulled only from this repo. Not for authoring skills or installing from anywhere else.
 argument-hint: "[setup | audit]"
 user-invocable: true
 ---
@@ -14,8 +14,7 @@ explainers → confirm → write) and adapted as ours: it audits **three** surfa
 sibling closure, and defaults every install to project-local.
 
 It ships **no runtime** — no server, no installer binary. It drives the existing `npx skills` tooling, invokes
-the `staffing` skill by name for the machine audit, and runs each installed skill's own setup. Composition is
-by name, never by importing another skill's files (`AGENTS.md` § Conventions).
+the `staffing` skill for the machine audit, and runs each installed skill's own setup.
 
 ## Command surface
 
@@ -61,7 +60,9 @@ write**, and nothing touches disk until the user approves the whole plan at conf
    code, and fall back to self-host placement on a miss. The `-y` skips the confirmation prompt since the user
    already confirmed at phase 3. Then run each installed skill's own setup (staffing's roster, review-loop's
    surface config, backlog's `docs/agents/` suite), write the `## Agent skills` block into the harness memory
-   file, and write the repo pointer.
+   file, write the repo pointer, and — consent-gated, if absent — seed the **global conventions**
+   (`templates/global-conventions.md`: local-first HTML presentation, tailnet up/down) into the harness's
+   global memory file.
 
 ## How it composes
 
@@ -79,14 +80,15 @@ Three kinds of dependency, per `AGENTS.md` § Conventions:
 
 1. **Bundled references** — this skill's own contract under `reference/` ([interview](reference/interview.md),
    [catalog](reference/catalog.md), [audit-mode](reference/audit-mode.md)) plus the seed templates under
-   `templates/` (`agent-skills-block.md`, `repo-pointer.md`). These carry the full contract so the skill runs
-   standalone; they import no other skill's files.
+   `templates/` (`agent-skills-block.md`, `repo-pointer.md`, `global-conventions.md`). These carry the full
+   contract so the skill runs standalone; they import no other skill's files.
 2. **Project artifacts it writes** — the `## Agent skills` context block written into the target repo's
-   `AGENTS.md`/`CLAUDE.md` (the per-project skill map — no separate `ask-asher` router) and the repo pointer.
-   The `docs/agents/` playbooks are **guaranteed, not authored here**: each installed skill's own setup writes
-   them.
+   `AGENTS.md`/`CLAUDE.md` (the per-project skill map — no separate `ask-asher` router), the repo pointer,
+   and the consent-gated global `## Conventions` seed (local-first HTML presentation, tailnet up/down) in the
+   harness's global memory file. The `docs/agents/` playbooks are **guaranteed, not authored here**: each
+   installed skill's own setup writes them.
 3. **Sibling skills it installs and guarantees** — every skill in this repo, pulled **only** from
    `https://github.com/asasher/asher-skills`. `staffing` is composed by name for the machine audit; the rest
    (`review-loop`, `plan`, `prototype`, `backlog`, `to-spec`, `to-tickets`, `maquette`, `to-sprites`, and the
    catalog skills) are installed per the interview, with their sibling closures guaranteed
-   ([catalog](reference/catalog.md)). It imports no sibling's files.
+   ([catalog](reference/catalog.md)).

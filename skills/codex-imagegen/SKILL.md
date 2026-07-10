@@ -1,6 +1,6 @@
 ---
 name: codex-imagegen
-description: Generate real raster images headlessly through the Codex CLI's built-in image_gen tool (no OPENAI_API_KEY — runs off the ChatGPT login), then chroma-key them into transparent PNGs. Use to produce game/app assets, sprites, textures, icons, or illustrations from a coding agent that has no image model of its own. Covers the non-obvious capture recipe (the bytes live in the session transcript, not a file) and batch generation.
+description: Generate real raster images headlessly through the Codex CLI's built-in image_gen tool (no OPENAI_API_KEY — runs off the ChatGPT login), then chroma-key them into transparent PNGs. Use to produce game/app assets, sprites, textures, icons, or illustrations from a coding agent that has no image model of its own.
 argument-hint: "[subject] [--key magenta|green] [--out path]"
 ---
 
@@ -55,4 +55,4 @@ Always open the result. Failure modes to check for:
 
 ## Fallback: the CLI path (needs a key)
 
-Codex's system skill also has `~/.codex/skills/.system/imagegen/scripts/image_gen.py` (subcommands `generate` / `edit` / `generate-batch`, gpt-image-2 / gpt-image-1.5 with true `--background transparent`). It is fully scriptable and deterministic but **hard-requires `OPENAI_API_KEY`** and will not use the ChatGPT OAuth token. Use it only when a key is available and the user asks for the CLI/API path; otherwise the built-in tool above is the no-cost route.
+Only when an `OPENAI_API_KEY` is available *and* the user asks for the CLI/API path (a fully scriptable, deterministic `image_gen.py` with true transparency). See [api-key-path](reference/api-key-path.md).

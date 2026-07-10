@@ -1,6 +1,6 @@
 ---
 name: to-spec
-description: Turn the current conversation into a spec — the high-level direction document a long design discussion earned but never wrote down. Pure synthesis, no interview: it mines what's already on the table (the conversation plus codebase/project understanding), captures what was decided, and writes a repo doc at docs/specs/<name>.md that to-tickets then splits into pickup-able tickets. Adapted from Matt Pocock's to-spec and shipped as our own — never installs an external skill. Speaks generic vocabulary (spec/ticket, not GitHub issue) and adapts to non-dev work: the dev-only sections (testing decisions, test seams) are skipped when they don't apply. Invoked by name by sibling skills (to-tickets) and directly by a user closing out a design conversation. Use to synthesize a decided direction into a spec. Not for eliciting requirements — only for capturing ones already decided.
+description: Turn the current conversation into a spec — the direction document a design discussion earned but never wrote down. Pure synthesis, no interview; writes a self-contained HTML deliverable at docs/specs/<name>.html for to-tickets to split into tickets. Use when closing out a conversation that reached a decision. Not for eliciting requirements.
 argument-hint: "[<name for the spec>]"
 user-invocable: true
 ---
@@ -23,12 +23,12 @@ skill.
 ## Command surface
 
 - **`to-spec [<name>]`** — synthesize the current conversation into a spec and write it to
-  `docs/specs/<name>.md`. With no name, derive a short kebab-case one from the decided direction. This is the
-  only command; invoked bare, it runs the synthesis.
+  `docs/specs/<name>.html`. With no name, derive a short kebab-case one from the decided direction. This is
+  the only command; invoked bare, it runs the synthesis.
 
 Load [synthesis](reference/synthesis.md) for the method (what to mine, the no-interview rule, dev-vs-non-dev
 gating, the no-stale-content rule, sign-off) and [template-guide](reference/template-guide.md) for what goes
-in each section. The fillable scaffold is [templates/spec.md](templates/spec.md).
+in each section. The fillable scaffold is [templates/spec-skeleton.html](templates/spec-skeleton.html).
 
 ## How a spec gets written
 
@@ -42,17 +42,19 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
    uses only the core sections.
 3. **For dev specs only — sketch the test seams.** Name the public seams the work would be tested at and
    **prefer the highest existing seam** (adapted from Matt Pocock). Skip this entirely for non-dev specs.
-4. **Write the spec** from the template into `docs/specs/<name>.md`, in generic vocabulary.
-5. **Sign-off.** If the user is present, take approval inline. If they're AFK, present the spec for sign-off
-   through the optional `review-loop` sibling (render the markdown to a self-contained review HTML first) —
+4. **Write the spec** from the skeleton into `docs/specs/<name>.html`, in generic vocabulary — a
+   self-contained HTML deliverable with stable element ids, same house style as a plan.
+5. **Sign-off.** If the user is present, open the rendered spec and take approval inline. If they're AFK,
+   serve the spec directly through the optional `review-loop` sibling (it is already review-ready HTML) —
    see the dependency surface.
 
 ## What a spec is (and isn't)
 
 - **Generic vocabulary.** A spec describes direction; `to-tickets` splits it into **tickets**. Say "spec" and
   "ticket" — never GitHub-specific "issue." The unit of downstream work is a ticket.
-- **The artifact is a repo doc** at `docs/specs/<name>.md` — the direction document `to-tickets` consumes. It
-  is coarser than a plan: a plan is per-ticket and gated for approval before implementation; a spec is the
+- **The artifact is a repo doc** at `docs/specs/<name>.html` — a self-contained HTML deliverable (stable
+  element ids, no external fetches) that `to-tickets` consumes and `review-loop` can serve as-is. It is
+  coarser than a plan: a plan is per-ticket and gated for approval before implementation; a spec is the
   pre-ticket direction the tickets are cut from.
 - **No file paths or code snippets.** They rot as the codebase moves; the spec is direction, not
   implementation. The single exception — carried over from the plan/PRD rule — is a **prototype-validated
@@ -66,16 +68,14 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
 - **Bundled references** — this skill's own contract, shipped in-directory: [synthesis](reference/synthesis.md)
   (the no-interview synthesis method, dev-vs-non-dev gating, the seams step, the no-stale-content rule, and
   sign-off) and [template-guide](reference/template-guide.md) (what each section holds and which are dev-only),
-  plus the fillable scaffold [templates/spec.md](templates/spec.md). These are the authority; they import no
+  plus the fillable scaffold [templates/spec-skeleton.html](templates/spec-skeleton.html). These are the authority; they import no
   other skill's files.
 - **Project playbooks** — the repo's **spec conventions**: where specs live and the spec→ticket vocabulary.
   Defaults to `docs/specs/`; a repo may record a different location or naming rule in its `docs/agents/`. When
   the optional review-loop sign-off is used, the repo's **presentation-surface config** (its `docs/agents/`
   surface playbook) governs where the rendered spec is served.
-- **Sibling skills** — **optional `review-loop` only.** When the user is AFK, to-spec renders the markdown
-  spec to a self-contained review HTML and presents it for sign-off through `review-loop`, composed by name.
-  When the user is present, approval is inline. This is the sole sibling and it is **not** a hard dependency:
-  skipping review-loop still produces a valid, committed spec. To-spec depends on no other skill.
-
-To-spec is **self-contained at the file level** — every reference and template it needs ships in its own
-directory, and no file here imports or reads another skill's files. It composes siblings by name only.
+- **Sibling skills** — **optional `review-loop` only.** When the user is AFK, to-spec presents the spec for
+  sign-off through `review-loop`, composed by name — the spec is already a self-contained review-ready HTML
+  with stable element ids, so it serves as-is. When the user is present, approval is inline. This is the sole
+  sibling and it is **not** a hard dependency: skipping review-loop still produces a valid, committed spec.
+  To-spec depends on no other skill.

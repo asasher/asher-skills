@@ -1,6 +1,6 @@
 ---
 name: fair-deal
-description: Helps two co-founders start a business together and agree a fair structure. Each founder runs their own agent; the agents privately interview their human, research objective benchmarks, and negotiate the deal — contributions, each founder's strengths, the split, ownership, roles, funding, and go-to-market — with each other through a shared PRIVATE GitHub repo (commits are the mediation channel), filling a shared Fair Deal Canvas as the human review surface. A fair agreement between the founders is the core; the business structure is planned alongside it. Also fits a partnership, JV, advisory, or revenue-share deal. Must be installed inside a deal project; never global.
+description: Two co-founders' agents privately interview their humans and negotiate a fair deal structure through a shared private repo.
 argument-hint: "[setup|join|interview|negotiate|status|draft|research] [args]"
 user-invocable: true
 disable-model-invocation: true
