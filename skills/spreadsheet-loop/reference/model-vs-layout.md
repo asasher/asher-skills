@@ -7,6 +7,8 @@ can only infer by clicking through cells.
 
 - **`MODEL.md` — what the workbook *means*.** The data model, in prose plus a small machine-readable block.
 - **`LAYOUT.md` — what the workbook *looks like*.** The visual language.
+- **`COMPONENTS.md` — how the workbook is divided.** Ownership, dependencies, lane, assertions, and merge
+  boundaries for each coherent part of the model.
 
 Both **govern** the snapshot; neither *is* the snapshot. The snapshot is the compiled concretion of the two.
 You should be able to change the model without re-deciding the look, and restyle the layout without touching
@@ -60,6 +62,14 @@ Write it so a reader can picture the workbook. Sections:
   restate is worth more than a screenshot.
 - **Conditional emphasis.** Where highlight-cell rules draw the eye (a total over threshold turns green).
 
+## `COMPONENTS.md` — the construction map
+
+Define coherent components before implementation. For each, record owned sheets/ranges, input/output named
+ranges, dependencies, editable cells, assertions, chosen lane, preserve-only neighbours, and permitted merge
+operations. A component may be smaller than a sheet or span several sheets. The purpose is bounded reasoning:
+load and review the part being changed, not the entire workbook by default. Use the shipped template and
+[lanes-and-merge](lanes-and-merge.md).
+
 ## Charts & pivots are declared objects — split across both documents
 
 A chart and a pivot are the two objects that live outside the cell grid, in `objects.json`
@@ -86,5 +96,7 @@ is the LibreOffice tier — see [converter](converter.md)).
   `LAYOUT.md` change first, then the snapshot / `objects.json`.
 - If a proposed change needs edits to *both* documents, that is a signal to slow down and confirm with the
   human — it usually means a genuine redesign, not a tweak.
+- If a change crosses a component or merge boundary, update `COMPONENTS.md` and re-run the review gate before
+  editing.
 
 Keeping the two apart is not bureaucracy; it is what makes the loop fast and the export trustworthy.

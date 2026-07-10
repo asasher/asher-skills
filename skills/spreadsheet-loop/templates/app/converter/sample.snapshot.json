@@ -47,7 +47,7 @@
     },
     {
       "name": "SHEET_CONDITIONAL_FORMATTING_PLUGIN",
-      "data": "{\"sheet-sales\":[{\"cfId\":\"cf-1\",\"ranges\":[{\"startRow\":2,\"endRow\":5,\"startColumn\":3,\"endColumn\":3}],\"rule\":{\"type\":\"colorScale\",\"min\":{\"color\":\"#F8696B\"},\"mid\":{\"color\":\"#FFEB84\"},\"max\":{\"color\":\"#63BE7B\"}}}]}"
+      "data": "{\"sheet-sales\":[{\"cfId\":\"cf-1\",\"ranges\":[{\"startRow\":2,\"endRow\":5,\"startColumn\":3,\"endColumn\":3}],\"rule\":{\"type\":\"colorScale\",\"config\":[{\"index\":0,\"color\":\"#F8696B\",\"value\":{\"type\":\"min\"}},{\"index\":1,\"color\":\"#FFEB84\",\"value\":{\"type\":\"percentile\",\"value\":50}},{\"index\":2,\"color\":\"#63BE7B\",\"value\":{\"type\":\"max\"}}]}}]}"
     }
   ]
 }

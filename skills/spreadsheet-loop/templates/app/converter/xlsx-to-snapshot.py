@@ -138,9 +138,11 @@ def read_cond_format(ws, theme_idx):
                     points.append(point)
                 if len(points) < 2:
                     continue
-                r = {"type": "colorScale", "min": points[0], "max": points[-1]}
-                if len(points) > 2:
-                    r["mid"] = points[1]
+                # Univer expects a config array; the legacy min/mid/max shape crashes its style renderer.
+                r = {"type": "colorScale", "config": [
+                    {"index": i, "color": point.pop("color", "#FFFFFF"), "value": point}
+                    for i, point in enumerate(points)
+                ]}
                 _with_cf_metadata(r, rule, theme_idx)
                 items.append({"cfId": f"cf-{len(items)}", "ranges": ranges, "rule": r})
             elif rule.type == "cellIs":

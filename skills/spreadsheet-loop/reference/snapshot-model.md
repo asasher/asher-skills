@@ -1,9 +1,10 @@
 # The snapshot model — `IWorkbookData` (+ `objects.json`)
 
-The source of truth is two files: the **Univer snapshot** (`workbook.snapshot.json`, the `IWorkbookData`
-below) for everything Univer renders natively, and **`objects.json`** for the declared charts and pivots that
-live outside Univer's native model (documented at the end). The [converter](converter.md) compiles both to
-`.xlsx`. This reference documents the subset the skill relies on — enough to read a snapshot, hand-edit one,
+In lane 1 the source of truth is two files: the **Univer snapshot** (`workbook.snapshot.json`, the
+`IWorkbookData` below) for everything Univer renders natively, and **`objects.json`** for declared charts and
+pivots. The [converter](converter.md) compiles both to `.xlsx`. In lane 2 these files are an isolated
+workbench; the authoritative Excel source and reviewed changeset govern the final merge. This reference
+documents the subset the skill relies on — enough to read a snapshot, hand-edit one,
 or reason about what the converter maps. The authority for anything beyond this is Univer's own docs
 (`docs.univer.ai`) and `reference.univer.ai`.
 

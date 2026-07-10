@@ -20,6 +20,10 @@
 ## Units & validation
 <!-- Currencies, percentages, allowed value sets (become data-validation dropdowns), sanity bounds. -->
 
+## Component interfaces
+<!-- Name the component that owns each important input/output and the downstream consumers. Detailed
+     boundaries, lane decisions, assertions, and merge rules live in COMPONENTS.md. -->
+
 ## Named-range registry
 <!-- The workbook's vocabulary. Names + meaning; cell addresses are assigned in LAYOUT.md, not here.
      The converter maps these to real Excel defined names. -->

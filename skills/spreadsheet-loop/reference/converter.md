@@ -1,6 +1,8 @@
 # The converter — snapshot (+ objects) ↔ .xlsx
 
-The converter is the **compile step** and the authority on what survives the trip to Excel. It lives in the
+The converter is the **lane-1 compile step** and the authority on what survives a full snapshot-to-Excel
+trip. It is useful for producing a lane-2 workbench, but a full converter save is **not** a
+preservation-safe merge for an authoritative workbook with preserve-only features. It lives in the
 scaffolded project as Python scripts under `converter/`, built on
 [`openpyxl`](https://openpyxl.readthedocs.io) — a permissively licensed (MIT) library, no server, no
 watermark. The tested reference implementations ship in this skill's `templates/app/converter/`.
@@ -18,9 +20,9 @@ open-source writers, **`openpyxl` is the most capable** — crucially, it create
 was the deciding factor.) The one thing no open-source library creates is a **live pivot table**; that is
 handled specially below.
 
-## Two source files
+## Lane-1 source files
 
-The source of truth is two files, because a couple of objects live outside Univer's native model:
+In lane 1 the source of truth is two files, because a couple of objects live outside Univer's native model:
 
 - **`workbook.snapshot.json`** — Univer-native: cells, formulas, styles, merges, sizing, freeze, named
   ranges, list validation, conditional formatting. Edited live in the browser; autosaved by the app.
@@ -29,15 +31,19 @@ The source of truth is two files, because a couple of objects live outside Unive
   Univer's save. See [model-vs-layout](model-vs-layout.md) and [the-loop](the-loop.md) for the discipline
   that keeps this symmetric.
 
+In lane 2 these files are an isolated workbench. The deliverable is a reviewed changeset applied to a copy of
+the original through a preservation-safe adapter; see [lanes-and-merge](lanes-and-merge.md).
+
 ## Status: BETA — hardened against real workbooks, with named residual gaps
 
 > **Measured 2026-07-10 against real financial workbooks** (`Revenue.xlsx`, `PS v0.8.xlsx`, a 77-sheet `.xlsm`),
 > before → after a hardening pass. On the two Revenue/PS workbooks the conformance harness
 > (`verify/conformance.py`) now reports **100% preservation of values, formula text, cached results, number
 > formats, resolved styles, merges, named ranges, data validation, and conditional formatting** — up from
-> ~16% and total DV/CF loss. The 77-sheet macro `.xlsm` imports and re-exports without crashing (charts/macros
-> detected, not reconstructed — by design). **This is good, but not "authoritative-file" trust:** verify
-> against real Excel before distributing, and see the residual gaps below.
+> ~16% and total DV/CF loss. The 77-sheet macro `.xlsm` imports, renders in Univer, and exports without
+> crashing. Its VBA, native charts, external links, and some images are preserve-only and therefore require
+> lane 2/3. Revenue and PS exports were also opened in real Excel. **This is not authoritative-file trust:**
+> use preflight and the lane decision before distributing.
 >
 > A **LibreOffice render diff** (2026-07-10) confirmed page-1 of `Revenue.xlsx` round-trips as a visual match
 > (after fixing a font-fallback and a literal-`=` defect it caught). Residual gaps (still open): colour tint is
@@ -47,7 +53,7 @@ The source of truth is two files, because a couple of objects live outside Unive
 
 ## Feature set & measured real-workbook status
 
-`snapshot (+ objects) → .xlsx`. Self-test 32/32 on the sample; the "measured" column is the conformance
+`snapshot (+ objects) → .xlsx`. Self-test 48/48 on the sample; the "measured" column is the conformance
 harness on the Revenue/PS real workbooks:
 
 | Feature | Source | openpyxl target | Measured |
@@ -62,7 +68,7 @@ harness on the Revenue/PS real workbooks:
 | Conditional formatting (CFVO/priority/font) | `SHEET_CONDITIONAL_FORMATTING_PLUGIN` | `cellIs`/`colorScale`/`dataBar`/`iconSet` | ✅ (backlog #5 done) |
 | **Charts** (bar/line/pie, cross-sheet) | `objects.charts[]` | **native** `openpyxl.chart` | ✅ (backlog #6 done) |
 | **Pivots** (rows×cols, sum/count/avg/min/max) | `objects.pivots[]` | flattened table (Tier A) / LibreOffice (Tier B) | ⚠️ static (interactive = Tier B) |
-| Comments, hyperlinks, images, sheet visibility, grouped column spans | — | — | ❌ not modeled (backlog #9) |
+| Comments, hyperlinks, images, sheet visibility, grouped column spans | snapshot/import | native worksheet/package parts | ✅ committed subset; preflight unknown extensions |
 
 ## Charts — native, free
 
@@ -89,24 +95,26 @@ handled at the best tier available:
 Pick the tier at intake based on whether the deliverable needs an *interactive* pivot or just the summary
 numbers. Either way the browser preview and the export agree on the values.
 
-## Import — and fail-safe detection of what it can't recover
+## Import — capability evidence, not permission to replace the source
 
 `xlsx-to-snapshot.py` recovers literal values, dates, formula text, styles (RGB colours only), merges, sizing,
 freeze, named ranges (workbook scope only), and conditional formatting (`colorScale` / `cellIs`). A raw-package
 **preflight** runs *first* and reports charts, pivots, macros, images, and external links it cannot
 reconstruct — writing them into `objects.json` and to stderr **before** any crash-prone work, so detection is
 fail-safe. Writes are atomic (temp + rename), so a mid-import failure can't leave a truncated, plausible file.
+Feed the report into the lane decision. Preserve-only findings make the snapshot a workbench unless the user
+explicitly approves dropping them.
 
-Known import gaps (see backlog): **data validation is not read at all** (export-only today), CF differential
-fonts and thresholds are dropped, theme/indexed colours collapse, and cached formula results, comments,
-hyperlinks, sheet visibility, and images are not modeled.
+Hard boundaries include VBA execution/preservation guarantees, external connections/links, signatures,
+native imported chart reconstruction, unsupported image formats, interactive pivots without the selected
+materialization tier, and unknown OOXML extensions. The preflight report is the authority for a given file.
 
-## Closure — the invariant, and where it currently leaks
+## Closure — lane-relative
 
-The *goal* is browser-renders ⟺ exporter-writes ⟺ importer-reads = the **same set**. The cell spine holds.
-But the 2026-07-10 review showed the invariant is **not yet enforced in code**, and leaks in real ways:
-- **Detection ≠ closure.** The import "note" is advisory — `compile` ignores it and will happily emit a
-  chart-free `.xlsx`. There is no gate that blocks compile on unresolved gaps.
+In lane 1 the goal is browser-renders ⟺ exporter-writes ⟺ importer-reads. In lane 2 closure is a declared,
+verified changeset plus preservation of everything outside its scope. Detection is evidence, not closure: an
+import note can warn about native charts or VBA while a full compile still emits a chart-free/macro-free
+`.xlsx`. That output is a prototype, not a merge.
 - **No schema for `objects.json`**; unknown chart types silently become bar charts; objects reference sheets
   by *mutable name*, so a browser rename staleness the sidecar.
 - **Interactivity gap**: a Tier-A pivot is a static table, not a draggable pivot.
@@ -134,7 +142,7 @@ on mutable sheet names) and the structure items in #9.
 npm run compile         # snapshot-to-xlsx.py … objects.json  (compile gate validates objects.json first)
 npm run import -- x.xlsx # xlsx-to-snapshot.py — captures caches, DV, CF; reports charts/pivots/macros it can't rebuild
 npm run verify          # read-back-check.py: diff dist/workbook.xlsx against snapshot + objects
-npm run test:converter  # the converter self-test on the shipped sample (32 checks)
+npm run test:converter  # the converter self-test on the shipped sample (48 checks)
 # closure gate on its own:
 python3 converter/validate_objects.py objects.json workbook.snapshot.json
 # measured round-trip fidelity against real workbooks (the gate for any converter change):
@@ -143,5 +151,5 @@ python3 verify/conformance.py --converter converter --min 0.9 path/to/*.xlsx
 
 Extending a feature = extend the mapper *and* add a case to `converter/test.py`, **and confirm
 `verify/conformance.py` doesn't regress on real workbooks**, before shipping. The measured table above must
-always describe the code, not an aspiration. Never hand-edit the `.xlsx`: the snapshot + objects are the
-source of truth and the next compile overwrites it.
+always describe the code, not an aspiration. In lane 1, never hand-edit the compiled `.xlsx`; fix the
+snapshot. In lane 2, never overwrite the authoritative file or call a lossy full converter save a merge.

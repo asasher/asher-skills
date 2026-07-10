@@ -358,13 +358,20 @@ def _apply_cond_format(snapshot, ws_by_name):
                     type="cellIs", operator=rule.get("operator", "greaterThan"), formula=formulas,
                     **_rule_kwargs(rule)))
             elif t == "colorScale":
-                points = [(rule.get("min"), "min")]
-                if rule.get("mid"):
-                    points.append((rule["mid"], "percentile"))
-                points.append((rule.get("max"), "max"))
+                if rule.get("config"):
+                    config = sorted(rule["config"], key=lambda point: point.get("index", 0))
+                    points = [(point.get("value") or {},
+                               "min" if i == 0 else "max" if i == len(config) - 1 else "percentile")
+                              for i, point in enumerate(config)]
+                    colors = [Color(rgb=to_argb(point.get("color"))) for point in config]
+                else:
+                    points = [(rule.get("min"), "min")]
+                    if rule.get("mid"):
+                        points.append((rule["mid"], "percentile"))
+                    points.append((rule.get("max"), "max"))
+                    colors = [Color(rgb=to_argb((point or {}).get("color"))) for point, _ in points]
                 cfvo = [_format_object(point, default, 50 if default == "percentile" else None)
                         for point, default in points]
-                colors = [Color(rgb=to_argb((point or {}).get("color"))) for point, _ in points]
                 ws.conditional_formatting.add(ref, Rule(
                     type="colorScale", colorScale=ColorScale(cfvo=cfvo, color=colors),
                     **_rule_kwargs(rule)))

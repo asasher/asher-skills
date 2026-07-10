@@ -3,12 +3,15 @@
 Spreadsheet-loop's human sign-off gates run through the **`review-loop` skill** — a sibling root primitive
 invoked by name. This skill carries no review server of its own and imports no review-loop files.
 
-The gates are on the **paper artifacts** only: `SPEC.md` (phase 1) and `MODEL.md` + `LAYOUT.md` (phase 2).
+The gates are on the **paper artifacts** only: `SPEC.md` (including capability/lanes) and
+`MODEL.md` + `LAYOUT.md` + `COMPONENTS.md` (phase 2).
 The live Univer surface is not a gated artifact — it is driven directly (see [the-loop](the-loop.md)).
 
 ## Render the deliverable
 
-At a gate, render the current markdown deliverable to a self-contained HTML page. Each top-level section
+At a gate, render the current markdown deliverable to a self-contained HTML page. The page must make the
+authoritative file, capability classifications, lane choice, component boundaries, merge strategy, and
+outside-lane work visible. Each top-level section
 becomes a block with a stable `id` derived from a slug of its heading; for `MODEL.md`/`LAYOUT.md`, render both
 as one page or two, but keep ids stable across revisions. This is the stable-id convention review-loop
 documents in its `templates/plan-skeleton.html` and `reference/review-loop.md`. Inline all styles; no external
@@ -39,4 +42,5 @@ its own. Absent surface config, review-loop degrades to local-only fallback: ope
 remote review is unavailable.
 
 The approve event — verdict, content hash, timestamp — is the approval record. Never build past a gate
-without it.
+without it. Expanding a component boundary, changing the authoritative file, or switching lanes invalidates
+the approval and requires a new review.

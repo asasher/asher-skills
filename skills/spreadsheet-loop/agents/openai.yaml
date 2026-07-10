@@ -1,7 +1,7 @@
 interface:
   display_name: "Spreadsheet Loop"
-  short_description: "Build complex Excel workbooks on a browser-native surface (Univer), then compile to .xlsx as the last step"
-  default_prompt: "Use $spreadsheet-loop to build a workbook: iterate on the web, compile to Excel."
+  short_description: "Build and safely merge browser-native workbook changes"
+  default_prompt: "Use $spreadsheet-loop to preflight this workbook, decompose it into components, and choose a safe build or merge lane."
 
 policy:
   allow_implicit_invocation: false

@@ -1,8 +1,8 @@
 # The loop — iterating on the browser surface
 
-Phase 4 is the heart of the skill: the human and the agent shape the workbook **in turns** on the running
-Univer surface, with `workbook.snapshot.json` + `objects.json` as the shared, persisted state. This is what
-Excel can't offer — a fast, inspectable surface where changes are cheap and legible.
+Phase 4 is the heart of the browser lanes: the human and agent shape an approved workbook component **in
+turns** on the running Univer surface. In lane 1, `workbook.snapshot.json` + `objects.json` is authoritative.
+In lane 2 it is a workbench that must emit a bounded changeset; the original Excel file remains authoritative.
 
 ## Serve it
 
@@ -27,9 +27,10 @@ the collaboration robust without any merge/OT machinery. There are two kinds of 
   in `objects.json`. When the agent writes a file, the app **reloads the human's browser** to the new state.
   End the turn by narrating what changed and handing back.
 
-**Why the agent never drives the live browser:** turn-based means it doesn't have to. It reads and writes
-files; the browser is the human's window, kept fresh by the reload. That removes an entire class of
-in-browser-automation and conflict problems.
+**Use browser automation for verification, not as the primary write path.** The agent normally edits files or
+the headless Facade while the browser remains the human's window. Agent-browser/Chrome may drive smoke tests,
+capture screenshots, inspect console errors, and validate autosave/reload behaviour. Do not mix those QA
+actions with a simultaneous human editing turn.
 
 **Two mechanics keep turns safe** (both in `vite.config.js`; see [univer-surface](univer-surface.md)):
 
@@ -44,7 +45,7 @@ turns — the safety rails assume it.
 
 ## Keep the docs and the snapshot together
 
-Every iteration is checked against `MODEL.md` and `LAYOUT.md`, per the
+Every iteration is checked against `MODEL.md`, `LAYOUT.md`, and `COMPONENTS.md`, per the
 [separation doctrine](model-vs-layout.md):
 
 - A change of **meaning** (new input, changed derivation, new named range) updates `MODEL.md` first — including
@@ -56,11 +57,11 @@ Every iteration is checked against `MODEL.md` and `LAYOUT.md`, per the
 If the snapshot drifts from the docs — a formula that no longer matches the model, a colour with no
 convention — that's debt to reconcile, not to leave. The docs are the reason the workbook stays legible.
 
-## Closure — declare special objects, don't free-draw them
+## Closure and changesets
 
-The loop's promise is **closure: what the browser shows is what compiles, and what imports is what the browser
-shows.** Cell-level edits (values, formulas, styles, conditional formatting, validation) round-trip
-symmetrically through the converter — edit them freely.
+In lane 1, closure means what the browser shows is what compiles and re-imports. In lane 2, closure means every
+browser-authored operation is represented in the changeset, stays inside the approved component, merges into
+a source copy, and passes assertions while preserve-only package parts remain intact.
 
 **Charts and pivots are different: they are declared objects, not browser-drawn ones.** A chart or pivot is
 recorded in `objects.json` (which fields, which ranges, which placement — from the model/layout decisions),
@@ -73,6 +74,7 @@ name it, don't fake it.
 
 ## Exiting the loop
 
-Leave phase 4 when the human agrees the workbook is right on the surface. Then compile ([converter](converter.md))
-and verify ([verify](verify.md)). If verification surfaces a gap, come back into the loop to fix the snapshot —
-never patch the `.xlsx` directly.
+Leave phase 4 when the human agrees the component is right on the surface. Then compile (lane 1), merge (lane
+2), or hand off to Excel (lane 3), and verify. If verification surfaces a gap, return to the correct source:
+the snapshot in lane 1; the reviewed changeset/component in lane 2; the authoritative Excel workflow in lane
+3. Never disguise a lossy full re-export as a merge.

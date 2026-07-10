@@ -137,14 +137,16 @@ with tempfile.TemporaryDirectory(prefix="spreadsheet-converter-test-", dir="/tmp
 
     cf_entry, conditional = resource(imported, "SHEET_CONDITIONAL_FORMATTING_PLUGIN")
     imported_rule = conditional["sheet-1"][0]["rule"]
-    ok("CF thresholds imported", [imported_rule[k].get("type") for k in ("min", "mid", "max")] ==
-       ["min", "percentile", "max"] and imported_rule["mid"].get("value") == 50, imported_rule)
+    imported_scale = sorted(imported_rule["config"], key=lambda point: point["index"])
+    ok("CF thresholds imported", [point["value"].get("type") for point in imported_scale] ==
+       ["min", "percentile", "max"] and imported_scale[1]["value"].get("value") == 50,
+       imported_rule)
     imported_rule.update({"priority": 7, "stopIfTrue": True,
                           "style": {"bl": 1, "it": 1, "fs": 9, "ff": "Arial",
                                     "cl": {"rgb": "#123456"}}})
-    imported_rule["min"].update({"type": "num", "value": 1000})
-    imported_rule["mid"].update({"type": "percentile", "value": 37})
-    imported_rule["max"].update({"type": "num", "value": 2000})
+    imported_scale[0]["value"].update({"type": "num", "value": 1000})
+    imported_scale[1]["value"].update({"type": "percentile", "value": 37})
+    imported_scale[2]["value"].update({"type": "num", "value": 2000})
     cf_entry["data"] = json.dumps(conditional)
 
     objects = json.load(open(objects_path))
@@ -229,8 +231,9 @@ with tempfile.TemporaryDirectory(prefix="spreadsheet-converter-test-", dir="/tmp
     reimported = json.load(open(reimported_path))
     _, reimported_cf = resource(reimported, "SHEET_CONDITIONAL_FORMATTING_PLUGIN")
     reimported_rule = reimported_cf["sheet-1"][0]["rule"]
-    ok("CF thresholds re-imported", [(reimported_rule[k].get("type"), reimported_rule[k].get("value"))
-                                      for k in ("min", "mid", "max")] ==
+    reimported_scale = sorted(reimported_rule["config"], key=lambda point: point["index"])
+    ok("CF thresholds re-imported", [(point["value"].get("type"), point["value"].get("value"))
+                                      for point in reimported_scale] ==
        [("num", 1000.0), ("percentile", 37.0), ("num", 2000.0)], reimported_rule)
 
 npass = sum(1 for _, p, _ in checks if p)

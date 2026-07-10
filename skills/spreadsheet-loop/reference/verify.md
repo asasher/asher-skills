@@ -1,7 +1,7 @@
 # Verify — is the .xlsx faithful?
 
-The compile is only trustworthy if it's checked. Phase 6 confirms the produced `.xlsx` matches the browser
-truth. Three layers, cheapest first; run as many as the machine allows.
+Integration is only trustworthy if it is checked. Phase 6 confirms the browser result, exported/merged file,
+and authoritative-file promise agree. Run the common layers, then the lane-specific checks.
 
 ## 1. Recompute formulas headlessly
 
@@ -28,27 +28,36 @@ Run `python3 verify/read-back-check.py dist/workbook.xlsx workbook.snapshot.json
 compiled `.xlsx` with `openpyxl` and asserts the committed feature set survived: values and formulas present,
 number formats intact, merges and freeze in place, named ranges defined, and **each declared chart and pivot
 materialized**. This catches converter regressions directly. It also complements the converter's own
-`converter/test.py` (the 19-check self-test on the shipped sample). Allow the documented ±1px sizing rounding.
+`converter/test.py` (the 48-check self-test on the shipped sample). Allow documented sizing rounding.
 
-## 3. Drive a real spreadsheet app (where possible)
+## 3. Drive a real spreadsheet app
 
-The strongest check is opening the file in a real client. If the environment has LibreOffice headless, use it
-to convert or re-read the file (`libreoffice --headless --convert-to ...`) and confirm it opens without
-repair prompts and formulas evaluate. If computer-use / a screenshot surface is available, open the `.xlsx`
-and visually diff against the browser rendering.
+The strongest check is opening the file in real Excel where Computer Use is available. Confirm it opens
+without a repair prompt, inspect the changed component, and compare it with the browser screenshot. If only
+LibreOffice headless is available, use it to convert or re-read the file and confirm it opens cleanly.
 
-> Note: on this machine, headless-Chrome screenshotting has been unreliable (SIGKILL). Prefer a
-> LibreOffice re-read or a DOM/value transcript over a browser screenshot for visual evidence, unless the
-> environment has changed.
+Use agent-browser/Chrome for the browser side and Computer Use for Excel; do not substitute one screenshot for
+the other when claiming a merge preserved the authoritative file.
+
+## 4. Lane-specific proof
+
+- **Lane 1:** recompute, read back, compare declared objects, and visually compare browser ↔ Excel.
+- **Lane 2:** also verify the source hash, changeset scope, component assertions, package-part inventory,
+  preserve-only features, VBA/signature presence where applicable, external-link/chart/image counts, and no
+  unapproved sheet/range changes. A structural OOXML diff is required for high-risk sources.
+- **Lane 3:** verify the Excel-native operation and record which assertions were checked; do not claim browser
+  round-trip fidelity.
 
 ## Reporting a gap
 
-A fidelity gap is one of two things — say which:
+A fidelity gap is one of three things — say which:
 
 - **A converter bug** — a mapping that should work but doesn't. Fix the mapper, add a case to its test, re-run.
 - **An out-of-scope feature** — the workbook used something the fence excludes (a chart, a pivot, a
   colour-scale rule). This is expected: report it, and resolve per intake's options (drop, hand-finish in
   Excel, or extend the converter deliberately with a new test).
+- **A merge/preservation bug** — a declared change escaped its component or an untouched source feature
+  changed. Reject the output and return to the original source copy plus changeset.
 
 Never report "looks fine" without having run at least layers 1 and 2. Faithful-by-construction is the design;
 verification is how you prove the construction held.

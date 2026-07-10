@@ -14,8 +14,16 @@ import '@univerjs/preset-sheets-data-validation/lib/index.css';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const CHART_COLORS = ['#2563eb', '#f97316', '#16a34a', '#dc2626', '#7c3aed', '#0891b2', '#ca8a04'];
+const appElement = document.getElementById('app');
 const statusElement = document.getElementById('status');
 const objectsPanel = document.getElementById('objects');
+
+// Univer emits setup commands after createWorkbook() returns. Only treat commands as human edits after the
+// user actually interacts; otherwise a fresh load replaces the useful `ready` state with `saved …`.
+let userHasInteracted = false;
+for (const eventName of ['pointerdown', 'keydown', 'paste', 'cut']) {
+  appElement.addEventListener(eventName, () => { userHasInteracted = true; }, { capture: true });
+}
 
 function setStatus(message, state = '') {
   statusElement.textContent = message;
@@ -126,6 +134,7 @@ async function saveWorkbook() {
 }
 
 function scheduleSave() {
+  if (!userHasInteracted) return;
   setStatus('editing…');
   clearTimeout(saveTimer);
   saveTimer = setTimeout(saveWorkbook, 800);

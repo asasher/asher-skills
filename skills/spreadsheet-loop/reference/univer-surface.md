@@ -1,7 +1,8 @@
 # The Univer surface — scaffold recipe
 
-Phase 3 stands up the browser surface: a small Vite + Univer app whose only job is to render
-`workbook.snapshot.json` and persist edits back to it, so the human and the agent share one source of truth.
+Phase 3 stands up the browser surface: a small Vite + Univer app that renders
+`workbook.snapshot.json` and persists edits back to it. It is the shared source in lane 1 and an isolated
+component workbench in lane 2.
 The complete, self-contained project template ships in this skill's `templates/app/`.
 
 ## What the scaffold is
@@ -15,8 +16,8 @@ requirements.txt      # openpyxl (the converter's only Python dep)
 vite.config.js        # dev server + /snapshot (GET) and /save (POST) persistence middleware
 index.html            # mount point + a small save-status indicator
 src/main.js           # createUniver, load /snapshot, debounced autosave to /save
-workbook.snapshot.json# source of truth: Univer-native cells (starts as one empty sheet)
-objects.json          # source of truth: declared charts + pivots (starts empty)
+workbook.snapshot.json# lane-1 source / lane-2 workbench: Univer-native cells
+objects.json          # lane-1 source / lane-2 workbench: declared charts + pivots
 converter/            # snapshot-to-xlsx.py, xlsx-to-snapshot.py (Python/openpyxl), sample.*, test.py
 verify/               # read-back-check.py (layer 2, openpyxl), recompute.mjs (layer 1, Univer node)
 ```
@@ -27,7 +28,7 @@ converter. Then:
 ```bash
 npm install                 # Univer presets + Vite
 pip install -r requirements.txt   # openpyxl
-npm run test:converter      # sanity-check the converter (19-check self-test) before relying on it
+npm run test:converter      # sanity-check the converter (48-check self-test) before relying on it
 npm run dev                 # serve the surface (Vite, listening on all interfaces for the proxy)
 ```
 
@@ -49,16 +50,17 @@ safe. Keep it to one process (`npm run dev`); don't add a separate backend.
 
 ## Starting from an existing .xlsx
 
-If intake said "start from this workbook," seed the snapshot before serving:
+Run capability preflight first and approve the lane. For lane 2, copy or extract the approved components into
+an isolated workbench; never replace the authoritative source. Then seed the snapshot before serving:
 
 ```bash
 npm run import -- path/to/existing.xlsx   # writes workbook.snapshot.json
 npm run dev
 ```
 
-The import recovers values, formulas, styles, merges, sizing, freeze, and named ranges (see
-[converter](converter.md) for what it does *not* recover). Sanity-check the imported snapshot on the surface
-before iterating.
+The import recovers the converter's committed subset and reports what it cannot reconstruct. Sanity-check the
+imported snapshot on the surface before iterating, and reconcile it against the capability report. Rendering
+success does not authorize a full re-export of a lane-2 source.
 
 ## Serving on the presentation surface
 
