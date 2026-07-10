@@ -2,7 +2,7 @@
 
 Splits a decided direction into **backlog-ready tickets** with blocking edges — the consumer half of the
 discussion → work bridge that `to-spec` opens. Its primary input is a **spec** (to-spec's output at
-`docs/specs/<name>.md`); it also accepts a **plan** or the **raw current conversation**. It drafts vertical
+`docs/specs/<name>.html`); it also accepts a **plan** or the **raw current conversation**. It drafts vertical
 slices, quizzes the user until the granularity and edges are approved, then publishes the tickets into the bound
 tracker in dependency order — blockers first — with `depends on #N` edges (backlog's recorded convention) that
 `backlog run` reads to skip blocked work.

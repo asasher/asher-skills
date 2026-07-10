@@ -2,8 +2,9 @@
 
 Turns a conversation that already reached a decision into the **spec** it earned: the high-level direction
 document a long design discussion produced but never wrote down. To-spec reads the current conversation and
-the codebase/project understanding built up in it, captures what was **decided**, and writes a repo doc at
-`docs/specs/<name>.md` that `to-tickets` later splits into pickup-able tickets. Root of the spec→tickets pair.
+the codebase/project understanding built up in it, captures what was **decided**, and writes a self-contained
+HTML deliverable at `docs/specs/<name>.html` that `to-tickets` later splits into pickup-able tickets. Root of
+the spec→tickets pair.
 
 ## When to use
 
@@ -32,7 +33,8 @@ Not for eliciting requirements. To-spec captures decisions already made — it n
 
 `SKILL.md` is the command surface (`to-spec [<name>]`) and points into `reference/`:
 `synthesis.md` (the no-interview method, gating, seams step, no-stale-content rule, sign-off) and
-`template-guide.md` (what each section holds). `templates/spec.md` is the fillable scaffold.
+`template-guide.md` (what each section holds). `templates/spec-skeleton.html` is the fillable scaffold —
+review-ready HTML in the plan skeleton's house style.
 `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
 
 Self-contained at the file level; composes by name. **Sibling dependency: optional `review-loop` only** — used

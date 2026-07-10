@@ -1,6 +1,7 @@
 # Template guide — what each section holds
 
-The scaffold is [templates/spec.md](../templates/spec.md); this file says what goes in each section and which
+The scaffold is [templates/spec-skeleton.html](../templates/spec-skeleton.html) — a self-contained HTML
+deliverable with stable element ids, same house style as a plan; this file says what goes in each section and which
 sections are dev-only. The section set is adapted from Matt Pocock's `to-spec` and shipped as our own. Two
 groups: **core** sections appear in every spec; **dev-only** sections are kept for dev specs and **skipped
 when they don't apply** (see [synthesis](synthesis.md) § Classify the work).

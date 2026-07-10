@@ -69,7 +69,7 @@ State what you checked.
   another skill's files"; a grep for cross-skill paths finds none). Directory carries the shipped layout
   (SKILL.md, README.md, agents/openai.yaml, reference/, templates/, evals/). Claiming a cross-skill import
   exists, or that it interviews, = fail.
-- **P2 (ac-2):** The three pointer kinds: **bundled references** (own `reference/` + `templates/spec.md`),
+- **P2 (ac-2):** The three pointer kinds: **bundled references** (own `reference/` + `templates/spec-skeleton.html`),
   **project playbooks** (the repo's spec-location/vocabulary convention, default `docs/specs/`; the
   presentation-surface config when review-loop is used), **sibling skills**. On siblings it must say
   **optional `review-loop` only**, explicitly **not a hard dependency** (skipping it still yields a valid
@@ -78,7 +78,7 @@ State what you checked.
   undecided point as a line in the spec's Notes**, never bounce it back as a question. Cite
   `reference/synthesis.md` § "The one rule: synthesize, never interview" (or SKILL.md's synthesis contract).
   Stopping to interview the user = fail.
-- **P4 (ac-4):** A **spec** — a repo doc written to **`docs/specs/<name>.md`** — the high-level **direction**
+- **P4 (ac-4):** A **spec** — a self-contained HTML repo doc written to **`docs/specs/<name>.html`** — the high-level **direction**
   document that **`to-tickets`** consumes. It is **not** a ticket (and never a GitHub "issue"); it's coarser
   than a plan. Cite SKILL.md § "What a spec is (and isn't)" / `reference/synthesis.md` § Naming and placing.
   Calling it a ticket/issue or naming the wrong path = fail.

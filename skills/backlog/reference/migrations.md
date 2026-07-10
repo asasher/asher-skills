@@ -2,6 +2,19 @@
 
 Read by `setup` when a playbook's version stamp — the `<!-- backlog-templates: ... -->` comment on line 1 (or its retired `<!-- triage-templates: ... -->` form) — predates the current `templates/VERSION`, or is absent. Each entry says what changed and how to reconcile it without losing repo values. **Reconcile applies every entry between the stamp and current `templates/VERSION`, in order** — never just the newest. So a playbook must not be re-stamped to the current version until every intervening entry has actually been applied to it; advancing the stamp past an unabsorbed entry silently strands that entry's changes, since the stamp is what tells reconcile the entry is still pending. An entry retires once no live deployment can predate it.
 
+## v2026-07-10.1 → v2026-07-10.2
+
+Reviewer/fixer playbooks renamed to stay platform-agnostic — "PR" is GitHub-flavoured; the loop reviews a
+**change** on whatever the change-review binding is. Apply all of:
+
+- **pr-reviewer.md → change-reviewer.md, pr-fixer.md → change-fixer.md** — rename the installed
+  `docs/agents/` files and update their `# Playbook:` titles ("PR Reviewer Criteria" → "Change Reviewer
+  Criteria", "PR Fixer Conventions" → "Change Fixer Conventions"). Content is otherwise untouched — every
+  repo-tuned criterion and convention carries over verbatim.
+- **References follow** — the `adversarial-review` command table row and `reference/adversarial-review.md`
+  now point at the new names (bundled references, replaced wholesale on install).
+- **Stamp** — bump both renamed playbooks to `v2026-07-10.2`.
+
 ## v2026-07-09.1 → v2026-07-10.1
 
 Setup hardened for existing non-trivial code projects: the audits now bind to a real inherited codebase instead of passing trivially on a greenfield one. The playbook slots the audits write into gain structure. Apply all of, preserving every repo value:

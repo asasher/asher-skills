@@ -37,7 +37,7 @@ ticket field holds. The fillable scaffolds are [templates/ticket.md](templates/t
 
 The full method is in [slicing](reference/slicing.md); the shape:
 
-1. **Read the direction.** The primary input is a **spec** at `docs/specs/<name>.md` (to-spec's output). A
+1. **Read the direction.** The primary input is a **spec** at `docs/specs/<name>.html` (to-spec's output). A
    **plan** or the **raw current conversation** are accepted alternates, read the same way — mine the decided
    direction, the actors, and the surface. Never modify the source.
 2. **Draft vertical slices.** Cut the work into tracer-bullet tickets — or, for a wide refactor, into its

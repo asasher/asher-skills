@@ -10,7 +10,7 @@ playbooks, not from another skill.
 To-tickets splits a direction someone already decided. The input comes in one of three forms; all are read the
 same way — mine the decided direction, the actors, and the full surface:
 
-- **A spec** (the primary input) — `to-spec`'s output at `docs/specs/<name>.md`, given as the command argument.
+- **A spec** (the primary input) — `to-spec`'s output at `docs/specs/<name>.html` (a self-contained HTML deliverable; an older `.md` spec reads the same way), given as the command argument.
   This is the contract path; a repo may record a different specs location in its `docs/agents/`, honor it when
   present.
 - **A plan** — a per-ticket, gated design doc. Read it as direction for a single slice's worth of work, or a

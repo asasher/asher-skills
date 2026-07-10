@@ -1,4 +1,6 @@
-# Playbook: PR Fixer Conventions
+<!-- backlog-templates: v2026-07-10.2 -->
+
+# Playbook: Change Fixer Conventions
 
 > Project playbook for this repo. The backlog `adversarial-review` Fixer subagent reads this file for how this team fixes and responds to review; the loop mechanics are in the skill's `reference/adversarial-review.md`.
 

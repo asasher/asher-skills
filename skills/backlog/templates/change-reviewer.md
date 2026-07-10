@@ -1,6 +1,4 @@
-<!-- backlog-templates: v2026-07-06.1 -->
-
-# Playbook: PR Reviewer Criteria
+# Playbook: Change Reviewer Criteria
 
 > Project playbook for this repo. The backlog `adversarial-review` Reviewer subagent reads this file for what to scrutinize, how to comment, and the approval bar; the loop mechanics are in the skill's `reference/adversarial-review.md`. The quality bar below is the shipped default (adapted from Cursor's thermo-nuclear code-quality review; smell baseline from Matt Pocock's `code-review` skill, MIT) — tune it to what matters in this codebase.
 
@@ -45,7 +43,7 @@ Match the diff against this fixed baseline of code smells (Fowler, *Refactoring*
 - Testability and test coverage of the change, held to `implementing.md` § Tests worth keeping.
 - Duplication and naming; legibility of the surrounding code after the change.
 - Behavior risk beyond the issue's scope.
-- Repo-specific concerns: **self-containment** (no cross-skill file imports; sibling reliance is compose-by-name only), **stdlib-only Python 3** scripts (no third-party imports), **Codex compatibility** (`agents/openai.yaml` present where a skill must present well in Codex, per `docs/patterns/codex-compat.md`), and that any **new or reworked skill carries a passing probe eval** (`docs/patterns/probe-evals.md`). The Reviewer also judges rendered artifacts (plan/prototype HTML) for taste, not just correctness.
+- Repo-specific concerns (performance budgets, security surfaces, accessibility, API compatibility): _<add yours>_.
 
 ## How to comment
 

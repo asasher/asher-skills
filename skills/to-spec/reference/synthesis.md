@@ -67,18 +67,21 @@ the downstream unit an "issue" — that's one tracker's word, and the pair is de
 
 ## Naming and placing the spec
 
-Write the spec to `docs/specs/<name>.md`, where `<name>` is a short kebab-case slug for the decided direction
-(given as the command argument, or derived from the solution when omitted). That path is the contract
-`to-tickets` reads. A repo may record a different specs location or naming rule in its `docs/agents/`
+Write the spec to `docs/specs/<name>.html`, where `<name>` is a short kebab-case slug for the decided
+direction (given as the command argument, or derived from the solution when omitted). That path is the
+contract `to-tickets` reads. The spec is a **self-contained HTML deliverable** — start from
+`templates/spec-skeleton.html`; keep its stable element ids (sections, `story-N`, `dec-N`, …), inline
+everything, fetch nothing. A repo may record a different specs location or naming rule in its `docs/agents/`
 conventions; honor it when present, default to `docs/specs/` otherwise.
 
 ## Sign-off
 
 - **User present** — take approval inline, in the conversation. This is the default path and depends on no
   other skill.
-- **User AFK** — present the spec for sign-off through the optional `review-loop` sibling: render the markdown
-  spec to a self-contained review HTML, then hand that artifact to `review-loop` (composed by name) so it can
-  be approved from the human's own device per the repo's presentation-surface config.
+- **User AFK** — present the spec for sign-off through the optional `review-loop` sibling: the spec is
+  already a self-contained review-ready HTML with stable element ids, so hand it to `review-loop` (composed
+  by name) as-is — no render step — and it is approved from the human's own device per the repo's
+  presentation-surface config.
 
 `review-loop` is optional and never a hard dependency — if it's unavailable, fall back to inline approval or
 leave the committed spec for the user to read directly. Skipping sign-off still leaves a valid spec on disk.
