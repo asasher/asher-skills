@@ -53,7 +53,7 @@ the original through a preservation-safe adapter; see [lanes-and-merge](lanes-an
 
 ## Feature set & measured real-workbook status
 
-`snapshot (+ objects) → .xlsx`. Self-test 48/48 on the sample; the "measured" column is the conformance
+`snapshot (+ objects) → .xlsx`. Self-test 53/53 on the sample; the "measured" column is the conformance
 harness on the Revenue/PS real workbooks:
 
 | Feature | Source | openpyxl target | Measured |
@@ -93,7 +93,9 @@ handled at the best tier available:
   template must be authored once in Excel/LibreOffice.
 
 Pick the tier at intake based on whether the deliverable needs an *interactive* pivot or just the summary
-numbers. Either way the browser preview and the export agree on the values.
+numbers. Either way the browser preview and the export agree on the values: the five aggregations
+(`sum`/`count`/`avg`/`min`/`max`) are implemented with one semantic in both — `count` counts **non-empty**
+source values (Excel's pivot Count), the other four operate on numeric values only.
 
 ## Import — capability evidence, not permission to replace the source
 
@@ -103,7 +105,8 @@ freeze, named ranges (workbook scope only), and conditional formatting (`colorSc
 reconstruct — writing them into `objects.json` and to stderr **before** any crash-prone work, so detection is
 fail-safe. Writes are atomic (temp + rename), so a mid-import failure can't leave a truncated, plausible file.
 Feed the report into the lane decision. Preserve-only findings make the snapshot a workbench unless the user
-explicitly approves dropping them.
+explicitly approves dropping them. A re-import over an existing `objects.json` **preserves** its declared
+charts/pivots and refreshes only `_import_note`; discarding them requires the explicit `--reset-objects` flag.
 
 Hard boundaries include VBA execution/preservation guarantees, external connections/links, signatures,
 native imported chart reconstruction, unsupported image formats, interactive pivots without the selected
@@ -115,13 +118,28 @@ In lane 1 the goal is browser-renders ⟺ exporter-writes ⟺ importer-reads. In
 verified changeset plus preservation of everything outside its scope. Detection is evidence, not closure: an
 import note can warn about native charts or VBA while a full compile still emits a chart-free/macro-free
 `.xlsx`. That output is a prototype, not a merge.
-- **No schema for `objects.json`**; unknown chart types silently become bar charts; objects reference sheets
-  by *mutable name*, so a browser rename staleness the sidecar.
-- **Interactivity gap**: a Tier-A pivot is a static table, not a draggable pivot.
 
-Most of these are now closed (a JSON schema + validator + compile gate exist, and the browser registers the
-DV/CF presets and renders real chart/pivot previews). What remains is stable-ID references (objects still key
-on mutable sheet names) and the structure items in #9.
+What enforces lane-1 closure today:
+
+- **`objects.schema.json` + the stdlib validator run as a compile gate** — invalid declared objects refuse
+  to compile; an unknown chart type or aggregation is rejected, never silently coerced. The browser preview
+  accepts exactly the schema's enums, so it cannot render a declaration the compile would refuse.
+- **One aggregation semantic** — pivot `sum`/`count`/`avg`/`min`/`max` are implemented identically in the
+  preview and the converter (`count` = non-empty, Excel's pivot Count); the numbers the human approves in
+  the browser are the numbers the `.xlsx` carries.
+- **Stable `sheetId` references** — a declared object may carry the snapshot's sheet id alongside the
+  display name, and the compile, the validator, the verify read-back, and the browser preview all resolve
+  sheetId-first, so a browser sheet rename cannot strand the sidecar.
+- **Re-import preserves declarations** — `xlsx-to-snapshot.py` carries existing `objects.json` charts/pivots
+  through a refresh-from-source (`--reset-objects` is the explicit way to start over).
+
+Genuinely open gaps:
+
+- **Interactivity**: a Tier-A pivot is a static computed table, not a draggable pivot (Tiers B/C exist for
+  that; see above).
+- **`sheetId` is optional**: a declaration that omits it still keys on the mutable sheet name — declare
+  `sheetId` whenever the human can rename sheets in the browser.
+- The #8 residuals (tint approximation, render-sensitive page breaks) bound any visual-fidelity claim.
 
 ## Hardening backlog (from the 2026-07-10 gpt-5.6 review + real-workbook round-trip)
 
@@ -131,7 +149,7 @@ on mutable sheet names) and the structure items in #9.
 4. **Data-validation import parity** — ✅ done: import emits the DV resource; inline lists quoted, range/named refs passed through; all DV types.
 5. **Conditional-formatting fidelity** — ✅ done: CFVO types/values, priority, `stopIfTrue`, differential fonts preserved both ways.
 6. **Charts/pivots/names** — ✅ done: cross-sheet chart refs resolve to their own sheet; pivots do rows×cols with sum/count/avg/min/max and reuse an existing sheet; defined-name scope preserved.
-7. **Closure enforcement** — ✅ mostly: `objects.schema.json` + stdlib `validate_objects.py` + compile gate (fails on invalid declared objects, warns on unresolved import gaps) + manifest hashes. **Open:** stable sheet-ID references instead of mutable names.
+7. **Closure enforcement** — ✅ done: `objects.schema.json` + stdlib `validate_objects.py` + compile gate (fails on invalid declared objects, warns on unresolved import gaps) + manifest hashes; stable `sheetId` references resolve end-to-end (compile, validator, verify read-back, browser preview). Residual: `sheetId` is optional — see Closure.
 8. **Real round-trip conformance suite** — ✅ mostly: `verify/conformance.py` gates on real workbooks (cells + structure); a **LibreOffice render diff** (PDF→PNG) was run as a visual ground-truth pass and caught two defects the openpyxl read-back can't see, now fixed: (a) font name/size were dropped for "default" Calibri/11, so exported cells had no explicit font and rendered **serif** in LibreOffice — now always emitted; (b) a literal string starting with `=` was misclassified as a formula — now keyed on `cell.data_type` with a `t:"s"` literal marker. **Open:** Univer-Facade-generated fixtures; computer-use visual check (LibreOffice computer-use was unavailable in the headless Codex run — the render-diff fallback was used).
 9. **Worksheet structure** — ✅ done: sheet visibility, grouped column spans + exact widths, exact row heights, comments, hyperlinks, and images now round-trip; the conformance structural line measures them. (Residual: page-break position is still LibreOffice-render-sensitive near thresholds.)
 10. **Operational** — ✅ done: `dist/` creation, one-arg `npm run import`, atomic `/save` + `/save-objects` + `response.ok`, pinned deps.
@@ -142,7 +160,7 @@ on mutable sheet names) and the structure items in #9.
 npm run compile         # snapshot-to-xlsx.py … objects.json  (compile gate validates objects.json first)
 npm run import -- x.xlsx # xlsx-to-snapshot.py — captures caches, DV, CF; reports charts/pivots/macros it can't rebuild
 npm run verify          # read-back-check.py: diff dist/workbook.xlsx against snapshot + objects
-npm run test:converter  # the converter self-test on the shipped sample (48 checks)
+npm run test:converter  # the converter self-test on the shipped sample (53 checks)
 # closure gate on its own:
 python3 converter/validate_objects.py objects.json workbook.snapshot.json
 # measured round-trip fidelity against real workbooks (the gate for any converter change):

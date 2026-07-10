@@ -8,7 +8,11 @@ are DETECTED by scanning the .xlsx parts and reported honestly (never silently d
 re-declare them in objects.json. This closes the "import has X but the browser can't show it" gap by
 making X visible as a reported gap rather than a silent loss.
 
-Usage: python3 xlsx-to-snapshot.py <in.xlsx> <out.snapshot.json> [out.objects.json]
+Re-import safety: if the objects file already holds declared charts/pivots, they are PRESERVED (only
+`_import_note` is refreshed) — a refresh-from-source must never silently destroy reviewed declarations.
+Pass --reset-objects to explicitly start the declarations over.
+
+Usage: python3 xlsx-to-snapshot.py <in.xlsx> <out.snapshot.json> [out.objects.json] [--reset-objects]
 Stdlib + openpyxl only.
 """
 import base64
@@ -261,15 +265,37 @@ def scan_embedded_objects(path):
                 counts["external_links"] += 1
     return counts
 
-def convert(in_path, out_snapshot, out_objects=None):
+def _existing_declarations(path):
+    """Declared charts/pivots already in the objects file. A re-import must never silently destroy
+    reviewed declarations, so unless --reset-objects is passed these are carried through both writes."""
+    if not path or not os.path.exists(path):
+        return [], []
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            existing = json.load(f)
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"  ⚠ existing {path} is unreadable ({exc}); its declarations cannot be preserved",
+              file=sys.stderr)
+        return [], []
+    if not isinstance(existing, dict):
+        return [], []
+    charts = existing.get("charts")
+    pivots = existing.get("pivots")
+    return (charts if isinstance(charts, list) else []), (pivots if isinstance(pivots, list) else [])
+
+def convert(in_path, out_snapshot, out_objects=None, reset_objects=False):
     # Fail-safe preflight: scan the raw package FIRST and persist the gap inventory, so charts/pivots/
     # macros are reported even if cell import later fails. Detection must never depend on success.
+    charts, pivots = ([], []) if reset_objects else _existing_declarations(out_objects)
+    if charts or pivots:
+        print(f"  ⚠ re-import — preserved {len(charts)} declared chart(s) and {len(pivots)} pivot(s) "
+              f"from existing {out_objects}; pass --reset-objects to discard them", file=sys.stderr)
     detected = scan_embedded_objects(in_path)
     preflight = {k: v for k, v in detected.items() if v}
     note = ("Preflight detected before import (reconstruction not yet confirmed): "
             + (", ".join(f"{v} {k}" for k, v in preflight.items()) or "none") + ".")
     if out_objects:
-        _atomic_write_json(out_objects, {"charts": [], "pivots": [], "_import_note": note})
+        _atomic_write_json(out_objects, {"charts": charts, "pivots": pivots, "_import_note": note})
     if preflight:
         print("  ⚠ preflight — " + note, file=sys.stderr)
 
@@ -430,7 +456,7 @@ def convert(in_path, out_snapshot, out_objects=None):
             + (", ".join(f"{v} {k}" for k, v in unresolved.items()) or "none")
             + ". Charts/pivots must be re-declared; macros/external-links remain out of scope.")
     if out_objects:
-        _atomic_write_json(out_objects, {"charts": [], "pivots": [], "_import_note": note})
+        _atomic_write_json(out_objects, {"charts": charts, "pivots": pivots, "_import_note": note})
     if unresolved:
         print("  ⚠ import gap — " + note, file=sys.stderr)
     for error in image_errors:
@@ -438,10 +464,14 @@ def convert(in_path, out_snapshot, out_objects=None):
     print(f"wrote {out_snapshot} ({len(sheet_order)} sheet(s), {len(styles)} styles)")
 
 def main():
-    if len(sys.argv) < 3:
-        print("usage: xlsx-to-snapshot.py <in.xlsx> <out.snapshot.json> [out.objects.json]", file=sys.stderr)
+    flags = {a for a in sys.argv[1:] if a.startswith("--")}
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    if flags - {"--reset-objects"} or len(args) < 2 or len(args) > 3:
+        print("usage: xlsx-to-snapshot.py <in.xlsx> <out.snapshot.json> [out.objects.json] [--reset-objects]",
+              file=sys.stderr)
         sys.exit(2)
-    convert(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else None)
+    convert(args[0], args[1], args[2] if len(args) > 2 else None,
+            reset_objects="--reset-objects" in flags)
 
 if __name__ == "__main__":
     main()

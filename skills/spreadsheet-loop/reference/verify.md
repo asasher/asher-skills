@@ -20,15 +20,17 @@ const recomputed = fWorkbook.save();
 ```
 
 Compare each formula cell's recomputed value against the cached `v` in the snapshot. A mismatch means the
-cached result was stale — refresh it before compiling. The verify harness ships in `templates/verify/`.
+cached result was stale — refresh it before compiling. The verify harness ships in `templates/app/verify/`
+(scaffolded into the project as `verify/`).
 
 ## 2. Read the .xlsx back and diff
 
 Run `python3 verify/read-back-check.py dist/workbook.xlsx workbook.snapshot.json objects.json` — it opens the
 compiled `.xlsx` with `openpyxl` and asserts the committed feature set survived: values and formulas present,
 number formats intact, merges and freeze in place, named ranges defined, and **each declared chart and pivot
-materialized**. This catches converter regressions directly. It also complements the converter's own
-`converter/test.py` (the 48-check self-test on the shipped sample). Allow documented sizing rounding.
+materialized** (declared objects resolve by stable `sheetId` first, then display name — the same order the
+compile uses). This catches converter regressions directly. It also complements the converter's own
+`converter/test.py` (the 53-check self-test on the shipped sample). Allow documented sizing rounding.
 
 ## 3. Drive a real spreadsheet app
 

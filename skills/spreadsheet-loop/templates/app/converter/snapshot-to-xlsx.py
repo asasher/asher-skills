@@ -454,6 +454,9 @@ def _cell_value(snapshot, sheet_name, row1, col1):
             return cell.get("v")
     return None
 
+# Aggregation semantics must match the browser preview (src/main.js `accumulate`/`aggregateResult`)
+# exactly — the numbers the human approves in the preview are the numbers the .xlsx must carry.
+# `count` counts non-empty values (Excel pivot "Count"); sum/avg/min/max are over numeric values only.
 _AGGREGATIONS = {"sum", "count", "avg", "min", "max"}
 
 def _new_aggregate(values):
@@ -464,7 +467,7 @@ def _update_aggregate(states, row, idx, values):
         value = row[idx[spec["field"]]]
         agg = spec.get("agg", "sum")
         if agg == "count":
-            if value is not None:
+            if value is not None and value != "":
                 states[i]["count"] += 1
             continue
         if not isinstance(value, (int, float)) or isinstance(value, bool):

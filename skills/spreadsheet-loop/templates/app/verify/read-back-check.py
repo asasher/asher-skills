@@ -66,16 +66,26 @@ for r in snapshot.get("resources", []):
             if d.get("name") and d["name"] not in wb.defined_names:
                 problems.append(f'named range "{d["name"]}" missing')
 
-# declared objects
+# declared objects — resolve the target sheet exactly like the compile (snapshot-to-xlsx.py `_object_sheet`):
+# stable `sheetId` first, then the display name, so a stale name with a valid sheetId still verifies.
+id_to_name = {sid: s["name"] for sid, s in snapshot.get("sheets", {}).items()}
+
+def object_sheet_name(obj):
+    if obj.get("sheetId") is not None:
+        return id_to_name.get(obj["sheetId"])
+    return obj.get("sheet")
+
 for ch in (objects or {}).get("charts", []):
-    ws = wb[ch["sheet"]] if ch["sheet"] in wb.sheetnames else None
+    name = object_sheet_name(ch)
+    ws = wb[name] if name in wb.sheetnames else None
     if not ws or not ws._charts:
-        problems.append(f'chart "{ch.get("id")}" missing from sheet {ch["sheet"]}')
+        problems.append(f'chart "{ch.get("id")}" missing from sheet {name or ch.get("sheet")}')
 for pv in (objects or {}).get("pivots", []):
-    if pv["sheet"] not in wb.sheetnames:
-        problems.append(f'pivot sheet "{pv["sheet"]}" missing')
+    name = object_sheet_name(pv)
+    if name not in wb.sheetnames:
+        problems.append(f'pivot sheet "{name or pv.get("sheet")}" missing')
     else:
-        vals = [c.value for col in wb[pv["sheet"]].iter_cols() for c in col]
+        vals = [c.value for col in wb[name].iter_cols() for c in col]
         if "Grand Total" not in vals:
             problems.append(f'pivot "{pv.get("id")}" has no Grand Total row')
 

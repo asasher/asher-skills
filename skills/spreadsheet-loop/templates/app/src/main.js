@@ -186,6 +186,16 @@ function getSheet(snapshot, sheetName) {
   return sheets.find((sheet) => sheet.name === sheetName);
 }
 
+// Resolve a declared object's target sheet exactly like the converter (snapshot-to-xlsx.py
+// `_object_sheet`): stable `sheetId` first, then the display name — so a declaration whose
+// `sheet` name went stale after a browser rename still previews, as long as its sheetId is valid.
+function objectSheetName(snapshot, object) {
+  if (object.sheetId !== null && object.sheetId !== undefined) {
+    return snapshot?.sheets?.[object.sheetId]?.name;
+  }
+  return object.sheet;
+}
+
 function getCellValue(sheet, row, column) {
   const cell = sheet?.cellData?.[String(row)]?.[String(column)];
   return cell && Object.prototype.hasOwnProperty.call(cell, 'v') ? cell.v : null;
@@ -468,10 +478,10 @@ function pieChartSvg(chart, categories, series) {
   return svg;
 }
 
-function chartSeries(snapshot, chart) {
+function chartSeries(snapshot, chart, fallbackSheet) {
   const series = [];
   for (const reference of Array.isArray(chart.values) ? chart.values : []) {
-    const { matrix } = readRange(snapshot, reference, chart.sheet);
+    const { matrix } = readRange(snapshot, reference, fallbackSheet);
     const columns = matrixColumns(matrix);
     columns.forEach((values, column) => {
       const index = series.length;
@@ -487,12 +497,18 @@ function chartSeries(snapshot, chart) {
 
 function renderChart(chart, snapshot, index) {
   const card = element('section', 'object-card');
+  const targetSheet = objectSheetName(snapshot, chart);
   card.append(element('h3', 'object-title', `CHART · ${chart.title || chart.id || index + 1}`));
-  card.append(element('p', 'object-meta', `${chart.type || 'bar'} · ${chart.sheet || 'unknown sheet'}!${chart.anchor || 'H2'}`));
+  card.append(element('p', 'object-meta', `${chart.type || 'bar'} · ${targetSheet || chart.sheet || 'unknown sheet'}!${chart.anchor || 'H2'}`));
   try {
-    const series = chartSeries(snapshot, chart);
+    if (!targetSheet) {
+      throw new Error(chart.sheetId !== null && chart.sheetId !== undefined
+        ? `Sheet id not found in snapshot: ${chart.sheetId}`
+        : 'Chart has no target sheet');
+    }
+    const series = chartSeries(snapshot, chart, targetSheet);
     const categories = chart.categories
-      ? flatten(readRange(snapshot, chart.categories, chart.sheet).matrix)
+      ? flatten(readRange(snapshot, chart.categories, targetSheet).matrix)
       : Array.from({ length: Math.max(...series.map((item) => item.values.length)) }, (_, itemIndex) => itemIndex + 1);
     const declaredType = String(chart.type || 'bar').toLowerCase();
     const type = ['bar', 'line', 'pie'].includes(declaredType) ? declaredType : 'bar';
@@ -503,13 +519,7 @@ function renderChart(chart, snapshot, index) {
         : barChartSvg(chart, categories, series);
     card.append(svg);
     if (type !== declaredType) {
-      card.append(element('p', 'object-note', `Unknown chart type “${declaredType}”; previewed as the converter's bar fallback.`));
-    }
-
-    const references = [chart.categories, ...(Array.isArray(chart.values) ? chart.values : [])].filter(Boolean);
-    const crossSheet = references.some((reference) => parseReference(reference, chart.sheet).sheetName !== chart.sheet);
-    if (crossSheet) {
-      card.append(element('p', 'object-note', 'Cross-sheet ranges are resolved for this preview; the current converter requires same-sheet chart declarations.'));
+      card.append(element('p', 'object-note', `Unknown chart type “${declaredType}” — the compile gate rejects it (schema allows bar|line|pie); previewed here as bar.`));
     }
   } catch (error) {
     card.append(element('p', 'object-error', `Preview unavailable: ${error.message}`));
@@ -530,40 +540,35 @@ function compareKeys(left, right) {
   );
 }
 
+// Aggregation semantics must match the converter (snapshot-to-xlsx.py `_update_aggregate` /
+// `_aggregate_result`) exactly, and the accepted set is exactly the objects.schema.json enum —
+// the preview must never render a declaration the compile gate would refuse, and the numbers the
+// human approves here must be the numbers the .xlsx carries. `count` counts non-empty values
+// (Excel pivot "Count"); sum/avg/min/max are over numeric values only.
+const PIVOT_AGGREGATIONS = ['sum', 'count', 'avg', 'min', 'max'];
+
 function newAggregateState() {
-  return { sum: 0, count: 0, countA: 0, min: null, max: null, product: 1, distinct: new Set() };
+  return { sum: 0, numericCount: 0, nonEmptyCount: 0, min: null, max: null };
 }
 
 function accumulate(state, value) {
-  if (value !== null && value !== undefined && value !== '') {
-    state.countA += 1;
-    state.distinct.add(valueKey([value]));
-  }
+  if (value !== null && value !== undefined && value !== '') state.nonEmptyCount += 1;
   const number = numeric(value);
   if (number === null) return;
   state.sum += number;
-  state.count += 1;
+  state.numericCount += 1;
   state.min = state.min === null ? number : Math.min(state.min, number);
   state.max = state.max === null ? number : Math.max(state.max, number);
-  state.product *= number;
-}
-
-function normalizedAgg(agg) {
-  return String(agg || 'sum').toLowerCase().replace(/[\s_-]/g, '');
 }
 
 function aggregateResult(state, agg) {
-  switch (normalizedAgg(agg)) {
+  switch (agg) {
     case 'sum': return state.sum;
-    case 'count': return state.count;
-    case 'counta': return state.countA;
-    case 'average':
-    case 'avg': return state.count ? state.sum / state.count : null;
+    case 'count': return state.nonEmptyCount;
+    case 'avg': return state.numericCount ? state.sum / state.numericCount : null;
     case 'min': return state.min;
     case 'max': return state.max;
-    case 'product': return state.count ? state.product : null;
-    case 'distinctcount': return state.distinct.size;
-    default: throw new Error(`Unsupported pivot aggregation: ${agg}`);
+    default: throw new Error(`Unsupported pivot aggregation: ${agg} (the compile gate allows ${PIVOT_AGGREGATIONS.join('|')})`);
   }
 }
 
@@ -636,7 +641,7 @@ function pivotTable(snapshot, pivot) {
   const displayedRowFields = rowFields.length ? rowFields : ['Group'];
   displayedRowFields.forEach((field) => headerRow.append(element('th', '', field)));
 
-  const aggregateLabel = (spec) => `${normalizedAgg(spec.agg)}(${spec.field})`;
+  const aggregateLabel = (spec) => `${spec.agg}(${spec.field})`;
   for (const [, columnValues] of sortedColumns) {
     for (const spec of valueSpecs) {
       const prefix = columnFields.length ? `${columnValues.map(displayValue).join(' · ')} · ` : '';
@@ -688,20 +693,15 @@ function pivotTable(snapshot, pivot) {
 
 function renderPivot(pivot, snapshot, index) {
   const card = element('section', 'object-card');
+  const targetSheet = objectSheetName(snapshot, pivot);
   card.append(element('h3', 'object-title', `PIVOT · ${pivot.id || index + 1}`));
   const rows = Array.isArray(pivot.rows) && pivot.rows.length ? pivot.rows.join(' + ') : '(all rows)';
   const columns = Array.isArray(pivot.cols) && pivot.cols.length ? ` × ${pivot.cols.join(' + ')}` : '';
-  card.append(element('p', 'object-meta', `${rows}${columns} · ${pivot.source || 'missing source'} → ${pivot.sheet || 'unknown sheet'}!${pivot.anchor || 'A1'} · static on compile`));
+  card.append(element('p', 'object-meta', `${rows}${columns} · ${pivot.source || 'missing source'} → ${targetSheet || pivot.sheet || 'unknown sheet'}!${pivot.anchor || 'A1'} · static on compile`));
   try {
     const scroll = element('div', 'preview-scroll');
     scroll.append(pivotTable(snapshot, pivot));
     card.append(scroll);
-    const hasColumns = Array.isArray(pivot.cols) && pivot.cols.length > 0;
-    const hasNonSum = Array.isArray(pivot.values)
-      && pivot.values.some((spec) => normalizedAgg(spec.agg) !== 'sum');
-    if (hasColumns || hasNonSum) {
-      card.append(element('p', 'object-note', 'Preview honors the declared columns and aggregations; the current Tier A converter is exactly equivalent only for row-grouped sums.'));
-    }
   } catch (error) {
     card.append(element('p', 'object-error', `Preview unavailable: ${error.message}`));
   }

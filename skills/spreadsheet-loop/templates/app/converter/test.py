@@ -158,7 +158,8 @@ with tempfile.TemporaryDirectory(prefix="spreadsheet-converter-test-", dir="/tmp
     objects["pivots"] = [{
         "id": "pivot-stable", "sheet": "Stale Pivot Name", "sheetId": "sheet-2",
         "source": "Sales!A2:D6", "rows": ["Region"],
-        "values": [{"field": "Revenue", "agg": "sum"}], "anchor": "A1"
+        "values": [{"field": "Revenue", "agg": "sum"}, {"field": "Units", "agg": "count"}],
+        "anchor": "A1"
     }]
     object_errors = validate_objects(objects) + validate_against_snapshot(objects, imported)
     ok("stable sheet IDs validate", not object_errors, object_errors)
@@ -167,6 +168,20 @@ with tempfile.TemporaryDirectory(prefix="spreadsheet-converter-test-", dir="/tmp
     invalid_errors = validate_against_snapshot(invalid_objects, imported)
     ok("invalid sheet ID rejected", any("sheet-missing" in e for e in invalid_errors), invalid_errors)
     json.dump(objects, open(objects_path, "w"), indent=2)
+
+    # Mixed-type pivot source: `count` must count non-empty values (Excel pivot Count) — text counts,
+    # a blank cell does not — identically in the converter and the browser preview. A numeric-only
+    # count (the old preview semantic) would report North=1/Grand=2 here instead of 2/3.
+    units_cells = imported["sheets"]["sheet-1"]["cellData"]
+    units_cells["3"]["2"] = {"v": "n/a"}
+    del units_cells["4"]["2"]
+
+    converter_mod = runpy.run_path(str(converter / "snapshot-to-xlsx.py"))
+    count_spec = [{"field": "X", "agg": "count"}]
+    count_states = converter_mod["_new_aggregate"](count_spec)
+    for value in (120, "n/a", False, "", None):
+        converter_mod["_update_aggregate"](count_states, [value], {"X": 0}, count_spec)
+    ok("count = non-empty semantics", count_states[0]["count"] == 3, count_states[0])
 
     mutated_path = td / "mutated.snapshot.json"
     json.dump(imported, open(mutated_path, "w"), indent=2)
@@ -212,6 +227,18 @@ with tempfile.TemporaryDirectory(prefix="spreadsheet-converter-test-", dir="/tmp
     stable_vals = {rt_pivot.cell(row=r, column=1).value: rt_pivot.cell(row=r, column=2).value
                    for r in range(2, 6)}
     ok("pivot stable ID resolution", stable_vals.get("Grand Total") == 4200, stable_vals)
+    count_vals = {rt_pivot.cell(row=r, column=1).value: rt_pivot.cell(row=r, column=3).value
+                  for r in range(2, 6)}
+    ok("pivot count on mixed-type column", count_vals.get("North") == 2 and
+       count_vals.get("South") == 1 and count_vals.get("Grand Total") == 3, count_vals)
+
+    # Verify layer 2 must agree with the compile on stable IDs: a stale sheet name + valid sheetId —
+    # the exact declaration the checks above bless — must PASS read-back, not report a missing object.
+    readback = subprocess.run([sys.executable, str(converter.parent / "verify" / "read-back-check.py"),
+                               str(roundtrip_path), str(mutated_path), str(objects_path)],
+                              capture_output=True, text=True, env=env)
+    ok("read-back resolves stable sheet IDs", readback.returncode == 0,
+       (readback.returncode, readback.stdout.strip() or readback.stderr.strip()))
 
     color_rule = next(rule for cf in roundtrip["Sales"].conditional_formatting for rule in cf.rules
                       if rule.type == "colorScale")
@@ -235,6 +262,25 @@ with tempfile.TemporaryDirectory(prefix="spreadsheet-converter-test-", dir="/tmp
     ok("CF thresholds re-imported", [(point["value"].get("type"), point["value"].get("value"))
                                       for point in reimported_scale] ==
        [("num", 1000.0), ("percentile", 37.0), ("num", 2000.0)], reimported_rule)
+
+    # Re-import over a reviewed objects.json must preserve the declarations (only the note refreshes);
+    # discarding them requires the explicit --reset-objects flag.
+    preserved_snapshot = td / "preserved.snapshot.json"
+    subprocess.run([sys.executable, str(converter / "xlsx-to-snapshot.py"), str(roundtrip_path),
+                    str(preserved_snapshot), str(objects_path)],
+                   check=True, capture_output=True, text=True, env=env)
+    preserved = json.load(open(objects_path))
+    ok("re-import preserves declared objects",
+       [c.get("id") for c in preserved.get("charts", [])] == ["chart-stable"] and
+       [p.get("id") for p in preserved.get("pivots", [])] == ["pivot-stable"] and
+       "Detected in the source" in preserved.get("_import_note", ""),
+       {k: preserved.get(k) for k in ("charts", "pivots", "_import_note")})
+    subprocess.run([sys.executable, str(converter / "xlsx-to-snapshot.py"), str(roundtrip_path),
+                    str(preserved_snapshot), str(objects_path), "--reset-objects"],
+                   check=True, capture_output=True, text=True, env=env)
+    reset = json.load(open(objects_path))
+    ok("--reset-objects discards declarations", reset.get("charts") == [] and reset.get("pivots") == [],
+       reset)
 
 npass = sum(1 for _, p, _ in checks if p)
 for name, p, got in checks:

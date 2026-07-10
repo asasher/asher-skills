@@ -64,6 +64,10 @@ their files).
 `npx skills add <repo-url> --skill spreadsheet-loop`, then hand it a workbook to build (or the path to an
 existing `.xlsx`). The scaffolded project is polyglot: Node (`npm install` → Univer presets + Vite) for the
 browser surface, and Python (`pip install -r requirements.txt` → openpyxl) for the converter.
+(The asher-skills "stdlib-only Python" convention governs a skill's own `scripts/`; `templates/app/` is a
+scaffold copied into user projects and declares its dependencies in its own manifests — `requirements.txt`,
+`package.json` — while `converter/validate_objects.py` stays deliberately stdlib so the compile gate runs
+anywhere.)
 Presenting an artifact for sign-off and serving the live surface use the repo's presentation surface config
 (`docs/agents/environment.md`); absent it, both degrade to a local open. Sign-off needs the `review-loop`
 skill installed; staffing the build needs the `staffing` skill installed.

@@ -28,7 +28,7 @@ converter. Then:
 ```bash
 npm install                 # Univer presets + Vite
 pip install -r requirements.txt   # openpyxl
-npm run test:converter      # sanity-check the converter (48-check self-test) before relying on it
+npm run test:converter      # sanity-check the converter (53-check self-test) before relying on it
 npm run dev                 # serve the surface (Vite, listening on all interfaces for the proxy)
 ```
 
@@ -71,7 +71,8 @@ fall back to a local open and say remote access is unavailable.
 
 ## Version pinning
 
-The template pins Univer presets at `^0.10`. Univer's API has moved across minors (e.g. `getSnapshot()` →
+The template pins Univer presets at the exact version `0.10.2` (see `package.json` — exact pins, no `^`
+range, so installs are reproducible). Univer's API has moved across minors (e.g. `getSnapshot()` →
 `save()`); if a newer major is installed, re-check the Facade calls in `src/main.js` and `verify/recompute.mjs`
 against `docs.univer.ai/reference/facade` before relying on them. This is the one place the scaffold is
 version-sensitive.
