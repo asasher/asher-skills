@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>spreadsheet-loop — workbook</title>
+    <style>
+      :root { color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; overflow: hidden; }
+      #app { width: 100vw; height: 100vh; }
+      #status {
+        position: fixed; right: 12px; bottom: 8px; z-index: 20;
+        padding: 3px 9px; border: 1px solid #e5e7eb; border-radius: 5px;
+        color: #4b5563; background: rgba(255, 255, 255, .96);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, .14); font-size: 12px;
+      }
+      #status[data-state="error"] { border-color: #fecaca; color: #b91c1c; background: #fff7f7; }
+      #objects {
+        position: fixed; top: 10px; right: 12px; z-index: 10;
+        width: min(440px, calc(100vw - 24px)); max-height: calc(100vh - 58px);
+        overflow: auto; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px;
+        color: #1f2937; background: rgba(255, 255, 255, .97);
+        box-shadow: 0 4px 18px rgba(0, 0, 0, .16); font-size: 12px;
+      }
+      #objects[hidden] { display: none; }
+      .objects-heading { margin: 0 0 9px; font-size: 13px; font-weight: 700; }
+      .object-card { margin-top: 9px; padding-top: 9px; border-top: 1px solid #e5e7eb; }
+      .object-title { margin: 0; font-size: 12px; font-weight: 700; }
+      .object-meta { margin: 3px 0 7px; color: #6b7280; line-height: 1.35; }
+      .object-error { margin: 6px 0 0; color: #b91c1c; }
+      .preview-scroll { max-width: 100%; overflow: auto; }
+      .pivot-preview { border-collapse: collapse; min-width: 100%; white-space: nowrap; }
+      .pivot-preview th, .pivot-preview td {
+        padding: 4px 7px; border: 1px solid #d1d5db; text-align: right;
+      }
+      .pivot-preview th { background: #f3f4f6; font-weight: 650; }
+      .pivot-preview th:first-child, .pivot-preview td:first-child { text-align: left; }
+      .pivot-preview .grand-total td { background: #f9fafb; font-weight: 700; }
+      .chart-preview { display: block; width: 100%; height: auto; overflow: visible; }
+      .chart-grid { stroke: #e5e7eb; stroke-width: 1; }
+      .chart-axis { stroke: #6b7280; stroke-width: 1; }
+      .chart-label { fill: #4b5563; font: 9px ui-sans-serif, system-ui, sans-serif; }
+      .chart-legend { fill: #374151; font: 9px ui-sans-serif, system-ui, sans-serif; }
+      .object-note { margin: 6px 0 0; color: #92400e; }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <aside id="objects" aria-label="Declared object previews" hidden></aside>
+    <div id="status" role="status" aria-live="polite">loading…</div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
