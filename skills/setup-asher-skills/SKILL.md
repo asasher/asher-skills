@@ -55,10 +55,14 @@ write**, and nothing touches disk until the user approves the whole plan at conf
    edit it. Nothing is written until this is approved.
 4. **Write.** For each skill in the closure, `npx skills add https://github.com/asasher/asher-skills --skill
    <name> -y` (add `-g` for a consented global staffing install: `-g -y`; project-local is the default) —
-   **only this repo's endpoint**. In the self-host case, do not run `npx skills add` against this repo's own
-   `skills/`; after each command, verify the skill landed on the filesystem rather than trusting the exit
-   code, and fall back to self-host placement on a miss. The `-y` skips the confirmation prompt since the user
-   already confirmed at phase 3. Then run each installed skill's own setup (staffing's roster, review-loop's
+   **only this repo**. In the self-host case, repo-owned skills are **still mounted**, from the repo's own
+   root as a local source (`npx skills add <repo-root> --skill <name> -y`): a canonical copy lands at
+   `.agents/skills/<name>` with a per-harness symlink at `.claude/skills/<name>`, refreshed by reinstall from
+   `skills/` and never edited in place — `skills/<name>/` itself is never an install destination. After each
+   command, verify the skill landed on the filesystem rather than trusting the exit code, and fall back to
+   direct placement on a miss (lock entry in the specified fallback shape: native fields plus
+   `"fallbackOrigin": true`, no fabricated `computedHash`). The `-y` skips the confirmation prompt since the
+   user already confirmed at phase 3. Then run each installed skill's own setup (staffing's roster, review-loop's
    surface config, backlog's `docs/agents/` suite), write the `## Agent skills` block into the harness memory
    file, write the repo pointer, and — consent-gated, if absent — seed the **global conventions**
    (`templates/global-conventions.md`: local-first HTML presentation, tailnet up/down) into the harness's
