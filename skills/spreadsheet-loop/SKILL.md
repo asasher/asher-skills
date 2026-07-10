@@ -81,9 +81,11 @@ run the import converter first to seed the snapshot ([converter](reference/conve
 
 ### 4. The loop — load [the-loop](reference/the-loop.md)
 
-Serve the surface on the repo's presentation surface and iterate. The human edits cells directly and/or the
-agent applies changes through the Facade API; either way the snapshot is the persisted state. Every
-iteration is checked back against `MODEL.md` and `LAYOUT.md` — the docs and the snapshot move together.
+Serve the surface and iterate **in turns** — one party holds the pen at a time. On a human turn they edit in
+the browser (autosaved to disk); on an agent turn the agent edits the files (directly or via a headless
+Facade script) and the browser reloads to the new state. A version-guarded save + reload-on-agent-edit keep
+turns safe with no merge machinery. Every turn is checked back against `MODEL.md` and `LAYOUT.md` — the docs
+and the snapshot move together.
 
 ### 5. Compile — load [converter](reference/converter.md)
 

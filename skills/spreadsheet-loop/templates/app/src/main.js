@@ -31,12 +31,21 @@ async function fetchJson(path) {
 
 let univerAPI;
 let fWorkbook;
+// The version the browser loaded — sent back on save so a save that raced an agent edit is refused.
+let baseVersion = '';
+
+async function loadSnapshot() {
+  const response = await fetch('/snapshot', { cache: 'no-store', headers: { Accept: 'application/json' } });
+  if (!response.ok) throw new Error(`/snapshot returned HTTP ${response.status}`);
+  baseVersion = response.headers.get('X-Workbook-Version') || '';
+  return response.json();
+}
 
 async function initialize() {
   let initialSnapshot = {};
   let loadError = null;
   try {
-    initialSnapshot = await fetchJson('/snapshot');
+    initialSnapshot = await loadSnapshot();
   } catch (error) {
     loadError = error;
   }
@@ -94,12 +103,20 @@ async function saveWorkbook() {
     const data = await Promise.resolve(fWorkbook.save());
     const response = await fetch('/save', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Base-Version': baseVersion },
       body: JSON.stringify(data),
     });
+    if (response.status === 409) {
+      // The agent edited during its turn; the watcher reload is coming, but don't overwrite meanwhile.
+      setStatus('agent updated the workbook — reloading…', 'error');
+      setTimeout(() => location.reload(), 400);
+      return;
+    }
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}${await responseError(response)}`);
     }
+    const result = await response.json().catch(() => ({}));
+    if (result.version) baseVersion = result.version; // advance to the version we just wrote
     setStatus(`saved ${new Date().toLocaleTimeString()}`);
     void renderObjects();
   } catch (error) {

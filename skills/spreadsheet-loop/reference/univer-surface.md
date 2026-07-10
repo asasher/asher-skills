@@ -33,11 +33,19 @@ npm run dev                 # serve the surface (Vite, listening on all interfac
 
 ## Why persistence lives in the dev server
 
-A browser can't write local files, so `vite.config.js` adds two endpoints: `GET /snapshot` serves the current
-`workbook.snapshot.json`, and `POST /save` writes it. `src/main.js` autosaves (debounced) on every edit. That
-loop — browser edits → `/save` → file on disk — is what lets the agent read the snapshot as truth between
-turns and lets the human hand the workbook back and forth. Keep it to one process (`npm run dev`); don't add a
-separate backend.
+A browser can't write local files, so `vite.config.js` adds the persistence + turn-safety layer:
+
+- `GET /snapshot` and `GET /objects` serve the two source files, each with an `X-Workbook-Version` header
+  (a content hash).
+- `POST /save` and `POST /save-objects` write them atomically (temp + rename). Each carries an
+  `X-Base-Version` header; a save whose base version is stale (an agent edited during its turn) is refused
+  with **HTTP 409**, and the browser reloads instead of clobbering.
+- A **file watcher** reloads the browser whenever the agent writes a file directly, so the human never keeps
+  editing a stale in-memory workbook.
+
+`src/main.js` autosaves (debounced) on every edit and tracks the loaded version. That loop — browser edits →
+`/save` → file on disk, agent edits → file → browser reload — is what makes the [turn-based loop](the-loop.md)
+safe. Keep it to one process (`npm run dev`); don't add a separate backend.
 
 ## Starting from an existing .xlsx
 

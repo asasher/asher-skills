@@ -1,8 +1,8 @@
 # The loop — iterating on the browser surface
 
-Phase 4 is the heart of the skill: the human and the agent edit the workbook **together** on the running
-Univer surface, with the snapshot as the persisted state. This is what Excel can't offer — a fast, shared,
-inspectable surface where changes are cheap and legible.
+Phase 4 is the heart of the skill: the human and the agent shape the workbook **in turns** on the running
+Univer surface, with `workbook.snapshot.json` + `objects.json` as the shared, persisted state. This is what
+Excel can't offer — a fast, inspectable surface where changes are cheap and legible.
 
 ## Serve it
 
@@ -11,20 +11,36 @@ surface (the tailnet root from `docs/agents/environment.md`), so the human can o
 are. The live surface is **not** a `review-loop` artifact — it is a live interactive surface, driven
 directly. Sign-off gates are for the paper artifacts (`SPEC.md`, `MODEL.md`, `LAYOUT.md`), not for the loop.
 
-End any turn where you're handing back to the human with the surface URL, so they can pick up editing.
+## Turn-based: one pen at a time
 
-## Two ways an edit happens
+The two files are the **board**; exactly one party holds the **pen** at a time. This is deliberate — it makes
+the collaboration robust without any merge/OT machinery. There are two kinds of turn:
 
-- **The human edits directly** in the browser — types values, drags, restyles. The app persists the snapshot
-  on change (autosave to `workbook.snapshot.json`). When you resume, re-read the snapshot; it is the truth.
-- **The agent applies changes** through the **Facade API** (`univerAPI` / `FWorkbook`), not by hand-editing
-  JSON, for anything non-trivial. Set values and formulas on ranges, apply styles, add named ranges, add
-  data-validation and conditional-formatting rules via the builders — then `fWorkbook.save()` and persist.
-  The Facade is also how you drive the headless Node instance in [verify](verify.md).
+- **Human turn.** The human edits live in the browser — types values, drags, restyles. The app autosaves the
+  snapshot to disk (debounced). The human ends the turn by handing back (a message, or just "your turn").
+  When you take over, **re-read `workbook.snapshot.json`** — it is the truth, not your memory of the prior
+  state.
+- **Agent turn.** The agent edits the **files**, not the human's live browser: small surgical value/style
+  fixes by editing `workbook.snapshot.json` directly; anything non-trivial (formulas, named ranges,
+  validation, conditional formatting) through a **headless Node Facade** script (`univerAPI`/`FWorkbook`
+  builders → `fWorkbook.save()`), which produces the correct plugin-resource shape. Declared charts/pivots go
+  in `objects.json`. When the agent writes a file, the app **reloads the human's browser** to the new state.
+  End the turn by narrating what changed and handing back.
 
-Hand-editing `workbook.snapshot.json` is fine for a small surgical fix to values or a style, but prefer the
-Facade for anything touching plugin resources (named ranges, validation, conditional formatting) — the
-builders produce the correct resource shape and keep `save()` authoritative.
+**Why the agent never drives the live browser:** turn-based means it doesn't have to. It reads and writes
+files; the browser is the human's window, kept fresh by the reload. That removes an entire class of
+in-browser-automation and conflict problems.
+
+**Two mechanics keep turns safe** (both in `vite.config.js`; see [univer-surface](univer-surface.md)):
+
+- **Reload-on-agent-edit.** The dev server watches the two files; when the agent writes one, it pushes a
+  browser reload, so the human never keeps editing a stale in-memory workbook.
+- **Version-guarded save.** Every save carries the version the browser loaded; a save that raced an agent
+  edit is refused (HTTP 409) and the browser reloads instead of overwriting. Last-write-wins is safe because
+  there is never a stale writer.
+
+If you ever find yourself wanting *both* parties editing at once, that's a signal to slow down and take
+turns — the safety rails assume it.
 
 ## Keep the docs and the snapshot together
 
