@@ -21,7 +21,7 @@
 
 - Regime: _<local-isolatable | cloud-singleton>_.
 - How to bring up an **isolated** stack for one worktree: _<the derived-env command / hook, or "main checkout only">_.
-- **Shared-singleton list** — every resource two concurrent worktrees would contend for, from the isolation audit's probes. One row each; `run` reads this to derive the verdict below. _<Fill the table, or "none — no runnable stack".>_
+- **Shared-singleton list** — every resource two concurrent worktrees would contend for, from the isolation audit's probes. One row each; `setup` derives the verdict below from it, and `run` reads the recorded verdict. _<Fill the table, or "none — no runnable stack".>_
 
   | Singleton | Collision mode | Locally isolatable? |
   |-----------|----------------|---------------------|
@@ -67,6 +67,6 @@
 
 > Read by `run` before dispatch.
 
-- Verdict: _<parallel-safe | serialize-verification>_ — derived from the shared-singleton list above, not chosen by preference.
-- If serialized, the exact singletons that force it: _<name the un-isolated rows from the list; when any is shared, serialize is a hard constraint — a parallel fan-out would corrupt shared state>_.
+- Verdict: _<parallel-safe | serialize-verification>_ — gated by the shared-singleton list above, asymmetrically: `parallel-safe` requires a list with no un-isolated collision; `serialize-verification` may come from that list (a hard constraint) or from a plain preference to serialize.
+- If serialized, why: _<either "user preference — sequential by choice" (the list is clear), or name the un-isolated rows from the list that force it — a hard constraint, since a parallel fan-out would corrupt that shared state>_.
 - Serialized exception lane: _<issue classes that must serialize even when parallel-safe — destructive shared-tenant operations, real third-party endpoints, deliberately distinct users; or "none">_.

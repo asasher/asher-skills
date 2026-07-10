@@ -1,6 +1,6 @@
 # Migrations
 
-Read by `setup` when a playbook's version stamp — the `<!-- backlog-templates: ... -->` comment on line 1 (or its retired `<!-- triage-templates: ... -->` form) — predates the current `templates/VERSION`, or is absent. Each entry says what changed and how to reconcile it without losing repo values. An entry retires once no live deployment can predate it.
+Read by `setup` when a playbook's version stamp — the `<!-- backlog-templates: ... -->` comment on line 1 (or its retired `<!-- triage-templates: ... -->` form) — predates the current `templates/VERSION`, or is absent. Each entry says what changed and how to reconcile it without losing repo values. **Reconcile applies every entry between the stamp and current `templates/VERSION`, in order** — never just the newest. So a playbook must not be re-stamped to the current version until every intervening entry has actually been applied to it; advancing the stamp past an unabsorbed entry silently strands that entry's changes, since the stamp is what tells reconcile the entry is still pending. An entry retires once no live deployment can predate it.
 
 ## v2026-07-09.1 → v2026-07-10.1
 

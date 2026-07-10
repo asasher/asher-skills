@@ -1,4 +1,4 @@
-<!-- backlog-templates: v2026-07-10.1 -->
+<!-- backlog-templates: v2026-07-06.1 -->
 
 # Playbook: Platform Bindings
 

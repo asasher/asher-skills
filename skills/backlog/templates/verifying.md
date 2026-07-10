@@ -4,7 +4,7 @@
 
 ## Checks
 
-Run narrowest-first, then broaden by touched surface. `setup` **discovers these from the repo and verifies each by running it** — from `.intent/`, `package.json` scripts, a `Makefile`/`Justfile`, `pyproject.toml`/`tox.ini`, `Cargo.toml`, gradle/maven, etc. — recording only commands that actually ran, verbatim. Do not record a guessed command; an unverified slot stays blank.
+Run narrowest-first, then broaden by touched surface. `setup` **discovers these from the repo and verifies each invocation by running it** — from `.intent/`, `package.json` scripts, a `Makefile`/`Justfile`, `pyproject.toml`/`tox.ini`, `Cargo.toml`, gradle/maven, etc. — recording only commands it has seen launch and execute the check, verbatim. Judge the invocation, not the exit code: a command that runs but reports failures (a currently-red suite) is still the real gate — record it with its baseline status, do not blank it. Only a missing script, a typo, or the wrong runner is omitted. A command that needs the running stack is confirmed with the stack up (`environment.md`). Do not record a guessed command.
 
 - Unit/targeted tests: _<the verified command, e.g. `npm test -- <path>`>_.
 - Lint: _<verified, or blank>_.
