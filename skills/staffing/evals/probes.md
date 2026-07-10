@@ -36,11 +36,11 @@ do it? Cite the sentence.
 
 **P7 (ac-6).** You are installing `staffing` on a **fresh machine that has no Codex CLI and a different model
 lineup** than any example in the skill. Following the audit procedure, outline the table you would write and
-say where its cost/intelligence/taste numbers come from. May you ship the four-model gpt-5.5/sonnet-5/…
+say where its cost/intelligence/taste numbers come from. May you ship the five-model gpt-5.6-sol/gpt-5.6-terra/sonnet-5/…
 table as the roster? Cite the rule.
 
-**P8 (ac-6).** In `reference/machine-audit.md`, what status does the four-model table (gpt-5.5, sonnet-5,
-opus-4.8, fable-5) have? Quote the label the file gives it.
+**P8 (ac-6).** In `reference/machine-audit.md`, what status does the five-model table (gpt-5.6-sol,
+gpt-5.6-terra, sonnet-5, opus-4.8, fable-5) have? Quote the label the file gives it.
 
 **P9 (ac-7).** Install `staffing` for a project that is identical to the machine default **except it forbids
 staffing below a higher floor**. What does the project override file contain? Cite the rule about what an
@@ -84,14 +84,16 @@ model removed from contention? Does the `intelligence > taste > cost` tie-break 
   model in a subagent and **report the staffing gap** — never default it to the backend builder, never skip
   the change. Cite `reference/roles-and-fallback.md` (worked example / fallback ladder). Handing it to the
   backend builder or stopping = fail.
-- **P4 (ac-4):** Order is pin → capability gate → rank. The **capability matrix** (a separate structure)
-  decides the browser requirement: filter to models marked `browser-use: true`. The `intelligence > taste >
-  cost` tie-break enters **only after**, ranking the survivor set — not the full roster. Executor must point
-  to the capability matrix and the rankings table as **distinct** structures by location
+- **P4 (ac-4):** Order is pin → capability gate → rank. Step 1 decides here when the installed roster
+  carries a **capability pin** for `browser-use` (the example roster pins it): the task routes straight to
+  the pinned model and ranking is skipped. Absent such a pin, the **capability matrix** (a separate
+  structure) gates: filter to models marked `browser-use: true`, and the `intelligence > taste > cost`
+  tie-break enters **only after**, ranking the survivor set — not the full roster. Executor must name the
+  pin list, the capability matrix, and the rankings table as **distinct** structures by location
   (`reference/rankings-and-routing.md`). Ranking first, or treating browser-use as a rankings column, = fail.
-- **P5 (ac-5):** The **mechanical/bulk task-pin** returns the pinned bulk model; resolution **stops at step
-  1** and skips ranking. It is a **pin**, not a ranking derivation — "a pin short-circuits the ranking." Cite
-  the task-pins section / step 1 of the resolution order in `reference/rankings-and-routing.md`. Deriving the
+- **P5 (ac-5):** The **mechanical/bulk task-type pin** returns the pinned bulk model; resolution **stops at
+  step 1** and skips ranking. It is a **pin**, not a ranking derivation — "a pin short-circuits the ranking."
+  Cite the Pins section / step 1 of the resolution order in `reference/rankings-and-routing.md`. Deriving the
   answer from the table = fail.
 - **P6 (ac-4):** **Not allowed.** A capability is a *kind*, not a *degree*; folding `browser-use` into the
   higher-is-better table either lets a browser-capable-but-dumber model outrank a smarter one, or lets
@@ -101,7 +103,7 @@ model removed from contention? Does the `intelligence > taste > cost` tie-break 
 - **P7 (ac-6):** Follow the audit: enumerate **this machine's** reachable models as the rows, seed
   cost/intelligence/taste from the documented default and mark them "tune these", omit the Codex CLI mechanics
   block (Codex absent), and set capability booleans + pins per what's reachable. You **may not** ship the
-  four-model table as the roster — it is labeled example output, and the roster is compiled from *this*
+  five-model table as the roster — it is labeled example output, and the roster is compiled from *this*
   machine. Cite `reference/machine-audit.md` (the audit procedure / "compiled from the current machine, never
   shipped fixed"). Reproducing Asher's table as the roster, or inventing reachable models, = fail.
 - **P8 (ac-6):** It is an **example of audit output for one machine — explicitly NOT the shipped/authoritative

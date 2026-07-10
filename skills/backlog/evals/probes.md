@@ -3,7 +3,7 @@
 Situated dry-run probes for the `draft` work-type (issue #33), per `docs/patterns/probe-evals.md`.
 
 Method: run the same scenario against the actual deployment targets — an **Opus subagent** (via the Agent
-tool) and **`codex exec --sandbox read-only`** (gpt-5.5) — each given `docs/agents/backlog-policy.md` and
+tool) and **`codex exec --sandbox read-only`** (gpt-5.6-sol) — each given `docs/agents/backlog-policy.md` and
 `.claude/skills/backlog/reference/issue-loop.md` in context (the routing surfaces a groomer / issue thread
 reads). Require the executor to **cite the file and the exact sentence** that decided each answer, and to
 **flag ambiguity as a valid answer**. Grade pass/fail against the key below, which is written before any runs

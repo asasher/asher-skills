@@ -8,7 +8,7 @@ own when cited.
 
 - **Executors are the deployment targets, run on both sides** (`environment.md` § Model staffing, checker
   role): a **Claude** subagent in-session (Agent tool, Opus) **and** `codex exec -s read-only
-  --skip-git-repo-check` for the gpt-5.5 side. A probe passes only if **both** executors pass it.
+  --skip-git-repo-check` for the gpt-5.6-sol side. A probe passes only if **both** executors pass it.
 - **Context:** command-surface session — the skill's `SKILL.md` and `reference/` files are available to the
   executor (this is how the skill deploys: a user invokes it and the model reads its files). Point the
   executor at `skills/setup-asher-skills/`.

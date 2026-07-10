@@ -30,7 +30,9 @@ this policy instead and flag the workspace instruction for fixing.
   fragmented, separately-rate-limited subscription session — and is never the right way to get a Claude result
   inside a loop you are already running.
 - **Non-Anthropic model CLIs → fine when they bill to a subscription.** Running `codex exec` under a ChatGPT
-  plan (or an equivalent subscription-authed CLI) draws from that plan's included allowance, so use it directly.
+  plan (or an equivalent subscription-authed CLI) draws from that plan's included allowance, so delegate to
+  it freely — from Claude Code, hold the run in a watched wrapper subagent (the orchestrator-subagent
+  pattern), not a fire-and-forget shell.
 - **Hard-gated exception.** If you are the orchestrator and you are *not* Claude Code (e.g. you are Codex), you
   cannot spawn a Claude subagent. If a Claude result is genuinely required and the only path is `claude -p`,
   **stop, loudly warn the human that this incurs extra usage, and get explicit approval before running it.**
@@ -63,8 +65,7 @@ says the eval is wrong. Changing the eval invalidates comparison with earlier it
    "done" means) and an **Agent execution** section (how each model participant is produced). Read `AGENTS.md`
    first; fall back to the README if a workspace has no `AGENTS.md` yet. Identify the full-run command, grading
    command, aggregation command, latest completed iteration, next iteration number, primary metric, and — per
-   the Agent execution policy above — how each participant is produced (which runs via subagent, which via a
-   subscription-authed CLI). If a workspace has no Agent execution section, apply the default policy. Completion:
+   the Agent execution policy above — how each participant is produced. If a workspace has no Agent execution section, apply the default policy. Completion:
    those items are known, or the missing item is named and the loop stops.
 
 2. **Build the signal packet.** Gather the current `SKILL.md`, eval goal, eval command, latest and previous
@@ -74,8 +75,7 @@ says the eval is wrong. Changing the eval invalidates comparison with earlier it
    cause.
 
 3. **Ask a fresh reviewer.** Load `reference/reviewer-prompt.md` and adapt it to the packet. Use a separate
-   model context when available, following the Agent execution policy: prefer an Agent-tool subagent for a
-   Claude reviewer, or a subscription-authed non-Anthropic CLI; never `claude -p`. If no separate context is
+   model context when available, per the Agent execution policy above. If no separate context is
    available, run the review in your own context but keep the prompt and response explicit in the notes.
    Completion: the
    reviewer returns either `NO_CHANGE` or a ranked edit plan with cited eval evidence, exact target regions,
@@ -90,8 +90,7 @@ says the eval is wrong. Changing the eval invalidates comparison with earlier it
 5. **Run the next iteration.** Refresh any skill snapshot the harness uses, such as
    `conditions/<skill-name>.md`, before running. Create or run into `iteration-(N+1)/`, where `N` is the latest
    completed iteration. Run the full test matrix, not a subset, for a comparison iteration. Produce each model
-   participant per the Agent execution policy — Claude cells via subagent, non-Anthropic cells via their
-   subscription-authed CLI; a harness that would shell out to `claude -p` must refuse unless explicitly approved.
+   participant per the Agent execution policy above.
    Completion: every test case was attempted in the new iteration directory; missing outputs or command failures
    are preserved as failure evidence.
 

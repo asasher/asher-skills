@@ -208,7 +208,7 @@ this same watch contract cover the **PR-merge** wait, or only the plan approval 
   and its code — **without polling `events.jsonl`**. Cite `reference/watch.md` §§ Who holds it / The wake and
   SKILL.md § Command surface (await). Blocking the orchestrator inline, hardcoding a model, or saying you
   poll the log = fail.
-- **W2 (ac-3, ac-11):** From Codex the watcher runs on **`gpt-5.5`** (Claude models unreachable → the roster
+- **W2 (ac-3, ac-11):** From Codex the watcher runs on **`gpt-5.6-terra`** (Claude models unreachable → the roster
   Floor collapses onto it). It is **not** hardcoded to `sonnet`: the watcher is **staffed at the roster
   Floor** — the cheapest capability class staffing names — read directly from the roster by composing
   `staffing` by name. A generic **`staffing route`** of the watch task would **not** give the model you want:

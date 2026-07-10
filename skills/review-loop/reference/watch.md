@@ -36,7 +36,7 @@ time without draining the orchestrator's budget or context.
   `intelligence > taste > cost`, so `route` returns the **most capable** reachable model (cost is only a
   tie-break) — the opposite of a cheap park. Read the Floor value the roster publishes instead. Do **not**
   bake in a model name: the Floor differs by harness — `sonnet-5` from **Claude Code** (never Haiku); from a
-  **Codex-driven** run, where Claude models are unreachable, the roster collapses to `gpt-5.5`. If the Floor
+  **Codex-driven** run, where Claude models are unreachable, the roster collapses to `gpt-5.6-terra`. If the Floor
   model is unreachable, walk staffing's succession ladder to the next reachable model, and if none is
   reachable run the watch on the current model in a subagent — never skip the watch. (No `staffing` change is
   needed: the Floor is already a named roster value; the watcher reads it, it does not add a pin or a role.)
