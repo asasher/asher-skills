@@ -4,7 +4,7 @@ Groom the backlog with the human, then run each ready-for-agent issue through th
 
 ## File locations
 
-- **Bundled reference** (`reference/`, `templates/`) ships with the skill; it is not looked for in the target repo. References hold only orchestration — targets, gates, handoffs — resolving staffing, review, planning, and prototyping against sibling skills by name.
+- **Bundled reference** (`reference/`, `templates/`) ships with the skill; `templates/` is shared `common/` plus per-domain packs, with `software/` the shipped default. It is not looked for in the target repo. References hold only orchestration — targets, gates, handoffs — resolving staffing, review, planning, and prototyping against sibling skills by name.
 - **Sibling skills** — `backlog` composes the `staffing` (roster/roles/fallback), `review-loop` (presentation + interactive review), `plan` (planning + approval gate), and `prototype` (throwaway design questions) skills **by plain name**; `backlog setup` ensures they are present (dependency surface).
 - **Project playbook** (`docs/agents/*.md`) lives in the target repo and holds the working instructions for each step: the technique (shipped inlined, no external skills required) plus this codebase's conventions and platform bindings. Created by `backlog setup`; override a step by editing its playbook.
 
