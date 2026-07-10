@@ -1,0 +1,25 @@
+{
+  "name": "spreadsheet-loop-workbook",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite",
+    "precompile": "node -e \"require('node:fs').mkdirSync('dist', { recursive: true })\"",
+    "compile": "python3 converter/snapshot-to-xlsx.py workbook.snapshot.json dist/workbook.xlsx objects.json",
+    "import": "node -e \"const { spawnSync } = require('node:child_process'); const [input, snapshot = 'workbook.snapshot.json', objects = 'objects.json'] = process.argv.slice(1); if (!input) { console.error('usage: npm run import -- <input.xlsx> [snapshot.json] [objects.json]'); process.exit(2); } const result = spawnSync('python3', ['converter/xlsx-to-snapshot.py', input, snapshot, objects], { stdio: 'inherit' }); if (result.error) { console.error(result.error.message); process.exit(1); } process.exit(result.status ?? 1);\"",
+    "verify": "python3 verify/read-back-check.py dist/workbook.xlsx workbook.snapshot.json objects.json",
+    "test:converter": "python3 converter/snapshot-to-xlsx.py converter/sample.snapshot.json /tmp/sl-sample.xlsx converter/sample.objects.json && python3 converter/test.py /tmp/sl-sample.xlsx",
+    "recompute": "node verify/recompute.mjs workbook.snapshot.json"
+  },
+  "dependencies": {
+    "@univerjs/preset-sheets-conditional-formatting": "0.10.2",
+    "@univerjs/preset-sheets-core": "0.10.2",
+    "@univerjs/preset-sheets-data-validation": "0.10.2",
+    "@univerjs/presets": "0.10.2"
+  },
+  "devDependencies": {
+    "@univerjs/preset-sheets-node-core": "0.10.2",
+    "vite": "5.4.0"
+  }
+}

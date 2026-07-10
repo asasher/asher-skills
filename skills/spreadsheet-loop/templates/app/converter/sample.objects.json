@@ -1,0 +1,24 @@
+{
+  "charts": [
+    {
+      "id": "chart-rev",
+      "sheet": "Sales",
+      "type": "bar",
+      "title": "Revenue by row",
+      "categories": "Sales!B3:B6",
+      "values": ["Sales!D3:D6"],
+      "seriesTitles": ["Revenue"],
+      "anchor": "F3"
+    }
+  ],
+  "pivots": [
+    {
+      "id": "pivot-region",
+      "sheet": "Pivot by Region",
+      "source": "Sales!A2:D6",
+      "rows": ["Region"],
+      "values": [{ "field": "Revenue", "agg": "sum" }],
+      "anchor": "A1"
+    }
+  ]
+}

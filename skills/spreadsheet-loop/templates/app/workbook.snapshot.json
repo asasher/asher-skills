@@ -1,0 +1,18 @@
+{
+  "id": "book-workbook",
+  "name": "Workbook",
+  "appVersion": "0.10.2",
+  "locale": "enUS",
+  "sheetOrder": ["sheet-1"],
+  "styles": {},
+  "sheets": {
+    "sheet-1": {
+      "id": "sheet-1",
+      "name": "Sheet1",
+      "rowCount": 100,
+      "columnCount": 26,
+      "cellData": {}
+    }
+  },
+  "resources": []
+}
