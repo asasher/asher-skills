@@ -44,7 +44,12 @@ for sid in order:
                 if xc.value != want:
                     problems.append(f'{sheet["name"]}!{addr} formula: want {want} got {xc.value!r}')
             elif cell.get("v") is not None:
-                if str(xc.value) != str(cell["v"]):
+                got = xc.value
+                # dates are stored ISO in the snapshot (t:"d") and materialize as a real datetime in the
+                # .xlsx — normalize the xlsx side to ISO before comparing so it's not a false mismatch.
+                if cell.get("t") == "d" and hasattr(got, "isoformat"):
+                    got = got.isoformat()
+                if str(got) != str(cell["v"]):
                     problems.append(f'{sheet["name"]}!{addr} value: want {cell["v"]!r} got {xc.value!r}')
             st = styles.get(cell["s"]) if isinstance(cell.get("s"), str) else cell.get("s")
             if st and st.get("n", {}).get("pattern") and xc.number_format != st["n"]["pattern"]:
