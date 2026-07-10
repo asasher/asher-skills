@@ -11,7 +11,8 @@ This phase is human-in-the-loop: the agent proposes and may self-apply any role 
 1. Pull the backlog.
    - If issues were named, use exactly those. Otherwise take every open issue that is not already excluded, closed, or `in-flight`.
    - Sweep for orphans while listing: an `in-flight` issue whose recorded branch no longer exists, or is quiet past the policy playbook's horizon, is surfaced to the human as a candidate reset per `backlog-policy.md` § In-flight hygiene — never reset silently. A reset the human confirms is applied here as a grooming write (on main, on the local binding) — the dead claim cannot race it.
-   - Completion criterion: a working set of open issues, each fetched with title, body, comments, and labels, and any in-flight orphans surfaced.
+   - **At scale** — a freshly-adopted tracker can carry hundreds of open issues, most long-untouched. Do not try to fully groom all of them in one interactive pass. Batch: partition by the tracker's own signals (priority, area/component label, age, recent activity) and groom the batch the human names first (typically the near-term/high-priority slice), leaving the long tail listed but ungroomed for later passes. The goal of a first groom is a *usable* `ready-for-agent` set, not a fully-triaged backlog. Report the batch worked and the remainder deferred.
+   - Completion criterion: a working set of open issues (a named batch when the backlog is large), each fetched with title, body, comments, and labels, and any in-flight orphans surfaced.
 
 2. Propose a work-type per issue.
    - Orient on each issue and propose one work-type role — bug, enhancement, or refactor — or mark it `needs-info`, `ready-for-human`, or an exclusion role. Map every proposal to this repo's labels per the playbook.
@@ -22,8 +23,9 @@ This phase is human-in-the-loop: the agent proposes and may self-apply any role 
    - Completion criterion: each issue is understood well enough to classify and judge readiness, or is parked as `needs-info` with its open question recorded.
 
 4. Resolve relationships.
-   - Detect dependencies between issues and record them per the playbook's convention so `run` can read them. Mark superseded, duplicate, and already-resolved issues with the matching exclusion role, link the canonical issue, and close them when the tools and the user allow.
-   - Completion criterion: dependencies are recorded, and stale or redundant issues are excluded or closed.
+   - Detect dependencies between issues and record them per the playbook's convention (`backlog-policy.md` § Dependencies — a task-list line, frontmatter, or the tracker's native blocker relation) so `run` can read them. Mark superseded, duplicate, and already-resolved issues with the matching exclusion role, link the canonical issue, and close them when the tools and the user allow.
+   - **Dedupe, don't re-litigate.** In an inherited backlog many issues overlap or restate one another; collapse the genuine duplicates to a canonical issue. But an issue the team already discussed, prioritized, or deliberately parked is a settled decision — record its existing state and move on; do not reopen its scope debate or re-propose a work-type the team already rejected. Grooming an adopted backlog is triage, not a redesign of every ticket.
+   - Completion criterion: dependencies are recorded, genuine duplicates collapsed, and stale or redundant issues excluded or closed — without re-opening settled ones.
 
 5. Shortlist and label.
    - Present the groomed candidates and let the human confirm which become `ready-for-agent`. Apply `ready-for-agent` only to confirmed issues, and only when each carries a work-type. Apply `ready-for-human`, `needs-info`, and exclusion roles as proposed.

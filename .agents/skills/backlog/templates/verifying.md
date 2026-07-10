@@ -4,14 +4,22 @@
 
 ## Checks
 
-Run narrowest-first, then broaden by touched surface. This repo's commands (populate from `.intent/` or the package scripts if a catalog exists):
+Run narrowest-first, then broaden by touched surface. `setup` **discovers these from the repo and verifies each by running it** — from `.intent/`, `package.json` scripts, a `Makefile`/`Justfile`, `pyproject.toml`/`tox.ini`, `Cargo.toml`, gradle/maven, etc. — recording only commands that actually ran, verbatim. Do not record a guessed command; an unverified slot stays blank.
 
-- Unit/targeted tests: _<e.g. `npm test -- <path>`>_.
-- Lint: _<add yours>_.
-- Type check: _<add yours>_.
-- Build: _<add yours>_.
+- Unit/targeted tests: _<the verified command, e.g. `npm test -- <path>`>_.
+- Lint: _<verified, or blank>_.
+- Type check: _<verified, or blank>_.
+- Build: _<verified, or blank>_.
 - Full / aggregate gate (before PR): _<e.g. a single `check` command that runs lint+typecheck+test>_.
 - Independent second-opinion verification: _<default: delegate to `codex exec` per `environment.md` § Driving the app when a criterion needs real UI interaction, screenshots, or a runtime check outside the current context; checks the session can run directly stay local>_.
+
+## CI merge gate
+
+> The host CI's required checks — the gate that blocks the merge, distinct from the local checks above. `setup` discovers this from the CI config (e.g. `.github/workflows/*.yml`, required status checks); `verify` and the PR step read it (`pr.md`).
+
+- The check set CI runs to gate a merge: _<the required jobs, or "none — no CI">_.
+- Where CI diverges from the local commands: _<note any check CI runs that the local gate doesn't, or "same">_.
+- Merge precondition: the PR is not mergeable until this CI gate is green. Local checks prove the change; CI-green is the merge condition — neither substitutes for the other.
 
 ## Acceptance criteria
 

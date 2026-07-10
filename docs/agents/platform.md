@@ -1,4 +1,4 @@
-<!-- backlog-templates: v2026-07-06.1 -->
+<!-- backlog-templates: v2026-07-10.1 -->
 
 # Playbook: Platform Bindings
 
@@ -14,7 +14,9 @@
   - Set / clear a role label: `gh issue edit <n> --add-label <role> --remove-label <role>`.
   - Create an issue: `gh issue create --title '...' --body '...' --label <work-type>,<readiness>`.
   - Close an issue: `gh issue close <n>` — or, preferentially, via the close-on-merge linkage below.
-  - Dependencies and duplicate links: recorded per `backlog-policy.md` § Dependencies.
+  - Read an issue's unresolved blockers (so `run` skips blocked work): GitHub has no native blocker field, so parse the `- [ ] depends on #N` task-list lines in the body (`backlog-policy.md` § Dependencies); an unchecked line whose target is still open is an unresolved blocker. (A tracker with a native relation — Jira `is blocked by`, Linear `blocked-by` — would bind that link's list-blockers API call here instead.)
+  - Write a blocker link: append a `- [ ] depends on #N` task-list line to the blocked issue's body via `gh issue edit <n> --body-file`.
+  - Duplicate links: recorded per `backlog-policy.md` § Dependencies.
 - Close-on-merge linkage: a `Closes #<n>` line in the PR body closes the issue when the PR merges — the loop's default; direct `gh issue close` only for issues no PR carries.
 
 ## Change review — where a change is proposed and reviewed

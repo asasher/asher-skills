@@ -1,4 +1,4 @@
-<!-- backlog-templates: v2026-07-06.1 -->
+<!-- backlog-templates: v2026-07-10.1 -->
 
 # Playbook: Verifying
 
@@ -14,6 +14,15 @@ Run narrowest-first, then broaden by touched surface. This is a skills repo — 
 - Lint / type check / build: **n/a** (no build system; stdlib Python + markdown).
 - Full / aggregate gate (before PR): the changed skill's probe eval passes against its answer key, and any changed script compiles and runs. New or reworked skills must clear a pre-deployment probe eval before first real use (`AGENTS.md` convention).
 - Independent second-opinion verification: delegate a scenario to `codex exec` as a second, differently-modeled executor when a criterion is subjective or benefits from a perspective outside the orchestrator's context; grading against the answer key and running scripts stay local.
+
+The commands above are the real, verified checks for this repo (probe eval + `py_compile` + drive-the-script) — there is no discovered test/lint/build pipeline to record because this repo has none.
+
+## CI merge gate
+
+> The host CI required-checks that gate a merge, distinct from the local checks above.
+
+- The check set CI runs to gate a merge: **none — this repo has no CI.** A merge to `main` triggers nothing automated (`environment.md` § Branching & deploys). The merge gate is human review + `adversarial-review` + the probe eval, not a status check.
+- Merge precondition: because there is no CI, the PR's readiness is the green probe eval and the review `LGTM`, not a CI status. On a repo *with* CI this section would name the required jobs and the PR could not merge until they pass.
 
 ## Acceptance criteria
 

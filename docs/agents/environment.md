@@ -1,4 +1,4 @@
-<!-- backlog-templates: v2026-07-06.1 -->
+<!-- backlog-templates: v2026-07-10.1 -->
 
 # Playbook: Environment
 
@@ -26,13 +26,20 @@
 
 - Regime: **local-isolatable** — skills are files + stdlib-Python scripts with no shared runtime state, so a `git worktree` is a complete isolated copy. No derived env, no ports to remap.
 - How to bring up an **isolated** stack for one worktree: `git worktree add <path> -b <branch> main` is sufficient — there is nothing else to stand up. Sequential verdict means the loop normally works the main checkout on a branch and does not fan out worktrees.
-- Shared singletons that cannot be isolated locally: the **GitHub tracker** (one issue graph — handled by serialized main-branch writes) and the **tailnet presentation surface** (one URL root — one review at a time). Neither blocks isolation of the code itself.
+- **Shared-singleton list** — there is no code-level shared runtime (no DB, no ports, no shared build cache; each skill is files + stdlib scripts), so the code isolates completely. The only singletons are loop infrastructure, both handled without serializing code work:
+
+  | Singleton | Collision mode | Locally isolatable? |
+  |-----------|----------------|---------------------|
+  | GitHub tracker | one issue graph | no — but serialized main-branch writes handle it |
+  | Tailnet presentation surface | one URL root | no — one review published at a time |
+
+  Neither collides with two worktrees editing skill files, so they do not force serialized *verification* of the code.
 
 ## Seed data
 
 - Seed regime: **none — drive the skill.** There is no data store to seed.
 - Command (if any): n/a.
-- How to reach a feature-exercising state: the "state" a skill needs is a **probe scenario** — a situated dry-run prompt plus an answer key, per `docs/patterns/probe-evals.md`. A skill's own `evals/` directory holds its scenarios; verification drives those scenarios through an executor model (§ Driving the app) rather than seeding a database.
+- **Drive-to-feature path:** the "state" a skill needs is a **probe scenario** — a situated dry-run prompt plus an answer key, per `docs/patterns/probe-evals.md`. A skill's own `evals/` directory holds its scenarios; verification drives those scenarios through an executor model (§ Driving the app) rather than seeding a database and navigating a UI. (This is the greenfield/no-app case evidence.md names — there is no running app surface to drive, so probes are the honest substitute here.)
 
 ## Authenticating for testing
 
@@ -93,5 +100,5 @@
 > Read by `run` before dispatch.
 
 - Verdict: **serialize-verification** — user chose sequential at setup. `run` dispatches one issue thread at a time.
-- If serialized, the shared resource that forces it: primarily the setup choice; reinforced by the single GitHub tracker (serialized main-branch writes) and the single tailnet review surface (one review at a time). The code itself is local-isolatable, so this is a policy choice, not a hard limit — flip to `parallel-safe` by re-running `backlog setup` and choosing parallel.
+- If serialized, the singletons that force it: **none at the code level** — the shared-singleton list above holds no code-level collision, so here serialize-verification is a genuine **policy choice**, not the hard constraint a real app's shared DB/build-cache would impose. Flip to `parallel-safe` by re-running `backlog setup` and choosing parallel; the tracker and review surface are handled by serialization of their own writes, not of code verification.
 - Serialized exception lane: **n/a** — already fully serialized.

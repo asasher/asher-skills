@@ -21,13 +21,22 @@
 
 - Regime: _<local-isolatable | cloud-singleton>_.
 - How to bring up an **isolated** stack for one worktree: _<the derived-env command / hook, or "main checkout only">_.
-- Shared singletons that cannot be isolated locally: _<e.g. one managed deployment, one auth tenant, one inbox; or "none">_.
+- **Shared-singleton list** — every resource two concurrent worktrees would contend for, from the isolation audit's probes. One row each; `run` reads this to derive the verdict below. _<Fill the table, or "none — no runnable stack".>_
+
+  | Singleton | Collision mode | Locally isolatable? |
+  |-----------|----------------|---------------------|
+  | _<e.g. Postgres `app_dev`>_ | _<shared data across worktrees>_ | _<yes — per-worktree DB / no>_ |
+  | _<e.g. host port 3000>_ | _<second stack fails to bind>_ | _<yes — derived port>_ |
+  | _<e.g. shared `node_modules`>_ | _<install mutates a running tree>_ | _<yes — per-worktree install>_ |
+  | _<e.g. `.next` build cache>_ | _<interleaved writes corrupt artifacts>_ | _<yes — per-worktree cache dir>_ |
+  | _<e.g. one managed deployment / auth tenant>_ | _<one backend behind every worktree>_ | _<no — cloud singleton>_ |
 
 ## Seed data
 
 - Seed regime: _<real seed command | load-from-dataset | none — drive the app>_.
 - Command (if any): _<e.g. `pnpm dev:seed`, or the dataset-load command>_.
-- What a freshly seeded stack contains, and how to reach a feature-exercising state when there is no seed: _<add yours>_.
+- What a freshly seeded stack contains: _<add yours>_.
+- **Drive-to-feature path** — from a running, seeded stack, how to reach a state that exercises a feature: the entry command/route, the navigation steps, and any precondition state a criterion needs (a logged-in role, a created record, a selected workspace). Set by `setup`'s access audit; `verify`/`evidence` drive it. _<add yours, or "n/a — no app surface">_.
 
 ## Authenticating for testing
 
@@ -58,6 +67,6 @@
 
 > Read by `run` before dispatch.
 
-- Verdict: _<parallel-safe | serialize-verification>_.
-- If serialized, the shared resource that forces it: _<add yours>_.
+- Verdict: _<parallel-safe | serialize-verification>_ — derived from the shared-singleton list above, not chosen by preference.
+- If serialized, the exact singletons that force it: _<name the un-isolated rows from the list; when any is shared, serialize is a hard constraint — a parallel fan-out would corrupt shared state>_.
 - Serialized exception lane: _<issue classes that must serialize even when parallel-safe — destructive shared-tenant operations, real third-party endpoints, deliberately distinct users; or "none">_.

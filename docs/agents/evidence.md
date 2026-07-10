@@ -1,10 +1,12 @@
-<!-- backlog-templates: v2026-07-06.1 -->
+<!-- backlog-templates: v2026-07-10.1 -->
 
 # Playbook: Evidence
 
 > Project playbook for this repo. The backlog `evidence` subskill reads this file for what to capture, the format/storage contract, and the presentation contract that makes artifacts render for the human; the gates are in the skill's `reference/evidence.md`. How to run, seed, and authenticate against the app — and the capture drivers — are in `environment.md`; the review surface this presents to is bound in `platform.md`. The PR body outline that consumes the prepared evidence block is in `pr.md`. Keep the presentation section for this repo's bound review surface; the others are reference for a rebind.
 
 ## What to capture
+
+This repo is the **no-running-app case**: there is no product surface to drive, so the honest proof is the probe-eval transcript (plus rendered-HTML screenshots for the skills that emit one). On a repo *with* a running app, evidence would instead be real check/test output plus screenshots driven through the actual app — a probe transcript is not a substitute there. Here, probes are the substitute because there is nothing else to drive.
 
 Per change type — tuned for a skills repo, where the proof is usually an eval transcript, not a screenshot:
 
