@@ -21,6 +21,7 @@ Tracker write discipline: on the local binding, this thread writes only its own 
    - **bug** → follow `reference/diagnose.md`.
    - **refactor** → follow `reference/refactor.md`.
    - **enhancement** → invoke the **`plan` skill** by name: it decides plan-or-skip, settles blocking design questions (itself composing the `prototype` skill by name), writes the HTML plan, and holds the approval gate. The `plan` skill stops at approval — **backlog owns the dev-tail**: on an approved plan, commit it to the work branch before dispatching build, and write the tracker posterity digest per `docs/agents/planning.md`/`platform.md` conventions (this dev-tail was formerly the plan step's gate 5 + posterity — it stays here now). Then follow `reference/implement.md`. On a skip decision, go straight to `reference/implement.md`.
+   - **draft** → produce-and-review, for judgment-terminal work whose correctness is taste/fit (a memo, copy, a research synthesis, code docs). Produce the artifact — authoring staffed by the **`staffing`** skill (by name) — then present it for sign-off through the **`review-loop`** skill (by name); the human review verdict **is** the definition of done. **Keep** the artifact: commit it to the work branch (unlike `prototype`, which deletes its throwaway — draft keeps the thing it made). There is no plan/implement spine and no mechanical acceptance-criteria run — see step 4.
    - Any branch — not just enhancement — may hand a blocking design question to the `prototype` skill (by name); the branch's own reference states when.
    - Staffing: build-out — `implement.md`, `refactor.md`, and fix commits — runs on the **builder** role for its surface, resolved by the `staffing` skill (by name), dispatched out of this thread; diagnosis is orchestrator work and stays here.
    - Completion criterion: the branch's own completion criterion is met, or the thread is paused at the enhancement approval gate.
@@ -28,6 +29,7 @@ Tracker write discipline: on the local binding, this thread writes only its own 
 4. Verify behavior → follow `reference/verify.md`.
    - This is a loop: verify runs the checks and exercises the change against its acceptance criteria, handing failures back to the branch that built the change (`implement.md`, `diagnose.md`, or `refactor.md`) until every criterion passes or it hits its cap.
    - Delegate the whole loop to a subagent filling the **checker** role, resolved by the `staffing` skill (by name); this thread stays coordinator and takes back any failure the subagent escalates per `verify.md`'s triggers.
+   - **draft exception.** A `draft` has no testable spec, so this step is skipped — it degenerates to "the review gate passed": the `review-loop` verdict from step 3 stands in for verify. Correspondingly, step 6 adversarial review degenerates for a pure-prose artifact (the human verdict was the review); a code-docs draft keeps a light correctness pass over the docs it touches.
    - Completion criterion: every acceptance criterion passes, or the verify loop ends at its cap or an explicit blocker (reported, no PR opened).
 
 5. Create the PR.
