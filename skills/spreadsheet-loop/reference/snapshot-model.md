@@ -103,6 +103,7 @@ edit can't wipe a declared object.
 {
   "charts": [
     { "id": "chart-rev", "sheet": "Sales", "type": "bar",        // bar | line | pie
+      "sheetId": "sheet-sales",                                    // optional stable id — survives renames
       "title": "Revenue by row",
       "categories": "Sales!B3:B6",                                 // A1 range for category labels
       "values": ["Sales!D3:D6"], "seriesTitles": ["Revenue"],
@@ -110,13 +111,18 @@ edit can't wipe a declared object.
   ],
   "pivots": [
     { "id": "pivot-region", "sheet": "Pivot by Region",           // sheet the pivot is written to
+      "sheetId": "sheet-pivot",                                    // optional stable id — survives renames
       "source": "Sales!A2:D6",                                     // A1 range incl. header row
       "rows": ["Region"], "cols": [],                              // field names from the header row
-      "values": [{ "field": "Revenue", "agg": "sum" }],           // agg: sum (v1)
+      "values": [{ "field": "Revenue", "agg": "sum" }],           // agg: sum | count | avg | min | max
       "anchor": "A1" }
   ]
 }
 ```
+
+`sheetId` is the snapshot's stable sheet id; when present, the compile, validator, verify read-back, and
+browser preview all resolve it before the display name, so a browser sheet rename cannot strand the
+declaration. Declare it whenever the human can rename sheets.
 
 A pivot's `source`, `rows`, and `values` are a **model** decision (what it summarizes); a chart's `type` and
 `anchor` are a **layout** decision (how it looks) — see [model-vs-layout](model-vs-layout.md). The converter
