@@ -34,7 +34,7 @@ Tracker write discipline: on the local binding, this thread writes only its own 
 
 5. Create the PR.
    - Open a ready-for-review PR, not a draft, via the change-review binding's open verb, once implementation and verification are complete. Target the base branch named in `docs/agents/environment.md`.
-   - Build the body per `docs/agents/pr.md`: it carries the close linkage from `platform.md` (GitHub: `Closes #<n>`; local: the issue file's `state` flips on this branch and closure rides the merge), the checks and per-criterion verification with the verify step's caveats, and an evidence placeholder — evidence is deferred to step 7.
+   - Build the body per `docs/agents/change-description.md`: it carries the close linkage from `platform.md` (GitHub: `Closes #<n>`; local: the issue file's `state` flips on this branch and closure rides the merge), the checks and per-criterion verification with the verify step's caveats, and an evidence placeholder — evidence is deferred to step 7.
    - Completion criterion: a ready-for-review PR exists whose merge will close the issue per the binding's linkage.
 
 6. Adversarial review → follow `reference/adversarial-review.md` against the new PR.

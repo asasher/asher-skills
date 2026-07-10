@@ -21,7 +21,7 @@
 
 - Binding: **github** — pull requests on `asasher/asher-skills`.
 - Verbs:
-  - Open a PR (ready for review, with a body per `pr.md`): `gh pr create --title '...' --body-file <file>`.
+  - Open a PR (ready for review, with a body per `change-description.md`): `gh pr create --title '...' --body-file <file>`.
   - Edit the PR body: `gh pr edit <n> --body-file <file>`.
   - Read review comments since a SHA: `gh pr view <n> --comments`; for inline threads `gh api repos/asasher/asher-skills/pulls/<n>/comments`.
   - Post a review comment / reply: `gh pr comment <n> --body '...'`.

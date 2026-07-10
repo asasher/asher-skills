@@ -21,7 +21,7 @@ This file is the command surface; each subcommand loads its own contract from `r
 | Command | Role | Bundled reference | Project playbook |
 |---|---|---|---|
 | `groom` | With the human: classify work-type, clarify, resolve relationships, label readiness | `reference/groom.md` | `docs/agents/backlog-policy.md` + `platform.md` |
-| `run` | Queue ready-for-agent, unblocked issues; dispatch one issue thread each | `reference/run.md`, `reference/issue-loop.md` | `docs/agents/backlog-policy.md` + `platform.md`; threads read `pr.md` + their step playbooks |
+| `run` | Queue ready-for-agent, unblocked issues; dispatch one issue thread each | `reference/run.md`, `reference/issue-loop.md` | `docs/agents/backlog-policy.md` + `platform.md`; threads read `change-description.md` + their step playbooks |
 | `setup` | Scaffold or reconcile playbooks; bind the platforms; set isolation, app access, seed/checks, readiness; ensure the siblings | `reference/setup.md`, `reference/worktree-isolation.md`, `templates/` | writes them |
 | `diagnose` | Bug: reproduce, fix, confirm the failing path passes | `reference/diagnose.md` | `docs/agents/diagnosing-bugs.md` + `environment.md` |
 | `plan` | Enhancement: plan or skip; HTML plan, approval gate (backlog keeps the commit-and-implement dev-tail) | the `plan` skill (composed by name) | — |

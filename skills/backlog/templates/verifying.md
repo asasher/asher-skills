@@ -15,7 +15,7 @@ Run narrowest-first, then broaden by touched surface. `setup` **discovers these 
 
 ## CI merge gate
 
-> The host CI's required checks — the gate that blocks the merge, distinct from the local checks above. `setup` discovers this from the CI config (e.g. `.github/workflows/*.yml`, required status checks); `verify` and the PR step read it (`pr.md`).
+> The host CI's required checks — the gate that blocks the merge, distinct from the local checks above. `setup` discovers this from the CI config (e.g. `.github/workflows/*.yml`, required status checks); `verify` and the PR step read it (`change-description.md`).
 
 - The check set CI runs to gate a merge: _<the required jobs, or "none — no CI">_.
 - Where CI diverges from the local commands: _<note any check CI runs that the local gate doesn't, or "same">_.
