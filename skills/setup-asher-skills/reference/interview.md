@@ -22,7 +22,9 @@ the single project question in (3).
 2. **The machine.** Determine the **reachable models** and whether the **Codex CLI** is installed — the
    staffing probe. **Do this by invoking the `staffing` skill by name**, not by re-deriving a roster:
    staffing owns the machine audit, the rankings seed, and the consent-gated global write. If `staffing`
-   isn't reachable, state that the machine audit needs it rather than inventing a roster.
+   isn't reachable, state that the machine audit needs it rather than inventing a roster. Also check the
+   harness's **global memory file** (`~/.claude/CLAUDE.md` or equivalent) for a `## Conventions` section —
+   phase 4 seeds it when absent.
 3. **The user/project.** Ask **one** question: *what is this project for?* — a shipping web product, a
    research effort, an ops/infra repo, a greenfield pitch, a content project, a library. The answer keys the
    recommendation in [catalog](catalog.md); everything else in this phase is read silently.
@@ -113,9 +115,15 @@ Execute the approved plan:
    pointer. **There is no separate `ask-asher` router skill** — this block is the map.
 4. **Write the repo pointer.** From `templates/repo-pointer.md`, record that these skills come from
    `https://github.com/asasher/asher-skills` and that updates/reconciliation run by re-invoking this skill.
+5. **Seed the global conventions (consent-gated).** If phase 1 found no `## Conventions` section in the
+   harness's global memory file, offer to seed it from `templates/global-conventions.md` — the local-first
+   HTML presentation rule (author locally, open locally or over tailnet; cloud artifacts only on explicit
+   request) and the machine's tailnet up/down commands (fill the placeholder during the interview). Like
+   staffing's global write, this touches home-directory memory: write it **only with explicit consent**, and
+   only the sections not already present. Projects override via their `docs/agents/` playbooks.
 
-Completion criterion: the closure is installed from this repo, each skill's playbooks are present, and the
-`## Agent skills` block + pointer are written.
+Completion criterion: the closure is installed from this repo, each skill's playbooks are present, the
+`## Agent skills` block + pointer are written, and the global conventions are seeded or explicitly declined.
 
 ## What this skill does not do
 
