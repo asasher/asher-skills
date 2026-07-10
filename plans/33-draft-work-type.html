@@ -1,0 +1,207 @@
+<!doctype html>
+<!-- Plan #33 — Add a `draft` work-type for judgment-terminal work.
+     House style per skills/plan/reference/authoring.md + docs/agents/planning.md.
+     Self-contained: inline styles, inline SVG, no external fetches. Stable ids never change. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #33 — Add a draft work-type</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --good: #1a7f37; --warn: #9a6700; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --good: #3fb950; --warn: #d29922; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 720px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+svg .edge-label { font-size: 10.5px; fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .75rem; color: var(--accent); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .3rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+em.good { color: var(--good); font-style: normal; font-weight: 600; }
+em.warn { color: var(--warn); font-style: normal; font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Add a <code>draft</code> work-type for judgment-terminal work</h1>
+  <p class="problem">Backlog's three work-types all assume a testable spec, so work whose correctness is taste or fit — a memo, copy, a research synthesis, code docs — has no honest home and gets forced through a mechanical <code>verify</code> gate that cannot judge it.</p>
+  <div class="chips"><span class="chip">#33</span><span class="chip">enhancement</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="model">
+  <h2>The draft branch</h2>
+  <p>A fourth work-type that routes to <strong>produce → review-loop → verdict-as-done</strong>: the human review verdict is the definition of done, and the artifact is <em class="good">kept</em>.</p>
+  <figure id="model-diagram">
+    <svg viewBox="0 0 660 486" width="100%" role="img" aria-label="draft branch flow through the issue loop">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <!-- box helper coords: cx=330, w=360 => x=150 -->
+      <!-- 1 groom -->
+      <rect x="150" y="14" width="360" height="46" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="330" y="34" text-anchor="middle">groom &#8594; work-type: <tspan font-weight="700">draft</tspan></text>
+      <text x="330" y="50" text-anchor="middle" class="edge-label">recognizes judgment-terminal work; a human blesses ready-for-agent</text>
+      <line x1="330" y1="60" x2="330" y2="82" stroke="currentColor" marker-end="url(#ar)"/>
+
+      <!-- 2 produce -->
+      <rect x="150" y="84" width="360" height="46" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="330" y="104" text-anchor="middle" font-weight="700">Step 3 &#183; Produce the artifact</text>
+      <text x="330" y="120" text-anchor="middle" class="edge-label">author staffed via the staffing skill (taste-weighted surface)</text>
+      <line x1="330" y1="130" x2="330" y2="152" stroke="currentColor" marker-end="url(#ar)"/>
+
+      <!-- 3 review-loop (the real gate) -->
+      <rect x="150" y="154" width="360" height="52" rx="8" fill="var(--card)" stroke="var(--good)" stroke-width="2"/>
+      <text x="330" y="176" text-anchor="middle" font-weight="700" fill="var(--good)">review-loop &#8212; the gate</text>
+      <text x="330" y="194" text-anchor="middle" class="edge-label">serve &#8594; annotate &#8594; verdict-coded await (by name)</text>
+      <!-- request_changes loop back to produce -->
+      <path d="M150 180 C90 180 90 107 144 107" fill="none" stroke="var(--warn)" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+      <text x="70" y="146" text-anchor="middle" class="edge-label" fill="var(--warn)">request_</text>
+      <text x="70" y="160" text-anchor="middle" class="edge-label" fill="var(--warn)">changes</text>
+      <line x1="330" y1="206" x2="330" y2="228" stroke="var(--good)" marker-end="url(#ar)"/>
+
+      <!-- 4 approve -> keep -->
+      <rect x="150" y="230" width="360" height="46" rx="8" fill="var(--card)" stroke="var(--good)" stroke-width="2"/>
+      <text x="330" y="250" text-anchor="middle" font-weight="700" fill="var(--good)">approve &#8594; KEEP artifact (commit)</text>
+      <text x="330" y="266" text-anchor="middle" class="edge-label">verdict = definition of done &#183; artifact is the deliverable</text>
+      <line x1="330" y1="276" x2="330" y2="298" stroke="currentColor" marker-end="url(#ar)"/>
+
+      <!-- 5 verify degenerate -->
+      <rect x="150" y="300" width="360" height="46" rx="8" fill="var(--card)" stroke="var(--muted)" stroke-dasharray="5 4"/>
+      <text x="330" y="320" text-anchor="middle" fill="var(--muted)">Step 4 &#183; verify &#8212; <tspan font-style="italic">degenerate</tspan></text>
+      <text x="330" y="336" text-anchor="middle" class="edge-label">no mechanical pass/fail &#8212; "the review gate passed"</text>
+      <line x1="330" y1="346" x2="330" y2="368" stroke="currentColor" marker-end="url(#ar)"/>
+
+      <!-- 6 PR review evidence report -->
+      <rect x="150" y="370" width="360" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="330" y="390" text-anchor="middle">Steps 5&#8211;8 &#183; PR &#183; review* &#183; evidence &#183; report</text>
+      <text x="330" y="408" text-anchor="middle" class="edge-label">*adversarial code-review degenerates for prose; light pass for code-docs</text>
+
+      <!-- side note prototype contrast -->
+      <text x="330" y="446" text-anchor="middle" class="edge-label" fill="var(--muted)">Contrast: prototype would DELETE the artifact here &#8212; draft keeps it.</text>
+      <text x="330" y="466" text-anchor="middle" class="edge-label" fill="var(--muted)">bug &#8594; diagnose &#183; enhancement &#8594; plan+implement &#183; refactor &#8594; refactor (unchanged)</text>
+    </svg>
+    <figcaption>The green boxes are the only true gate: the human verdict at review-loop. Everything a code work-type gets from <code>verify</code> and adversarial review degenerates, because there is no testable spec to run.</figcaption>
+  </figure>
+</section>
+
+<section id="where-it-sits">
+  <h2>Two comparisons that fix the boundary</h2>
+  <p><code>draft</code> is enhancement-shaped but judged differently, and it is the opposite of <code>prototype</code> on artifact fate.</p>
+  <table id="tbl-enh">
+    <thead><tr><th>Axis</th><th>enhancement</th><th>draft</th></tr></thead>
+    <tbody>
+      <tr><td>Correctness is&#8230;</td><td>a testable spec</td><td>taste / fit</td></tr>
+      <tr><td>Definition of done</td><td>acceptance criteria pass under a mechanical verify run + adversarial code review</td><td>the human review verdict at the review gate</td></tr>
+      <tr><td>The <code>verify</code> step</td><td>runs; pass/fail per criterion</td><td>skipped / degenerates to "the review gate passed"</td></tr>
+    </tbody>
+  </table>
+  <table id="tbl-proto" style="margin-top:1rem;">
+    <thead><tr><th>Axis</th><th>prototype</th><th>draft</th></tr></thead>
+    <tbody>
+      <tr><td>The deliverable</td><td>the answer / decision</td><td>the artifact itself</td></tr>
+      <tr><td>Artifact fate</td><td><em class="warn">DELETED</em> (throwaway from day one)</td><td><em class="good">KEPT</em> (committed and merged)</td></tr>
+      <tr><td>Shape</td><td>a step invoked mid-branch to settle a design question</td><td>a whole work-type / branch</td></tr>
+      <tr><td>Done when</td><td>the answer is captured somewhere durable</td><td>the human verdict approves the artifact</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>Stories</h2>
+  <ul class="plain">
+    <li id="story-1">As <em>Asher grooming the backlog</em>, I want to label a "write the launch memo" issue <code>draft</code>, so that it isn't forced into <code>enhancement</code> and judged by a mechanical verify it can never pass.</li>
+    <li id="story-2">As <em>an issue thread working a <code>draft</code></em>, I want the route to send me to produce → review-loop → verdict, so that I stop at the human verdict instead of inventing testable acceptance criteria for a taste call.</li>
+    <li id="story-3">As <em>an issue thread</em>, I want <code>draft</code> to keep the artifact (commit + merge), so that the memo/doc I produced ships — unlike <code>prototype</code>, which would delete it.</li>
+    <li id="story-4">As <em>a reader of the policy</em>, I want the <code>draft</code> role to name code-docs as a fit, so that documentation work routes here too.</li>
+    <li id="story-5">As <em>a maintainer verifying the change</em>, I want a dual-executor probe, so that two differently-modeled agents demonstrably route a judgment-terminal task to <code>draft</code> and name the verdict as done.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Key decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><strong>Add <code>draft</code> as a fourth work-type role, not a readiness or a flavor of enhancement.</strong> Work-type decides <em>how</em> the agent works an issue; judgment-terminal work is a distinct <em>how</em> (verdict-terminal, no mechanical verify), so it earns its own row in <code>backlog-policy.md</code> § Label roles → Work-type, next to bug/enhancement/refactor.</li>
+    <li id="dec-2"><strong>The role text pins the verdict-as-done and the keep-the-artifact rule.</strong> Definition: "produce a novel artifact whose correctness is taste/fit; done is the human review verdict at the review gate, with no mechanical <code>verify</code> pass/fail; the artifact is <em class="good">kept</em> (committed and merged) — unlike <code>prototype</code>, which deletes it." The prototype contrast lives in the role text itself so the two never blur.</li>
+    <li id="dec-3"><strong>Route <code>draft</code> inline in <code>issue-loop.md</code> step 3 — no new heavy branch reference.</strong> The branch is thin (produce via <code>staffing</code> → present via <code>review-loop</code> by name → keep), so it is a bullet alongside bug/enhancement/refactor rather than a new <code>reference/draft.md</code>. It composes <code>review-loop</code> and <code>staffing</code> by name, importing neither.</li>
+    <li id="dec-4"><strong>Verify degenerates, stated in <code>issue-loop.md</code> step 4.</strong> For a <code>draft</code>, step 4 is skipped or collapses to "the review gate returned <code>approve</code>" — there is no acceptance-criteria run because there is no testable spec. Step 6 adversarial review likewise degenerates for a pure-prose artifact (the human verdict was the real review); code-docs may keep a light correctness pass.</li>
+    <li id="dec-5"><strong>Edit the template <em>and</em> the installed copy, in lock-step.</strong> Both <code>skills/backlog/templates/backlog-policy.md</code> (source template) and <code>docs/agents/backlog-policy.md</code> (installed), and both <code>skills/backlog/reference/issue-loop.md</code> (source) and <code>.claude/skills/backlog/reference/issue-loop.md</code> (installed), so a future <code>backlog setup</code> re-install carries <code>draft</code> and the checked-in policy already has it.</li>
+    <li id="dec-6"><strong>Grooming gets a one-line recognizer.</strong> A note under the work-type roles / readiness guidance on how to spot a <code>draft</code> ("the deliverable is an artifact judged by taste/fit — a memo, copy, a synthesis, code docs — with no testable spec"), so <code>groom</code> assigns it instead of defaulting to <code>enhancement</code>.</li>
+    <li id="dec-7"><strong>The dual-executor probe lives in a new <code>skills/backlog/evals/probes.md</code></strong> (the backlog skill has no <code>evals/</code> yet), following <code>docs/patterns/probe-evals.md</code>: a judgment-terminal scenario + answer key, run once through an in-session Claude executor and once through <code>gpt-5.5</code> via <code>codex exec</code>.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><code>backlog-policy.md</code> § Label roles → Work-type lists a <code>draft</code> role as a fourth bullet beside <code>bug</code>/<code>enhancement</code>/<code>refactor</code>, present in <strong>both</strong> the installed <code>docs/agents/backlog-policy.md</code> and the source <code>skills/backlog/templates/backlog-policy.md</code>.</li>
+    <li id="ac-2" data-criterion>The <code>draft</code> role text states its definition of done is the <strong>human review verdict</strong> at the review gate, and states explicitly that there is <strong>no mechanical <code>verify</code> pass/fail</strong>.</li>
+    <li id="ac-3" data-criterion>The <code>draft</code> role text states the artifact is <strong>kept</strong> (committed and merged) and names the contrast with <code>prototype</code> (throwaway — keep the answer, delete the artifact).</li>
+    <li id="ac-4" data-criterion>The <code>draft</code> role text names <strong>code-docs</strong> as an in-scope use.</li>
+    <li id="ac-5" data-criterion><code>issue-loop.md</code> step 3 lists a <code>draft</code> route that (a) produces the artifact via the <code>staffing</code> skill by name, (b) presents it via the <code>review-loop</code> skill by name, and (c) treats the verdict as done and keeps the artifact — present in <strong>both</strong> the installed and source <code>issue-loop.md</code>.</li>
+    <li id="ac-6" data-criterion><code>issue-loop.md</code> step 4 (verify) states that for a <code>draft</code> the step is skipped or degenerates to "the review gate passed" — no mechanical acceptance-criteria run.</li>
+    <li id="ac-7" data-criterion>Given a judgment-terminal scenario, an <strong>in-session Claude executor</strong> routing per the edited policy classifies the work-type as <code>draft</code>, names the human review verdict as its definition of done (not a mechanical verify pass), and states the artifact is kept (not deleted).</li>
+    <li id="ac-8" data-criterion>The same scenario run through <strong><code>gpt-5.5</code> via <code>codex exec</code></strong> (the second, independent executor) reaches the same three conclusions — <code>draft</code>, verdict-as-done, artifact-kept — matching the probe's answer key.</li>
+    <li id="ac-9" data-criterion>The probe scenario and its answer key are committed under <code>skills/backlog/evals/probes.md</code>, and neither executor conflates <code>draft</code> with <code>prototype</code> (i.e. neither proposes deleting the artifact).</li>
+  </ul>
+</section>
+
+<section id="checks">
+  <h2>How it will be checked</h2>
+  <p>Doc-shape criteria (AC-1..6) are confirmed by reading the four edited files. The routing criteria (AC-7..9) are confirmed at the skill's behavioral seam: the dual-executor probe from <code>docs/patterns/probe-evals.md</code> — one in-session Claude run (Agent tool) and one <code>codex exec -s read-only</code> run, each fed the judgment-terminal scenario and graded against the answer key. No mechanical CI exists in this repo; every check is agent-driven on demand. Deliberately left unchecked: the aesthetic quality of any real draft artifact (that is exactly the human-verdict surface this work-type introduces, not something to automate).</p>
+</section>
+
+<section id="required">
+  <h2>What's required</h2>
+  <ul class="plain">
+    <li id="req-1">The two probe transcripts (Claude in-session + <code>codex exec</code>) plus a per-criterion pass/fail verdict table mapping AC-7..9 to the answer key.</li>
+    <li id="req-2">A screenshot is not required — the artifacts here are markdown edits, not a rendered surface; the probe transcripts are the evidence.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li><strong>Executors conflate <code>draft</code> with <code>prototype</code></strong> (both "produce an artifact, review it"). Mitigation: the role text and the tables lead with the artifact-fate contrast (kept vs deleted), and AC-9 fails the probe if an executor proposes deleting the artifact.</li>
+    <li><strong>Degenerate steps read as "skip everything," letting a draft merge unreviewed.</strong> Mitigation: step 4/6 degenerate <em>because</em> the review-loop human verdict already ran in step 3 — the gate moves, it does not vanish. The wording ties "verify passed" to "the verdict was approve."</li>
+    <li><strong>Template/installed drift</strong> — editing one copy but not the other. Mitigation: AC-1 and AC-5 require both copies; dec-5 makes lock-step explicit.</li>
+    <li><strong>Grooming keeps defaulting to <code>enhancement</code></strong> and <code>draft</code> is never assigned. Mitigation: the dec-6 recognizer line; the probe exercises the classification step, not just the route.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>A new <code>reference/draft.md</code> branch file — the route is thin enough to inline (dec-3). Revisit only if the branch grows its own procedure.</li>
+    <li>Reworking <code>verify.md</code> / <code>adversarial-review.md</code> internals — <code>draft</code> is handled by the routing note in <code>issue-loop.md</code>, not by rewriting those references.</li>
+    <li>Retro-adding <code>evals/</code> to other skills — this plan adds only the backlog probe needed to verify <code>draft</code>.</li>
+    <li>Building the review surface or changing <code>review-loop</code> / <code>staffing</code> — <code>draft</code> composes them by name, unchanged.</li>
+    <li>Migrating existing backlog issues to <code>draft</code> — grooming does that going forward, per-issue.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>

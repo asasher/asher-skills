@@ -15,7 +15,7 @@ This phase is human-in-the-loop: the agent proposes and may self-apply any role 
    - Completion criterion: a working set of open issues (a named batch when the backlog is large), each fetched with title, body, comments, and labels, and any in-flight orphans surfaced.
 
 2. Propose a work-type per issue.
-   - Orient on each issue and propose one work-type role — bug, enhancement, or refactor — or mark it `needs-info`, `ready-for-human`, or an exclusion role. Map every proposal to this repo's labels per the playbook.
+   - Orient on each issue and propose one work-type role — the full set is in `backlog-policy.md` § Label roles → Work-type (bug, enhancement, refactor, draft) — or mark it `needs-info`, `ready-for-human`, or an exclusion role. Propose `draft` for judgment-terminal work whose correctness is taste/fit — a memo, copy, a synthesis, code docs, with no testable spec to run against. Map every proposal to this repo's labels per the playbook.
    - Completion criterion: every issue has a proposed role grounded in its content.
 
 3. Clarify.

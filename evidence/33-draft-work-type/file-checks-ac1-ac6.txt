@@ -1,0 +1,34 @@
+# File checks (ac-1..ac-6) at branch HEAD ba6b013
+
+## ac-1  draft role in BOTH policy copies (source template + installed playbook)
+skills/backlog/templates/backlog-policy.md
+docs/agents/backlog-policy.md
+.agents/skills/backlog/templates/backlog-policy.md
+
+## ac-2  verdict-as-done + no mechanical verify (installed playbook)
+human review verdict** at the review gate — there is **no mechanical `verify` pass/fail**
+
+## ac-3  artifact kept + prototype contrast
+artifact is **kept** (committed and merged): that is the line against `prototype
+
+## ac-4  code-docs named in both policy copies
+docs/agents/backlog-policy.md:2
+skills/backlog/templates/backlog-policy.md:2
+
+## ac-5  step-3 draft route in BOTH issue-loop copies (staffing + review-loop + keep)
+.agents/skills/backlog/reference/issue-loop.md:**draft** → produce-and-review
+skills/backlog/reference/issue-loop.md:**draft** → produce-and-review
+
+## ac-6  step-4 draft exception in BOTH issue-loop copies
+.agents/skills/backlog/reference/issue-loop.md:1
+skills/backlog/reference/issue-loop.md:1
+
+## mirror parity — source vs installed (.agents), all five pairs
+IDENTICAL  reference/groom.md
+IDENTICAL  reference/setup.md
+IDENTICAL  reference/issue-loop.md
+IDENTICAL  templates/backlog-policy.md
+IDENTICAL  evals/probes.md
+
+## draft label on tracker
+draft	Judgment-terminal work: produce-and-review, done at the human review verdict	#BFD4F2
