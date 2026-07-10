@@ -1,7 +1,7 @@
 # setup-asher-skills — probe answer key
 
 Written before any run. Grade each probe pass/fail against its key; a probe passes only if **both** executors
-(Claude in-session + gpt-5.5 via `codex exec`) satisfy it. Cited file/sentence must actually support the
+(Claude in-session + gpt-5.6-sol via `codex exec`) satisfy it. Cited file/sentence must actually support the
 answer.
 
 **P1 — three-part audit.** PASS if the executor names **three** audit surfaces — the **repo** (remotes,
@@ -12,9 +12,9 @@ done by **invoking the `staffing` skill by name**, not by re-deriving a roster. 
 instead of composing staffing.
 
 **P2 — one decision at a time + closure.** PASS if the executor installs `plan` **and** auto-pulls
-**`review-loop` + `staffing`** (the closure), presents decisions **one at a time** with a **plain-language
-explainer**, and **tells the user which siblings came along and why** (not a silent pull). Cite
-`reference/catalog.md` § The closure rules (`plan ⇒ ensure review-loop + staffing`) and/or
+**`review-loop` + `staffing` + `prototype`** (the closure), presents decisions **one at a time** with a
+**plain-language explainer**, and **tells the user which siblings came along and why** (not a silent pull).
+Cite `reference/catalog.md` § The closure rules (`plan ⇒ ensure review-loop + staffing + prototype`) and/or
 `reference/interview.md` § Phase 2. FAIL if it installs `plan` alone, pulls siblings silently, or dumps the
 whole catalog at once.
 

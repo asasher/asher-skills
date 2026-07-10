@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Answer one design question with a throwaway artifact, then throw it away. A thin composer usable anywhere — a codebase, a document, a design surface — not only dev. Frames one explicit question, picks a shape (behavior — "does this model feel right?" — or form — "what should this look like?"), builds the smallest artifact that settles it, presents it for feedback via the review-loop skill and staffs the build via the staffing skill (both by name), captures the decision somewhere durable, and deletes the artifact. Invoked by name by sibling skills (plan, backlog) when a question blocks progress, or directly by a user with a design question. Use to settle a state model, a layout, a UI, or a document direction with real alternatives rather than argument. Not for building the real thing — only for answering the question that unblocks it.
+description: Answer one design question with a throwaway artifact, then throw it away — keep the answer, delete the scaffolding. Usable anywhere, not only dev. Use to settle a state model, layout, UI, or document direction with real alternatives rather than argument — directly, or when a workflow skill hits a question paper can't settle. Not for building the real thing.
 argument-hint: "<design question>"
 user-invocable: true
 ---
@@ -22,9 +22,9 @@ technique's defaults apply — don't improvise repo structure.
 ## Entry points
 
 - **Directly:** `prototype "<design question>"` — a user hands one explicit question.
-- **From a skill:** `plan`/`backlog` hand over a question that paper cannot settle (a state model that only
-  feels right or wrong under real cases, a UI or a document that needs to be seen), and fold the answer back
-  in. Any workflow branch may do this; the branch states when.
+- **From a skill:** `plan` hands over a logic or UI question its gates can't settle on paper (including one a
+  reviewer requests during plan review), or another workflow skill (e.g. `backlog`) does the same from any
+  branch; the caller folds the answer back in.
 
 Invoked without a clear question, the first move is to extract one — a prototype answering a vague question is
 pure waste.
@@ -37,11 +37,11 @@ Walk these in order; each is the completion criterion for its step.
    picked per [prototyping](reference/prototyping.md) (behavior vs form). A prototype answering a vague or
    wrong question is pure waste — this gate is where that is caught.
 2. **Built and handed over** — the prototype runs from one command or one URL, surfaces its state, and is
-   presented for feedback. Build-out is dispatched to the model the **`staffing`** skill resolves (by name).
-   A form-shape prototype, or any answer that is a document a human should mark up, is served through the
-   **`review-loop`** skill (by name — don't fork a review UI); a live interactive prototype is driven
-   directly. Either way the pause message ends with the artifact's URL and the hub URL, so the human can
-   drive it from wherever they are. Extend it on request; prototypes evolve.
+   presented for feedback. Build-out is dispatched to the model the **`staffing`** skill resolves. A
+   form-shape prototype, or any answer that is a document a human should mark up, is served through the
+   **`review-loop`** skill (don't fork a review UI); a live interactive prototype is driven directly. Either
+   way the pause message ends with the artifact's URL and the hub URL, so the human can drive it from
+   wherever they are. Extend it on request; prototypes evolve.
 3. **Answer captured** — the decision and its why are written somewhere durable: into the consuming plan when
    called from planning (with variant captures for form shapes), otherwise into the record the playbook
    names. The prototype itself is never the record.
@@ -72,5 +72,5 @@ Walk these in order; each is the completion criterion for its step.
   improvising repo structure.
 - **Sibling skills** — **`review-loop`** (present the answer for feedback) and **`staffing`** (staff the
   build), composed **by plain name, no imports**. Unlike the root primitives review-loop and staffing (which
-  depend on no sibling), **`prototype` is a composer** — these two siblings are load-bearing dependencies. It
-  references them by name and imports none of their files.
+  carry no load-bearing sibling dependency), **`prototype` is a composer** — these two siblings are
+  load-bearing dependencies.

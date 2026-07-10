@@ -1,12 +1,12 @@
 # Plan — the contract
 
-The gates that take an intent worth planning to an approved plan, the plan-or-skip threshold, and the two
-compositions. Domain-neutral: nothing here assumes code, a repo, or a running app. A project playbook (below)
-may override the defaults; absent one, this file stands alone.
+The gates that take an intent worth planning to an approved plan, the plan-or-skip threshold, and the
+sibling compositions. Domain-neutral: nothing here assumes code, a repo, or a running app. A project playbook
+(below) may override the defaults; absent one, this file stands alone.
 
-Plan ships **no runtime.** It authors an artifact and borrows the sign-off gate from **`review-loop`** and
-role selection from **`staffing`**, both by plain name — never by importing their files (`AGENTS.md`
-§ Conventions).
+Plan ships **no runtime.** It authors an artifact and borrows the sign-off gate from **`review-loop`**, role
+selection from **`staffing`**, and design-question artifacts from **`prototype`** — all by plain name, never
+by importing their files (`AGENTS.md` § Conventions).
 
 ## The gates
 
@@ -34,8 +34,11 @@ Any question the plan **cannot settle on paper** is settled before writing, then
 - A surface that has to be *seen* to be judged (several plausible layouts, no settled design).
 - Accumulating speculative "should handle X" reasoning that trying the real thing would settle in minutes.
 
-Settle it **by whatever means the caller has** — a prototype, a spike, a research pass. Plan is
-**means-neutral**: it declares no dependency on any prototyping skill. Fold the answer into the plan; for a
+Plan decides the shape and routes it: a **logic** (behavior) or **UI** (form) question goes to the
+**`prototype`** sibling skill by name; anything else falls to a spike or a research pass. A reviewer may also
+send the plan back for a prototype during the gate-4 approval round — include what they ask for. Absent the
+prototype sibling, settle the question by spike or research and record the gap in the plan's notes.
+Fold the answer into the plan; for a
 visual question, embed the variants with the chosen one marked, so the decision outlives the exploration.
 Don't explore what reading the material or an existing pattern already settles — an exploration answers a
 question, it doesn't replace thinking.
@@ -77,6 +80,10 @@ verdict in conversation. Never improvise a public tunnel.
   describes?" resolve against the installed roster via the `staffing` skill by name. Plan hardcodes no
   ranking. As a default sketch when staffing is unreachable: authoring a plan is orchestrator-grade judgment
   work; building what it describes is delegated per the roster — but defer to staffing wherever it is present.
+- **`prototype` — design-question artifacts (gate 2).** A logic or UI question the plan cannot settle on
+  paper routes to the `prototype` skill by name, and a reviewer may request a prototype during the gate-4
+  approval round. A soft dependency: absent it, settle the question by spike or research and record the gap
+  in the plan's notes.
 
 ## What this skill does not do
 

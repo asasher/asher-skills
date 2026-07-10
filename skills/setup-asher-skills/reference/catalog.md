@@ -24,7 +24,7 @@ The map is a starting point tuned by the project answer, not a fixed bundle.
 | Project is for… | Recommend | Why |
 |---|---|---|
 | A shipping product / app repo, ongoing work | `backlog` (pulls its full closure) | The issue→reviewed-PR loop; brings plan, prototype, review-loop, staffing |
-| A one-off feature or decision that needs sign-off | `plan` (pulls review-loop + staffing) | Reviewed plan with an approval gate, no full backlog machinery |
+| A one-off feature or decision that needs sign-off | `plan` (pulls review-loop + staffing + prototype) | Reviewed plan with an approval gate, no full backlog machinery |
 | A design/state question that needs to be tried | `prototype` (pulls review-loop + staffing) | Throwaway artifact that settles one question |
 | A greenfield product to pitch/sell | `maquette` (pulls review-loop) | High-fidelity clickable prototype for a demo |
 | Turning a decided conversation into a written spec | `to-spec` (review-loop optional) | Synthesize a spec; feeds `to-tickets` |
@@ -43,13 +43,14 @@ Accepting a composer installs its **transitive sibling closure** — setup compu
 ships a half-wired composer. Two roots depend on nothing; everything closes over them.
 
 - **Roots (depend on nothing):** `staffing`, `review-loop`.
-- **`plan` ⇒ ensure `review-loop` + `staffing`.** (plan renders the artifact, review-loop signs it off,
-  staffing picks who authors/builds.)
-- **`prototype` ⇒ ensure `review-loop` + `staffing`.** (same two siblings.)
+- **`plan` ⇒ ensure `review-loop` + `staffing` + `prototype`.** (plan renders the artifact, review-loop signs
+  it off, staffing picks who authors/builds, prototype settles logic/UI design questions — a soft edge, but
+  installed with plan so gate 2 works out of the box.)
+- **`prototype` ⇒ ensure `review-loop` + `staffing`.** (the two roots.)
 - **`maquette` ⇒ ensure `review-loop`.** (maquette signs off its brief and journeys; it does not compose
   staffing.)
 - **`backlog` ⇒ ensure ALL of `staffing`, `review-loop`, `plan`, `prototype`.** The transitive closure adds
-  nothing beyond those four (plan and prototype only pull the two roots).
+  nothing beyond those four (plan pulls prototype and the two roots; prototype pulls only the roots).
 - **Soft edges, noted not force-installed:** `to-tickets` reads backlog's `backlog-policy.md`/`platform.md`
   conventions but does not require the whole skill; `to-sprites` uses `codex-imagegen` only for `--generate`.
   Mention these; install them only if the user wants that path.
