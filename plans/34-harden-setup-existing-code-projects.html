@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #34 — Harden backlog setup for existing code projects</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --a1:#4f46e5; --a2:#0891b2; --a3:#b45309; --ok:#15803d; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --a1:#818cf8; --a2:#22d3ee; --a3:#fbbf24; --ok:#4ade80; } }
+:root[data-theme="dark"] { color-scheme: dark; --fg:#e4e4e7; --muted:#94949c; --bg:#121216; --card:#1a1a20; --line:#2c2c34; --accent:#818cf8; --a1:#818cf8; --a2:#22d3ee; --a3:#fbbf24; --ok:#4ade80; }
+:root[data-theme="light"] { color-scheme: light; --fg:#1a1a1e; --muted:#6b6b74; --bg:#fafafa; --card:#fff; --line:#e4e4e7; --accent:#4f46e5; --a1:#4f46e5; --a2:#0891b2; --a3:#b45309; --ok:#15803d; }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 760px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.4rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2.2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+h3 { font-size: .95rem; margin: 1.4rem 0 .3rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: var(--fg); }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .5rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+.tag { font-size: .68rem; font-weight: 600; padding: .05rem .4rem; border-radius: 5px; white-space: nowrap; }
+.t1 { color: var(--a1); border:1px solid var(--a1); } .t2 { color: var(--a2); border:1px solid var(--a2); } .t3 { color: var(--a3); border:1px solid var(--a3); }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .75rem; color: var(--accent); }
+ul.criteria li b { font-weight: 600; }
+.area-h { font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; margin:1rem 0 .35rem; }
+.a1c{color:var(--a1)} .a2c{color:var(--a2)} .a3c{color:var(--a3)}
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .3rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .84em; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Harden <code>backlog</code> setup for existing non-trivial code projects</h1>
+  <p class="problem">The loop was proven on a greenfield repo (no CI, no app, no tests) — three setup audits pass trivially here and would produce nothing usable when pointed at a real inherited codebase.</p>
+  <div class="chips"><span class="chip">#34</span><span class="chip">enhancement</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="thesis">
+  <h2>The core problem</h2>
+  <p>Setup already <em>names</em> all three concerns. But each audit has a trivial-pass path a greenfield repo slips through — "read a command catalog <em>if present</em>", "shared singletons: <em>or none</em>", "map each role <em>where one fits</em>". The hardening turns each audit from a mention into one that <b>discovers concrete artifacts from a real repo and records them where the loop reads them</b>. No new subskills; the change is to the audit contract (<code>setup.md</code>, <code>worktree-isolation.md</code>) and the playbook templates those audits write into.</p>
+  <figure id="thesis-diagram">
+    <svg viewBox="0 0 720 250" width="100%" role="img" aria-label="Audit discovers real artifacts, records them in playbooks, loop steps consume them">
+      <!-- columns -->
+      <text x="90" y="22" text-anchor="middle" font-weight="600">setup AUDIT</text>
+      <text x="360" y="22" text-anchor="middle" font-weight="600">RECORDED IN</text>
+      <text x="630" y="22" text-anchor="middle" font-weight="600">CONSUMED BY</text>
+      <!-- area 1 -->
+      <rect x="10" y="40" width="160" height="46" rx="7" fill="none" stroke="var(--a1)"/>
+      <text x="90" y="60" text-anchor="middle" fill="var(--a1)" font-weight="600">discover + run</text>
+      <text x="90" y="76" text-anchor="middle" fill="var(--a1)">checks, CI gate, drive-path</text>
+      <rect x="280" y="40" width="160" height="46" rx="7" fill="none" stroke="var(--line)"/>
+      <text x="360" y="60" text-anchor="middle">verifying.md,</text>
+      <text x="360" y="76" text-anchor="middle">environment.md, evidence.md</text>
+      <rect x="550" y="40" width="160" height="46" rx="7" fill="none" stroke="var(--line)"/>
+      <text x="630" y="66" text-anchor="middle">verify &amp; evidence</text>
+      <line x1="170" y1="63" x2="278" y2="63" stroke="var(--a1)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="440" y1="63" x2="548" y2="63" stroke="var(--line)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- area 2 -->
+      <rect x="10" y="102" width="160" height="46" rx="7" fill="none" stroke="var(--a2)"/>
+      <text x="90" y="122" text-anchor="middle" fill="var(--a2)" font-weight="600">enumerate</text>
+      <text x="90" y="138" text-anchor="middle" fill="var(--a2)">shared singletons</text>
+      <rect x="280" y="102" width="160" height="46" rx="7" fill="none" stroke="var(--line)"/>
+      <text x="360" y="122" text-anchor="middle">environment.md</text>
+      <text x="360" y="138" text-anchor="middle">§ Worktree isolation</text>
+      <rect x="550" y="102" width="160" height="46" rx="7" fill="none" stroke="var(--line)"/>
+      <text x="630" y="128" text-anchor="middle">run (dispatch verdict)</text>
+      <line x1="170" y1="125" x2="278" y2="125" stroke="var(--a2)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="440" y1="125" x2="548" y2="125" stroke="var(--line)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- area 3 -->
+      <rect x="10" y="164" width="160" height="46" rx="7" fill="none" stroke="var(--a3)"/>
+      <text x="90" y="184" text-anchor="middle" fill="var(--a3)" font-weight="600">map labels, deps,</text>
+      <text x="90" y="200" text-anchor="middle" fill="var(--a3)">CI merge gate</text>
+      <rect x="280" y="164" width="160" height="46" rx="7" fill="none" stroke="var(--line)"/>
+      <text x="360" y="184" text-anchor="middle">backlog-policy.md,</text>
+      <text x="360" y="200" text-anchor="middle">platform.md, pr.md</text>
+      <rect x="550" y="164" width="160" height="46" rx="7" fill="none" stroke="var(--line)"/>
+      <text x="630" y="190" text-anchor="middle">groom &amp; PR step</text>
+      <line x1="170" y1="187" x2="278" y2="187" stroke="var(--a3)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="440" y1="187" x2="548" y2="187" stroke="var(--line)" stroke-width="1.5" marker-end="url(#ar)"/>
+      <defs><marker id="ar" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--muted)"/></marker></defs>
+    </svg>
+    <figcaption>Every fix follows the same spine: the audit produces a concrete artifact, records it in a playbook, and a downstream loop step reads it.</figcaption>
+  </figure>
+</section>
+
+<section id="gaps">
+  <h2>Gaps &#8594; fixes, per area</h2>
+  <table>
+    <thead><tr><th>Area</th><th>Trivial-pass gap today</th><th>Hardened audit output</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag t1">1 · verify/evidence</span></td>
+        <td>Step 5 only "reads a catalog if present"; nothing discovers real checks or the CI merge-gate. Step 6 records a driver but not <em>how to reach a feature-exercising state</em>. Nothing forbids probe-eval standing in for real-app evidence.</td>
+        <td>Actively discover checks from real sources (package scripts, Makefile/Justfile, CI workflows, pyproject/tox/cargo/go/gradle), <b>run each to verify</b>, record only what ran; discover the CI merge-gate set; record the drive-to-feature path; evidence = real check output + real screenshots, probes named greenfield-only.</td>
+      </tr>
+      <tr>
+        <td><span class="tag t2">2 · isolation</span></td>
+        <td>Probes cover containers/ports/cloud but miss local shared resources (node_modules, build caches, test DBs). The "shared singletons" line is one optional slot ("or none"); no enumerated list; verdict isn't tied to concrete resources.</td>
+        <td>Probes gain local-shared-resource collisions; the audit emits an <b>enumerated shared-singleton list</b> (resource · collision mode · locally-isolatable?) into <code>environment.md</code>; when un-isolated singletons exist, <code>serialize-verification</code> is a <b>hard constraint naming them</b>, not a policy choice.</td>
+      </tr>
+      <tr>
+        <td><span class="tag t3">3 · labels/scale/deps</span></td>
+        <td>Label mapping assumes a small clean taxonomy. No first-groom-at-scale affordance (dedupe without re-litigating). Custom bindings exercise no dependency-relation verb. Nothing makes host CI a merge gate.</td>
+        <td>Map an arbitrary large taxonomy (many labels, overlaps, neutrals); <code>groom.md</code> gains a scale affordance; custom bindings bind the tracker's native dependency relation (Jira/Linear blocks); <code>pr.md</code>/<code>verifying.md</code> record host-CI-green as a merge precondition.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="files">
+  <h2>Files changed</h2>
+  <table>
+    <thead><tr><th>File</th><th>Kind</th><th>Change</th><th>Area</th></tr></thead>
+    <tbody>
+      <tr><td><code>reference/setup.md</code></td><td>audit</td><td>Step 5 active discovery + verify + CI gate; step 6 drive-to-feature path; step 4 singleton enumeration; step 3 large-taxonomy mapping.</td><td><span class="tag t1">1</span> <span class="tag t2">2</span> <span class="tag t3">3</span></td></tr>
+      <tr><td><code>reference/worktree-isolation.md</code></td><td>audit</td><td>Add local-shared-resource probes; require the enumerated singleton list; verdict tied to named resources.</td><td><span class="tag t2">2</span></td></tr>
+      <tr><td><code>reference/groom.md</code></td><td>audit</td><td>Scale affordance: batch a large pre-existing backlog, dedupe without re-litigating settled issues.</td><td><span class="tag t3">3</span></td></tr>
+      <tr><td><code>templates/environment.md</code></td><td>playbook</td><td>Singleton-list shape; drive-to-feature state; hard-constraint framing for the verdict.</td><td><span class="tag t1">1</span> <span class="tag t2">2</span></td></tr>
+      <tr><td><code>templates/verifying.md</code></td><td>playbook</td><td>Discovered-and-verified checks vs guessed; the named CI merge-gate check set.</td><td><span class="tag t1">1</span> <span class="tag t3">3</span></td></tr>
+      <tr><td><code>templates/evidence.md</code></td><td>playbook</td><td>Real-app evidence over probes for a running app; probe fallback marked greenfield-only.</td><td><span class="tag t1">1</span></td></tr>
+      <tr><td><code>templates/platform.md</code></td><td>playbook</td><td>Dependency-relation verb in the tracker binding + custom-binding derivation (Jira/Linear).</td><td><span class="tag t3">3</span></td></tr>
+      <tr><td><code>templates/pr.md</code></td><td>playbook</td><td>Host CI status as a merge precondition in the body outline.</td><td><span class="tag t3">3</span></td></tr>
+      <tr><td><code>backlog-policy.md</code></td><td>playbook</td><td>§ Dependencies stated per-binding (task-list / frontmatter / native relation).</td><td><span class="tag t3">3</span></td></tr>
+      <tr><td><code>templates/VERSION</code> + <code>reference/migrations.md</code></td><td>meta</td><td>Bump to <code>v2026-07-10.1</code>; migration entry so an older install reconciles without clobbering repo practice.</td><td>meta</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>Stories</h2>
+  <ul class="plain">
+    <li id="story-1">As an operator running <code>backlog setup</code> on an inherited app, I want the audit to discover and verify the repo's real test/lint/typecheck/build commands and its CI merge-gate, so <code>verify</code> runs what actually gates the code and the PR can't merge on red CI.</li>
+    <li id="story-2">As an operator, I want setup to record how to boot the stack and drive to a state that exercises a feature, so <code>verify</code> drives the real app and <code>evidence</code> is real screenshots, not agent-authored probe transcripts.</li>
+    <li id="story-3">As an operator, I want the isolation audit to enumerate every shared singleton (DB, ports, node_modules, build caches, test DBs) with a real parallel/serial verdict, so <code>run</code> doesn't fan out worktrees that corrupt each other.</li>
+    <li id="story-4">As an operator inheriting a large tracker with an arbitrary label taxonomy and non-GitHub dependency links, I want setup to map those labels to roles and bind the native dependency relation, and groom to triage the backlog at scale without re-litigating settled issues.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Key decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><b>Harden audits, add no subskills.</b> The three areas already have homes in the loop; the fix is to strengthen the audit contract and the playbook slots it fills, so the existing <code>verify</code>/<code>run</code>/<code>groom</code>/PR steps read richer artifacts unchanged.</li>
+    <li id="dec-2"><b>Discovery is verify-by-running, not asking.</b> "Binding to reality" means setup enumerates candidate commands from real config files and <em>executes</em> each, recording only those that ran — the same discipline the platform bindings already use. A greenfield repo yields an empty set honestly instead of passing on a guess.</li>
+    <li id="dec-3"><b>The shared-singleton list is a first-class recorded artifact</b>, not a verdict footnote. <code>run</code> and <code>verify</code> read the enumerated list; the verdict is derived from it and names the resource forcing serialization.</li>
+    <li id="dec-4"><b>CI-green is a merge precondition, distinct from local checks.</b> <code>verify</code>'s local check gate proves the change; the host CI status gate (discovered in area 1) blocks the merge. Both are recorded; neither substitutes for the other.</li>
+    <li id="dec-5"><b>Non-GitHub dependency relations bind as a tracker verb</b>, written as a prose contract (Jira/Linear "blocks/blocked-by"). Verb commands are only <em>verified</em> against a live tracker at a real setup run — the template ships the contract, not fabricated commands.</li>
+    <li id="dec-6"><b>Template contract change &#8658; version bump + migration.</b> Bump <code>templates/VERSION</code> and add a <code>migrations.md</code> entry so setup's reconcile (step 2) upgrades an older install section-by-section, preserving repo-authored divergence.</li>
+    <li id="dec-7"><b>Groom scale lives in <code>groom.md</code>, scoped to a first-groom affordance</b> (batching + dedupe-without-re-litigating) — not a rewrite of grooming. Flagged below as the one item straddling the "setup + templates" boundary.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <p class="area-h a1c">Area 1 — verify/evidence binding to reality</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><b>Check discovery + verify.</b> <code>setup.md</code> step 5 directs enumerating check commands from real sources (package scripts, Makefile/Justfile, CI workflow files, pyproject/tox/noxfile, cargo/go/gradle) and <b>running each to confirm it works</b>, recording only commands that ran; <code>verifying.md</code> distinguishes discovered-and-verified checks from unverified guesses.</li>
+    <li id="ac-2" data-criterion><b>CI merge-gate discovered.</b> Setup identifies the exact check set the host CI runs to gate merge, and <code>verifying.md</code> records it as the named CI gate (separate from the local narrowest-first checks).</li>
+    <li id="ac-3" data-criterion><b>Drive-to-feature state recorded.</b> Setup step 6 (and <code>environment.md</code> § Seed / § Driving) records how to boot the stack and reach a state that exercises a feature — the entry/navigation path — as an explicit audit output, not folded into seed.</li>
+    <li id="ac-4" data-criterion><b>Real-app evidence over probes.</b> <code>evidence.md</code> states that for a real running app, evidence is real check/test output plus screenshots driven through the app, and names agent-driven probe transcripts as a greenfield-only fallback for repos with no runnable surface.</li>
+  </ul>
+  <p class="area-h a2c">Area 2 — isolation verdict with real shared singletons</p>
+  <ul class="criteria">
+    <li id="ac-5" data-criterion><b>Local-shared-resource probes.</b> <code>worktree-isolation.md</code> audit probes include local collisions beyond containers/ports/cloud — shared <code>node_modules</code>/install dirs, build caches (<code>.next</code>/<code>dist</code>/<code>target</code>/<code>build</code>/<code>__pycache__</code>/<code>.gradle</code>), shared test databases, and state/lock dirs.</li>
+    <li id="ac-6" data-criterion><b>Enumerated singleton list.</b> Setup step 4 + <code>worktree-isolation.md</code> require producing an explicit shared-singleton list — each resource with its collision mode and whether it's locally isolatable — recorded in <code>environment.md</code> § Worktree isolation, whose template slot is a list, not a one-line "or none".</li>
+    <li id="ac-7" data-criterion><b>Verdict as hard constraint.</b> The docs state that when un-isolated real singletons exist, <code>serialize-verification</code> is a hard constraint that <b>names the forcing resources</b> (not a policy preference), and that a naive parallel fan-out would corrupt shared state.</li>
+  </ul>
+  <p class="area-h a3c">Area 3 — label mapping, scale, non-GitHub deps, CI merge</p>
+  <ul class="criteria">
+    <li id="ac-8" data-criterion><b>Arbitrary-taxonomy mapping.</b> <code>setup.md</code> step 3 handles a large pre-existing label taxonomy — mapping many labels to the readiness/work-type roles, resolving overlaps/ambiguity, leaving unrelated labels neutral, and reusing existing labels rather than creating duplicates.</li>
+    <li id="ac-9" data-criterion><b>Groom at scale.</b> <code>groom.md</code> gains an affordance for a large pre-existing backlog: batching/prioritizing and de-duplicating without re-litigating already-settled issues, so a first groom of an inherited backlog is tractable.</li>
+    <li id="ac-10" data-criterion><b>Non-GitHub dependency relations.</b> <code>platform.md</code> (tracker verbs + § Custom bindings) and <code>backlog-policy.md</code> § Dependencies bind a tracker's native dependency relation (e.g. Jira/Linear blocks/blocked-by) as a first-class verb <code>run</code> reads, stated per-binding.</li>
+    <li id="ac-11" data-criterion><b>CI-green merge gate.</b> <code>pr.md</code> and <code>verifying.md</code> record the host CI status as a merge precondition — the PR is not considered mergeable until CI is green — distinct from the local check gate.</li>
+  </ul>
+  <p class="area-h">Meta</p>
+  <ul class="criteria">
+    <li id="ac-12" data-criterion><b>Versioned + migratable.</b> <code>templates/VERSION</code> is bumped and <code>migrations.md</code> gains an entry describing each contract change and how reconcile applies it without deleting repo-authored content; every changed playbook template's stamp updates to the new version.</li>
+    <li id="ac-13" data-criterion><b>Internally consistent.</b> The reference and template edits cross-reference correctly (setup writes exactly the slots the templates expose; verify/run/evidence/groom read exactly what setup records), with no dangling pointer to a removed or renamed slot.</li>
+  </ul>
+</section>
+
+<section id="checks">
+  <h2>How it will be checked</h2>
+  <p>This is a docs/contract change with no runtime, so the criteria are confirmed by <b>text review against each named file</b> plus a <b>situated dry-run probe</b> (this repo's stateful-skill eval pattern): give an executor model a synthetic inherited-repo scenario — a JS/TS app with <code>package.json</code> scripts, a <code>.github/workflows</code> CI gate, a shared Postgres + <code>node_modules</code>, an arbitrary Jira-style label set — and confirm a setup dry-run produces the three hardened artifacts (verified checks + CI gate, enumerated singleton list + serialize verdict, label map + dependency binding). Left deliberately unchecked: an end-to-end setup against a live real repo — this skills repo has no CI/app/tests, so real validation is deferred to a first real-project run (see risks).</p>
+</section>
+
+<section id="required">
+  <h2>What's required on completion</h2>
+  <ul class="plain">
+    <li id="req-1">The diff across the nine files + VERSION/migrations, each criterion mapped to the passage that satisfies it.</li>
+    <li id="req-2">A dry-run probe transcript (executor model against the synthetic inherited-repo scenario) showing the three hardened artifacts emerge — the evidence surrogate for a repo that can't be set up against itself.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks &amp; mitigations</summary>
+  <ul class="plain">
+    <li><b>Can't validate end-to-end here.</b> asher-skills has no CI/app/tests, so the hardened audits can't run against it. Mitigation: dry-run probe against a synthetic scenario now; flag first-real-project validation as follow-up.</li>
+    <li><b>Jira/Linear verbs written blind.</b> No live non-GitHub tracker to exercise. Mitigation: ship the dependency-relation binding as a prose contract with explicit "verify at setup time" framing (matching how custom bindings already work), not fabricated commands.</li>
+    <li><b>Scope breadth.</b> Nine files touched. Mitigation: every edit follows one spine (audit &#8594; recorded slot &#8594; consumer); no new machinery, so the blast radius is prose contracts the loop already reads.</li>
+    <li><b>Prior art overlap.</b> #27 ("harden setup audit") touched adjacent ground. Mitigation: this plan is written against current <code>HEAD</code>; edits layer on what #27 left, not a revert.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li><b>Writing isolation-scaffold code.</b> <code>worktree-isolation.md</code> already describes the scaffold pattern; this hardens the <em>audit</em> only. Actual per-repo scaffolding stays a setup-time, approval-gated action.</li>
+    <li><b>Non-code / domain-pack support.</b> The issue says it rides on these same setup improvements; deferred to its own track.</li>
+    <li><b>An end-to-end run against a real inherited repo.</b> Deferred to the first real-project setup; this issue delivers the hardened contract + a dry-run probe.</li>
+    <li><b>Rewriting groom.</b> Only a scale affordance is added; the grooming flow itself is unchanged.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
