@@ -1,0 +1,7 @@
+interface:
+  display_name: "Plan"
+  short_description: "Turn an intent worth planning into a reviewed plan artifact, then hold it at a human approval gate"
+  default_prompt: "Use $plan to decide whether this needs a plan, write one, and get it approved before any work starts."
+
+policy:
+  allow_implicit_invocation: false

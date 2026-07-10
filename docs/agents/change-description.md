@@ -17,4 +17,4 @@ The body is the index for this change's evidence. In order:
 
 ## This repo
 
-- Title convention, required sections beyond the outline, or an existing PR template to honor: no PR template — use the outline. Title: imperative, sentence-case (matching the commit style in `implementing.md`). Include a `Closes #<n>` line so the issue closes on merge (`platform.md` § Tracker). Under Claude Code, the PR body ends with the `🤖 Generated with Claude Code` + session trailers `CLAUDE.md`'s harness section mandates.
+- Title convention, required sections beyond the outline, or an existing PR template to honor: no PR template — use the outline. Title: imperative, sentence-case (matching the commit style in `implementing.md`). Include a `Closes #<n>` line so the issue closes on merge (`platform.md` § Tracker). Under Claude Code, the PR body ends with the harness's own `🤖 Generated with [Claude Code](https://claude.com/claude-code)` line.

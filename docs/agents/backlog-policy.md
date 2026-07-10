@@ -29,7 +29,9 @@ Two further lifecycle values appear only where the tracker has no native equival
 
 - Labels: **`wontfix`**, **`duplicate`**, **`superseded`**, **`invalid`** (all identity; `documentation`, `question`, `good first issue`, `help wanted` are neutral).
 
-**Neutral** — every other label (priority, area, size, etc.); ignored for selection and routing.
+**Neutral** — every other label (priority, area, size, etc.); ignored for selection and routing. The default is **neutral**: a label maps to a role only when `setup` explicitly bound it — here every binding above is the identity mapping; everything else stays neutral.
+
+**Aliases** — when several existing labels fill one role, one is canonical and the loop treats the others as that role too: **none** — every role label here is a single identity mapping. Setup reuses existing labels rather than minting duplicates.
 
 ## Dependencies
 

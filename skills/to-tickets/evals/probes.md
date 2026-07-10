@@ -57,12 +57,12 @@ fragment. Does the skill allow file paths and code in a ticket? What is the sing
 to-tickets edit the source spec or the parent issue? Cite both rules.
 
 **P11 (ac-11).** Read `skills/to-tickets/agents/openai.yaml`. Is it well-formed per
-`docs/patterns/codex-compat.md`, and is `allow_implicit_invocation` set correctly for an operator skill that
+`AGENTS.md` § Conventions (the `agents/openai.yaml` rule), and is `allow_implicit_invocation` set correctly for an operator skill that
 publishes to a tracker? State the value and why it's right.
 
 **P12 (ac-12).** Read `skills/to-tickets/evals/probes.md`. Does a pre-written answer key exist covering
 ac-1..ac-11, and is the method dual-executor (Opus in-session + `codex exec`) and read-only per
-`docs/patterns/probe-evals.md`? State what you checked.
+`docs/agents/probe-evals.md`? State what you checked.
 
 ## Answer key
 
@@ -126,7 +126,7 @@ ac-1..ac-11, and is the method dual-executor (Opus in-session + `codex exec`) an
   YAML, = fail.
 - **P12 (ac-12):** The file carries a **pre-written answer key** with a probe per ac-1..ac-11 (this file is
   ac-12) and a coverage map; the method names **both** executors (Opus subagent + `codex exec --sandbox
-  read-only`) and states it is **read-only / dry-run** per `docs/patterns/probe-evals.md`. A grep confirms an
+  read-only`) and states it is **read-only / dry-run** per `docs/agents/probe-evals.md`. A grep confirms an
   Answer key section, both executor names, and the read-only note. Missing the key, a single-executor method, or
   no read-only guarantee, = fail.
 

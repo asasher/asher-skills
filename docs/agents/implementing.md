@@ -30,7 +30,7 @@ For the work that deserves tests, work red → green in vertical slices:
 
 ## Commits
 
-- Commit style this repo expects: imperative, sentence-case subject line (e.g. "Add backlog skill", "Update skill-loop with reference to patterns") — no Conventional Commits prefix. Under the Claude Code harness, append the trailers `CLAUDE.md` mandates (`Co-Authored-By:` and `Claude-Session:`). Commit/push only when Asher asks.
+- Commit style this repo expects: imperative, sentence-case subject line (e.g. "Add backlog skill", "Update skill-loop with reference to patterns") — no Conventional Commits prefix. Under the Claude Code harness, end the message with its `Co-Authored-By: Claude …` trailer (the harness's own convention; repo history carries no other trailers). Commit/push only when Asher asks.
 
 ## Code conventions
 
@@ -43,5 +43,5 @@ For the work that deserves tests, work red → green in vertical slices:
 
 ## This repo's testing setup
 
-- Test framework and how to run a single test: **no unit-test framework.** A skill's "tests" are its probe scenarios, driven through an executor per `docs/patterns/probe-evals.md` and `environment.md` § Driving the app. Build test-first here means: write/adjust the probe scenario and answer key that the change should satisfy, confirm the current skill fails or under-serves it, then make the change and re-run.
+- Test framework and how to run a single test: **no unit-test framework.** A skill's "tests" are its probe scenarios, driven through an executor per `docs/agents/probe-evals.md` and `environment.md` § Driving the app. Build test-first here means: write/adjust the probe scenario and answer key that the change should satisfy, confirm the current skill fails or under-serves it, then make the change and re-run.
 - Where tests live relative to source: in each skill's own `evals/` directory (skills are self-contained).

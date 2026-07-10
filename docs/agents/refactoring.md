@@ -21,4 +21,4 @@
 ## This repo
 
 - Test framework and command: **no unit-test framework** — the lock is a probe eval. Capture the affected skill's probe verdicts before the change; the refactor is behavior-preserving only if the identical scenarios produce the same verdicts after (allowing for model variance — re-run ≥2 executors). For a script refactor, `python3 -m py_compile` plus the same driven paths, same output.
-- Conventions this repo cares about (naming, module boundaries, file layout): self-contained skill directories, compose-by-name (never file-level cross-skill imports), stdlib-only Python 3, and the `docs/patterns/` copy-a-pattern / extract-a-primitive rule (`AGENTS.md` § Conventions). A refactor must not turn a compose-by-name pointer into a file dependency.
+- Conventions this repo cares about (naming, module boundaries, file layout): self-contained skill directories, compose-by-name (never file-level cross-skill imports), stdlib-only Python 3, and the copy-a-technique / extract-a-primitive rule (`AGENTS.md` § Conventions). A refactor must not turn a compose-by-name pointer into a file dependency.

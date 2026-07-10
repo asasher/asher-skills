@@ -21,7 +21,7 @@
 
 - Binding: _<github | local | gitlab | custom>_.
 - Verbs:
-  - Open a PR (ready for review, with a body per `pr.md`): _<e.g. `gh pr create --title ... --body-file ...`; local: commit `.backlog/reviews/<issue-id>-<slug>.md` on the work branch, body per `pr.md`, and set the issue's `state: in-review`>_.
+  - Open a PR (ready for review, with a body per `change-description.md`): _<e.g. `gh pr create --title ... --body-file ...`; local: commit `.backlog/reviews/<issue-id>-<slug>.md` on the work branch, body per `change-description.md`, and set the issue's `state: in-review`>_.
   - Edit the PR body: _<e.g. `gh pr edit --body-file ...`; local: edit the review file and commit>_.
   - Read review comments since a SHA: _<e.g. `gh pr view --comments` / `gh api .../comments`; local: read the review file's appended review sections>_.
   - Post a review comment / reply: _<e.g. `gh pr comment`; local: append to the review file — Reviewer and Fixer each sign their sections>_.

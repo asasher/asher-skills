@@ -43,7 +43,7 @@ Match the diff against this fixed baseline of code smells (Fowler, *Refactoring*
 - Testability and test coverage of the change, held to `implementing.md` § Tests worth keeping.
 - Duplication and naming; legibility of the surrounding code after the change.
 - Behavior risk beyond the issue's scope.
-- Repo-specific concerns: **self-containment** (no cross-skill file imports; sibling reliance is compose-by-name only), **stdlib-only Python 3** scripts (no third-party imports), **Codex compatibility** (`agents/openai.yaml` present where a skill must present well in Codex, per `docs/patterns/codex-compat.md`), and that any **new or reworked skill carries a passing probe eval** (`docs/patterns/probe-evals.md`). The Reviewer also judges rendered artifacts (plan/prototype HTML) for taste, not just correctness.
+- Repo-specific concerns: **self-containment** (no cross-skill file imports; sibling reliance is compose-by-name only), **stdlib-only Python 3** scripts (no third-party imports), **Codex compatibility** (`agents/openai.yaml` present where a skill must present well in Codex, per `AGENTS.md` § Conventions (the `agents/openai.yaml` rule)), and that any **new or reworked skill carries a passing probe eval** (`docs/agents/probe-evals.md`). The Reviewer also judges rendered artifacts (plan/prototype HTML) for taste, not just correctness.
 
 ## How to comment
 

@@ -42,9 +42,9 @@
 ## Harness — how threads are spawned
 
 - Binding: **Claude Code** — the loop runs from Claude Code; the model roster per harness is in `environment.md` § Model staffing.
-- Create an issue thread with a prompt and a working directory: the Agent tool (`subagent_type: claude` or `general-purpose`), `isolation: 'worktree'` when a thread must isolate; Codex (gpt-5.6-sol) threads run via `codex exec --cd <dir>`, held by a wrapper subagent so the orchestrator watches them like any other thread (Codex mechanics in `CLAUDE.md` § Staffing → Mechanics; the wrapper detail is in `environment.md` § Model staffing).
+- Create an issue thread with a prompt and a working directory: the Agent tool (`subagent_type: claude` or `general-purpose`), `isolation: 'worktree'` when a thread must isolate; Codex (gpt-5.6-sol) threads run via `codex exec --cd <dir>`, held by a wrapper subagent so the orchestrator watches them like any other thread (Codex mechanics in `~/.claude/CLAUDE.md` § Staffing → Mechanics, the global base; the wrapper detail is in `environment.md` § Model staffing).
 - Can a spawned thread read this skill's bundled references from disk? Yes — at `.claude/skills/backlog/reference/` and `docs/agents/` in the checkout.
-- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; the review loop awaits `scripts/review-await.py`. The watch is **held on a dedicated staffing-resolved watcher subagent that loops-until-verdict**, not the orchestrator inline — contract in `skills/review-loop/reference/watch.md` (applies to both the approval gate and the PR-merge watch).
+- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; the review loop awaits the `review-loop` skill's `review-await.py` (self-host path `skills/review-loop/scripts/review-await.py`). The watch is **held on a dedicated staffing-resolved watcher subagent that loops-until-verdict**, not the orchestrator inline — contract in `skills/review-loop/reference/watch.md` (applies to both the approval gate and the PR-merge watch).
 
 ## The local binding — tracker contract
 
@@ -61,4 +61,4 @@
 
 ## Custom bindings
 
-For a platform this skill has no shipped default for, `backlog setup` derives the binding interactively: name the tool or API, exercise every verb above live, and record only commands that worked. A verb the platform cannot express is recorded as a gap with its fallback (e.g. no close-on-merge → the run thread closes issues after merge), so downstream steps inherit the degradation explicitly rather than discovering it.
+For a platform this skill has no shipped default for, `backlog setup` derives the binding interactively: name the tool or API, exercise every verb above live, and record only commands that worked. A verb the platform cannot express is recorded as a gap with its fallback (e.g. no close-on-merge → the run thread closes issues after merge), so downstream steps inherit the degradation explicitly rather than discovering it. When such a tracker has a **native dependency relation** (Jira `is blocked by`, Linear `blocked-by`), bind it as the blocker read/write verbs above rather than falling back to the task-list convention — that relation is what `run` reads to skip blocked work. Where the tracker's live API is not reachable at setup time, record the relation as a prose contract naming the link type and the intended read/write calls, flagged "verify against the live tracker at first use" — never a fabricated command presented as verified.

@@ -1,4 +1,9 @@
-# Pre-deployment evals: situated probes + scripted dry-runs
+# Playbook: Pre-deployment probe evals
+
+> Project playbook for this repo — the check discipline for skill changes, read by `verify` (it is the
+> recorded check command in `verifying.md`), `evidence` (the transcript + verdict-table contract), and
+> anyone shipping a new or reworked skill. Formerly the `docs/patterns/` probe-evals pattern doc; promoted
+> to a playbook when that directory was retired.
 
 ## Problem
 
@@ -27,7 +32,7 @@ Validated 2026-07-04 (triage skill, 20/20) and reused since (bayes 20/20 before 
 3. **Require citations.** "Cite the file and exact sentence that decided it" makes pointer-following
    observable instead of vibes.
 4. **Answer key written before any runs.** Grade pass/fail against it.
-5. **Executors are the actual deployment targets.** An Opus subagent via the Agent tool, plus
+5. **Executors are the actual deployment targets.** A Claude subagent via the Agent tool, plus
    `codex exec --sandbox read-only` for the Codex side. (~115k tokens total for 4 sessions × 5 probes.)
 6. **Ambiguity is a valid answer.** Instruct executors to flag it — the flagged ambiguities are routinely
    the most valuable findings.
@@ -60,7 +65,7 @@ never touches this repo; exits non-zero on any FAIL.
   the model said.
 - Don't probe only the happy path; the value is in failure-branch and resume probes.
 - Billing: Claude executors run in-session (Agent tool), never via `claude -p`; Codex executors run via
-  `codex exec` on the subscription. See CLAUDE.md § Staffing.
+  `codex exec` on the subscription. See the global base, `~/.claude/CLAUDE.md` § Staffing.
 
 ## Instances
 

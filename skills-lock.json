@@ -4,12 +4,37 @@
     "backlog": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "4e252d2fd671c236bf78e407afe2bd88839ac980e96e45a24e4cd77d64c1dab1"
+      "computedHash": "423d72dd62564a5c676d5f9285e15b4b8c121bf9cc70d44357064766801f3839"
+    },
+    "plan": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "72b867eab75bf328c8a5a4237b1134d2ed67fa77f7f77a28582a4af40cb53d23"
+    },
+    "prototype": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "f20076c5b4360dc6126c77f74b46a5c2a1f20af4db8f16e8c91ca6461badbf9f"
+    },
+    "review-loop": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "63748a8609b0d6e1e784ae1f31caae25bfbee084a4a96aaa0b93df236b411ae4"
+    },
+    "setup-asher-skills": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "a63ee821a4e613fe6c9637cc8a66d2e881d55bf8cd0dc742165c0dfdd5ba97c6"
     },
     "skill-loop": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "e55f8e33217a38b9afd94f831ad82da217c3bd6a611f6c8c33b9e760d604d8f9"
+      "computedHash": "fa71766ea190110945e1192a6eeab745d067b9c1e617f424436d05837fc3feb8"
+    },
+    "staffing": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "8318ab9a89d53cb2dcb5953dfb3e9c60457b966d7035ad037b7ff0a89fa36992"
     },
     "writing-great-skills": {
       "source": "mattpocock/skills",

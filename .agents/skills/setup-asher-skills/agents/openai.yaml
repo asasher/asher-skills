@@ -1,0 +1,7 @@
+interface:
+  display_name: "Setup asher-skills"
+  short_description: "Prompt-driven installer for this repo's skills — audit repo/machine/project, interview one decision at a time, install a dependency-complete set from this repo only, and map it"
+  default_prompt: "Use $setup-asher-skills to set this project up with the right asher-skills: audit the repo, machine, and what the project is for; recommend and confirm a skill set one decision at a time; install it (pulling siblings) from asasher/asher-skills only; and write the ## Agent skills map. Re-invoke to audit an existing install for drift."
+
+policy:
+  allow_implicit_invocation: false

@@ -53,12 +53,12 @@ hard dependency?
 **P9b (ac-9, present).** The user is sitting right there. How is the spec approved? If `review-loop` were
 unavailable, could you still ship a valid spec? Cite the sentence.
 
-**P10 (ac-10).** Read `skills/to-spec/agents/openai.yaml`. Is it well-formed per `docs/patterns/codex-compat.md`,
+**P10 (ac-10).** Read `skills/to-spec/agents/openai.yaml`. Is it well-formed per `AGENTS.md` § Conventions (the `agents/openai.yaml` rule),
 and is `allow_implicit_invocation` set correctly for a synthesis operator skill that writes repo docs? State
 the value and why it's right.
 
 **P11 (ac-11).** Read `skills/to-spec/evals/probes.md`. Does a pre-written answer key exist covering
-ac-1..ac-10, and is the method dual-executor (Opus in-session + `codex exec`) per `docs/patterns/probe-evals.md`?
+ac-1..ac-10, and is the method dual-executor (Opus in-session + `codex exec`) per `docs/agents/probe-evals.md`?
 State what you checked.
 
 ## Answer key
@@ -117,7 +117,7 @@ State what you checked.
   malformed, = fail.
 - **P11 (ac-11):** The file carries a **pre-written answer key** with a probe per ac-1..ac-10 (ac-7 probed both
   ways) and a coverage map; the method names **both** executors (Opus subagent + `codex exec --sandbox
-  read-only`) per `docs/patterns/probe-evals.md`. A grep confirms an Answer key section and both executor
+  read-only`) per `docs/agents/probe-evals.md`. A grep confirms an Answer key section and both executor
   names. Missing the key, or a single-executor method, = fail.
 
 ## Scoring
