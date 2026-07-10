@@ -1,5 +1,3 @@
-<!-- backlog-templates: v2026-07-06.1 -->
-
 # Playbook: Platform Bindings
 
 > Project playbook for this repo. Shared — read by every subcommand that touches the tracker (`groom`, `run`, the issue loop), proposes or edits a PR (the create-PR step, `adversarial-review`, `evidence`), or creates and publishes working copies (`run`, `implement`, the fixer). The skill's references speak in **role nouns** — issue, label, PR, branch, worktree, push — and this file binds each role to this repo's real platform. Bindings are prose contracts, not adapter code: each verb records the working command (or harness tool call) verified by `backlog setup` — live at binding time, end-to-end when the smoke test runs. A recorded command that no longer exists is drift — re-run `backlog setup`.

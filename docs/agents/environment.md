@@ -1,5 +1,3 @@
-<!-- backlog-templates: v2026-07-06.1 -->
-
 # Playbook: Environment
 
 > Project playbook for this repo. Shared — read by any backlog subskill that builds a branch, runs, or tests the app (`implement`, `verify`, `evidence`, `diagnose`, the PR step, the review fixer) and by `run` for the parallelism verdict. Tailor every section to this codebase. `setup` fills the isolation, seed, and parallelism sections from its audit.

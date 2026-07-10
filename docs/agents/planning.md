@@ -1,5 +1,3 @@
-<!-- backlog-templates: v2026-07-06.1 -->
-
 # Playbook: Planning Enhancements
 
 > Project playbook for this repo. The backlog `plan` subskill reads this file for the threshold, format, review conduct, and approval; the gates are in the skill's `reference/plan.md`. The plan structure below draws on Matt Pocock's `to-prd` skill (MIT) — tailor everything to this team's conventions.

@@ -27,8 +27,7 @@ workflow skill, an ad-hoc session, and any harness — not just one dev loop.
   global-with-overrides: a global base (harness-coupled: `~/.claude/CLAUDE.md` or `~/.codex/AGENTS.md`, each
   filtered to the models that harness can reach) plus sparse project overrides in `docs/agents/` that carry
   only deltas. A resolver reads base, then applies deltas.
-- **Reconcile by LLM audit, no version stamps** — a deliberate departure from backlog's `vNN` template
-  stamps.
+- **Reconcile by LLM audit, no version stamps** — the shared posture across this repo's operator skills.
 - **Global writes are consent-gated** via a scope-decision flow.
 
 ## Layout

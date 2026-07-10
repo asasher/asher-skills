@@ -1,5 +1,3 @@
-<!-- backlog-templates: v2026-07-06.1 -->
-
 # Playbook: Evidence
 
 > Project playbook for this repo. The backlog `evidence` subskill reads this file for what to capture, the format/storage contract, and the presentation contract that makes artifacts render for the human; the gates are in the skill's `reference/evidence.md`. How to run, seed, and authenticate against the app — and the capture drivers — are in `environment.md`; the review surface this presents to is bound in `platform.md`. The PR body outline that consumes the prepared evidence block is in `pr.md`. Keep the presentation section for this repo's bound review surface; the others are reference for a rebind.
