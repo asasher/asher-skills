@@ -113,11 +113,12 @@ repo whose recorded work domain is `writing`. Per run's step-1 preflight, which 
 
 ## Answer key
 
-- **P1 (ac-3):** Ask the work-domain question **before any scaffolding**, with **exactly five options —
-  software / writing / research / ops / general** — and propose **`writing`** as the default: the repo's
+- **P1 (ac-3):** Ask the work-domain question **before any scaffolding**, with the current **six options —
+  software / skill-authoring / writing / research / ops / general** — and propose **`writing`** as the default: the repo's
   evidence (prose manuscript, no code) is unambiguous, and the posture is confirm-not-interrogate.
   Not asking; a different option set; or proposing `software` despite the prose evidence = **fail**.
-  (`software` is the default only when evidence is ambiguous.)
+  (`software` is the default only when evidence is ambiguous; `skill-authoring` was registered after issue
+  #32 and does not change this manuscript's default.)
 - **P2 (ac-4/ac-5):** Install the **four `templates/common/` playbooks** plus — because no `writing` pack
   ships yet — the **seven `templates/software/` step playbooks as stand-ins**, each **flagged in its
   installed header as a code-flavored stand-in to tailor**, with the **gap named in the setup report**;
@@ -131,10 +132,84 @@ repo whose recorded work domain is `writing`. Per run's step-1 preflight, which 
 - **P4 (ac-4):** The **pack's** file — the install set is `common/` overlaid by `templates/<domain>/`, and a
   same-name pack file **shadows** the common file. Answering common's file, or "conflict/ask the user" =
   **fail**.
-- **P5 (ac-8):** Every template in the **scaffold set — `templates/common/` plus the recorded work domain's
-  pack** — must have its `docs/agents/` counterpart (for `writing`, whose pack is unshipped, the software
-  stand-ins are those counterparts, so the full eleven still resolve). Citing only a flat `templates/*.md`
-  rule = **fail**.
+- **P5 (ac-8):** Every playbook in the **resolved scaffold set** must have its `docs/agents/` counterpart:
+  common overlaid by the recorded work domain's pack, then same-name software stand-ins for absent required
+  steps. For `writing`, whose pack is unshipped, the software stand-ins are those counterparts, so the full
+  eleven still resolve. Citing only a flat `templates/*.md` rule = **fail**.
 
 Pass bar: **P1–P5 5/5 on both executors**, with citations; a flagged genuine ambiguity counts as a pass for
 that probe if the flagged wording is real (and is itself a finding to fix).
+
+---
+
+# Backlog — skill-authoring baseline-pack probes (issue #35)
+
+Situated dry-run probes for the `skill-authoring` work domain, partial-pack resolution, and skill-behavior
+verification in `backlog setup` and `backlog run`, per `docs/agents/probe-evals.md`.
+
+Method: run the same three probes against both deployment executors — an **in-session Claude subagent** and
+**`codex exec --sandbox read-only`** — each given the post-change `skills/backlog/reference/setup.md`,
+`skills/backlog/reference/run.md`, `skills/backlog/templates/common/backlog-policy.md`, the relevant
+`skills/backlog/templates/skill-authoring/` playbooks, and a file listing of `skills/backlog/templates/`.
+Require each executor to **cite the file and exact sentence** that decides every answer, and to **flag
+ambiguity as a valid answer**. Preserve both cited transcripts and grade each probe criterion pass/fail
+against the key below, written before any executor run; it keys on
+`plans/35-skill-authoring-pack.html` acceptance criteria **ac-3, ac-6, ac-8, and ac-10..ac-14** — the plan
+is the source of truth.
+
+## Probes
+
+**P1 (ac-8/ac-10/ac-11 — fresh registration and install).** You are running `backlog setup` on a fresh
+repo with `skills/formatter/SKILL.md` and `skills/linter/SKILL.md`, but no app stack, source tree, or test
+runner. What exact work-domain choices do you offer, which default do you propose, and what files resolve
+into `docs/agents/` after the user confirms it? Identify every native source and every stand-in, including
+what is flagged, reported, and recorded. Cite the deciding sentences.
+
+**P2 (ac-10/ac-12/ac-13 — re-run, shadow, and partial resolution).** You re-run setup on a repo whose
+recorded domain is `skill-authoring`. Both `templates/common/environment.md` and
+`templates/skill-authoring/environment.md` exist. The installed playbooks corresponding to
+`implementing.md`, `refactoring.md`, `change-reviewer.md`, and `change-fixer.md` are absent; all other
+resolved counterparts are present. Which environment baseline wins, which skill-authoring files remain
+native, which missing files are reconciled from software, and what must setup report? May `backlog run`
+pass preflight before those four files exist? State the full counterpart count after repair and cite the
+rules.
+
+**P3 (ac-3/ac-6/ac-14 — mid-verify discipline).** A skill's situated probe scenarios have been written,
+but there is no answer key and no executor has run them. You are about to verify a behavior change. What
+must happen next, in what order, through which executor roles, what must each run produce, and how is the
+result graded and retained as evidence? A teammate proposes replacing this with "drive the app and take a
+screenshot"; decide whether that is the skill-behavior verification seam and cite the relevant playbooks.
+
+## Answer key
+
+- **P1 (ac-8/ac-10/ac-11):** Offer **exactly six options — software / skill-authoring / writing / research /
+  ops / general** — and propose **`skill-authoring`** because the repo has `SKILL.md` files under
+  `skills/<name>/`. Resolve **eleven counterparts**: the three unshadowed common files
+  (`backlog-policy.md`, `platform.md`, `change-description.md`); the four native skill-authoring files
+  (`environment.md`, `verifying.md`, `evidence.md`, `diagnosing-bugs.md`), with the pack environment
+  shadowing common; and the four same-name software stand-ins (`implementing.md`, `refactoring.md`,
+  `change-reviewer.md`, `change-fixer.md`). Every stand-in is header-flagged as code-flavored and every gap
+  is named in the setup report; record `skill-authoring` in installed `backlog-policy.md` § Work domain.
+  A five-value list, a `software` default, installing common environment, treating all seven software
+  files as stand-ins, omitting a required step file, or silent/unflagged fallback = **fail**.
+- **P2 (ac-10/ac-12/ac-13):** The **skill-authoring `environment.md` wins** the same-name shadow. Keep
+  native skill-authoring `verifying.md`, `evidence.md`, and `diagnosing-bugs.md`; fill only the absent
+  `implementing.md`, `refactoring.md`, `change-reviewer.md`, and `change-fixer.md` from their same-name
+  software baselines, flag every installed stand-in, and name every gap in the setup report. **`run`
+  preflight fails** until all four exist; after repair the resolved skill-authoring scaffold has **eleven
+  counterparts** (three unshadowed common + four native pack + four stand-ins). Choosing common
+  environment, replacing native pack files with software, passing preflight with seven files, or failing
+  to flag/report the four gaps = **fail**.
+- **P3 (ac-3/ac-6/ac-14):** **Write the answer key before any run**, then run the **same situated probes**
+  through an **in-session executor** and an **independent CLI executor**. Require both to cite the deciding
+  text and preserve both transcripts; grade each answer **per prewritten criterion** in a pass/fail verdict
+  table, retaining the transcripts and table as evidence (and showing the relevant before/after verdict
+  shift for a behavioral rework). "Drive the app" is **not** the skill-behavior seam: executor-harness
+  probes replace it; scripts are still invoked directly, real CI is still recorded, and rendered artifacts
+  are added only when the skill produces a visual surface. Running before keying, using only one executor,
+  accepting uncited output, grading only an aggregate result, discarding transcripts, or substituting an
+  app screenshot = **fail**.
+
+Pass bar: **P1–P3 3/3 on both executors**, with exact citations; a flagged genuine ambiguity counts as a
+pass for that probe if the cited wording is genuinely ambiguous (and becomes a finding to fix). Retain both
+executor transcripts and the per-probe verdict table.
