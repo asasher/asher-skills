@@ -126,7 +126,7 @@ Execute the approved plan:
    `.agents/skills/<name>` plus the per-harness symlink `.claude/skills/<name>` where that harness is present.
 
    A hand-placed `skills-lock.json` fallback entry has a **specified shape**: the tool's native fields —
-   `source` (the repo root path in the self-host case, else `https://github.com/asasher/asher-skills`),
+   `source` (the repo root path in the self-host case, else the slug `asasher/asher-skills`),
    `sourceType` (`"local"` / `"github"`), and `skillPath` for github sources — plus exactly one extension
    field, `"fallbackOrigin": true`, and **no `computedHash`**. Never fabricate `computedHash` (it is not a
    plain sha256 of `SKILL.md`), and add no free-form fields (`note` and the like). The `skills` CLI does not
