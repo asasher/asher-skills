@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #32 — Setup asks the work domain, installs a domain baseline pack</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --pack: #0d9488; --future: #b45309; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --pack: #2dd4bf; --future: #fbbf24; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 700px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+svg .small { font-size: 10.5px; }
+svg .lbl { font-size: 10.5px; fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .75rem; color: var(--accent); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .25rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+img { max-width: 100%; border-radius: 8px; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Setup asks the work domain, installs a domain baseline pack</h1>
+  <p class="problem">A repo tracking non-code work (a book, a research effort, ops) runs <code>backlog setup</code> and silently gets test-first TDD playbooks — setup never asks what kind of work this is.</p>
+  <div class="chips"><span class="chip">#32</span><span class="chip">plan v1</span><span class="chip">enables #35</span></div>
+</header>
+
+<section id="model">
+  <h2>The shape</h2>
+  <p>The flat <code>templates/</code> splits into a shared <code>common/</code> plus per-domain packs; setup asks the domain once and installs common overlaid by the pack.</p>
+  <figure id="model-diagram">
+    <svg viewBox="0 0 660 372" width="660" height="372" role="img" aria-label="Before/after template layout and the install resolution flow">
+      <!-- BEFORE panel -->
+      <rect x="8" y="8" width="180" height="228" rx="8" fill="none" stroke="var(--line)"/>
+      <text x="20" y="28" font-weight="600">templates/ — today</text>
+      <text x="20" y="46" class="lbl">11 flat files, code flavor baked in</text>
+      <text x="28" y="68" class="small">backlog-policy.md</text>
+      <text x="28" y="84" class="small">platform.md</text>
+      <text x="28" y="100" class="small">environment.md</text>
+      <text x="28" y="116" class="small">change-description.md</text>
+      <text x="28" y="136" class="small">implementing.md</text>
+      <text x="28" y="152" class="small">verifying.md</text>
+      <text x="28" y="168" class="small">evidence.md</text>
+      <text x="28" y="184" class="small">diagnosing-bugs.md</text>
+      <text x="28" y="200" class="small">refactoring.md</text>
+      <text x="28" y="216" class="small">change-reviewer.md</text>
+      <text x="28" y="232" class="small">change-fixer.md</text>
+      <!-- arrow -->
+      <line x1="196" y1="120" x2="240" y2="120" stroke="var(--muted)" stroke-width="1.5"/>
+      <polygon points="240,116 248,120 240,124" fill="var(--muted)"/>
+      <!-- AFTER: common -->
+      <rect x="256" y="8" width="190" height="118" rx="8" fill="none" stroke="var(--accent)"/>
+      <text x="268" y="28" font-weight="600" fill="var(--accent)">common/</text>
+      <text x="268" y="44" class="lbl">shared, domain-neutral (4)</text>
+      <text x="276" y="64" class="small">backlog-policy.md  + domain slot</text>
+      <text x="276" y="80" class="small">platform.md</text>
+      <text x="276" y="96" class="small">environment.md</text>
+      <text x="276" y="112" class="small">change-description.md</text>
+      <!-- AFTER: software -->
+      <rect x="256" y="138" width="190" height="150" rx="8" fill="none" stroke="var(--pack)"/>
+      <text x="268" y="158" font-weight="600" fill="var(--pack)">software/</text>
+      <text x="268" y="174" class="lbl">verbatim move of today's 7</text>
+      <text x="276" y="192" class="small">implementing.md</text>
+      <text x="276" y="208" class="small">verifying.md</text>
+      <text x="276" y="224" class="small">evidence.md</text>
+      <text x="276" y="240" class="small">diagnosing-bugs.md</text>
+      <text x="276" y="256" class="small">refactoring.md</text>
+      <text x="276" y="272" class="small">change-reviewer.md &#183; change-fixer.md</text>
+      <!-- future packs -->
+      <rect x="466" y="138" width="180" height="66" rx="8" fill="none" stroke="var(--future)" stroke-dasharray="5 4"/>
+      <text x="478" y="158" font-weight="600" fill="var(--future)">writing/ &#8230;</text>
+      <text x="478" y="174" class="lbl">#35 and later packs drop in</text>
+      <text x="478" y="190" class="lbl">here — a directory each</text>
+      <!-- install rule -->
+      <rect x="466" y="8" width="180" height="118" rx="8" fill="none" stroke="var(--line)"/>
+      <text x="478" y="28" font-weight="600">install =</text>
+      <text x="478" y="46" class="small" fill="var(--accent)">common/</text>
+      <text x="478" y="62" class="small">&#8853; overlaid by</text>
+      <text x="478" y="78" class="small" fill="var(--pack)">templates/&lt;domain&gt;/</text>
+      <text x="478" y="100" class="lbl">same-name pack file</text>
+      <text x="478" y="114" class="lbl">shadows the common file</text>
+      <!-- flow row -->
+      <line x1="8" y1="308" x2="646" y2="308" stroke="var(--line)"/>
+      <text x="8" y="300" class="lbl">setup, fresh install:</text>
+      <rect x="8" y="320" width="128" height="40" rx="8" fill="none" stroke="var(--accent)"/>
+      <text x="18" y="337" class="small">ask the domain</text>
+      <text x="18" y="352" class="small">(default from the repo)</text>
+      <line x1="136" y1="340" x2="160" y2="340" stroke="var(--muted)"/><polygon points="160,336 168,340 160,344" fill="var(--muted)"/>
+      <rect x="168" y="320" width="140" height="40" rx="8" fill="none" stroke="var(--accent)"/>
+      <text x="178" y="337" class="small">record it:</text>
+      <text x="178" y="352" class="small">backlog-policy &#167; Work domain</text>
+      <line x1="308" y1="340" x2="332" y2="340" stroke="var(--muted)"/><polygon points="332,336 340,340 332,344" fill="var(--muted)"/>
+      <rect x="340" y="320" width="130" height="40" rx="8" fill="none" stroke="var(--pack)"/>
+      <text x="350" y="337" class="small">install common</text>
+      <text x="350" y="352" class="small">&#8853; the domain pack</text>
+      <line x1="470" y1="340" x2="494" y2="340" stroke="var(--muted)"/><polygon points="494,336 502,340 494,344" fill="var(--muted)"/>
+      <rect x="502" y="320" width="150" height="40" rx="8" fill="none" stroke="var(--future)" stroke-dasharray="5 4"/>
+      <text x="512" y="337" class="small">no pack shipped? install</text>
+      <text x="512" y="352" class="small">software, flagged + reported</text>
+    </svg>
+    <figcaption>The non-obvious property: a pack may shadow <em>any</em> file by name, so a future domain can re-flavor even a “common” default without re-architecture.</figcaption>
+  </figure>
+</section>
+
+<section id="before-after">
+  <h2>Before &#8594; after</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Today</th><th>Planned</th></tr></thead>
+    <tbody>
+      <tr><td>Template layout</td><td>11 flat files under <code>templates/</code></td><td><code>templates/common/</code> (4) + <code>templates/software/</code> (7); future packs are sibling directories</td></tr>
+      <tr><td>Setup's first scaffold act</td><td>Copy templates, code flavor assumed</td><td>Ask “what kind of work is this? (software / writing / research / ops / general)”, default from repo evidence, then install common &#8853; pack</td></tr>
+      <tr><td>Domain memory</td><td>None</td><td>Recorded in the installed <code>backlog-policy.md</code> &#167; Work domain; re-runs reconcile against that pack; absent &#8594; <code>software</code></td></tr>
+      <tr><td>Unshipped domain (writing/research/ops/general)</td><td>n/a</td><td>Explicit degrade: software step baselines installed, each flagged as a code-flavored stand-in, gap reported</td></tr>
+      <tr><td>Orchestration (groom/run/issue-loop/&#8230;)</td><td>Domain-neutral</td><td>Untouched — only <code>setup.md</code> changes behavior; <code>run.md</code> preflight rewords its counterpart check</td></tr>
+      <tr><td>Skill name</td><td><code>backlog</code></td><td><code>backlog</code> — no rename</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>Stories</h2>
+  <ul class="plain">
+    <li id="story-1">As the owner of a <em>non-code repo</em> (a book, research, ops), I want setup to ask what kind of work I track, so that my playbooks aren't TDD boilerplate that misfits every issue.</li>
+    <li id="story-2">As the owner of an <em>existing code repo</em>, I want a setup re-run to change nothing — my install reconciles as <code>software</code> by default, so nothing regresses.</li>
+    <li id="story-3">As the <em>author of #35's writing pack</em>, I want a <code>templates/writing/</code> slot with a defined overlay rule, so the pack is a drop-in directory, not a re-architecture.</li>
+    <li id="story-4">As a <em>setup run for an unshipped domain</em>, I want a flagged, reported degrade rather than a silent code-flavored install or a missing playbook that halts the loop.</li>
+    <li id="story-5">As the <em>issue-loop orchestration</em>, I want to stay untouched — domain flavor lives in playbooks, never in references.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Key decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><strong>Common/pack split, not full per-domain sets.</strong> Shared contracts (bindings, label policy, audit slots) keep one canonical copy; a domain pack carries only the step playbooks that differ. Forced by #35's economics: a writing pack should be ~7 small files, not a fork of all 11.</li>
+    <li id="dec-2"><strong>The 4/7 classification.</strong> Common: <code>backlog-policy</code>, <code>platform</code>, <code>environment</code>, <code>change-description</code> — role bindings and setup-filled audit slots, no work technique. Pack: <code>implementing</code>, <code>verifying</code>, <code>evidence</code>, <code>diagnosing-bugs</code>, <code>refactoring</code>, <code>change-reviewer</code>, <code>change-fixer</code> — each inlines a technique (test-first, check discovery, screenshot evidence, code-review bar) that is what “code flavor” means.</li>
+    <li id="dec-3"><strong>Overlay rule: pack shadows common by filename.</strong> Install = <code>common/</code> &#8853; <code>templates/&lt;domain&gt;/</code>, same-name pack file wins. Costs nothing today (no overlaps ship) and lets a future pack re-flavor a shared default without touching the structure.</li>
+    <li id="dec-4"><strong>The domain is recorded in the installed <code>backlog-policy.md</code></strong>, a new § Work domain the common template ships as a slot. It is policy about what kind of work the tracker holds, so it lives with the label policy; setup re-runs read it, and absence means <code>software</code> — legacy installs reconcile unchanged.</li>
+    <li id="dec-5"><strong>Missing-pack degrade: flagged software baselines + a reported gap.</strong> The loop hard-stops on a missing playbook, so blanking the slots would brick every reference; installing software baselines silently would masquerade as fit. Each degraded file gets a header flag naming it a code-flavored stand-in to tailor; the setup report names the gap.</li>
+    <li id="dec-6"><strong><code>software/</code> is a verbatim move.</strong> The 7 step playbooks move with <code>git mv</code>, byte-identical; the only template content change anywhere is the § Work domain slot added to <code>common/backlog-policy.md</code>. This is the no-regression guarantee, checkable as pure renames in the diff.</li>
+    <li id="dec-7"><strong>The domain question opens setup's scaffold step (step 2)</strong> rather than becoming a new numbered step — the ordering guarantee (asked before any scaffolding) is stated in the criterion, and the reference avoids renumbering churn across its cross-references.</li>
+    <li id="dec-8"><strong><code>general</code> is an option, not a pack.</strong> No shipped pack today, so it takes the dec-5 degrade path deliberately; authoring a genuinely neutral pack is its own future issue, as the writing pack is #35.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><code>skills/backlog/templates/</code> contains exactly <code>common/</code> (backlog-policy, platform, environment, change-description) and <code>software/</code> (implementing, verifying, evidence, diagnosing-bugs, refactoring, change-reviewer, change-fixer); no flat <code>templates/*.md</code> file remains.</li>
+    <li id="ac-2" data-criterion>The diff against main shows all 11 templates as pure renames — byte-identical content — except <code>common/backlog-policy.md</code>, whose only change is the added § Work domain slot.</li>
+    <li id="ac-3" data-criterion><code>reference/setup.md</code> asks the work-domain question before any playbook is scaffolded, with exactly the five options software / writing / research / ops / general, defaulting from repo evidence (confirm, not interrogate) and to <code>software</code> when evidence is ambiguous.</li>
+    <li id="ac-4" data-criterion><code>reference/setup.md</code> states the install rule: the scaffold set is <code>templates/common/</code> overlaid by <code>templates/&lt;domain&gt;/</code>, a same-name pack file shadowing the common file.</li>
+    <li id="ac-5" data-criterion><code>reference/setup.md</code> states the missing-pack degrade: a domain with no shipped pack installs the software step baselines, each flagged in its installed header as a code-flavored stand-in to tailor, with the gap named in the setup report — no required playbook is ever left uninstalled.</li>
+    <li id="ac-6" data-criterion><code>reference/setup.md</code>'s re-run path reconciles against the work domain recorded in the installed <code>backlog-policy.md</code>, defaulting to <code>software</code> when no domain is recorded.</li>
+    <li id="ac-7" data-criterion><code>templates/common/backlog-policy.md</code> ships a § Work domain slot setup fills, and this repo's own <code>docs/agents/backlog-policy.md</code> records <code>software</code> in it.</li>
+    <li id="ac-8" data-criterion><code>SKILL.md</code>, <code>README.md</code>, and <code>reference/run.md</code>'s preflight describe the <code>common/</code> + <code>&lt;domain&gt;/</code> layout; grep across <code>skills/backlog/</code> finds no stale flat-<code>templates/*.md</code> phrasing.</li>
+    <li id="ac-9" data-criterion>Every bundled reference except <code>setup.md</code> and <code>run.md</code> is byte-identical to main, and the skill keeps its name — orchestration untouched, no rename.</li>
+    <li id="ac-10" data-criterion>Dual-executor situated probes for the domain path (new scenarios in <code>skills/backlog/evals/probes.md</code>: fresh writing-repo install hits the question + degrade; fresh code-repo install defaults to software; legacy re-run with no recorded domain reconciles as software) pass against an answer key written before any runs.</li>
+    <li id="ac-11" data-criterion>The installed copy <code>.agents/skills/backlog/</code> is refreshed from source and content-matches <code>skills/backlog/</code>.</li>
+  </ul>
+</section>
+
+<section id="checks">
+  <h2>How it will be checked</h2>
+  <p>Static criteria (ac-1, ac-2, ac-7&#8211;ac-9, ac-11) confirm at the repo seam: <code>git diff --find-renames</code>, directory listings, and greps on the branch. Behavioral criteria (ac-3&#8211;ac-6, ac-10) confirm at the probe seam per <code>docs/agents/probe-evals.md</code>: situated dry-run scenarios driven through both deployment executors (a Claude subagent in-session and gpt-5.6-sol via <code>codex exec</code>), graded pass/fail against a pre-written key — this repo's recorded stand-in for “drive the app” (<code>environment.md</code> § Seed data). Deliberately unchecked: a live end-to-end <code>backlog setup</code> against a real second repo — no fixture repo is in scope, and the probes exercise the same decision points at a fraction of the cost.</p>
+</section>
+
+<section id="required">
+  <h2>What's required</h2>
+  <ul class="plain">
+    <li id="req-1">Probe transcripts from both executors plus a per-probe verdict table against the answer key (the <code>evidence.md</code> contract for this repo).</li>
+    <li id="req-2">Terminal transcripts of the rename-diff and grep checks backing the static criteria.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li>Legacy installs (playbooks written before domain recording) could reconcile against the wrong pack — mitigated by the absent-&#8594;-<code>software</code> default (ac-6), which makes every pre-existing install resolve exactly as today.</li>
+    <li>The 4/7 classification could prove wrong for some future domain (e.g. a pack wanting its own <code>environment.md</code>) — mitigated by the overlay rule (dec-3): a pack may shadow any common file, so a misclassification is recoverable without restructuring.</li>
+    <li>Source and installed copy drifting mid-review — mitigated by refreshing the install in the same PR (ac-11) and re-running the refresh after any fixer commit that touches the source.</li>
+    <li>Other repos' installs go stale relative to the renamed layout — acceptable: installed playbooks are flat files under <code>docs/agents/</code> and don't reference template paths; their next setup re-run reconciles them (recorded follow-up, not this PR).</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>#35's writing pack — this issue lands the slot it drops into, not the pack.</li>
+    <li>Authoring research / ops / general packs — each is its own future issue; until then those domains take the flagged degrade path.</li>
+    <li>Any rename of the skill or re-architecture of groom / run / issue-loop — the issue explicitly keeps orchestration untouched.</li>
+    <li>Re-running setup on other repos that have backlog installed — their reconcile happens in their own sessions.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>

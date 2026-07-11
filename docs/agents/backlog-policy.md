@@ -2,6 +2,10 @@
 
 > Project playbook for this repo. Read by `groom` (to triage the backlog), `run` (to select ready work), and the issue loop (to route on work-type). The skill reasons in **roles**; map this tracker's actual label names to each role below so the wording can differ per repo. On the local tracker binding (`platform.md`) the mapping is the identity — roles are the frontmatter values verbatim.
 
+## Work domain
+
+- Domain: **software** — step playbooks scaffolded from `templates/software/` (the shipped default). Recorded 2026-07-11 (issue #32).
+
 ## Label roles
 
 Two independent axes, plus exclusions. Readiness decides *whether and who* picks an issue up; work-type decides *how* the agent works it.

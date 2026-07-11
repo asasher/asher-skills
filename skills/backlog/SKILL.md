@@ -22,7 +22,7 @@ This file is the command surface; each subcommand loads its own contract from `r
 |---|---|---|---|
 | `groom` | With the human: classify work-type, clarify, resolve relationships, label readiness | `reference/groom.md` | `docs/agents/backlog-policy.md` + `platform.md` |
 | `run` | Queue ready-for-agent, unblocked issues; dispatch one issue thread each | `reference/run.md`, `reference/issue-loop.md` | `docs/agents/backlog-policy.md` + `platform.md`; threads read `change-description.md` + their step playbooks |
-| `setup` | Scaffold or reconcile playbooks; bind the platforms; set isolation, app access, seed/checks, readiness; ensure the siblings | `reference/setup.md`, `reference/worktree-isolation.md`, `templates/` | writes them |
+| `setup` | Ask the work domain and install its baseline pack; reconcile playbooks; bind platforms; set isolation, app access, seed/checks, readiness; ensure siblings | `reference/setup.md`, `reference/worktree-isolation.md`, `templates/` | writes them |
 | `diagnose` | Bug: reproduce, fix, confirm the failing path passes | `reference/diagnose.md` | `docs/agents/diagnosing-bugs.md` + `environment.md` |
 | `plan` | Enhancement: plan or skip; HTML plan, approval gate (backlog keeps the commit-and-implement dev-tail) | the `plan` skill (composed by name) | — |
 | `prototype` | Throwaway code that answers a design question (logic or UI shape) | the `prototype` skill (composed by name) | — |
@@ -38,7 +38,7 @@ This file is the command surface; each subcommand loads its own contract from `r
 
 Three kinds of dependency, per `AGENTS.md` § Conventions:
 
-1. **Bundled references** — backlog's own dev contract under `reference/` plus the dev playbooks it ships under `templates/`. These ship with the skill and are not looked for in the target repo.
+1. **Bundled references** — backlog's own dev contract under `reference/` plus the playbook baselines it ships under `templates/`: shared `templates/common/` plus per-domain packs `templates/<domain>/` (`software/` is the shipped default; the domain is chosen at setup). These ship with the skill and are not looked for in the target repo.
 2. **Project playbooks** — `docs/agents/*.md`, installed into the target repo by `setup`. A repo changes how a step works by editing its playbooks, never the skill.
 3. **Sibling skills** — `staffing`, `review-loop`, `plan`, `prototype`, composed by plain name (never imported; what each owns is under the command table). `setup` ensures they are present; absent a sibling, backlog states the requirement rather than failing silently.
 
