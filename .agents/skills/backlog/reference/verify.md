@@ -8,7 +8,7 @@ The check commands and where acceptance criteria come from live in `docs/agents/
 
 As the loop's verify step, this whole loop runs in a delegated subagent filling the **checker** role — the role and its fallback ladder are resolved by the `staffing` skill (by name). The issue thread stays coordinator either way. Standalone runs execute wherever they were invoked.
 
-Verification produces a **verdict and its raw grading record**, not presentation artifacts. Preserve the check output, cited executor transcripts, and per-criterion results needed to substantiate that verdict; the separate, terminal `reference/evidence.md` step packages those records and captures any human-facing proof against the final reviewed HEAD. Do not render, commit, publish, or attach evidence here. Take a screenshot only when you need one to diagnose a failure.
+Verification produces a **verdict and its raw evidence record (the grading record)**, not presentation artifacts. Preserve the check output, cited executor transcripts, and per-criterion results needed to substantiate that verdict; the separate, terminal `reference/evidence.md` step packages that raw record and captures any additional human-facing proof against the final reviewed HEAD. Do not render, commit, publish, or attach the evidence package here. Take a screenshot only when you need one to diagnose a failure.
 
 ## Loop
 
