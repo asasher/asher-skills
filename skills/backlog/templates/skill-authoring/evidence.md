@@ -14,7 +14,7 @@ Per change type — the shipped baseline; tune to this repo:
 - Pure explanatory prose with no behavioral contract: the diff and the criterion it satisfies; _<add stricter repo expectations if needed>_.
 - Repo-specific expectations beyond these: _<add yours, or "none">_.
 
-Captured once after review converges, every transcript, verdict row, and rendered artifact is mapped to the acceptance criterion it proves. An uncited executor summary or a screenshot without the keyed behavioral verdict is not sufficient proof of a skill decision.
+Captured once after review converges, copy the final verify step's raw transcript and verdict record into the evidence package without re-running or independently re-grading it. If review changed behavior, the affected criteria must have been re-verified first and the newest raw record replaces the stale rows. Map every transcript, verdict row, and rendered artifact to the acceptance criterion it proves. An uncited executor summary or a screenshot without the keyed behavioral verdict is not sufficient proof of a skill decision.
 
 ## Format and storage
 
