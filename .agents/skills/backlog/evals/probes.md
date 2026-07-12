@@ -149,7 +149,8 @@ verification in `backlog setup` and `backlog run`, per `docs/agents/probe-evals.
 
 Method: run the same three probes against both deployment executors — an **in-session Claude subagent** and
 **`codex exec --sandbox read-only`** — each given the post-change `skills/backlog/reference/setup.md`,
-`skills/backlog/reference/run.md`, `skills/backlog/templates/common/backlog-policy.md`, the relevant
+`skills/backlog/reference/run.md`, `skills/backlog/reference/verify.md`,
+`skills/backlog/templates/common/backlog-policy.md`, the relevant
 `skills/backlog/templates/skill-authoring/` playbooks, and a file listing of `skills/backlog/templates/`.
 Require each executor to **cite the file and exact sentence** that decides every answer, and to **flag
 ambiguity as a valid answer**. Preserve both cited transcripts and grade each probe criterion pass/fail
@@ -175,10 +176,12 @@ pass preflight before those four files exist? State the full counterpart count a
 rules.
 
 **P3 (ac-3/ac-6/ac-14 — mid-verify discipline).** A skill's situated probe scenarios have been written,
-but there is no answer key and no executor has run them. You are about to verify a behavior change. What
-must happen next, in what order, through which executor roles, what must each run produce, and how is the
-result graded and retained as evidence? A teammate proposes replacing this with "drive the app and take a
-screenshot"; decide whether that is the skill-behavior verification seam and cite the relevant playbooks.
+but there is no answer key and no executor has run them. The repo has no app or stack. You are about to
+verify a behavior change. What must happen next, in what order, through which executor roles, what must each
+run produce, and how is the result graded and retained as evidence? Explain how the shared setup and verify
+paths ready and exercise this no-app surface without blocking on app access. A teammate proposes replacing
+this with "drive the app and take a screenshot"; decide whether that is the skill-behavior verification seam
+and cite the relevant playbooks and shared references.
 
 ## Answer key
 
@@ -208,7 +211,12 @@ screenshot"; decide whether that is the skill-behavior verification seam and cit
   probes replace it; scripts are still invoked directly, real CI is still recorded, and rendered artifacts
   are added only when the skill produces a visual surface. Running before keying, using only one executor,
   accepting uncited output, grading only an aggregate result, discarding transcripts, or substituting an
-  app screenshot = **fail**.
+  app screenshot = **fail**. Shared setup must record the checked-in `evals/` scenarios as seed state,
+  executor roles as the drivers, cited transcripts plus the verdict table as the evidence path, and a
+  load-skill/submit-scenario exercise path — it must not require a nonexistent app or stack. Shared verify
+  must ready that executor-harness surface with the scenario, deployment context, and prewritten key, then
+  exercise and re-run criteria against that same surface. Blocking on app access or claiming that verify's
+  stack/app wording overrides the skill-authoring playbooks = **fail**.
 
 Pass bar: **P1–P3 3/3 on both executors**, with exact citations; a flagged genuine ambiguity counts as a
 pass for that probe if the cited wording is genuinely ambiguous (and becomes a finding to fix). Retain both
