@@ -6,9 +6,10 @@ install comes from this repo only. This file stands alone and names siblings by 
 ## Pull only from this repo
 
 **Every skill setup installs comes from `https://github.com/asasher/asher-skills` — the slug `asasher/asher-skills`
-— and nothing else.** Every `npx skills add` command this skill emits targets that endpoint. setup **never
-installs, recommends, or emits an install command for a skill from any other host or account** (not
-`mattpocock/*`, not any vendor repo, not a gist).
+— and nothing else.** Every `npx skills add` command this skill emits targets that endpoint — or, in the
+self-host case ([interview](interview.md) Phase 4), the same repo's own root as a local source: the identical
+source at a local address. setup **never installs, recommends, or emits an install command for a skill from
+any other host or account** (not `mattpocock/*`, not any vendor repo, not a gist).
 
 The reason is a design stance, not a limitation: good ideas from elsewhere are **brought in, adapted, and
 shipped here as our own** (for example `to-spec` is our adaptation of Matt Pocock's `to-prd`). So when a user

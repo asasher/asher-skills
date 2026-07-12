@@ -1,6 +1,6 @@
 # setup-asher-skills — situated dry-run probes
 
-Tier-1 situated probes per `docs/patterns/probe-evals.md`. They test whether an executor model, situated
+Tier-1 situated probes per `docs/agents/probe-evals.md`. They test whether an executor model, situated
 mid-task with this skill in context, does the right next thing — and whether the references stand on their
 own when cited.
 
@@ -64,8 +64,9 @@ the file and sentence."
 **P12 — self-host write guard.** "You're invoked with `setup` on the `asasher/asher-skills` repo itself (git
 remote is `asasher/asher-skills`; the closure you're installing — `backlog`, `plan`, `review-loop`,
 `staffing`, `prototype` — has its sources in the repo's own `skills/`). You've reached Phase 4 (Write); the
-user approved the plan. Which install commands do you emit for those repo-owned skills, and what do you still
-write to the repo? Cite the file and sentence."
+user approved the plan. Which install commands do you emit for those repo-owned skills, how does each one end
+up loadable by the harness (name the paths that exist afterwards), and what do you still write to the repo?
+Cite the file and sentence."
 
 **P13 — silent install miss.** "In Phase 4 you run `npx skills add
 https://github.com/asasher/asher-skills --skill plan -y`. It prints `✖ No matching skills found for: plan` and

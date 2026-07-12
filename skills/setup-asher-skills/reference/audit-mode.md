@@ -35,7 +35,8 @@ tool's concern, not setup's reconciliation mechanism. setup does not add or read
    instead of double-counting as two installs.
 3. **Compare and report — in prose.** Describe each finding and what to do about it:
    - **Drift** — a skill installed here whose content diverges from the repo's current version (read both and
-     judge; don't diff a stamp). A fallback-origin `skills-lock.json` entry, hand-placed because the tool
+     judge; don't diff a stamp). A fallback-origin `skills-lock.json` entry (`"fallbackOrigin": true`, no
+     `computedHash` — the shape specified in [interview](interview.md) Phase 4), hand-placed because the tool
      could not install the skill, is expected, not drift: its `computedHash` is intentionally uncomputed, so
      do not flag it as drifted.
    - **Overlap** — a skill installed both project and global, or listed twice; say which scope should win

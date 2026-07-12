@@ -80,12 +80,33 @@ Execute the approved plan:
    `skills/` dir holds these skills). This is one shared notion consumed by the READ path (audit's catalog
    choice) and this WRITE path (Phase 4's install guard), so the two cannot diverge.
 
-   In the self-host case, check each skill before installing. If the skill is repo-owned — its install source
-   would be this repo's own `skills/<name>/` — **guard**: do not run `npx skills add` for it. `skills/<name>/`
-   is never an install target, and the skill is already present as source. Still write the `## Agent skills`
-   block, the repo pointer, and the guaranteed playbooks.
+   In the self-host case, a repo-owned skill — one whose install source is this repo's own `skills/<name>/` —
+   **still gets mounted**: source presence is not an install. The harness loads installed skills from
+   `.agents/skills/` / `.claude/skills/`, never from `skills/`, so a register-only write (block + pointer +
+   playbooks with nothing mounted) leaves the closure non-functional. The **guard** constrains the mechanics
+   of the mount, not whether to mount:
 
-   For every skill not guarded, run `npx skills add https://github.com/asasher/asher-skills --skill <name> -y`
+   - **Local source, not the endpoint.** Install repo-owned skills from the repo's own root as a local
+     source — `npx skills add <repo-root> --skill <name> -y` — never from the
+     `https://github.com/asasher/asher-skills` endpoint, which may lag the local branch (the same
+     repo-is-the-source reasoning as audit's self-catalog choice).
+   - **`skills/<name>/` is never an install destination.** The mount lands as a **canonical copy** at
+     `.agents/skills/<name>` plus a **per-harness symlink** `.claude/skills/<name> ->
+     ../../.agents/skills/<name>`, with the tool's own `skills-lock.json` entry (`sourceType: "local"`,
+     tool-computed `computedHash`). Verified on `skills` v1.5.15: the tool creates the symlink only when
+     `.claude/skills/` already exists — when the project is worked from Claude Code, ensure that directory
+     exists before installing, or add the symlink afterwards.
+   - **The mount is a build product, the copy is deliberate.** The canonical mount is a real directory copy
+     (identical twins with `skills/<name>/`), not a symlink into `skills/` — the same shape every consumer
+     project gets. The drift this invites is handled by discipline, not linkage: never edit
+     `.agents/skills/<name>` in place; edit `skills/<name>/` and refresh by re-running the same local-source
+     install (the repo's `AGENTS.md` § Vocabulary records this under *Installed skill*).
+
+   Still write the `## Agent skills` block, the repo pointer, and the guaranteed playbooks, exactly as for any
+   other install.
+
+   For every skill not under the self-host guard, run
+   `npx skills add https://github.com/asasher/asher-skills --skill <name> -y`
    — project-local by default (the tool's project install; `-y` skips the prompt the user already answered at
    phase 3), or `-g -y` for a consented global `staffing` install (`-g` is scope, `-y` still skips the prompt
    — they are orthogonal). Flags verified against `skills` v1.5.15 (`-s/--skill`, `-g/--global`,
@@ -99,12 +120,20 @@ Execute the approved plan:
    4 were requested).
 
    On a verified miss, place the skill's files directly instead of trusting the failed install. This is the
-   **self-host fallback**: use this repo's own `skills/<name>/` in the self-host case, else fetch the skill
-   from the `https://github.com/asasher/asher-skills` endpoint. It never breaks pull-only-from-this-repo, and
-   uses the same direct-placement mechanism as the self-host guard. If you hand-place a `skills-lock.json`
-   fallback entry, do not fabricate `computedHash`: it is not a plain sha256 of `SKILL.md`, so mark the
-   entry's fallback origin and tell the user this is a rough edge. `audit-mode` treats a fallback-origin entry
-   as expected, not drift.
+   **direct-placement fallback**: copy from this repo's own `skills/<name>/` in the self-host case, else fetch
+   the skill from the `https://github.com/asasher/asher-skills` endpoint. It never breaks
+   pull-only-from-this-repo, and it mirrors the mount shape the tool would have produced — a canonical copy at
+   `.agents/skills/<name>` plus the per-harness symlink `.claude/skills/<name>` where that harness is present.
+
+   A hand-placed `skills-lock.json` fallback entry has a **specified shape**: the tool's native fields —
+   `source` (the repo root path in the self-host case, else the slug `asasher/asher-skills`),
+   `sourceType` (`"local"` / `"github"`), and `skillPath` for github sources — plus exactly one extension
+   field, `"fallbackOrigin": true`, and **no `computedHash`**. Never fabricate `computedHash` (it is not a
+   plain sha256 of `SKILL.md`), and add no free-form fields (`note` and the like). The `skills` CLI does not
+   know `fallbackOrigin`; if a later successful run rewrites the entry — dropping the marker, computing a real
+   hash — the tool has simply adopted the skill, which is the desired end state, not breakage. Tell the user
+   the entry is fallback-origin; `audit-mode` treats such an entry (marked `fallbackOrigin`, or missing
+   `computedHash`) as expected, not drift.
 2. **Guarantee the playbooks by delegation.** Run each installed skill's own setup so its `docs/agents/`
    playbooks land: `staffing` writes the roster (global base + project delta, with consent); `review-loop`
    (or `backlog setup`, which composes it) writes the presentation surface config; `backlog setup` writes its
