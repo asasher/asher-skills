@@ -1,0 +1,82 @@
+{
+  "name": "asher-skills",
+  "owner": {
+    "name": "Asher"
+  },
+  "description": "Asher's skills, grouped by purpose for installation and discovery.",
+  "plugins": [
+    {
+      "name": "creative",
+      "source": "./",
+      "description": "Skills for visual design, interface craft, images, sprites, and media.",
+      "category": "creative",
+      "skills": [
+        "./skills/creative/bare-minimum-ux",
+        "./skills/creative/codex-imagegen",
+        "./skills/creative/maquette",
+        "./skills/creative/shadixfy",
+        "./skills/creative/to-sprites",
+        "./skills/creative/watch-video"
+      ]
+    },
+    {
+      "name": "delivery",
+      "source": "./",
+      "description": "Skills for planning, building, diagnosing, and delivering work.",
+      "category": "delivery",
+      "skills": [
+        "./skills/delivery/backlog",
+        "./skills/delivery/diagnosing-bugs",
+        "./skills/delivery/plan",
+        "./skills/delivery/prototype",
+        "./skills/delivery/spreadsheet-loop",
+        "./skills/delivery/to-spec",
+        "./skills/delivery/to-tickets"
+      ]
+    },
+    {
+      "name": "personal",
+      "source": "./",
+      "description": "Skills for personal operations, communications, opportunities, learning, and work.",
+      "category": "personal",
+      "skills": [
+        "./skills/personal/capture-to-inbox",
+        "./skills/personal/control-plane",
+        "./skills/personal/eloquent",
+        "./skills/personal/fair-deal",
+        "./skills/personal/goodwork",
+        "./skills/personal/learn-anything",
+        "./skills/personal/manage-notes",
+        "./skills/personal/manage-opportunities",
+        "./skills/personal/manage-tasks",
+        "./skills/personal/projects-triage",
+        "./skills/personal/review-opportunities",
+        "./skills/personal/teamdrive"
+      ]
+    },
+    {
+      "name": "system",
+      "source": "./",
+      "description": "Skills that operate and maintain the skill system itself.",
+      "category": "system",
+      "skills": [
+        "./skills/system/review-loop",
+        "./skills/system/setup-asher-skills",
+        "./skills/system/skill-loop",
+        "./skills/system/staffing"
+      ]
+    },
+    {
+      "name": "thinking",
+      "source": "./",
+      "description": "Skills for structured reasoning under uncertainty and constraint.",
+      "category": "thinking",
+      "skills": [
+        "./skills/thinking/bayes",
+        "./skills/thinking/constraints",
+        "./skills/thinking/dissolve",
+        "./.agents/skills/writing-great-skills"
+      ]
+    }
+  ]
+}

@@ -16,8 +16,8 @@ Install in the current project:
 npx skills add <repo-url> --skill <skill-name> -y
 ```
 
-Categories organize source browsing only. Skill names, `--skill <name>`, sibling references, and installed
-directories remain flat and unchanged. Invocation and execution are independent axes. `user` means
+Categories organize source browsing and the interactive installer. Skill names, `--skill <name>`, sibling
+references, and installed directories remain flat and unchanged. Invocation and execution are independent axes. `user` means
 **explicit-only**: a human, orchestrator, or delegated prompt must name the skill. `model` also permits a
 working thread to discover the skill when needed. `orchestrator` execution owns delegation boundaries;
 `thread` execution runs within its caller. Thus an orchestrator may explicitly dispatch any installed skill,
