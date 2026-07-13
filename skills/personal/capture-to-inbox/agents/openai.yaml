@@ -1,0 +1,6 @@
+interface:
+  display_name: "Capture to Inbox"
+  short_description: "Capture and drain items into Inbox"
+  default_prompt: "Use $capture-to-inbox to preview and safely drain the configured capture queue into Inbox."
+policy:
+  allow_implicit_invocation: true

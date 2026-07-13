@@ -1,7 +1,0 @@
-interface:
-  display_name: "Staffing"
-  short_description: "Own the model roster — audit reachable models, then resolve which model should run each task"
-  default_prompt: "Use $staffing to audit this machine's reachable models and set up the roster."
-
-policy:
-  allow_implicit_invocation: false

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Manage Opportunities"
+  short_description: "Track pursuits from lead through delivery handoff"
+  default_prompt: "Use $manage-opportunities to update this pursuit and preserve its commercial history."
+
+policy:
+  allow_implicit_invocation: true

@@ -4,43 +4,42 @@
     "backlog": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "903671f9facab32b106ac217e69606f9fccbe30a25a016f45fc1d45fc8ef3b7c"
+      "computedHash": "ec0e0b1fabe29174fa4253f9d392d42664cefa90b7fe3cdc18088abca8c02d33"
+    },
+    "diagnosing-bugs": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "c97d1badfb1c3036e2f1469ac296913c0402086f22c2c92bda8933a8ff6ee1ed"
     },
     "plan": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "72b867eab75bf328c8a5a4237b1134d2ed67fa77f7f77a28582a4af40cb53d23"
+      "computedHash": "b81e667cfe187797c69148d10fc66da495e6d353d4122d5b205f4c9e838011d7"
     },
     "prototype": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "f20076c5b4360dc6126c77f74b46a5c2a1f20af4db8f16e8c91ca6461badbf9f"
+      "computedHash": "e84d76ac3db483058bc9e63662f63bbedbab40e4a6d3a01df814747302c42484"
     },
     "review-loop": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "63748a8609b0d6e1e784ae1f31caae25bfbee084a4a96aaa0b93df236b411ae4"
+      "computedHash": "f88b8e8c1bc6e1272dce865fa791a639377a165a6ccea50b51141bb834d09dc6"
     },
     "setup-asher-skills": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "ae1664067b2def1d645ed74ac032936cd8d88cb5d4dfa157981a01add240a67e"
+      "computedHash": "2a9b557323af39ceafd51f3b6e020cdb90e24a3cc388ca0e65a191da4a13f27a"
     },
     "skill-loop": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "fa71766ea190110945e1192a6eeab745d067b9c1e617f424436d05837fc3feb8"
+      "computedHash": "09a59c6e4e6713b139f3e420010472d4434fb5688400c43466229c317da95eae"
     },
     "staffing": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "8318ab9a89d53cb2dcb5953dfb3e9c60457b966d7035ad037b7ff0a89fa36992"
-    },
-    "writing-great-skills": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/productivity/writing-great-skills/SKILL.md",
-      "computedHash": "581f78b50b3d81b095de86b5c18a4d9fa932fbe414cc82bd26d627d4da518f07"
+      "computedHash": "e9d2765b55c9fb272db3c4b2246b206696e948f1dd29875205f0848c4cac502a"
     }
   }
 }

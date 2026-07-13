@@ -47,6 +47,19 @@
 - How an agent mints a session: n/a — no app session to mint.
 - Test accounts / where credentials live: `gh` keyring and `~/.codex/`; never hardcode, never echo them.
 
+## Verification data
+
+- Standing accounts/tenants and permissions: local filesystem fixtures plus the authenticated GitHub repo
+  with issue/PR read-write access; no product test tenant or second application user is required here.
+- Per-issue fixture naming: `VERIFY-<issue>-<purpose>` under a temporary directory or the owning
+  `<skill>-workspace/`; never share a mutable fixture across issue runs.
+- Scale: use generated temporary skill trees for catalog/closure tests and temporary state/surface roots for
+  review lifecycle tests.
+- Approved synthetic substitutes: situated prompt fixtures may exercise skill decisions because this repo has
+  no product runtime; they do not substitute for live GitHub API behavior or script lifecycle/process checks.
+- Lifetime/cleanup: the owning test retains fixtures through its final assertion/evidence capture, then
+  removes only its own temporary root.
+
 ## Driving the app & capturing evidence
 
 > Set by `setup`'s app-access audit; read by `verify` (to exercise the app) and `evidence` (to capture proof). One entry per surface the loop verifies.
@@ -74,18 +87,26 @@
   - `python3 -m http.server 8390 --directory ~/.backlog/surface/asher-skills` (a stable port; pick another if 8390 is taken — 8377 is already held by a prior `/review` handler).
   - `tailscale serve --bg --set-path /asher-skills http://localhost:8390`.
 - Publish a document: `mkdir -p ~/.backlog/surface/asher-skills/<issue> && ln -sfn <absolute path to the committed HTML> ~/.backlog/surface/asher-skills/<issue>/<name>.html` → resolves at `<root URL>/<issue>/<name>.html`.
-- Review server (interactive review — plans, prototype answer sheets; contract: review-loop `reference/review-loop.md`; scripts ship with the `review-loop` skill — self-host path `skills/review-loop/scripts/`): `python3 skills/review-loop/scripts/review-server.py --doc <file> --title "…" --issue <n> --kind plan --state <run state dir> --surface ~/.backlog/surface/asher-skills --port <p> --public-url https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills/<n>/review`, with the port proxied once — `tailscale serve --bg --set-path /asher-skills/<n>/review http://localhost:<p>`. The agent blocks on `python3 skills/review-loop/scripts/review-await.py --state <run state dir> --timeout <secs>` (exit 0 approve / 3 nits / 10 changes / 124 timeout).
-- Hub: `https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills/` serves the generated `index.html` beside `registry.json`; swept by `python3 skills/review-loop/scripts/review-server.py --sweep --surface ~/.backlog/surface/asher-skills`.
+- Review server (interactive review — plans, prototype answer sheets; contract: review-loop `reference/review-loop.md`; scripts ship with the `review-loop` skill — self-host path `skills/system/review-loop/scripts/`): `python3 skills/system/review-loop/scripts/review-server.py --doc <file> --title "…" --issue <n> --kind plan --state <run state dir> --surface ~/.backlog/surface/asher-skills --port <p> --public-url https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills/<n>/review`, with the port proxied once — `tailscale serve --bg --set-path /asher-skills/<n>/review http://localhost:<p>`. The agent blocks on `python3 skills/system/review-loop/scripts/review-await.py --state <run state dir> --timeout <secs>` (exit 0 approve / 3 nits / 10 changes / 124 timeout).
+- Hub: `https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills/` serves the generated `index.html` beside `registry.json`; swept by `python3 skills/system/review-loop/scripts/review-server.py --sweep --surface ~/.backlog/surface/asher-skills`.
 - Expose a live prototype: `tailscale serve --bg --set-path /asher-skills/<n>/proto http://localhost:<port>`.
 - Reap rule: on teardown, remove the issue's symlinks under `~/.backlog/surface/asher-skills/<n>/` and turn off its proxies — `tailscale serve --set-path /asher-skills/<n>/review off` (and `.../proto off`); `tailscale serve status` lists live handlers for the orphan sweep. **Note:** setup found a pre-existing `/review → http://localhost:8377` handler from an earlier session — reap it if dead (`tailscale serve --set-path /review off`).
 - Keep-awake: **none** (setup choice) — the surface is up when the machine is awake; harnesses hold sleep assertions during active runs. No LaunchAgent, no `caffeinate`. AFK reviews that outlast an active run may find the machine asleep; revisit if that bites.
 
 ## Model staffing
 
-> Owned by the **`staffing`** skill (composed by name): it defines the roles (its `reference/roles-and-fallback.md`: orchestrator, builder by surface, checker, floor), rankings, and the fallback ladder. Read by `run` at dispatch and by every reference that spawns work. The general rankings and routing rules live in the **global base** — `~/.claude/CLAUDE.md` § Staffing, mirrored (Codex-filtered) in `~/.codex/AGENTS.md` § Staffing — with this repo's deltas in the project `CLAUDE.md` § Staffing; resolve base-then-deltas. This section is the **compiled roster** — those rules crossed with this repo's surfaces and what each harness can actually reach; list only reachable models, since one harness usually cannot spawn another vendor's models. One model may fill several roles.
+> Owned by the **`staffing`** skill (composed by name): it defines the roles (its `reference/roles-and-fallback.md`: orchestrator, issue coordinator, builder by surface, checker, floor), rankings, and the fallback ladder. Read by `run` before every dispatch and by every reference that spawns work. The general rankings and routing rules live in the **global base** — `~/.claude/CLAUDE.md` § Staffing, mirrored in `~/.codex/AGENTS.md` § Staffing — with this repo's deltas in the project `CLAUDE.md` § Staffing; resolve base-then-deltas. This section is the **compiled roster** — those rules crossed with this repo's surfaces and each direction's effect-verified native or sibling-harness reachability. One model may fill several roles.
 
 - Floor: **sonnet-5** (Claude-side) or **gpt-5.6-terra** (Codex-side) — never Haiku (global base § Staffing). Nothing staffs below the Floor in any role.
-- **One thread pattern everywhere: orchestrator + subagents.** Every delegated thread — Claude or Codex — runs as an Agent-tool subagent the orchestrator watches; completion wakes the orchestrator, so it also watches the threads. A Codex thread is held by a thin wrapper subagent (`model: 'sonnet', effort: 'low'`, labeled `gpt-5.6-sol:…`) that composes a self-contained codex prompt, runs `codex exec` via Bash, and returns the report. No raw fire-and-forget background shells for delegated work.
+- Issue coordinator eligibility: any reachable route at or above the Floor that can own a durable child and
+  dispatch/escalate its worker stages. For `routine`, apply normal pins → capability/taste gates →
+  `intelligence > taste > cost`; for `orchestrator-required`, use the session orchestrator. Record the route
+  before worktree/child creation; routine points up to the session orchestrator, while orchestrator-required
+  records the roster's next orchestrator successor and human authority for unresolved product decisions.
+- **One thread pattern everywhere: orchestrator + subagents.** Every delegated thread uses a watched native
+  agent thread or tracked sibling-harness wrapper whose completion wakes the orchestrator. A Claude→Codex
+  thread is held by a thin wrapper subagent (`model: 'sonnet', effort: 'low'`, labeled
+  `gpt-5.6-sol:…`) that runs `codex exec` and returns the report. No fire-and-forget shell owns delegated work.
 - From **Claude Code** (this loop's harness):
   - Orchestrator: the session model — **fable-5** in current sessions; the most capable reachable Claude model in general.
   - Builder (backend / mechanical — clear-spec skill edits, reference rewrites, bulk work): **gpt-5.6-sol via `codex exec`** (`~/.claude/CLAUDE.md` § Staffing → Mechanics, the global base), through the wrapper-subagent pattern above. Parallel codex edit agents use `isolation: 'worktree'`.
@@ -93,7 +114,11 @@
   - Checker: probe-eval executor runs on **both** gpt-5.6-sol (`codex exec`) and a Claude model in-session, per `docs/agents/probe-evals.md`'s dual-executor design; verify⇆fix mechanics on gpt-5.6-sol; review/grading judgment on **fable-5 or opus-4.8** (skill reviews and probe grading, per `AGENTS.md`). The Reviewer handles the full criteria including rendered artifacts.
   - Watcher / cron (review-verdict watches, PR-merge watches, scheduled check-ins): the Floor — **sonnet-5** in-session; **gpt-5.6-terra** for Codex-side scheduled jobs. Watchers only wait and relay; judgment escalates to the orchestrator.
   - Capability pins (gates before ranking): **browser-use → gpt-5.6-terra via chatgpt-in-chrome** (drives a real Chrome browser); **computer-use → gpt-5.6-terra via the Codex computer-use client** (non-browser work where the agent must operate the computer/GUI itself). Claude-side headless Chrome is blocked on this machine, so browser work routes through Codex.
-- From **Codex** (if the loop is ever driven from Codex instead): Claude models are unreachable, so every role collapses onto **gpt-5.6-sol** (terra for watch/cron). The **same orchestrator-subagent pattern holds**: the Codex orchestrator delegates each thread to its native agent-thread facility (`[agents]` in `~/.codex/config.toml` — max_depth 3, max_threads 20 on this machine) and watches them — no fire-and-forget shells there either.
+- From **Codex**: native Codex agents remain available; Claude is also reachable through sibling harness
+  dispatch with a bounded `claude -p` command and **no `--bare`**. Staffing chooses the issue coordinator
+  before the child is created, records the upward successor, and treats a failed Codex→Claude invocation as
+  loss of that direction only. No Anthropic-policy monitor runs in the skill; the remaining graph is allowed
+  to be asymmetric until the route is repaired.
 - Succession: if the session model is unreachable, the most capable reachable Claude model orchestrates (**fable-5**, then opus-4.8, then sonnet-5), keeping all Claude-side roles; **gpt-5.6-sol via `codex exec`** remains the mechanical builder/checker regardless, since it bills to its own subscription.
 
 ## Parallelism verdict

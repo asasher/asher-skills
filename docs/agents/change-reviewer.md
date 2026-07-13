@@ -40,6 +40,8 @@ Match the diff against this fixed baseline of code smells (Fowler, *Refactoring*
 
 ## Also scrutinize
 
+- Open every test, fixture, document, or probe cited as criterion coverage; confirm it exists and exercises
+  the claimed runtime seam before accepting it.
 - Testability and test coverage of the change, held to `implementing.md` § Tests worth keeping.
 - Duplication and naming; legibility of the surrounding code after the change.
 - Behavior risk beyond the issue's scope.
@@ -50,7 +52,13 @@ Match the diff against this fixed baseline of code smells (Fowler, *Refactoring*
 - Prioritize: correctness, then structural regressions and missed simplifications, then boundary/type-contract problems, then file size, then legibility. A few high-conviction comments beat a long list of nits — do not flood the review with cosmetic notes when a structural issue dominates.
 - Leave only actionable comments: each names the expected improvement and why it matters. Be direct and demanding about quality without being rude; do not soften major maintainability issues into mild suggestions.
 - Review only the diff since the last seen SHA on re-review.
+- A genuine product-semantics question is a ruling request, not a review edit: stop, send the question and
+  evidence to the issue coordinator, and wait for its explicit ruling or escalation. After Fixer applies the
+  ruling and targeted verification passes, review that new HEAD yourself; do not invent behavior or dead-end
+  the question as an ordinary blocker.
 
 ## Approval bar
 
 Do not approve merely because behavior seems correct. Approve when there is no correctness concern, no clear structural regression, no obvious missed simplification, no unjustified file-size explosion, no spaghetti growth from special-case branching, and no boundary leak or avoidable canonical-helper duplication. When no actionable improvement remains, comment exactly `LGTM`.
+When a styling-only verification capture is proposed for evidence reuse, record the exact verdict
+**“no product-code change; no recapture”** only when its HEAD is still final; otherwise require recapture.

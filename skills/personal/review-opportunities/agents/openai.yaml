@@ -1,0 +1,7 @@
+interface:
+  display_name: "Review Opportunities"
+  short_description: "Audit the pursuit portfolio without changing it"
+  default_prompt: "Use $review-opportunities to produce a report-only audit of the Opportunity portfolio."
+
+policy:
+  allow_implicit_invocation: false

@@ -16,6 +16,56 @@ Install in the current project:
 npx skills add <repo-url> --skill <skill-name> -y
 ```
 
+Categories organize source browsing only. Skill names, `--skill <name>`, sibling references, and installed
+directories remain flat and unchanged. Invocation and execution are independent axes. `user` means
+**explicit-only**: a human, orchestrator, or delegated prompt must name the skill. `model` also permits a
+working thread to discover the skill when needed. `orchestrator` execution owns delegation boundaries;
+`thread` execution runs within its caller. Thus an orchestrator may explicitly dispatch any installed skill,
+including one marked `user`.
+
+## Authored skills
+
+| Category | Skill | Invocation | Execution |
+|---|---|---|---|
+| system | `review-loop` | user | orchestrator |
+| system | `setup-asher-skills` | user | thread |
+| system | `skill-loop` | user | orchestrator |
+| system | `staffing` | model | thread |
+| delivery | `backlog` | user | orchestrator |
+| delivery | `diagnosing-bugs` | model | thread |
+| delivery | `plan` | user | orchestrator |
+| delivery | `prototype` | model | orchestrator |
+| delivery | `spreadsheet-loop` | user | orchestrator |
+| delivery | `to-spec` | user | thread |
+| delivery | `to-tickets` | user | thread |
+| creative | `bare-minimum-ux` | model | thread |
+| creative | `codex-imagegen` | model | thread |
+| creative | `maquette` | model | thread |
+| creative | `shadixfy` | model | thread |
+| creative | `to-sprites` | user | thread |
+| creative | `watch-video` | model | thread |
+| thinking | `bayes` | user | thread |
+| thinking | `constraints` | user | thread |
+| thinking | `dissolve` | user | orchestrator |
+| personal | `capture-to-inbox` | model | thread |
+| personal | `control-plane` | user | orchestrator |
+| personal | `eloquent` | model | thread |
+| personal | `fair-deal` | user | orchestrator |
+| personal | `goodwork` | model | thread |
+| personal | `learn-anything` | user | thread |
+| personal | `manage-notes` | model | thread |
+| personal | `manage-opportunities` | model | thread |
+| personal | `manage-tasks` | model | thread |
+| personal | `projects-triage` | user | orchestrator |
+| personal | `review-opportunities` | user | thread |
+| personal | `teamdrive` | user | thread |
+
+The generated install/setup graph is
+[`skills/system/setup-asher-skills/reference/catalog.json`](skills/system/setup-asher-skills/reference/catalog.json);
+the separate runtime composition view is in
+[`reference/catalog.md`](skills/system/setup-asher-skills/reference/catalog.md#runtime-composition);
+[`skills/source-migration.json`](skills/source-migration.json) records the flat-to-category move.
+
 ## Skills I Like
 
 ### Project

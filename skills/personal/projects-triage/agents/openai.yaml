@@ -1,0 +1,7 @@
+interface:
+  display_name: "Projects Triage"
+  short_description: "Run local backlog workflows for Project repositories"
+  default_prompt: "Use $projects-triage to run each eligible Project repository's local backlog workflow."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Manage Tasks"
+  short_description: "Move workspace tasks through their daily lifecycle"
+  default_prompt: "Use $manage-tasks to reconcile these Project or Opportunity tasks without duplicating them."
+
+policy:
+  allow_implicit_invocation: true

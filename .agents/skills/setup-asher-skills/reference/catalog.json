@@ -1,0 +1,388 @@
+{
+  "schema_version": 2,
+  "skills": {
+    "backlog": {
+      "category": "delivery",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [
+        "diagnosing-bugs",
+        "plan",
+        "prototype",
+        "review-loop",
+        "staffing"
+      ],
+      "setup": "reference/setup.md",
+      "source": "skills/delivery/backlog"
+    },
+    "bare-minimum-ux": {
+      "category": "creative",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "source": "skills/creative/bare-minimum-ux"
+    },
+    "bayes": {
+      "category": "thinking",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [],
+      "source": "skills/thinking/bayes"
+    },
+    "capture-to-inbox": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [
+        {
+          "capability": "build-apple-shortcuts",
+          "kind": "codex-plugin",
+          "name": "shortcuts-playground",
+          "source": "https://github.com/viticci/shortcuts-playground-plugin",
+          "version": "1.2.x"
+        }
+      ],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/capture-to-inbox"
+    },
+    "codex-imagegen": {
+      "category": "creative",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "source": "skills/creative/codex-imagegen"
+    },
+    "constraints": {
+      "category": "thinking",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [],
+      "source": "skills/thinking/constraints"
+    },
+    "control-plane": {
+      "category": "personal",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [
+        "projects-triage",
+        "review-opportunities"
+      ],
+      "requires": [
+        "capture-to-inbox",
+        "manage-notes",
+        "manage-opportunities",
+        "manage-tasks"
+      ],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/control-plane"
+    },
+    "diagnosing-bugs": {
+      "category": "delivery",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "setup": "reference/setup.md",
+      "source": "skills/delivery/diagnosing-bugs"
+    },
+    "dissolve": {
+      "category": "thinking",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [],
+      "source": "skills/thinking/dissolve"
+    },
+    "eloquent": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "source": "skills/personal/eloquent"
+    },
+    "fair-deal": {
+      "category": "personal",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/fair-deal"
+    },
+    "goodwork": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/goodwork"
+    },
+    "learn-anything": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [],
+      "source": "skills/personal/learn-anything"
+    },
+    "manage-notes": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [
+        "manage-opportunities"
+      ],
+      "requires": [
+        "manage-tasks"
+      ],
+      "source": "skills/personal/manage-notes"
+    },
+    "manage-opportunities": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "manage-tasks"
+      ],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/manage-opportunities"
+    },
+    "manage-tasks": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [
+        "manage-opportunities"
+      ],
+      "requires": [],
+      "source": "skills/personal/manage-tasks"
+    },
+    "maquette": {
+      "category": "creative",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "review-loop"
+      ],
+      "source": "skills/creative/maquette"
+    },
+    "plan": {
+      "category": "delivery",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [
+        "prototype"
+      ],
+      "requires": [
+        "review-loop",
+        "staffing"
+      ],
+      "source": "skills/delivery/plan"
+    },
+    "projects-triage": {
+      "category": "personal",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [],
+      "source": "skills/personal/projects-triage"
+    },
+    "prototype": {
+      "category": "delivery",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "review-loop",
+        "staffing"
+      ],
+      "source": "skills/delivery/prototype"
+    },
+    "review-loop": {
+      "category": "system",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [
+        "staffing"
+      ],
+      "requires": [],
+      "setup": "reference/setup.md",
+      "source": "skills/system/review-loop"
+    },
+    "review-opportunities": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [
+        "manage-opportunities"
+      ],
+      "source": "skills/personal/review-opportunities"
+    },
+    "setup-asher-skills": {
+      "category": "system",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [
+        "staffing"
+      ],
+      "source": "skills/system/setup-asher-skills"
+    },
+    "shadixfy": {
+      "category": "creative",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "source": "skills/creative/shadixfy"
+    },
+    "skill-loop": {
+      "category": "system",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [],
+      "source": "skills/system/skill-loop"
+    },
+    "spreadsheet-loop": {
+      "category": "delivery",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [
+        "review-loop",
+        "staffing"
+      ],
+      "source": "skills/delivery/spreadsheet-loop"
+    },
+    "staffing": {
+      "category": "system",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "setup": "reference/setup.md",
+      "source": "skills/system/staffing"
+    },
+    "teamdrive": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/teamdrive"
+    },
+    "to-spec": {
+      "category": "delivery",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [
+        "review-loop"
+      ],
+      "requires": [],
+      "source": "skills/delivery/to-spec"
+    },
+    "to-sprites": {
+      "category": "creative",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [
+        "codex-imagegen"
+      ],
+      "requires": [],
+      "source": "skills/creative/to-sprites"
+    },
+    "to-tickets": {
+      "category": "delivery",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [],
+      "requires": [],
+      "source": "skills/delivery/to-tickets"
+    },
+    "watch-video": {
+      "category": "creative",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "source": "skills/creative/watch-video"
+    }
+  }
+}

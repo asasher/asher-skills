@@ -1,7 +1,0 @@
-interface:
-  display_name: "Small Bets"
-  short_description: "Community-led founder strategy"
-  default_prompt: "Use $smallbets to validate my business idea before I build."
-
-policy:
-  allow_implicit_invocation: true
