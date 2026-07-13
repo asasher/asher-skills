@@ -1,0 +1,972 @@
+<!doctype html>
+<!-- Roadmap covering operational issues #44-#49, #51-#55, and #57. Self-contained,
+     visual-first, stable ids on every
+     section, decision, story, and acceptance criterion. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backlog normal-flow hardening roadmap — issues #44–49, #51–55, #57</title>
+<style>
+:root { color-scheme: light dark; --fg:#19191d; --muted:#686871; --bg:#fafafa; --card:#fff; --line:#e2e2e8; --accent:#4f46e5; --core:#1d4ed8; --skill:#047857; --setup:#a16207; --risk:#b42318; }
+@media (prefers-color-scheme:dark) { :root { --fg:#e7e7eb; --muted:#9a9aa3; --bg:#121216; --card:#1a1a20; --line:#303039; --accent:#8b8cf8; --core:#60a5fa; --skill:#34d399; --setup:#fbbf24; --risk:#fb7185; } }
+body { margin:0; padding:2.5rem 1.25rem 6rem; background:var(--bg); color:var(--fg); font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+*, *::before, *::after { box-sizing:border-box; }
+main { max-width:820px; margin:0 auto; }
+header.plan { margin-bottom:2.2rem; }
+h1 { margin:0 0 .35rem; font-size:1.5rem; letter-spacing:-.015em; }
+h2 { margin:0 0 .65rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+h3 { margin:1rem 0 .35rem; font-size:.98rem; }
+p { margin:.45rem 0; }
+.problem { max-width:72ch; color:var(--muted); }
+.chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.8rem; }
+.chip { padding:.08rem .55rem; border:1px solid currentColor; border-radius:999px; color:var(--accent); font-size:.72rem; }
+section { margin:2.2rem 0; }
+figure { margin:.8rem 0; padding:1rem; overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:12px; }
+figcaption { margin-top:.55rem; color:var(--muted); font-size:.82rem; }
+.mobile-diagram-note { display:none; color:var(--muted); font-size:.82rem; }
+svg text { font:12px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:var(--fg); }
+svg .small { font-size:10.5px; fill:var(--muted); }
+svg .core { fill:var(--core); }
+svg .skill { fill:var(--skill); }
+svg .setup { fill:var(--setup); }
+table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); font-size:.88rem; }
+#spawn-boundary-table { table-layout:fixed; }
+#spawn-boundary-table th:nth-child(1) { width:16%; }
+#spawn-boundary-table th:nth-child(2) { width:29%; }
+#spawn-boundary-table th:nth-child(3) { width:36%; }
+#spawn-boundary-table th:nth-child(4) { width:19%; }
+#setup-private-contract th:first-child { width:18%; }
+#compaction-gate-table { table-layout:fixed; }
+#compaction-gate-table th:nth-child(1) { width:18%; }
+#compaction-gate-table th:nth-child(2) { width:45%; }
+#compaction-gate-table th:nth-child(3) { width:37%; }
+#delivery-tranches { table-layout:fixed; }
+#delivery-tranches th:nth-child(1) { width:16%; }
+#delivery-tranches th:nth-child(2) { width:39%; }
+#delivery-tranches th:nth-child(3) { width:45%; }
+#open-issue-disposition { table-layout:fixed; }
+#open-issue-disposition th:nth-child(1) { width:9%; }
+#open-issue-disposition th:nth-child(2) { width:28%; }
+#open-issue-disposition th:nth-child(3) { width:45%; }
+#open-issue-disposition th:nth-child(4) { width:18%; }
+#open-issue-disposition .status { white-space:normal; }
+#closed-issue-baselines th:first-child { width:20%; }
+th,td { padding:.55rem .7rem; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); overflow-wrap:anywhere; }
+th { color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; }
+tr:last-child td { border-bottom:0; }
+.status { white-space:nowrap; font-weight:600; }
+.extract { color:var(--skill); }
+.follow { color:var(--setup); }
+.keep { color:var(--core); }
+code { padding:0 .3rem; background:var(--card); border:1px solid var(--line); border-radius:4px; font-size:.86em; }
+pre { margin:.65rem 0; padding:.85rem 1rem; overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:10px; font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace; }
+ul.plain { margin:.45rem 0; padding-left:1.25rem; }
+ul.plain li { margin:.35rem 0; }
+ol.sequence { margin:.5rem 0; padding:0; list-style:none; counter-reset:phase; }
+ol.sequence li { display:grid; grid-template-columns:2rem 1fr; gap:.65rem; padding:.7rem 0; border-bottom:1px solid var(--line); counter-increment:phase; }
+ol.sequence li:last-child { border-bottom:0; }
+ol.sequence li::before { content:counter(phase); display:grid; place-items:center; width:1.6rem; height:1.6rem; border-radius:999px; background:var(--accent); color:white; font-size:.78rem; }
+ul.criteria { margin:.55rem 0; padding:0; list-style:none; }
+ul.criteria li { position:relative; margin:.45rem 0; padding:.62rem .75rem .62rem 2.2rem; background:var(--card); border:1px solid var(--line); border-radius:9px; }
+ul.criteria li::before { content:"☐"; position:absolute; left:.78rem; color:var(--accent); }
+.tag { display:inline-block; margin-right:.4rem; padding:0 .32rem; border:1px solid var(--line); border-radius:5px; color:var(--muted); font-size:.68rem; text-transform:uppercase; letter-spacing:.04em; }
+details { margin:.75rem 0; padding:.65rem 1rem; background:var(--card); border:1px solid var(--line); border-radius:10px; }
+summary { cursor:pointer; color:var(--muted); font-size:.88rem; }
+a { color:var(--accent); }
+@media (max-width:620px) {
+  body { padding:1.4rem .8rem 4rem; }
+  th,td { padding:.45rem; }
+  .wide { display:block; overflow-x:auto; }
+  #compaction-gate-table { table-layout:auto; }
+  #compaction-gate-table thead { display:none; }
+  #compaction-gate-table tbody,
+  #compaction-gate-table tr,
+  #compaction-gate-table td { display:block; width:100%; }
+  #compaction-gate-table tr { padding:.5rem; border-bottom:1px solid var(--line); }
+  #compaction-gate-table tr:last-child { border-bottom:0; }
+  #compaction-gate-table td { padding:.25rem .4rem; border:0; overflow-wrap:normal; }
+  #compaction-gate-table td::before { display:block; color:var(--muted); font-size:.68rem; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+  #compaction-gate-table td:nth-child(1)::before { content:"Pass"; }
+  #compaction-gate-table td:nth-child(2)::before { content:"Required action"; }
+  #compaction-gate-table td:nth-child(3)::before { content:"Proof"; }
+  #skill-graph svg, #deep-module-cutaway svg, #dispatch-timeline svg { width:720px; max-width:none; }
+  #spawn-boundary-table { min-width:720px; }
+  .mobile-diagram-note { display:block; }
+}
+@media (min-width:621px) { table.capacity-table th:first-child, table.capacity-table td:first-child { width:1%; white-space:nowrap; } }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Small skills, a navigable source tree, shared memory, and a hardened backlog</h1>
+  <p class="problem">The current <code>backlog</code> skill owns reusable engineering techniques inside its private references and setup templates, the growing flat skills directory is becoming harder to navigate, and three production run retros plus their follow-on failure issues show that operational fixes trapped in prompts or Claude-only auto-memory are repeatedly rediscovered. Split stable disciplines into compact, deep modules with setup-owned playbooks; group sources by human-facing domain without changing their names; replace harness-private memory; then harden backlog’s remaining orchestration. Compactness is load-bearing: fewer tokens, less to read, and smaller units that can be understood correctly in isolation.</p>
+  <div class="chips"><span class="chip">12 open issues</span><span class="chip">plan v12</span><span class="chip">architecture roadmap</span><span class="chip">child approvals required</span></div>
+</header>
+
+<section id="evidence-base">
+  <h2>Evidence base</h2>
+  <table>
+    <thead><tr><th>Source</th><th>What it contributes</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://github.com/asasher/asher-skills/issues/44">#44 · metis retro</a></td><td>Fleet kill, phantom waits, verify-lock invention, Codex heartbeat/stdin mechanics, durable review state, environment preflight, fixture lifecycle.</td></tr>
+      <tr><td><a href="https://github.com/asasher/asher-skills/issues/45">#45 · memory audit</a></td><td>Cross-harness operational knowledge belongs in versioned skills, playbooks, or tracker history—not Claude-only memory or repeated dispatch boilerplate.</td></tr>
+      <tr><td><a href="https://github.com/asasher/asher-skills/issues/46">#46 · pipelines retro</a></td><td>Self-approval integrity failure, nested-report topology, machine-wide concurrency pressure, one-fixer ownership, verified platform verbs.</td></tr>
+      <tr><td><a href="https://github.com/asasher/asher-skills/issues/47">#47 · integrations-v2 retro</a></td><td>Central verdict consumption, conflict-aware waves, durable audited resume, foreign-PID failure, environment exoneration, status-board need.</td></tr>
+      <tr><td><a href="https://github.com/asasher/asher-skills/issues/48">#48 · dispatch staffing</a></td><td>Choose the issue coordinator at dispatch from groomed work-type and surface; reserve the expensive orchestrator for uncertainty and escalation.</td></tr>
+      <tr><td><a href="https://github.com/asasher/asher-skills/issues/49">#49 · sibling harness dispatch</a></td><td>Codex may dispatch Claude non-interactively with <code>claude -p</code> as long as the route does not use <code>--bare</code>. The route is available now; if it later fails, staffing records the lost direction and degrades to asymmetric sibling harness dispatch.</td></tr>
+      <tr><td><a href="https://code.claude.com/docs/en/memory">Claude Code memory docs</a></td><td>Auto-memory is machine-local and enabled by default; supported controls include <code>autoMemoryEnabled: false</code> and <code>CLAUDE_CODE_DISABLE_AUTO_MEMORY=1</code>.</td></tr>
+      <tr><td><a href="https://github.com/mattpocock/skills/tree/main/skills">mattpocock/skills source tree</a></td><td>Skill sources live under category directories such as <code>engineering/</code>, <code>productivity/</code>, <code>personal/</code>, and <code>misc/</code>, while skills remain independently named and installable.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="issue-coverage">
+  <h2>Issues this roadmap resolves or answers</h2>
+  <p>The scope rule is evidence-driven: include open issues about failures observed in backlog, plan, setup, staffing, verify, evidence, review, or cross-harness operation. Exclude requests whose primary purpose is creating a new unrelated skill or adding a product capability. Snapshot reviewed against every open repository issue on 2026-07-13.</p>
+  <table id="open-issue-disposition">
+    <thead><tr><th>Issue</th><th>Observed problem</th><th>Roadmap answer / owner</th><th>Disposition</th></tr></thead>
+    <tbody>
+      <tr id="issue-44"><td><a href="https://github.com/asasher/asher-skills/issues/44">#44</a></td><td>Metis run: dead waits, process tracking, setup/environment, review, fixture, and resume failures.</td><td>Tranche B hardening plus tranche D capacity; itemized again in the retro-owner table.</td><td class="status extract">Resolve</td></tr>
+      <tr id="issue-45"><td><a href="https://github.com/asasher/asher-skills/issues/45">#45</a></td><td>Knowledge trapped in Claude-only memory and repeated prompts.</td><td>Tranche E produces the separately approved memory architecture/deprecation plan.</td><td class="status follow">Answer with child plan</td></tr>
+      <tr id="issue-46"><td><a href="https://github.com/asasher/asher-skills/issues/46">#46</a></td><td>Pipelines run: self-approval, nested report topology, concurrency, process and verification failures.</td><td>Tranche B backlog/staffing/review-loop rules; tranche D machine-wide capacity.</td><td class="status extract">Resolve</td></tr>
+      <tr id="issue-47"><td><a href="https://github.com/asasher/asher-skills/issues/47">#47</a></td><td>Integrations run: dead watchers, foreign PIDs, status friction, conflict waves, audited resume.</td><td>Tranche B event/status, dispatch, review, platform, and resume contracts; tranche D capacity.</td><td class="status extract">Resolve</td></tr>
+      <tr id="issue-48"><td><a href="https://github.com/asasher/asher-skills/issues/48">#48</a></td><td>Every issue coordinator defaults to the expensive session orchestrator.</td><td>Staffing coordinator role and pre-spawn routing in tranche B.</td><td class="status extract">Resolve and close</td></tr>
+      <tr id="issue-49"><td><a href="https://github.com/asasher/asher-skills/issues/49">#49</a></td><td>Codex lacks a declared route for dispatching work to its Claude sibling harness.</td><td>Tranche B staffing contract: use <code>claude -p</code> without <code>--bare</code>; treat a future invocation failure as ordinary route loss and compile an asymmetric fallback roster.</td><td class="status extract">Ready</td></tr>
+      <tr id="issue-51"><td><a href="https://github.com/asasher/asher-skills/issues/51">#51</a></td><td>Greenfield setup contradicts itself over <code>AGENTS.md</code> versus <code>CLAUDE.md</code>.</td><td>Tranche A chooses harness-neutral <code>AGENTS.md</code> plus a Claude import shim when Claude is installed.</td><td class="status extract">Resolve</td></tr>
+      <tr id="issue-52"><td><a href="https://github.com/asasher/asher-skills/issues/52">#52</a></td><td>Installer promises review-loop/staffing setup behavior their contracts do not provide.</td><td>Owned setup references: review-loop’s public <code>setup</code> branch reconciles presentation config; staffing preserves an existing global base and writes only required deltas.</td><td class="status extract">Resolve</td></tr>
+      <tr id="issue-53"><td><a href="https://github.com/asasher/asher-skills/issues/53">#53</a></td><td>Approved plans present mechanism claims and promised tests as facts without falsification.</td><td>Plan marks hypotheses; prototype/spike validates risky mechanisms; implement validates first; verify/reviewer confirm cited artifacts exist and cover the claim.</td><td class="status extract">Resolve</td></tr>
+      <tr id="issue-54"><td><a href="https://github.com/asasher/asher-skills/issues/54">#54</a></td><td>Acceptance criteria omit data/tenant/observation needs and become unverifiable at runtime.</td><td>Plan criteria declare data requirements; setup inventories test affordances; verify provisions per-issue fixtures; groom batches concrete option questions.</td><td class="status extract">Resolve</td></tr>
+      <tr id="issue-55"><td><a href="https://github.com/asasher/asher-skills/issues/55">#55</a></td><td>Five loop gaps: direct-fix bugs, styling evidence reuse, native dependencies, durable handoff, reviewer behavior rulings.</td><td>All five become explicit tranche B branches and probes, not generic “backlog hardening.”</td><td class="status extract">Resolve</td></tr>
+      <tr id="issue-57"><td><a href="https://github.com/asasher/asher-skills/issues/57">#57</a></td><td>Review server dies with its issuing exec session before the human submits approval.</td><td>Review-loop owns a detached, health-checked server lifecycle and idempotent stop; watcher lifetime stays independent.</td><td class="status extract">Resolve</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="closed-regression-issues">Closed failures retained as regression baselines</h3>
+  <table id="closed-issue-baselines">
+    <thead><tr><th>Issues</th><th>Behavior that must stay green</th></tr></thead>
+    <tbody>
+      <tr id="baseline-decomposition"><td><a href="https://github.com/asasher/asher-skills/issues/6">#6</a></td><td>Backlog composes staffing, review-loop, plan, and prototype by name rather than reabsorbing their machinery.</td></tr>
+      <tr id="baseline-review-network"><td><a href="https://github.com/asasher/asher-skills/issues/15">#15</a></td><td>Tailnet startup is conditional, authenticated, and never “reset” when healthy.</td></tr>
+      <tr id="baseline-review-delivery"><td><a href="https://github.com/asasher/asher-skills/issues/16">#16</a>, <a href="https://github.com/asasher/asher-skills/issues/23">#23</a></td><td>Recorded verdicts survive timeout/re-arm and reach the parent without manual log polling; #57 adds server survival before the event exists.</td></tr>
+      <tr id="baseline-installer-audit"><td><a href="https://github.com/asasher/asher-skills/issues/27">#27</a>, <a href="https://github.com/asasher/asher-skills/issues/31">#31</a></td><td>Self-host audit finds both harness installs, never clobbers skill sources, verifies actual landing rather than exit code, and surfaces foreign provenance.</td></tr>
+      <tr id="baseline-existing-project"><td><a href="https://github.com/asasher/asher-skills/issues/34">#34</a></td><td>Existing projects bind real checks/app access, shared-singleton isolation, label roles, dependencies, and CI merge gates.</td></tr>
+      <tr id="baseline-delegation-dogfood"><td><a href="https://github.com/asasher/asher-skills/issues/37">#37</a></td><td>Self-host mounts are explicit and drift-safe, lock shape is valid, and a clean consumer proves playbook delegation—the source of #51/#52.</td></tr>
+    </tbody>
+  </table>
+
+  <p class="problem" id="issue-scope-exclusions"><strong>Reviewed and excluded:</strong> open skill/product creation requests #11–13, #35, and #42; already-completed skill creation/extraction and domain/draft features are historical architecture, not unresolved failure scope. Closed issues above remain regression inputs, not reopened work.</p>
+</section>
+
+<section id="compactness-model">
+  <h2>The whole system as compact, deep modules</h2>
+  <p>The composer sees narrow interfaces; each delegated thread loads the complete discipline it needs. Solid arrows are runtime calls, dashed arrows are setup-time composition, and dotted reach is ambient model invocation.</p>
+  <p class="mobile-diagram-note">Swipe each diagram horizontally to follow it at a readable size.</p>
+  <figure id="skill-graph">
+    <h3 id="runtime-shape">1 · Runtime: one branch, then one common tail</h3>
+    <svg viewBox="0 0 800 410" width="100%" role="img" aria-label="Backlog runtime branches for bugs, enhancements, and refactors, converging on verify, code-review, and evidence">
+      <defs><marker id="runtime-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--core)"/></marker></defs>
+
+      <text x="20" y="18" class="small">OPTIONAL INTAKE</text>
+      <rect x="20" y="30" width="130" height="52" rx="9" fill="none" stroke="var(--core)"/>
+      <text x="40" y="52" class="core" font-weight="700">to-spec</text><text x="40" y="69" class="small">talk → direction</text>
+      <rect x="185" y="30" width="145" height="52" rx="9" fill="none" stroke="var(--core)"/>
+      <text x="205" y="52" class="core" font-weight="700">to-tickets</text><text x="205" y="69" class="small">direction / plan → work</text>
+      <rect x="365" y="30" width="150" height="52" rx="9" fill="none" stroke="var(--core)" stroke-width="2"/>
+      <text x="385" y="52" class="core" font-weight="700">backlog</text><text x="385" y="69" class="small">dispatch by work type</text>
+      <line x1="150" y1="56" x2="185" y2="56" stroke="var(--core)" marker-end="url(#runtime-arrow)"/>
+      <line x1="330" y1="56" x2="365" y2="56" stroke="var(--core)" marker-end="url(#runtime-arrow)"/>
+
+      <text x="20" y="120" class="small">SELECTED BRANCH — only one loads</text>
+      <rect x="20" y="135" width="205" height="112" rx="10" fill="none" stroke="var(--skill)"/>
+      <text x="40" y="158" class="small">BUG</text><text x="40" y="181" font-weight="700">direct-fix lane</text><text x="40" y="198" class="small">self-evident cosmetic defect</text><text x="40" y="224" class="skill" font-weight="700">diagnosing-bugs</text>
+      <rect x="280" y="135" width="240" height="112" rx="10" fill="none" stroke="var(--skill)"/>
+      <text x="300" y="158" class="small">ENHANCEMENT</text>
+      <text x="300" y="187" class="skill" font-weight="700">plan</text><text x="350" y="187">→</text><text x="375" y="187" class="skill" font-weight="700">implement</text>
+      <text x="300" y="205" class="small">approval → built change</text>
+      <rect x="300" y="217" width="155" height="22" rx="5" fill="none" stroke="var(--line)"/><text x="311" y="233" class="small">prototype when needed</text>
+      <rect x="575" y="135" width="205" height="112" rx="10" fill="none" stroke="var(--skill)"/>
+      <text x="595" y="158" class="small">REFACTOR</text><text x="595" y="187" class="skill" font-weight="700">refactor</text><text x="595" y="205" class="small">same behavior → new shape</text>
+
+      <path d="M440 82 L440 105 L122 105 L122 135" fill="none" stroke="var(--core)" marker-end="url(#runtime-arrow)"/>
+      <line x1="440" y1="105" x2="440" y2="135" stroke="var(--core)" marker-end="url(#runtime-arrow)"/>
+      <path d="M440 105 L677 105 L677 135" fill="none" stroke="var(--core)" marker-end="url(#runtime-arrow)"/>
+
+      <text x="20" y="285" class="small">COMMON TAIL — every code-producing branch rejoins here</text>
+      <line x1="122" y1="247" x2="122" y2="270" stroke="var(--muted)"/>
+      <line x1="400" y1="247" x2="400" y2="270" stroke="var(--muted)"/>
+      <line x1="677" y1="247" x2="677" y2="270" stroke="var(--muted)"/>
+      <line x1="122" y1="270" x2="677" y2="270" stroke="var(--muted)"/>
+      <line x1="400" y1="270" x2="400" y2="310" stroke="var(--core)" marker-end="url(#runtime-arrow)"/>
+      <rect x="255" y="310" width="130" height="58" rx="9" fill="none" stroke="var(--skill)"/>
+      <text x="278" y="335" class="skill" font-weight="700">verify</text><text x="278" y="353" class="small">criteria → verdict</text>
+      <rect x="425" y="310" width="145" height="58" rx="9" fill="none" stroke="var(--skill)"/>
+      <text x="447" y="335" class="skill" font-weight="700">code-review</text><text x="447" y="353" class="small">diff → findings</text>
+      <rect x="610" y="310" width="130" height="58" rx="9" fill="none" stroke="var(--skill)"/>
+      <text x="632" y="335" class="skill" font-weight="700">evidence</text><text x="632" y="353" class="small">HEAD → proof</text>
+      <line x1="385" y1="339" x2="425" y2="339" stroke="var(--core)" marker-end="url(#runtime-arrow)"/>
+      <line x1="570" y1="339" x2="610" y2="339" stroke="var(--core)" marker-end="url(#runtime-arrow)"/>
+    </svg>
+
+    <h3 id="shared-services-shape">2 · Shared services: three independent relationships</h3>
+    <svg viewBox="0 0 800 285" width="100%" role="img" aria-label="Independent shared-service relationships for capacity and staffing, human review, and ambient memory">
+      <defs>
+        <marker id="service-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--muted)"/></marker>
+        <marker id="ambient-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--skill)"/></marker>
+      </defs>
+      <text x="20" y="22" class="small">ROUTING</text>
+      <rect x="20" y="35" width="165" height="55" rx="9" fill="none" stroke="var(--skill)"/><text x="40" y="59" class="skill" font-weight="700">capacity</text><text x="40" y="77" class="small">pools · reset · headroom</text>
+      <rect x="315" y="35" width="165" height="55" rx="9" fill="none" stroke="var(--setup)"/><text x="335" y="59" class="setup" font-weight="700">staffing</text><text x="335" y="77" class="small">task → qualified route</text>
+      <rect x="610" y="35" width="170" height="55" rx="9" fill="none" stroke="var(--core)"/><text x="630" y="59" class="core" font-weight="700">backlog + workers</text><text x="630" y="77" class="small">dispatch and fallback</text>
+      <line x1="185" y1="62" x2="315" y2="62" stroke="var(--muted)" marker-end="url(#service-arrow)"/>
+      <line x1="480" y1="62" x2="610" y2="62" stroke="var(--muted)" marker-end="url(#service-arrow)"/>
+
+      <text x="20" y="125" class="small">HUMAN GATE</text>
+      <rect x="20" y="138" width="165" height="55" rx="9" fill="none" stroke="var(--core)"/><text x="40" y="162" class="core" font-weight="700">plan / prototype</text><text x="40" y="180" class="small">artifact ready</text>
+      <rect x="315" y="138" width="165" height="55" rx="9" fill="none" stroke="var(--setup)"/><text x="335" y="162" class="setup" font-weight="700">review-loop</text><text x="335" y="180" class="small">serve · annotate · await</text>
+      <rect x="610" y="138" width="170" height="55" rx="9" fill="none" stroke="var(--core)"/><text x="630" y="162" class="core" font-weight="700">human verdict</text><text x="630" y="180" class="small">approve / revise</text>
+      <line x1="185" y1="165" x2="315" y2="165" stroke="var(--muted)" marker-end="url(#service-arrow)"/>
+      <line x1="480" y1="165" x2="610" y2="165" stroke="var(--muted)" marker-end="url(#service-arrow)"/>
+
+      <text x="20" y="228" class="small">AMBIENT RECALL</text>
+      <rect x="20" y="241" width="165" height="40" rx="9" fill="none" stroke="var(--core)"/><text x="40" y="266" class="core" font-weight="700">any delegated thread</text>
+      <rect x="315" y="241" width="165" height="40" rx="9" fill="none" stroke="var(--skill)"/><text x="335" y="266" class="skill" font-weight="700">memory</text>
+      <rect x="610" y="241" width="170" height="40" rx="9" fill="none" stroke="var(--line)"/><text x="630" y="266" font-weight="700">canonical owner</text>
+      <line x1="185" y1="261" x2="315" y2="261" stroke="var(--skill)" stroke-dasharray="3 5" marker-end="url(#ambient-arrow)"/>
+      <line x1="480" y1="261" x2="610" y2="261" stroke="var(--muted)" marker-end="url(#service-arrow)"/>
+    </svg>
+
+    <h3 id="setup-shape">3 · Setup: install-time only</h3>
+    <svg viewBox="0 0 800 135" width="100%" role="img" aria-label="Setup-asher-skills resolves sibling closure and invokes each public skill's setup command, which loads its setup reference to reconcile project playbooks">
+      <defs><marker id="setup-flow-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--setup)"/></marker></defs>
+      <rect x="20" y="35" width="145" height="55" rx="9" fill="none" stroke="var(--setup)" stroke-width="2"/><text x="40" y="59" class="setup" font-weight="700">setup-asher-skills</text><text x="40" y="77" class="small">selected skill</text>
+      <rect x="220" y="35" width="145" height="55" rx="9" fill="none" stroke="var(--setup)"/><text x="240" y="59" class="setup" font-weight="700">dependency closure</text><text x="240" y="77" class="small">names only</text>
+      <rect x="420" y="35" width="145" height="55" rx="9" fill="none" stroke="var(--setup)"/><text x="440" y="59" class="setup" font-weight="700">&lt;skill&gt; setup</text><text x="440" y="77" class="small">dependency-first</text>
+      <rect x="620" y="35" width="160" height="55" rx="9" fill="none" stroke="var(--line)"/><text x="640" y="59" font-weight="700">reference/setup.md</text><text x="640" y="77" class="small">reconcile owned playbooks</text>
+      <line x1="165" y1="62" x2="220" y2="62" stroke="var(--setup)" stroke-dasharray="7 5" marker-end="url(#setup-flow-arrow)"/>
+      <line x1="365" y1="62" x2="420" y2="62" stroke="var(--setup)" stroke-dasharray="7 5" marker-end="url(#setup-flow-arrow)"/>
+      <line x1="565" y1="62" x2="620" y2="62" stroke="var(--setup)" stroke-dasharray="7 5" marker-end="url(#setup-flow-arrow)"/>
+      <text x="20" y="122" class="small">Normal runtime never loads this path.</text>
+    </svg>
+    <figcaption>Read the three diagrams independently: runtime branching, shared services, then setup. No edge family shares a canvas with another.</figcaption>
+  </figure>
+
+  <figure id="deep-module-cutaway">
+    <svg viewBox="0 0 800 270" width="100%" role="img" aria-label="Deep module cutaway showing a compact backlog call into the complete diagnosing-bugs discipline in the selected worker context">
+      <defs><marker id="cut-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--muted)"/></marker></defs>
+      <text x="20" y="20" class="small">PARENT CONTEXT</text>
+      <rect x="20" y="35" width="205" height="150" rx="11" fill="none" stroke="var(--core)" stroke-width="2"/>
+      <text x="40" y="62" class="core" font-weight="700">backlog · bug branch</text>
+      <text x="40" y="89">Use <tspan class="skill" font-weight="700">diagnosing-bugs</tspan></text>
+      <text x="40" y="107">with this issue and environment.</text>
+      <text x="40" y="137" class="small">Parent retains only:</text>
+      <text x="40" y="154" class="small">issue · expected result · gate</text>
+      <text x="40" y="171" class="small">Technique is not duplicated.</text>
+
+      <line x1="225" y1="110" x2="310" y2="110" stroke="var(--muted)" marker-end="url(#cut-arrow)"/>
+      <text x="240" y="96" class="small">named interface</text>
+
+      <text x="330" y="20" class="small">SELECTED WORKER CONTEXT · DEEP MODULE</text>
+      <rect x="310" y="35" width="470" height="205" rx="11" fill="none" stroke="var(--skill)" stroke-width="2"/>
+      <text x="330" y="62" class="skill" font-weight="700">diagnosing-bugs</text>
+      <text x="330" y="82" class="small">public contract: defect → named root cause + confirmed fix</text>
+      <line x1="330" y1="96" x2="760" y2="96" stroke="var(--line)"/>
+      <text x="340" y="122">1 · Build a tight red-capable loop</text>
+      <text x="340" y="144">2 · Reproduce and minimise</text>
+      <text x="340" y="166">3 · Rank falsifiable hypotheses</text>
+      <text x="550" y="122">4 · Instrument one prediction</text>
+      <text x="550" y="144">5 · Fix behind regression proof</text>
+      <text x="550" y="166">6 · Cleanup and re-run original loop</text>
+      <rect x="330" y="190" width="430" height="32" rx="7" fill="none" stroke="var(--line)"/>
+      <text x="348" y="211" class="small">done: exact symptom green · regression proof/no-seam · debug residue gone</text>
+
+      <path d="M540 240 C500 265, 180 260, 125 185" fill="none" stroke="var(--muted)" marker-end="url(#cut-arrow)"/>
+      <text x="270" y="258" class="small">small result returns; module internals stay out of the caller’s context</text>
+    </svg>
+    <figcaption>Compactness does not remove correctness. It moves complete behavior behind a narrow contract, so only the thread doing the work pays to load and understand the internals.</figcaption>
+  </figure>
+
+  <table>
+    <thead><tr><th>Context tier</th><th>What loads</th><th>Compactness rule</th></tr></thead>
+    <tbody>
+      <tr id="load-metadata"><td>Every turn</td><td>Skill name + description only</td><td>One trigger per genuine branch; no identity prose or synonym lists.</td></tr>
+      <tr id="load-composer"><td>Workflow invoked</td><td>Composer interface and sequence</td><td>Name the called skill, input, output, and gate; never restate its technique.</td></tr>
+      <tr id="load-worker"><td>Worker selected</td><td>That worker skill’s contract</td><td>Complete enough to be correct in isolation; unrelated worker skills stay unloaded.</td></tr>
+      <tr id="load-reference"><td>Branch reached</td><td>Only the branch-specific reference/playbook</td><td>Progressive disclosure is conditional, shallow, and pointed to explicitly.</td></tr>
+      <tr id="load-setup"><td>Setup invoked</td><td>Dependency and reconciliation contracts</td><td>Setup detail never taxes ordinary runtime turns.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="post-refactor-compaction">Mandatory post-refactor compaction gate</h3>
+  <p>Every tranche ends with a ruthless editing pass over every changed skill and reference. The pass may change structure and wording, but not observable behavior. It optimizes two linked costs: tokens loaded by the agent and material a human must read to understand the module.</p>
+  <table id="compaction-gate-table">
+    <thead><tr><th>Pass</th><th>Required action</th><th>Proof</th></tr></thead>
+    <tbody>
+      <tr id="compact-lock"><td>1 · Lock behavior</td><td>Before pruning, capture current commands, branches, completion/failure gates, setup writes, handoffs, and passing probe corpus. Treat these as the behavior checksum.</td><td>Before/after contract inventory and the same situated probes, including known failure cases.</td></tr>
+      <tr id="compact-prune"><td>2 · Prune ruthlessly</td><td>Delete duplication, no-ops, sediment, stale caveats, repeated identity prose, and synonyms that name one branch twice. Collapse recurring meanings into precise leading words where that improves predictability.</td><td>A deletion ledger classifies every removed passage and points to the surviving authority when meaning was deduplicated.</td></tr>
+      <tr id="compact-disclose"><td>3 · Deepen modules</td><td>Keep only the trigger, command routing, sequence spine, context pointers, and checkable gates in <code>SKILL.md</code>. Move branch-only and setup-only detail behind explicit references; do not split material merely to improve a line count.</td><td>Representative load traces show ordinary runtime never loads setup, unrelated branches, provenance, or another worker’s method.</td></tr>
+      <tr id="compact-agent"><td>4 · Measure agent cost</td><td>Tokenize always-loaded descriptions, each modified <code>SKILL.md</code>, and representative bug/enhancement/refactor/setup paths before and after.</td><td>Every changed path is smaller, or a reviewed exception identifies the new correctness gate responsible; no exception may cite convenience.</td></tr>
+      <tr id="compact-human"><td>5 · Prove human readability</td><td>A cold reader reviews one module at a time and must identify what invokes it, its commands, its main sequence, its completion/failure gates, and where conditional detail lives without reading unrelated modules.</td><td>A short readability verdict names confusion, backtracking, or duplicated authority; all material findings are fixed before tranche approval.</td></tr>
+      <tr id="compact-equivalence"><td>6 · Prove equivalence</td><td>Run the locked probes and compare command routing, decisions, writes, handoffs, and terminal states. Smaller prose is not accepted when behavior drifts.</td><td>Behavioral diff is empty, except changes explicitly authorized by that tranche’s acceptance criteria.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="backlog-agent-dispatch">
+  <h2>Backlog agent dispatch — where staffing and spawning happen</h2>
+  <p>This is the concern captured exactly by <a href="https://github.com/asasher/asher-skills/issues/48">issue #48</a>: the run thread currently spawns every issue coordinator on the expensive session-orchestrator role, even though grooming has already supplied enough information to staff that coordinator deliberately. The revised contract makes the first staffing decision <em>before</em> the issue thread exists, then repeats staffing only at genuine worker boundaries inside that thread.</p>
+
+  <figure id="dispatch-timeline">
+    <svg viewBox="0 0 800 555" width="100%" role="img" aria-label="Backlog dispatch timeline showing where the run orchestrator makes the issue coordinator staffing decision, spawns an issue thread, and where that coordinator later staffs and spawns stage workers">
+      <defs><marker id="dispatch-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--muted)"/></marker></defs>
+
+      <text x="20" y="22" class="small">RUN THREAD · SESSION ORCHESTRATOR</text>
+      <text x="430" y="22" class="small">ISSUE THREAD · SELECTED COORDINATOR</text>
+      <line x1="400" y1="10" x2="400" y2="530" stroke="var(--line)"/>
+
+      <rect x="20" y="42" width="350" height="66" rx="9" fill="none" stroke="var(--core)"/>
+      <text x="40" y="66" class="core" font-weight="700">1 · queue and claim</text>
+      <text x="40" y="85" class="small">groomed work-type · surface · uncertainty · dependencies</text>
+      <text x="40" y="101" class="small">fresh capacity snapshot · harness reachability</text>
+
+      <line x1="195" y1="108" x2="195" y2="132" stroke="var(--muted)" marker-end="url(#dispatch-arrow)"/>
+      <rect x="20" y="136" width="350" height="82" rx="9" fill="none" stroke="var(--setup)" stroke-width="2"/>
+      <text x="40" y="162" class="setup" font-weight="700">STAFF A · choose this issue’s coordinator</text>
+      <text x="40" y="183" class="small">run thread asks staffing before creating any issue thread</text>
+      <text x="40" y="201" class="small">output: model + route + cost pool + escalation successor</text>
+
+      <line x1="195" y1="218" x2="195" y2="242" stroke="var(--muted)" marker-end="url(#dispatch-arrow)"/>
+      <rect x="20" y="246" width="350" height="74" rx="9" fill="none" stroke="var(--core)" stroke-width="2"/>
+      <rect x="28" y="254" width="334" height="58" rx="7" fill="none" stroke="var(--core)"/>
+      <text x="48" y="280" class="core" font-weight="700">SPAWN 1 · issue coordinator</text>
+      <text x="48" y="300" class="small">one worktree + thread id · selected model may differ from run</text>
+
+      <path d="M370 283 L430 283" fill="none" stroke="var(--muted)" marker-end="url(#dispatch-arrow)"/>
+      <rect x="430" y="246" width="350" height="74" rx="9" fill="none" stroke="var(--core)"/>
+      <text x="450" y="272" class="core" font-weight="700">2 · orient and route the issue</text>
+      <text x="450" y="292" class="small">invoke bug / enhancement / refactor discipline</text>
+      <text x="450" y="309" class="small">invoking a skill does not itself imply another agent</text>
+
+      <line x1="605" y1="320" x2="605" y2="344" stroke="var(--muted)" marker-end="url(#dispatch-arrow)"/>
+      <rect x="430" y="348" width="350" height="82" rx="9" fill="none" stroke="var(--setup)" stroke-width="2"/>
+      <text x="450" y="374" class="setup" font-weight="700">STAFF B · resolve each worker boundary</text>
+      <text x="450" y="395" class="small">role + surface + difficulty + live capacity + fallback</text>
+      <text x="450" y="413" class="small">repeated before build, verify, review, and evidence</text>
+
+      <line x1="605" y1="430" x2="605" y2="454" stroke="var(--muted)" marker-end="url(#dispatch-arrow)"/>
+      <rect x="430" y="458" width="350" height="74" rx="9" fill="none" stroke="var(--skill)" stroke-width="2"/>
+      <rect x="438" y="466" width="334" height="58" rx="7" fill="none" stroke="var(--skill)"/>
+      <text x="458" y="492" class="skill" font-weight="700">SPAWN N · stage worker(s)</text>
+      <text x="458" y="512" class="small">builder · checker · reviewer + fixer · evidence checker</text>
+
+      <path d="M430 495 C390 495,390 389,430 389" fill="none" stroke="var(--muted)" marker-end="url(#dispatch-arrow)"/>
+      <text x="265" y="448" class="small">worker returns; next stage restaffs</text>
+
+      <rect x="20" y="458" width="350" height="74" rx="9" fill="none" stroke="var(--core)"/>
+      <text x="40" y="484" class="core" font-weight="700">3 · receive checkpoints + terminal summary</text>
+      <text x="40" y="504" class="small">run keeps status, tracker writes, capacity, and wave ownership</text>
+      <text x="40" y="521" class="small">it never takes over the issue’s implementation work</text>
+      <line x1="430" y1="495" x2="370" y2="495" stroke="var(--muted)" marker-end="url(#dispatch-arrow)"/>
+    </svg>
+    <figcaption>The decisive correction is STAFF A: coordinator selection happens in the run thread, before SPAWN 1. STAFF B belongs to the selected issue coordinator and is repeated only when work crosses into a new worker context.</figcaption>
+  </figure>
+
+  <div class="wide">
+  <table id="spawn-boundary-table">
+    <thead><tr><th>Boundary</th><th>Parent makes this staffing decision</th><th>New agent?</th><th>Selected role</th></tr></thead>
+    <tbody>
+      <tr id="spawn-issue-coordinator"><td>Claimed issue → issue loop</td><td>Run thread, from groomed work-type, surface, uncertainty, capacity, and reachability.</td><td><strong>Always:</strong> one isolated issue thread. Record its thread id, model route, pool, and escalation successor.</td><td>Issue coordinator—not automatically the session orchestrator.</td></tr>
+      <tr id="spawn-diagnosis"><td>Bug diagnosis</td><td>Issue coordinator invokes <code>diagnosing-bugs</code>; staffing is consulted only if it delegates or escalates the work.</td><td><strong>Not by default.</strong> Model invocation and skill invocation are independent axes. Spawn only for an explicit diagnosis handoff.</td><td>Coordinator, or a staffed diagnostic delegate when uncertainty crosses the escalation threshold.</td></tr>
+      <tr id="spawn-plan-author"><td>Enhancement planning</td><td>The <code>plan</code> composer asks staffing who should author; the issue coordinator retains lifecycle ownership.</td><td><strong>Conditional:</strong> spawn a plan author when staffing selects a separate context/model; otherwise author in the coordinator thread.</td><td>Author route selected for reasoning/taste; approval remains a human gate.</td></tr>
+      <tr id="spawn-prototype"><td>Prototype requested</td><td><code>prototype</code> asks staffing after the coordinator frames the design question.</td><td><strong>Always when invoked:</strong> spawn the artifact builder; return only the answer to the coordinator/plan.</td><td>Builder selected for the prototype’s logic or taste surface.</td></tr>
+      <tr id="spawn-builder"><td>Implement or refactor</td><td>Issue coordinator asks staffing at the approved/skip build boundary.</td><td><strong>Always:</strong> spawn one builder for the branch; a later fix returns to that branch owner when reachable.</td><td>Surface-qualified builder.</td></tr>
+      <tr id="spawn-verifier"><td>Behavior verification</td><td>Issue coordinator asks staffing after the build reaches a durable checkpoint.</td><td><strong>Always:</strong> spawn a checker independent of the builder. It returns a verdict or an escalation, not self-approval.</td><td>Checker.</td></tr>
+      <tr id="spawn-review-pair"><td>Adversarial PR review</td><td>Issue coordinator asks staffing after the verified PR exists.</td><td><strong>Always:</strong> spawn Reviewer and Fixer as distinct agents; Reviewer never edits, Fixer never approves.</td><td>Checker-constrained Reviewer + surface-qualified builder Fixer.</td></tr>
+      <tr id="spawn-evidence"><td>Final-HEAD evidence</td><td>Normally the issue coordinator asks staffing after review converges. For #55’s styling-only exception, verification capture may already satisfy this boundary if Reviewer confirms the captured HEAD remains final and no product code changed.</td><td><strong>Conditional:</strong> no dispatch when evidence is waived or a valid same-HEAD styling capture is accepted. Otherwise reuse only an alive independent checker whose identity/final HEAD still match; spawn fresh in every other case.</td><td>Checker.</td></tr>
+      <tr id="spawn-waits-memory"><td>Waits, status, memory</td><td>No capable model is staffed merely to park. Any live thread may invoke <code>memory</code> itself.</td><td><strong>No agent by default:</strong> use event monitors/wakeups for waits; model-invoked memory stays in the current thread unless explicitly delegated.</td><td>Non-model monitor, or current agent.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 id="coordinator-routing">Coordinator routing contract added to staffing first</h3>
+  <table id="coordinator-routing-table">
+    <thead><tr><th>Groomed coordination class</th><th>Required recorded facts</th><th>Coordinator route</th><th>Escalation</th></tr></thead>
+    <tbody>
+      <tr id="coordinator-routine"><td><code>routine</code></td><td>Work-type, surface, checkable acceptance criteria, known dependencies, and no recorded unresolved diagnosis/design question.</td><td>Filter to coordinator-qualified routes, then apply staffing’s normal order: standing task/capability pins, capability and quality floors, live capacity, intelligence/taste/cost ranking, and succession. A deliberate routine-coordinator pin—not an implicit cost-first rule—may choose the cheaper model.</td><td>Escalate to the recorded successor when the issue reveals an unresolved design gap, hard diagnosis, or repeated failed gate.</td></tr>
+      <tr id="coordinator-orchestrator"><td><code>orchestrator-required</code></td><td>A named unresolved diagnosis/design reason or an explicit grooming judgment that coordination itself needs the top reasoning role.</td><td>Session-orchestrator route or its roster successor.</td><td>May staff down individual mechanical stages, never its unresolved coordination decision.</td></tr>
+      <tr id="coordinator-missing"><td>Missing/invalid</td><td>The grooming schema is incomplete.</td><td>Do not silently treat the issue as routine; skip dispatch and report the grooming gap.</td><td>Human or grooming fixes the field before claim.</td></tr>
+    </tbody>
+  </table>
+  <p class="problem">The <code>staffing</code> roster gains an explicit <strong>issue coordinator</strong> capability floor, eligible routes, per-harness succession line, and escalation triggers before backlog changes dispatch. Work-type and surface alone inform the route; the groomed coordination class decides whether routine coordination is permitted.</p>
+
+  <h3 id="spawn-ledger-protocol">Durable spawn ledger and writer protocol</h3>
+  <table id="spawn-ledger-table">
+    <thead><tr><th>Binding</th><th>Canonical events</th><th>Writer</th><th>Status projection</th></tr></thead>
+    <tbody>
+      <tr id="spawn-ledger-github"><td>Live tracker (for example GitHub)</td><td>Append-only structured lifecycle comments keyed by <code>run_id</code>, <code>issue_id</code>, <code>parent_thread_id</code>, and monotonic per-parent sequence.</td><td>The parent that spawns or receives the child appends the event through the verified tracker verb; no central writer is required after handoff.</td><td>The status board is a rebuildable projection over tracker events. A run monitor may refresh it, but event truth does not depend on that monitor living.</td></tr>
+      <tr id="spawn-ledger-local"><td>Local tracker</td><td>A shared administrative root outside every worktree: <code>&lt;git-common-dir&gt;/backlog-runs/&lt;run-id&gt;/</code>, resolved to one absolute path by setup. Each run/issue stream stores one immutable JSON event per zero-padded sequence number.</td><td>Exactly one issue coordinator owns its issue stream; the run thread alone owns the run stream and serialized main-tracker changes. Writers create a temp file, fsync, then atomically rename with no-overwrite semantics; a per-stream lease guards adoption after death.</td><td>Any worktree folds the same run and per-issue streams to rebuild one board. Recovery verifies lease owner and last sequence; cleanup archives the event digest to the tracker/evidence, then reaps only terminal runs after the configured retention window.</td></tr>
+      <tr id="spawn-ledger-event"><td>Every binding</td><td>Spawn, start, heartbeat/checkpoint, return, failure, escalation, reuse, cancellation, and reaping events include role, model route, pool/reservation, worktree, child id, expected return, and verified durable state.</td><td>The parent records spawn/reuse and consumes return; the child records only its own milestones. Setup probes every write/read/rebuild verb.</td><td>A missing or out-of-order event is visible as <code>unknown</code>, never inferred from an agent self-report.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="usage-capacity">
+  <h2>Usage capacity → productive work, graceful recovery</h2>
+  <p><code>capacity</code> reports what is known about each independent usage pool; staffing chooses a qualified route; backlog maximizes completed durable units and schedules continuation instead of discovering exhaustion through a fleet-wide stop.</p>
+  <figure id="capacity-state-machine">
+    <svg viewBox="0 0 800 355" width="100%" role="img" aria-label="Capacity state machine from usage observation through conservative routing, checkpoint, scheduled reset, and audited resume">
+      <defs>
+        <marker id="cap-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--muted)"/></marker>
+        <marker id="cap-skill-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--skill)"/></marker>
+      </defs>
+
+      <text x="20" y="18" class="small">OBSERVE — never infer an exact balance from silence</text>
+      <rect x="20" y="35" width="145" height="88" rx="10" fill="none" stroke="var(--skill)"/>
+      <text x="40" y="59" class="skill" font-weight="700">pool probes</text>
+      <text x="40" y="78" class="small">usage meter / status</text>
+      <text x="40" y="95" class="small">rate-limit error</text>
+      <text x="40" y="112" class="small">reset signal</text>
+
+      <rect x="215" y="35" width="205" height="88" rx="10" fill="none" stroke="var(--skill)" stroke-width="2"/>
+      <text x="235" y="59" class="skill" font-weight="700">capacity snapshot</text>
+      <text x="235" y="78" class="small">pool · known / unknown / exhausted</text>
+      <text x="235" y="95" class="small">headroom · reset_at · observed_at</text>
+      <text x="235" y="112" class="small">source · confidence · active leases</text>
+      <line x1="165" y1="79" x2="215" y2="79" stroke="var(--skill)" marker-end="url(#cap-skill-arrow)"/>
+
+      <rect x="470" y="35" width="135" height="88" rx="10" fill="none" stroke="var(--setup)"/>
+      <text x="490" y="59" class="setup" font-weight="700">staffing</text>
+      <text x="490" y="78" class="small">capability floor first</text>
+      <text x="490" y="95" class="small">then pool capacity</text>
+      <text x="490" y="112" class="small">then cost / preference</text>
+      <line x1="420" y1="79" x2="470" y2="79" stroke="var(--muted)" marker-end="url(#cap-arrow)"/>
+
+      <rect x="655" y="35" width="125" height="88" rx="10" fill="none" stroke="var(--core)"/>
+      <text x="675" y="59" class="core" font-weight="700">backlog</text>
+      <text x="675" y="78" class="small">wave · checkpoint</text>
+      <text x="675" y="95" class="small">status · schedule</text>
+      <text x="675" y="112" class="small">audited resume</text>
+      <line x1="605" y1="79" x2="655" y2="79" stroke="var(--muted)" marker-end="url(#cap-arrow)"/>
+
+      <text x="20" y="170" class="small">CONTROL LOOP — compare reliable headroom with the predicted cost of the next durable unit</text>
+
+      <rect x="20" y="190" width="130" height="58" rx="9" fill="none" stroke="var(--core)"/>
+      <text x="40" y="214" class="core" font-weight="700">normal</text>
+      <text x="40" y="232" class="small">bounded waves</text>
+      <rect x="185" y="190" width="130" height="58" rx="9" fill="none" stroke="var(--setup)"/>
+      <text x="205" y="214" class="setup" font-weight="700">conserve</text>
+      <text x="205" y="232" class="small">shrink · finish near gate</text>
+      <rect x="350" y="190" width="130" height="58" rx="9" fill="none" stroke="var(--skill)"/>
+      <text x="370" y="214" class="skill" font-weight="700">reroute</text>
+      <text x="370" y="232" class="small">qualified alternate pool</text>
+      <rect x="515" y="190" width="130" height="58" rx="9" fill="none" stroke="var(--risk)"/>
+      <text x="535" y="214" fill="var(--risk)" font-weight="700">checkpoint</text>
+      <text x="535" y="232" class="small">no new expensive work</text>
+      <rect x="680" y="190" width="100" height="58" rx="9" fill="none" stroke="var(--core)"/>
+      <text x="700" y="214" class="core" font-weight="700">resume</text>
+      <text x="700" y="232" class="small">audit first</text>
+
+      <line x1="150" y1="219" x2="185" y2="219" stroke="var(--muted)" marker-end="url(#cap-arrow)"/>
+      <text x="153" y="183" class="small">next unit may not fit</text>
+      <line x1="315" y1="208" x2="350" y2="208" stroke="var(--skill)" marker-end="url(#cap-skill-arrow)"/>
+      <text x="325" y="200" class="small">route exists</text>
+      <path d="M415 248 C360 285, 135 285, 85 248" fill="none" stroke="var(--skill)" marker-end="url(#cap-skill-arrow)"/>
+      <text x="205" y="281" class="small">alternate pool restores headroom</text>
+      <line x1="315" y1="232" x2="515" y2="232" stroke="var(--risk)" marker-end="url(#cap-arrow)"/>
+      <text x="370" y="251" class="small">no qualified pool</text>
+      <line x1="645" y1="219" x2="680" y2="219" stroke="var(--muted)" marker-end="url(#cap-arrow)"/>
+      <text x="650" y="183" class="small">wake after reset</text>
+      <path d="M730 248 C700 325, 130 325, 85 248" fill="none" stroke="var(--core)" marker-end="url(#cap-arrow)"/>
+      <text x="310" y="323" class="small">recompute capacity · inspect durable state · continue from the last proven gate</text>
+
+      <text x="20" y="350" class="small">Unknown is a real state: shrink the commitment and checkpoint sooner; never fabricate remaining usage or reset time.</text>
+    </svg>
+    <figcaption>Optimization target: the most completed, reviewable work per available pool—not the most concurrent agents. Capability and quality floors remain hard constraints even under quota pressure.</figcaption>
+  </figure>
+
+  <table class="capacity-table">
+    <thead><tr><th>Capacity posture</th><th>Work policy</th><th>Durability policy</th></tr></thead>
+    <tbody>
+      <tr id="capacity-normal"><td>Known sufficient</td><td>Run the bounded conflict-aware wave.</td><td>Checkpoint at normal lifecycle gates.</td></tr>
+      <tr id="capacity-conserve"><td>Low or uncertain</td><td>Start no speculative fan-out; finish the nearest durable unit, shrink waves, and use a verified alternate pool only above its capability floor.</td><td>Checkpoint before each expensive stage and push transition status.</td></tr>
+      <tr id="capacity-exhausted"><td>Exhausted</td><td>Start nothing new on that pool; let already-running qualified work reach a safe boundary only when possible.</td><td>Persist state, release resources, record <code>not_before</code>, and schedule continuation after reset.</td></tr>
+      <tr id="capacity-resume"><td>Reset observed</td><td>Recompute every pool and restaff unfinished units.</td><td>Run the audited-resume protocol before trusting prior agents or processes.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="source-layout">
+  <h2>Nested source layout</h2>
+  <p>Categories organize the repository for humans; they never become part of a skill’s public identity, dependency name, or installed path.</p>
+  <figure id="source-layout-diagram">
+    <pre>skills/
+  system/       setup-asher-skills · staffing · capacity · memory · skill-loop · review-loop
+  delivery/     backlog · plan · prototype · diagnosing-bugs · to-spec · to-tickets · …
+  creative/     bare-minimum-ux · codex-imagegen · maquette · shadixfy · to-sprites
+  thinking/     bayes · constraints · dissolve · smallbets
+  personal/     eloquent · fair-deal · goodwork · learn-anything · teamdrive
+
+.agents/skills/ &lt;name&gt;        installed copies remain flat
+&lt;name&gt;-workspace/             development workspaces remain stable at repo root</pre>
+    <figcaption>This is an initial taxonomy, not a permanent ontology. A skill lives under the category matching its primary user job; ambiguous cases choose one home and stay addressable by name.</figcaption>
+  </figure>
+  <table>
+    <thead><tr><th>Concern</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr id="layout-identity"><td>Public identity</td><td><code>name:</code> and <code>--skill &lt;name&gt;</code> remain unchanged; no category-prefixed names such as <code>delivery:backlog</code>.</td></tr>
+      <tr id="layout-discovery"><td>Discovery</td><td>Skill discovery reads exactly <code>skills/&lt;category&gt;/&lt;name&gt;/SKILL.md</code>. Setup is an ordinary <code>reference/setup.md</code> branch behind the root skill’s command pointer, so recursive reference files never acquire public identities.</td></tr>
+      <tr id="layout-dependencies"><td>Dependencies</td><td>Sibling declarations continue to use skill names only. Moving a source directory cannot alter the dependency graph.</td></tr>
+      <tr id="layout-installed"><td>Installed copies</td><td>Project and harness install directories remain flat by name. Categories are source-repository navigation, not runtime namespaces.</td></tr>
+      <tr id="layout-migration"><td>Migration</td><td>One atomic move updates every repo-owned path, catalog entry, setup script, lock source, eval, and documentation link; a generated migration map records old → new locations.</td></tr>
+      <tr id="layout-readme"><td>Browsing</td><td>The root catalog groups by category, then distinguishes invocation policy within each category—matching Matt’s useful separation of physical domain and invocation semantics.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="setup-subskill-representation">
+  <h2>Setup is an owned reference, not another skill</h2>
+  <p>Setup is a branch of the public skill’s command surface. The owning <code>SKILL.md</code> routes <code>setup</code> to an ordinary bundled reference such as <code>reference/setup.md</code>; no nested <code>SKILL.md</code>, hidden skill identity, or separate setup dispatcher is introduced. <code>setup-asher-skills</code> owns closure-wide installation and invokes each installed owner’s setup branch by name.</p>
+  <figure id="setup-file-shape">
+    <pre>skills/delivery/backlog/
+  SKILL.md                 public skill; `setup` command points to reference/setup.md
+  README.md
+  reference/
+    setup.md               ordinary branch reference; owns backlog playbook setup
+    run.md …
+
+.agents/skills/backlog/    one flat public install; no nested skill identity</pre>
+  </figure>
+  <table id="setup-private-contract">
+    <thead><tr><th>Concern</th><th>Contract</th></tr></thead>
+    <tbody>
+      <tr id="setup-declaration"><td>Declaration</td><td>The public root’s command table declares <code>setup</code> and points to <code>reference/setup.md</code>; required and optional sibling names remain canonical dependency declarations. A broken pointer is a packaging error. No setup command means the skill has no setup branch.</td></tr>
+      <tr id="setup-discovery"><td>Discovery</td><td>Skill discovery reads only <code>skills/&lt;category&gt;/&lt;name&gt;/SKILL.md</code>. Setup references are ordinary bundled markdown reached by context pointers, so catalog, installer, and model metadata never mistake them for independent skills.</td></tr>
+      <tr id="setup-invocation"><td>Invocation</td><td>A user may invoke <code>&lt;skill&gt; setup</code>. For installation, <code>setup-asher-skills</code> resolves the selected skill’s required sibling closure, presents the total write plan, installs dependency-first, then invokes each installed owner’s <code>setup</code> branch dependency-first. It names the public skill; it never imports or duplicates the setup reference.</td></tr>
+      <tr id="setup-order"><td>Ordering and cycles</td><td>Required-sibling edges define a deterministic topological order; a required cycle is a hard pre-write error naming the full cycle. Optional siblings join only when installed or explicitly selected and cannot silently become required.</td></tr>
+      <tr id="setup-absence"><td>Absent or failed setup</td><td>No setup command is a valid no-op. A routed setup failure stops dependants, records partial writes, and reports the owning public skill; the owner’s reference must reconcile safely on the next invocation.</td></tr>
+      <tr id="setup-packaging"><td>Packaging proof</td><td>A clean install proves <code>reference/setup.md</code> ships as an ordinary file inside its owner, the root command reaches it, direct and installer-driven setup are behaviorally equivalent, and a partial-failure retry is idempotent.</td></tr>
+      <tr id="setup-dispatcher-owner"><td>Installer ownership</td><td><code>setup-asher-skills</code> owns catalog choice, recursive sibling closure, install/audit UX, total-write confirmation, ordering, and invoking public setup branches. Each public skill owns only the behavior inside its own <code>reference/setup.md</code>.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="provenance-credit">
+  <h2>Skill provenance and credit</h2>
+  <p>Compact modules should make lineage easier to see, not easier to erase. Any skill derived from, adapted from, copied from, or materially inspired by another skill records that relationship in its own README.</p>
+  <table id="provenance-contract">
+    <thead><tr><th>Relationship</th><th>Required README credit</th><th>Repository obligation</th></tr></thead>
+    <tbody>
+      <tr id="credit-copied"><td>Copied or substantially adapted</td><td>Upstream author/project, direct source URL, immutable commit/tag when available (access date only for unversioned sources), what was copied, and a short summary of local changes.</td><td>Verify license compatibility before shipping; preserve every required notice and include the upstream license text when its terms require it.</td></tr>
+      <tr id="credit-inspired"><td>Materially inspired</td><td>Name and link the upstream skill/project, say explicitly that the local implementation is original or substantially different, and identify the borrowed idea or workflow shape.</td><td>Do not imply endorsement or code copying; still check for copied wording, templates, fixtures, and scripts during review.</td></tr>
+      <tr id="credit-internal"><td>Extracted or adapted from another skill in this repository</td><td>Name and link the original local skill/path, preserve every upstream ancestor from that skill’s credits, and explain whether authority moved or a technique was intentionally copied.</td><td>Keep one authoritative technique owner; the old README points to the new owner, and copied local files retain a short source header so improvements can be reconciled deliberately.</td></tr>
+      <tr id="credit-none"><td>No meaningful external or internal source</td><td>No boilerplate credits section is required.</td><td>The audit records “original/no identified source” outside the shipped README rather than adding noisy empty prose.</td></tr>
+    </tbody>
+  </table>
+  <pre id="credits-readme-shape">## Credits
+
+- Relationship: copied | adapted | inspired | extracted
+- Source: Author/Project — immutable source link
+- Borrowed: &lt;technique, workflow shape, files, or wording&gt;
+- Local changes: &lt;concise summary&gt;
+- License/notices: &lt;license and repository notice path&gt;</pre>
+  <p class="problem">The first audit must cover every published skill, with special attention to <code>diagnosing-bugs</code> and <code>writing-great-skills</code>. Credit is human-facing README material, so it does not increase runtime skill context.</p>
+</section>
+
+<section id="memory-design-gate">
+  <h2>Memory requires its own plan and approval gate</h2>
+  <p>This architecture plan establishes the need for a cross-harness <code>memory</code> skill, but it does not choose the permanent storage defaults. Before implementation, run a separate <code>plan</code> session that studies the useful behavior of each installed harness-specific memory system, tests candidate shared stores, and presents the migration/deprecation policy for approval.</p>
+  <table id="memory-design-questions">
+    <thead><tr><th>The memory plan must settle</th><th>Choices to compare</th><th>Approval evidence</th></tr></thead>
+    <tbody>
+      <tr id="memory-defaults"><td>Default homes by scope</td><td>Project repo/playbook, issue tracker, private shared repository, machine-global store, or no persistence; secrets remain outside all memory stores.</td><td>A routing matrix for project facts, active work, cross-project knowledge, ephemeral observations, and sensitive data.</td></tr>
+      <tr id="memory-store"><td>Shared-store mechanics</td><td>Location, schema, indexing/retrieval, provenance, history, sync, conflict handling, offline behavior, encryption/access, review/expiry, and cross-machine bootstrap.</td><td>Representative Claude and Codex read/write/recall probes against each viable candidate, with failure and recovery behavior.</td></tr>
+      <tr id="memory-inspiration"><td>Harness behaviors worth preserving</td><td>Automatic capture, project scoping, user correction/forgetting, lazy recall, source visibility, retention, and controls from Claude Code and every other installed harness memory surface.</td><td>A feature comparison that names what is adopted, adapted, or rejected and links the authoritative harness documentation/source.</td></tr>
+      <tr id="memory-deprecation"><td>Harness-specific deprecation</td><td>Inventory, classify, deduplicate, migrate, shadow-read, disable writes, verify parity, disable reads, retain reversible snapshot, and remove only after acceptance.</td><td>A phased rollout with explicit go/no-go checks, rollback commands, and proof that no useful memory becomes unreachable.</td></tr>
+      <tr id="memory-ownership"><td>Authority and correction</td><td>Which store wins on conflicts, who may update/delete, how supersession works, and whether project truth can ever be promoted globally.</td><td>Conflict, correction, stale-memory, deletion, and project-vs-global precedence scenarios.</td></tr>
+    </tbody>
+  </table>
+  <p class="problem">A private git-backed store remains a candidate baseline because it is versioned and harness-neutral, not a foregone conclusion. No harness memory is disabled until the approved memory plan’s migration and parity gates pass.</p>
+</section>
+
+<section id="model">
+  <h2>The target shape</h2>
+  <p><code>backlog</code> owns the durable issue lifecycle; worker skills own repeatable disciplines; <code>memory</code> routes durable discoveries to shared owners; each public skill’s setup reference owns the project playbooks that make that capability concrete.</p>
+  <figure id="ownership-diagram">
+    <svg viewBox="0 0 780 430" width="100%" role="img" aria-label="Backlog core delegates work to reusable worker skills, memory routes discoveries, and public skill setup references own playbooks">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--muted)"/></marker>
+        <marker id="green-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="var(--skill)"/></marker>
+      </defs>
+
+      <rect x="20" y="75" width="240" height="205" rx="12" fill="none" stroke="var(--core)" stroke-width="2"/>
+      <text x="38" y="102" class="core" font-weight="700">backlog · irreducible core</text>
+      <text x="38" y="130">setup · groom · queue · claim</text>
+      <text x="38" y="153">wave dispatch · issue lifecycle</text>
+      <text x="38" y="176">tracker / branch / PR state</text>
+      <text x="38" y="199">worktree + resource coordination</text>
+      <text x="38" y="222">checkpoint · resume · status board</text>
+      <text x="38" y="250" class="small">Keeps orchestration; explicitly assigns skills</text>
+      <text x="38" y="266" class="small">to child threads and consumes their reports.</text>
+
+      <rect x="330" y="35" width="180" height="48" rx="10" fill="none" stroke="var(--skill)"/>
+      <text x="350" y="57" class="skill" font-weight="700">diagnosing-bugs</text>
+      <text x="350" y="73" class="small">first extraction · model-invoked</text>
+
+      <rect x="330" y="98" width="180" height="48" rx="10" fill="none" stroke="var(--skill)"/>
+      <text x="350" y="120" class="skill" font-weight="700">implement / refactor</text>
+      <text x="350" y="136" class="small">follow-on execution disciplines</text>
+
+      <rect x="330" y="161" width="180" height="48" rx="10" fill="none" stroke="var(--skill)"/>
+      <text x="350" y="183" class="skill" font-weight="700">verify</text>
+      <text x="350" y="199" class="small">follow-on verdict discipline</text>
+
+      <rect x="330" y="224" width="180" height="48" rx="10" fill="none" stroke="var(--skill)"/>
+      <text x="350" y="246" class="skill" font-weight="700">code-review / evidence</text>
+      <text x="350" y="262" class="small">follow-on review disciplines</text>
+
+      <rect x="330" y="287" width="180" height="58" rx="10" fill="none" stroke="var(--skill)" stroke-width="2"/>
+      <text x="350" y="310" class="skill" font-weight="700">memory</text>
+      <text x="350" y="326" class="small">model-invoked routing + recall</text>
+      <text x="350" y="339" class="small">approved shared store + scoped owners</text>
+
+      <line x1="260" y1="130" x2="330" y2="61" stroke="var(--skill)" marker-end="url(#green-arrow)"/>
+      <line x1="260" y1="156" x2="330" y2="122" stroke="var(--skill)" marker-end="url(#green-arrow)"/>
+      <line x1="260" y1="185" x2="330" y2="185" stroke="var(--skill)" marker-end="url(#green-arrow)"/>
+      <line x1="260" y1="214" x2="330" y2="248" stroke="var(--skill)" marker-end="url(#green-arrow)"/>
+
+      <path d="M140 280 L140 316 L330 316" fill="none" stroke="var(--skill)" marker-end="url(#green-arrow)"/>
+
+      <rect x="590" y="75" width="170" height="205" rx="12" fill="none" stroke="var(--setup)" stroke-width="2"/>
+      <text x="610" y="102" class="setup" font-weight="700">setup-asher-skills</text>
+      <text x="610" y="132">resolve siblings</text>
+      <text x="610" y="155">confirm total writes</text>
+      <text x="610" y="178">invoke owner setup</text>
+      <text x="610" y="201">load setup reference</text>
+      <text x="610" y="224">verify readiness</text>
+      <text x="610" y="252" class="small">Each public skill routes to</text>
+      <text x="610" y="268" class="small">its own setup reference.</text>
+
+      <line x1="510" y1="61" x2="590" y2="120" stroke="var(--muted)" marker-end="url(#arrow)"/>
+      <line x1="510" y1="122" x2="590" y2="150" stroke="var(--muted)" marker-end="url(#arrow)"/>
+      <line x1="510" y1="185" x2="590" y2="180" stroke="var(--muted)" marker-end="url(#arrow)"/>
+      <line x1="510" y1="248" x2="590" y2="215" stroke="var(--muted)" marker-end="url(#arrow)"/>
+
+      <line x1="510" y1="316" x2="590" y2="245" stroke="var(--muted)" marker-end="url(#arrow)"/>
+
+      <text x="390" y="392" text-anchor="middle" class="small">Invocation policy is independent: a parent may name any installed skill; a child may also discover model-invoked skills.</text>
+    </svg>
+    <figcaption>Runtime composition remains by name. Installation/setup guarantees only declared siblings; other installed model-invoked skills remain ambient capabilities available to delegated threads.</figcaption>
+  </figure>
+</section>
+
+<section id="boundary-review">
+  <h2>Boundary review</h2>
+  <table class="wide">
+    <thead><tr><th>Current backlog concern</th><th>Disposition</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr id="boundary-diagnosis"><td><code>diagnose.md</code> + <code>diagnosing-bugs.md</code></td><td class="status extract">Extract now</td><td>Independent trigger, stable cross-project technique, already adapted from Matt Pocock, and useful both directly and inside issue threads.</td></tr>
+      <tr id="boundary-implement"><td><code>implement.md</code> + <code>implementing.md</code></td><td class="status follow">Follow-on skill</td><td>Reusable discipline, but its final shape should decide whether to compose a separate TDD primitive or own the test-first loop itself.</td></tr>
+      <tr id="boundary-refactor"><td><code>refactor.md</code> + <code>refactoring.md</code></td><td class="status follow">Follow-on skill</td><td>Clean behavior-preserving contract with a distinct trigger; extraction is low-risk after the setup protocol is proven.</td></tr>
+      <tr id="boundary-verify"><td><code>verify.md</code> + <code>verifying.md</code></td><td class="status follow">Follow-on skill</td><td>Useful outside backlog, but its handback loop, environment lease, and evidence boundary must be made caller-neutral first.</td></tr>
+      <tr id="boundary-code-review"><td><code>adversarial-review.md</code> + reviewer/fixer playbooks</td><td class="status follow">Follow-on split</td><td>Extract a one-pass <code>code-review</code> discipline; keep or compose the capped reviewer⇄fixer loop as an orchestrator.</td></tr>
+      <tr id="boundary-evidence"><td><code>evidence.md</code> + evidence playbook</td><td class="status follow">Follow-on skill</td><td>Reusable capture discipline, but still coupled to final-HEAD timing, PR-body replacement, and platform publication.</td></tr>
+      <tr id="boundary-memory"><td>Claude Code auto-memory + #45 disposition audits</td><td class="status extract">Plan, then new root skill</td><td>First approve the storage/routing/deprecation defaults in a dedicated memory plan; then create a model-invoked <code>memory</code> capability and migrate before disabling any harness-private memory.</td></tr>
+      <tr id="boundary-capacity"><td>Harness usage limits, reset windows, and continuation scheduling</td><td class="status extract">New root skill</td><td>Create a model-invoked <code>capacity</code> capability that reports observed headroom and reset times; staffing consumes it for routing and backlog consumes it for wave size, checkpoint, and resume decisions.</td></tr>
+      <tr id="boundary-core"><td>groom, run, issue-loop, setup coordination, worktree isolation, platform/environment/backlog policy, change description</td><td class="status keep">Keep in backlog</td><td>These jointly define the durable tracker-to-reviewed-change lifecycle; splitting them would hide state transitions and increase coordination load.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="retro-disposition">
+  <h2>Retro findings → owners</h2>
+  <table class="wide">
+    <thead><tr><th>Repeated finding</th><th>Owner after change</th><th>Planned rule</th></tr></thead>
+    <tbody>
+      <tr id="retro-waits"><td>Dead watchers, phantom parking, nested reports</td><td><code>backlog</code></td><td>Tracked waits only; checkpoint before every park; central event consumption; child final text is the report; large handoffs travel by durable file.</td></tr>
+      <tr id="retro-concurrency"><td>Fleet quota kills and expensive issue coordinators</td><td><code>backlog</code> + <code>staffing</code></td><td>Conflict-aware waves, machine-aware cap, coordinator selected per issue at dispatch, upward escalation for uncertainty.</td></tr>
+      <tr id="retro-symmetric-dispatch"><td>Sibling harness dispatch reachability (#49)</td><td><code>staffing</code></td><td>Declare Codex→Claude through <code>claude -p</code> without <code>--bare</code>. No vendor-policy monitor is part of the skill: if the path later fails, record that direction unavailable and route through the remaining asymmetric sibling harness graph.</td></tr>
+      <tr id="retro-usage"><td>Hard usage-limit stops strand active work across harnesses</td><td><code>capacity</code> + <code>staffing</code> + <code>backlog</code></td><td>Observe each independent pool, forecast only to the next durable boundary, reduce or reroute before exhaustion, then checkpoint and schedule an audited resume at reset when no qualified pool remains.</td></tr>
+      <tr id="retro-resume"><td>Human-requested audits and unreliable self-reports</td><td><code>backlog</code></td><td>Durable status board and checkpoint schema; automatic audited resume from tracker, refs, worktrees, event logs, and processes.</td></tr>
+      <tr id="retro-codex"><td>stdin hangs, silent-task kills, foreign PIDs, invisible progress</td><td><code>staffing</code></td><td>Standard Codex invocation: closed stdin, tracked foreground/session, heartbeat, milestone file, worktree identity, exact-ref verification, no bare-PID ownership.</td></tr>
+      <tr id="retro-review"><td>Self-approval and dead review routes</td><td><code>review-loop</code></td><td>Separate token custody, client evidence, route health before awaiting, durable state, registry/route sweep, centralized verdict stream.</td></tr>
+      <tr id="retro-env"><td>Auth, display, proxy, compose-lock, and browser gaps discovered during verify</td><td>owning setup references + environment playbook</td><td>Walk auth and drive-to-feature end to end; record a verification preflight; scoped cleanup only; re-check on drift.</td></tr>
+      <tr id="retro-platform"><td>Broken <code>gh</code> verbs, closing syntax, merge-policy traps</td><td><code>backlog setup</code> + platform playbook</td><td>Exercise every bound verb, record working fallbacks, encode squash/stack protocol, and verify state-changing effects.</td></tr>
+      <tr id="retro-verify"><td>Environment failures patched as product bugs; verify/evidence fixture churn</td><td><code>verify</code> / evidence boundary</td><td>Exonerate the environment before product fixes; keep a scoped environment/fixture lease through final evidence; capture only against final reviewed HEAD.</td></tr>
+      <tr id="retro-memory"><td>Knowledge trapped in Claude-only auto-memory or copied prompts</td><td><code>memory</code> plan → skill</td><td>Compare harness behavior and candidate stores; approve the routing matrix and reversible deprecation sequence before building the shared memory capability.</td></tr>
+      <tr id="retro-greenfield-files"><td>Greenfield instruction-file fork (#51)</td><td><code>setup-asher-skills</code></td><td>Canonical <code>AGENTS.md</code>; minimal Claude import shim when needed; preserve deliberate existing layouts.</td></tr>
+      <tr id="retro-setup-promises"><td>Promised but unwritable sibling playbooks (#52)</td><td><code>review-loop setup</code> + <code>staffing setup</code></td><td>Each public command routes to its owned <code>reference/setup.md</code>; staffing prose matches its preserve-existing-base/consent contract and project-delta behavior.</td></tr>
+      <tr id="retro-plan-hypotheses"><td>Approved mechanism/test claims proved false (#53)</td><td><code>plan</code> + <code>prototype</code> + implement/verify/reviewer</td><td>Label hypotheses, attach falsification probes, validate risky claims before dependent build, and open claimed artifacts before trusting coverage.</td></tr>
+      <tr id="retro-data-requirements"><td>Criteria impossible to exercise with available data/tenant (#54)</td><td><code>plan</code> + backlog setup/groom/verify</td><td>Declare entity/scale/account/observation needs; inventory test affordances; provision isolated per-issue fixtures; pre-approve substitutes; batch concrete scope questions.</td></tr>
+      <tr id="retro-direct-fix"><td>Diagnose ceremony for self-evident cosmetic bugs (#55.1)</td><td>backlog bug branch</td><td>Guarded direct-fix + visual verification lane; contradictory evidence falls back to <code>diagnosing-bugs</code>.</td></tr>
+      <tr id="retro-styling-evidence"><td>Duplicate capture for unchanged styling HEAD (#55.2)</td><td>verify + evidence + Reviewer</td><td>Reuse verification capture only when it is already final-HEAD evidence and Reviewer confirms review changed no code.</td></tr>
+      <tr id="retro-native-dependencies"><td>Dependency policy without verified native verbs (#55.3)</td><td>backlog setup + platform playbook</td><td>Probe and record dependency read/write verbs; run consumes the verified native edge summary.</td></tr>
+      <tr id="retro-final-handoff"><td>Deliberate run handoff loses operational context (#55.4)</td><td>backlog run</td><td>Tracker handoff table plus durable cross-harness handoff file with protocols, environment state, and cleanup debts.</td></tr>
+      <tr id="retro-behavior-ruling"><td>Reviewer finds a real behavior question with no ruling loop (#55.5)</td><td>issue coordinator + Reviewer/Fixer</td><td>Reviewer → coordinator/orchestrator/human ruling → Fixer → targeted verify → same Reviewer.</td></tr>
+      <tr id="retro-review-server"><td>Review URL published from an exec-owned server that dies (#57)</td><td><code>review-loop</code></td><td>Detached health-checked service lifecycle, idempotent stop, registry cleanup, concurrent-server regression; watcher remains delivery-only.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="sequence">
+  <h2>Roadmap tranches and approval gates</h2>
+  <p>This document is an architecture roadmap, not authorization for one atomic implementation. Each tranche below lands independently, has its own reviewed child plan or issue contract, and may proceed without waiting for unrelated tranches once its prerequisites pass.</p>
+  <table id="delivery-tranches">
+    <thead><tr><th>Tranche</th><th>Scope</th><th>Entry / exit gate</th></tr></thead>
+    <tbody>
+      <tr id="tranche-foundation"><td>A · foundation</td><td>Fold recursive setup into <code>setup-asher-skills</code>; canonical sibling declarations; public <code>setup</code> commands backed by ordinary owner references; #51 greenfield instructions; #52 honest delegation; provenance/credit rule.</td><td>Exit when clean install, closure ordering, direct-vs-installer setup parity, cycle, partial retry, consumer-project delegation, greenfield layout, and README/license audits pass. Enables every later tranche.</td></tr>
+      <tr id="tranche-backlog"><td>B · first production cut</td><td>Staffing coordinator role → #48 issue dispatch → #49 sibling harness dispatch → <code>diagnosing-bugs</code> extraction → #44–47 hardening → #53–55 plan/verify/loop refinements → #57 durable review serving.</td><td>A reviewed child plan maps every issue item to files/probes and proves routine/non-routine staffing, both reachable sibling-harness directions, asymmetric route-loss fallback, falsification/data gates, five #55 branches, durable review submission, and upward escalation.</td></tr>
+      <tr id="tranche-layout"><td>C · source navigation</td><td>Category-directory migration and recursive public/private discovery updates.</td><td>Separate migration plan/map; all names and installs remain stable. Independent after tranche A.</td></tr>
+      <tr id="tranche-capacity"><td>D · capacity</td><td>Usage observation, machine-wide reservations, reset scheduling, staffing/backlog consumption.</td><td>Separate reviewed skill plan and simulations. Backlog may ship conservative fixed caps before this tranche.</td></tr>
+      <tr id="tranche-memory"><td>E · memory design</td><td>Only the dedicated memory plan, harness comparison, candidate-store trials, and approved migration/deprecation design.</td><td>This roadmap ends at that approval record. Implementation, migration, and any disablement require the memory child plan’s separate authorization.</td></tr>
+      <tr id="tranche-future"><td>F · follow-on</td><td>Refactor/implement/verify/review/evidence extractions.</td><td>One reviewed child plan and probe-eval record per extraction.</td></tr>
+    </tbody>
+  </table>
+  <p class="problem" id="tranche-compaction-rule"><strong>Universal exit gate:</strong> after a tranche’s behavior is correct, every changed skill/reference must pass the post-refactor compaction gate before that tranche can be approved or installed.</p>
+  <h3 id="candidate-order">Tranche-local sequences — no global serial order</h3>
+  <h3 id="sequence-foundation">A · foundation</h3>
+  <ol class="sequence">
+    <li id="phase-1"><div><strong>Land the composition/setup contract inside <code>setup-asher-skills</code>.</strong> Define declared siblings, optional siblings, invocation/delegation policy, and owner-routed <code>setup</code> references. Resolve #51’s greenfield layout and #52’s review-loop/staffing promises, then prove dependency-first public-skill invocation in self-host and clean-consumer fixtures.</div></li>
+    <li id="phase-compactness"><div><strong>Establish the compactness baseline, then repeat it after every refactor.</strong> Inventory always-loaded metadata, each command/branch path, setup-only references, behavioral probes, and cold-reader comprehension before changes. After each tranche works, ruthlessly prune and disclose until agent load and human reading both improve without changing the locked behavior.</div></li>
+  </ol>
+  <h3 id="sequence-backlog">B · first production cut</h3>
+  <ol class="sequence">
+    <li id="phase-staffing-coordinator"><div><strong>Add the staffing coordinator contract before changing dispatch.</strong> Compile the issue-coordinator floor, eligible routes, groomed coordination class, per-harness succession line, capacity inputs, and upward escalation triggers into the roster and setup playbook.</div></li>
+    <li id="phase-credit"><div><strong>Enable #49 sibling harness dispatch.</strong> Add Codex→Claude as a normal eligible route through <code>claude -p</code> without <code>--bare</code>, verify one end-to-end dispatch and return, and encode route failure as a staffing input. Do not poll Anthropic policy: an observed invocation failure makes the graph asymmetric until the route is deliberately repaired.</div></li>
+    <li id="phase-3"><div><strong>Harden backlog from #44–49 and #53–55.</strong> Land #48’s pre-spawn coordinator decision, #49’s sibling harness route, plan falsification/data requirements, direct-fix and styling-evidence branches, native dependency verbs, final handoff file, behavior-ruling loop, tracked waits, checkpoints, status events, audited resume, and lock/platform preflights.</div></li>
+    <li id="phase-2"><div><strong>Extract <code>diagnosing-bugs</code> as the pilot.</strong> Preserve the tight red-capable feedback-loop discipline, transitive attribution, and project delta; its public <code>setup</code> command routes to <code>reference/setup.md</code>, which owns the playbook. Backlog’s bug branch becomes a thin explicit invocation plus lifecycle handoff.</div></li>
+    <li id="phase-4"><div><strong>Harden sibling owners used by this cut.</strong> Update plan/prototype falsification, staffing delegate mechanics, and review-loop’s #57 detached service lifecycle plus gate integrity/durable verdict path; keep backlog as composer.</div></li>
+    <li id="phase-6"><div><strong>Dogfood the production cut.</strong> Install into greenfield and inherited fixtures; execute direct-fix and diagnosed bugs plus an enhancement with declared data needs; submit review after the issuing exec exits; exercise behavior escalation, interruption/resume, native dependencies, final handoff, and every spawn/setup owner.</div></li>
+  </ol>
+  <h3 id="sequence-layout">C · source navigation</h3>
+  <ol class="sequence">
+    <li id="phase-layout"><div><strong>Migrate skill sources into category directories.</strong> Choose one primary-job category per existing skill, move sources atomically, make all discovery recursive, regenerate catalogs and lock metadata, and verify every skill still installs by its unchanged name.</div></li>
+  </ol>
+  <h3 id="sequence-capacity">D · capacity</h3>
+  <ol class="sequence">
+    <li id="phase-capacity"><div><strong>Add capacity-aware execution under its child plan.</strong> Build the model-invoked <code>capacity</code> skill, configure reliable read-only usage/reset probes, establish the machine-wide snapshot/lease contract, and make staffing/backlog consume it at dispatch and durable stage boundaries. Simulate low, unknown, exhausted, and reset states.</div></li>
+  </ol>
+  <h3 id="sequence-memory">E · memory design</h3>
+  <ol class="sequence">
+    <li id="phase-memory-plan"><div><strong>Plan the memory system in its independent tranche.</strong> Inspect the installed harness-specific memory systems and their authoritative documentation, test candidate shared stores, choose defaults by scope, define correction/expiry and conflict authority, and design a reversible shadow-read → migrate → parity → disable sequence. Present the plan through <code>review-loop</code> and stop at approval.</div></li>
+    <li id="phase-memory"><div><strong>Open—but do not execute—the memory implementation child plan.</strong> The approved memory design seeds its own implementation issue/plan. Building the skill, migrating data, and disabling any harness memory are outside this roadmap approval.</div></li>
+  </ol>
+  <h3 id="sequence-future">F · follow-on extractions</h3>
+  <ol class="sequence">
+    <li id="phase-5"><div><strong>Plan and extract remaining disciplines one at a time.</strong> Candidate order: refactor → implement → verify → code-review loop → evidence. Each cut gets a separately reviewed child plan, its own probe eval, and must leave backlog thinner without weakening the end-to-end lifecycle.</div></li>
+  </ol>
+</section>
+
+<section id="stories">
+  <h2>Stories</h2>
+  <ul class="plain">
+    <li id="story-1">As a project maintainer, I want <code>diagnosing-bugs</code> independently installable, so that the same debugging discipline works without installing backlog.</li>
+    <li id="story-2">As a backlog orchestrator, I want to assign a named skill to each delegated worker, so that child threads receive a bounded process without importing sibling files.</li>
+    <li id="story-3">As a delegated worker, I want access to installed model-invoked skills even when the parent did not name one, so that I can reach useful ambient capabilities when the task reveals the need.</li>
+    <li id="story-4">As a project being set up, I want each public skill’s <code>setup</code> command to route to its own bundled setup reference, so that configuration ownership follows capability ownership without inventing another skill.</li>
+    <li id="story-5">As a human running several tickets, I want bounded waves and a durable status board, so that progress stays visible and a quota or session failure does not erase the run’s state.</li>
+    <li id="story-6">As a resumed orchestrator, I want an audited resume based on durable evidence, so that I do not trust stale PIDs, dead watchers, or optimistic agent reports.</li>
+    <li id="story-7">As a project using a live review gate, I want only a genuine human verdict to approve work, so that agents cannot self-approve or mistake an unpublished route for a valid gate.</li>
+    <li id="story-8">As a verifier, I want setup to prove the real auth and drive-to-feature path, so that environment failures are identified before they are misdiagnosed as product defects.</li>
+    <li id="story-9">As an agent that discovers a durable fact, I want a model-invoked memory skill to classify and store it in the right shared owner, so that knowledge is not trapped in one harness or duplicated everywhere.</li>
+    <li id="story-10">As the same user on another machine or harness, I want cross-project memories available through the approved shared owner, so that recall and correction travel with me without assuming the storage decision in advance.</li>
+    <li id="story-11">As a maintainer browsing a growing collection, I want skill sources grouped by their primary user job, so that I can find related skills without changing how any skill is invoked or installed.</li>
+    <li id="story-12">As a Codex orchestrator, I want staffing to dispatch work to the Claude sibling harness through <code>claude -p</code> without <code>--bare</code>, so that either harness may delegate to the other while each direction remains independently fallible.</li>
+    <li id="story-13">As a workflow author, I want to call a skill through a narrow interface instead of repeating its discipline, so that the caller stays short and has only one module boundary to understand.</li>
+    <li id="story-14">As a skill reader, I want each runtime branch to load only the material it uses, so that token cost and human reading effort scale with the selected path rather than the whole system.</li>
+    <li id="story-15">As a user running a long implementation, I want the system to notice shrinking usage headroom before a hard stop, so that it finishes durable work, adjusts staffing, or pauses cleanly instead of stranding a fleet.</li>
+    <li id="story-16">As a returning orchestrator after a reset, I want a scheduled audited continuation, so that productive work resumes without asking me to reconstruct or manually restart the run.</li>
+    <li id="story-17">As an upstream skill author, I want copied, adapted, and inspired work credited in the consuming skill’s README with preserved license obligations, so that decomposition never erases lineage.</li>
+  </ul>
+</section>
+
+<section id="decisions">
+  <h2>Key decisions</h2>
+  <ul class="plain">
+    <li id="dec-1"><strong>Two independent axes.</strong> Invocation policy and delegation policy are recorded separately; “primitive” does not imply model-invoked, and “orchestrator” does not imply delegated execution.</li>
+    <li id="dec-2"><strong>Explicit and ambient composition coexist.</strong> A parent may name any installed skill in a child prompt; inside the child, only model-invoked skills are autonomously discoverable.</li>
+    <li id="dec-3"><strong>Setup is a reference branch, not a skill.</strong> A public skill routes its <code>setup</code> command to <code>reference/setup.md</code>, which creates/reconciles its playbooks. <code>setup-asher-skills</code> coordinates closure-wide invocation by public skill name and never imports another skill’s setup file.</li>
+    <li id="dec-4"><strong><code>diagnosing-bugs</code> is the pilot extraction.</strong> It has the strongest independent invocation, smallest coupling surface, and clearest provenance. Backlog keeps the issue lifecycle around it, not the technique itself.</li>
+    <li id="dec-5"><strong>No big-bang decomposition.</strong> Other candidates leave backlog only in individually evaluated cuts; the end-to-end issue loop must stay green after each extraction.</li>
+    <li id="dec-6"><strong>Durable truth beats agent reports.</strong> Checkpoints, refs, tracker state, event logs, and verified process identity are authoritative for status and resume; a message claiming “watch armed” or “merged” is not.</li>
+    <li id="dec-7"><strong>Final-HEAD evidence remains invariant.</strong> Verification may retain a scoped stack/fixture lease, but human-facing evidence is finalized only after review convergence against the reviewed HEAD.</li>
+    <li id="dec-8"><strong>Retros are input, not a new mandatory ceremony.</strong> This roadmap consumes #44–49, #51–55, and #57 plus the named closed regression issues; it does not add a retrospective stage to every ticket.</li>
+    <li id="dec-9"><strong>Harness memory is learned from, migrated, then deprecated.</strong> The memory plan inventories every installed harness-specific memory surface, preserves useful behavior deliberately, and approves a reversible migration before setup disables writes or reads. Claude auto-memory is the first known target, not the only possible one; no useful entry is silently deleted.</li>
+    <li id="dec-10"><strong>Memory is routing, not a new dumping ground.</strong> Project invariants land in their existing repo instruction/playbook owner; active decisions and incidents land on the issue tracker; secrets remain in secret storage; ephemeral or stale facts are dropped; only genuinely cross-project knowledge enters the global store.</li>
+    <li id="dec-11"><strong>Memory storage defaults are approval-gated.</strong> A private git-backed store is the baseline candidate because it offers harness-neutral history, sync, and offline reads, but the dedicated memory plan must compare it with the real alternatives. Whatever wins is private where required and retrieved lazily rather than injected wholesale into every turn.</li>
+    <li id="dec-12"><strong>Categories are physical, not semantic namespaces.</strong> The source tree gains a shallow domain grouping inspired by Matt Pocock’s repository; skill names, dependency references, installed copies, and workspace names do not inherit the category path.</li>
+    <li id="dec-13"><strong>Group by primary user job.</strong> Categories describe why someone reaches for a skill—system, delivery, creative, thinking, personal—not whether it is primitive/orchestrator or user/model-invoked. Those remain independent metadata axes.</li>
+    <li id="dec-14"><strong>#48 and #49 land in the first production cut.</strong> Dispatch-time coordinator staffing uses facts already available from grooming. Sibling harness dispatch is symmetric while both directions work: Codex reaches Claude through <code>claude -p</code> without <code>--bare</code>; each direction has its own availability state and fallback.</li>
+    <li id="dec-15"><strong>Reachability and economics are compiled facts.</strong> Staffing records each harness→model route with its auth source, cost pool, allowance/credit, health check, and fallback. Vendor announcements never become capability until the route works end to end.</li>
+    <li id="dec-16"><strong>Compactness is a correctness tool, not aesthetic minification.</strong> The target is less material in each caller and branch, achieved by removing duplication/no-ops and deepening module boundaries; required completion criteria stay inside the owning skill even when they cost lines.</li>
+    <li id="dec-17"><strong>Deep modules expose four things.</strong> A caller needs the skill’s trigger/input, output, completion gate, and failure/escalation contract. The worker owns the full method. If the caller must understand the method to invoke the skill safely, the boundary is too shallow.</li>
+    <li id="dec-18"><strong>Load traces are the token budget.</strong> Compactness is measured per real path—always-loaded metadata, composer, selected worker, selected references, setup-only—not by total repository size or an arbitrary file-length cap.</li>
+    <li id="dec-19"><strong>The graph is generated architecture.</strong> Canonical dependency/setup declarations drive the catalog and checked graph data; the rendered plan visual explains that graph but is not a second hand-maintained source of truth.</li>
+    <li id="dec-20"><strong>Capacity is a separate deep module.</strong> Usage observation and reset interpretation are reusable across backlog, skill-loop, and ad-hoc delegated work. <code>capacity</code> produces a snapshot; staffing routes from it; callers decide how to checkpoint and resume.</li>
+    <li id="dec-21"><strong>Unknown is not healthy.</strong> Every pool observation carries source, time, and confidence. When a harness exposes no reliable meter, capacity reports <em>unknown</em> and callers reduce commitment; they never invent a remaining percentage or reset timestamp.</li>
+    <li id="dec-22"><strong>Optimize completed durable units, not concurrency.</strong> The scheduler compares reliable headroom to the predicted cost of reaching the next checkpoint. It prefers finishing near-complete work, shrinks waves before exhaustion, and never routes below capability or taste floors just to consume another pool.</li>
+    <li id="dec-23"><strong>Hard limits become scheduled pauses.</strong> On exhaustion, the active thread writes a durable checkpoint and status, releases scarce resources, records the earliest safe continuation time, and installs a harness-bound wakeup. Resume begins with the same durable-state audit used after a fleet kill.</li>
+    <li id="dec-24"><strong>Capacity is machine/account-wide.</strong> Concurrent projects share usage pools, so observations and active reservations live in an atomic machine-level state surface rather than isolated repo playbooks; project policy may cap consumption further but cannot create headroom.</li>
+    <li id="dec-25"><strong>Staff before spawning.</strong> The parent that owns a delegation consults staffing with the task facts and capacity before creating the child. For backlog’s first delegation, that parent is the run thread and the selected role is an issue coordinator—not the session orchestrator by default.</li>
+    <li id="dec-26"><strong>Skill invocation is not an agent boundary.</strong> A coordinator or delegated worker may invoke model-invoked skills in its current context. A new agent exists only at an explicit dispatch boundary, which records parent, purpose, selected route, thread id, capacity pool, durable return contract, and escalation successor.</li>
+    <li id="dec-27"><strong>Lineage is part of the skill’s human contract.</strong> When another skill or project materially shaped a skill, its README states whether the relationship is copied, adapted, inspired, or internally extracted; names and links the source; describes local changes; and carries every license/notice obligation without loading that history into runtime instructions.</li>
+    <li id="dec-28"><strong>Deprecation proceeds by parity gates, not a flag flip.</strong> Harness-private memory moves through inventory, approved routing, migration, shadow comparison, write disablement, read parity, and only then read disablement/removal. Each phase has rollback and preserves an accepted snapshot until the next gate passes.</li>
+    <li id="dec-29"><strong>This is a roadmap with separately authorized tranches.</strong> Approval settles the architecture, order, and child-plan gates; it does not authorize one giant change, memory migration/disablement, capacity deployment, or every later extraction. Each tranche can land and roll back independently.</li>
+    <li id="dec-30"><strong>Events are canonical; boards are projections.</strong> Each parent writes structured spawn/return events to the platform-bound durable surface. Status can be rebuilt after the run thread exits, so monitoring convenience never becomes a single point of truth.</li>
+    <li id="dec-31"><strong>Greenfield instructions are harness-neutral first.</strong> Setup creates <code>AGENTS.md</code> as the canonical project instruction file when neither instruction file exists; when Claude Code is installed it also creates the minimal <code>CLAUDE.md</code> <code>@AGENTS.md</code> import plus Claude-only deltas. Existing deliberate layouts are reconciled, never replaced.</li>
+    <li id="dec-32"><strong>Setup promises only owner-routed behavior.</strong> Review-loop’s public <code>setup</code> command gains an ordinary setup reference for presentation configuration. Staffing’s setup reference preserves an existing global base and writes a missing base only with explicit consent; otherwise it reconciles the project delta. Installer prose names those exact degradations.</li>
+    <li id="dec-33"><strong>Mechanism claims remain hypotheses until falsified.</strong> Plans label unfamiliar-library/runtime assumptions and their cheapest red-capable probe. Implement validates the riskiest first; verify and review open every claimed test/artifact before treating it as coverage.</li>
+    <li id="dec-34"><strong>Every criterion declares how it can be exercised.</strong> Entities, account/tenant needs, scale, fixture lifetime, and observation mechanism are part of the criterion. Infeasible requirements are rewritten or their substitute is approved at the plan gate, never improvised by verification.</li>
+    <li id="dec-35"><strong>Self-evident cosmetic bugs get a guarded direct-fix lane.</strong> A human report plus an observable visual/copy defect and named styling/copy cause may go straight to fix and visual verification; the first contradictory observation falls back to <code>diagnosing-bugs</code>.</li>
+    <li id="dec-36"><strong>Evidence validity follows HEAD, not ceremony.</strong> Styling-only verification captures may double as evidence only when review changes no product code and the reviewer explicitly confirms no recapture is required. Any code/fixture/environment change invalidates them; ordinary final-HEAD capture remains the default.</li>
+    <li id="dec-37"><strong>Review serving and verdict delivery have separate durable owners.</strong> The HTTP server launches outside the issuing exec session with closed inherited descriptors, state-scoped logs, atomic PID/port metadata, health verification, idle/explicit teardown, and stale-registry repair. Watcher loss cannot kill serving; server loss is surfaced before awaiting.</li>
+    <li id="dec-38"><strong>Behavior rulings return to lifecycle authority.</strong> A Reviewer that finds a genuine product-semantics question stops and sends it to the issue coordinator; the coordinator resolves within the approved plan or escalates to the session orchestrator/human, then sends a ruling to the Fixer, requires targeted re-verification, and returns the new HEAD to the same Reviewer.</li>
+    <li id="dec-39"><strong>Native dependency edges and final handoffs are durable platform data.</strong> Setup probes native dependency read/write verbs when available; run uses those edges for waves. On terminal handoff it writes both tracker summary and a cross-harness file snapshot under the shared run administrative root, including environment state and cleanup debts.</li>
+    <li id="dec-40"><strong>Correct behavior earns a ruthless compaction pass.</strong> Refactoring is not complete when the new graph merely works. Every changed skill is pruned for duplication, no-ops, sediment, and unnecessary always-loaded detail, then re-proven against the locked behavior. Compactness serves the agent through lower token load and the human through less, clearer material to read.</li>
+    <li id="dec-41"><strong>No arbitrary line-count target.</strong> The budget is situated load and comprehension, not a tiny file for its own sake. Required gates stay; branch-only/setup-only detail moves behind precise context pointers; a shorter file that hides authority or changes behavior fails.</li>
+  </ul>
+</section>
+
+<section id="criteria">
+  <h2>Roadmap acceptance gates</h2>
+  <p>These gates are assigned to the tranche or child plan named by their tags and surrounding sections. They are not one PR’s checklist, and an explicit blocker is a reported non-pass.</p>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><span class="tag">foundation</span>The public skill contract represents invocation policy, delegation policy, required siblings, optional siblings, and an optional <code>setup</code> command pointing to <code>reference/setup.md</code>; no nested setup <code>SKILL.md</code> exists, and required cycles fail before writes.</li>
+    <li id="ac-2" data-criterion><span class="tag">foundation</span><code>setup-asher-skills</code> resolves a clean backlog fixture’s full sibling closure, shows the complete write set, installs and invokes each public owner’s <code>setup</code> command dependency-first, skips owners without setup, and recovers idempotently from a simulated partial failure without parsing or copying reference bodies.</li>
+    <li id="ac-3" data-criterion><span class="tag">skill</span><code>diagnosing-bugs</code> installs and runs without backlog, preserves a red-capable feedback-loop gate, reproduction/minimization, ranked falsifiable hypotheses, targeted instrumentation, regression proof, cleanup, and upstream attribution.</li>
+    <li id="ac-4" data-criterion><span class="tag">setup</span><code>diagnosing-bugs setup</code> routes through its root <code>SKILL.md</code> to <code>reference/setup.md</code>, creates/reconciles its project playbook without overwriting deliberate deltas, and is idempotent on direct and <code>setup-asher-skills</code>-driven runs.</li>
+    <li id="ac-5" data-criterion><span class="tag">backlog</span>The backlog bug branch contains only lifecycle orchestration around an explicit <code>diagnosing-bugs</code> invocation; no duplicate debugging technique remains in backlog’s references or templates.</li>
+    <li id="ac-6" data-criterion><span class="tag">runtime</span>A probe proves an orchestrator can explicitly assign a user-invoked skill to a child, and another proves a child can autonomously select an available model-invoked skill that the parent did not name.</li>
+    <li id="ac-7" data-criterion><span class="tag">scheduler</span>Run dispatches conflict-aware bounded waves, chooses each issue coordinator from groomed work-type/surface through staffing, and escalates uncertain work to the orchestrator.</li>
+    <li id="ac-8" data-criterion><span class="tag">durability</span>Before every external wait or parked gate, an issue thread writes a durable checkpoint; the run status board updates at lifecycle transitions and can be reconstructed without the original thread context.</li>
+    <li id="ac-9" data-criterion><span class="tag">resume</span>A killed-run probe resumes from tracker, refs, worktrees, review events, and verified process identity; it rejects stale PIDs, dead watchers, and unsupported self-reports.</li>
+    <li id="ac-10" data-criterion><span class="tag">coordination</span>Serialized verification has an explicit live-owner lock, transfer/adoption and stale-owner rules, and no orphanable background acquirer.</li>
+    <li id="ac-11" data-criterion><span class="tag">staffing</span>The standard Codex delegate path closes stdin, emits tracked heartbeats and milestones, binds ownership to the worktree/task rather than a bare PID, verifies effects after execution, and exposes machine-wide concurrency limits.</li>
+    <li id="ac-12" data-criterion><span class="tag">review</span>The review gate verifies a live route before awaiting, persists state durably, records enough client evidence to audit a verdict, and prevents the awaiting worker from manufacturing a human approval.</li>
+    <li id="ac-13" data-criterion><span class="tag">backlog child plan</span>For each fixture in the child plan’s explicit surface matrix, setup successfully walks the named auth + drive-to-feature path and passes its route-health, display/driver, stale-process, and scoped-credential checks. A blocker is recorded as blocked, never counted as a pass.</li>
+    <li id="ac-14" data-criterion><span class="tag">backlog child plan</span>The child plan enumerates and successfully probes the required verbs for each selected binding: issue list/read/comment/role transition/close; branch/worktree create/read/delete; PR open/read/edit/review/merge; and stacked/squash reconciliation when that binding declares those policies. Broken primary verbs have effect-verified fallbacks.</li>
+    <li id="ac-15" data-criterion><span class="tag">verify</span>A verify/review/evidence probe retains only scoped fixtures/resources, exonerates a broken environment before proposing product changes, and finalizes evidence against the final reviewed HEAD.</li>
+    <li id="ac-16" data-criterion><span class="tag">retro</span>Every distinct recommendation in #44–49, #51–55, and #57 has a recorded disposition—resolved by a named tranche, assigned to a separately approved child plan, externally blocked, or explicitly rejected with reason—with no memory-only or prompt-only owner.</li>
+    <li id="ac-17" data-criterion><span class="tag">eval</span>Each extracted or materially changed skill locks its pre-refactor commands, decisions, writes, handoffs, and terminal states in probes drawn from observed failures; after structural change and compaction, the same independent-executor corpus passes before installation metadata is refreshed.</li>
+    <li id="ac-18" data-criterion><span class="tag">memory child-plan seed</span>The approved memory plan specifies a self-contained, model-invoked <code>memory</code> skill that handles learn, recall, correct, forget, and explicit parent assignment without authorizing its implementation here.</li>
+    <li id="ac-19" data-criterion><span class="tag">memory child-plan seed</span>The approved plan defines a routing probe for project invariants, active work/incidents, secrets, ephemeral facts, and cross-project knowledge, including the selected owner for each scope.</li>
+    <li id="ac-20" data-criterion><span class="tag">memory tranche exit</span>The approved memory plan selects and justifies a default shared store using privacy, versioning/history, cross-machine sync, offline access, conflict handling, harness-neutral read/write support, lazy retrieval, and recovery evidence rather than assuming the first candidate.</li>
+    <li id="ac-21" data-criterion><span class="tag">memory child-plan seed</span>The approved plan requires <code>memory setup</code> to inventory every detected harness-specific memory location, disposition every entry, migrate retained knowledge, and preserve a reversible snapshot until acceptance.</li>
+    <li id="ac-22" data-criterion><span class="tag">memory child-plan seed</span>The approved plan names the supported write/read disable controls and parity probes for every detected harness, including interactive and headless Claude Code, but this roadmap does not authorize applying those controls.</li>
+    <li id="ac-23" data-criterion><span class="tag">memory child-plan seed</span>The approved plan defines provenance, scope, observation date, review/expiry, supersession, deletion, and conflict behavior for durable memory without preserving narrative session state.</li>
+    <li id="ac-24" data-criterion><span class="tag">memory child-plan seed</span>The approved plan requires cross-harness recall parity for global knowledge and proves project-specific discoveries remain in their scoped owner rather than being copied globally.</li>
+    <li id="ac-25" data-criterion><span class="tag">layout</span>Every published skill source lives exactly one category directory below <code>skills/</code>, and a checked-in migration map accounts for every former flat source path.</li>
+    <li id="ac-26" data-criterion><span class="tag">identity</span>For every moved source, its frontmatter <code>name</code>, explicit invocation syntax, sibling dependency names, installed directory name, and workspace directory name are unchanged.</li>
+    <li id="ac-27" data-criterion><span class="tag">foundation/layout</span>Repository cataloging, validation, install, audits, and eval discovery find every public <code>skills/&lt;category&gt;/&lt;name&gt;/SKILL.md</code> exactly once; setup references remain ordinary bundled files reachable only through their owner’s command pointer and never appear as public/model-invoked skills.</li>
+    <li id="ac-28" data-criterion><span class="tag">install</span>A clean-fixture matrix installs at least one skill from every category using only <code>--skill &lt;name&gt;</code>, resolves its sibling closure across category boundaries, and produces the same flat installed shape as before.</li>
+    <li id="ac-29" data-criterion><span class="tag">references</span>A repository-wide check finds no stale repo-owned references that assume the former flat <code>skills/&lt;name&gt;/</code> source path, except explicit old→new entries in the migration map.</li>
+    <li id="ac-30" data-criterion><span class="tag">catalog</span>The root catalog presents skills by source category and, within each category, exposes invocation policy without implying that category controls invocation or delegation.</li>
+    <li id="ac-31" data-criterion><span class="tag">issue 48</span>At dispatch, backlog passes each groomed issue’s work-type, surface, and known uncertainty to staffing, records the selected thread coordinator and escalation path, and no longer defaults every issue thread to the session orchestrator.</li>
+    <li id="ac-32" data-criterion><span class="tag">issue 49</span>A Codex parent successfully dispatches one bounded task to the Claude sibling harness with <code>claude -p</code> and no <code>--bare</code>, receives the durable return, and then proves a simulated or observed route failure marks only that direction unavailable while staffing selects the declared asymmetric fallback.</li>
+    <li id="ac-33" data-criterion><span class="tag">issue 49 state</span>Staffing records sibling harness dispatch reachability per direction from real invocation outcomes, including command shape, timestamp, return/failure class, and fallback successor; it makes no route depend on a recurring Anthropic-policy or credit-status check.</li>
+    <li id="ac-34" data-criterion><span class="tag">symmetry</span>After the gate passes, both harness rosters expose verified Claude Code→Codex and Codex→Claude delegate routes, each with a tracked wrapper/session contract, progress visibility, cost pool, concurrency limit, and reachable fallback.</li>
+    <li id="ac-35" data-criterion><span class="tag">economics</span>A routing comparison using representative plan, build, verify, and watcher tasks decides what remains on <code>codex exec</code>, what may use credit-backed Claude, and what stays interactive; credit exhaustion automatically falls back without spending unapproved usage credits.</li>
+    <li id="ac-36" data-criterion><span class="tag">compactness gate</span>Every changed skill/reference receives a post-refactor compaction pass after behavior is green; its ledger records before/after tokens for metadata and representative command paths, human-readable word/heading counts, cold-reader findings, and the locked behavioral corpus.</li>
+    <li id="ac-37" data-criterion><span class="tag">agent reduction</span>Every changed runtime/setup path loads fewer tokens than its baseline, or carries an explicit reviewed exception showing the exact new correctness gate responsible; duplication, no-ops, sediment, provenance prose, and convenience are not valid exceptions.</li>
+    <li id="ac-38" data-criterion><span class="tag">ruthless pruning</span>A meaning-level deletion audit removes duplicated technique, no-ops, stale sediment, and repeated trigger synonyms; each retained meaning has one authority, and composers keep only trigger/input, output, sequence handoff, completion/failure gate, and context pointers.</li>
+    <li id="ac-39" data-criterion><span class="tag">branch load</span>Situated load-trace probes show that a bug thread does not load implement/refactor/review/evidence technique before reaching those stages, an enhancement does not load diagnosis, and ordinary runtime does not load setup contracts.</li>
+    <li id="ac-40" data-criterion><span class="tag">human readability</span>For every changed skill, a cold reader can identify its trigger, command surface, main sequence, completion/failure gates, dependencies, and conditional reference pointers one module at a time without reading unrelated skills; all material confusion, backtracking, and duplicate-authority findings are fixed.</li>
+    <li id="ac-41" data-criterion><span class="tag">graph</span>A generated dependency graph derived from canonical declarations matches the root catalog and the plan’s depicted runtime/setup/ambient edge types; CI-style validation fails on missing nodes, duplicate skill names, cycles in required setup dependencies, or undeclared edges.</li>
+    <li id="ac-42" data-criterion><span class="tag">capacity</span>A self-contained, model-invoked <code>capacity</code> skill returns one normalized snapshot per configured usage pool: status (<code>known</code>, <code>unknown</code>, or <code>exhausted</code>), observed headroom when available, <code>reset_at</code> when available, observation source/time/confidence, and active reservations.</li>
+    <li id="ac-43" data-criterion><span class="tag">truth</span>When a probe or vendor surface is unavailable, stale, or ambiguous, capacity reports <code>unknown</code>; a test confirms it never converts absent telemetry into a fabricated balance or reset time.</li>
+    <li id="ac-44" data-criterion><span class="tag">setup</span><code>capacity setup</code> discovers and verifies every available read-only usage/reset probe and wakeup mechanism, records unsupported pools explicitly, and writes no billing, plan, or credit mutation without separate user approval.</li>
+    <li id="ac-45" data-criterion><span class="tag">staffing</span>Staffing filters routes by required capability and quality floor before considering capacity, then selects among qualified pools using reliable headroom, predicted next-stage cost, task pins, and the existing intelligence/taste/cost rules.</li>
+    <li id="ac-46" data-criterion><span class="tag">dispatch</span>Backlog reads a fresh capacity snapshot before each wave and expensive lifecycle stage, accounts for active reservations across projects, and chooses a wave whose predicted units can reach their next durable checkpoint.</li>
+    <li id="ac-47" data-criterion><span class="tag">conserve</span>In low or unknown capacity simulations, backlog starts no speculative fan-out, shrinks the wave, prefers the work nearest a durable boundary, checkpoints before expensive stages, and reroutes only to a verified qualified pool.</li>
+    <li id="ac-48" data-criterion><span class="tag">exhaustion</span>On a simulated hard limit, every active issue has a durable checkpoint and status, no new work starts on the exhausted pool, scarce runtime resources are released, and a continuation is scheduled no earlier than the observed reset plus a small safety margin.</li>
+    <li id="ac-49" data-criterion><span class="tag">resume</span>The scheduled continuation wakes, recomputes all pool capacity, runs the audited-resume protocol, rejects stale agent/process claims, restaffs unfinished units, and proceeds without requiring a human recap.</li>
+    <li id="ac-50" data-criterion><span class="tag">global leases</span>Two concurrent project simulations update capacity reservations atomically, cannot overbook the same reported headroom, and reap a reservation whose owning run is durably dead.</li>
+    <li id="ac-51" data-criterion><span class="tag">overhead</span>Capacity observation is transition- and stage-boundary-driven; monitoring uses no capable parked model and its measured overhead is reported separately from productive work.</li>
+    <li id="ac-52" data-criterion><span class="tag">backlog/#48</span>A backlog-run probe proves staffing resolves each issue coordinator before its thread is created: a fully specified <code>routine</code> fixture uses a qualified non-orchestrator route, an <code>orchestrator-required</code> fixture with a named diagnosis/design reason uses the orchestrator route, and a missing coordination class is skipped as a grooming gap.</li>
+    <li id="ac-53" data-criterion><span class="tag">spawn ledger</span>Every spawned agent appears in canonical events with parent, issue/stage, role, model route, pool/reservation, worktree, child id, checkpoint, expected return, and escalation successor; two concurrent worktrees write distinct streams under the same resolved git-common administrative root, then rebuild one identical board after a simulated writer death/adoption.</li>
+    <li id="ac-54" data-criterion><span class="tag">boundaries</span>End-to-end bug, enhancement, and refactor probes match the declared spawn table: skill invocation alone creates no child, mandatory worker boundaries create the named independent roles, and conditional boundaries record why they stayed local or delegated.</li>
+    <li id="ac-55" data-criterion><span class="tag">issue 48</span>The final implementation closes issue #48 with evidence that a clear-spec issue is coordinated by a non-orchestrator route while the session orchestrator retains queue ownership and successfully handles an explicit upward escalation.</li>
+    <li id="ac-56" data-criterion><span class="tag">credits</span>Every published skill is audited for external and internal lineage; each materially copied, adapted, inspired, or extracted skill has a README credit naming and linking the source, classifying the relationship, identifying the borrowed material/idea, and summarizing local changes.</li>
+    <li id="ac-57" data-criterion><span class="tag">license</span>Every copied or adapted source has a recorded license-compatibility verdict, required upstream notices and license text are preserved, and an unclear or incompatible source blocks publication rather than receiving attribution-only treatment.</li>
+    <li id="ac-58" data-criterion><span class="tag">compact credit</span>Provenance lives in the human-facing README and required source headers—not duplicated in runtime <code>SKILL.md</code> prose—unless knowledge of the source materially changes execution behavior.</li>
+    <li id="ac-59" data-criterion><span class="tag">memory tranche exit</span>Before any memory implementation begins, a separately reviewed plan compares installed harness memory behavior and candidate stores, selects defaults by scope, defines authority/correction/expiry/conflict rules, and records an approval event through <code>review-loop</code>. This is the memory tranche’s only implementation-authorizing handoff.</li>
+    <li id="ac-60" data-criterion><span class="tag">memory child-plan seed</span>The approved memory plan must require a staged probe that shadow-compares old and new recall, disables writes before reads, proves cross-harness parity and correction/deletion behavior, retains a reversible snapshot, and rolls back successfully from at least one simulated failed gate; executing that probe is outside this roadmap approval.</li>
+    <li id="ac-61" data-criterion><span class="tag">issue scope</span>The reviewed issue matrix accounts for every open non-PR issue in <code>asasher/asher-skills</code>: #44–49, #51–55, and #57 have a named tranche/disposition; unrelated new-skill/product requests are explicitly excluded; closed #6, #15–16, #23, #27, #31, #34, and #37 are named regression baselines.</li>
+    <li id="ac-62" data-criterion><span class="tag">issue 51</span>A greenfield matrix proves: Codex-only creates canonical <code>AGENTS.md</code>; Claude-enabled creates the same <code>AGENTS.md</code> plus a minimal importing <code>CLAUDE.md</code>; deliberate existing AGENTS-only, CLAUDE-only, and two-file layouts are reconciled without replacement.</li>
+    <li id="ac-63" data-criterion><span class="tag">issue 52</span>A plan-only clean consumer proves <code>review-loop setup</code> routes to its owned reference and writes/reconciles presentation configuration; <code>staffing setup</code> leaves an existing global base byte-identical, writes a missing base only after explicit consent, and expresses repo-specific choices as a project delta.</li>
+    <li id="ac-64" data-criterion><span class="tag">issue 53</span>A plan fixture with a false third-party mechanism and a promised-but-missing test is stopped by four gates: the plan labels/falsifies the assumption, implement runs the probe before dependent work, verify confirms the artifact exists, and Reviewer opens the cited test before accepting its coverage.</li>
+    <li id="ac-65" data-criterion><span class="tag">issue 54</span>Every criterion in a representative plan declares entities, scale, account/tenant, fixture lifetime, and observation mechanism; setup records available test affordances; verify provisions uniquely named per-issue fixtures; an infeasible requirement is rewritten or receives an explicit substitute at approval rather than at verify time.</li>
+    <li id="ac-66" data-criterion><span class="tag">issue 55.1</span>A self-evident styling/copy fixture takes the direct-fix lane and receives both-theme/appropriate visual verification; a second fixture whose first fix contradicts the named cause automatically enters <code>diagnosing-bugs</code> with the failed observation preserved.</li>
+    <li id="ac-67" data-criterion><span class="tag">issue 55.2</span>A styling-only verification capture is reused as evidence only when its HEAD equals the final reviewed HEAD and Reviewer records “no product-code change; no recapture”; code, fixture, environment, or HEAD drift forces fresh final-HEAD evidence.</li>
+    <li id="ac-68" data-criterion><span class="tag">issue 55.3</span>Setup probes and records native dependency read/write verbs for the selected tracker, run skips a natively blocked issue and releases it after the edge clears, and a tracker without native edges uses its explicitly recorded fallback rather than invented commands.</li>
+    <li id="ac-69" data-criterion><span class="tag">issue 55.4</span>At deliberate and failure handoff, run writes both the tracker table and a shared-root handoff snapshot containing durable state pointers, protocols learned, environment/resource state, cleanup debts, and <code>not_before</code>; Claude and Codex can resume from it without chat context.</li>
+    <li id="ac-70" data-criterion><span class="tag">issue 55.5</span>A Reviewer behavior question produces no unilateral edit or dead-end: it routes to the issue coordinator, escalates when outside the approved plan, returns an explicit ruling to Fixer, triggers targeted re-verification, and reaches the same Reviewer on the new HEAD.</li>
+    <li id="ac-71" data-criterion><span class="tag">issue 57</span>A public serve integration test launches review-loop from a short-lived parent with closed stdio, lets the parent/issuing exec exit, then separately GETs <code>/version</code>, POSTs a hash-matching approval, observes the exact durable event, and idempotently stops/removes the registry row; the result is identical with and without a watcher and with two concurrent servers.</li>
+    <li id="ac-72" data-criterion><span class="tag">regressions</span>The tranche test matrix retains the closed-issue guarantees: name-only composition (#6), conditional tailnet recovery (#15), lossless verdict delivery (#16/#23), dual-harness/self-host audit and verified landing (#27/#31), inherited-project reality/isolation/CI binding (#34), and drift-safe self-host mount plus real consumer delegation (#37).</li>
+  </ul>
+</section>
+
+<section id="checks">
+  <h2>How it will be checked</h2>
+  <p>Structure checks verify self-contained skill directories, dependency declarations, owner-routed setup references, README credits/license notices, playbook provenance, manifests, and absence of cross-skill file imports. Probe evals exercise explicit assignment, ambient model invocation, clean install, idempotent direct/recursive setup, bounded dispatch, plan falsification, criterion data provisioning, direct-fix fallback, native dependencies, behavior rulings, kill-and-resume, detached review serving, gate integrity, environment exoneration, final-HEAD evidence, and staged memory design. Each tranche then reruns the locked corpus after ruthless compaction, compares situated token loads, and holds a cold-reader review. Greenfield and inherited-project dogfood runs supply end-to-end proof; the twelve open-issue dispositions and closed regression baselines are reviewed from the matrix rather than inferred from changed files.</p>
+</section>
+
+<section id="required">
+  <h2>Evidence expected from the roadmap’s child tranches</h2>
+  <p>Each item is produced by its owning tranche before that tranche closes; approval of this roadmap does not require or authorize producing all of them in one change.</p>
+  <ul class="plain">
+    <li id="req-1">An issue disposition ledger mapping every finding in #44–49, #51–55, and #57 to its tranche, owner, proof, and close/defer/block outcome.</li>
+    <li id="req-2">Probe transcripts and verdict tables for each extracted or materially changed skill.</li>
+    <li id="req-3">A clean-project install/setup transcript showing recursive closure and setup-owned playbooks.</li>
+    <li id="req-4">A dogfood backlog run demonstrating one bug, one enhancement, one interrupted resume, and one genuine human review verdict.</li>
+    <li id="req-5">Memory child-plan requirement: a migration ledger for every detected harness memory surface, including before/after verification from one interactive and one headless Claude session for the first known auto-memory target.</li>
+    <li id="req-6">Memory child-plan requirement: a cross-harness, cross-machine recall transcript against the shared store selected by the approved memory plan.</li>
+    <li id="req-7">A complete source migration map and clean-install matrix covering every category and at least one cross-category dependency closure.</li>
+    <li id="req-8">For #49, a live sibling-harness-dispatch transcript showing Codex→<code>claude -p</code> without <code>--bare</code>, the durable return, and an asymmetric route-loss fallback transcript.</li>
+    <li id="req-9">A post-refactor compactness dossier for every changed skill: before/after agent-token load traces, human word/heading inventory, deletion ledger, cold-reader verdict, behavioral-equivalence results, and the generated dependency graph used to verify the architecture.</li>
+    <li id="req-10">A capacity simulation transcript covering known, unknown, low, exhausted, alternate-pool, scheduled-reset, and audited-resume paths across two concurrent projects.</li>
+    <li id="req-11">A backlog dispatch transcript and status-board snapshot showing the pre-spawn staffing decision for each issue plus every later worker spawn, return, reuse, and escalation.</li>
+    <li id="req-12">A complete skill-lineage ledger plus the resulting per-skill README credits, source headers, preserved notices, and license-compatibility verdicts.</li>
+    <li id="req-13">The separately approved memory plan, harness-feature comparison, candidate-store evaluation, phased deprecation/rollback design, and its review-loop approval record.</li>
+    <li id="req-14">A normal-flow regression report covering #51–55 and #57 plus the closed #6/#15–16/#23/#27/#31/#34/#37 guarantees, with one evidence link per acceptance gate.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks and mitigations</summary>
+  <ul class="plain">
+    <li><strong>Dependency sprawl:</strong> extraction can turn a readable workflow into a catalog hunt. Mitigation: extract only independent invocation or sequence boundaries, and keep backlog’s lifecycle visible in one issue-loop contract.</li>
+    <li><strong>Duplicate authority:</strong> copied technique may survive in backlog and the new skill. Mitigation: one source of truth; backlog retains only invocation and handoff language.</li>
+    <li><strong>Setup conflict:</strong> multiple public skills’ setup references may edit shared playbooks such as <code>environment.md</code>. Mitigation: section ownership plus a reconciler that preserves unowned sections and deliberate project deltas.</li>
+    <li><strong>Oversized change:</strong> retro hardening and decomposition could become one unsafe rewrite. Mitigation: ordered slices, each leaving the end-to-end issue loop usable and independently evaluated.</li>
+    <li><strong>Harness limitations:</strong> some dead-wait behavior ultimately belongs to the harness. Mitigation: encode durable fallbacks now and file harness changes separately; do not make correctness depend on a future harness fix.</li>
+    <li><strong>Global-memory sprawl or leakage:</strong> a shared store can become a second unbounded memory pile or receive secrets. Mitigation: strict routing, approved access controls and sync surface, provenance/expiry metadata, no secrets, lazy retrieval, and periodic reconciliation.</li>
+    <li><strong>Taxonomy churn:</strong> categories can become a recurring naming debate. Mitigation: shallow primary-job groups, one home per skill, no runtime meaning, and category changes treated as rare navigation refactors.</li>
+    <li><strong>Sibling-route volatility:</strong> a currently working dispatch direction can later fail because a harness changes. Mitigation: treat reachability as per-direction staffing state, fail closed on the broken route, preserve the other direction, and repair the graph when the failure is encountered rather than embedding a vendor-policy monitor.</li>
+    <li><strong>Over-pruning:</strong> token pressure can delete a caveat or gate that makes a skill safe. Mitigation: prune duplication and no-ops first, preserve observable completion/failure criteria, and require existing behavioral probes to pass after every compacting edit.</li>
+    <li><strong>Shallow-module proliferation:</strong> many tiny skills can cost more navigation than they save. Mitigation: split only at independent invocation or sequence boundaries and require each extracted skill to hide meaningful complexity behind a narrow interface.</li>
+    <li><strong>Bad telemetry:</strong> stale or partial vendor meters can trigger the wrong staffing decision. Mitigation: source/time/confidence on every observation, explicit unknown state, and conservative commitments when data is weak.</li>
+    <li><strong>Monitoring tax:</strong> a watcher can consume the usage it is trying to preserve. Mitigation: cheap read-only probes at stage transitions, no capable parked model, and event/reset-driven wakeups.</li>
+    <li><strong>Wakeup failure:</strong> a scheduled continuation may never fire. Mitigation: durable <code>not_before</code> state, an idempotent wake job, and ordinary next invocation detecting overdue resumable work.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>Extracting <em>every</em> backlog reference merely because it is short.</li>
+    <li>Adding a mandatory retrospective stage to every issue lifecycle.</li>
+    <li>Rewriting tracker bindings or replacing the existing issue/PR role vocabulary.</li>
+    <li>Changing the product repositories whose runs produced #44, #46, and #47; this plan changes the reusable skills and setup baselines.</li>
+    <li>Disabling authored instruction surfaces such as project <code>AGENTS.md</code>/<code>CLAUDE.md</code>; the plan deprecates agent-written harness memory only after parity, not deliberate versioned instructions.</li>
+    <li>Auto-loading the entire global memory store into every context; retrieval is skill-driven and scoped to the active need.</li>
+    <li>Renaming skills or introducing category-qualified invocation/dependency names as part of the source-tree migration.</li>
+    <li>Adding <code>--bare</code> to the Codex→Claude sibling harness dispatch path, or embedding an Anthropic-policy monitor in the skill; observed route behavior is the operational signal.</li>
+    <li>Bypassing vendor usage limits, purchasing or enabling additional paid capacity automatically, or routing work below its capability/taste floor merely to keep a run active.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>
