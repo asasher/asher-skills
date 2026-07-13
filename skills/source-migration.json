@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "moves": {
+    "skills/backlog": "skills/delivery/backlog",
+    "skills/bare-minimum-ux": "skills/creative/bare-minimum-ux",
+    "skills/bayes": "skills/thinking/bayes",
+    "skills/codex-imagegen": "skills/creative/codex-imagegen",
+    "skills/constraints": "skills/thinking/constraints",
+    "skills/diagnosing-bugs": "skills/delivery/diagnosing-bugs",
+    "skills/dissolve": "skills/thinking/dissolve",
+    "skills/eloquent": "skills/personal/eloquent",
+    "skills/fair-deal": "skills/personal/fair-deal",
+    "skills/goodwork": "skills/personal/goodwork",
+    "skills/learn-anything": "skills/personal/learn-anything",
+    "skills/maquette": "skills/creative/maquette",
+    "skills/plan": "skills/delivery/plan",
+    "skills/prototype": "skills/delivery/prototype",
+    "skills/review-loop": "skills/system/review-loop",
+    "skills/setup-asher-skills": "skills/system/setup-asher-skills",
+    "skills/shadixfy": "skills/creative/shadixfy",
+    "skills/skill-loop": "skills/system/skill-loop",
+    "skills/smallbets": "skills/thinking/smallbets",
+    "skills/spreadsheet-loop": "skills/delivery/spreadsheet-loop",
+    "skills/staffing": "skills/system/staffing",
+    "skills/teamdrive": "skills/personal/teamdrive",
+    "skills/to-spec": "skills/delivery/to-spec",
+    "skills/to-sprites": "skills/creative/to-sprites",
+    "skills/to-tickets": "skills/delivery/to-tickets",
+    "skills/watch-video": "skills/creative/watch-video"
+  }
+}

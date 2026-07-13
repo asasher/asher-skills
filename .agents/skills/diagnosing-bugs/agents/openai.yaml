@@ -1,0 +1,7 @@
+interface:
+  display_name: "Diagnosing Bugs"
+  short_description: "Find root causes with a red-capable loop"
+  default_prompt: "Use $diagnosing-bugs to reproduce, isolate, and fix this bug with regression proof."
+
+policy:
+  allow_implicit_invocation: true

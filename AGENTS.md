@@ -5,7 +5,7 @@ Skills Asher made or likes, kept in one repo so they can be installed elsewhere 
 
 ## Layout
 
-- `skills/<name>/` — one skill per directory: `SKILL.md` (entry point), `README.md`, and optionally
+- `skills/<category>/<name>/` — one published skill per directory: `SKILL.md` (entry point), `README.md`, and optionally
   `reference/`, `templates/`, `scripts/`, `agents/`, `evals/`.
 - `docs/agents/` — this repo's own project playbooks, written by the installed skills' setups
   (`backlog setup` and its siblings) plus the repo-authored `probe-evals.md` (the eval discipline).
@@ -23,7 +23,7 @@ Use these terms precisely — say which one you mean, and know which one you are
 
 Where a skill lives — three distinct places, three terms:
 
-- **Skill source** — `skills/<name>/`. The canonical skill this repo exists to publish. All authoring
+- **Skill source** — `skills/<category>/<name>/`. The canonical skill this repo exists to publish. All authoring
   happens here; every install anywhere is a copy of it.
 - **Skill workspace** — `<name>-workspace/` at the root. The working space for *working on* a skill:
   running its evals and tests, research, drafts, and scratch artifacts from development. The skill's
@@ -32,7 +32,7 @@ Where a skill lives — three distinct places, three terms:
 - **Installed skill** — `.agents/skills/<name>`, the canonical installed copy, with a per-harness symlink
   at `.claude/skills/<name>`; tracked in `skills-lock.json`. This is what the harness loads when a skill
   runs *in this repo*. It is a build product of the source: never edit it in place — edit
-  `skills/<name>/` and reinstall (`npx skills add <path-to-this-repo> --skill <name>`), or the edit is
+  its catalog-resolved source and reinstall (`npx skills add <path-to-this-repo> --skill <name>`), or the edit is
   silently lost on the next reinstall.
 
 How skills and instructions relate:
@@ -75,7 +75,7 @@ Kinds of skill:
   instructions installed under `docs/agents/`), and *sibling skills* (other skills invoked by name).
 - **Copy a technique; extract a primitive.** A small, local technique is reused by copying its canonical
   files from the skill that has them and noting the source in the copy's header (e.g. `Adapted from
-  skills/review-loop/scripts/review-server.py`) — improvements flow back to the canonical version
+  skills/system/review-loop/scripts/review-server.py`) — improvements flow back to the canonical version
   deliberately, not automatically. A capability that several skills genuinely share — the review surface,
   model staffing — is instead extracted into its own skill and referenced by name, never forked into every
   caller.
@@ -89,13 +89,14 @@ Kinds of skill:
 
 ## Agent skills
 
-These skills are installed for this project — self-hosted from this repo's own `skills/` (the skill
-sources above), so `skills-lock.json` records a local source. Re-run `setup-asher-skills` (audit mode)
+These skills are installed for this project — self-hosted from this repo's categorized `skills/` sources,
+so `skills-lock.json` records a local source. Re-run `setup-asher-skills` (audit mode)
 to reconcile them against the repo.
 
 | Skill | What it does here | Scope |
 |-------|-------------------|-------|
 | backlog | Runs issues through groom → plan → build → review to a merged PR | project |
+| diagnosing-bugs | Runs the reusable six-phase defect diagnosis discipline | project |
 | plan | Turns an intent into a reviewed plan held at an approval gate | project |
 | prototype | Answers one design question with a throwaway artifact — keep the answer, delete the artifact | project |
 | review-loop | Serves a rendered artifact for human sign-off and blocks until the verdict | project |
@@ -105,12 +106,13 @@ to reconcile them against the repo.
 | writing-great-skills | Authoring guidance for writing skills (from mattpocock/skills) | project |
 
 **How they fit together:** composers pull their siblings — `plan` and `prototype` use `review-loop`
-(to sign off) and `staffing` (to pick the model); `backlog` uses all four. `staffing` and `review-loop`
-depend on nothing.
+(to sign off) and `staffing` (to pick the model); `backlog` also uses `diagnosing-bugs`. `staffing` and
+`review-loop` depend on nothing.
 
 **Source & updates:** installed from this repo itself. To add a skill, change scope, or check for drift,
-re-invoke `setup-asher-skills`; to refresh an installed skill after editing its source, re-run
-`npx skills add <path-to-this-repo> --skill <name>`. **Never `npx skills remove` here:** with the
+re-invoke `setup-asher-skills`; to refresh sources, install the complete desired local set in one atomic
+`npx skills add <path-to-this-repo> --skill <names...> -y` command—sequential single-skill adds can replace
+earlier selections. **Never `npx skills remove` here:** with the
 lockfile's local source path it deletes the skill *source* under `skills/`, not just the installed copy —
 uninstall by hand instead (remove the `.agents/skills/<name>` dir, the `.claude/skills/<name>` symlink,
 and the lockfile entry).

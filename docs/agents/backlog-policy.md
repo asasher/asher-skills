@@ -12,7 +12,7 @@ Two independent axes, plus exclusions. Readiness decides *whether and who* picks
 
 **Readiness / ownership** — map each to this repo's label:
 
-- `ready-for-agent` — groomed and released: the agent may work it. Requires a work-type. Label: **`ready-for-agent`** (identity).
+- `ready-for-agent` — groomed and released: the agent may work it. Requires a work-type and complete dispatch metadata (§ Dispatch metadata). Label: **`ready-for-agent`** (identity).
 - `in-flight` — dispatched: an issue thread owns it, so `run` never selects it. Set by `run` at dispatch, replacing `ready-for-agent`; records what's flying via a GitHub comment alongside the label (branch name and dispatch date). Cleared by the run thread on abort, superseded by closure when the change merges, or reset by `groom`'s human-confirmed orphan sweep (§ In-flight hygiene). Label: **`in-flight`** (identity).
 - `ready-for-human` — only a human; the agent skips it entirely. Also the abort target for verify caps and environment blockers: the agent hands the issue back with the blocker commented, since a human must look before it can be re-released. Label: **`ready-for-human`** (identity).
 - `needs-info` — parked, waiting on the reporter. Label: **`needs-info`** (identity).
@@ -37,13 +37,26 @@ Two further lifecycle values appear only where the tracker has no native equival
 
 **Aliases** — when several existing labels fill one role, one is canonical and the loop treats the others as that role too: **none** — every role label here is a single identity mapping. Setup reuses existing labels rather than minting duplicates.
 
+## Dispatch metadata
+
+Every `ready-for-agent` issue carries a stable `Dispatch:` block in its body or latest grooming comment:
+
+- `surface`: `backend`, `ui`, `mixed`, or `non-code`, plus any required capability.
+- `coordination`: `routine` or `orchestrator-required`.
+- `reason`: one sentence naming why the class applies and any known uncertainty. Routine means the issue is
+  settled enough for a normal coordinator; orchestrator-required is reserved for product judgment, design,
+  hard diagnosis, or another named uncertainty.
+
+`run` passes these fields to staffing before creating a worktree or child. Missing fields are a grooming gap,
+never permission to infer them or default to the orchestrator.
+
 ## Dependencies
 
-- How this repo records that one issue is blocked by another, so `run` can skip blocked work: a `- [ ] depends on #123` task-list line in the issue body. `run` treats an issue with any unchecked, unclosed dependency as blocked and skips it. Duplicate/supersede links: a `duplicate of #N` / `superseded by #N` body line plus the exclusion label.
+- How this repo records that one issue is blocked by another: GitHub's native `blocked_by` relation, read and written with the verified verbs in `platform.md`. `run` defers the issue while the native unresolved count is positive and releases it into the next wave after the edge clears. Duplicate/supersede links remain a `duplicate of #N` / `superseded by #N` body line plus the exclusion label.
 
 ## Readiness decision
 
-- The agent proposes a work-type and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. The agent may apply `ready-for-human`, `needs-info`, and exclusion roles on its own.
+- The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. The agent may apply `ready-for-human`, `needs-info`, and exclusion roles on its own.
 - Adjust this rule if this team wants more or less agent autonomy (e.g. let the agent auto-bless low-risk bugs).
 
 ## In-flight hygiene

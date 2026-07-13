@@ -15,6 +15,9 @@ Per change type — tuned for a skills repo, where the proof is usually an eval 
 - Repo-specific expectations beyond these: an eval transcript is the default proof for anything touching a skill's behavior; a green "it renders" screenshot alone is not enough when the change is about *what the skill decides*.
 
 Captured once, after adversarial review converges, each artifact mapped to the acceptance criterion it proves.
+Styling-only verification captures may be reused only when their HEAD is the final reviewed HEAD and the
+Reviewer records **“no product-code change; no recapture”**; product-code, fixture, environment, or HEAD drift
+forces fresh final-HEAD evidence.
 
 ## Format and storage
 

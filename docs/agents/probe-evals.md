@@ -32,12 +32,13 @@ Validated 2026-07-04 (triage skill, 20/20) and reused since (bayes 20/20 before 
 3. **Require citations.** "Cite the file and exact sentence that decided it" makes pointer-following
    observable instead of vibes.
 4. **Answer key written before any runs.** Grade pass/fail against it.
-5. **Executors are the actual deployment targets.** A Claude subagent via the Agent tool, plus
-   `codex exec --sandbox read-only` for the Codex side. (~115k tokens total for 4 sessions × 5 probes.)
+5. **Executors are the actual deployment targets.** From Claude Code, use an in-session Claude subagent plus
+   `codex exec --sandbox read-only`; from Codex, reach the Claude sibling harness with `claude -p` (never
+   `--bare`) plus a native Codex agent. Each direction is independently fallible.
 6. **Ambiguity is a valid answer.** Instruct executors to flag it — the flagged ambiguities are routinely
    the most valuable findings.
 
-Canonical written-out example: `skills/maquette/evals/probes.md` (probes + method header; key kept
+Canonical written-out example: `skills/creative/maquette/evals/probes.md` (probes + method header; key kept
 separate until runs are graded).
 
 ## Tier 2: scripted dry-run
@@ -45,7 +46,7 @@ separate until runs are graded).
 When the skill's risk is in tool mechanics rather than wording, script the whole protocol against a
 sandbox and assert invariants at every step.
 
-Canonical: `skills/fair-deal/eval/protocol-dryrun.sh` — exercises the full two-party negotiation protocol
+Canonical: `skills/personal/fair-deal/eval/protocol-dryrun.sh` — exercises the full two-party negotiation protocol
 with a bare local repo standing in for the remote and two clones playing the partners; 35 checks (privacy
 firewall, turn alternation, shared-state integrity); scaffolds into a fresh `mktemp` dir each run and
 never touches this repo; exits non-zero on any FAIL.
@@ -64,8 +65,9 @@ never touches this repo; exits non-zero on any FAIL.
 - Writing the answer key *after* seeing model output invalidates the eval — you'll grade toward whatever
   the model said.
 - Don't probe only the happy path; the value is in failure-branch and resume probes.
-- Billing: Claude executors run in-session (Agent tool), never via `claude -p`; Codex executors run via
-  `codex exec` on the subscription. See the global base, `~/.claude/CLAUDE.md` § Staffing.
+- Staffing and usage: use the current harness's verified sibling-harness routes and capacity state. Do not
+  embed a vendor-policy monitor in the eval; an invocation failure marks that direction unavailable and the
+  run records the asymmetric fallback.
 
 ## Instances
 
