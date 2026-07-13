@@ -84,6 +84,7 @@
       "internal": false,
       "invocation": "user",
       "optional": [
+        "manage-communications",
         "projects-triage",
         "review-opportunities"
       ],
@@ -158,6 +159,20 @@
       "optional": [],
       "requires": [],
       "source": "skills/personal/learn-anything"
+    },
+    "manage-communications": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "manage-opportunities",
+        "manage-tasks"
+      ],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/manage-communications"
     },
     "manage-notes": {
       "category": "personal",

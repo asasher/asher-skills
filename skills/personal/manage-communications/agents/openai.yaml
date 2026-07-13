@@ -1,0 +1,7 @@
+interface:
+  display_name: "Manage Communications"
+  short_description: "Prepare governed stakeholder communications"
+  default_prompt: "Use $manage-communications to prepare reviewable project updates and internal digests from workspace evidence."
+
+policy:
+  allow_implicit_invocation: true

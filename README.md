@@ -53,6 +53,7 @@ including one marked `user`.
 | personal | `fair-deal` | user | orchestrator |
 | personal | `goodwork` | model | thread |
 | personal | `learn-anything` | user | thread |
+| personal | `manage-communications` | model | thread |
 | personal | `manage-notes` | model | thread |
 | personal | `manage-opportunities` | model | thread |
 | personal | `manage-tasks` | model | thread |

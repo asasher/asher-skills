@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "ledger_states": [
+    "selected",
+    "rendered",
+    "handoff_drafted",
+    "handoff_sent",
+    "outlook_drafted",
+    "sent",
+    "excluded",
+    "blocked",
+    "superseded"
+  ]
+}
