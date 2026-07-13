@@ -1,0 +1,48 @@
+Issue #35 static checks
+Reviewed implementation HEAD: 001376238342bbf4559acea0cef4c4404b08a869
+Captured after adversarial-review LGTM; evidence files are the only post-review additions.
+
+$ git diff --check origin/main...HEAD
+exit 0
+(no output)
+
+$ find skills/backlog/templates/skill-authoring -maxdepth 1 -type f | sort
+exit 0
+skills/backlog/templates/skill-authoring/diagnosing-bugs.md
+skills/backlog/templates/skill-authoring/environment.md
+skills/backlog/templates/skill-authoring/evidence.md
+skills/backlog/templates/skill-authoring/verifying.md
+Result: PASS — exact four-file inventory, no extras.
+
+$ rg -n -i '(tail045|tailscale|asasher|\bAsher\b|gpt-|claude|sonnet|opus|fable|terra|/Users/|~/)' skills/backlog/templates/skill-authoring/*.md
+exit 1
+(no output)
+Result: PASS — no forbidden hostname, identity, named roster model, or machine-specific path.
+
+$ rg -n 'exactly six options|software.*skill-authoring.*writing.*research.*ops.*general|defaults to `skill-authoring`' skills/backlog/reference/setup.md
+exit 0
+14:   - Fresh install: **before scaffolding anything**, ask the user "what kind of work does this repo track?" with exactly six options: `software` / `skill-authoring` / `writing` / `research` / `ops` / `general`. Default the answer from repo evidence and confirm rather than interrogate, in the same posture as step 3's binding questions: a skill-authoring repo (`SKILL.md` files under `skills/<name>/`) defaults to `skill-authoring`; a code repo (`package.json`, `src/`, a test runner) defaults to `software`; a manuscript defaults to `writing`; ambiguous evidence defaults to `software`. Record the answer in the installed `backlog-policy.md` § Work domain.
+
+$ rg -n 'software.*skill-authoring.*writing.*research.*ops.*general' skills/backlog/templates/common/backlog-policy.md
+exit 0
+7:- Domain: _<software | skill-authoring | writing | research | ops | general>_.
+Result: PASS — setup and policy expose the same six domains and skill-source evidence selects skill-authoring.
+
+$ rg -n 'resolved scaffold set|eleven counterparts|only `implementing.md`|flagged stand-in' skills/backlog/reference/setup.md
+exit 0
+8:   - List `docs/agents/` and determine this repo's work domain from the installed `backlog-policy.md` § Work domain; if the section is absent, use `software` (a legacy install); a fresh install has no playbook to read — the domain is asked in step 2. Resolve the **scaffold set** for that domain in two passes: overlay `templates/common/` with `templates/<domain>/`, with a same-name pack file shadowing common; then, for each required step playbook absent from that overlay, add the same-name `templates/software/` baseline as a flagged stand-in.
+11:   - Completion criterion: the work domain is known (recorded or defaulted; on a fresh install, deferred to step 2's question), and every playbook in the resolved scaffold set is classified fresh-scaffold, current, or needs-reconciliation. For `skill-authoring`, the full set has eleven counterparts: three unshadowed common files, four native pack files, and four flagged software stand-ins.
+16:   - Scaffolding and reconciliation draw from the **resolved scaffold set**: first overlay `templates/common/` with `templates/<domain>/`, with a same-name pack file shadowing common; then add the same-name `templates/software/` baseline as a flagged stand-in for every required step playbook absent from that overlay.
+17:   - Missing-baseline degrade: when the chosen domain has no shipped pack (today, every domain except `software` and `skill-authoring`), install the `templates/software/` step baselines as stand-ins. When a shipped pack omits a required step baseline, install only each missing same-name `templates/software/` baseline as a stand-in. Add one flag line to every installed stand-in's header naming it a code-flavored baseline to tailor for `<domain>`, and name every gap in the setup report. Never leave a required playbook uninstalled. For `skill-authoring`, its pack `environment.md` shadows common and only `implementing.md`, `refactoring.md`, `change-reviewer.md`, and `change-fixer.md` come from software as flagged stand-ins.
+18:   - Missing → write it from the resolved scaffold set, including any required flagged stand-in.
+21:   - Completion criterion: the domain is chosen and recorded, every playbook in the resolved scaffold set has a reconciled counterpart, and every change, degraded stand-in, and flagged conflict is reported. For `skill-authoring`, require all eleven counterparts: three unshadowed common files, four native pack files, and four flagged software stand-ins.
+
+$ rg -n 'resolved scaffold set|full eleven counterparts' skills/backlog/reference/run.md
+exit 0
+11:   - Completion criterion: every playbook in the **resolved scaffold set** has its `docs/agents/` counterpart. Resolve it by overlaying `templates/common/` with the recorded work domain's pack (`docs/agents/backlog-policy.md` § Work domain; absent → `software`), with same-name pack files shadowing common, then adding each same-name `templates/software/` baseline as a flagged stand-in for any absent required step playbook. The required step names are `implementing`, `verifying`, `evidence`, `diagnosing-bugs`, `refactoring`, `change-reviewer`, and `change-fixer`; for `skill-authoring`, preflight therefore requires the full eleven counterparts (three unshadowed common files, four native pack files, and four flagged software stand-ins).
+Result: PASS — fresh install, reconciliation, and run preflight share the resolved eleven-file contract.
+
+$ diff -qr skills/backlog .agents/skills/backlog
+exit 0
+(no output)
+Result: PASS — canonical skill source and installed skill content byte-match.

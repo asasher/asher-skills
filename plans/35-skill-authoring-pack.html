@@ -1,0 +1,250 @@
+<!doctype html>
+<!-- Plan #35 — Ship a skill-authoring baseline pack.
+     Self-contained: inline styles and SVG, no external fetches. Stable ids never change. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #35 — Ship a skill-authoring baseline pack</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --pack: #0d9488; --fallback: #b45309; --good: #1a7f37; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --pack: #2dd4bf; --fallback: #fbbf24; --good: #3fb950; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 760px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+svg text { font: 12px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+svg .small { font-size: 10.5px; }
+svg .muted { font-size: 10.5px; fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .5rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .75rem; color: var(--accent); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .3rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code, q { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .9em; }
+blockquote { margin: .5rem 0; padding: .55rem .8rem; border-left: 3px solid var(--line); color: var(--muted); background: var(--card); }
+.new { border-left-color: var(--good); color: var(--fg); }
+.in { color: var(--pack); font-weight: 600; }
+.fallback { color: var(--fallback); font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Ship a skill-authoring baseline pack from validated practice</h1>
+  <p class="problem">A repo that authors prompt-driven skills currently receives software verification and evidence defaults, even though its real runtime is an executor harness and its honest proof is a graded probe transcript.</p>
+  <div class="chips"><span class="chip">#35</span><span class="chip">enhancement</span><span class="chip">plan v1</span></div>
+</header>
+
+<section id="model">
+  <h2>The resolved install</h2>
+  <p>A sixth domain overlays four validated skill-authoring baselines onto common, then fills only unresolved required steps with flagged software stand-ins.</p>
+  <figure id="model-diagram">
+    <svg viewBox="0 0 720 330" width="100%" role="img" aria-label="Resolution of common, skill-authoring pack, and software fallbacks into eleven installed playbooks">
+      <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs>
+      <rect x="10" y="12" width="190" height="114" rx="8" fill="none" stroke="var(--accent)"/>
+      <text x="22" y="34" font-weight="700" fill="var(--accent)">common/ (4)</text>
+      <text x="28" y="56" class="small">backlog-policy.md</text><text x="28" y="74" class="small">platform.md</text>
+      <text x="28" y="92" class="small">change-description.md</text><text x="28" y="110" class="small">environment.md</text>
+
+      <rect x="10" y="142" width="190" height="114" rx="8" fill="none" stroke="var(--pack)" stroke-width="2"/>
+      <text x="22" y="164" font-weight="700" fill="var(--pack)">skill-authoring/ (4)</text>
+      <text x="28" y="186" class="small">environment.md — shadows common</text><text x="28" y="204" class="small">verifying.md</text>
+      <text x="28" y="222" class="small">evidence.md</text><text x="28" y="240" class="small">diagnosing-bugs.md</text>
+
+      <line x1="210" y1="133" x2="274" y2="133" stroke="currentColor" marker-end="url(#arrow)"/>
+      <text x="242" y="118" text-anchor="middle" class="muted">overlay</text>
+
+      <rect x="284" y="40" width="190" height="184" rx="8" fill="none" stroke="var(--good)" stroke-width="2"/>
+      <text x="296" y="62" font-weight="700" fill="var(--good)">overlay result (7)</text>
+      <text x="302" y="84" class="small">backlog-policy.md</text><text x="302" y="102" class="small">platform.md</text>
+      <text x="302" y="120" class="small">change-description.md</text><text x="302" y="138" class="small">environment.md — pack wins</text>
+      <text x="302" y="156" class="small">verifying.md</text><text x="302" y="174" class="small">evidence.md</text>
+      <text x="302" y="192" class="small">diagnosing-bugs.md</text>
+      <text x="302" y="214" class="muted">same-name shadow rule unchanged</text>
+
+      <line x1="484" y1="133" x2="538" y2="133" stroke="currentColor" marker-end="url(#arrow)"/>
+      <text x="511" y="105" text-anchor="middle" class="muted">fill 4</text><text x="511" y="119" text-anchor="middle" class="muted">missing</text>
+
+      <rect x="548" y="40" width="162" height="184" rx="8" fill="none" stroke="var(--fallback)" stroke-dasharray="5 4"/>
+      <text x="560" y="62" font-weight="700" fill="var(--fallback)">fallback additions (4)</text>
+      <text x="566" y="88" class="small">implementing.md</text><text x="566" y="108" class="small">refactoring.md</text>
+      <text x="566" y="128" class="small">change-reviewer.md</text><text x="566" y="148" class="small">change-fixer.md</text>
+      <text x="566" y="176" class="muted">each header flagged</text><text x="566" y="192" class="muted">gap named in setup report</text>
+      <text x="566" y="214" font-weight="700">resolved scaffold set = 11</text>
+
+      <rect x="284" y="258" width="426" height="54" rx="8" fill="none" stroke="var(--line)"/>
+      <text x="296" y="280" class="small">Why partial: only the four issue-named techniques have validated skill-repo source material.</text>
+      <text x="296" y="299" class="small">A flagged fallback is honest; inventing four “native” playbooks would violate the pivot.</text>
+    </svg>
+    <figcaption>The existing shadow rule already covers a pack file shadowing a same-name common file; the new rule resolves required step gaps after that overlay.</figcaption>
+  </figure>
+</section>
+
+<section id="gate">
+  <h2>Plan-or-skip</h2>
+  <p><strong>PLAN.</strong> The project threshold triggers because this crosses more than one subsystem/public interface: setup domain routing, the common policy contract, a new template pack, installed-copy reconciliation, and behavioral probes. The partial-pack fallback is also a new commitment whose semantics must be settled before editing.</p>
+</section>
+
+<section id="before-after">
+  <h2>Before &#8594; after</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Today</th><th>Planned</th></tr></thead>
+    <tbody>
+      <tr><td>Domain choices</td><td>Exactly five: software / writing / research / ops / general</td><td>Exactly six; add <code>skill-authoring</code> with an evidence-based default</td></tr>
+      <tr><td>Shipped packs</td><td><code>software/</code> only</td><td><code>software/</code> + a four-file <code>skill-authoring/</code></td></tr>
+      <tr><td>Degrade</td><td>Whole software pack when no domain pack ships</td><td>Whole-pack fallback for unshipped domains; per-file fallback for gaps in a shipped partial pack</td></tr>
+      <tr><td>Skill verification seam</td><td>Software checks and “drive the app” language</td><td>Pre-keyed, citation-bearing probes through two executor roles, graded from transcripts</td></tr>
+      <tr><td>Proof</td><td>Tests and running-app artifacts</td><td>Executor transcripts + criterion verdict tables; rendered artifacts only when the skill produces a visual</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stories">
+  <h2>Stories</h2>
+  <ul class="plain">
+    <li id="story-1">As the owner of a <em>repo that authors skills</em>, I want setup to recognize that domain from its layout, so that I confirm an informed default rather than select a misleading software baseline.</li>
+    <li id="story-2">As a <em>skill author</em>, I want verification framed as probes through real executor harnesses, so that the playbook tests the prompt-driven behavior I actually ship.</li>
+    <li id="story-3">As a <em>debugger</em>, I want a skill bug reduced to a failing probe or confirmed transcript and its load-bearing prompt/reference line, so that the feedback loop targets the real decision error.</li>
+    <li id="story-4">As a <em>reviewer</em>, I want transcripts and per-criterion verdicts, plus rendered proof for visual outputs, so that evidence is honest and gradable.</li>
+    <li id="story-5">As <em>backlog setup</em>, I want a partial pack to resolve every required playbook without disguising software defaults as native skill-authoring practice.</li>
+  </ul>
+</section>
+
+<section id="pack-files">
+  <h2>The four native baselines</h2>
+  <table>
+    <thead><tr><th>Pack file</th><th>Distilled generic baseline</th></tr></thead>
+    <tbody>
+      <tr id="file-verifying"><td><code>verifying.md</code></td><td>Preserves the role header and the sections downstream reads: Checks, CI merge gate, Acceptance criteria. Checks become situated probes graded against an answer key written <strong>before</strong> any run; the same probes run through an in-session executor and an independent CLI executor; both must cite the deciding text, produce transcripts, and be graded per criterion. It says explicitly that executor probes replace “drive the app” for skill behavior, while scripts are driven directly and any real CI is still recorded.</td></tr>
+      <tr id="file-environment"><td><code>environment.md</code></td><td>Preserves branching/deploy, local running, isolation, seed, auth, driving/evidence, presenting, staffing, and parallelism sections. There is no assumed app or stack: exercising a skill means driving a probe through an executor harness; files plus stdlib scripts make worktree isolation complete; seed state is the situated scenarios in each skill's <code>evals/</code>; executor roles and transcript capture replace app drivers. Presentation and staffing remain sibling-owned placeholders.</td></tr>
+      <tr id="file-diagnosing"><td><code>diagnosing-bugs.md</code></td><td>Keeps the feedback-loop → minimise → hypothesise → instrument → regression → cleanup phases, but leads with a failing situated probe or a confirmed misbehaving-run transcript. Reproduce model-dependent behavior across the two executor roles, then minimise the scenario to the prompt input and exact SKILL/reference line that causes the wrong decision; the resulting probe becomes the regression check. Script bugs still use a direct failing invocation.</td></tr>
+      <tr id="file-evidence"><td><code>evidence.md</code></td><td>Preserves the role header plus What to capture, Format/storage, and Presentation contracts. Default proof is the executor transcript and a pass/fail table mapping every probe to its prewritten answer-key criterion; behavioral reworks show the relevant before/after verdict shift. When a skill emits a visual artifact, add rendered screenshots or a short flow artifact. No repo hostnames, identities, model names, or local paths are baked in.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="decisions">
+  <h2>Key decisions</h2>
+  <ul class="plain">
+    <li id="dec-domain"><strong>Register <code>skill-authoring</code> as a sixth work domain in setup and the common policy.</strong> A fresh repo with <code>SKILL.md</code> files under <code>skills/&lt;name&gt;/</code> defaults to it; setup still confirms the inferred value, ambiguous evidence still defaults to software, and re-runs never silently change a recorded domain.</li>
+    <li id="dec-partial"><strong>Ship exactly four native files and define one resolved scaffold set.</strong> <code>environment</code>, <code>verifying</code>, <code>evidence</code>, and <code>diagnosing-bugs</code> are IN because the issue names them and the repo has dogfooded source. <code>implementing</code>, <code>refactoring</code>, <code>change-reviewer</code>, and <code>change-fixer</code> are OUT as native files: their software baselines are substantially code-flavored, and the issue provides no validated skill-authoring source from which to distill replacements. The resolved set is common overlaid by the domain pack, then any absent member of the seven required step-playbook names is filled by its same-name software baseline. Setup step 1 inventory/reconciliation, step 2 scaffolding/completion, and <code>run.md</code> preflight all use that resolved set, so fresh installs and re-runs cannot make fallback playbooks invisible.</li>
+    <li id="dec-shadow"><strong>The common-overlay shadow rule is sufficient for <code>environment.md</code>.</strong> Setup already says the scaffold set is <code>templates/common/</code> overlaid by <code>templates/&lt;domain&gt;/</code> and “a pack file with the same name shadows the common file,” so the skill-authoring environment wins without a special case.</li>
+    <li id="dec-probe-playbook"><strong>No fifth <code>probe-evals.md</code> template ships.</strong> Its reusable technique is distilled into <code>verifying.md</code>; adding an unreferenced project playbook would expand setup's contract beyond the issue's four named files.</li>
+    <li id="dec-generic"><strong>Generalize roles, never this repo's bindings.</strong> Say “in-session executor,” “independent CLI executor,” “the staffing skill/playbook,” and “the skill's <code>evals/</code>”; omit tailnet URLs, account/repo names, named models, and machine-specific paths.</li>
+    <li id="dec-probes"><strong>Append a pre-keyed issue-35 probe set to backlog's existing eval file.</strong> Three situated probes cover fresh skills-repo registration/install, same-name shadow plus partial fallback, and a mid-verify answer-key/dual-executor decision. Each run requires exact citations and ambiguity reporting; both executor roles must pass every probe.</li>
+  </ul>
+
+  <details id="exact-wording">
+    <summary>Exact setup and policy wording to change</summary>
+    <p id="domain-current"><strong>Current setup sentence:</strong></p>
+    <blockquote>Fresh install: <strong>before scaffolding anything</strong>, ask the user "what kind of work does this repo track?" with exactly five options: <code>software</code> / <code>writing</code> / <code>research</code> / <code>ops</code> / <code>general</code>. Default the answer from repo evidence and confirm rather than interrogate, in the same posture as step 3's binding questions: a code repo (<code>package.json</code>, <code>src/</code>, a test runner) defaults to <code>software</code>; a manuscript defaults to <code>writing</code>; ambiguous evidence defaults to <code>software</code>.</blockquote>
+    <p id="domain-new"><strong>Planned setup sentence:</strong></p>
+    <blockquote class="new">Fresh install: <strong>before scaffolding anything</strong>, ask the user "what kind of work does this repo track?" with exactly six options: <code>software</code> / <code>skill-authoring</code> / <code>writing</code> / <code>research</code> / <code>ops</code> / <code>general</code>. Default the answer from repo evidence and confirm rather than interrogate, in the same posture as step 3's binding questions: a skill-authoring repo (<code>SKILL.md</code> files under <code>skills/&lt;name&gt;/</code>) defaults to <code>skill-authoring</code>; a code repo (<code>package.json</code>, <code>src/</code>, a test runner) defaults to <code>software</code>; a manuscript defaults to <code>writing</code>; ambiguous evidence defaults to <code>software</code>.</blockquote>
+    <p id="policy-current"><strong>Current common policy value:</strong> <code>- Domain: _&lt;software | writing | research | ops | general&gt;_.</code></p>
+    <p id="policy-new"><strong>Planned value:</strong> <code>- Domain: _&lt;software | skill-authoring | writing | research | ops | general&gt;_.</code></p>
+    <p id="degrade-current"><strong>Current degrade sentence:</strong></p>
+    <blockquote>Missing-pack degrade: when the chosen domain has no shipped pack (today, every domain except <code>software</code>), install the <code>templates/software/</code> step baselines as stand-ins. Add one flag line to each installed file's header naming it a code-flavored stand-in to tailor for <code>&lt;domain&gt;</code>, and name the gap in the setup report. Never leave a required playbook uninstalled.</blockquote>
+    <p id="degrade-new"><strong>Planned replacement:</strong></p>
+    <blockquote class="new">Missing-baseline degrade: when the chosen domain has no shipped pack (today, every domain except <code>software</code> and <code>skill-authoring</code>), install the <code>templates/software/</code> step baselines as stand-ins. When a shipped pack omits a required step baseline, install only each missing same-name <code>templates/software/</code> baseline as a stand-in. Add one flag line to every installed stand-in's header naming it a code-flavored baseline to tailor for <code>&lt;domain&gt;</code>, and name every gap in the setup report. Never leave a required playbook uninstalled.</blockquote>
+  </details>
+
+  <details id="resolved-set-wording">
+    <summary>Make the partial-pack rule coherent across setup and run</summary>
+    <p id="inventory-current"><strong>Current step-1 inventory sentence:</strong></p>
+    <blockquote>Compare the installed playbooks against the skill's <strong>scaffold set</strong> for that domain: <code>templates/common/</code> overlaid by <code>templates/&lt;domain&gt;/</code>, with a same-name pack file shadowing the common file. Identify which scaffold-set playbooks lack a counterpart.</blockquote>
+    <p id="inventory-new"><strong>Planned definition used by step 1, step 2, and run:</strong></p>
+    <blockquote class="new">Resolve the scaffold set in two passes: overlay <code>templates/common/</code> with <code>templates/&lt;domain&gt;/</code>, with a same-name pack file shadowing common; then, for each required step playbook absent from that overlay, add the same-name <code>templates/software/</code> baseline as a flagged stand-in. The required step names are <code>implementing</code>, <code>verifying</code>, <code>evidence</code>, <code>diagnosing-bugs</code>, <code>refactoring</code>, <code>change-reviewer</code>, and <code>change-fixer</code>.</blockquote>
+    <p id="resolved-uses">Update step 1's comparison and completion criterion, step 2's “Scaffolding and reconciliation draw from…” / “Missing → write…” / completion lines, and <code>reference/run.md</code>'s preflight completion criterion to say <strong>resolved scaffold set</strong>. For <code>skill-authoring</code> that is eleven counterparts: three unshadowed common files + four native pack files + four flagged software stand-ins.</p>
+  </details>
+</section>
+
+<section id="probes">
+  <h2>Situated probes</h2>
+  <table>
+    <thead><tr><th>Probe</th><th>Scenario and required answer</th></tr></thead>
+    <tbody>
+      <tr id="probe-1"><td>P1 · registration/install</td><td>Fresh repo with <code>skills/&lt;name&gt;/SKILL.md</code> files and no app stack. Setup must offer exactly six choices, propose <code>skill-authoring</code>, install the common/pack overlay rather than the whole software pack, record the domain, and identify the four flagged missing-step stand-ins.</td></tr>
+      <tr id="probe-2"><td>P2 · re-run/shadow/partial resolution</td><td>On a skill-authoring re-run, both common and pack <code>environment.md</code> exist, while all four software-only step counterparts are absent. The executor must choose the pack environment, retain pack-native verify/evidence/diagnose, reconcile the four absent implementing/refactoring/reviewer/fixer counterparts from software with flags and a setup-report gap, and state that <code>run</code>'s preflight fails until the resulting full eleven-file install has counterparts.</td></tr>
+      <tr id="probe-3"><td>P3 · mid-verify discipline</td><td>Situated after probe scenarios exist but before an answer key or executor runs, the verifier must write the key first, run the same cited scenario through an in-session executor and independent CLI executor, preserve both transcripts, and grade a per-criterion verdict table; it must reject “drive the app” as the skill-behavior seam.</td></tr>
+    </tbody>
+  </table>
+  <p>The answer key is committed beside these probes before any run. Run the same set through an in-session <strong>Claude subagent</strong> and <strong><code>codex exec --sandbox read-only</code></strong>; both receive the edited setup, run preflight, policy, and relevant pack playbooks. Exact file-and-sentence citations are mandatory, genuine ambiguity may be flagged, and the pass bar is P1–P3 3/3 on both executors. These concrete eval mechanics live in the repo's probe asset, while the shipped pack files themselves use generic executor roles.</p>
+</section>
+
+<section id="criteria">
+  <h2>Definition of done</h2>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion><code>skills/backlog/templates/skill-authoring/</code> contains exactly <code>environment.md</code>, <code>verifying.md</code>, <code>evidence.md</code>, and <code>diagnosing-bugs.md</code>.</li>
+    <li id="ac-2" data-criterion>Each of the four pack files carries its required role header and preserves the section headings consumed by backlog's downstream references.</li>
+    <li id="ac-3" data-criterion>The skill-authoring <code>verifying.md</code> makes pre-run answer-key authoring, dual-executor cited transcripts, and per-criterion grading the behavioral check, with no “drive the app” instruction for skill behavior.</li>
+    <li id="ac-4" data-criterion>The pack <code>environment.md</code> states there is no assumed app/stack, exercising a skill is an executor-harness probe run, files plus stdlib scripts are completely worktree-isolated, and the skill's <code>evals/</code> probe scenarios are its seed state.</li>
+    <li id="ac-5" data-criterion>The pack <code>diagnosing-bugs.md</code> defines a skill repro as a failing probe or confirmed misbehaving-run transcript and minimises it to the load-bearing prompt input and SKILL/reference line before the scenario becomes a regression probe.</li>
+    <li id="ac-6" data-criterion>The pack <code>evidence.md</code> requires executor transcripts plus a pass/fail table mapped to the prewritten answer-key criteria, adding rendered artifacts when the changed skill produces a visual surface.</li>
+    <li id="ac-7" data-criterion>A grep of the four pack files finds no tailnet hostname, <code>asasher</code>/<code>Asher</code> identity, named model from this repo's roster, or absolute/machine-specific path; executor and staffing references use generic roles.</li>
+    <li id="ac-8" data-criterion><code>reference/setup.md</code> offers exactly six work-domain options and defaults a repo containing <code>skills/&lt;name&gt;/SKILL.md</code> files to <code>skill-authoring</code>.</li>
+    <li id="ac-9" data-criterion><code>templates/common/backlog-policy.md</code> § Work domain lists the same six values, including <code>skill-authoring</code>.</li>
+    <li id="ac-10" data-criterion>Setup defines the resolved scaffold set as common overlaid by the domain pack, then the same-name software baseline for every absent required step playbook.</li>
+    <li id="ac-11" data-criterion>Setup's degrade wording names <code>software</code> and <code>skill-authoring</code> as the two shipped packs and requires every software stand-in to be header-flagged and reported.</li>
+    <li id="ac-12" data-criterion>For <code>skill-authoring</code>, the resolved set uses the pack <code>environment.md</code> and installs only implementing/refactoring/change-reviewer/change-fixer from software.</li>
+    <li id="ac-13" data-criterion>Setup step 1 inventory/reconciliation, step 2 scaffolding/completion, and <code>reference/run.md</code> preflight all require counterparts for the full resolved eleven-file skill-authoring set.</li>
+    <li id="ac-14" data-criterion><code>skills/backlog/evals/probes.md</code> appends the three issue-35 situated probes and a gradable answer key committed before any executor run.</li>
+    <li id="ac-15" data-criterion>The issue-35 probe method requires exact citations and ambiguity reporting, then passes P1–P3 3/3 through both a Claude subagent and <code>codex exec --sandbox read-only</code>, retaining both transcripts and a per-probe verdict table.</li>
+    <li id="ac-16" data-criterion>After refreshing with <code>npx skills add &lt;path-to-this-repo&gt; --skill backlog</code>, <code>.agents/skills/backlog/</code> content-matches <code>skills/backlog/</code>, including the new pack, setup/run wording, common policy, and probes.</li>
+  </ul>
+</section>
+
+<section id="checks">
+  <h2>How it will be checked</h2>
+  <p>The behavioral seam is the dual-executor probe-eval discipline in <code>docs/agents/probe-evals.md</code>, not a conventional test suite: answer key first, the same situated probes through a Claude subagent and <code>codex exec --sandbox read-only</code>, citations required, transcripts graded into verdict tables. Static seams are directory listings, targeted greps, and source-versus-installed-copy comparison. There is no running app to drive and no screenshot requirement unless a changed skill emits a visual artifact.</p>
+</section>
+
+<section id="required">
+  <h2>What's required</h2>
+  <ul class="plain">
+    <li id="req-1">The Claude-subagent and read-only-<code>codex exec</code> transcripts plus the P1–P3 verdict table against the prewritten answer key.</li>
+    <li id="req-2">A static-check transcript for pack contents, forbidden-binding greps, six-option coherence, partial-fallback wording, and source/installed-copy equality.</li>
+    <li id="req-3">Rendered evidence only if implementation changes or produces a visual artifact; the four markdown baselines themselves need no screenshot.</li>
+  </ul>
+</section>
+
+<details id="risks">
+  <summary>Risks</summary>
+  <ul class="plain">
+    <li><strong>A partial pack silently drops required playbooks.</strong> Mitigation: setup resolves missing step files explicitly after overlay, flags each fallback, reports every gap, and P2 exercises the exact case.</li>
+    <li><strong>A fallback is mistaken for validated skill-authoring practice.</strong> Mitigation: only the four proven files are native; every software remainder carries the code-flavored stand-in header and appears in the setup report.</li>
+    <li><strong>The environment shadow is missed because environment was classified common.</strong> Mitigation: the existing same-name shadow rule is called out in setup and tested directly in P2/ac-12.</li>
+    <li><strong>The baseline leaks this repo's machine, roster, or identity.</strong> Mitigation: generic-role wording plus the grep-checkable ac-7 exclusion list.</li>
+    <li><strong>An answer key is reverse-engineered from executor output.</strong> Mitigation: probes and key land together before runs; transcripts record the run order.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul class="plain">
+    <li>A writing/docs pack — deferred until a real project validates its practice.</li>
+    <li>Native skill-authoring versions of <code>implementing.md</code>, <code>refactoring.md</code>, <code>change-reviewer.md</code>, or <code>change-fixer.md</code>; they remain explicit stand-ins until validated source exists.</li>
+    <li>A fifth <code>probe-evals.md</code> project playbook; the reusable discipline is inlined into the verifying baseline.</li>
+    <li>Changing backlog's issue routing, setup's recorded-domain re-run rule, or any domain other than registering the sixth option and updating fallback accounting.</li>
+    <li>A conventional automated test suite or live setup run against another repo; the situated probes are the project-recorded verification seam.</li>
+  </ul>
+</details>
+
+</main>
+</body>
+</html>

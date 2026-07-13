@@ -4,10 +4,10 @@
 
 ## Work domain
 
-- Domain: _<software | writing | research | ops | general>_.
-- Chosen at `backlog setup`, this is the kind of work this repo's backlog tracks and decides which baseline pack (`templates/<domain>/`) the step playbooks were scaffolded and are reconciled from.
+- Domain: _<software | skill-authoring | writing | research | ops | general>_.
+- Chosen at `backlog setup`, this is the kind of work this repo's backlog tracks. Playbooks resolve from `templates/common/` overlaid by `templates/<domain>/`, then same-name `templates/software/` stand-ins for any required step the domain pack omits.
 - Absent this section (an install from before domain packs existed), the domain is `software`.
-- When the chosen domain's pack was not yet shipped at install time, the step playbooks are `software` baselines standing in, each flagged in its own header as a code-flavored stand-in to tailor.
+- When the chosen domain's pack was not yet shipped at install time, or a shipped pack omitted a required step, those step playbooks are `software` baselines standing in, each flagged in its own header as a code-flavored stand-in to tailor.
 
 ## Label roles
 
