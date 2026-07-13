@@ -24,5 +24,9 @@ reconcile them against the repo.
 **How they fit together:** render this summary from the installed skills' canonical sibling declarations;
 do not maintain a second dependency list in this template.
 
+**External requirements:** list only provenance-checked requirements declared by the installed closure, with
+their scope and requiring skill. Full source/version/hooks/provider/verification provenance belongs in the
+consumer-owned `external-dependencies.lock.json`, not in this map. Omit this line when there are none.
+
 **Source & updates:** see the repo pointer below / in this file. To add a skill, change scope, or check for
 drift, re-invoke `setup-asher-skills`.

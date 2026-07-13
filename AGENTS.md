@@ -13,8 +13,8 @@ Skills Asher made or likes, kept in one repo so they can be installed elsewhere 
   research, scratch artifacts produced while building it; not part of any install.
 - `plans/`, `evidence/` — artifacts from running the loop on this repo (plan HTML, review evidence);
   working state, not part of any install.
-- `.agents/skills/` (+ `.claude/skills/` symlinks) — the skills installed *into* this repo, tracked in
-  `skills-lock.json`. See § Vocabulary.
+- `.agents/skills/` — primary mounts for skills installed *into* this repo; `.claude/skills/` may hold alias
+  mounts. Install provenance is tracked in `skills-lock.json`. See § Vocabulary.
 
 ## Vocabulary
 
@@ -23,27 +23,37 @@ Use these terms precisely — say which one you mean, and know which one you are
 
 Where a skill lives — three distinct places, three terms:
 
-- **Skill source** — `skills/<category>/<name>/`. The canonical skill this repo exists to publish. All authoring
-  happens here; every install anywhere is a copy of it.
-- **Skill workspace** — `<name>-workspace/` at the root. The working space for *working on* a skill:
+- **Skill source** — `skills/<category>/<name>/`. The canonical skill this repo exists to publish. All
+  authoring happens here; every Asher-authored install is derived from it.
+- **Skill workspace** — `<name>-workspace/` at the root. The author-side working space for *working on* a skill:
   running its evals and tests, research, drafts, and scratch artifacts from development. The skill's
   shipped files still live in the source — the workspace holds the work *around* them, and is never part
   of any install.
-- **Installed skill** — `.agents/skills/<name>`, the canonical installed copy, with a per-harness symlink
-  at `.claude/skills/<name>`; tracked in `skills-lock.json`. This is what the harness loads when a skill
-  runs *in this repo*. It is a build product of the source: never edit it in place — edit
-  its catalog-resolved source and reinstall (`npx skills add <path-to-this-repo> --skill <name>`), or the edit is
-  silently lost on the next reinstall.
+- **Installed skill package** — the replaceable copy of a skill source that a harness loads. It is a build
+  product: never edit it in place — edit the catalog-resolved skill source and reinstall, or the edit is lost
+  on refresh. Install provenance is tracked in `skills-lock.json`.
+- **Primary installed skill mount** — the path `.agents/skills/<name>`, which must be a real copied directory
+  exposing one installed skill package. It is never a symlink and never the consumer's skill instance.
+- **Alias installed skill mount** — an optional harness path such as `.claude/skills/<name>`, which must be a
+  symlink to the primary installed skill mount. There may be zero or more aliases; each exposes the same
+  installed package and is not an independent copy.
+- **Skill instance** — the consumer-owned project materialization created or maintained by running an
+  installed package: an editable directory such as `control-plane/` containing scaffold, configuration,
+  state, and artifacts. It is project material, not a package mount or author-side skill workspace, and a
+  package reinstall must preserve it.
+- **Skill state** — the mutable data inside or associated with a skill instance: checkpoints, queues,
+  decisions, and resume artifacts. State is part of the consumer's ongoing work, while the instance is the
+  broader materialization that may also contain editable configuration, scaffold, and durable artifacts.
 
 How skills and instructions relate:
 
 - **Sibling skill** — another skill in this repo that a skill relies on by name (§ Conventions:
   compose-by-name), e.g. `plan` presents through the `review-loop` sibling. A plain-language runtime
   pointer resolved by the installed skill set — never a file import.
-- **External skill** — a skill relied on by name whose source lives *outside* this repo. **Reserved — we
-  have none today**; if a skill ever actually depends on one, call it this so the out-of-repo provenance
-  is explicit. (`writing-great-skills` is externally *sourced* from mattpocock/skills, but nothing relies
-  on it, so it is just an installed skill.)
+- **External requirement** — a skill or Codex plugin relied on by a selected skill whose canonical source
+  lives outside this repo and is declared in that skill source's `metadata.external`. It is not a sibling and
+  is installed only after provenance review and explicit consent. Its consumer-owned record lives in
+  `external-dependencies.lock.json`, separate from Asher-authored skill provenance.
 - **Playbook** — a repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup
   (e.g. `environment.md`, `platform.md`). Skills speak in role nouns; the playbook binds those roles to
   this repo's reality. Owned by the repo once written — setups reconcile them, never blindly overwrite.
@@ -58,8 +68,8 @@ How skills and instructions relate:
 Kinds of skill:
 
 - **Stateless skill** — each invocation is self-contained; nothing carries over between sessions.
-- **Stateful skill** — maintains its state in the working directory (a state artifact in the skill's
-  workspace, e.g. `bayes`, `goodwork`, `backlog`), so a bare invocation reads it and resumes exactly where
+- **Stateful skill** — maintains skill state in the consumer's working directory (for example `bayes`,
+  `goodwork`, `backlog`), so a bare invocation reads it and resumes exactly where
   the last session left off — no human recap. State lives with the work, never in chat context or memory
   files; a session's last act is updating it. Stateful skills get extra probe-eval attention on the
   resume-after-a-gap path, since their mistakes compound across sessions.
@@ -72,7 +82,9 @@ Kinds of skill:
   language ("present it via the `review-loop` skill") — a runtime pointer resolved by the installed skill
   set, not a file dependency. Every skill declares its **dependency surface** as three kinds of pointer:
   *bundled references* (its own contract, shipped in-directory), *project playbooks* (repo-specific
-  instructions installed under `docs/agents/`), and *sibling skills* (other skills invoked by name).
+  instructions installed under `docs/agents/`), *sibling skills* (other Asher-authored skills invoked by
+  name), and declared *external requirements* (provenance-checked skills or Codex plugins installed by their
+  provider after consent).
 - **Copy a technique; extract a primitive.** A small, local technique is reused by copying its canonical
   files from the skill that has them and noting the source in the copy's header (e.g. `Adapted from
   skills/system/review-loop/scripts/review-server.py`) — improvements flow back to the canonical version

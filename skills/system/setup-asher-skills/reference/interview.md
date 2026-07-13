@@ -16,9 +16,12 @@ the single project question in (3).
    `AGENTS.md` and `CLAUDE.md`, including any existing `## Agent skills` block; prior-install evidence, not
    the block alone, decides routing: greenfield (no block and no installed asher-skills) runs `setup`, while a
    block or installed asher-skills routes to `audit` — see [audit-mode](audit-mode.md). Read the skills
-   already installed **both project and global** (project: `skills-lock.json`, `.claude/skills/`,
-   `.agents/skills/`; global: `~/.claude/skills/`, `~/.agents/skills/`), resolving symlinks before comparing;
-   and the `docs/agents/` playbooks present.
+   already installed **both project and global**. At project scope read `skills-lock.json`, primary mounts in
+   `.agents/skills/`, and alias mounts such as `.claude/skills/`; at global scope read the provenance lock
+   `~/.agents/.skill-lock.json`, primary mounts in `~/.agents/skills/`, and aliases such as
+   `~/.claude/skills/`. Also read each scope's `external-dependencies.lock.json` when present and the
+   `docs/agents/` playbooks. Use `scripts/install.py inspect` to classify mount shape; resolving paths alone
+   can hide an invalid primary symlink or independent alias directory.
 2. **The machine.** Determine the **reachable models** and whether the **Codex CLI** is installed — the
    staffing probe. **Do this by invoking the `staffing` skill by name**, not by re-deriving a roster:
    staffing owns the machine audit, the rankings seed, and the consent-gated global write. If `staffing`
@@ -50,6 +53,10 @@ decisions. The rules:
   user in plain language which siblings came along and why** ("Adding `plan` also brings `review-loop`, which
   you'll use to approve the plan, and `staffing`, which picks which model writes it — they work together").
   Never pull a sibling silently and invisibly.
+- **Declared external requirements are a separate decision.** Show each merged external requirement pulled by
+  the accepted closure in plain language: the capability and why the selected skill needs it. Its declaration
+  permits an offer, not an install; provenance/version/scope/hooks and the external write get their own
+  explicit consent at confirmation. An undeclared external request is not added to this setup run.
 - **Scope is surfaced only where it matters.** Everything is **project-local by default**; the only skill
   offered a **global** install is `staffing`, because a model roster is genuinely reusable across every
   project. Offer staffing global with a one-sentence explainer and route the global write through staffing's
@@ -64,6 +71,9 @@ Before writing anything, show the user the complete plan and let them edit it:
 - the skills to install, with the auto-pulled siblings marked and each skill's scope (project / global);
 - the deterministic dependency-first install/setup order compiled from the selected roots, including optional
   siblings that are already installed or explicitly selected;
+- every merged external requirement, including the requiring skill, exact source, declared or unpinned
+  version, inherited scope, capability, discovered install hooks, provider-specific install action, capability
+  check, and the separate `external-dependencies.lock.json` write;
 - a draft of the `## Agent skills` block that will go into `AGENTS.md`/`CLAUDE.md`;
 - the `docs/agents/` playbooks that will be guaranteed (named, with which skill's setup writes each);
 - the repo pointer.
@@ -76,8 +86,9 @@ Completion criterion: the user has approved the resolved plan (as-is or after ed
 
 Execute the approved plan:
 
-1. **Compile, then install from this repo only.** Resolve the selected roots from the bundled generated
-   catalog, fail before writes on a missing required sibling or required cycle, and install in deterministic
+1. **Compile, then install Asher-authored skills from their canonical source.** Resolve the selected roots
+   from the bundled generated catalog, fail before writes on a missing required sibling, required cycle,
+   malformed external declaration, or conflicting external requirement, and install in deterministic
    dependency-first order. An optional sibling joins only when already installed or explicitly selected.
    First establish whether this is the **self-host case** using the canonical "repo is the source" detection
    in [audit-mode](audit-mode.md) step 1 (the repo's git remote is `asasher/asher-skills`, or a local
@@ -95,17 +106,20 @@ Execute the approved plan:
      source — `npx skills add <repo-root> --skill <ordered names...> -y` — never from the
      `https://github.com/asasher/asher-skills` endpoint, which may lag the local branch (the same
      repo-is-the-source reasoning as audit's self-catalog choice).
-   - **The source directory is never an install destination.** The mount lands as a **canonical copy** at
-     `.agents/skills/<name>` plus a **per-harness symlink** `.claude/skills/<name> ->
+   - **The source directory is never an install destination.** The installed skill package is exposed through
+     a **primary installed skill mount**, a real directory copy at `.agents/skills/<name>`, plus zero or more
+     **alias installed skill mounts**;
+     for Claude Code, `.claude/skills/<name> ->
      ../../.agents/skills/<name>`, with the tool's own `skills-lock.json` entry (`sourceType: "local"`,
      tool-computed `computedHash`). Verified on `skills` v1.5.15: the tool creates the symlink only when
      `.claude/skills/` already exists — when the project is worked from Claude Code, ensure that directory
      exists before installing, or add the symlink afterwards.
-   - **The mount is a build product, the copy is deliberate.** The canonical mount is a real directory copy
+   - **The installed package is a build product, the copy is deliberate.** The primary mount is a real directory copy
      (identical twins with the catalog-resolved source), not a symlink into `skills/` — the same shape every consumer
      project gets. The drift this invites is handled by discipline, not linkage: never edit
      `.agents/skills/<name>` in place; edit the catalog-resolved source and refresh by re-running the same local-source
-     install (the repo's `AGENTS.md` § Vocabulary records this under *Installed skill*).
+     install. Consumer-owned skill instances such as `control-plane/` and their state are project material;
+     mount reconciliation must not edit or remove them.
 
    Still write the `## Agent skills` block, the repo pointer, and the guaranteed playbooks, exactly as for any
    other install.
@@ -119,19 +133,25 @@ Execute the approved plan:
    asher-skills and the compiled new closure, in deterministic dependency-first order. Run **one command per
    scope**: repeated single-skill calls can replace earlier selections from the same source. Every install
    command targets `asasher/asher-skills` and nothing else — see
-   [catalog](catalog.md) § Pull only from this repo.
+   [catalog](catalog.md) § Canonical source and declared externals.
 
-   After the batch, verify every named skill actually landed on the filesystem: check the project install
-   dirs (`.claude/skills/<name>/` or `.agents/skills/<name>/`) and the `skills-lock.json` entries. Do not trust
-   the exit code: `npx skills add` can print `✖ No matching skills found` and exit 0
+   After each batch, verify every named skill with `scripts/install.py inspect`: the primary mount must be a
+   real `.agents/skills/<name>` directory, and every expected harness alias must be a symlink to that primary.
+   A primary symlink, independent alias directory, regular-file mount, dangling alias, or wrong-target alias
+   is not a valid install. Also verify provenance in project `skills-lock.json` or, for global installs,
+   `~/.agents/.skill-lock.json`; filesystem presence without the scope's lock provenance is incomplete. Do not
+   trust the exit code: `npx skills add` can print `✖ No matching skills found` and exit 0
    after installing nothing, and `-y` mode can under-report the count (it reported "Installed 3 skills" when
    4 were requested).
 
    On a verified miss, place only the missing skill's files directly instead of trusting the failed install. This is the
    **direct-placement fallback**: copy from this repo's catalog-resolved source in the self-host case, else fetch
    the skill from the `https://github.com/asasher/asher-skills` endpoint. It never breaks
-   pull-only-from-this-repo, and it mirrors the mount shape the tool would have produced — a canonical copy at
-   `.agents/skills/<name>` plus the per-harness symlink `.claude/skills/<name>` where that harness is present.
+   canonical-source rule, and it mirrors the mount shape the tool would have produced — a real primary copy at
+   `.agents/skills/<name>` plus symlink aliases where those harnesses are present. After placement, run
+   `scripts/install.py reconcile`: it may create or replace only missing, dangling, or wrong-target symlink
+   aliases when the primary is a real directory. It refuses a primary symlink, an independent alias directory,
+   or any other destructive replacement; stop and ask the user to resolve those unsafe states.
 
    A hand-placed `skills-lock.json` fallback entry has a **specified shape**: the tool's native fields —
    `source` (the repo root path in the self-host case, else the slug `asasher/asher-skills`),
@@ -142,7 +162,27 @@ Execute the approved plan:
    hash — the tool has simply adopted the skill, which is the desired end state, not breakage. Tell the user
    the entry is fallback-origin; `audit-mode` treats such an entry (marked `fallbackOrigin`, or missing
    `computedHash`) as expected, not drift.
-2. **Invoke owner setup branches dependency-first.** After installation, invoke `<skill> setup` by public
+2. **Install only consented declared external requirements.** Use the compiler's merged `external` output;
+   never add an external merely because the user mentioned it. For each requirement, confirm that the fetched
+   repository exactly matches the declared GitHub HTTPS `source`, resolve the declared `version` when present
+   (otherwise disclose that it is unpinned), inspect provider manifests/scripts for install or lifecycle hooks,
+   and compare the expected name, kind, and capability. Disclose source, resolved version/commit, inherited
+   scope, capability, and every hook (or explicitly "none found") before obtaining explicit consent.
+
+   Install a `skill` through the skill provider and a `codex-plugin` through Codex's plugin installer; follow
+   that provider's scope and version mechanism rather than emitting an improvised generic install command.
+   After installation, exercise the declared capability or its provider health check and verify its mounts or
+   registration. Provider exit zero alone is insufficient. If consent is declined or capability verification
+   fails, do not mark the requirement satisfied; report the requiring Asher-authored skill as non-operational
+   and offer to remove it from the plan.
+
+   Record each verified external in a consumer-owned `external-dependencies.lock.json`, separate from
+   `skills-lock.json`: project dependencies use the project root; global dependencies use
+   `~/.agents/external-dependencies.lock.json`. Preserve unrelated entries and record at least `name`, `kind`,
+   declared `source`, declared and resolved version/commit, `scope`, `capability`, discovered hooks, provider,
+   requiring skill names, and verification performed. This lock records observed provenance; it never expands
+   what the selected skill sources declared.
+3. **Invoke owner setup branches dependency-first.** After installation, invoke `<skill> setup` by public
    skill name in the same dependency-first order. A skill without a declared setup branch is a valid no-op.
    Staffing preserves an existing global base and writes a missing one only with explicit consent; otherwise
    it reconciles the project delta. Review-loop reconciles only its presentation-surface section. Backlog
@@ -153,7 +193,7 @@ Execute the approved plan:
    `.agents/setup-asher-skills/setup-state.json`; after success, record the owned writes. A failure stops every
    dependent, reports the public owner and partial write set, and leaves completed dependencies intact. A
    retry recompiles the same graph and re-invokes idempotently from the failed owner.
-3. **Write the `## Agent skills` block.** From `templates/agent-skills-block.md`, write the per-project skill
+4. **Write the `## Agent skills` block.** From `templates/agent-skills-block.md`, write the per-project skill
    map into the harness instruction layout. When neither instruction file exists, create canonical
    `AGENTS.md`; when Claude Code will work in the project, also create a minimal `CLAUDE.md` beginning with
    `@AGENTS.md`. When either file already exists, preserve that deliberate layout and reconcile its map or
@@ -166,23 +206,24 @@ Execute the approved plan:
    import (create a minimal `CLAUDE.md` holding just the import if none exists); without it the map is
    invisible to that harness. A prose "read AGENTS.md first" line is not equivalent — it depends on the
    model obeying and costs a read every session.
-4. **Write the repo pointer.** From `templates/repo-pointer.md`, record that these skills come from
+5. **Write the repo pointer.** From `templates/repo-pointer.md`, record that Asher-authored skills come from
    `https://github.com/asasher/asher-skills` and that updates/reconciliation run by re-invoking this skill.
-5. **Seed the global conventions (consent-gated).** If phase 1 found no `## Conventions` section in the
+6. **Seed the global conventions (consent-gated).** If phase 1 found no `## Conventions` section in the
    harness's global memory file, offer to seed it from `templates/global-conventions.md` — the local-first
    HTML presentation rule (author locally, open locally or over tailnet; cloud artifacts only on explicit
    request) and the machine's tailnet up/down commands (fill the placeholder during the interview). Like
    staffing's global write, this touches home-directory memory: write it **only with explicit consent**, and
    only the sections not already present. Projects override via their `docs/agents/` playbooks.
 
-Completion criterion: the closure is installed from this repo, each skill's playbooks are present, the
-`## Agent skills` block + pointer are written, and the global conventions are seeded or explicitly declined.
+Completion criterion: the Asher-authored closure has strict primary/alias mounts and lock provenance; every
+consented external is capability-verified and separately locked; each skill's playbooks are present; the
+`## Agent skills` block + pointer are written; and global conventions are seeded or explicitly declined.
 
 ## What this skill does not do
 
 - **Author or edit any installed skill.** setup composes the skills as they are; changing one is that skill's
   own concern.
-- **Install anything from outside this repo.** External good ideas are already adapted and shipped here — see
-  [catalog](catalog.md) § Pull only from this repo.
-- **Write a `docs/agents/` playbook itself.** It guarantees them via each skill's setup (phase 4 step 2).
+- **Auto-install arbitrary external requests.** Only a selected source's compiled `metadata.external`
+  requirements enter the consented external path; everything else is advise-only.
+- **Write a `docs/agents/` playbook itself.** It guarantees them via each skill's setup (phase 4 step 3).
 - **Ship an `ask-asher` router.** The `## Agent skills` block is the per-project map.

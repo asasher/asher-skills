@@ -47,10 +47,17 @@ including one marked `user`.
 | thinking | `bayes` | user | thread |
 | thinking | `constraints` | user | thread |
 | thinking | `dissolve` | user | orchestrator |
+| personal | `capture-to-inbox` | model | thread |
+| personal | `control-plane` | user | orchestrator |
 | personal | `eloquent` | model | thread |
 | personal | `fair-deal` | user | orchestrator |
 | personal | `goodwork` | model | thread |
 | personal | `learn-anything` | user | thread |
+| personal | `manage-notes` | model | thread |
+| personal | `manage-opportunities` | model | thread |
+| personal | `manage-tasks` | model | thread |
+| personal | `projects-triage` | user | orchestrator |
+| personal | `review-opportunities` | user | thread |
 | personal | `teamdrive` | user | thread |
 
 The generated install/setup graph is

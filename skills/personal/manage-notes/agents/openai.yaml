@@ -1,0 +1,7 @@
+interface:
+  display_name: "Manage Notes"
+  short_description: "Collect, ingest, query, and lint workspace knowledge"
+  default_prompt: "Use $manage-notes to process or query this workspace knowledge with source provenance."
+
+policy:
+  allow_implicit_invocation: true

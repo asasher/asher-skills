@@ -25,6 +25,7 @@ def write_skill(
     name: str | None = None,
     requires: tuple[str, ...] = (),
     optional: tuple[str, ...] = (),
+    external: tuple[dict[str, str], ...] = (),
     setup: bool = False,
 ) -> None:
     directory = root / "skills" / source
@@ -40,6 +41,7 @@ def write_skill(
         "  execution: thread\n"
         f"  requires: [{', '.join(requires)}]\n"
         f"  optional: [{', '.join(optional)}]\n"
+        f"  external: {json.dumps(external, separators=(',', ':'))}\n"
         f"{setup_line}"
         "---\n"
         + ("setup loads reference/setup.md\n" if setup else ""),
@@ -106,6 +108,23 @@ class CatalogTests(unittest.TestCase):
         self.assertIsNone(found["flat"].category)
         self.assertEqual(found["nested"].category, "delivery")
 
+    def test_schema_two_records_empty_external_requirements(self) -> None:
+        temp, root = self.fixture()
+        self.addCleanup(temp.cleanup)
+        write_skill(root, "alpha")
+        compiled = catalog.compile_catalog(root)
+        self.assertEqual(compiled["schema_version"], 2)
+        self.assertEqual(compiled["skills"]["alpha"]["external"], [])
+
+    def test_rejects_yaml_unsafe_unquoted_description(self) -> None:
+        temp, root = self.fixture()
+        self.addCleanup(temp.cleanup)
+        write_skill(root, "alpha")
+        path = root / "skills" / "alpha" / "SKILL.md"
+        path.write_text(path.read_text().replace("description: fixture", "description: fixture: detail"))
+        with self.assertRaisesRegex(catalog.CatalogError, "must be quoted"):
+            catalog.discover(root)
+
     def test_rejects_deeper_and_nested_public_identities(self) -> None:
         for sources in (("one/two/three",), ("parent", "parent/child")):
             with self.subTest(sources=sources):
@@ -171,6 +190,106 @@ class CatalogTests(unittest.TestCase):
         order = with_present["setup_order"]
         self.assertLess(order.index("base"), order.index("app"))
         self.assertLess(order.index("helper"), order.index("extra"))
+
+    def test_external_requirements_are_merged_and_deduplicated(self) -> None:
+        temp, root = self.fixture()
+        self.addCleanup(temp.cleanup)
+        requirement = {
+            "name": "browser-driver",
+            "kind": "codex-plugin",
+            "source": "https://github.com/example/browser-driver",
+            "capability": "Drive an authenticated browser session",
+            "version": "v1.2.3",
+        }
+        write_skill(root, "app", requires=("base",), external=(requirement,))
+        write_skill(root, "base", external=(requirement,))
+        resolved = catalog.resolve(catalog.discover(root), {"app"})
+        self.assertEqual(resolved["external"], [requirement])
+
+    def test_rejects_conflicting_external_declarations_in_closure(self) -> None:
+        temp, root = self.fixture()
+        self.addCleanup(temp.cleanup)
+        common = {
+            "name": "browser-driver",
+            "kind": "codex-plugin",
+            "source": "https://github.com/example/browser-driver",
+            "capability": "Drive a browser",
+        }
+        write_skill(root, "app", requires=("base",), external=(common,))
+        write_skill(root, "base", external=({**common, "version": "v2"},))
+        graph = catalog.discover(root)
+        with self.assertRaisesRegex(catalog.CatalogError, "conflicting external requirement"):
+            catalog.resolve(graph, {"app"})
+
+    def test_validates_external_declarations(self) -> None:
+        valid = {
+            "name": "external-tool",
+            "kind": "skill",
+            "source": "https://github.com/example/external-tool.git",
+            "capability": "Provide the external tool",
+        }
+        cases = {
+            "invalid name": ({**valid, "name": "External Tool"}, "name is invalid"),
+            "invalid kind": ({**valid, "kind": "package"}, "kind must be"),
+            "invalid source": ({**valid, "source": "http://github.com/example/tool"}, "GitHub HTTPS"),
+            "missing capability": (
+                {key: value for key, value in valid.items() if key != "capability"},
+                "missing=.*capability",
+            ),
+            "unknown field": ({**valid, "installer": "custom"}, "unknown=.*installer"),
+            "non-string version": ({**valid, "version": 2}, "non-empty strings"),
+        }
+        for label, (requirement, message) in cases.items():
+            with self.subTest(label=label):
+                temp, root = self.fixture()
+                try:
+                    write_skill(root, "app", external=(requirement,))
+                    with self.assertRaisesRegex(catalog.CatalogError, message):
+                        catalog.discover(root)
+                finally:
+                    temp.cleanup()
+
+        for label, external, message in (
+            ("unsorted", ({**valid, "name": "zulu"}, {**valid, "name": "alpha"}), "sorted by name"),
+            ("duplicate", (valid, valid), "duplicate names"),
+        ):
+            with self.subTest(label=label):
+                temp, root = self.fixture()
+                try:
+                    write_skill(root, "app", external=external)
+                    with self.assertRaisesRegex(catalog.CatalogError, message):
+                        catalog.discover(root)
+                finally:
+                    temp.cleanup()
+
+    def test_external_must_be_inline_json(self) -> None:
+        temp, root = self.fixture()
+        self.addCleanup(temp.cleanup)
+        write_skill(root, "app")
+        skill = root / "skills/app/SKILL.md"
+        skill.write_text(skill.read_text().replace("external: []", "external: [not-json]"))
+        with self.assertRaisesRegex(catalog.CatalogError, "one-line JSON array"):
+            catalog.discover(root)
+
+    def test_external_names_cannot_collide_with_sibling_edges(self) -> None:
+        temp, root = self.fixture()
+        self.addCleanup(temp.cleanup)
+        write_skill(
+            root,
+            "app",
+            requires=("helper",),
+            external=(
+                {
+                    "name": "helper",
+                    "kind": "skill",
+                    "source": "https://github.com/example/helper",
+                    "capability": "Help",
+                },
+            ),
+        )
+        write_skill(root, "helper")
+        with self.assertRaisesRegex(catalog.CatalogError, "collide with sibling edges"):
+            catalog.discover(root)
 
     def test_rejects_cross_harness_invocation_mismatch(self) -> None:
         temp, root = self.fixture()

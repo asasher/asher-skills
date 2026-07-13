@@ -1,25 +1,35 @@
 # The catalog — what to install, and the rules that bind it
 
-Which skills fit which project and the hard invariant that every install comes from this repo only. Canonical
-invocation, execution, required-sibling, optional-sibling, setup, and internal-hold declarations live under
-`metadata` in each source `SKILL.md`; [`catalog.json`](catalog.json) is their generated snapshot. Internal
-roots are cataloged for audit but cannot be selected or required by a public skill. Validate a
+Which skills fit which project and how their dependency surface is declared. Canonical invocation, execution,
+required-sibling, optional-sibling, external, setup, and internal-hold declarations live under `metadata` in
+each source `SKILL.md`; schema-2 [`catalog.json`](catalog.json) is their generated snapshot and emits
+`external: []` when absent. Internal roots are cataloged for audit but cannot be selected or required by a
+public skill. Validate a
 self-host checkout with `python3 skills/system/setup-asher-skills/scripts/catalog.py validate --root . --snapshot
 skills/system/setup-asher-skills/reference/catalog.json` before using the snapshot.
 
-## Pull only from this repo
+## Canonical source and declared externals
 
-**Every skill setup installs comes from `https://github.com/asasher/asher-skills` — the slug `asasher/asher-skills`
-— and nothing else.** Every `npx skills add` command this skill emits targets that endpoint — or, in the
-self-host case ([interview](interview.md) Phase 4), the same repo's own root as a local source: the identical
-source at a local address. setup **never installs, recommends, or emits an install command for a skill from
-any other host or account** (not `mattpocock/*`, not any vendor repo, not a gist).
+**Every Asher-authored skill comes from `https://github.com/asasher/asher-skills` — the slug
+`asasher/asher-skills` — or, in the self-host case, the same repo's local root.** Never substitute a fork,
+mirror, gist, or similarly named external package for an Asher-authored skill.
 
-The reason is a design stance, not a limitation: good ideas from elsewhere are **brought in, adapted, and
-shipped here as our own** (for example `to-spec` is our adaptation of Matt Pocock's `to-spec`). So when a user
-asks for an external skill by name — "install the TDD skill" — the move is: **offer our adapted equivalent if
-we ship one, or say plainly that we don't ship it. Never reach out to the external repo.** If we have no
-equivalent, that is an honest answer, not a reason to break the invariant.
+A skill source may declare provenance-checked external requirements in one frontmatter line:
+
+`external: [{"name":"browser-driver","kind":"codex-plugin","source":"https://github.com/owner/repo","capability":"Drive an authenticated browser","version":"v1.2.3"}]`
+
+The value is a JSON array sorted by unique `name`. Every object requires `name`, `kind`, `source`, and
+`capability`; `version` is optional. Names are lower-kebab-case, `kind` is `skill` or `codex-plugin`, and
+`source` is an HTTPS GitHub repository URL. External names cannot collide with required or optional sibling
+edges. The compiler merges identical declarations across the selected closure and rejects any same-name
+declarations whose source, kind, capability, or version differs.
+
+An external declaration is permission to **offer**, not permission to install. Before any external write,
+follow [interview](interview.md) Phase 4: verify provenance, inspect and disclose source/version/scope/hooks,
+get explicit consent, use the provider-specific installer, verify the declared capability, and record the
+result in the consumer's separate `external-dependencies.lock.json`. An arbitrary external request that is
+not in the selected closure is never auto-installed; offer an Asher-authored equivalent if one exists, or
+state that the request needs a separate deliberate install outside this setup run.
 
 ## By project type — the recommendation seed
 
@@ -47,7 +57,9 @@ inside a deal project and is **never** global.
 Accepting a composer installs its transitive **required** closure. Optional siblings join only when explicitly
 selected or already present; joining one also brings that sibling's required closure. Required edges determine
 the dependency-first setup order. The compiler rejects missing siblings, duplicate names, broken setup
-pointers, and required cycles before a write plan is presented.
+pointers, required cycles, malformed external declarations, and conflicting external requirements before a
+write plan is presented. Closure output includes the sorted, deduplicated `external` requirements merged from
+every active skill.
 
 The current notable edges are visible in `catalog.json`: backlog requires diagnosing-bugs, plan, prototype,
 review-loop, and staffing; plan requires review-loop and staffing and optionally uses prototype; prototype and spreadsheet-loop
@@ -84,3 +96,6 @@ itself proof that a dispatch occurs.
 - **Global only for `staffing`, only with consent.** A model roster is the one genuinely cross-project thing,
   so `staffing` is the only skill offered a global install, routed through staffing's own consent gate. No
   other skill is offered global (and `fair-deal` is explicitly never global).
+- **External requirements inherit the approved scope of the skill that requires them.** Disclose that scope
+  separately; if the same requirement is needed in more than one scope, each provider install and lock record
+  is a separate consented write.

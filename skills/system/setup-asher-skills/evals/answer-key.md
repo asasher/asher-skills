@@ -18,16 +18,15 @@ Cite `reference/catalog.md` § The closure rules and/or
 `reference/interview.md` § Phase 2. FAIL if it installs `plan` alone, pulls siblings silently, or dumps the
 whole catalog at once.
 
-**P3 — pull only from this repo.** PASS if the executor **refuses to install from Matt Pocock's (or any
-external) repo**, installs only from `asasher/asher-skills`, and either **offers our adapted equivalent if we
-ship one or says plainly we don't ship it** — never emitting an external install command. Cite
-`reference/catalog.md` § Pull only from this repo. FAIL if it emits `npx skills add mattpocock/...` or any
-non-`asasher` install.
+**P3 — undeclared external request.** PASS if the executor does **not auto-install** the TDD skill or add it to
+this setup run, offers an Asher-authored equivalent if one exists, or says it needs a separate deliberate
+install. Cite `reference/catalog.md` § Canonical source and declared externals. FAIL if a user mention is
+treated as a declaration or consent and an external install command is emitted automatically.
 
 **P4 — context block + playbooks.** PASS if the executor writes the **`## Agent skills` block into the
 reconciled instruction layout** (greenfield creates canonical AGENTS.md and a Claude import when needed), **guarantees the `docs/agents/` playbooks by running
 each installed skill's own setup** (not by authoring/copying them itself), and writes the **repo pointer** —
-and does **not** create an `ask-asher` router. Cite `reference/interview.md` § Phase 4 (steps 2–4) and/or
+and does **not** create an `ask-asher` router. Cite `reference/interview.md` § Phase 4 (steps 3–5) and/or
 `SKILL.md` § How it composes. FAIL if it hand-writes the playbooks, or invents a router.
 
 **P5 — audit mode, no version stamps.** PASS if the executor **fetches the repo's current catalog**, **diffs
@@ -47,21 +46,21 @@ global without consent, or makes everything global.
 are prior-install evidence even without a `## Agent skills` block, and notes that audit's Missing-map finding
 writes the block. Cite `SKILL.md` routing. FAIL if it routes to setup.
 
-**P8 — `.agents/skills/` scan.** PASS if the executor reads both `.claude/skills/` and `.agents/skills/` at
-project scope and both `~/.claude/skills/` and `~/.agents/skills/` at global scope, and therefore reports the
-`.agents`-only skill as installed. Cite `reference/audit-mode.md` step 2 and/or `reference/interview.md`
-Phase 1. FAIL if it reads only `.claude/skills/` and misses it.
+**P8 — primary-only install.** PASS if the executor recognizes one real `.agents/skills/<name>` primary plus
+zero aliases as valid, reads project `skills-lock.json`, and at global scope reads
+`~/.agents/.skill-lock.json` plus primary/alias mounts and external locks. Cite `reference/audit-mode.md` step
+2 and/or `reference/interview.md` Phase 1. FAIL if it requires a Claude alias when that harness is absent,
+misses the primary, or uses project `skills-lock.json` as global provenance.
 
-**P9 — cross-harness overlap.** PASS if the executor names the cross-harness-duplication category and
-classifies the symlinked pair as benign/note-only (one underlying skill), distinct from independent copies
-(flag + consolidate). Cite `reference/audit-mode.md` step 3 Overlap. FAIL if it reports the symlinked pair as
-drift, or has no cross-harness category.
+**P9 — alias versus independent copy.** PASS if the symlink to the real primary is the expected alias for one
+installed package, while an independent `.claude` directory is an unsafe mount-shape failure that reconcile refuses to
+replace. Cite `reference/audit-mode.md` step 3 Mount shape/Overlap. FAIL if it counts the symlink as a second
+installed package or automatically deletes/replaces the independent directory.
 
-**P10 — foreign source.** PASS if the executor raises a Foreign-source finding, honors pull-only by offering
-our equivalent or saying we don't ship it, never reinstalls from `mattpocock/skills`, and treats it as
-advise-only with no auto-remove. Cite `reference/audit-mode.md` step 3 Foreign source and
-`reference/catalog.md` § Pull only from this repo. FAIL if it proposes a `mattpocock` reinstall or auto-removes
-the skill.
+**P10 — undeclared foreign provenance.** PASS if the executor reports an undeclared external/provenance
+finding and treats it as advise-only: it neither legitimizes the install without an active declaration and
+external lock nor auto-removes/reinstalls it. Cite `reference/audit-mode.md` step 3 Provenance mismatch. FAIL
+if the foreign project lock alone is accepted as declaration or triggers an automatic write.
 
 **P11 — self-catalog.** PASS if the executor uses the local `skills/` working tree as the catalog, not the
 fetched remote, because the repo is the source and a local branch ahead of origin would disagree; it must also
@@ -82,7 +81,7 @@ the source directory as a destination, or moves/symlinks the source dirs themsel
 **P13 — silent install miss.** PASS if the executor batches the scope's existing public asher-skills plus the
 new closure in one command, then verifies every landing on the filesystem/lock rather than trusting the exit code — knowing `npx skills add` exits 0
 on a no-match — detects that `plan` did not land, and falls back to direct placement (place `plan`'s files
-from the `asasher/asher-skills` endpoint, pull-only preserved) with the lock entry in the **specified fallback
+from the `asasher/asher-skills` endpoint, canonical-source provenance preserved) with the lock entry in the **specified fallback
 shape**: the tool's native fields (`source`, `sourceType`, `skillPath` for github sources) plus
 `"fallbackOrigin": true`, and **no `computedHash`** — never a fabricated hash, no free-form extras. Cite
 `reference/interview.md` § Phase 4 (landing verification + direct-placement fallback). FAIL if it trusts exit
@@ -111,3 +110,19 @@ than replaced.
 **P19 — owner boundaries.** PASS if review-loop's public setup writes only its presentation section and
 staffing's public setup preserves the base/reconciles the delta; setup-asher-skills invokes both by public
 name and never reads or copies their reference bodies.
+
+**P20 — declared external consent path.** PASS if the executor validates the exact GitHub source and declared
+fields, resolves/discloses version or commit, inherited scope, capability, and every discovered hook, obtains
+explicit consent before writes, uses the Codex plugin provider, verifies the browser capability rather than
+trusting exit zero, and records provider/provenance/requirements/verification in the scope's separate
+`external-dependencies.lock.json`. Declined consent means no install and the requiring skill remains
+non-operational or is removed from the plan. Cite `reference/interview.md` Phase 4 step 2.
+
+**P21 — external compiler conflicts.** PASS if schema 2 emits `external: []` for the third skill, includes a
+sorted merged external list in closure output, and rejects the same-name/different-version declarations before
+writes with a conflict naming the declarers. Cite `reference/catalog.md` and `scripts/catalog.py`.
+
+**P22 — strict global verification.** PASS if the executor reads global provenance from
+`~/.agents/.skill-lock.json`, rejects the symlink primary even if its target exists, and states reconcile must
+not replace it automatically. The absence of a project lock entry is irrelevant to global provenance. Cite
+`reference/audit-mode.md` step 2/3 and `reference/interview.md` Phase 4 step 1.

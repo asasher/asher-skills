@@ -11,11 +11,38 @@ from dataclasses import dataclass
 from pathlib import Path
 
 NAME = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-META_KEYS = {"invocation", "execution", "requires", "optional", "setup", "internal"}
+GITHUB_HTTPS = re.compile(
+    r"^https://github\.com/"
+    r"[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/"
+    r"[A-Za-z0-9](?:[A-Za-z0-9_.-]*[A-Za-z0-9])?(?:\.git)?$"
+)
+META_KEYS = {"invocation", "execution", "requires", "optional", "external", "setup", "internal"}
+EXTERNAL_REQUIRED_KEYS = {"name", "kind", "source", "capability"}
+EXTERNAL_KEYS = EXTERNAL_REQUIRED_KEYS | {"version"}
 
 
 class CatalogError(ValueError):
     pass
+
+
+@dataclass(frozen=True)
+class ExternalRequirement:
+    name: str
+    kind: str
+    source: str
+    capability: str
+    version: str | None = None
+
+    def record(self) -> dict[str, str]:
+        result = {
+            "name": self.name,
+            "kind": self.kind,
+            "source": self.source,
+            "capability": self.capability,
+        }
+        if self.version is not None:
+            result["version"] = self.version
+        return result
 
 
 @dataclass(frozen=True)
@@ -27,6 +54,7 @@ class Skill:
     execution: str
     requires: tuple[str, ...]
     optional: tuple[str, ...]
+    external: tuple[ExternalRequirement, ...]
     setup: str | None
     internal: bool
 
@@ -38,6 +66,7 @@ class Skill:
             "execution": self.execution,
             "requires": list(self.requires),
             "optional": list(self.optional),
+            "external": [requirement.record() for requirement in self.external],
             "internal": self.internal,
         }
         if self.setup:
@@ -65,6 +94,52 @@ def _names(value: str, field: str, path: Path) -> tuple[str, ...]:
     if names != tuple(sorted(names)):
         raise CatalogError(f"{path}: metadata.{field} must be sorted")
     return names
+
+
+def _external(value: str, path: Path) -> tuple[ExternalRequirement, ...]:
+    try:
+        raw = json.loads(value)
+    except json.JSONDecodeError as exc:
+        raise CatalogError(f"{path}: metadata.external must be a one-line JSON array") from exc
+    if not isinstance(raw, list):
+        raise CatalogError(f"{path}: metadata.external must be a one-line JSON array")
+
+    requirements: list[ExternalRequirement] = []
+    for index, item in enumerate(raw):
+        label = f"{path}: metadata.external[{index}]"
+        if not isinstance(item, dict):
+            raise CatalogError(f"{label} must be an object")
+        keys = set(item)
+        missing = EXTERNAL_REQUIRED_KEYS - keys
+        unknown = keys - EXTERNAL_KEYS
+        if missing or unknown:
+            raise CatalogError(f"{label} unknown={sorted(unknown)} missing={sorted(missing)}")
+        if any(not isinstance(item[key], str) or not item[key].strip() for key in keys):
+            raise CatalogError(f"{label} values must be non-empty strings")
+        if any(item[key] != item[key].strip() or "\n" in item[key] for key in keys):
+            raise CatalogError(f"{label} values must be trimmed one-line strings")
+        if not NAME.fullmatch(item["name"]):
+            raise CatalogError(f"{label}.name is invalid")
+        if item["kind"] not in {"skill", "codex-plugin"}:
+            raise CatalogError(f"{label}.kind must be skill or codex-plugin")
+        if not GITHUB_HTTPS.fullmatch(item["source"]):
+            raise CatalogError(f"{label}.source must be a GitHub HTTPS repository URL")
+        requirements.append(
+            ExternalRequirement(
+                name=item["name"],
+                kind=item["kind"],
+                source=item["source"],
+                capability=item["capability"],
+                version=item.get("version"),
+            )
+        )
+
+    names = tuple(requirement.name for requirement in requirements)
+    if len(names) != len(set(names)):
+        raise CatalogError(f"{path}: metadata.external contains duplicate names")
+    if names != tuple(sorted(names)):
+        raise CatalogError(f"{path}: metadata.external must be sorted by name")
+    return tuple(requirements)
 
 
 def _frontmatter(path: Path) -> tuple[dict[str, str], dict[str, str]]:
@@ -111,6 +186,13 @@ def _parse(path: Path, root: Path, category: str | None) -> Skill:
     name = _scalar(top.get("name", ""))
     if not NAME.fullmatch(name) or path.parent.name != name:
         raise CatalogError(f"{path}: frontmatter name must match its directory")
+    description = top.get("description", "").strip()
+    if not description:
+        raise CatalogError(f"{path}: frontmatter description is required")
+    if ": " in description and not (
+        len(description) >= 2 and description[0] == description[-1] and description[0] in "\"'"
+    ):
+        raise CatalogError(f"{path}: description containing ': ' must be quoted for YAML compatibility")
     invocation = _scalar(metadata["invocation"])
     execution = _scalar(metadata["execution"])
     if invocation not in {"user", "model"} or execution not in {"orchestrator", "thread"}:
@@ -131,6 +213,12 @@ def _parse(path: Path, root: Path, category: str | None) -> Skill:
     optional = _names(metadata["optional"], "optional", path)
     if name in requires + optional or set(requires) & set(optional):
         raise CatalogError(f"{path}: sibling edges must be disjoint and non-self-referential")
+    external = _external(metadata.get("external", "[]"), path)
+    collisions = set(requires + optional) & {requirement.name for requirement in external}
+    if collisions:
+        raise CatalogError(
+            f"{path}: external requirements collide with sibling edges: {', '.join(sorted(collisions))}"
+        )
     setup = _scalar(metadata["setup"]) if "setup" in metadata else None
     internal = _scalar(metadata.get("internal", "false")).lower() == "true"
     if setup:
@@ -147,6 +235,7 @@ def _parse(path: Path, root: Path, category: str | None) -> Skill:
         execution=execution,
         requires=requires,
         optional=optional,
+        external=external,
         setup=setup,
         internal=internal,
     )
@@ -231,13 +320,30 @@ def resolve(
             active.add(name)
             queue.append(name)
         queue.sort()
-    return {"selected": sorted(selected), "closure": sorted(active), "setup_order": _required_order(skills, active)}
+    merged_external: dict[str, ExternalRequirement] = {}
+    declared_by: dict[str, str] = {}
+    for skill_name in sorted(active):
+        for requirement in skills[skill_name].external:
+            existing = merged_external.get(requirement.name)
+            if existing is not None and existing != requirement:
+                raise CatalogError(
+                    f"conflicting external requirement {requirement.name}: "
+                    f"{declared_by[requirement.name]} != {skill_name}"
+                )
+            merged_external[requirement.name] = requirement
+            declared_by.setdefault(requirement.name, skill_name)
+    return {
+        "selected": sorted(selected),
+        "closure": sorted(active),
+        "setup_order": _required_order(skills, active),
+        "external": [merged_external[name].record() for name in sorted(merged_external)],
+    }
 
 
 def compile_catalog(root: Path) -> dict[str, object]:
     skills = discover(root)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "skills": {name: skill.record() for name, skill in skills.items()},
     }
 

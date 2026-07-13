@@ -2,9 +2,9 @@
 
 The prompt-driven installer for [asher-skills](https://github.com/asasher/asher-skills). Wire the right skills
 into a project without hand-wiring: it audits your repo, your machine's reachable models, and what the project
-is for, then interviews you one plain-language decision at a time, installs a dependency-complete set **from
-this repo only**, and writes the project's `## Agent skills` map. Re-invoke it to audit an existing install for
-drift.
+is for, then interviews you one plain-language decision at a time, installs a dependency-complete set of
+Asher-authored skills from this repo, handles any declared external requirements behind a separate consent
+gate, and writes the project's `## Agent skills` map. Re-invoke it to audit an existing install for drift.
 
 It audits **three** surfaces, guarantees each skill's **sibling closure**, defaults every install to
 **project-local** (global only for `staffing`, with consent), and reconciles by **LLM audit — no version stamps**.
@@ -23,14 +23,17 @@ Then invoke it:
 
 ## What it does not do
 
-Author or change any installed skill, install anything from outside this repo, write `docs/agents/` playbooks
-itself (it runs each installed skill's own setup), or ship an `ask-asher` router (the `## Agent skills` block
-is the map).
+Author or change any installed skill, auto-install an undeclared external request, write `docs/agents/`
+playbooks itself (it runs each installed skill's own setup), or ship an `ask-asher` router (the `## Agent
+skills` block is the map). A selected skill may declare an external skill or Codex plugin; setup verifies its
+GitHub provenance, discloses version/scope/hooks, asks for explicit consent, uses its provider installer,
+verifies the capability, and records it separately in `external-dependencies.lock.json`.
 
 ## Layout
 
 - `reference/` — the contract plus generated `catalog.json` snapshot.
 - `scripts/catalog.py` — validates source declarations and resolves deterministic closure/setup order.
+- `scripts/install.py` — inspects primary/alias mounts and safely repairs symlink aliases.
 - `templates/` — seeds for the `## Agent skills` block and the repo pointer.
 - `evals/` — dual-executor probes + answer key.
 - `agents/openai.yaml` — Codex presentation.

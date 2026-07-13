@@ -1,0 +1,6 @@
+interface:
+  display_name: "Control Plane"
+  short_description: "Run the workspace morning sequence"
+  default_prompt: "Use $control-plane to run the complete morning workspace sequence and return the final brief."
+policy:
+  allow_implicit_invocation: false
