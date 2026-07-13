@@ -27,7 +27,9 @@ plugin consent, Shortcut generation, signing, and the live smoke test remain eff
 
 ## Drain Contract
 
-1. Load paths, deployment URL, and token environment name from the consumer instance configuration.
+1. Load paths, deployment URL, token name, and private token-file binding from the consumer instance
+   configuration. Read the token file first, falling back to the process environment only when the file has
+   no matching assignment; never print it.
 2. List the queue; a dry run stops after reporting new versus already-recorded Queue IDs.
 3. For each new item, verify any payload before an atomic local write, then append one Inbox entry carrying
    `Queue ID: \`<id>\``.

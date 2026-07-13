@@ -46,8 +46,13 @@ class SetupTests(unittest.TestCase):
             first = run_script(SETUP, "--project", str(project))
             self.assertEqual(first.returncode, 0, first.stderr)
             self.assertTrue((project / "Inbox" / "INBOX.md").is_file())
+            self.assertEqual((project / ".env").read_text(encoding="utf-8"), "CAPTURE_TOKEN=\n")
+            self.assertEqual((project / ".env").stat().st_mode & 0o777, 0o600)
+            self.assertIn(".env", (project / ".gitignore").read_text(encoding="utf-8").splitlines())
             self.assertTrue((project / "control-plane" / "capture-to-inbox" / "api" / "src" / "app.js").is_file())
             self.assertTrue((project / "control-plane" / "config.json").is_file())
+            config = json.loads((project / "control-plane" / "config.json").read_text(encoding="utf-8"))
+            self.assertEqual(config["capture_to_inbox"]["token_file"], ".env")
             self.assertTrue((project / "control-plane" / "state" / "intake-ledger.json").is_file())
             self.assertTrue((project / "control-plane" / "state" / "setup.json").is_file())
             self.assertTrue((project / "control-plane" / "capture-to-inbox" / "deployment.json").is_file())
@@ -59,6 +64,18 @@ class SetupTests(unittest.TestCase):
             second = run_script(SETUP, "--project", str(project))
             self.assertEqual(second.returncode, 0, second.stderr)
             self.assertEqual(tree_bytes(project), before)
+
+    def test_preserves_existing_local_secret_and_tightens_permissions(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            project = Path(temporary)
+            env_file = project / ".env"
+            env_file.write_text("CAPTURE_TOKEN=consumer-secret\n", encoding="utf-8")
+            env_file.chmod(0o644)
+            result = run_script(SETUP, "--project", str(project))
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(env_file.read_text(encoding="utf-8"), "CAPTURE_TOKEN=consumer-secret\n")
+            self.assertEqual(env_file.stat().st_mode & 0o777, 0o600)
+            self.assertIn(".env", (project / ".gitignore").read_text(encoding="utf-8").splitlines())
 
     def test_preserves_inbox_and_consumer_api_edits_with_candidate_conflict(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -184,6 +201,7 @@ class DrainTests(unittest.TestCase):
                     "capture_to_inbox": {
                         "deployment": "control-plane/capture-to-inbox/deployment.json",
                         "token_env": "CAPTURE_TOKEN",
+                        "token_file": ".env",
                     },
                 }
             ),
@@ -210,6 +228,27 @@ class DrainTests(unittest.TestCase):
 
     def drain(self, *arguments: str) -> subprocess.CompletedProcess[str]:
         return run_script(DRAIN, "--project", str(self.project), *arguments, env=self.env)
+
+    def test_project_dotenv_is_the_local_source_of_truth(self) -> None:
+        (self.project / ".env").write_text("CAPTURE_TOKEN=test-token\n", encoding="utf-8")
+        (self.project / ".env").chmod(0o600)
+        wrong_process_env = dict(self.env, CAPTURE_TOKEN="wrong-token")
+        result = run_script(
+            DRAIN,
+            "--project",
+            str(self.project),
+            "--dry-run",
+            env=wrong_process_env,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, "Queue is empty.\n")
+
+    def test_rejects_overexposed_project_dotenv(self) -> None:
+        (self.project / ".env").write_text("CAPTURE_TOKEN=test-token\n", encoding="utf-8")
+        (self.project / ".env").chmod(0o644)
+        result = self.drain("--dry-run")
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("chmod 600", result.stderr)
 
     def test_preserves_dry_run_limit_keep_remote_and_queue_id_idempotency(self) -> None:
         first = "11111111-1111-4111-8111-111111111111"

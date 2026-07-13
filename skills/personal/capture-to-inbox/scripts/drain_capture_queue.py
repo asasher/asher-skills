@@ -18,6 +18,7 @@ from typing import Any
 
 QUEUE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 URL_PATTERN = re.compile(r'https?://[^\s<>"\')\]]+', re.IGNORECASE)
+ENV_ASSIGNMENT = re.compile(r"^(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$")
 
 
 class DrainError(RuntimeError):
@@ -34,6 +35,39 @@ def load_json_object(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise DrainError(f"expected a JSON object in {path}")
     return value
+
+
+def dotenv_value(path: Path, key: str) -> str | None:
+    if not path.exists():
+        return None
+    if path.stat().st_mode & 0o077:
+        raise DrainError(f"local secret file is readable by group or others: {path}; run chmod 600 {path}")
+
+    found: list[tuple[int, str]] = []
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except UnicodeDecodeError as error:
+        raise DrainError(f"local secret file is not valid UTF-8: {path}") from error
+
+    for line_number, raw in enumerate(lines, start=1):
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        match = ENV_ASSIGNMENT.fullmatch(line)
+        if not match or match.group(1) != key:
+            continue
+        value = match.group(2).strip()
+        if value.startswith(("'", '"')):
+            quote = value[0]
+            if len(value) < 2 or value[-1] != quote:
+                raise DrainError(f"unterminated quoted value for {key} in {path}:{line_number}")
+            value = value[1:-1]
+        found.append((line_number, value))
+
+    if len(found) > 1:
+        locations = ", ".join(str(line_number) for line_number, _value in found)
+        raise DrainError(f"duplicate {key} assignments in {path} at lines {locations}")
+    return found[0][1] if found else None
 
 
 def project_path(project: Path, raw: str, label: str) -> Path:
@@ -300,9 +334,18 @@ def resolve_runtime(args: argparse.Namespace) -> tuple[Path, Path, Path, str, st
     api_url = (args.api_url or deployment.get("api_url") or "").rstrip("/")
     if not api_url.startswith(("http://", "https://")):
         raise DrainError(f"deployment API URL is not configured in {deployment_path}")
-    token = os.environ.get(token_env, "")
+    local_env = project_path(
+        project,
+        str(capture.get("token_file") or ".env"),
+        "capture_to_inbox.token_file",
+    )
+    file_token = dotenv_value(local_env, token_env)
+    token = file_token if file_token is not None else os.environ.get(token_env, "")
     if not token:
-        raise DrainError(f"required bearer token environment variable is unset: {token_env}")
+        raise DrainError(
+            f"required bearer token is missing: set {token_env} in {local_env} "
+            "or in the process environment"
+        )
     if not inbox.is_file():
         raise DrainError(f"Inbox is missing: {inbox}; run capture-to-inbox setup")
     return project, inbox, attachments, api_url, token

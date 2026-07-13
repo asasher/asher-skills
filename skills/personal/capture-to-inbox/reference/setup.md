@@ -20,9 +20,10 @@ deployment, Shortcut build, and the smoke test are effect gates.
    python3 <capture-to-inbox-skill>/scripts/setup_instance.py --project <consumer-root>
    ```
 
-   It creates a missing Inbox, API source, config/state/deployment skeletons, and an empty Shortcut working
-   directory. A conflict exit is a reconciliation gate: inspect each candidate and consumer edit; never copy
-   over it wholesale.
+   It creates a missing Inbox, API source, config/state/deployment skeletons, an empty Shortcut working
+   directory, a private project-root `.env` ignored by Git, and its `capture_to_inbox.token_file` instance
+   binding. Preserve an existing token while tightening `.env` to mode `0600`. A conflict exit is a
+   reconciliation gate: inspect each candidate and consumer edit; never copy over it wholesale.
 4. **Deploy.** Follow [deployment](deployment.md). Bind Railway initially, create or reuse persistent storage,
    set provider-managed secrets, deploy only the consumer API copy, and effect-verify health and auth before
    recording non-secret identities.
@@ -33,8 +34,9 @@ deployment, Shortcut build, and the smoke test are effect gates.
    run the drain once with `--dry-run` and once normally; verify the Inbox has one Queue-ID marker per item,
    the attachment bytes and checksum match, and the remote queue is empty. Remove only the smoke entries and
    files whose IDs were recorded by this run if the consumer does not want them retained.
-7. **Record.** Mark setup complete only when external capability, materialization, deployment, generated and
-   signed Shortcut, and the end-to-end smoke test all pass. Store no secret values.
+7. **Record.** Mark setup complete only when external capability, materialization, local `.env`, deployment,
+   generated and signed Shortcut, and the end-to-end smoke test all pass. Store no secret values in tracked
+   files or setup state.
 
 ## Reconciliation
 

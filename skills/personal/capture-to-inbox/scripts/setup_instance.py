@@ -50,6 +50,26 @@ def atomic_write(path: Path, data: bytes, mode: int = 0o644) -> None:
         temporary.unlink(missing_ok=True)
 
 
+def ensure_local_secret_store(project: Path, created: list[str], updated: list[str]) -> None:
+    env_path = project / ".env"
+    if not env_path.exists():
+        atomic_write(env_path, b"CAPTURE_TOKEN=\n", mode=0o600)
+        created.append(str(env_path))
+    else:
+        current_mode = env_path.stat().st_mode & 0o777
+        if current_mode != 0o600:
+            os.chmod(env_path, 0o600)
+            updated.append(f"{env_path}: permissions 0600")
+
+    gitignore = project / ".gitignore"
+    current = gitignore.read_text(encoding="utf-8") if gitignore.exists() else ""
+    ignored = any(line.strip() == ".env" for line in current.splitlines())
+    if not ignored:
+        separator = "" if not current or current.endswith("\n") else "\n"
+        atomic_write(gitignore, f"{current}{separator}.env\n".encode("utf-8"))
+        (updated if current else created).append(str(gitignore))
+
+
 def candidate_path(path: Path, data: bytes) -> Path:
     base = path.with_name(f"{path.name}.setup-candidate")
     candidate = base
@@ -85,6 +105,7 @@ def deep_defaults(current: Any, defaults: Any) -> Any:
 def valid_config(value: dict[str, Any]) -> bool:
     paths = value.get("paths")
     capture = value.get("capture_to_inbox")
+    token_file = capture.get("token_file") if isinstance(capture, dict) else None
     return (
         value.get("schema_version") == 1
         and isinstance(paths, dict)
@@ -94,6 +115,7 @@ def valid_config(value: dict[str, Any]) -> bool:
             isinstance(capture.get(key), str) and capture[key]
             for key in ("deployment", "token_env")
         )
+        and (token_file is None or isinstance(token_file, str) and token_file)
     )
 
 
@@ -229,6 +251,8 @@ def setup(project: Path, instance_arg: str) -> tuple[int, dict[str, list[str]]]:
     updated = report["updated"]
     conflicts = report["conflicts"]
 
+    ensure_local_secret_store(project, created, updated)
+
     inbox = project / "Inbox" / "INBOX.md"
     if not inbox.exists():
         atomic_write(inbox, INBOX_SEED.encode("utf-8"))
@@ -248,6 +272,7 @@ def setup(project: Path, instance_arg: str) -> tuple[int, dict[str, list[str]]]:
         "capture_to_inbox": {
             "deployment": deployment_relative,
             "token_env": "CAPTURE_TOKEN",
+            "token_file": ".env",
         },
     }
     deployment_defaults = {
@@ -269,6 +294,7 @@ def setup(project: Path, instance_arg: str) -> tuple[int, dict[str, list[str]]]:
         "schema_version": 1,
         "capture_to_inbox": {
             "materialized": True,
+            "local_secret": "pending",
             "external_dependency": "pending",
             "deployment": "pending",
             "shortcut": "pending",
