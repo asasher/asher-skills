@@ -14,7 +14,7 @@ existing READMEs.
 | `shadixfy` | Fork anchored to MIT-licensed `cyxzdev/uncodixfy@e0e0280…`; differences and notice shipped. |
 | `plan`, `prototype`, `review-loop`, `staffing` | Internal extractions now cite their source commits, name the authority moved, and summarize later changes. |
 | `maquette` | Earlier third-party-derived feel/web-quality prose was removed and replaced with compact original outcome gates. Its remaining copied technique is the named internal `bare-minimum-ux` distillation. |
-| `smallbets` | **Not published.** Verbatim/adapted material traces to `slavingia/skills`, whose audited revisions expose no license. `metadata.internal: true` removes it from normal discovery/install pending permission or clean-room replacement. |
+| `smallbets` | **Not published.** Asher confirmed the source as `slavingia/skills`; the credit now pins audited revision `eb9f57f…` and identifies the ten consolidated workflows. That upstream tree exposes no license, so `metadata.internal: true` removes it from normal discovery/install pending permission or clean-room replacement. |
 | `bare-minimum-ux`, `codex-imagegen` | Missing READMEs added; both explicitly classified as original/local integration. |
 | `bayes`, `constraints`, `dissolve`, `fair-deal`, `skill-loop`, `spreadsheet-loop`, `teamdrive`, `to-sprites`, `watch-video` | Original synthesis/integration; existing source bibliographies or dependency links checked. No external skill code/text lineage identified. |
 
