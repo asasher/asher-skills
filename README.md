@@ -47,7 +47,6 @@ including one marked `user`.
 | thinking | `bayes` | user | thread |
 | thinking | `constraints` | user | thread |
 | thinking | `dissolve` | user | orchestrator |
-| thinking | `smallbets` | user | thread (internal provenance hold) |
 | personal | `eloquent` | model | thread |
 | personal | `fair-deal` | user | orchestrator |
 | personal | `goodwork` | model | thread |

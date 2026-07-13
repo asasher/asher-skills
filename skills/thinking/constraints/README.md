@@ -29,6 +29,5 @@ Research notes live in `constraints-research/` at the repo root.
 
 ## Companions
 
-When the constraint turns out to be a life/career question, hand off to `goodwork`; when the fix wants a
-portfolio of cheap market experiments, `smallbets`. When a "constraint" is really a confused question rather
-than a limited flow ("is our problem *culture*?"), `dissolve` it first.
+When the constraint turns out to be a life/career question, hand off to `goodwork`. When a "constraint" is
+really a confused question rather than a limited flow ("is our problem *culture*?"), `dissolve` it first.

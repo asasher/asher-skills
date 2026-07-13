@@ -11,7 +11,7 @@ frontmatter because the harness pays to load it.
 | review-loop | 1,322 | 589 | -733 |
 | setup-asher-skills | 1,833 | 736 | -1,097 |
 | staffing | 1,150 | 591 | -559 |
-| all authored `SKILL.md` entry points | 39,355 (25 skills) | 36,300 (26 skills) | -3,055 despite adding diagnosing-bugs |
+| all authored `SKILL.md` entry points | 39,355 (25 skills) | 35,041 (25 skills) | -4,314 after adding diagnosing-bugs and archiving unused smallbets |
 
 The seven refactored core entry points are 41–55 lines. Compactness came from moving complete disciplines
 behind named interfaces, not deleting their gates.

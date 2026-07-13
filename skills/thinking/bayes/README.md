@@ -39,6 +39,5 @@ summarized in the reference files.
 ## Companions
 
 Suggestions, not dependencies: a question that keeps circling a loaded word may want `dissolve` rather than
-an answer; a belief that resolves into "place many cheap wagers" territory rhymes with `smallbets`; a
-question about where a *system* is stuck is `constraints`' hunt, with this skill as the honest bookkeeper
-for any single contested hypothesis inside it.
+an answer; a question about where a *system* is stuck is `constraints`' hunt, with this skill as the honest
+bookkeeper for any single contested hypothesis inside it.

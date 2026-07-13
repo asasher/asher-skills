@@ -16,7 +16,7 @@ Synthesized from: Designing Your Life & Designing Your New Work Life (Burnett & 
 
 ## Companions
 
-Document mechanics (resume compile/tailor/ATS, cover letters, LinkedIn, salary negotiation) delegate to the `eloquent` skill when available. Independent-income paths pair well with `smallbets`.
+Document mechanics (resume compile/tailor/ATS, cover letters, LinkedIn, salary negotiation) delegate to the `eloquent` skill when available.
 
 ## v2 Operator Notes
 

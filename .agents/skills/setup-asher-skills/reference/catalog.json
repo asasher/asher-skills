@@ -188,15 +188,6 @@
       "requires": [],
       "source": "skills/system/skill-loop"
     },
-    "smallbets": {
-      "category": "thinking",
-      "execution": "thread",
-      "internal": true,
-      "invocation": "user",
-      "optional": [],
-      "requires": [],
-      "source": "skills/thinking/smallbets"
-    },
     "spreadsheet-loop": {
       "category": "delivery",
       "execution": "orchestrator",

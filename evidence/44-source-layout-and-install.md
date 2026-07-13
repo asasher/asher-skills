@@ -3,8 +3,10 @@
 Date: 2026-07-13
 
 `npx skills add . --list` discovered 25 public skills at exactly
-`skills/<category>/<name>/SKILL.md`; it omitted internal provenance-hold skill `smallbets`. The canonical
-compiler discovered all 26 sources exactly once and preserved every frontmatter name.
+`skills/<category>/<name>/SKILL.md`; it omitted the then-internal `smallbets`. The canonical compiler
+discovered all 26 sources exactly once and preserved every frontmatter name. `smallbets` was subsequently
+archived at `b11bb2a` and deleted under [issue #58](https://github.com/asasher/asher-skills/issues/58), leaving
+25 public sources.
 
 Clean git fixtures then compiled the root closure and passed the ordered names to one atomic install command
 per scope. Each expected flat `.agents/skills/<name>/SKILL.md` landed:

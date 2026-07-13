@@ -40,7 +40,7 @@ The map is a starting point tuned by the project answer, not a fixed bundle.
 The single-purpose catalog skills (`bayes`, `constraints`, `dissolve`, `eloquent`, `fair-deal`, `goodwork`,
 `learn-anything`, `teamdrive`, `watch-video`, `shadixfy`, `bare-minimum-ux`, `skill-loop`) are
 offered only when the project answer clearly calls for one; they carry no sibling closure. `fair-deal` installs
-inside a deal project and is **never** global. `smallbets` is an internal provenance hold and is not offered.
+inside a deal project and is **never** global.
 
 ## Install and setup closure
 

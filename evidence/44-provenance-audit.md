@@ -14,12 +14,11 @@ existing READMEs.
 | `shadixfy` | Fork anchored to MIT-licensed `cyxzdev/uncodixfy@e0e0280…`; differences and notice shipped. |
 | `plan`, `prototype`, `review-loop`, `staffing` | Internal extractions now cite their source commits, name the authority moved, and summarize later changes. |
 | `maquette` | Earlier third-party-derived feel/web-quality prose was removed and replaced with compact original outcome gates. Its remaining copied technique is the named internal `bare-minimum-ux` distillation. |
-| `smallbets` | **Not published.** Asher confirmed the source as `slavingia/skills`; the credit now pins audited revision `eb9f57f…` and identifies the ten consolidated workflows. That upstream tree exposes no license, so `metadata.internal: true` removes it from normal discovery/install pending permission or clean-room replacement. |
 | `bare-minimum-ux`, `codex-imagegen` | Missing READMEs added; both explicitly classified as original/local integration. |
 | `bayes`, `constraints`, `dissolve`, `fair-deal`, `skill-loop`, `spreadsheet-loop`, `teamdrive`, `to-sprites`, `watch-video` | Original synthesis/integration; existing source bibliographies or dependency links checked. No external skill code/text lineage identified. |
 
 ## Publication gate
 
-The public installer lists 25 skills. `smallbets` remains in source only as an internal provenance hold; the
-canonical resolver refuses to select an internal root or let a public skill require one. Attribution is not
-treated as a substitute for redistribution permission.
+The public installer lists 25 skills. The unlicensed `smallbets` adaptation was archived at commit
+`b11bb2a` and then deleted; [issue #58](https://github.com/asasher/asher-skills/issues/58) retains the original
+idea as a future, clean-room, multi-framework “idea to first dollar” skill.
