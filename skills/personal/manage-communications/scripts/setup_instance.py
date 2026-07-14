@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 
-TEMPLATE_VERSION = "1.0.0"
+TEMPLATE_VERSION = "1.2.0"
 
 
 def json_bytes(value: Any) -> bytes:
@@ -112,7 +112,7 @@ def setup(workspace: Path, instance_relative: Path) -> dict[str, Any]:
             status = "consumer_modified"
         records[relative.as_posix()] = {"template_sha256": digest, "status": status}
 
-    for directory in ("audiences", "interests", "state", "runs"):
+    for directory in ("profiles", "audiences", "interests", "state", "runs"):
         (instance / directory).mkdir(parents=True, exist_ok=True)
     ledger = instance / "state" / "message-ledger.jsonl"
     if not ledger.exists():

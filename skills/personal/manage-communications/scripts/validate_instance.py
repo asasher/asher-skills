@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -64,6 +65,33 @@ def find_secret_key(value: Any, prefix: str = "") -> list[str]:
 def parse_version(raw: str) -> tuple[int, int, int] | None:
     match = VERSION.search(raw)
     return tuple(int(part) for part in match.groups()) if match else None
+
+
+def validate_profile_binding(
+    instance: Path, value: dict[str, Any], label: str, errors: list[str]
+) -> tuple[str, str] | None:
+    profile_value = value.get("profile_file")
+    digest_value = value.get("profile_sha256")
+    if profile_value is None and digest_value is None:
+        return None
+    if not isinstance(profile_value, str) or not profile_value:
+        errors.append(f"{label}: profile_file must be a non-empty instance-relative path")
+        return None
+    relative = Path(profile_value)
+    if relative.is_absolute() or ".." in relative.parts:
+        errors.append(f"{label}: profile_file must stay inside the communications instance")
+        return None
+    if not isinstance(digest_value, str) or not re.fullmatch(r"[0-9a-f]{64}", digest_value):
+        errors.append(f"{label}: profile_sha256 must be a lowercase SHA-256 digest")
+        return None
+    profile = instance / relative
+    if not profile.is_file():
+        errors.append(f"{label}: missing profile {profile_value}")
+        return None
+    actual = hashlib.sha256(profile.read_bytes()).hexdigest()
+    if actual != digest_value:
+        errors.append(f"{label}: stale profile_sha256 for {profile_value}")
+    return profile_value, digest_value
 
 
 def validate(workspace: Path, require_token: bool, check_cli: bool) -> dict[str, Any]:
@@ -144,6 +172,7 @@ def validate(workspace: Path, require_token: bool, check_cli: bool) -> dict[str,
         warnings.append("no audience files are configured")
     for path in audiences:
         audience = load_json(path, errors)
+        audience_binding = validate_profile_binding(instance, audience, str(path), errors)
         recipients = audience.get("recipients")
         if not isinstance(recipients, list) or not recipients:
             errors.append(f"{path}: recipients must be a non-empty list")
@@ -162,6 +191,12 @@ def validate(workspace: Path, require_token: bool, check_cli: bool) -> dict[str,
         if audience.get("kind") == "external":
             if not isinstance(interest_value, str) or not (instance / interest_value).is_file():
                 errors.append(f"{path}: external audience requires a valid interest_file")
+            else:
+                interest_path = instance / interest_value
+                interest = load_json(interest_path, errors)
+                interest_binding = validate_profile_binding(instance, interest, str(interest_path), errors)
+                if audience_binding != interest_binding:
+                    errors.append(f"{path}: audience and interest manifests must bind the same profile")
 
     if check_cli:
         try:
@@ -184,6 +219,9 @@ def validate(workspace: Path, require_token: bool, check_cli: bool) -> dict[str,
             "credential_file": ".env",
             "credential_present": bool(token),
             "audience_count": len(audiences),
+            "profile_count": len(list((instance / "profiles").glob("*.md")))
+            if (instance / "profiles").is_dir()
+            else 0,
         },
     }
 

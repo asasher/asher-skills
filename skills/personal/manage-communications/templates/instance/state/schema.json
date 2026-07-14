@@ -3,6 +3,7 @@
   "ledger_states": [
     "selected",
     "rendered",
+    "reviewed",
     "handoff_drafted",
     "handoff_sent",
     "outlook_drafted",

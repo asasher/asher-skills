@@ -1,5 +1,13 @@
 # Selection and disclosure
 
+## Preference ownership
+
+Put person-wide facts in People records, organization-wide preferences in Customer or Company records, and
+project-wide narrative rules in the Project record. Put preferences specific to one project–customer
+relationship in one consumer-owned audience profile linked from both records. Treat audience and interest
+JSON as operational manifests; when they name a profile, require their `profile_sha256` values to match the
+current profile before selection.
+
 ## Evidence status
 
 - `production_verified` — observed in the production-facing system or confirmed by its authoritative owner.
@@ -15,7 +23,7 @@ released pending verification, and never promote `in_progress` or `planned` into
 
 Include a fact only when all are true:
 
-1. It belongs to the audience's project and an enabled feature in its interest file.
+1. It belongs to the audience's project and an enabled feature in its current profile-bound interest file.
 2. Its disclosure level permits external use.
 3. It is material to client-visible behavior, delivery confidence, a required decision, or a stated next
    step.
