@@ -12,10 +12,12 @@ Recovered recipe (see SKILL.md for the why):
 
 Single:  codex_imagegen.py --subject "..." --out path.png [--key magenta|green] [--size 1024] [--match "kw kw"]
 Custom:  codex_imagegen.py --prompt-file p.txt --out path.png [--match "kw"]
-Batch:   codex_imagegen.py --batch batch.json --outdir DIR [--key ...] [--size ...]
+Batch:   codex_imagegen.py --batch batch.json --outdir DIR [--new-version] [--key ...] [--size ...]
          batch.json = [{"name":"oak-tree","subject":"..."}, ...]  (or "prompt" for a raw prompt)
 """
 import argparse, base64, glob, json, os, re, subprocess, sys, time
+
+from output_paths import latest_existing_path, open_output
 
 SESS = os.path.expanduser("~/.codex/sessions")
 PNG_SIG, JPG_SIG = "iVBORw0KGgo", "/9j/"
@@ -93,10 +95,9 @@ def generate(prompt, out, match, timeout=420, effort="low"):
     cands.sort(key=score, reverse=True)
     best, matched = cands[0][0], score(cands[0])[0]
     raw = base64.b64decode(best + "=" * (-len(best) % 4))
-    os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
-    with open(out, "wb") as f:
+    with open_output(out) as (actual_out, f):
         f.write(raw)
-    return True, f"wrote {out} ({len(raw)}B); matched_kw={matched}; candidates={len(cands)}"
+    return True, f"wrote {actual_out} ({len(raw)}B); matched_kw={matched}; candidates={len(cands)}"
 
 
 def main():
@@ -106,6 +107,11 @@ def main():
     ap.add_argument("--out")
     ap.add_argument("--batch", help="JSON list of {name, subject|prompt}")
     ap.add_argument("--outdir", default=".")
+    ap.add_argument(
+        "--new-version",
+        action="store_true",
+        help="in batch mode, generate the next version instead of skipping completed names",
+    )
     ap.add_argument("--key", choices=list(KEYS), default="magenta")
     ap.add_argument("--size", type=int, default=1024)
     ap.add_argument("--match", help="keywords to disambiguate the image (default: from subject/out)")
@@ -120,8 +126,9 @@ def main():
         for it in items:
             name = it["name"]
             out = os.path.join(a.outdir, f"{name}.png")
-            if os.path.exists(out) and os.path.getsize(out) > 50_000:
-                print(f"SKIP {name} (exists)", flush=True); ok += 1; continue
+            latest = latest_existing_path(out)
+            if not a.new_version and latest and latest.stat().st_size > 50_000:
+                print(f"SKIP {name} (exists: {latest})", flush=True); ok += 1; continue
             prompt = it.get("prompt") or build_prompt(it["subject"], a.key, a.size)
             match = it.get("match") or it.get("subject") or name
             print(f"GEN  {name} …", flush=True)

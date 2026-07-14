@@ -9,6 +9,8 @@ Requires numpy + Pillow (pip install numpy pillow). Codex ships an equivalent at
 """
 import argparse, sys
 
+from output_paths import open_output
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("inp")
@@ -55,8 +57,9 @@ def main():
         y0, y1 = max(0, ys.min() - a.pad), min(out.shape[0], ys.max() + 1 + a.pad)
         out = out[y0:y1, x0:x1]
 
-    Image.fromarray(out, "RGBA").save(a.out)
-    print(f"wrote {a.out} ({out.shape[1]}x{out.shape[0]}, key={a.key})")
+    with open_output(a.out) as (actual_out, handle):
+        Image.fromarray(out, "RGBA").save(handle, format="PNG")
+    print(f"wrote {actual_out} ({out.shape[1]}x{out.shape[0]}, key={a.key})")
 
 
 if __name__ == "__main__":
