@@ -4,9 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
+import shutil
 import sys
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -16,9 +19,13 @@ GITHUB_HTTPS = re.compile(
     r"[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/"
     r"[A-Za-z0-9](?:[A-Za-z0-9_.-]*[A-Za-z0-9])?(?:\.git)?$"
 )
-META_KEYS = {"invocation", "execution", "requires", "optional", "external", "setup", "internal"}
+META_KEYS = {
+    "invocation", "execution", "requires", "optional", "external", "setup", "internal", "variants"
+}
 EXTERNAL_REQUIRED_KEYS = {"name", "kind", "source", "capability"}
 EXTERNAL_KEYS = EXTERNAL_REQUIRED_KEYS | {"version"}
+PROVIDERS = {"claude", "codex"}
+PROTECTED_VARIANT_PATHS = {"SKILL.md", "agents/openai.yaml", "reference/setup.md"}
 
 
 class CatalogError(ValueError):
@@ -57,6 +64,7 @@ class Skill:
     external: tuple[ExternalRequirement, ...]
     setup: str | None
     internal: bool
+    variants: tuple[tuple[str, str], ...]
 
     def record(self) -> dict[str, object]:
         result: dict[str, object] = {
@@ -68,6 +76,7 @@ class Skill:
             "optional": list(self.optional),
             "external": [requirement.record() for requirement in self.external],
             "internal": self.internal,
+            "variants": dict(self.variants),
         }
         if self.setup:
             result["setup"] = self.setup
@@ -140,6 +149,43 @@ def _external(value: str, path: Path) -> tuple[ExternalRequirement, ...]:
     if names != tuple(sorted(names)):
         raise CatalogError(f"{path}: metadata.external must be sorted by name")
     return tuple(requirements)
+
+
+def _variants(value: str, path: Path) -> tuple[tuple[str, str], ...]:
+    try:
+        raw = json.loads(value)
+    except json.JSONDecodeError as exc:
+        raise CatalogError(f"{path}: metadata.variants must be a one-line JSON object") from exc
+    if not isinstance(raw, dict) or not raw:
+        raise CatalogError(f"{path}: metadata.variants must be a non-empty one-line JSON object")
+    if list(raw) != sorted(raw):
+        raise CatalogError(f"{path}: metadata.variants keys must be sorted")
+    if set(raw) - PROVIDERS:
+        raise CatalogError(
+            f"{path}: metadata.variants has unsupported provider(s): "
+            + ", ".join(sorted(set(raw) - PROVIDERS))
+        )
+    result: list[tuple[str, str]] = []
+    source_root = path.parent.resolve()
+    for provider, relative in raw.items():
+        if not isinstance(relative, str) or relative != f"variants/{provider}":
+            raise CatalogError(
+                f"{path}: metadata.variants.{provider} must be variants/{provider}"
+            )
+        overlay = (path.parent / relative).resolve()
+        if source_root not in overlay.parents or not overlay.is_dir():
+            raise CatalogError(f"{path}: missing variant overlay: {relative}")
+        for candidate in sorted(overlay.rglob("*")):
+            if candidate.is_symlink():
+                raise CatalogError(f"{path}: variant overlays cannot contain symlinks: {candidate}")
+            if candidate.is_file():
+                rel = candidate.relative_to(overlay).as_posix()
+                if rel in PROTECTED_VARIANT_PATHS:
+                    raise CatalogError(
+                        f"{path}: variant overlay changes shared contract path {rel}"
+                    )
+        result.append((provider, relative))
+    return tuple(result)
 
 
 def _frontmatter(path: Path) -> tuple[dict[str, str], dict[str, str]]:
@@ -221,6 +267,7 @@ def _parse(path: Path, root: Path, category: str | None) -> Skill:
         )
     setup = _scalar(metadata["setup"]) if "setup" in metadata else None
     internal = _scalar(metadata.get("internal", "false")).lower() == "true"
+    variants = _variants(metadata["variants"], path) if "variants" in metadata else ()
     if setup:
         if setup != "reference/setup.md" or not (path.parent / setup).is_file():
             raise CatalogError(f"{path}: setup must point to a shipped reference/setup.md")
@@ -238,6 +285,7 @@ def _parse(path: Path, root: Path, category: str | None) -> Skill:
         external=external,
         setup=setup,
         internal=internal,
+        variants=variants,
     )
 
 
@@ -343,8 +391,73 @@ def resolve(
 def compile_catalog(root: Path) -> dict[str, object]:
     skills = discover(root)
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "skills": {name: skill.record() for name, skill in skills.items()},
+    }
+
+
+def _tree_files(root: Path, *, omit_variants: bool = False) -> list[Path]:
+    files: list[Path] = []
+    for path in sorted(root.rglob("*")):
+        if omit_variants and path.relative_to(root).parts[:1] == ("variants",):
+            continue
+        if path.is_symlink():
+            raise CatalogError(f"skill trees cannot contain symlinks: {path}")
+        if path.is_file():
+            files.append(path)
+    return files
+
+
+def tree_hash(root: Path, *, omit_variants: bool = False) -> str:
+    digest = hashlib.sha256()
+    for path in _tree_files(root, omit_variants=omit_variants):
+        relative = path.relative_to(root).as_posix().encode("utf-8")
+        digest.update(len(relative).to_bytes(8, "big"))
+        digest.update(relative)
+        data = path.read_bytes()
+        digest.update(len(data).to_bytes(8, "big"))
+        digest.update(data)
+    return "sha256:" + digest.hexdigest()
+
+
+def materialize_variant(skill: Skill, root: Path, provider: str, output: Path) -> dict[str, str]:
+    variants = dict(skill.variants)
+    if provider not in variants:
+        raise CatalogError(f"{skill.name}: provider is not declared: {provider}")
+    source = root.resolve() / skill.source
+    output = output.resolve()
+    if source == output or source in output.parents:
+        raise CatalogError(f"materialization output cannot be inside the skill source: {output}")
+    if output.exists() or output.is_symlink():
+        raise CatalogError(f"refusing existing materialization output: {output}")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = Path(tempfile.mkdtemp(prefix=f".{output.name}-", dir=output.parent))
+    try:
+        for child in sorted(source.iterdir()):
+            if child.name in {"variants", "evals"}:
+                continue
+            target = temporary / child.name
+            if child.is_symlink():
+                raise CatalogError(f"skill trees cannot contain symlinks: {child}")
+            if child.is_dir():
+                shutil.copytree(child, target)
+            else:
+                shutil.copy2(child, target)
+        overlay = source / variants[provider]
+        shutil.copytree(overlay, temporary, dirs_exist_ok=True)
+        if (temporary / "variants").exists():
+            raise CatalogError("compiled provider tree unexpectedly contains variants/")
+        effective_hash = tree_hash(temporary)
+        temporary.replace(output)
+    finally:
+        if temporary.exists():
+            shutil.rmtree(temporary)
+    return {
+        "skill": skill.name,
+        "provider": provider,
+        "source_revision": tree_hash(source),
+        "effective_hash": effective_hash,
+        "output": str(output),
     }
 
 
@@ -355,12 +468,13 @@ def _write(path: Path, data: dict[str, object]) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("compile", "validate", "closure"))
+    parser.add_argument("command", choices=("compile", "validate", "closure", "materialize"))
     parser.add_argument("skills", nargs="*")
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--output", type=Path)
     parser.add_argument("--snapshot", type=Path)
     parser.add_argument("--present", action="append", default=[])
+    parser.add_argument("--provider", choices=sorted(PROVIDERS))
     args = parser.parse_args(argv)
     try:
         if args.command == "compile":
@@ -377,9 +491,23 @@ def main(argv: list[str] | None = None) -> int:
             if actual != expected:
                 raise CatalogError(f"{args.snapshot}: snapshot differs from source declarations")
             print(f"valid: {len(actual['skills'])} skills")
-        else:
+        elif args.command == "closure":
             graph = discover(args.root)
             print(json.dumps(resolve(graph, set(args.skills), set(args.present)), indent=2, sort_keys=True))
+        else:
+            if len(args.skills) != 1 or not args.provider or not args.output:
+                parser.error("materialize requires one skill, --provider, and --output")
+            graph = discover(args.root)
+            name = args.skills[0]
+            if name not in graph:
+                raise CatalogError(f"unknown skill: {name}")
+            print(
+                json.dumps(
+                    materialize_variant(graph[name], args.root, args.provider, args.output),
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
     except (CatalogError, OSError, json.JSONDecodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1

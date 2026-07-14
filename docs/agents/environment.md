@@ -95,31 +95,9 @@
 
 ## Model staffing
 
-> Owned by the **`staffing`** skill (composed by name): it defines the roles (its `reference/roles-and-fallback.md`: orchestrator, issue coordinator, builder by surface, checker, floor), rankings, and the fallback ladder. Read by `run` before every dispatch and by every reference that spawns work. The general rankings and routing rules live in the **global base** — `~/.claude/CLAUDE.md` § Staffing, mirrored in `~/.codex/AGENTS.md` § Staffing — with this repo's deltas in the project `CLAUDE.md` § Staffing; resolve base-then-deltas. This section is the **compiled roster** — those rules crossed with this repo's surfaces and each direction's effect-verified native or sibling-harness reachability. One model may fill several roles.
-
-- Floor: **sonnet-5** (Claude-side) or **gpt-5.6-terra** (Codex-side) — never Haiku (global base § Staffing). Nothing staffs below the Floor in any role.
-- Issue coordinator eligibility: any reachable route at or above the Floor that can own a durable child and
-  dispatch/escalate its worker stages. For `routine`, apply normal pins → capability/taste gates →
-  `intelligence > taste > cost`; for `orchestrator-required`, use the session orchestrator. Record the route
-  before worktree/child creation; routine points up to the session orchestrator, while orchestrator-required
-  records the roster's next orchestrator successor and human authority for unresolved product decisions.
-- **One thread pattern everywhere: orchestrator + subagents.** Every delegated thread uses a watched native
-  agent thread or tracked sibling-harness wrapper whose completion wakes the orchestrator. A Claude→Codex
-  thread is held by a thin wrapper subagent (`model: 'sonnet', effort: 'low'`, labeled
-  `gpt-5.6-sol:…`) that runs `codex exec` and returns the report. No fire-and-forget shell owns delegated work.
-- From **Claude Code** (this loop's harness):
-  - Orchestrator: the session model — **fable-5** in current sessions; the most capable reachable Claude model in general.
-  - Builder (backend / mechanical — clear-spec skill edits, reference rewrites, bulk work): **gpt-5.6-sol via `codex exec`** (`~/.claude/CLAUDE.md` § Staffing → Mechanics, the global base), through the wrapper-subagent pattern above. Parallel codex edit agents use `isolation: 'worktree'`.
-  - Builder (ui / taste ≥ 7 — SKILL copy, plan/prototype HTML, anything user-facing): a Claude model via the Agent `model` override — **fable-5** (taste 9) or **opus-4.8** (taste 7).
-  - Checker: probe-eval executor runs on **both** gpt-5.6-sol (`codex exec`) and a Claude model in-session, per `docs/agents/probe-evals.md`'s dual-executor design; verify⇆fix mechanics on gpt-5.6-sol; review/grading judgment on **fable-5 or opus-4.8** (skill reviews and probe grading, per `AGENTS.md`). The Reviewer handles the full criteria including rendered artifacts.
-  - Watcher / cron (review-verdict watches, PR-merge watches, scheduled check-ins): the Floor — **sonnet-5** in-session; **gpt-5.6-terra** for Codex-side scheduled jobs. Watchers only wait and relay; judgment escalates to the orchestrator.
-  - Capability pins (gates before ranking): **browser-use → gpt-5.6-terra via chatgpt-in-chrome** (drives a real Chrome browser); **computer-use → gpt-5.6-terra via the Codex computer-use client** (non-browser work where the agent must operate the computer/GUI itself). Claude-side headless Chrome is blocked on this machine, so browser work routes through Codex.
-- From **Codex**: native Codex agents remain available; Claude is also reachable through sibling harness
-  dispatch with a bounded `claude -p` command and **no `--bare`**. Staffing chooses the issue coordinator
-  before the child is created, records the upward successor, and treats a failed Codex→Claude invocation as
-  loss of that direction only. No Anthropic-policy monitor runs in the skill; the remaining graph is allowed
-  to be asymmetric until the route is repaired.
-- Succession: if the session model is unreachable, the most capable reachable Claude model orchestrates (**fable-5**, then opus-4.8, then sonnet-5), keeping all Claude-side roles; **gpt-5.6-sol via `codex exec`** remains the mechanical builder/checker regardless, since it bills to its own subscription.
+Resolve the active harness's deferred global staffing module, then apply `CLAUDE.md` § Staffing. This repo
+adds two deltas only: skill design remains orchestration-grade, and probe evals use the dual-executor contract
+in `docs/agents/probe-evals.md`. There is no project floor, capability-provider, or succession override.
 
 ## Parallelism verdict
 

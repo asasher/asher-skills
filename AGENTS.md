@@ -11,10 +11,8 @@ Skills Asher made or likes, kept in one repo so they can be installed elsewhere 
   (`backlog setup` and its siblings) plus the repo-authored `probe-evals.md` (the eval discipline).
 - `<skill>-workspace/` dirs at the root — the working space for developing a skill: eval and test runs,
   research, scratch artifacts produced while building it; not part of any install.
-- `research/` — durable general research dossiers; local-skill authoring research instead follows
-  `<skill>-workspace/research/`. The `research` skill and `docs/agents/researching.md` own the boundary.
-- `plans/`, `evidence/` — approved plan HTML and criterion-linked review proof respectively; neither is a
-  catch-all for research or other human-reviewed artifacts. Working state, not part of any install.
+- `plans/`, `evidence/` — artifacts from running the loop on this repo (plan HTML, review evidence);
+  working state, not part of any install.
 - `.agents/skills/` — primary mounts for skills installed *into* this repo; `.claude/skills/` may hold alias
   mounts. Install provenance is tracked in `skills-lock.json`. See § Vocabulary.
 
@@ -34,11 +32,11 @@ Where a skill lives — three distinct places, three terms:
 - **Installed skill package** — the replaceable copy of a skill source that a harness loads. It is a build
   product: never edit it in place — edit the catalog-resolved skill source and reinstall, or the edit is lost
   on refresh. Install provenance is tracked in `skills-lock.json`.
-- **Primary installed skill mount** — the path `.agents/skills/<name>`, which must be a real copied directory
-  exposing one installed skill package. It is never a symlink and never the consumer's skill instance.
-- **Alias installed skill mount** — an optional harness path such as `.claude/skills/<name>`, which must be a
-  symlink to the primary installed skill mount. There may be zero or more aliases; each exposes the same
-  installed package and is not an independent copy.
+- **Primary installed skill mount** — the Codex path `.agents/skills/<name>`, always a real copied directory.
+  For a declared provider variant it is the compiled Codex tree; otherwise it is the shared package.
+- **Alias/provider installed skill mount** — a harness path such as `.claude/skills/<name>`. Unvaried skills
+  use a symlink to the primary. A declared provider variant uses a separately compiled real directory plus
+  `.agents/asher-skills/variant-lock.json`; an undeclared independent copy is invalid.
 - **Skill instance** — the consumer-owned project materialization created or maintained by running an
   installed package: an editable directory such as `control-plane/` containing scaffold, configuration,
   state, and artifacts. It is project material, not a package mount or author-side skill workspace, and a
@@ -113,17 +111,16 @@ to reconcile them against the repo.
 | diagnosing-bugs | Runs the reusable six-phase defect diagnosis discipline | project |
 | plan | Turns an intent into a reviewed plan held at an approval gate | project |
 | prototype | Answers one design question with a throwaway artifact — keep the answer, delete the artifact | project |
-| research | Establishes primary-source facts and observations, then separates supported inferences and unknowns | project |
+| research | Establishes primary-source findings with traceable claims, contradictions, and unknowns | project |
 | review-loop | Serves a rendered artifact for human sign-off and blocks until the verdict | project |
-| staffing | Owns the model roster — who staffs which task (global base in `~/.claude/CLAUDE.md` § Staffing; this repo's deltas in `CLAUDE.md` § Staffing) | project |
+| staffing | Owns the model roster; each harness loads its deferred global module plus this repo's sparse deltas | project |
 | setup-asher-skills | The installer/auditor for this skill set — sets a project up, adds skills with their sibling closure, audits for drift | project |
 | skill-loop | Iterates a skill through eval → revise cycles | project |
 | writing-great-skills | Authoring guidance for writing skills (from mattpocock/skills) | project |
 
-**How they fit together:** composers pull their siblings — `plan` and `prototype` use `review-loop`
-(to sign off) and `staffing` (to pick the model); `research` uses `staffing` for bounded fan-out; `plan`
-may consume research findings; `backlog` also uses `diagnosing-bugs` and `research` as work-type branches.
-`staffing` and `review-loop` depend on nothing.
+**How they fit together:** `backlog` requires `diagnosing-bugs`, `plan`, `prototype`, `research`,
+`review-loop`, and `staffing`. `research` requires `staffing`; `plan` optionally uses `prototype` and
+`research`; `plan` and `prototype` require `review-loop` and `staffing`.
 
 **Source & updates:** installed from this repo itself. To add a skill, change scope, or check for drift,
 re-invoke `setup-asher-skills`; to refresh sources, install the complete desired local set in one atomic
