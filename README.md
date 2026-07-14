@@ -60,6 +60,7 @@ including one marked `user`.
 | personal | `projects-triage` | user | orchestrator |
 | personal | `review-opportunities` | user | thread |
 | personal | `teamdrive` | user | thread |
+| personal | `until-zero` | model | thread |
 
 The generated install/setup graph is
 [`skills/system/setup-asher-skills/reference/catalog.json`](skills/system/setup-asher-skills/reference/catalog.json);

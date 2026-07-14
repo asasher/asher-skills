@@ -81,8 +81,9 @@ The current notable edges are visible in `catalog.json`: backlog requires diagno
 research, review-loop, and staffing; research requires staffing; plan requires review-loop and staffing and
 optionally uses prototype and research; prototype and spreadsheet-loop
 require review-loop and staffing; maquette requires review-loop; review-loop optionally uses staffing for its
-watch; setup-asher-skills requires staffing; and to-spec optionally uses review-loop. Document inputs such as
-to-tickets consuming a spec are not sibling edges.
+watch; setup-asher-skills requires staffing; control-plane optionally uses until-zero; to-spec optionally uses
+review-loop; and to-sprites optionally uses codex-imagegen. Document inputs such as to-tickets consuming a
+spec are not sibling edges.
 
 When closure resolution adds a sibling, **tell the user which sibling came along and why** — the pull is never
 silent ([interview](interview.md) § Phase 2).

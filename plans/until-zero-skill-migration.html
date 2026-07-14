@@ -1,10 +1,10 @@
 <!doctype html>
-<!-- Draft plan. Stable ids are review anchors; do not rename them across revisions. -->
+<!-- Approved plan. Stable ids are review anchors; do not rename them across revisions. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plan — Until Zero becomes a control-plane skill</title>
+<title>Plan — Until Zero becomes a standalone personal skill</title>
 <style>
 :root {
   color-scheme: light dark;
@@ -108,18 +108,18 @@ summary { cursor: pointer; font-weight: 650; }
 <main>
 <header class="top" id="plan-header">
   <div>
-    <div class="status">Draft for Asher’s approval</div>
-    <h1>Until Zero becomes a control-plane skill.</h1>
+    <div class="status">Approved for implementation · 14 July 2026</div>
+    <h1>Until Zero becomes a standalone personal skill.</h1>
     <p class="lede">Preserve the financial model, Wallet capture, and calm runway readout. Replace the Lakebed application with workspace-owned state, a dedicated per-installation Runway Capture API, an agent-operated skill, a Shortcuts Playground-authored Wallet Shortcut, and a generated HTML review surface.</p>
   </div>
   <div class="verdict" id="recommendation">
     <strong>Recommendation: retire the app—after a measured cutover.</strong>
-    <span>The Lakebed runtime remains the rollback system until real-data parity and a live Wallet cycle both pass.</span>
+    <span>The reusable skill ships without migration code or data. After it is merged and installed, a separate one-time cutover job generates the dump, imports it, proves parity, and preserves rollback.</span>
   </div>
 </header>
 
 <nav aria-label="Plan sections">
-  <a href="#inventory">What exists</a><a href="#shape">Target shape</a><a href="#decisions">Decisions</a><a href="#migration">Migration</a><a href="#criteria">Done</a><a href="#risks">Risks</a>
+  <a href="#inventory">What exists</a><a href="#shape">Target shape</a><a href="#decisions">Decisions</a><a href="#migration">One-time cutover</a><a href="#criteria">Done</a><a href="#risks">Risks</a>
 </nav>
 
 <section id="problem">
@@ -155,14 +155,14 @@ summary { cursor: pointer; font-weight: 650; }
   <p class="section-intro">Each installation receives its own runway-only capture service. The skill ships the template; setup materializes consumer-owned source, deploys it to Railway by default, and then connects the generated Wallet Shortcut.</p>
   <figure class="architecture" id="architecture-diagram">
     <svg viewBox="0 0 1000 350" role="img" aria-labelledby="arch-title arch-desc">
-      <title id="arch-title">Proposed control-plane architecture</title>
-      <desc id="arch-desc">Manage Runway ships a dedicated Capture API template that setup copies into the consumer workspace and deploys to Railway. The generated Wallet Shortcut posts transactions to that service. Manage Runway drains the service into canonical workspace state and generates the HTML review surface.</desc>
+      <title id="arch-title">Proposed standalone Until Zero architecture</title>
+      <desc id="arch-desc">Until Zero ships a dedicated Capture API template that setup copies into the consumer workspace and deploys to Railway. The generated Wallet Shortcut posts transactions to that service. Until Zero drains the service into canonical workspace state and generates the HTML review surface.</desc>
       <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/></marker></defs>
-      <rect class="box" x="20" y="36" width="160" height="94" rx="10"/><text x="100" y="67" text-anchor="middle" font-weight="650">manage-runway source</text><text class="muted" x="100" y="91" text-anchor="middle">API template + setup</text><text class="muted" x="100" y="111" text-anchor="middle">replaceable package</text>
+      <rect class="box" x="20" y="36" width="160" height="94" rx="10"/><text x="100" y="67" text-anchor="middle" font-weight="650">until-zero source</text><text class="muted" x="100" y="91" text-anchor="middle">API template + setup</text><text class="muted" x="100" y="111" text-anchor="middle">replaceable package</text>
       <rect class="box" x="220" y="36" width="170" height="94" rx="10"/><text x="305" y="67" text-anchor="middle" font-weight="650">runway/api</text><text class="muted" x="305" y="91" text-anchor="middle">consumer-owned source</text><text class="muted" x="305" y="111" text-anchor="middle">template.json</text>
       <rect class="accent" x="430" y="36" width="180" height="126" rx="12"/><text x="520" y="68" text-anchor="middle" font-weight="700">Railway capture service</text><text class="muted" x="520" y="93" text-anchor="middle">runway only · v1 envelope</text><text class="muted" x="520" y="114" text-anchor="middle">paging · lease · ack</text><text class="muted" x="520" y="135" text-anchor="middle">volume + bounded retention</text>
       <rect class="box" x="20" y="224" width="160" height="94" rx="10"/><text x="100" y="256" text-anchor="middle" font-weight="650">Wallet Shortcut</text><text class="muted" x="100" y="280" text-anchor="middle">Shortcuts Playground</text><text class="muted" x="100" y="300" text-anchor="middle">append-only token</text>
-      <rect class="accent" x="650" y="111" width="160" height="126" rx="12"/><text x="730" y="145" text-anchor="middle" font-weight="700">manage-runway</text><text class="muted" x="730" y="170" text-anchor="middle">drain · normalize</text><text class="muted" x="730" y="191" text-anchor="middle">propose · project</text><text class="muted" x="730" y="212" text-anchor="middle">apply approved changes</text>
+      <rect class="accent" x="650" y="111" width="160" height="126" rx="12"/><text x="730" y="145" text-anchor="middle" font-weight="700">until-zero</text><text class="muted" x="730" y="170" text-anchor="middle">drain · normalize</text><text class="muted" x="730" y="191" text-anchor="middle">propose · project</text><text class="muted" x="730" y="212" text-anchor="middle">apply approved changes</text>
       <rect class="box" x="840" y="111" width="140" height="126" rx="10"/><text x="910" y="144" text-anchor="middle" font-weight="650">runway state</text><text class="muted" x="910" y="169" text-anchor="middle">JSON/JSONL</text><text class="muted" x="910" y="190" text-anchor="middle">audit + approvals</text><text class="muted" x="910" y="211" text-anchor="middle">HTML snapshots</text>
       <path class="edge" d="M180 83 H220"/><path class="edge" d="M390 83 H430"/>
       <path class="edge" d="M180 271 H390 Q420 271 440 162"/>
@@ -178,8 +178,8 @@ summary { cursor: pointer; font-weight: 650; }
   <table id="ownership-table">
     <thead><tr><th>Layer</th><th>Owner</th><th>Durability boundary</th></tr></thead>
     <tbody>
-      <tr><td><code>manage-runway</code></td><td>Canonical skill source in asher-skills</td><td>Replaceable package; domain scripts, contracts, and Runway Capture API template</td></tr>
-      <tr><td>Runway API source</td><td>Consumer instance at <code>control-plane/runway/api</code></td><td>Editable copy with template hashes and adjacent upgrade candidates</td></tr>
+      <tr><td><code>until-zero</code></td><td>Canonical skill source in asher-skills</td><td>Replaceable package; domain scripts, contracts, and Runway Capture API template</td></tr>
+      <tr><td>Runway API source</td><td>Consumer instance at <code>until-zero/api</code></td><td>Editable copy with template hashes and adjacent upgrade candidates</td></tr>
       <tr><td>Runway API deployment</td><td>Consumer’s Railway project/service/volume</td><td>Dedicated queue; secrets only in Railway or local environment</td></tr>
       <tr><td>Runway state and reports</td><td>asher-workspace consumer</td><td>Readable JSON/JSONL, audit and approval records, generated reports</td></tr>
       <tr><td>Until Zero repo</td><td>Historical implementation</td><td>Read-only/archive after rollback window; engine oracle retained</td></tr>
@@ -205,30 +205,29 @@ summary { cursor: pointer; font-weight: 650; }
 <section id="decisions">
   <h2>Key decisions</h2>
   <ol class="decision-list">
-    <li id="dec-1"><span class="num">D1</span><span><strong>Build <code>manage-runway</code>, not an app-shaped skill.</strong> The skill owns domain workflows, deterministic state transitions, projection, and report generation; it does not reproduce every inline-edit interaction.</span></li>
-    <li id="dec-2"><span class="num">D2</span><span><strong>Ship a dedicated Runway Capture API with <code>manage-runway</code>.</strong> This is not a shared queue and does not alter <code>capture-to-inbox</code>. The skill bundles a small dependency-free server template; setup materializes an editable consumer copy under <code>control-plane/runway/api</code>, following the source/package/instance separation already proven by Capture to Inbox.</span></li>
+    <li id="dec-1"><span class="num">D1</span><span><strong>Build <code>until-zero</code>, not an app-shaped skill.</strong> The skill owns domain workflows, deterministic state transitions, projection, and report generation; it does not reproduce every inline-edit interaction.</span></li>
+    <li id="dec-2"><span class="num">D2</span><span><strong>Ship a dedicated Runway Capture API with <code>until-zero</code>.</strong> This is not a shared queue and does not alter <code>capture-to-inbox</code>. The skill bundles a small dependency-free server template; setup materializes an editable consumer copy under <code>until-zero/api</code>, following the source/package/instance separation already proven by Capture to Inbox.</span></li>
     <li id="dec-3"><span class="num">D3</span><span><strong>Separate producer and consumer authority.</strong> The Wallet credential can append captures only; a distinct drain credential can list, lease, read, and acknowledge. Query-string tokens are removed, and neither secret is committed.</span></li>
-    <li id="dec-10"><span class="num">D10</span><span><strong>Delegate Shortcut authoring to the external Shortcuts Playground skill.</strong> <code>manage-runway setup</code> declares the external capability, performs provenance/version/hook disclosure and explicit consent, then asks Shortcuts Playground to build, validate, archive, sign, and verify a minimal “Capture to Runway” Shortcut. The generated Shortcut accepts Transaction input and uses import questions for the dedicated API URL and append-only producer token, so no secret is committed. Setup then guides the user through the Apple-owned step it cannot perform: import the Shortcut, create a personal <em>Transaction</em> automation, select cards, choose <em>Run Immediately</em>, and run the generated Shortcut with the transaction as input.</span></li>
+    <li id="dec-10"><span class="num">D10</span><span><strong>Delegate Shortcut authoring to the external Shortcuts Playground skill.</strong> <code>until-zero setup</code> discloses the declared name, kind, source, version, and capability and obtains explicit consent, then asks Shortcuts Playground to build, validate, archive, sign, and verify a minimal “Capture to Runway” Shortcut. The generated Shortcut accepts Transaction input and uses import questions for the dedicated API URL and append-only producer token, so no secret is committed. Setup then guides the user through the Apple-owned step it cannot perform: import the Shortcut, create a personal <em>Transaction</em> automation, select cards, choose <em>Run Immediately</em>, and run the generated Shortcut with the transaction as input.</span></li>
     <li id="dec-11"><span class="num">D11</span><span><strong>Make Railway the default deployment path, with an effect-verified guided fallback.</strong> Setup first materializes the API locally. If the Railway CLI is installed and authenticated, it offers to create or reuse the project, service, persistent volume, and secrets, deploys from the consumer-owned copy, waits for completion, and verifies health plus authentication boundaries. If the CLI or authentication is missing, setup gives exact Railway steps, records the incomplete gate, and resumes at verification after the user finishes. It never fabricates provider state or store secrets in <code>deployment.json</code>.</span></li>
     <li id="dec-4"><span class="num">D4</span><span><strong>Keep canonical financial state readable and local.</strong> Accounts, rules, events, FX, transactions, pending captures, and audit/approval records live in the consumer instance as versioned JSON/JSONL with atomic writes and a single-writer lock.</span></li>
     <li id="dec-5"><span class="num">D5</span><span><strong>Port the engine to stdlib Python.</strong> Skill-repo conventions prohibit a new dependency stack; parity is established against the existing TypeScript oracle before the port becomes authoritative.</span></li>
     <li id="dec-6"><span class="num">D6</span><span><strong>Mapped captures count; unmapped captures do not.</strong> A Wallet charge mapped deterministically to a known account enters as <code>uncleared</code>. Ambiguous captures remain pending and excluded, fixing the current model/comment disagreement.</span></li>
-    <li id="dec-7"><span class="num">D7</span><span><strong>Review changes, not raw state.</strong> Reconciliations and material model edits become hash-addressed proposed change sets. The generated HTML shows before/after runway effects; approval is recorded before apply.</span></li>
-    <li id="dec-8"><span class="num">D8</span><span><strong>Integrate softly with the control plane.</strong> <code>manage-runway</code> is optional. When configured, refresh runs before the morning brief; failures are surfaced without blocking unrelated inbox/task phases.</span></li>
-    <li id="dec-9"><span class="num">D9</span><span><strong>Retire by evidence, not by date.</strong> Lakebed is disabled only after frozen-date parity, live Wallet verification, a completed statement workflow, and an agreed rollback window.</span></li>
+    <li id="dec-7"><span class="num">D7</span><span><strong>Review changes, not raw state.</strong> Reconciliations and material model edits become hash-addressed proposed change sets. Each proposal embeds exact before/after runway effects at an explicit date; approval is recorded before apply.</span></li>
+    <li id="dec-8"><span class="num">D8</span><span><strong>Keep orchestration one-way.</strong> <code>until-zero</code> is standalone and carries no control-plane reference. The control plane may optionally invoke it by name; when configured, refresh runs before the morning brief and failures do not block unrelated inbox/task phases.</span></li>
+    <li id="dec-9"><span class="num">D9</span><span><strong>Keep migration out of the skill.</strong> The package contains no Lakebed exporter, importer, retirement route, or real data. Once the skill is installed in its actual consumer workspace, a separate one-time job generates a secret-safe dump, imports the selected owner through ordinary proposals, proves parity, and records rollback evidence before Lakebed is disabled.</span></li>
   </ol>
 </section>
 
 <section id="migration">
-  <h2>Migration sequence</h2>
-  <p class="section-intro">Each phase ends with a red-capable gate; downstream work does not proceed on a hopeful result.</p>
+  <h2>One-time post-install cutover</h2>
+  <p class="section-intro">This sequence is operational work after the reusable skill is merged and installed. None of its dump, transformation, import, dual-run, or retirement machinery ships in <code>until-zero</code>.</p>
   <div class="phases">
-    <article class="phase" id="phase-0"><span class="phase-no">0 · FREEZE & EXPORT</span><h3>Select the real owner</h3><p>Secret-safe export of every domain table, IDs, links, exception ranges, order, status, and as-of value. Preserve raw ingest separately under an explicit retention decision.</p><p class="gate"><strong>Gate:</strong> row counts reconcile and two settings scopes are explicitly dispositioned.</p></article>
-    <article class="phase" id="phase-1"><span class="phase-no">1 · DEDICATED CAPTURE API</span><h3>Materialize and deploy</h3><p>Adapt the proven Capture-to-Inbox template pattern into a runway-only dependency-free Node 20 service with a versioned transaction envelope, append/drain credentials, pagination, a drain lease, acknowledgement, retention, health checks, private file modes, and atomic queue visibility. Setup copies it into the consumer instance with <code>template.json</code> and <code>deployment.json</code>, then provisions Railway automatically when its CLI is authenticated or walks the user through the same gates.</p><p class="gate"><strong>Gate:</strong> both automatic and guided setup paths end in a healthy dedicated service whose unauthenticated and producer read attempts fail.</p></article>
-    <article class="phase" id="phase-2"><span class="phase-no">2 · RUNWAY CORE</span><h3>Port and prove the engine</h3><p>Materialize the consumer state, import the chosen owner, and run old/new projections on frozen dates, including card-cycle and recurrence edge cases.</p><p class="gate"><strong>Gate:</strong> 27 oracle cases plus real-data snapshot parity.</p></article>
-    <article class="phase" id="phase-3"><span class="phase-no">3 · SKILL & REVIEW</span><h3>Operate through proposals</h3><p>Implement query, capture refresh, natural-language edits, statement reconcile, proposal/apply, audit log, and self-contained current/snapshot HTML. After the dedicated API passes setup, first-run setup invokes Shortcuts Playground, verifies the signed artifact, records non-secret generation metadata, and walks the user through the personal Transaction automation.</p><p class="gate"><strong>Gate:</strong> a fresh executor completes realistic probes and a new user completes API deployment, Shortcut import, and one live capture without authoring actions.</p></article>
-    <article class="phase" id="phase-4"><span class="phase-no">4 · DUAL RUN</span><h3>Repoint the phone safely</h3><p>Run the new dedicated Wallet endpoint while Lakebed remains readable. Compare capture, dedupe, account mapping, statement timing, and zero-date output through a real spend/reconcile cycle.</p><p class="gate"><strong>Gate:</strong> no missing/duplicate transaction and rollback is rehearsed.</p></article>
-    <article class="phase" id="phase-5"><span class="phase-no">5 · RETIRE & INDEX</span><h3>Remove the runtime, keep the home</h3><p>Disable old Shortcut and tokens, archive/export Lakebed, freeze the repo, and retain a thin Project note linking the skill source, instance, deployment, reports, and archive.</p><p class="gate"><strong>Gate:</strong> post-retirement morning run and capture smoke test pass.</p></article>
+    <article class="phase" id="phase-0"><span class="phase-no">0 · INSTALL</span><h3>Materialize the real consumer</h3><p>Merge the skill PR, install it in the actual working directory, materialize the instance, and verify its deterministic core before touching live data.</p><p class="gate"><strong>Gate:</strong> package tests pass and the installed empty instance validates structurally.</p></article>
+    <article class="phase" id="phase-1"><span class="phase-no">1 · DUMP</span><h3>Generate a secret-safe export</h3><p>As a one-time job, export every domain table, preserve IDs and links, explicitly select the intended owner, exclude tokens and credentials, and record counts plus source hash.</p><p class="gate"><strong>Gate:</strong> both settings scopes are dispositioned, counts reconcile, and a secret scan is clean.</p></article>
+    <article class="phase" id="phase-2"><span class="phase-no">2 · IMPORT</span><h3>Transform through reviewed proposals</h3><p>Normalize the selected owner into the installed state contract, show exact before/after projections, approve the bound proposal hashes, and apply only to the consumer instance.</p><p class="gate"><strong>Gate:</strong> canonical state validates and frozen-date real-data output matches the legacy oracle.</p></article>
+    <article class="phase" id="phase-3"><span class="phase-no">3 · LIVE VERIFY</span><h3>Prove capture and statement flow</h3><p>Deploy the dedicated API, build the Shortcut, complete one live Wallet capture and one statement reconciliation, and compare missing/duplicate capture, account mapping, card timing, and zero dates while Lakebed remains readable.</p><p class="gate"><strong>Gate:</strong> no unexplained drift and rollback is rehearsed.</p></article>
+    <article class="phase" id="phase-4"><span class="phase-no">4 · RETIRE</span><h3>Disable old runtime, retain evidence</h3><p>Disable old Shortcut and tokens, archive the dump and Lakebed implementation, and retain links to the skill, instance, deployment, reports, cutover evidence, and rollback record.</p><p class="gate"><strong>Gate:</strong> post-retirement refresh/report smoke passes.</p></article>
   </div>
 </section>
 
@@ -243,16 +242,16 @@ summary { cursor: pointer; font-weight: 650; }
     <li id="ac-6" data-criterion>Two concurrent drain attempts cannot apply the same capture twice; a failed local write leaves the remote item unacknowledged.<small>Check: lease race and fault-injection tests.</small></li>
     <li id="ac-7" data-criterion>A mapped Wallet charge is stored once as uncleared and changes the runway through its account’s correct cash/card timing.<small>Check: live Shortcut-shaped capture and projection diff.</small></li>
     <li id="ac-8" data-criterion>An unmapped Wallet charge remains pending, is visible in the review surface, and does not affect any zero date until assigned.<small>Check: unmapped fixture before/after assignment.</small></li>
-    <li id="ac-9" data-criterion>A statement import proposes matched statuses, ignored duplicates, balance changes, and new recurring rules without mutating canonical state.<small>Check: hash canonical files before/after proposal.</small></li>
+    <li id="ac-9" data-criterion>A statement import deterministically proposes unique matches, balance changes, and new transactions while leaving ambiguous rows unresolved and canonical state unchanged; recurring rules are separate edits.<small>Check: hash canonical files before/after change generation.</small></li>
     <li id="ac-10" data-criterion>Applying a proposal requires an approval whose content hash matches; stale or altered proposals are rejected and leave state unchanged.<small>Check: approve, tamper, and stale-hash tests.</small></li>
-    <li id="ac-11" data-criterion>The generated <code>current.html</code> is self-contained, responsive, readable in light/dark modes, and shows runway, pending decisions, assumptions, provenance, and before/after effects.<small>Check: offline render, phone/desktop screenshots, contrast audit.</small></li>
+    <li id="ac-11" data-criterion>The generated <code>current.html</code> is self-contained, responsive, readable in light/dark modes, and shows runway, pending decisions, assumptions, and provenance; each proposal separately embeds its exact before/after effects.<small>Check: offline render plus proposal-content inspection.</small></li>
     <li id="ac-12" data-criterion>Every applied mutation records timestamp, actor, source capture/proposal IDs, before/after hashes, and approval ID without embedding secrets.<small>Check: audit-log schema and secret scan.</small></li>
     <li id="ac-13" data-criterion>Setup and upgrade preserve consumer-edited instance files, emit adjacent candidates for conflicts, and do not overwrite financial state or deployment identity.<small>Check: fresh, idempotent, edited-instance evals.</small></li>
     <li id="ac-14" data-criterion>A configured morning control-plane run refreshes runway capture and includes a concise status/link; an unavailable runway phase is reported while later workspace phases continue.<small>Check: healthy and failure-path orchestrator probes.</small></li>
     <li id="ac-15" data-criterion>The existing <code>capture-to-inbox</code> skill, consumer instance, Railway service, and share-sheet flow remain unchanged by the runway migration.<small>Check: zero-diff inventory plus its existing end-to-end smoke test.</small></li>
     <li id="ac-16" data-criterion>The old Lakebed runtime is disabled only after a completed dual-run window includes at least one live Wallet capture and one statement reconciliation with a rehearsed rollback.<small>Check: signed cutover checklist and evidence links.</small></li>
     <li id="ac-17" data-criterion>The Until Zero Project note remains the known home and links the canonical skill, consumer instance, active report, deployment, export, and archived repo.<small>Check: workspace link lint and manual navigation.</small></li>
-    <li id="ac-18" data-criterion><code>manage-runway</code> declares Shortcuts Playground as an external capability with reviewed provenance/version/hook disclosure, and setup obtains explicit consent before installing or invoking it.<small>Check: clean-project setup probe with absent and present dependency.</small></li>
+    <li id="ac-18" data-criterion><code>until-zero</code> declares Shortcuts Playground as an external capability with exact identity, source, version, and capability disclosure, and setup obtains explicit consent before installing or invoking it.<small>Check: clean-project setup probe with absent and present dependency.</small></li>
     <li id="ac-19" data-criterion>On first-run setup, Shortcuts Playground produces validator-clean unsigned XML, archives it, signs an importable <code>.shortcut</code>, and verifies the signed file exists with non-zero size; committed artifacts contain placeholders/import questions rather than a producer token.<small>Check: plugin pipeline transcript, artifact inspection, and secret scan.</small></li>
     <li id="ac-20" data-criterion>A new user can follow the generated setup guide to import the Shortcut, create an iOS Transaction automation for selected cards, set it to Run Immediately, pass Transaction input to the Shortcut, and deliver one live capture to their dedicated Runway Capture API.<small>Check: clean-phone setup walkthrough and resulting Queue ID.</small></li>
     <li id="ac-21" data-criterion>When the Railway CLI is installed and authenticated, setup can create or reuse the project, service, persistent volume, environment variables, and domain; deploy the consumer-owned API source; and verify healthy/authenticated behavior without exposing a secret.<small>Check: effect-verified setup in a disposable Railway fixture, followed by teardown.</small></li>
@@ -270,7 +269,7 @@ summary { cursor: pointer; font-weight: 650; }
     <article class="check" id="check-surface"><h3>Human seam</h3><p>Offline render and browser screenshots at phone/desktop sizes; keyboard navigation, WCAG contrast, and human approval of the real current report.</p></article>
     <article class="check" id="check-shortcut"><h3>Shortcut seam</h3><p>External dependency consent, Shortcuts Playground validation/signing evidence, non-secret artifact inspection, clean import, personal Transaction automation setup, and one live capture from iPhone.</p></article>
   </div>
-  <p class="note" id="unchecked">Deliberately unchecked until the dual-run: prediction accuracy beyond the encoded assumptions. The migration proves semantic equivalence and provenance, not that future cashflow assumptions are objectively correct.</p>
+  <p class="note" id="unchecked">Deliberately unchecked until the one-time cutover: prediction accuracy beyond the encoded assumptions. Parity proves semantic equivalence and provenance, not that future cashflow assumptions are objectively correct.</p>
 </section>
 
 <section id="assumptions">
@@ -303,8 +302,8 @@ summary { cursor: pointer; font-weight: 650; }
 <details id="required">
   <summary>Required implementation evidence</summary>
   <ul class="risk-list">
-    <li id="req-1">Sanitized production export manifest and owner-selection record.</li>
-    <li id="req-2">Cross-engine parity report keyed to frozen date and fixture hash.</li>
+    <li id="req-1">Post-install one-time cutover record: sanitized dump manifest, owner selection, counts, source hash, and secret scan.</li>
+    <li id="req-2">Post-import parity report keyed to frozen date and fixture hash; these artifacts remain outside the reusable skill.</li>
     <li id="req-3">Dedicated Capture API authorization, concurrency, failure, template-upgrade, and automatic/guided Railway setup results.</li>
     <li id="req-4">Probe transcripts and pass/fail table for the new skill.</li>
     <li id="req-5">Desktop/mobile review-surface screenshots and contrast results.</li>
@@ -325,7 +324,7 @@ summary { cursor: pointer; font-weight: 650; }
   </ul>
 </details>
 
-<footer class="footer" id="plan-footer">Plan v1 · draft awaiting Asher’s approval · no implementation authorized by this document.</footer>
+<footer class="footer" id="plan-footer">Plan v1 · approved by Asher on 14 July 2026 · canonical skill: until-zero.</footer>
 </main>
 </body>
 </html>
