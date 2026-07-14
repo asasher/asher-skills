@@ -9,21 +9,20 @@ an agent-driven procedure; **it ships no scripts.**
 
 Run these probes and record the results:
 
-1. **Which routes work in each direction?** Enumerate native models, then probe installed sibling harness
-   CLIs. Claude→Codex uses a bounded `codex exec`; Codex→Claude uses a bounded `claude -p` and must not add
-   `--bare`. Record the command shape, timestamp, return/failure class, and fallback successor per direction.
-   A failed direction is unavailable without making the healthy direction unavailable. Do not poll vendor
-   policy or credit notices; real invocation behavior is the operational signal.
+1. **Which routes work from this harness?** Enumerate native models, then probe the sibling-harness route
+   defined by the compiled `reference/harness.md`. Record command shape, timestamp, return/failure class,
+   native wrapper label/model evidence, and fallback successor. A failure removes this direction only. Do not
+   poll vendor policy or credit notices; real invocation behavior is the operational signal.
 2. **Which sibling harness CLIs are installed?** Probe `codex --version` and `claude --version`, then retain
    only the routes step 1 actually exercised. Presence alone is not reachability. The result decides which
-   mechanics the base includes (see [install-and-reconcile](install-and-reconcile.md) § CLI and tools mechanics).
-3. **Which harness memory layer exists?** Detect which global memory file the harness uses
-   (`~/.claude/CLAUDE.md` for Claude Code, `~/.codex/AGENTS.md` for Codex) so the base is written to the
-   right place. This also feeds the scope-decision flow.
+   mechanics the base includes (see [install-and-reconcile](install-and-reconcile.md) § External-worker contract).
+3. **Which harness memory layer exists?** Use the exact global pointer and deferred-module paths in the
+   compiled `reference/harness.md`. This also feeds the scope-decision flow.
 4. **Do global staffing rules already exist?** Read the detected memory layer for an existing staffing
    roster. Its presence or absence chooses the scope-decision branch (see install-and-reconcile).
 
-From (1) you have the **rows** of the rankings table and capability matrix. From (2) you have the **sibling harness
+From (1) you have the **rows** of the rankings table and directional route states. Independently effect-probe
+installed skills/plugins/tools to build the capability-provider registry. From (2) you have the **sibling harness
 mechanics** the base needs. What the audit **cannot** probe is the *judgment numbers* — cost, intelligence,
 and taste are human assessments, not machine-detectable — so seed them, then let the user tune.
 
@@ -50,16 +49,12 @@ output*, never the authoritative table — a different machine produces a differ
 | opus-4.8      | 3    | 7            | 7     |
 | fable-5       | 1    | 9            | 9     |
 
-# Capabilities (booleans) — separate matrix, one row per model
-| model    | browser-use | computer-use |
-|----------|-------------|--------------|
-| ...      | (probe/fill)| (probe/fill) |
-
-# Capability pins — resolve at step 1, before ranking; the matrix gates only unpinned capabilities
-| capability   | pinned model  |
-|--------------|---------------|
-| browser-use  | gpt-5.6-terra |
-| computer-use | gpt-5.6-terra |
+# Capability providers — effect-probed harness/tool routes, never model traits
+| need | primary provider | fallback | eligible executor |
+|------|------------------|----------|-------------------|
+| browser-use | chrome provider | project browser CLI | active Codex route |
+| computer-use | computer-use provider | none | active Codex route |
+| imagegen | native imagegen provider | repo headless skill | active Codex route |
 
 # Task-pins
 | task type         | pinned model |
@@ -69,8 +64,8 @@ output*, never the authoritative table — a different machine produces a differ
 # Floor: sonnet-5 (Claude-side) / gpt-5.6-terra (Codex-side). Watcher/cron duty runs at the Floor per
 # harness — a Floor assignment, not a pin (review-loop reads the Floor directly for its watcher).
 
-# Reachability (illustrative): Claude→Codex works via `codex exec`; Codex→Claude works via `claude -p`
-# without `--bare`. Each direction has its own timestamp, failure class, and successor.
+# Reachability (illustrative): active harness → sibling route works through the compiled native wrapper.
+# The direction has its own timestamp, failure class, and successor.
 ```
 
 Everything above is **audit output for one environment**. On a machine with, say, no Codex CLI and a
@@ -82,9 +77,9 @@ Never present the five-model rows as the canonical staffing roster; they are a l
 
 1. Reachable models → rows of the rankings table, each seeded with cost/intelligence/taste and flagged
    "tune these".
-2. Same models → rows of the capability matrix; set booleans per what you can determine (a model's
-   browser/computer use is often known from its documented tooling).
-3. Task-pins → the named pin list; carry the mechanical/bulk pin if the pinned model is reachable, else leave
+2. Effect-probed harness skills/plugins/tools → the capability-provider registry, with primary, fallback,
+   eligible executor, and route state. Installation or model documentation alone is insufficient.
+3. Task/provider pins → the named pin list; carry the mechanical/bulk pin if its worker route is reachable, else leave
    it for the user to set.
 4. CLI mechanics → include only effect-verified directions; never infer symmetry from one working route.
 5. Coordinator eligibility → among the reachable routes, record which can own a durable issue child and
