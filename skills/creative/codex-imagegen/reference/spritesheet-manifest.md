@@ -4,6 +4,8 @@
 
 ```json
 {
+  "mode": "spritesheet",
+  "artifact": "/abs/path/terrain-sprites-v2",
   "source": "/abs/path/sheet.png",
   "sheet": { "width": 1024, "height": 1024 },
   "slicing": {
@@ -38,7 +40,7 @@ When `--generate` is used, `source` is an object:
 
 ```json
 {
-  "path": "/tmp/to-sprites-.../generated-source.png",
+  "path": "source/generated-source.png",
   "generated": true,
   "subject": "4x4 isometric terrain tiles..."
 }

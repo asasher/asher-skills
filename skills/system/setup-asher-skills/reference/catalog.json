@@ -416,19 +416,6 @@
       "source": "skills/delivery/to-spec",
       "variants": {}
     },
-    "to-sprites": {
-      "category": "creative",
-      "execution": "thread",
-      "external": [],
-      "internal": false,
-      "invocation": "user",
-      "optional": [
-        "codex-imagegen"
-      ],
-      "requires": [],
-      "source": "skills/creative/to-sprites",
-      "variants": {}
-    },
     "to-tickets": {
       "category": "delivery",
       "execution": "thread",

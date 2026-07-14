@@ -2,7 +2,7 @@
 
 Good extraction starts with a boring background and isolated subjects. Use this guidance both when prompting
 an image model yourself and when passing `--generate`, because `--generate` forwards the subject guidance to
-the optional `codex-imagegen` sibling.
+the bundled `codex-imagegen` generator.
 
 ## Grid Sheet Prompt
 

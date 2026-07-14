@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline acceptance selfcheck for the to-sprites skill."""
+"""Offline acceptance selfcheck for codex-imagegen's spritesheet mode."""
 
 from __future__ import annotations
 
@@ -16,10 +16,9 @@ from PIL import Image
 
 
 SKILL_DIR = Path(__file__).resolve().parents[1]
-REPO_ROOT = SKILL_DIR.parents[1]
 SCRIPT = SKILL_DIR / "scripts/extract_spritesheet.py"
-FIXTURE = SKILL_DIR / "evals/fixtures/iso-4x4.png"
-MAKE_FIXTURE = SKILL_DIR / "evals/make_fixture.py"
+FIXTURE = SKILL_DIR / "evals/spritesheet-fixtures/iso-4x4.png"
+MAKE_FIXTURE = SKILL_DIR / "evals/spritesheet_make_fixture.py"
 NAMES = [
     "grass",
     "dirt",
@@ -41,6 +40,7 @@ NAMES = [
 
 
 def import_extractor():
+    sys.path.insert(0, str(SCRIPT.parent))
     spec = importlib.util.spec_from_file_location("extract_spritesheet", SCRIPT)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
@@ -103,7 +103,6 @@ def check_ac4_cli_help() -> None:
         "--anchor",
         "--validate",
         "--expect",
-        "--force",
         "--contact-sheet",
         "--generator-cmd",
     ]
@@ -137,8 +136,9 @@ def check_ac1_alpha_corners(manifest: dict, out_dir: Path) -> None:
 
 
 def check_ac5_manifest_schema(manifest: dict) -> None:
-    top = {"source", "sheet", "slicing", "key", "elements"}
+    top = {"mode", "artifact", "source", "sheet", "slicing", "key", "elements"}
     assert_true(top.issubset(manifest), "manifest missing top-level keys")
+    assert_true(manifest["mode"] == "spritesheet", "manifest mode is not spritesheet")
     required = {
         "name",
         "index",
@@ -174,12 +174,8 @@ def check_trimmed_within_sheet_rect(manifest: dict) -> None:
 
 def check_ac3_non_destructive(extractor, out_dir: Path) -> None:
     before = file_hash(FIXTURE)
-    try:
-        run_extract(extractor, out_dir)
-    except extractor.OutputExistsError:
-        pass
-    else:
-        raise AssertionError("re-run without force did not refuse overwrite")
+    rerun = run_extract(extractor, out_dir)
+    assert_true(Path(rerun["artifact"]).name == f"{out_dir.name}-v2", "re-run did not create v2 artifact")
     after = file_hash(FIXTURE)
     assert_true(before == after, "source hash changed")
 
@@ -245,6 +241,33 @@ def check_ac14_generate_source(extractor, root: Path) -> None:
     assert_true(source.get("generated") is True, "source.generated not true")
     assert_true(source.get("subject") == subject, "generated subject not recorded")
     assert_true(len(manifest["elements"]) == 16, "generated pipeline did not extract 16")
+
+    relative = subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--generate",
+            subject,
+            "--out",
+            "relative-generated",
+            "--cols",
+            "4",
+            "--rows",
+            "4",
+            "--key",
+            "auto",
+            "--generator-cmd",
+            stub,
+        ],
+        cwd=root,
+        capture_output=True,
+        text=True,
+    )
+    assert_true(relative.returncode == 0, relative.stderr + relative.stdout)
+    assert_true(
+        (root / "relative-generated/source/generated-source.png").exists(),
+        "relative --generate output escaped the caller working directory",
+    )
     try:
         extractor.extract(
             generate="this should fail",
@@ -316,15 +339,15 @@ def check_ac6_validate(extractor, root: Path) -> None:
 
 
 def check_ac11_prompts_doc() -> None:
-    text = (SKILL_DIR / "reference/prompts.md").read_text()
-    for phrase in ["flat key background", "consistent scale", "isolated non-touching", "codex-imagegen"]:
+    text = (SKILL_DIR / "reference/spritesheet-prompts.md").read_text()
+    for phrase in ["flat key background", "consistent scale", "isolated non-touching"]:
         assert_true(phrase in text, f"prompts doc missing {phrase!r}")
 
 
 def check_ac13_codex_surface() -> None:
     text = (SKILL_DIR / "agents/openai.yaml").read_text()
-    assert_true('display_name: "to-sprites"' in text, "display_name missing")
-    assert_true("allow_implicit_invocation: false" in text, "implicit invocation policy wrong")
+    assert_true('display_name: "Codex Imagegen"' in text, "display_name missing")
+    assert_true("allow_implicit_invocation: true" in text, "implicit invocation policy wrong")
 
 
 def main() -> int:
@@ -341,14 +364,14 @@ def main() -> int:
         else:
             print(f"PASS {label}")
 
-    with tempfile.TemporaryDirectory(prefix="to-sprites-selfcheck-") as tmp:
+    with tempfile.TemporaryDirectory(prefix="codex-imagegen-spritesheet-") as tmp:
         root = Path(tmp)
         base_out = root / "base"
         base_manifest = run_extract(extractor, base_out)
 
         run("ac-1 keyed source exports transparent-corner PNG assets", lambda: check_ac1_alpha_corners(base_manifest, base_out))
         run("ac-2 regular 4x4 grid exports 16 row-major assets", lambda: check_ac2_grid(base_manifest, base_out))
-        run("ac-3 non-destructive overwrite refusal preserves source bytes", lambda: check_ac3_non_destructive(extractor, base_out))
+        run("ac-3 re-run versions the artifact and preserves source bytes", lambda: check_ac3_non_destructive(extractor, base_out))
         run("ac-4 CLI help documents every flag", check_ac4_cli_help)
         run("ac-5 manifest schema is complete", lambda: check_ac5_manifest_schema(base_manifest))
         run("ac-5 sanity trimmed_bounds stay within sheet_rect", lambda: check_trimmed_within_sheet_rect(base_manifest))

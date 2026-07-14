@@ -1,7 +1,0 @@
-interface:
-  display_name: "to-sprites"
-  short_description: "Extract keyed sprite sheets into transparent assets and a manifest"
-  default_prompt: "Use $to-sprites to extract this keyed sprite sheet into named transparent assets and a manifest."
-
-policy:
-  allow_implicit_invocation: false

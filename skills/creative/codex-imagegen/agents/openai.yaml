@@ -1,0 +1,7 @@
+interface:
+  display_name: "Codex Imagegen"
+  short_description: "Generate flat, layered, or sprite assets"
+  default_prompt: "Use $codex-imagegen to create versioned raster assets in the appropriate flat, layered, or spritesheet mode."
+
+policy:
+  allow_implicit_invocation: true
