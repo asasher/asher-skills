@@ -93,7 +93,8 @@
       "optional": [
         "manage-communications",
         "projects-triage",
-        "review-opportunities"
+        "review-opportunities",
+        "until-zero"
       ],
       "requires": [
         "capture-to-inbox",
@@ -426,6 +427,25 @@
       "requires": [],
       "source": "skills/delivery/to-tickets",
       "variants": {}
+    },
+    "until-zero": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [
+        {
+          "capability": "build-apple-shortcuts",
+          "kind": "codex-plugin",
+          "name": "shortcuts-playground",
+          "source": "https://github.com/viticci/shortcuts-playground-plugin",
+          "version": "1.2.x"
+        }
+      ],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/until-zero"
     },
     "watch-video": {
       "category": "creative",

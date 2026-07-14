@@ -1,0 +1,6 @@
+interface:
+  display_name: "Until Zero"
+  short_description: "Operate a review-first personal cash runway"
+  default_prompt: "Use $until-zero to refresh my runway and explain when I hit zero."
+policy:
+  allow_implicit_invocation: true
