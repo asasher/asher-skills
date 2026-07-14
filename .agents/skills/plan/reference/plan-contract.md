@@ -5,7 +5,8 @@ sibling compositions. Domain-neutral: nothing here assumes code, a repo, or a ru
 (below) may override the defaults; absent one, this file stands alone.
 
 Plan ships **no runtime.** It authors an artifact and borrows the sign-off gate from **`review-loop`**, role
-selection from **`staffing`**, and design-question artifacts from **`prototype`** — all by plain name, never
+selection from **`staffing`**, design-question artifacts from **`prototype`**, and source-backed findings from
+**`research`** — all by plain name, never
 by importing their files (`AGENTS.md` § Conventions).
 
 ## The gates
@@ -35,9 +36,11 @@ Any question the plan **cannot settle on paper** is settled before writing, then
 - Accumulating speculative "should handle X" reasoning that trying the real thing would settle in minutes.
 
 Plan decides the shape and routes it: a **logic** (behavior) or **UI** (form) question goes to the
-**`prototype`** sibling skill by name; anything else falls to a spike or a research pass. A reviewer may also
+**`prototype`** sibling skill by name; a fact/source question goes to the **`research`** sibling by name;
+anything else falls to a bounded spike. A reviewer may also
 send the plan back for a prototype during the gate-4 approval round — include what they ask for. Absent the
-prototype sibling, settle the question by spike or research and record the gap in the plan's notes.
+prototype sibling, settle the question by a bounded spike and record the gap in the plan's notes. Absent the
+research sibling, run a bounded inline source pass and record that its full claim audit was unavailable.
 Fold the answer into the plan; for a
 visual question, embed the variants with the chosen one marked, so the decision outlives the exploration.
 Don't explore what reading the material or an existing pattern already settles — an exploration answers a
@@ -45,7 +48,8 @@ question, it doesn't replace thinking.
 
 Treat every claim about an unfamiliar library, runtime, integration, or test seam as a hypothesis. Name the
 cheapest red-capable falsification step and validate the riskiest claim before the plan depends on it. Route a
-logic/UI claim to `prototype`; use a bounded spike or research pass for the rest. Retain the answer and
+logic/UI claim to `prototype`; route a source-backed factual claim to `research`; use a bounded spike for the
+rest. Retain the answer and
 evidence, not the throwaway mechanism.
 
 ### 3. Written
@@ -87,8 +91,12 @@ verdict in conversation. Never improvise a public tunnel.
   work; building what it describes is delegated per the roster — but defer to staffing wherever it is present.
 - **`prototype` — design-question artifacts (gate 2).** A logic or UI question the plan cannot settle on
   paper routes to the `prototype` skill by name, and a reviewer may request a prototype during the gate-4
-  approval round. A soft dependency: absent it, settle the question by spike or research and record the gap
+  approval round. A soft dependency: absent it, settle the question by a bounded spike and record the gap
   in the plan's notes.
+- **`research` — source-backed findings (gate 2).** A question about what primary sources establish routes to
+  the research skill by name. Plan consumes its findings and keeps the decision; research retains facts,
+  inferences, contradictions, and unknowns in its dossier. A soft dependency: absent it, run a bounded inline
+  source pass and record that the full research audit was unavailable.
 
 ## What this skill does not do
 

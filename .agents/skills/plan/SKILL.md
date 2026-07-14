@@ -8,7 +8,7 @@ metadata:
   invocation: user
   execution: orchestrator
   requires: [review-loop, staffing]
-  optional: [prototype]
+  optional: [prototype, research]
 ---
 
 # Plan
@@ -27,18 +27,20 @@ domain-neutral; project-specific rigor comes from optional `docs/agents/planning
 1. **Decide.** Apply the project threshold or bundled default. A small, low-risk, reversible change returns
    `skip`; otherwise continue.
 2. **Settle design.** Label unfamiliar mechanism claims as hypotheses and falsify them before dependency.
-   Invoke `prototype` by name for logic/UI questions that need an artifact; otherwise spike or research.
+   Invoke `prototype` by name for logic/UI questions that need an artifact; invoke `research` by name for
+   source-backed fact questions; otherwise run a bounded spike.
 3. **Write.** Produce self-contained HTML whose stable `ac-N` criteria are checkable pass/fail and declare
    required data/tenant/scale/lifetime/observation. Use `staffing route <plan-author task>` for author selection.
 4. **Approve.** Present through `review-loop`; disposition every annotation until the hash-bound verdict is
    approve. Stop here and return the plan plus approval event.
 
 A failed falsification returns to design. Rejected review returns to writing. Missing `review-loop` degrades
-to a local open/conversational verdict; missing `prototype` uses a recorded spike/research fallback; missing
-`staffing` is reported rather than replaced with an invented roster.
+to a local open/conversational verdict; missing `prototype` uses a recorded spike fallback; missing `research`
+uses a bounded inline source pass and records the gap; missing `staffing` is reported rather than replaced
+with an invented roster.
 
 ## Dependency surface
 
 - **Bundled:** the two references and HTML skeleton above; these are the complete default contract.
 - **Project:** optional delta-only `docs/agents/planning.md`.
-- **Siblings:** required `review-loop` and `staffing`; optional `prototype`, all invoked by name with no file imports.
+- **Siblings:** required `review-loop` and `staffing`; optional `prototype` and `research`, all invoked by name with no file imports.

@@ -47,6 +47,7 @@ including one marked `user`.
 | thinking | `bayes` | user | thread |
 | thinking | `constraints` | user | thread |
 | thinking | `dissolve` | user | orchestrator |
+| thinking | `research` | model | orchestrator |
 | personal | `capture-to-inbox` | model | thread |
 | personal | `control-plane` | user | orchestrator |
 | personal | `eloquent` | model | thread |

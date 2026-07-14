@@ -11,8 +11,10 @@ Skills Asher made or likes, kept in one repo so they can be installed elsewhere 
   (`backlog setup` and its siblings) plus the repo-authored `probe-evals.md` (the eval discipline).
 - `<skill>-workspace/` dirs at the root — the working space for developing a skill: eval and test runs,
   research, scratch artifacts produced while building it; not part of any install.
-- `plans/`, `evidence/` — artifacts from running the loop on this repo (plan HTML, review evidence);
-  working state, not part of any install.
+- `research/` — durable general research dossiers; local-skill authoring research instead follows
+  `<skill>-workspace/research/`. The `research` skill and `docs/agents/researching.md` own the boundary.
+- `plans/`, `evidence/` — approved plan HTML and criterion-linked review proof respectively; neither is a
+  catch-all for research or other human-reviewed artifacts. Working state, not part of any install.
 - `.agents/skills/` — primary mounts for skills installed *into* this repo; `.claude/skills/` may hold alias
   mounts. Install provenance is tracked in `skills-lock.json`. See § Vocabulary.
 
@@ -111,6 +113,7 @@ to reconcile them against the repo.
 | diagnosing-bugs | Runs the reusable six-phase defect diagnosis discipline | project |
 | plan | Turns an intent into a reviewed plan held at an approval gate | project |
 | prototype | Answers one design question with a throwaway artifact — keep the answer, delete the artifact | project |
+| research | Establishes primary-source facts and observations, then separates supported inferences and unknowns | project |
 | review-loop | Serves a rendered artifact for human sign-off and blocks until the verdict | project |
 | staffing | Owns the model roster — who staffs which task (global base in `~/.claude/CLAUDE.md` § Staffing; this repo's deltas in `CLAUDE.md` § Staffing) | project |
 | setup-asher-skills | The installer/auditor for this skill set — sets a project up, adds skills with their sibling closure, audits for drift | project |
@@ -118,8 +121,9 @@ to reconcile them against the repo.
 | writing-great-skills | Authoring guidance for writing skills (from mattpocock/skills) | project |
 
 **How they fit together:** composers pull their siblings — `plan` and `prototype` use `review-loop`
-(to sign off) and `staffing` (to pick the model); `backlog` also uses `diagnosing-bugs`. `staffing` and
-`review-loop` depend on nothing.
+(to sign off) and `staffing` (to pick the model); `research` uses `staffing` for bounded fan-out; `plan`
+may consume research findings; `backlog` also uses `diagnosing-bugs` and `research` as work-type branches.
+`staffing` and `review-loop` depend on nothing.
 
 **Source & updates:** installed from this repo itself. To add a skill, change scope, or check for drift,
 re-invoke `setup-asher-skills`; to refresh sources, install the complete desired local set in one atomic
