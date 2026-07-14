@@ -38,9 +38,9 @@ Layered mode starts from a scene plan. It does not segment or reconstruct an exi
 }
 ```
 
-`size` is a positive square canvas dimension. `art_direction` is appended to every subject to improve visual coherence. There may be at most one `background`; other roles are keyed transparent assets. Supported anchors are `bottom-center`, `center`, and `top-left`. Position defaults to bottom-center at the canvas bottom.
+`size` is a positive square canvas dimension. When a layer omits `prompt`, `art_direction` is appended to its generated subject to improve visual coherence. There may be at most one `background`; other roles are keyed transparent assets. Supported anchors are `bottom-center`, `center`, and `top-left`. Position defaults to bottom-center at the canvas bottom.
 
-Each layer needs a stable `name` and a `subject`. Optional fields are `role`, `z`, `key`, `prompt`, `match`, `pad`, `anchor`, `x`, and `y`. A custom `prompt` owns the full generation instruction and therefore must preserve the flat-key constraint for non-background layers.
+Each layer needs a stable `name` and a `subject`. Optional fields are `role`, `z`, `key`, `prompt`, `match`, `pad`, `anchor`, `x`, and `y`. A custom `prompt` replaces the generated prompt, so include both the shared art direction and the flat-key constraint there for non-background layers. Use `match` only to supply distinctive transcript-selection words when the subject is too generic.
 
 ## Artifact
 
