@@ -1,0 +1,1620 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Wayfinder Research</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Wayfinder Research" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Wayfinder Research&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(--background) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: light-dark(rgb(255 255 255), rgb(24 24 24));
+  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
+  --card: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --card-foreground: var(--foreground);
+  --popover: light-dark(rgb(255 255 255), rgb(45 45 45));
+  --popover-foreground: var(--foreground);
+  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
+  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
+  --secondary: light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: light-dark(
+    rgb(26 28 31 / 49.4%),
+    rgb(255 255 255 / 49.8%)
+  );
+  --accent: light-dark(rgb(229 242 255), rgb(13 39 63));
+  --accent-foreground: var(--primary);
+  --destructive: light-dark(rgb(226 85 7), rgb(255 133 73));
+  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
+  --input: light-dark(
+    rgb(26 28 31 / 11.8%),
+    color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+  );
+  --ring: light-dark(rgb(51 156 255), rgb(131 195 255 / 76%));
+  --font-size-base: 14px;
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: 12.5px;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+  --color-background-primary: var(--background);
+  --color-text-primary: var(--foreground);
+  --color-border-secondary: var(--border);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--viz-font-weight-medium);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: superellipse(1.5);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget &gt; :not(.card) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: superellipse(1.5);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+    [aria-pressed=&quot;true&quot;],
+    [aria-selected=&quot;true&quot;],
+    .is-selected
+  ) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;main id=&quot;wayfinder-research&quot; aria-labelledby=&quot;wf-title&quot;&gt;
+  &lt;style&gt;
+    #wayfinder-research {
+      --wf-line: color-mix(in srgb, var(--border) 78%, transparent);
+      --wf-soft: color-mix(in srgb, var(--muted) 72%, transparent);
+      --wf-user: color-mix(in srgb, var(--viz-series-1) 16%, transparent);
+      --wf-agent: color-mix(in srgb, var(--viz-series-2) 16%, transparent);
+      --wf-tracker: color-mix(in srgb, var(--viz-series-3) 16%, transparent);
+      --wf-research: color-mix(in srgb, var(--viz-series-4) 16%, transparent);
+      --wf-scope: color-mix(in srgb, var(--viz-series-5) 16%, transparent);
+      color: var(--foreground);
+      display: grid;
+      gap: 2rem;
+      width: 100%;
+    }
+
+    #wayfinder-research * { box-sizing: border-box; }
+    #wayfinder-research a { color: var(--foreground); text-decoration-color: var(--muted-foreground); }
+    #wayfinder-research p { margin: 0; }
+    #wayfinder-research h1,
+    #wayfinder-research h2,
+    #wayfinder-research h3 { margin: 0; }
+    #wayfinder-research ul,
+    #wayfinder-research ol { margin: 0; padding-left: 1.25rem; }
+    #wayfinder-research li + li { margin-top: .45rem; }
+    #wayfinder-research code { overflow-wrap: anywhere; }
+
+    #wayfinder-research .wf-hero {
+      display: grid;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--wf-line);
+    }
+    #wayfinder-research .wf-eyebrow {
+      color: var(--muted-foreground);
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    #wayfinder-research .wf-lede { max-width: 74ch; }
+    #wayfinder-research .wf-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem 1rem;
+      color: var(--muted-foreground);
+    }
+    #wayfinder-research .wf-callout {
+      border-left: 4px solid var(--viz-series-1);
+      padding: .75rem 1rem;
+      background: var(--wf-user);
+    }
+    #wayfinder-research .wf-callout strong { font-weight: 500; }
+
+    #wayfinder-research .wf-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    #wayfinder-research .wf-nav a {
+      border: 1px solid var(--wf-line);
+      border-radius: 999px;
+      padding: .35rem .7rem;
+      text-decoration: none;
+    }
+
+    #wayfinder-research .wf-section {
+      display: grid;
+      gap: 1rem;
+      scroll-margin-top: 1rem;
+    }
+    #wayfinder-research .wf-section-head {
+      display: grid;
+      gap: .35rem;
+      max-width: 78ch;
+    }
+    #wayfinder-research .wf-section-head p { color: var(--muted-foreground); }
+
+    #wayfinder-research .wf-chain {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, auto));
+      align-items: center;
+      gap: .45rem;
+    }
+    #wayfinder-research .wf-chain-step {
+      min-height: 5.5rem;
+      display: grid;
+      align-content: center;
+      gap: .3rem;
+      padding: .75rem;
+      border-top: 3px solid var(--viz-series-1);
+      background: var(--wf-soft);
+    }
+    #wayfinder-research .wf-chain-step strong { font-weight: 500; }
+    #wayfinder-research .wf-chain-step span { color: var(--muted-foreground); }
+    #wayfinder-research .wf-arrow { color: var(--muted-foreground); text-align: center; }
+
+    #wayfinder-research .wf-object-model {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+    #wayfinder-research .wf-map {
+      display: grid;
+      gap: .75rem;
+      padding: 1rem;
+      border: 2px solid var(--viz-series-3);
+      background: var(--wf-tracker);
+    }
+    #wayfinder-research .wf-map-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    #wayfinder-research .wf-tag {
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      padding: .15rem .5rem;
+      font-size: .85em;
+      white-space: nowrap;
+    }
+    #wayfinder-research .wf-map-row {
+      padding: .6rem .7rem;
+      border-left: 3px solid var(--border);
+      background: color-mix(in srgb, var(--background) 58%, transparent);
+    }
+    #wayfinder-research .wf-map-row strong { font-weight: 500; }
+    #wayfinder-research .wf-map-row span { display: block; color: var(--muted-foreground); }
+    #wayfinder-research .wf-objects {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .75rem;
+    }
+    #wayfinder-research .wf-object {
+      display: grid;
+      gap: .3rem;
+      padding: .8rem;
+      border-top: 3px solid var(--viz-series-2);
+      background: var(--wf-agent);
+    }
+    #wayfinder-research .wf-object:nth-child(2) { border-color: var(--viz-series-4); background: var(--wf-research); }
+    #wayfinder-research .wf-object:nth-child(3) { border-color: var(--viz-series-5); background: var(--wf-scope); }
+    #wayfinder-research .wf-object:nth-child(4) { border-color: var(--viz-series-3); background: var(--wf-tracker); }
+    #wayfinder-research .wf-object strong { font-weight: 500; }
+    #wayfinder-research .wf-object span { color: var(--muted-foreground); }
+
+    #wayfinder-research .wf-swim {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-top: 1px solid var(--wf-line);
+      border-left: 1px solid var(--wf-line);
+    }
+    #wayfinder-research .wf-lane-head,
+    #wayfinder-research .wf-cell {
+      border-right: 1px solid var(--wf-line);
+      border-bottom: 1px solid var(--wf-line);
+      min-width: 0;
+    }
+    #wayfinder-research .wf-lane-head {
+      padding: .7rem;
+      font-weight: 500;
+    }
+    #wayfinder-research .wf-lane-head[data-lane=&quot;human&quot;] { background: var(--wf-user); }
+    #wayfinder-research .wf-lane-head[data-lane=&quot;agent&quot;] { background: var(--wf-agent); }
+    #wayfinder-research .wf-lane-head[data-lane=&quot;tracker&quot;] { background: var(--wf-tracker); }
+    #wayfinder-research .wf-lane-head[data-lane=&quot;research&quot;] { background: var(--wf-research); }
+    #wayfinder-research .wf-cell {
+      min-height: 6.25rem;
+      padding: .55rem;
+      background: color-mix(in srgb, var(--background) 82%, transparent);
+    }
+    #wayfinder-research .wf-event {
+      height: 100%;
+      display: grid;
+      align-content: start;
+      gap: .3rem;
+      padding: .65rem;
+      border-left: 3px solid var(--viz-series-2);
+      background: var(--wf-agent);
+    }
+    #wayfinder-research .wf-event[data-actor=&quot;human&quot;] { border-color: var(--viz-series-1); background: var(--wf-user); }
+    #wayfinder-research .wf-event[data-actor=&quot;tracker&quot;] { border-color: var(--viz-series-3); background: var(--wf-tracker); }
+    #wayfinder-research .wf-event[data-actor=&quot;research&quot;] { border-color: var(--viz-series-4); background: var(--wf-research); }
+    #wayfinder-research .wf-event[data-actor=&quot;scope&quot;] { border-color: var(--viz-series-5); background: var(--wf-scope); }
+    #wayfinder-research .wf-event strong { font-weight: 500; }
+    #wayfinder-research .wf-event span { color: var(--muted-foreground); }
+    #wayfinder-research .wf-step {
+      color: var(--muted-foreground);
+      font-size: .85em;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    #wayfinder-research .wf-empty { color: var(--muted-foreground); display: grid; place-items: center; }
+
+    #wayfinder-research .wf-type-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: .75rem;
+    }
+    #wayfinder-research .wf-type {
+      display: grid;
+      align-content: start;
+      gap: .55rem;
+      padding: .9rem;
+      border-top: 4px solid var(--viz-series-2);
+      background: var(--wf-agent);
+    }
+    #wayfinder-research .wf-type:nth-child(1) { border-color: var(--viz-series-4); background: var(--wf-research); }
+    #wayfinder-research .wf-type:nth-child(2) { border-color: var(--viz-series-1); background: var(--wf-user); }
+    #wayfinder-research .wf-type:nth-child(3) { border-color: var(--viz-series-2); background: var(--wf-agent); }
+    #wayfinder-research .wf-type:nth-child(4) { border-color: var(--viz-series-5); background: var(--wf-scope); }
+    #wayfinder-research .wf-type h3 { display: flex; justify-content: space-between; gap: .5rem; }
+    #wayfinder-research .wf-type h3 span { font-weight: 400; color: var(--muted-foreground); }
+    #wayfinder-research .wf-type dl { display: grid; gap: .45rem; margin: 0; }
+    #wayfinder-research .wf-type dt { color: var(--muted-foreground); }
+    #wayfinder-research .wf-type dd { margin: 0; }
+
+    #wayfinder-research .wf-state {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      align-items: center;
+      gap: .45rem;
+    }
+    #wayfinder-research .wf-state-node {
+      min-height: 6rem;
+      display: grid;
+      align-content: center;
+      gap: .25rem;
+      padding: .7rem;
+      border-top: 3px solid var(--viz-series-2);
+      background: var(--wf-agent);
+    }
+    #wayfinder-research .wf-state-node[data-state=&quot;fog&quot;] { border-color: var(--viz-series-5); background: var(--wf-scope); }
+    #wayfinder-research .wf-state-node[data-state=&quot;frontier&quot;] { border-color: var(--viz-series-1); background: var(--wf-user); }
+    #wayfinder-research .wf-state-node[data-state=&quot;tracker&quot;] { border-color: var(--viz-series-3); background: var(--wf-tracker); }
+    #wayfinder-research .wf-state-node strong { font-weight: 500; }
+    #wayfinder-research .wf-state-node span { color: var(--muted-foreground); }
+    #wayfinder-research .wf-branches {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .75rem;
+    }
+    #wayfinder-research .wf-branch {
+      display: grid;
+      gap: .35rem;
+      padding: .85rem;
+      border-left: 4px solid var(--viz-series-3);
+      background: var(--wf-tracker);
+    }
+    #wayfinder-research .wf-branch[data-kind=&quot;scope&quot;] { border-color: var(--viz-series-5); background: var(--wf-scope); }
+
+    #wayfinder-research .wf-invariants,
+    #wayfinder-research .wf-review-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .75rem;
+    }
+    #wayfinder-research .wf-invariant,
+    #wayfinder-research .wf-review {
+      display: grid;
+      align-content: start;
+      gap: .35rem;
+      padding: .85rem 0;
+      border-top: 2px solid var(--wf-line);
+    }
+    #wayfinder-research .wf-invariant strong,
+    #wayfinder-research .wf-review strong { font-weight: 500; }
+    #wayfinder-research .wf-invariant span,
+    #wayfinder-research .wf-review span { color: var(--muted-foreground); }
+
+    #wayfinder-research .wf-route {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: .6rem;
+      align-items: center;
+    }
+    #wayfinder-research .wf-route-node {
+      min-height: 6rem;
+      display: grid;
+      align-content: center;
+      gap: .3rem;
+      padding: .85rem;
+      border-top: 3px solid var(--viz-series-2);
+      background: var(--wf-agent);
+    }
+    #wayfinder-research .wf-route-node[data-active=&quot;true&quot;] { border-color: var(--viz-series-1); background: var(--wf-user); }
+    #wayfinder-research .wf-route-node[data-end=&quot;true&quot;] { border-color: var(--viz-series-3); background: var(--wf-tracker); }
+    #wayfinder-research .wf-route-node strong { font-weight: 500; }
+    #wayfinder-research .wf-route-node span { color: var(--muted-foreground); }
+
+    #wayfinder-research .wf-table-wrap { width: 100%; }
+    #wayfinder-research table { width: 100%; border-collapse: collapse; }
+    #wayfinder-research th,
+    #wayfinder-research td {
+      padding: .65rem;
+      border-bottom: 1px solid var(--wf-line);
+      text-align: left;
+      vertical-align: top;
+    }
+    #wayfinder-research th { font-weight: 500; background: var(--wf-soft); }
+    #wayfinder-research .wf-sources { display: grid; gap: .6rem; }
+    #wayfinder-research .wf-source {
+      display: grid;
+      grid-template-columns: minmax(10rem, .45fr) minmax(0, 1fr);
+      gap: .8rem;
+      padding-bottom: .6rem;
+      border-bottom: 1px solid var(--wf-line);
+    }
+    #wayfinder-research .wf-source span { color: var(--muted-foreground); }
+
+    @media (max-width: 900px) {
+      #wayfinder-research .wf-chain,
+      #wayfinder-research .wf-state { grid-template-columns: 1fr; }
+      #wayfinder-research .wf-arrow { transform: rotate(90deg); }
+      #wayfinder-research .wf-object-model { grid-template-columns: 1fr; }
+      #wayfinder-research .wf-type-grid,
+      #wayfinder-research .wf-invariants,
+      #wayfinder-research .wf-review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #wayfinder-research .wf-route { grid-template-columns: 1fr; }
+      #wayfinder-research .wf-route .wf-arrow { transform: rotate(90deg); }
+    }
+
+    @media (max-width: 680px) {
+      #wayfinder-research { gap: 1.5rem; }
+      #wayfinder-research .wf-swim { grid-template-columns: 1fr; border-left: 0; }
+      #wayfinder-research .wf-lane-head { display: none; }
+      #wayfinder-research .wf-cell { min-height: 0; border-left: 1px solid var(--wf-line); }
+      #wayfinder-research .wf-cell:empty,
+      #wayfinder-research .wf-empty { display: none; }
+      #wayfinder-research .wf-event::before {
+        content: attr(data-actor);
+        color: var(--muted-foreground);
+        font-size: .82em;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+      }
+      #wayfinder-research .wf-type-grid,
+      #wayfinder-research .wf-invariants,
+      #wayfinder-research .wf-review-grid,
+      #wayfinder-research .wf-objects,
+      #wayfinder-research .wf-branches { grid-template-columns: 1fr; }
+      #wayfinder-research .wf-table-wrap { display: grid; gap: .75rem; }
+      #wayfinder-research table,
+      #wayfinder-research thead,
+      #wayfinder-research tbody,
+      #wayfinder-research tr,
+      #wayfinder-research th,
+      #wayfinder-research td { display: block; }
+      #wayfinder-research thead { display: none; }
+      #wayfinder-research tr { padding: .65rem 0; border-bottom: 1px solid var(--wf-line); }
+      #wayfinder-research td { border: 0; padding: .25rem 0; }
+      #wayfinder-research td::before { content: attr(data-label) &quot;: &quot;; font-weight: 500; }
+      #wayfinder-research .wf-source { grid-template-columns: 1fr; gap: .2rem; }
+    }
+  &lt;/style&gt;
+
+  &lt;header class=&quot;wf-hero&quot;&gt;
+    &lt;p class=&quot;wf-eyebrow&quot;&gt;Research dossier · source inspected 14 July 2026&lt;/p&gt;
+    &lt;h1 id=&quot;wf-title&quot;&gt;Wayfinder: how a foggy, multi-session effort becomes a clear route&lt;/h1&gt;
+    &lt;p class=&quot;wf-lede&quot;&gt;Wayfinder is a planning control system built on an issue tracker. It turns uncertainty into a dependency-aware map of &lt;em&gt;decision tickets&lt;/em&gt;, resolves the frontier one decision at a time, and stops at the point where normal specification and delivery can begin.&lt;/p&gt;
+    &lt;div class=&quot;wf-callout&quot;&gt;&lt;strong&gt;The key distinction:&lt;/strong&gt; a Wayfinder ticket is a question whose resolution is a decision. It is not an implementation slice. The map is complete when the route is clear—not when the destination has been built.&lt;/div&gt;
+    &lt;div class=&quot;wf-meta&quot;&gt;
+      &lt;span&gt;Inspected commit &lt;code&gt;66898f60e8c7&lt;/code&gt; (13 July 2026)&lt;/span&gt;
+      &lt;span&gt;Invocation is explicit: &lt;code&gt;/wayfinder&lt;/code&gt;&lt;/span&gt;
+      &lt;span&gt;Default behavior: plan, don’t do&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;nav class=&quot;wf-nav&quot; aria-label=&quot;Document sections&quot;&gt;
+      &lt;a href=&quot;#mental-model&quot;&gt;Mental model&lt;/a&gt;
+      &lt;a href=&quot;#chart-flow&quot;&gt;Chart flow&lt;/a&gt;
+      &lt;a href=&quot;#work-flow&quot;&gt;Ticket flow&lt;/a&gt;
+      &lt;a href=&quot;#states&quot;&gt;State machine&lt;/a&gt;
+      &lt;a href=&quot;#handoff&quot;&gt;Handoff&lt;/a&gt;
+      &lt;a href=&quot;#review-notes&quot;&gt;Review notes&lt;/a&gt;
+      &lt;a href=&quot;#sources&quot;&gt;Sources&lt;/a&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;section class=&quot;wf-section&quot; id=&quot;mental-model&quot;&gt;
+    &lt;div class=&quot;wf-section-head&quot;&gt;
+      &lt;h2&gt;The one-minute mental model&lt;/h2&gt;
+      &lt;p&gt;The destination bounds the effort. The frontier contains precise, takeable questions. Fog holds in-scope questions that cannot yet be stated precisely.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-chain&quot; role=&quot;img&quot; aria-label=&quot;Loose idea becomes a destination, then a decision map, then one resolved decision per session, then a handoff to specification or implementation.&quot;&gt;
+      &lt;div class=&quot;wf-chain-step&quot;&gt;&lt;strong&gt;Loose idea&lt;/strong&gt;&lt;span&gt;Too large and foggy for one session&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-arrow&quot; aria-hidden=&quot;true&quot;&gt;→&lt;/div&gt;
+      &lt;div class=&quot;wf-chain-step&quot;&gt;&lt;strong&gt;Name destination&lt;/strong&gt;&lt;span&gt;The end-state fixes scope&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-arrow&quot; aria-hidden=&quot;true&quot;&gt;→&lt;/div&gt;
+      &lt;div class=&quot;wf-chain-step&quot;&gt;&lt;strong&gt;Chart map&lt;/strong&gt;&lt;span&gt;Precise questions + dependencies + fog&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-arrow&quot; aria-hidden=&quot;true&quot;&gt;→&lt;/div&gt;
+      &lt;div class=&quot;wf-chain-step&quot;&gt;&lt;strong&gt;Resolve frontier&lt;/strong&gt;&lt;span&gt;At most one decision per ordinary session&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-arrow&quot; aria-hidden=&quot;true&quot;&gt;→&lt;/div&gt;
+      &lt;div class=&quot;wf-chain-step&quot;&gt;&lt;strong&gt;Hand off&lt;/strong&gt;&lt;span&gt;When nothing remains to decide&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;wf-object-model&quot;&gt;
+      &lt;article class=&quot;wf-map&quot;&gt;
+        &lt;div class=&quot;wf-map-title&quot;&gt;&lt;h3&gt;Map issue&lt;/h3&gt;&lt;span class=&quot;wf-tag&quot;&gt;wayfinder:map&lt;/span&gt;&lt;/div&gt;
+        &lt;div class=&quot;wf-map-row&quot;&gt;&lt;strong&gt;Destination&lt;/strong&gt;&lt;span&gt;One or two lines describing what “the route is clear” means.&lt;/span&gt;&lt;/div&gt;
+        &lt;div class=&quot;wf-map-row&quot;&gt;&lt;strong&gt;Notes&lt;/strong&gt;&lt;span&gt;Domain, skills to consult, standing preferences, and any execution override.&lt;/span&gt;&lt;/div&gt;
+        &lt;div class=&quot;wf-map-row&quot;&gt;&lt;strong&gt;Decisions so far&lt;/strong&gt;&lt;span&gt;One-line gists linking to closed tickets; never duplicates their detail.&lt;/span&gt;&lt;/div&gt;
+        &lt;div class=&quot;wf-map-row&quot;&gt;&lt;strong&gt;Not yet specified&lt;/strong&gt;&lt;span&gt;In-scope fog: suspected questions that are not precise enough to ticket.&lt;/span&gt;&lt;/div&gt;
+        &lt;div class=&quot;wf-map-row&quot;&gt;&lt;strong&gt;Out of scope&lt;/strong&gt;&lt;span&gt;Work beyond the destination. It is closed and does not graduate.&lt;/span&gt;&lt;/div&gt;
+      &lt;/article&gt;
+      &lt;div class=&quot;wf-objects&quot; aria-label=&quot;Objects surrounding the map&quot;&gt;
+        &lt;article class=&quot;wf-object&quot;&gt;&lt;strong&gt;Decision tickets&lt;/strong&gt;&lt;span&gt;Child issues, each with one precise &lt;code&gt;## Question&lt;/code&gt; and a type label.&lt;/span&gt;&lt;/article&gt;
+        &lt;article class=&quot;wf-object&quot;&gt;&lt;strong&gt;Blocking graph&lt;/strong&gt;&lt;span&gt;Native tracker dependencies expose which questions are not yet takeable.&lt;/span&gt;&lt;/article&gt;
+        &lt;article class=&quot;wf-object&quot;&gt;&lt;strong&gt;Frontier&lt;/strong&gt;&lt;span&gt;Open + unblocked + unclaimed children: the edge of what is currently known.&lt;/span&gt;&lt;/article&gt;
+        &lt;article class=&quot;wf-object&quot;&gt;&lt;strong&gt;Resolution detail&lt;/strong&gt;&lt;span&gt;The answer lives on the closed ticket; the map stores only a gist and link.&lt;/span&gt;&lt;/article&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;wf-section&quot; id=&quot;chart-flow&quot;&gt;
+    &lt;div class=&quot;wf-section-head&quot;&gt;
+      &lt;h2&gt;Chart the map · user/agent swim lanes&lt;/h2&gt;
+      &lt;p&gt;Charting is one session. It interviews for scope and breadth, writes the shared map, launches AFK research, and then stops without manually resolving an ordinary ticket.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-swim&quot; role=&quot;table&quot; aria-label=&quot;Swim lane showing the charting session across human, Wayfinder session, issue tracker, and research subagents&quot;&gt;
+      &lt;div class=&quot;wf-lane-head&quot; data-lane=&quot;human&quot; role=&quot;columnheader&quot;&gt;Human&lt;/div&gt;
+      &lt;div class=&quot;wf-lane-head&quot; data-lane=&quot;agent&quot; role=&quot;columnheader&quot;&gt;Wayfinder session agent&lt;/div&gt;
+      &lt;div class=&quot;wf-lane-head&quot; data-lane=&quot;tracker&quot; role=&quot;columnheader&quot;&gt;Issue tracker&lt;/div&gt;
+      &lt;div class=&quot;wf-lane-head&quot; data-lane=&quot;research&quot; role=&quot;columnheader&quot;&gt;Research subagents&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;human&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;1 · Invoke&lt;/span&gt;&lt;strong&gt;Bring a loose, large idea&lt;/strong&gt;&lt;span&gt;The route is not yet clear enough for a spec.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;1 · Orient&lt;/span&gt;&lt;strong&gt;Recognize the Wayfinder shape&lt;/strong&gt;&lt;span&gt;If the whole journey fits one session and has no fog, stop and ask how to proceed.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;human&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;2 · Decide&lt;/span&gt;&lt;strong&gt;Answer one question at a time&lt;/strong&gt;&lt;span&gt;The human owns decisions; the agent looks up discoverable facts.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;2 · Grill&lt;/span&gt;&lt;strong&gt;Name the destination first&lt;/strong&gt;&lt;span&gt;Use grilling + domain modeling to sharpen terms, boundaries, and the end artifact.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;human&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;3 · Explore&lt;/span&gt;&lt;strong&gt;React across the whole space&lt;/strong&gt;&lt;span&gt;Breadth first: avoid disappearing down one branch too early.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;3 · Fan out&lt;/span&gt;&lt;strong&gt;Separate tickets from fog&lt;/strong&gt;&lt;span&gt;Ticket if the question is precise now; keep it in fog if it is not.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;4 · Publish&lt;/span&gt;&lt;strong&gt;Create, then wire&lt;/strong&gt;&lt;span&gt;Create the map and all currently specifiable child tickets first; dependency edges need issue IDs, so wiring is a second pass.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;tracker&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;4 · Persist&lt;/span&gt;&lt;strong&gt;Render the shared frontier&lt;/strong&gt;&lt;span&gt;Map issue, typed children, native blocking, assignees, and ordering become team-visible state.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;5 · Delegate&lt;/span&gt;&lt;strong&gt;Fire every research ticket&lt;/strong&gt;&lt;span&gt;Research is the exception to the one-ticket-per-session rule.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;tracker&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;5 · Coordinate&lt;/span&gt;&lt;strong&gt;Keep research as real blockers&lt;/strong&gt;&lt;span&gt;Downstream decisions remain visibly blocked until findings resolve the ticket.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;research&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;5 · AFK&lt;/span&gt;&lt;strong&gt;Research primary sources in parallel&lt;/strong&gt;&lt;span&gt;Write cited findings on throwaway &lt;code&gt;research/&amp;lt;name&amp;gt;&lt;/code&gt; branches and point back from tickets.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;human&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;6 · Result&lt;/span&gt;&lt;strong&gt;Receive one shared map&lt;/strong&gt;&lt;span&gt;No manual ticket resolution is attempted during charting.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;6 · Stop&lt;/span&gt;&lt;strong&gt;End the charting session&lt;/strong&gt;&lt;span&gt;Future invocations work the visible frontier one decision at a time.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;tracker&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;6 · Canonical state&lt;/span&gt;&lt;strong&gt;Map is the control plane&lt;/strong&gt;&lt;span&gt;Collaborators can see available, claimed, blocked, and resolved work without chat history.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;wf-section&quot; id=&quot;work-flow&quot;&gt;
+    &lt;div class=&quot;wf-section-head&quot;&gt;
+      &lt;h2&gt;Work one decision ticket · user/agent swim lanes&lt;/h2&gt;
+      &lt;p&gt;The first write is the claim. The last writes are resolution comment → close ticket → append a one-line context pointer to the map → rechart any newly visible terrain.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-swim&quot; role=&quot;table&quot; aria-label=&quot;Swim lane showing a ticket resolution session across human, Wayfinder session, issue tracker, and supporting skill&quot;&gt;
+      &lt;div class=&quot;wf-lane-head&quot; data-lane=&quot;human&quot; role=&quot;columnheader&quot;&gt;Human&lt;/div&gt;
+      &lt;div class=&quot;wf-lane-head&quot; data-lane=&quot;agent&quot; role=&quot;columnheader&quot;&gt;Wayfinder session agent&lt;/div&gt;
+      &lt;div class=&quot;wf-lane-head&quot; data-lane=&quot;tracker&quot; role=&quot;columnheader&quot;&gt;Issue tracker&lt;/div&gt;
+      &lt;div class=&quot;wf-lane-head&quot; data-lane=&quot;research&quot; role=&quot;columnheader&quot;&gt;Supporting skill / agent&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;human&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;1 · Invoke&lt;/span&gt;&lt;strong&gt;Provide a map&lt;/strong&gt;&lt;span&gt;A ticket is optional; naming one overrides automatic selection.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;1 · Load low-res&lt;/span&gt;&lt;strong&gt;Read the map, not every ticket&lt;/strong&gt;&lt;span&gt;Orient to Destination, Notes, Decisions-so-far, and fog.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;tracker&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;1 · Query&lt;/span&gt;&lt;strong&gt;Return the current frontier&lt;/strong&gt;&lt;span&gt;Open, unblocked, unclaimed children in tracker order.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;2 · Select&lt;/span&gt;&lt;strong&gt;Choose and claim before work&lt;/strong&gt;&lt;span&gt;User-named ticket wins; otherwise first frontier ticket wins.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;tracker&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;2 · Lock&lt;/span&gt;&lt;strong&gt;Assign to the driving developer&lt;/strong&gt;&lt;span&gt;The assignee is the concurrency claim; other sessions must skip it.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;human&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;3 · HITL when required&lt;/span&gt;&lt;strong&gt;Speak for human decisions&lt;/strong&gt;&lt;span&gt;Prototype and grilling cannot resolve without live human reaction.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;3 · Zoom&lt;/span&gt;&lt;strong&gt;Fetch detail only as needed&lt;/strong&gt;&lt;span&gt;Open related tickets, consult Notes, and invoke the ticket’s supporting skill.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;research&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;3 · Resolve mode&lt;/span&gt;&lt;strong&gt;Research / prototype / grilling / task&lt;/strong&gt;&lt;span&gt;Each ticket type has a different human-agent contract.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;4 · Record&lt;/span&gt;&lt;strong&gt;Write the answer once&lt;/strong&gt;&lt;span&gt;Full answer goes on the ticket. The map receives only a gist and named link.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;tracker&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;4 · Commit state&lt;/span&gt;&lt;strong&gt;Comment → close → index&lt;/strong&gt;&lt;span&gt;Closing may automatically unblock downstream tickets.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;human&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;5 · Result&lt;/span&gt;&lt;strong&gt;See the route advance&lt;/strong&gt;&lt;span&gt;The tracker visibly exposes the next takeable decisions.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;5 · Rechart&lt;/span&gt;&lt;strong&gt;Update the known world&lt;/strong&gt;&lt;span&gt;Create-then-wire new tickets, graduate clarified fog, remove invalidated tickets, or rule work out of scope.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot; data-actor=&quot;tracker&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;5 · Canonical state&lt;/span&gt;&lt;strong&gt;Frontier moves&lt;/strong&gt;&lt;span&gt;Dependencies, ticket states, Decisions-so-far, fog, and scope stay synchronized.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+      &lt;div class=&quot;wf-cell&quot;&gt;&lt;div class=&quot;wf-event&quot;&gt;&lt;span class=&quot;wf-step&quot;&gt;6 · Stop&lt;/span&gt;&lt;strong&gt;Do not resolve a second ordinary ticket&lt;/strong&gt;&lt;span&gt;One ticket is the session boundary; launch another session for the next frontier item.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+      &lt;div class=&quot;wf-cell wf-empty&quot;&gt;—&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;wf-section&quot; id=&quot;ticket-types&quot;&gt;
+    &lt;div class=&quot;wf-section-head&quot;&gt;
+      &lt;h2&gt;Ticket types are interaction contracts&lt;/h2&gt;
+      &lt;p&gt;The type says who can move the decision forward and what “resolved” means. It is not merely a categorization label.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-type-grid&quot;&gt;
+      &lt;article class=&quot;wf-type&quot;&gt;
+        &lt;h3&gt;Research &lt;span&gt;AFK&lt;/span&gt;&lt;/h3&gt;
+        &lt;dl&gt;&lt;dt&gt;Use when&lt;/dt&gt;&lt;dd&gt;A downstream decision waits on external or local knowledge.&lt;/dd&gt;&lt;dt&gt;Agent behavior&lt;/dt&gt;&lt;dd&gt;Delegate to a research subagent; prefer primary sources and write cited findings.&lt;/dd&gt;&lt;dt&gt;Resolution&lt;/dt&gt;&lt;dd&gt;Facts are captured; downstream blockers can clear.&lt;/dd&gt;&lt;/dl&gt;
+      &lt;/article&gt;
+      &lt;article class=&quot;wf-type&quot;&gt;
+        &lt;h3&gt;Prototype &lt;span&gt;HITL&lt;/span&gt;&lt;/h3&gt;
+        &lt;dl&gt;&lt;dt&gt;Use when&lt;/dt&gt;&lt;dd&gt;“How should it look or behave?” cannot be settled on paper.&lt;/dd&gt;&lt;dt&gt;Interaction&lt;/dt&gt;&lt;dd&gt;The agent makes a cheap, rough artifact; the human reacts to higher-fidelity evidence.&lt;/dd&gt;&lt;dt&gt;Resolution&lt;/dt&gt;&lt;dd&gt;The decision and a pointer to the throwaway prototype are recorded.&lt;/dd&gt;&lt;/dl&gt;
+      &lt;/article&gt;
+      &lt;article class=&quot;wf-type&quot;&gt;
+        &lt;h3&gt;Grilling &lt;span&gt;HITL&lt;/span&gt;&lt;/h3&gt;
+        &lt;dl&gt;&lt;dt&gt;Use when&lt;/dt&gt;&lt;dd&gt;A decision needs conversation; this is the default type.&lt;/dd&gt;&lt;dt&gt;Interaction&lt;/dt&gt;&lt;dd&gt;Ask one question at a time with a recommendation. Look up facts; never answer for the human.&lt;/dd&gt;&lt;dt&gt;Resolution&lt;/dt&gt;&lt;dd&gt;Shared understanding is explicit and captured.&lt;/dd&gt;&lt;/dl&gt;
+      &lt;/article&gt;
+      &lt;article class=&quot;wf-type&quot;&gt;
+        &lt;h3&gt;Task &lt;span&gt;HITL or AFK&lt;/span&gt;&lt;/h3&gt;
+        &lt;dl&gt;&lt;dt&gt;Use when&lt;/dt&gt;&lt;dd&gt;Manual work must happen before a later decision can be made.&lt;/dd&gt;&lt;dt&gt;Guardrail&lt;/dt&gt;&lt;dd&gt;It may do work only to unblock a decision, not to deliver the destination.&lt;/dd&gt;&lt;dt&gt;Resolution&lt;/dt&gt;&lt;dd&gt;What was done and the resulting facts are recorded.&lt;/dd&gt;&lt;/dl&gt;
+      &lt;/article&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;wf-section&quot; id=&quot;states&quot;&gt;
+    &lt;div class=&quot;wf-section-head&quot;&gt;
+      &lt;h2&gt;Skill state machine&lt;/h2&gt;
+      &lt;p&gt;Precision controls the fog-to-ticket transition. Dependency and claim state control the ticket-to-frontier transition. Closing a ticket changes the frontier and may reveal new fog that can now graduate.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-state&quot; role=&quot;img&quot; aria-label=&quot;Fog becomes a precise ticket, which may be blocked, then becomes an unblocked frontier ticket, is claimed, and is resolved and closed.&quot;&gt;
+      &lt;div class=&quot;wf-state-node&quot; data-state=&quot;fog&quot;&gt;&lt;strong&gt;Fog&lt;/strong&gt;&lt;span&gt;In scope, but question not yet precise&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-arrow&quot; aria-hidden=&quot;true&quot;&gt;precise? →&lt;/div&gt;
+      &lt;div class=&quot;wf-state-node&quot;&gt;&lt;strong&gt;Open ticket&lt;/strong&gt;&lt;span&gt;One precise question + type&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-arrow&quot; aria-hidden=&quot;true&quot;&gt;all blockers closed →&lt;/div&gt;
+      &lt;div class=&quot;wf-state-node&quot; data-state=&quot;frontier&quot;&gt;&lt;strong&gt;Frontier&lt;/strong&gt;&lt;span&gt;Open + unblocked + unclaimed&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-arrow&quot; aria-hidden=&quot;true&quot;&gt;assign first →&lt;/div&gt;
+      &lt;div class=&quot;wf-state-node&quot; data-state=&quot;tracker&quot;&gt;&lt;strong&gt;Claimed&lt;/strong&gt;&lt;span&gt;One session owns the work&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-branches&quot;&gt;
+      &lt;div class=&quot;wf-branch&quot;&gt;&lt;strong&gt;Resolution branch&lt;/strong&gt;&lt;span&gt;Post full answer on ticket → close it → append one-line named link to Decisions-so-far → re-evaluate frontier and fog.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-branch&quot; data-kind=&quot;scope&quot;&gt;&lt;strong&gt;Scope branch&lt;/strong&gt;&lt;span&gt;If the ticket lies beyond the Destination, close it and link one explanatory line under Out of scope. Do not count it as a decision on the route.&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;wf-section&quot; id=&quot;invariants&quot;&gt;
+    &lt;div class=&quot;wf-section-head&quot;&gt;
+      &lt;h2&gt;System invariants&lt;/h2&gt;
+      &lt;p&gt;These are the rules that keep multiple long-running sessions coherent.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-invariants&quot;&gt;
+      &lt;div class=&quot;wf-invariant&quot;&gt;&lt;strong&gt;Destination before tickets&lt;/strong&gt;&lt;span&gt;Scope must exist before any question can be judged in or out.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-invariant&quot;&gt;&lt;strong&gt;Map is index, not store&lt;/strong&gt;&lt;span&gt;Decision detail lives in one ticket only; the map carries a gist and link.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-invariant&quot;&gt;&lt;strong&gt;Names over bare IDs&lt;/strong&gt;&lt;span&gt;Humans read ticket titles; the name wraps its tracker link.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-invariant&quot;&gt;&lt;strong&gt;Claim is the first write&lt;/strong&gt;&lt;span&gt;Assignment prevents concurrent sessions from duplicating work.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-invariant&quot;&gt;&lt;strong&gt;Create before wiring&lt;/strong&gt;&lt;span&gt;Tickets need tracker identities before dependency edges can reference them.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-invariant&quot;&gt;&lt;strong&gt;One ordinary ticket per session&lt;/strong&gt;&lt;span&gt;Research subagents are the explicit exception.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-invariant&quot;&gt;&lt;strong&gt;HITL means a real human loop&lt;/strong&gt;&lt;span&gt;The agent cannot simulate the human’s answer and call the ticket resolved.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-invariant&quot;&gt;&lt;strong&gt;Fog is not a backlog&lt;/strong&gt;&lt;span&gt;It is coarser than tickets; one patch may become several tickets or none.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-invariant&quot;&gt;&lt;strong&gt;Planning ends at clarity&lt;/strong&gt;&lt;span&gt;The urge to build usually signals that the Wayfinder map has reached its handoff boundary.&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;wf-section&quot; id=&quot;handoff&quot;&gt;
+    &lt;div class=&quot;wf-section-head&quot;&gt;
+      &lt;h2&gt;Where Wayfinder sits in the larger flow&lt;/h2&gt;
+      &lt;p&gt;It is deliberately upstream of specification and delivery. The heaviest flow should be reserved for work whose uncertainty cannot fit one session.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-route&quot; role=&quot;img&quot; aria-label=&quot;A foggy large idea goes through Wayfinder, then to-spec, then normal delivery. A clear small idea skips Wayfinder.&quot;&gt;
+      &lt;div class=&quot;wf-route-node&quot;&gt;&lt;strong&gt;Idea triage&lt;/strong&gt;&lt;span&gt;Small + clear → grill/spec directly&lt;br&gt;Large + foggy → Wayfinder&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-arrow&quot; aria-hidden=&quot;true&quot;&gt;→&lt;/div&gt;
+      &lt;div class=&quot;wf-route-node&quot; data-active=&quot;true&quot;&gt;&lt;strong&gt;Wayfinder&lt;/strong&gt;&lt;span&gt;Resolve the decisions that make a route specifiable&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-arrow&quot; aria-hidden=&quot;true&quot;&gt;→&lt;/div&gt;
+      &lt;div class=&quot;wf-route-node&quot; data-end=&quot;true&quot;&gt;&lt;strong&gt;to-spec → delivery&lt;/strong&gt;&lt;span&gt;Collapse linked decisions into a buildable spec; implement directly only if the effort proved genuinely small&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;wf-section&quot; id=&quot;tracker&quot;&gt;
+    &lt;div class=&quot;wf-section-head&quot;&gt;
+      &lt;h2&gt;Tracker abstraction&lt;/h2&gt;
+      &lt;p&gt;The core state model stays the same. &lt;code&gt;docs/agents/issue-tracker.md&lt;/code&gt; supplies the physical operations for each repository.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-table-wrap&quot;&gt;
+      &lt;table&gt;
+        &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Concern&lt;/th&gt;&lt;th&gt;GitHub&lt;/th&gt;&lt;th&gt;GitLab&lt;/th&gt;&lt;th&gt;Local Markdown&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;&lt;td data-label=&quot;Concern&quot;&gt;Map&lt;/td&gt;&lt;td data-label=&quot;GitHub&quot;&gt;Issue labelled &lt;code&gt;wayfinder:map&lt;/code&gt;&lt;/td&gt;&lt;td data-label=&quot;GitLab&quot;&gt;Issue labelled &lt;code&gt;wayfinder:map&lt;/code&gt; (epic optional)&lt;/td&gt;&lt;td data-label=&quot;Local Markdown&quot;&gt;&lt;code&gt;.scratch/&amp;lt;effort&amp;gt;/map.md&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td data-label=&quot;Concern&quot;&gt;Children&lt;/td&gt;&lt;td data-label=&quot;GitHub&quot;&gt;Native sub-issues; task-list fallback&lt;/td&gt;&lt;td data-label=&quot;GitLab&quot;&gt;&lt;code&gt;Part of #&amp;lt;map&amp;gt;&lt;/code&gt; in description&lt;/td&gt;&lt;td data-label=&quot;Local Markdown&quot;&gt;Numbered files under &lt;code&gt;issues/&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td data-label=&quot;Concern&quot;&gt;Blocking&lt;/td&gt;&lt;td data-label=&quot;GitHub&quot;&gt;Native issue dependencies; body fallback&lt;/td&gt;&lt;td data-label=&quot;GitLab&quot;&gt;Native &lt;code&gt;/blocked_by&lt;/code&gt;; body fallback&lt;/td&gt;&lt;td data-label=&quot;Local Markdown&quot;&gt;&lt;code&gt;Blocked by: NN, NN&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td data-label=&quot;Concern&quot;&gt;Claim&lt;/td&gt;&lt;td data-label=&quot;GitHub&quot;&gt;Assign &lt;code&gt;@me&lt;/code&gt;&lt;/td&gt;&lt;td data-label=&quot;GitLab&quot;&gt;Assign &lt;code&gt;@me&lt;/code&gt;&lt;/td&gt;&lt;td data-label=&quot;Local Markdown&quot;&gt;&lt;code&gt;Status: claimed&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td data-label=&quot;Concern&quot;&gt;Resolve&lt;/td&gt;&lt;td data-label=&quot;GitHub&quot;&gt;Comment, close, update map&lt;/td&gt;&lt;td data-label=&quot;GitLab&quot;&gt;Note, close, update map&lt;/td&gt;&lt;td data-label=&quot;Local Markdown&quot;&gt;Append Answer, mark resolved, update map&lt;/td&gt;&lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;wf-section&quot; id=&quot;review-notes&quot;&gt;
+    &lt;div class=&quot;wf-section-head&quot;&gt;
+      &lt;h2&gt;Reviewer watch points&lt;/h2&gt;
+      &lt;p&gt;These are not claims that the design is broken. They are the places where the source leaves operational judgment to the user, tracker, or hosting agent.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-review-grid&quot;&gt;
+      &lt;div class=&quot;wf-review&quot;&gt;&lt;strong&gt;No explicit final-close ritual&lt;/strong&gt;&lt;span&gt;The completion condition is conceptually clear—no decisions or fog remain—but the source does not specify closing the map issue or applying a “complete” state.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-review&quot;&gt;&lt;strong&gt;Research branch lifecycle is thinly specified&lt;/strong&gt;&lt;span&gt;Wayfinder requires a throwaway &lt;code&gt;research/&amp;lt;name&amp;gt;&lt;/code&gt; branch and ticket pointer; the research skill itself only requires a cited Markdown file and does not define cleanup or merge mechanics.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-review&quot;&gt;&lt;strong&gt;Ordering depends on the tracker adapter&lt;/strong&gt;&lt;span&gt;“First frontier ticket in order” is precise only to the extent the tracker playbook defines stable child ordering; local Markdown is clearest because numbering is explicit.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-review&quot;&gt;&lt;strong&gt;Tracker feature variance matters&lt;/strong&gt;&lt;span&gt;Native child/dependency support may be unavailable. Fallback body conventions preserve semantics but lose some visual and query strength.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-review&quot;&gt;&lt;strong&gt;Concurrent map edits need normal conflict discipline&lt;/strong&gt;&lt;span&gt;Claims prevent duplicate ticket work, but the source does not add a separate lock for simultaneous updates to Decisions-so-far, fog, or ticket topology.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-review&quot;&gt;&lt;strong&gt;Execution override is powerful&lt;/strong&gt;&lt;span&gt;Notes can explicitly carry execution into the map. That changes the default planning contract, so reviewers should treat it as a deliberate, visible exception.&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class=&quot;wf-section&quot; id=&quot;sources&quot;&gt;
+    &lt;div class=&quot;wf-section-head&quot;&gt;
+      &lt;h2&gt;Primary sources&lt;/h2&gt;
+      &lt;p&gt;All analysis above was checked against the repository at commit &lt;code&gt;66898f60e8c744e269f8ce06c2b2b99ce7660d5f&lt;/code&gt;.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;wf-sources&quot;&gt;
+      &lt;div class=&quot;wf-source&quot;&gt;&lt;a href=&quot;https://github.com/mattpocock/skills/blob/66898f60e8c744e269f8ce06c2b2b99ce7660d5f/skills/engineering/wayfinder/SKILL.md&quot;&gt;Wayfinder skill source&lt;/a&gt;&lt;span&gt;Canonical map, ticket, fog, invocation, state, and interaction rules.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-source&quot;&gt;&lt;a href=&quot;https://github.com/mattpocock/skills/blob/66898f60e8c744e269f8ce06c2b2b99ce7660d5f/docs/engineering/wayfinder.md&quot;&gt;Wayfinder documentation&lt;/a&gt;&lt;span&gt;Quickstart, use-case positioning, success criteria, prerequisites, and handoff guidance.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-source&quot;&gt;&lt;a href=&quot;https://github.com/mattpocock/skills/tree/66898f60e8c744e269f8ce06c2b2b99ce7660d5f/skills/engineering/setup-matt-pocock-skills&quot;&gt;Tracker adapter templates&lt;/a&gt;&lt;span&gt;GitHub, GitLab, and local-Markdown implementations of map, child, blocking, frontier, claim, and resolve operations.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-source&quot;&gt;&lt;a href=&quot;https://github.com/mattpocock/skills/blob/66898f60e8c744e269f8ce06c2b2b99ce7660d5f/skills/productivity/grilling/SKILL.md&quot;&gt;Grilling skill&lt;/a&gt;&lt;span&gt;One-question-at-a-time human decision contract used in destination and ticket resolution.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-source&quot;&gt;&lt;a href=&quot;https://github.com/mattpocock/skills/blob/66898f60e8c744e269f8ce06c2b2b99ce7660d5f/skills/engineering/research/SKILL.md&quot;&gt;Research skill&lt;/a&gt;&lt;span&gt;Background-agent and primary-source research contract.&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;wf-source&quot;&gt;&lt;a href=&quot;https://github.com/mattpocock/skills/blob/66898f60e8c744e269f8ce06c2b2b99ce7660d5f/skills/engineering/to-spec/SKILL.md&quot;&gt;to-spec skill&lt;/a&gt;&lt;span&gt;The downstream synthesis stage once Wayfinder has cleared the route.&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+
+  const getTrigger = (target) =&gt;
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest(&quot;[data-tooltip]&quot;)
+      : null;
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handleLeave = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
+    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
+    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
+    document.removeEventListener(&quot;focusout&quot;, handleLeave);
+    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
+    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
+  document.addEventListener(&quot;pointerout&quot;, handleLeave);
+  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
+  document.addEventListener(&quot;focusout&quot;, handleLeave);
+  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
+  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</body>
+</html>
