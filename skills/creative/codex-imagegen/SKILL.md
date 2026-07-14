@@ -1,7 +1,6 @@
 ---
 name: codex-imagegen
-description: Generate real raster images headlessly through the Codex CLI's built-in image_gen tool (no OPENAI_API_KEY — runs off the ChatGPT login), then chroma-key them into transparent PNGs. Use to produce game/app assets, sprites, textures, icons, or illustrations from a coding agent that has no image model of its own.
-argument-hint: "[subject] [--key magenta|green] [--out path]"
+description: Generate immutable raster image artifacts through Codex's built-in image tool. Use for flat images and transparent assets, asset-first layered scenes with independently generated layers, or keyed sprite-sheet extraction into named assets and manifests.
 metadata:
   invocation: model
   execution: thread
@@ -9,58 +8,97 @@ metadata:
   optional: []
 ---
 
-# Codex Image Generation (headless)
+# Codex Imagegen
 
-Codex CLI can generate real bitmap images via its built-in `image_gen` tool, authenticated by the user's **ChatGPT login — no `OPENAI_API_KEY` required**. The catch is that from `codex exec` the tool is easy to get wrong: with the sandbox on it silently no-ops and reuses a previous image, and even on success it never writes a file — the PNG is base64 inside the session transcript. This skill encodes the recipe that actually works, recovered by trial.
+Use one of three artifact modes:
 
-Use it when a coding agent needs raster art (sprites, tiles, textures, mockups, illustrations) and has no image model. For vector/icon work that should stay code-native, don't use this — draw SVG.
+1. **Flat** — generate one raster image, optionally key it into transparency.
+2. **Layered** — generate a planned background and independently generated foreground/subject assets, then derive a composite. This is asset-first only: do not segment an existing flattened image.
+3. **Spritesheet** — extract a keyed sheet into named transparent assets and a manifest, or generate the sheet first and then extract it.
 
-## The six things that make it work
+For vector or code-native graphics, use the project's native SVG/CSS/canvas path instead.
 
-1. **Bypass the sandbox.** `codex exec --dangerously-bypass-approvals-and-sandbox`. With `-s read-only`/`workspace-write` the image tool cannot run; codex will claim it "generated inline" and then hand back a *stale* earlier image (or nothing). This one flag is the difference between real output and silent failure.
-2. **The bytes are in the session transcript, not a file.** After a run, the image is a base64 string inside `~/.codex/sessions/**/*.jsonl` on a payload of `type: "image_generation_call"` (PNG base64 starts with `iVBORw0KGgo`; sometimes a `data:` URL or JPEG `/9j/`). It is NOT written to disk, NOT in `--json` stdout, NOT reliably in `~/.codex/generated_images/` under exec.
-3. **Sequential only.** Never run two codex image generations in parallel — concurrent processes write overlapping sessions and the fresh-session detection breaks. Batch = a sequential loop.
-4. **Disambiguate by prompt keywords, not recency.** Other codex processes pollute recent sessions. Match the extracted image's `revised_prompt` against subject keywords; fall back to the largest payload. Never "grab the newest session."
-5. **Flat key background, then key it out yourself.** Codex fakes "transparent" requests by painting a checkerboard, so ask for a **solid flat key color** and remove it locally. Pick the key by subject: **magenta `#FF00FF`** for green/brown/grey subjects (trees, rock, wood, buildings); **green `#00FF00`** only when the subject has no green (and never for pink/magenta subjects). Green-on-green eats foliage edges.
-6. **Keep every generation.** Treat generated images as immutable because regeneration is costly. The first write uses the requested path; if that path or one of its sibling versions exists, write the next monotonic sibling instead (`oak-tree.png`, `oak-tree-v2.png`, `oak-tree-v3.png`). Never delete or overwrite an earlier generation. Apply the same rule to chroma-keyed and other derived image outputs, and always use the actual path reported by the script.
+## Invariants
 
-## Generate one asset
+- Run image generation sequentially. Concurrent Codex image sessions make transcript matching unreliable.
+- The generator must use `codex exec --dangerously-bypass-approvals-and-sandbox`; sandboxed execution can silently reuse a stale result.
+- Image bytes live in `~/.codex/sessions/**/*.jsonl`, not reliably in stdout or a generated-images directory. The bundled generator extracts the new image by prompt keywords and payload size.
+- Treat every artifact as immutable. The first output uses the requested name; later writes use monotonic siblings such as `scene.png`, `scene-v2/`, `scene-v3.png`. A file and directory with the same stem belong to one version family.
+- Use the actual output path reported by the script. Never assume the requested path was written.
+- Use one flat key color for transparent assets. Prefer magenta for green/brown/gray subjects; use green only when the subject contains no green.
 
-```
+All commands below are relative to this skill directory.
+
+## Flat mode
+
+Generate one keyed raster:
+
+```bash
 python3 scripts/codex_imagegen.py \
   --subject "a cozy top-down oak tree, round leafy canopy, storybook game-asset style" \
   --key magenta --size 1024 --out assets/raw/oak-tree.png
 ```
 
-`--subject` wraps your text in a prompt that pins the flat key background, dimensions, and "no checkerboard / no text / no pure-key pixels in the subject". For full control pass `--prompt-file FILE` instead (you own the whole prompt, but keep the flat-key-background clause). The script marks the time, runs codex with the bypass flag, then extracts the freshest matching image from the session transcript. It writes to `--out` when absent or reports the next `-vN` sibling when that image family already exists. Runs take ~1–3 min.
+Use `--prompt-file FILE` for a fully authored prompt, retaining the solid-key requirements when transparency is needed. Then remove the background:
 
-## Make it transparent
-
-The generated PNG has a flat key background. Remove it:
-
-```
-python3 scripts/chroma_key.py assets/raw/oak-tree.png assets/oak-tree.png --key magenta
+```bash
+python3 scripts/chroma_key.py \
+  assets/raw/oak-tree.png assets/oak-tree.png --key magenta
 ```
 
-This keys the flat color, despills the fringe, feathers the edge, and trims to content bounds. It also chooses the next `-vN` sibling rather than overwriting an existing output. (Codex also ships an equivalent at `~/.codex/skills/.system/imagegen/scripts/remove_chroma_key.py`.)
+For a sequential batch, pass `--batch batch.json --outdir DIR`; the JSON shape is `[{"name":"oak-tree","subject":"..."}]`. Existing completed families are resumable. Add `--new-version` only when intentionally iterating every item.
 
-## Batch (sequential)
+## Layered mode: asset-first
 
+Plan the layers before generating. Every movable foreground/subject object gets its own image-generation request on a flat key background; the backdrop is generated separately as a full-bleed image. The composite is derived from those layer assets, never treated as their source.
+
+```bash
+python3 scripts/codex_imagegen.py \
+  --layers scene.json --out assets/forest-clearing
 ```
-python3 scripts/codex_imagegen.py --batch batch.json --outdir assets/raw --key magenta
+
+The output is a versioned directory containing the prompts and raw generations, transparent layer PNGs, `manifest.json`, and `composite.png`. A failed run remains on disk with `status: "failed"` so expensive successful layers are not lost. See [layered mode](reference/layered-mode.md) for the scene schema and artifact contract.
+
+Do not imply reconstruction fidelity: this mode does not infer hidden pixels, split a flattened source, or use Segment Anything. If the user provides only a flattened image, stop at a flat artifact or ask them to approve a future segmentation/recreation workflow.
+
+## Spritesheet mode
+
+Extract a regular grid:
+
+```bash
+python3 scripts/extract_spritesheet.py \
+  --in sheet.png --cols 4 --rows 4 --key auto \
+  --names grass,dirt,stone,sand,water,shoreline,roads,wood,lava,snow,forest,mountain,farmland,bridge,cliff,ice \
+  --out assets/terrain-sprites --validate --expect 16 \
+  --contact-sheet assets/terrain-preview.png
 ```
 
-`batch.json` is `[{"name": "oak-tree", "subject": "..."}, ...]`. The script loops **one at a time**, skips names whose latest version is already complete (resumable), and logs progress. For N assets budget ~1.5–2 min each.
+Use `--slice components` for separated objects in a packed sheet. Use `--generate "SUBJECT"` instead of `--in` to create the keyed source through the bundled flat generator first. The generated source is preserved inside the directory artifact under `source/`.
 
-To intentionally iterate every item in an existing batch, add `--new-version`. Each completed item is then written as its next `-vN` sibling; earlier batch outputs remain untouched.
+Every extraction reserves a new versioned directory rather than overwriting a prior result. Read [slicing](reference/spritesheet-slicing.md), [prompting](reference/spritesheet-prompts.md), [manifest](reference/spritesheet-manifest.md), and [validation](reference/spritesheet-validation.md) when that branch applies.
 
-## Verify — silence is not success
+## Shared keying
 
-Always open the result. Failure modes to check for:
-- **Stale image**: you asked for X and got a prior unrelated image → the bypass flag was missing, or keyword matching failed. Re-run; confirm `matched_kw > 0` in the log.
-- **Checkerboard background**: you asked for transparency instead of a flat key color → re-prompt with a solid key fill.
-- **Keyed holes**: the subject contained the key color (green foliage on a green key) → regenerate on the other key color.
+Flat transparency, layered foregrounds, and sprite extraction all use `scripts/image_key.py`: a distance-based alpha ramp with despill. Accepted keys are `auto`, `none`, `magenta`, `green`, or `#RRGGBB` where the caller permits them. If edges are eaten, regenerate with the other key color; if key remnants survive, adjust `--key-lo`/`--key-hi` or provide the exact color.
 
-## Fallback: the CLI path (needs a key)
+## Verify
 
-Only when an `OPENAI_API_KEY` is available *and* the user asks for the CLI/API path (a fully scriptable, deterministic `image_gen.py` with true transparency). See [api-key-path](reference/api-key-path.md).
+Open the reported artifact, not merely the requested path. For layered output, inspect both every layer and the derived composite. For spritesheets, use `--validate` and a contact sheet. A zero exit code does not substitute for checking that the generated subject matches the request and that keyed edges are usable.
+
+Common failures:
+
+- An unrelated old image means the generation was sandboxed or transcript keyword matching failed.
+- A checkerboard means the prompt requested transparency rather than a solid key fill.
+- Holes in the subject mean the chosen key color occurred in the subject.
+- A failed layered manifest is resumable evidence, not permission to overwrite that directory.
+
+## Fallback
+
+Only when `OPENAI_API_KEY` is available and the user explicitly wants the API/CLI route, use [the API-key path](reference/api-key-path.md).
+
+## Dependency surface
+
+- **Bundled:** generator, immutable path allocator, shared keyer, layered compositor, sprite extractor, references, and evals.
+- **Project playbooks:** none.
+- **Sibling skills:** none. Sprite generation calls the bundled generator directly.
+- **External requirements:** Pillow and NumPy from `requirements.txt`; Codex CLI with an authenticated ChatGPT session for generation.

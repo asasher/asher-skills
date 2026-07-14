@@ -1,6 +1,6 @@
 # Slicing
 
-`to-sprites` has two slicing modes. Both feed the same tail: keying, trimming, naming, export, manifest, and
+The spritesheet branch has two slicing modes. Both feed the same tail: keying, trimming, naming, export, manifest, and
 validation.
 
 ## Grid

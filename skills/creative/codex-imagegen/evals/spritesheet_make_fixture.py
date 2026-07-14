@@ -52,7 +52,7 @@ def build_fixture() -> Image.Image:
 
 
 def main() -> int:
-    out = Path(__file__).resolve().parent / "fixtures/iso-4x4.png"
+    out = Path(__file__).resolve().parent / "spritesheet-fixtures/iso-4x4.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     build_fixture().save(out, "PNG", compress_level=9)
     print(f"wrote {out}")

@@ -42,7 +42,6 @@ including one marked `user`.
 | creative | `codex-imagegen` | model | thread |
 | creative | `maquette` | model | thread |
 | creative | `shadixfy` | model | thread |
-| creative | `to-sprites` | user | thread |
 | creative | `watch-video` | model | thread |
 | thinking | `bayes` | user | thread |
 | thinking | `constraints` | user | thread |

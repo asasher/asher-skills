@@ -14,13 +14,15 @@ import re
 import shlex
 import subprocess
 import sys
-import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Sequence
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+
+from image_key import key_image
+from output_paths import next_output_path, reserve_output_dir
 
 
 DEFAULT_GENERATOR_CMD = (
@@ -34,7 +36,7 @@ class SpriteExtractionError(RuntimeError):
 
 
 class OutputExistsError(SpriteExtractionError):
-    """Raised when an output file would be overwritten without --force."""
+    """Raised when an internal write would collide inside a reserved artifact."""
 
 
 class GenerationError(SpriteExtractionError):
@@ -81,10 +83,6 @@ class Element:
     asset_rel: str = ""
 
 
-def _repo_root() -> Path:
-    return Path(__file__).resolve().parents[2]
-
-
 def _as_path(value: str | Path | None) -> Path | None:
     if value is None:
         return None
@@ -118,20 +116,6 @@ def _parse_size(text: str | Sequence[int] | None) -> tuple[int, int] | None:
     return int(match.group(1)), int(match.group(2))
 
 
-def _hex_color(rgb: tuple[int, int, int] | None) -> str | None:
-    if rgb is None:
-        return None
-    return "#{:02X}{:02X}{:02X}".format(*rgb)
-
-
-def _parse_hex_color(value: str) -> tuple[int, int, int]:
-    match = re.fullmatch(r"#?([0-9a-fA-F]{6})", value.strip())
-    if not match:
-        raise SpriteExtractionError("--key must be auto, none, or #RRGGBB")
-    raw = match.group(1)
-    return int(raw[0:2], 16), int(raw[2:4], 16), int(raw[4:6], 16)
-
-
 def _slug(value: str) -> str:
     cleaned = re.sub(r"[^A-Za-z0-9_-]+", "-", value.strip()).strip("-")
     return cleaned or "sprite"
@@ -147,54 +131,6 @@ def _load_names(names: str | Sequence[str] | None) -> list[str]:
     if path.exists() and path.is_file():
         return [_slug(line.strip()) for line in path.read_text().splitlines() if line.strip()]
     return [_slug(part.strip()) for part in value.split(",") if part.strip()]
-
-
-def _dominant_border_color(image: Image.Image) -> tuple[int, int, int]:
-    rgb = np.asarray(image.convert("RGB"), dtype=np.uint8)
-    top = rgb[0:1, :, :].reshape(-1, 3)
-    bottom = rgb[-1:, :, :].reshape(-1, 3)
-    left = rgb[:, 0:1, :].reshape(-1, 3)
-    right = rgb[:, -1:, :].reshape(-1, 3)
-    border = np.concatenate([top, bottom, left, right], axis=0)
-    colors, counts = np.unique(border, axis=0, return_counts=True)
-    return tuple(int(v) for v in colors[int(np.argmax(counts))])
-
-
-def _apply_key(
-    image: Image.Image,
-    key: str,
-    key_hi: float,
-    key_lo: float,
-) -> tuple[Image.Image, dict, tuple[int, int, int] | None]:
-    if key_hi <= key_lo:
-        raise SpriteExtractionError("--key-hi must be greater than --key-lo")
-    if key == "none":
-        return image.convert("RGBA"), {"color": None, "method": "none"}, None
-    if key == "auto":
-        key_rgb = _dominant_border_color(image)
-        method = "border-sample"
-    else:
-        key_rgb = _parse_hex_color(key)
-        method = "supplied"
-
-    rgba = np.asarray(image.convert("RGBA"), dtype=np.float32)
-    rgb = rgba[..., :3]
-    input_alpha = rgba[..., 3]
-    key_vec = np.asarray(key_rgb, dtype=np.float32)
-    distance = np.linalg.norm(rgb - key_vec, axis=2)
-
-    ramp = np.clip((distance - key_lo) / max(key_hi - key_lo, 1e-6), 0.0, 1.0)
-    alpha = input_alpha * ramp
-    alpha_frac = np.clip(alpha / 255.0, 0.0, 1.0)
-
-    corrected = rgb.copy()
-    fringe = (alpha_frac > 0.05) & (alpha_frac < 0.999)
-    if np.any(fringe):
-        a = alpha_frac[fringe][..., None]
-        corrected[fringe] = (rgb[fringe] - (1.0 - a) * key_vec) / np.maximum(a, 1e-6)
-
-    out = np.dstack([corrected, alpha]).clip(0, 255).astype(np.uint8)
-    return Image.fromarray(out, "RGBA"), {"color": _hex_color(key_rgb), "method": method}, key_rgb
 
 
 def _content_bounds(arr: np.ndarray, origin_x: int, origin_y: int) -> Rect | None:
@@ -493,7 +429,7 @@ def _ensure_writable_outputs(paths: Iterable[Path], source_path: Path, force: bo
             existing.append(str(path))
     if existing:
         raise OutputExistsError(
-            "refusing to overwrite existing output files without --force: "
+            "refusing to overwrite existing output files inside the reserved artifact: "
             + ", ".join(existing[:8])
             + (" ..." if len(existing) > 8 else "")
         )
@@ -641,21 +577,17 @@ def _print_validation_report(report: dict) -> None:
         print(f"{status} {check['name']}: {check['detail']}")
 
 
-def _sibling_imagegen_script() -> Path:
-    """Resolve the codex-imagegen sibling by name, beside this skill's own
-    install directory — works in the source repo (skills/) and in any
-    installed layout (.claude/skills/, .agents/skills/, ...)."""
-    return _repo_root() / "codex-imagegen" / "scripts" / "codex_imagegen.py"
+def _imagegen_script() -> Path:
+    return Path(__file__).resolve().with_name("codex_imagegen.py")
 
 
 def _run_generator(subject: str, out_path: Path, generator_cmd: str) -> None:
-    repo_root = _repo_root()
-    imagegen_script = _sibling_imagegen_script()
+    imagegen_script = _imagegen_script()
     if generator_cmd == DEFAULT_GENERATOR_CMD and not imagegen_script.exists():
         raise GenerationError(
-            "--generate needs the optional sibling skill codex-imagegen "
+            "--generate needs codex-imagegen's bundled generator "
             f"(looked for {imagegen_script}). "
-            "Install it, pass --in instead, or provide --generator-cmd for a stub/CI generator."
+            "Repair the skill, pass --in instead, or provide --generator-cmd for a stub/CI generator."
         )
 
     try:
@@ -668,11 +600,11 @@ def _run_generator(subject: str, out_path: Path, generator_cmd: str) -> None:
         raise GenerationError(f"--generator-cmd placeholder not recognized: {exc}") from exc
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    proc = subprocess.run(command, shell=True, cwd=repo_root, capture_output=True, text=True)
+    proc = subprocess.run(command, shell=True, capture_output=True, text=True)
     if proc.returncode != 0:
         stderr = (proc.stderr or proc.stdout or "").strip()
         raise GenerationError(
-            "generator command failed. Install/repair codex-imagegen, pass --in, "
+            "generator command failed. Repair codex-imagegen, pass --in, "
             f"or provide a working --generator-cmd. Exit {proc.returncode}: {stderr[:500]}"
         )
     if not out_path.exists():
@@ -704,13 +636,12 @@ def extract(
     expect: int | None = None,
     contact_sheet: str | Path | None = None,
     generator_cmd: str = DEFAULT_GENERATOR_CMD,
-    force: bool = False,
     print_validation: bool = False,
 ) -> dict:
     """Extract sprites and return the manifest dict.
 
     Exactly one of source_path or generate is required. Validation failures and
-    overwrite refusals raise SpriteExtractionError subclasses.
+    internal write collisions raise SpriteExtractionError subclasses.
     """
     if bool(source_path) == bool(generate):
         raise SpriteExtractionError("provide exactly one of source_path/--in or generate/--generate")
@@ -725,86 +656,93 @@ def extract(
     tile_pair = _parse_size(tile)
     margin_pair = _parse_pair(margin, "--margin")
     spacing_pair = _parse_pair(spacing, "--spacing")
-    contact_path = _as_path(contact_sheet)
-
-    temp_dir: tempfile.TemporaryDirectory[str] | None = None
+    requested_contact_path = _as_path(contact_sheet)
     generated_source = False
     subject = None
+    if generate:
+        subject = generate
+        generated_source = True
+        if out_dir is None:
+            out_dir = Path.cwd() / f"{_slug(subject)}-sprites"
+    else:
+        source = _as_path(source_path)
+        if source is None:
+            raise SpriteExtractionError("missing source path")
+        if out_dir is None:
+            out_dir = source.with_name(f"{source.stem}-sprites")
+
+    requested_out = _as_path(out_dir)
+    if requested_out is None:
+        raise SpriteExtractionError("missing output directory")
     try:
-        if generate:
-            subject = generate
-            generated_source = True
-            if out_dir is None:
-                out_dir = Path.cwd() / f"{_slug(subject)}-sprites"
-            temp_dir = tempfile.TemporaryDirectory(prefix="to-sprites-")
-            source = Path(temp_dir.name) / "generated-source.png"
-            _run_generator(subject, source, generator_cmd)
-        else:
-            source = _as_path(source_path)
-            if source is None:
-                raise SpriteExtractionError("missing source path")
-            if out_dir is None:
-                out_dir = source.with_name(f"{source.stem}-sprites")
+        out_path = reserve_output_dir(requested_out)
+    except ValueError as exc:
+        raise SpriteExtractionError(str(exc)) from exc
 
-        source = source.expanduser()
-        if not source.exists():
-            raise SpriteExtractionError(f"source not found: {source}")
-        out_path = _as_path(out_dir)
-        if out_path is None:
-            raise SpriteExtractionError("missing output directory")
-        if out_path.exists() and not out_path.is_dir():
-            raise OutputExistsError(f"--out exists and is not a directory: {out_path}")
+    if generate:
+        source = out_path / "source" / "generated-source.png"
+        _run_generator(subject, source, generator_cmd)
+    else:
+        source = _as_path(source_path)
+        if source is None:
+            raise SpriteExtractionError("missing source path")
 
-        with Image.open(source) as opened:
-            original = opened.copy()
-        keyed, key_info, key_rgb = _apply_key(original, key, float(key_hi), float(key_lo))
+    source = source.expanduser()
+    if not source.exists():
+        raise SpriteExtractionError(f"source not found: {source}")
+    contact_path = next_output_path(requested_contact_path) if requested_contact_path else None
 
-        if slice_mode == "grid":
-            elements, slicing, empty_cells = _slice_grid(
-                keyed, cols, rows, tile_pair, margin_pair, spacing_pair, pad, names_list
-            )
-        else:
-            elements, slicing, empty_cells = _slice_components(keyed, pad, names_list)
+    with Image.open(source) as opened:
+        original = opened.copy()
+    try:
+        keyed, key_info, key_rgb = key_image(original, key, float(key_hi), float(key_lo))
+    except ValueError as exc:
+        raise SpriteExtractionError(str(exc)) from exc
 
-        planned = _planned_output_paths(out_path, elements, export_format, contact_path)
-        _ensure_writable_outputs(planned, source, force)
-        _write_assets(out_path, elements, export_format)
+    if slice_mode == "grid":
+        elements, slicing, empty_cells = _slice_grid(
+            keyed, cols, rows, tile_pair, margin_pair, spacing_pair, pad, names_list
+        )
+    else:
+        elements, slicing, empty_cells = _slice_components(keyed, pad, names_list)
 
-        source_entry: str | dict
-        if generated_source:
-            source_entry = {
-                "path": str(source),
-                "generated": True,
-                "subject": subject,
-            }
-        else:
-            source_entry = str(source.resolve())
+    planned = _planned_output_paths(out_path, elements, export_format, contact_path)
+    _ensure_writable_outputs(planned, source, False)
+    _write_assets(out_path, elements, export_format)
 
-        manifest = {
-            "source": source_entry,
-            "sheet": {"width": original.size[0], "height": original.size[1]},
-            "slicing": slicing,
-            "key": key_info,
-            "elements": [_element_manifest(element, anchor) for element in elements],
+    source_entry: str | dict
+    if generated_source:
+        source_entry = {
+            "path": str(source.relative_to(out_path)),
+            "generated": True,
+            "subject": subject,
         }
+    else:
+        source_entry = str(source.resolve())
 
-        out_path.mkdir(parents=True, exist_ok=True)
-        manifest_path = out_path / "spritesheet.json"
-        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
-        if contact_path is not None:
-            _write_contact_sheet(contact_path, elements)
+    manifest = {
+        "mode": "spritesheet",
+        "artifact": str(out_path),
+        "source": source_entry,
+        "sheet": {"width": original.size[0], "height": original.size[1]},
+        "slicing": slicing,
+        "key": key_info,
+        "elements": [_element_manifest(element, anchor) for element in elements],
+    }
 
-        if validate:
-            report = _validate(manifest, out_path, expect, empty_cells, key_rgb, float(key_lo))
-            if print_validation:
-                _print_validation_report(report)
-            if not report["ok"]:
-                raise ValidationError(report)
+    manifest_path = out_path / "spritesheet.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+    if contact_path is not None:
+        _write_contact_sheet(contact_path, elements)
 
-        return manifest
-    finally:
-        if temp_dir is not None:
-            temp_dir.cleanup()
+    if validate:
+        report = _validate(manifest, out_path, expect, empty_cells, key_rgb, float(key_lo))
+        if print_validation:
+            _print_validation_report(report)
+        if not report["ok"]:
+            raise ValidationError(report)
+
+    return manifest
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -831,7 +769,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--anchor", choices=("bottom-center", "center", "top-left"), default="bottom-center", help="anchor/pivot mode")
     parser.add_argument("--validate", action="store_true", help="run validation checks and fail on any error")
     parser.add_argument("--expect", type=int, help="expected element count for validation")
-    parser.add_argument("--force", action="store_true", help="overwrite existing output files")
     parser.add_argument("--contact-sheet", help="optional QA preview PNG path")
     parser.add_argument(
         "--generator-cmd",
@@ -866,7 +803,6 @@ def main(argv: Sequence[str] | None = None) -> int:
             expect=args.expect,
             contact_sheet=args.contact_sheet,
             generator_cmd=args.generator_cmd,
-            force=args.force,
             print_validation=args.validate,
         )
     except ValidationError as exc:
@@ -877,11 +813,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     except SpriteExtractionError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
-    out_dir = args.out_dir
-    if out_dir is None and args.in_path:
-        source = Path(args.in_path).expanduser()
-        out_dir = str(source.with_name(f"{source.stem}-sprites"))
-    print(f"wrote {len(manifest['elements'])} element(s) to {out_dir or 'output directory'}")
+    print(f"wrote {len(manifest['elements'])} element(s) to {manifest['artifact']}")
     return 0
 
 

@@ -45,7 +45,7 @@ The map is a starting point tuned by the project answer, not a fixed bundle.
 | Turning a decided conversation into a written spec | `to-spec` (review-loop optional) | Synthesize a spec; feeds `to-tickets` |
 | Splitting a spec/plan into backlog tickets | `to-tickets` | Vertical-slice tickets with blocking edges into backlog's convention |
 | Any project that will route work across models | `staffing` — offer **global** | A reusable model roster; the one skill worth installing once for every project |
-| Game/asset work with sprite sheets | `to-sprites` (+ `codex-imagegen` for `--generate`) | Extract/generate sprite assets |
+| Raster, layered, or sprite-sheet asset work | `codex-imagegen` | Generate flat/layered artifacts or extract sprite assets |
 
 The single-purpose catalog skills (`bayes`, `constraints`, `dissolve`, `eloquent`, `fair-deal`, `goodwork`,
 `learn-anything`, `teamdrive`, `watch-video`, `shadixfy`, `bare-minimum-ux`, `skill-loop`) are
@@ -64,8 +64,8 @@ every active skill.
 The current notable edges are visible in `catalog.json`: backlog requires diagnosing-bugs, plan, prototype,
 review-loop, and staffing; plan requires review-loop and staffing and optionally uses prototype; prototype and spreadsheet-loop
 require review-loop and staffing; maquette requires review-loop; review-loop optionally uses staffing for its
-watch; setup-asher-skills requires staffing; to-spec optionally uses review-loop; and to-sprites optionally
-uses codex-imagegen. Document inputs such as to-tickets consuming a spec are not sibling edges.
+watch; setup-asher-skills requires staffing; and to-spec optionally uses review-loop. Document inputs such as
+to-tickets consuming a spec are not sibling edges.
 
 When closure resolution adds a sibling, **tell the user which sibling came along and why** — the pull is never
 silent ([interview](interview.md) § Phase 2).
