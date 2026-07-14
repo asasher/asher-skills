@@ -2,8 +2,8 @@
 
 Which skills fit which project and how their dependency surface is declared. Canonical invocation, execution,
 required-sibling, optional-sibling, external, setup, and internal-hold declarations live under `metadata` in
-each source `SKILL.md`; schema-2 [`catalog.json`](catalog.json) is their generated snapshot and emits
-`external: []` when absent. Internal roots are cataloged for audit but cannot be selected or required by a
+each source `SKILL.md`; schema-3 [`catalog.json`](catalog.json) is their generated snapshot and emits
+`external: []` and `variants: {}` when absent. Internal roots are cataloged for audit but cannot be selected or required by a
 public skill. Validate a
 self-host checkout with `python3 skills/system/setup-asher-skills/scripts/catalog.py validate --root . --snapshot
 skills/system/setup-asher-skills/reference/catalog.json` before using the snapshot.
@@ -30,6 +30,21 @@ get explicit consent, use the provider-specific installer, verify the declared c
 result in the consumer's separate `external-dependencies.lock.json`. An arbitrary external request that is
 not in the selected closure is never auto-installed; offer an Asher-authored equivalent if one exists, or
 state that the request needs a separate deliberate install outside this setup run.
+
+## Opt-in provider variants
+
+The default remains one real `.agents/skills/<name>` primary plus any harness alias symlinks. A skill opts
+into real provider trees only with a sorted one-line declaration such as
+`variants: {"claude":"variants/claude","codex":"variants/codex"}`. Each value must be the matching shipped
+overlay directory. The catalog keeps name, invocation/execution policy, siblings, externals, and setup owner
+once in the root `SKILL.md`; overlays may replace runtime files but may not contain `SKILL.md`,
+`agents/openai.yaml`, or `reference/setup.md`.
+
+For each confirmed active harness, `catalog.py materialize <skill> --provider <provider>` copies the common
+runtime tree without author-only `evals/` or source-only `variants/`, applies that provider's overlay, and reports the shared-source revision plus the
+effective-tree hash. `install.py publish-variant` preflights every destination and the provider lock before
+publishing any tree, then atomically converts only the approved active mounts to real provider directories.
+Unvaried skills never enter this path and retain their symlink behavior.
 
 ## By project type — the recommendation seed
 
@@ -58,7 +73,7 @@ inside a deal project and is **never** global.
 Accepting a composer installs its transitive **required** closure. Optional siblings join only when explicitly
 selected or already present; joining one also brings that sibling's required closure. Required edges determine
 the dependency-first setup order. The compiler rejects missing siblings, duplicate names, broken setup
-pointers, required cycles, malformed external declarations, and conflicting external requirements before a
+pointers, invalid provider overlays, required cycles, malformed external declarations, and conflicting external requirements before a
 write plan is presented. Closure output includes the sorted, deduplicated `external` requirements merged from
 every active skill.
 
