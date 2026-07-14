@@ -6,6 +6,7 @@
     "review_surface": "local_html",
     "agentmail_recipient": "reviewer_only",
     "outlook_recipient_field": "to",
+    "outlook_sender_recipient": "exclude",
     "draft_replacement": "supersede",
     "watermark_advance": "sent_only"
   },

@@ -11,7 +11,10 @@ Reconcile a consumer-owned communications instance without overwriting its polic
 2. Resolve `<workspace-root>/.env`; require Git to ignore it and mode `0600`. Parse it as dotenv data and
    read only `AGENTMAIL_API_KEY`. Preserve every other assignment. Never source it as shell code.
 3. Complete `policy.json`, `capabilities.json`, audience files, and interest files with verified local
-   facts. Keep names, addresses, project paths, provider IDs, and cadence choices out of the skill source.
+   facts. When a project–customer relationship needs human-readable preferences, create one Markdown profile
+   in the consumer instance, link it from both entity records, and bind its SHA-256 into the audience and
+   interest manifests. Keep names, addresses, project paths, provider IDs, and cadence choices out of the
+   skill source.
 4. Reconcile `docs/agents/communications.md` manually. Preserve project-owned policy and deliberate
    substitutions; never overwrite it wholesale.
 

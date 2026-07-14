@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import subprocess
@@ -61,6 +62,14 @@ class ManageCommunicationsTests(unittest.TestCase):
         (people / "Client.md").write_text(
             "---\nperson: Client\nemail: client@example.com\n---\n", encoding="utf-8"
         )
+        profiles = instance / "profiles"
+        profiles.mkdir(exist_ok=True)
+        profile = profiles / "fixture.md"
+        profile.write_text(
+            "# Fixture communications\n\nCanonical recipient and interest preferences.\n",
+            encoding="utf-8",
+        )
+        profile_digest = hashlib.sha256(profile.read_bytes()).hexdigest()
         (instance / "audiences" / "fixture.json").write_text(
             json.dumps(
                 {
@@ -68,6 +77,8 @@ class ManageCommunicationsTests(unittest.TestCase):
                     "id": "fixture",
                     "kind": "external",
                     "project_id": "fixture-project",
+                    "profile_file": "profiles/fixture.md",
+                    "profile_sha256": profile_digest,
                     "recipients": [
                         {"person_note": "People/Client.md", "role": "external"},
                         {"person_note": "People/Reviewer.md", "role": "internal"},
@@ -85,6 +96,8 @@ class ManageCommunicationsTests(unittest.TestCase):
                     "schema_version": 1,
                     "id": "fixture",
                     "project_id": "fixture-project",
+                    "profile_file": "profiles/fixture.md",
+                    "profile_sha256": profile_digest,
                     "include": ["rfq-management"],
                     "exclude": ["*"],
                 },
@@ -108,6 +121,13 @@ class ManageCommunicationsTests(unittest.TestCase):
                 (root / "control-plane" / "communications" / "policy.json").read_text(encoding="utf-8")
             )
             self.assertEqual(policy["delivery"]["review_gate"], "browser_explicit_approval")
+            self.assertEqual(policy["delivery"]["outlook_sender_recipient"], "exclude")
+            states = json.loads(
+                (root / "control-plane" / "communications" / "state" / "schema.json").read_text(
+                    encoding="utf-8"
+                )
+            )["ledger_states"]
+            self.assertIn("reviewed", states)
             self.assertEqual((root / ".env").read_bytes(), before_env)
 
             files_before = {
@@ -136,6 +156,20 @@ class ManageCommunicationsTests(unittest.TestCase):
             self.assertNotIn("sentinel-secret", result.stdout + result.stderr)
             report = json.loads(result.stdout)
             self.assertEqual(report["status"], "valid")
+            self.assertEqual(report["checks"]["profile_count"], 1)
+
+    def test_validator_rejects_a_stale_profile_binding(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.make_workspace(root)
+            self.assertEqual(run(str(SETUP), str(root)).returncode, 0)
+            self.configure_instance(root)
+            profile = root / "control-plane" / "communications" / "profiles" / "fixture.md"
+            profile.write_text(profile.read_text(encoding="utf-8") + "Changed.\n", encoding="utf-8")
+
+            result = run(str(VALIDATE), str(root), "--require-token")
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("stale profile_sha256", result.stdout)
 
     def test_comms_bag_accepts_both_internal_digest_layouts(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

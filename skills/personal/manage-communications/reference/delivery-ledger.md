@@ -9,7 +9,8 @@ sent communication.
 
 Each event records `timestamp`, `comms_id`, `audience_id`, `project_ids`, `state`, `evidence_hash`,
 `content_hash`, `recipient_hash`, and only the provider IDs relevant to that transition. Never record message
-bodies, addresses, tokens, or raw mailbox payloads.
+bodies, addresses, tokens, or raw mailbox payloads. Compute `recipient_hash` as SHA-256 over the compact JSON
+array of normalized lowercase addresses in lexical order.
 
 `reviewed` records the approved rendered-content hash, `approval_surface: "browser"`, and the approval time.
 It authorizes provider writes only for those exact rendered bytes. A content or template change after review
@@ -25,4 +26,7 @@ Before a provider write, search for the same audience/evidence/content tuple:
   never silently patch the old draft.
 
 Advance `state/watermarks.json` only after exactly one matching Sent Items message is found or the user
-explicitly confirms the send. Ambiguous matches block reconciliation.
+explicitly confirms the send. Ambiguous matches block reconciliation. A `sent` event records the actual Sent
+Items `recipient_hash`. When it differs from the reviewed manifest, also record `approved_recipient_hash`;
+never rewrite the historical manifest. A user-made removal or addition is historical fact, while an
+unexpected connector-made addition blocks automatic reconciliation until the user confirms it.
