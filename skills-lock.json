@@ -4,7 +4,7 @@
     "backlog": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "ec0e0b1fabe29174fa4253f9d392d42664cefa90b7fe3cdc18088abca8c02d33"
+      "computedHash": "42de3fc7040e86c881af90808aa42ea77d362fef03ec42aa70ff720240457952"
     },
     "diagnosing-bugs": {
       "source": "/Users/asher/Projects/asher-skills",
@@ -14,12 +14,17 @@
     "plan": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "b81e667cfe187797c69148d10fc66da495e6d353d4122d5b205f4c9e838011d7"
+      "computedHash": "e0e39f1e4e4c228a88ce4a81f5101f071c0ab8dd1f12d4e75143a4f78b5b9b54"
     },
     "prototype": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
       "computedHash": "e84d76ac3db483058bc9e63662f63bbedbab40e4a6d3a01df814747302c42484"
+    },
+    "research": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "e57ec04e2d99a40f795112c8780a266b6600cf19d024d03c3e58bbcbef22bcc2"
     },
     "review-loop": {
       "source": "/Users/asher/Projects/asher-skills",
@@ -29,7 +34,7 @@
     "setup-asher-skills": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "2a9b557323af39ceafd51f3b6e020cdb90e24a3cc388ca0e65a191da4a13f27a"
+      "computedHash": "9b97e27ffec7fd5c0c1759e442e45c5ab6a91d323384b6a89692093de25c5132"
     },
     "skill-loop": {
       "source": "/Users/asher/Projects/asher-skills",
@@ -39,7 +44,12 @@
     "staffing": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "e9d2765b55c9fb272db3c4b2246b206696e948f1dd29875205f0848c4cac502a"
+      "computedHash": "e064a0dc1a1b2f7111f45a178d802c9e95365a8d49537f4be46868b2fc2ef658"
+    },
+    "writing-great-skills": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "581f78b50b3d81b095de86b5c18a4d9fa932fbe414cc82bd26d627d4da518f07"
     }
   }
 }

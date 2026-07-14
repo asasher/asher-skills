@@ -14,18 +14,28 @@ Never upgrade a lower-confidence signal into a shipped, paid, committed, or stag
 
 ## Audiences and interests
 
+- A consumer may use one Markdown profile as the human-facing known home for preferences specific to a
+  project–customer relationship. Link it from both entity records.
+- Audience and interest files are operational manifests. When they name a profile, both must bind the same
+  current SHA-256 or the run stops.
 - Audience files name People dossiers; People dossiers own addresses and organization membership.
 - Interest files are explicit allow/exclude maps. Unknown interest requires review, not assumption.
 - External updates contain only client-relevant, externally safe evidence.
 - The internal digest may be richer but keeps uncertainty, ownership, and source boundaries visible.
+- The workspace may bind consumer-owned layout and editorial playbooks here. Keep brand, client, project,
+  and recipient choices outside the installed skill.
 
 ## Delivery policy
 
+- Present every rendered message, its proposed recipients, and forced light/dark previews in a browser;
+  approval applies to the exact rendered-content and recipient hashes.
 - AgentMail may deliver rich HTML only to the configured reviewer.
-- Outlook creates forward drafts with every approved recipient in `To`; no stakeholder send is automatic.
+- Outlook creates forward drafts with the current audience recipients in `To`; do not add the reviewer or
+  sender unless the audience includes them. No stakeholder send is automatic.
 - The forward wrapper is intentional AI provenance.
 - New evidence supersedes an awaiting-review draft; never silently patch it.
-- Only unique Sent Items reconciliation or explicit human confirmation advances a watermark.
+- Only unique Sent Items reconciliation or explicit human confirmation advances a watermark. Reconciliation
+  records the actual sent recipients without rewriting the reviewed manifest.
 
 ## Local choices
 

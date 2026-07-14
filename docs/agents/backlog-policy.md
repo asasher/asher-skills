@@ -25,9 +25,12 @@ Two further lifecycle values appear only where the tracker has no native equival
 - `bug` — diagnose branch. Label: **`bug`** (identity).
 - `enhancement` — plan → implement branch. Label: **`enhancement`** (identity).
 - `refactor` — refactor branch. Label: **`refactor`** (identity).
-- `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a research synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — there is **no mechanical `verify` pass/fail**. The artifact is **kept** (committed and merged): that is the line against `prototype`, which is throwaway — keep the answer, delete the artifact. Label: **`draft`** (identity).
+- `research` — source-audit branch for epistemic-terminal work. The kept dossier records supported facts, traceable inferences, contradictions, and unknowns under `research/<slug>/`. Label: **`research`** (identity).
+- `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a narrative synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — there is **no mechanical `verify` pass/fail**. The artifact is **kept** (committed and merged): that is the line against `prototype`, which is throwaway — keep the answer, delete the artifact. Label: **`draft`** (identity).
 
-> Recognizing `draft`: the deliverable is an artifact judged by taste/fit — a memo, copy, a synthesis, code docs — with no testable spec to run against. When that is the shape, groom to `draft`, not `enhancement`.
+> If the terminal question is what sources establish, use `research`. If sources feed prose judged by voice,
+> persuasion, or fit, use `draft`. If behavior must change, keep the applicable code work-type and invoke
+> research as a substage.
 
 **Exclusion** — terminal; removed from grooming and from the run queue:
 

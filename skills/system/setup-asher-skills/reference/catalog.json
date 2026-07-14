@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "skills": {
     "backlog": {
       "category": "delivery",
@@ -12,11 +12,13 @@
         "diagnosing-bugs",
         "plan",
         "prototype",
+        "research",
         "review-loop",
         "staffing"
       ],
       "setup": "reference/setup.md",
-      "source": "skills/delivery/backlog"
+      "source": "skills/delivery/backlog",
+      "variants": {}
     },
     "bare-minimum-ux": {
       "category": "creative",
@@ -26,7 +28,8 @@
       "invocation": "model",
       "optional": [],
       "requires": [],
-      "source": "skills/creative/bare-minimum-ux"
+      "source": "skills/creative/bare-minimum-ux",
+      "variants": {}
     },
     "bayes": {
       "category": "thinking",
@@ -36,7 +39,8 @@
       "invocation": "user",
       "optional": [],
       "requires": [],
-      "source": "skills/thinking/bayes"
+      "source": "skills/thinking/bayes",
+      "variants": {}
     },
     "capture-to-inbox": {
       "category": "personal",
@@ -55,7 +59,8 @@
       "optional": [],
       "requires": [],
       "setup": "reference/setup.md",
-      "source": "skills/personal/capture-to-inbox"
+      "source": "skills/personal/capture-to-inbox",
+      "variants": {}
     },
     "codex-imagegen": {
       "category": "creative",
@@ -65,7 +70,8 @@
       "invocation": "model",
       "optional": [],
       "requires": [],
-      "source": "skills/creative/codex-imagegen"
+      "source": "skills/creative/codex-imagegen",
+      "variants": {}
     },
     "constraints": {
       "category": "thinking",
@@ -75,7 +81,8 @@
       "invocation": "user",
       "optional": [],
       "requires": [],
-      "source": "skills/thinking/constraints"
+      "source": "skills/thinking/constraints",
+      "variants": {}
     },
     "control-plane": {
       "category": "personal",
@@ -95,7 +102,8 @@
         "manage-tasks"
       ],
       "setup": "reference/setup.md",
-      "source": "skills/personal/control-plane"
+      "source": "skills/personal/control-plane",
+      "variants": {}
     },
     "diagnosing-bugs": {
       "category": "delivery",
@@ -106,7 +114,8 @@
       "optional": [],
       "requires": [],
       "setup": "reference/setup.md",
-      "source": "skills/delivery/diagnosing-bugs"
+      "source": "skills/delivery/diagnosing-bugs",
+      "variants": {}
     },
     "dissolve": {
       "category": "thinking",
@@ -116,7 +125,8 @@
       "invocation": "user",
       "optional": [],
       "requires": [],
-      "source": "skills/thinking/dissolve"
+      "source": "skills/thinking/dissolve",
+      "variants": {}
     },
     "eloquent": {
       "category": "personal",
@@ -126,7 +136,8 @@
       "invocation": "model",
       "optional": [],
       "requires": [],
-      "source": "skills/personal/eloquent"
+      "source": "skills/personal/eloquent",
+      "variants": {}
     },
     "fair-deal": {
       "category": "personal",
@@ -137,7 +148,8 @@
       "optional": [],
       "requires": [],
       "setup": "reference/setup.md",
-      "source": "skills/personal/fair-deal"
+      "source": "skills/personal/fair-deal",
+      "variants": {}
     },
     "goodwork": {
       "category": "personal",
@@ -148,7 +160,8 @@
       "optional": [],
       "requires": [],
       "setup": "reference/setup.md",
-      "source": "skills/personal/goodwork"
+      "source": "skills/personal/goodwork",
+      "variants": {}
     },
     "learn-anything": {
       "category": "personal",
@@ -158,7 +171,8 @@
       "invocation": "user",
       "optional": [],
       "requires": [],
-      "source": "skills/personal/learn-anything"
+      "source": "skills/personal/learn-anything",
+      "variants": {}
     },
     "manage-communications": {
       "category": "personal",
@@ -172,7 +186,8 @@
         "manage-tasks"
       ],
       "setup": "reference/setup.md",
-      "source": "skills/personal/manage-communications"
+      "source": "skills/personal/manage-communications",
+      "variants": {}
     },
     "manage-notes": {
       "category": "personal",
@@ -186,7 +201,8 @@
       "requires": [
         "manage-tasks"
       ],
-      "source": "skills/personal/manage-notes"
+      "source": "skills/personal/manage-notes",
+      "variants": {}
     },
     "manage-opportunities": {
       "category": "personal",
@@ -199,7 +215,8 @@
         "manage-tasks"
       ],
       "setup": "reference/setup.md",
-      "source": "skills/personal/manage-opportunities"
+      "source": "skills/personal/manage-opportunities",
+      "variants": {}
     },
     "manage-tasks": {
       "category": "personal",
@@ -211,7 +228,8 @@
         "manage-opportunities"
       ],
       "requires": [],
-      "source": "skills/personal/manage-tasks"
+      "source": "skills/personal/manage-tasks",
+      "variants": {}
     },
     "maquette": {
       "category": "creative",
@@ -223,7 +241,8 @@
       "requires": [
         "review-loop"
       ],
-      "source": "skills/creative/maquette"
+      "source": "skills/creative/maquette",
+      "variants": {}
     },
     "plan": {
       "category": "delivery",
@@ -232,13 +251,15 @@
       "internal": false,
       "invocation": "user",
       "optional": [
-        "prototype"
+        "prototype",
+        "research"
       ],
       "requires": [
         "review-loop",
         "staffing"
       ],
-      "source": "skills/delivery/plan"
+      "source": "skills/delivery/plan",
+      "variants": {}
     },
     "projects-triage": {
       "category": "personal",
@@ -248,7 +269,8 @@
       "invocation": "user",
       "optional": [],
       "requires": [],
-      "source": "skills/personal/projects-triage"
+      "source": "skills/personal/projects-triage",
+      "variants": {}
     },
     "prototype": {
       "category": "delivery",
@@ -261,7 +283,22 @@
         "review-loop",
         "staffing"
       ],
-      "source": "skills/delivery/prototype"
+      "source": "skills/delivery/prototype",
+      "variants": {}
+    },
+    "research": {
+      "category": "thinking",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "staffing"
+      ],
+      "setup": "reference/setup.md",
+      "source": "skills/thinking/research",
+      "variants": {}
     },
     "review-loop": {
       "category": "system",
@@ -274,7 +311,8 @@
       ],
       "requires": [],
       "setup": "reference/setup.md",
-      "source": "skills/system/review-loop"
+      "source": "skills/system/review-loop",
+      "variants": {}
     },
     "review-opportunities": {
       "category": "personal",
@@ -286,7 +324,8 @@
       "requires": [
         "manage-opportunities"
       ],
-      "source": "skills/personal/review-opportunities"
+      "source": "skills/personal/review-opportunities",
+      "variants": {}
     },
     "setup-asher-skills": {
       "category": "system",
@@ -298,7 +337,8 @@
       "requires": [
         "staffing"
       ],
-      "source": "skills/system/setup-asher-skills"
+      "source": "skills/system/setup-asher-skills",
+      "variants": {}
     },
     "shadixfy": {
       "category": "creative",
@@ -308,7 +348,8 @@
       "invocation": "model",
       "optional": [],
       "requires": [],
-      "source": "skills/creative/shadixfy"
+      "source": "skills/creative/shadixfy",
+      "variants": {}
     },
     "skill-loop": {
       "category": "system",
@@ -318,7 +359,8 @@
       "invocation": "user",
       "optional": [],
       "requires": [],
-      "source": "skills/system/skill-loop"
+      "source": "skills/system/skill-loop",
+      "variants": {}
     },
     "spreadsheet-loop": {
       "category": "delivery",
@@ -331,7 +373,8 @@
         "review-loop",
         "staffing"
       ],
-      "source": "skills/delivery/spreadsheet-loop"
+      "source": "skills/delivery/spreadsheet-loop",
+      "variants": {}
     },
     "staffing": {
       "category": "system",
@@ -342,7 +385,11 @@
       "optional": [],
       "requires": [],
       "setup": "reference/setup.md",
-      "source": "skills/system/staffing"
+      "source": "skills/system/staffing",
+      "variants": {
+        "claude": "variants/claude",
+        "codex": "variants/codex"
+      }
     },
     "teamdrive": {
       "category": "personal",
@@ -353,7 +400,8 @@
       "optional": [],
       "requires": [],
       "setup": "reference/setup.md",
-      "source": "skills/personal/teamdrive"
+      "source": "skills/personal/teamdrive",
+      "variants": {}
     },
     "to-spec": {
       "category": "delivery",
@@ -365,7 +413,8 @@
         "review-loop"
       ],
       "requires": [],
-      "source": "skills/delivery/to-spec"
+      "source": "skills/delivery/to-spec",
+      "variants": {}
     },
     "to-tickets": {
       "category": "delivery",
@@ -375,7 +424,8 @@
       "invocation": "user",
       "optional": [],
       "requires": [],
-      "source": "skills/delivery/to-tickets"
+      "source": "skills/delivery/to-tickets",
+      "variants": {}
     },
     "watch-video": {
       "category": "creative",
@@ -385,7 +435,8 @@
       "invocation": "model",
       "optional": [],
       "requires": [],
-      "source": "skills/creative/watch-video"
+      "source": "skills/creative/watch-video",
+      "variants": {}
     }
   }
 }

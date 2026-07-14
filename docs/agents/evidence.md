@@ -6,6 +6,13 @@
 
 This repo is the **no-running-app case**: there is no product surface to drive, so the honest proof is the probe-eval transcript (plus rendered-HTML screenshots for the skills that emit one). On a repo *with* a running app, evidence would instead be real check/test output plus screenshots driven through the actual app — a probe transcript is not a substitute there. Here, probes are the substitute because there is nothing else to drive.
 
+Evidence is proof of a separate checked criterion, not a catch-all for anything a human reviews. Research
+briefs, source packets, findings, and rendered research reports stay under `research/` (or the owning
+`<skill>-workspace/research/` route in `researching.md`). A research dossier's citations and claim audit are
+intrinsic provenance; do not copy the dossier into `evidence/`. Likewise, plans and prototypes remain in their
+own canonical locations. A screenshot or probe transcript proving a change to one of those artifacts may be
+evidence; the artifact itself is not.
+
 Per change type — tuned for a skills repo, where the proof is usually an eval transcript, not a screenshot:
 
 - Skill behavior change (SKILL.md, references, routing): the **probe-eval result** — the executor transcript plus a pass/fail table mapping each probe to its answer-key criterion (`docs/agents/probe-evals.md`). For a reworked skill, show the before/after verdict shift on the scenarios that motivated the change.

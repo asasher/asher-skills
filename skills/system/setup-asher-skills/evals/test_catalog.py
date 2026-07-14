@@ -108,13 +108,14 @@ class CatalogTests(unittest.TestCase):
         self.assertIsNone(found["flat"].category)
         self.assertEqual(found["nested"].category, "delivery")
 
-    def test_schema_two_records_empty_external_requirements(self) -> None:
+    def test_schema_three_records_empty_external_and_variant_requirements(self) -> None:
         temp, root = self.fixture()
         self.addCleanup(temp.cleanup)
         write_skill(root, "alpha")
         compiled = catalog.compile_catalog(root)
-        self.assertEqual(compiled["schema_version"], 2)
+        self.assertEqual(compiled["schema_version"], 3)
         self.assertEqual(compiled["skills"]["alpha"]["external"], [])
+        self.assertEqual(compiled["skills"]["alpha"]["variants"], {})
 
     def test_rejects_yaml_unsafe_unquoted_description(self) -> None:
         temp, root = self.fixture()

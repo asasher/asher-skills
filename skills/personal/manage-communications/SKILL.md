@@ -34,7 +34,11 @@ internal digest, but may deliver only to the configured reviewer; it never sends
 ## Workflow
 
 1. Resolve the consuming workspace root and read `docs/agents/communications.md`,
-   `control-plane/communications/policy.json`, capabilities, audiences, interests, watermarks, and ledger.
+   `control-plane/communications/policy.json`, capabilities, relationship profiles, audiences, interests,
+   watermarks, and ledger. When a profile exists, treat it as the human-facing source of truth and require
+   its hash-bound audience and interest manifests to be current. Load any consumer-owned layout or editorial
+   playbook named by the binding; never promote its brand, client, project, or recipient choices into this
+   portable skill.
    Run `python3 scripts/validate_instance.py <workspace-root> --require-token --check-cli` before a live
    handoff. A missing or unverified capability stops only the provider phase; selection and rendering may
    continue as a dry run.
@@ -47,19 +51,21 @@ internal digest, but may deliver only to the configured reviewer; it never sends
 4. Build one immutable comms bag per audience. Validate it with
    `python3 scripts/validate_comms_bag.py <bag.json>`. Do not combine clients merely because they share a
    project.
-5. Compute audience, evidence, and content hashes. If the ledger already has the same unit in
-   `awaiting_review` or `sent`, reuse/report it instead of creating a duplicate. New evidence supersedes an
+5. Compute audience, evidence, and content hashes. If the ledger already has the same unit in `rendered` or
+   a later state, follow the ledger reuse rules instead of creating a duplicate. New evidence supersedes an
    older review item; never silently patch it.
-6. Render HTML and plain text from the same bag. Preserve evidence IDs in the run manifest, not in visible
-   copy. Open a browser review surface containing every message in scope; do not perform a provider write.
+6. Render HTML and plain text from the same bag. Preserve evidence IDs and private instructions in the run
+   manifest, not in visible copy. Open a browser review surface containing every message in scope, its
+   proposed recipients, and forced light and dark previews shown together; do not perform a provider write.
 7. Hold at the browser review gate until the reviewer explicitly approves the exact rendered artifacts.
    Record the approval in the run manifest and append `reviewed`. Requested changes supersede the render
    and require another browser review; never hand off unreviewed bytes.
 8. For a live handoff, AgentMail may send only to the configured reviewer. Then use the Outlook capability
-   to locate that message and create one forward draft with every approved external and internal
-   stakeholder in `To`. Do not send the Outlook draft.
-9. Append state transitions. Advance a watermark only after exactly one matching message is found in Sent
-   Items or the user explicitly confirms the send.
+   to locate that message and create one forward draft with the current audience recipients in `To`. Do not
+   add the reviewer or sender unless the audience selects them. Do not send the Outlook draft.
+9. Append state transitions. Reconciliation reads the actual Sent Items recipients instead of assuming the
+   draft was unchanged. Advance a watermark only after exactly one matching message is found in Sent Items
+   or the user explicitly confirms the send.
 
 Completion criterion: every eligible audience has exactly one validated bag or one explicit exclusion;
 every live handoff has explicit browser approval for the exact rendered artifacts; every provider action is
@@ -71,7 +77,7 @@ creation alone.
 - Read `AGENTMAIL_API_KEY` only from `<workspace-root>/.env` with a dotenv parser. Never shell-source the
   file, pass the token in argv, or copy it into config, artifacts, logs, or the ledger.
 - Treat the root `.env` as a shared secret store. Read only the named key and preserve unrelated entries.
-- Put all approved recipients in Outlook `To`; the visible forward wrapper is intentional AI provenance.
+- Put all selected recipients in Outlook `To`; the visible forward wrapper is intentional AI provenance.
 - Do not call AgentMail or create an Outlook draft before explicit approval at the browser review gate.
 - Keep external copy inside the audience interest map and verified disclosure level. Internal copy may be
   richer, but payment and opportunity claims still require their authoritative owner.

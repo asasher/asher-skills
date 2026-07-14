@@ -68,6 +68,10 @@ ordering, but nobody has exercised that runtime path. What must the plan record 
 one account and no feasible large fixture. What fields must the criterion carry, and when is a substitute
 allowed to be chosen?
 
+**P15 (research composition).** A plan depends on the current retention limit in a vendor's versioned API
+reference. Which sibling owns establishing that fact, what does plan consume, and what happens if the sibling
+is absent?
+
 ## Answer key
 
 - **P1 (ac-9a):** Yes — `plan` is **domain-neutral**; a research sprint is a valid undertaking (SKILL.md
@@ -94,7 +98,8 @@ allowed to be chosen?
 - **P6 (ac-2):** Three pointer kinds: **bundled references** (its own `plan-contract.md` + `authoring.md` +
   the skeleton), **project playbook** (`docs/agents/planning.md`, delta-only), **sibling skills**. Siblings
   are required **`review-loop`** = sign-off and **`staffing`** = routing, plus optional **`prototype`** for
-  questions paper cannot settle. Missing a pointer kind or misclassifying an edge = fail.
+  logic/UI questions paper cannot settle and optional **`research`** for source-backed fact questions.
+  Missing a pointer kind or misclassifying an edge = fail.
 - **P7 (ac-3):** **No** — plan ships no `review-server`/`review-await` and no `scripts/` dir. To present a
   plan it **invokes the `review-loop` skill by plain name**, not by importing its files (`AGENTS.md`
   § Conventions "compose by name, not by file"). Cite SKILL.md / plan-contract.md § Composition. Saying it
@@ -128,10 +133,15 @@ allowed to be chosen?
 - **P14 (issue 54):** PASS only if the criterion names entities, scale/feasibility, account/tenant, fixture
   lifetime, and observation mechanism; it must be rewritten or receive an explicit substitute at plan
   approval, never improvised by verify.
+- **P15 (research composition):** PASS only if plan invokes **`research` by name** to establish the
+  source-backed fact, consumes the returned findings while retaining the planning decision, and—if research
+  is absent—runs only a bounded inline source pass while recording that the full claim audit was unavailable.
+  Routing an API-reference fact to `prototype`, silently treating a web search as audited research, or giving
+  research ownership of the plan fails.
 
 ## Scoring
 
-14 probes × 2 executors (one Claude route + one Codex route). A probe passes only with the **correct action AND a
+15 probes × 2 executors (one Claude route + one Codex route). A probe passes only with the **correct action AND a
 correct citation**. P1–P5 are the five core routing probes ac-9 names and must pass on both executors.
 Ambiguity flags are recorded as findings, not failures — they drive wording fixes before ship. Report a
 verdict table mapping each probe → its criterion → pass/fail per executor.
@@ -156,3 +166,4 @@ self-contained + neutral header), and **ac-8** (`openai.yaml` parses).
 | ac-8  | P11       | file check (YAML parses) |
 | ac-9  | P1, P2, P3, P4, P5 | — (the probes *are* ac-9) |
 | ac-10 | P12       | — |
+| research composition | P15 | — |

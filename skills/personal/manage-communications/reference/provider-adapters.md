@@ -21,9 +21,12 @@ shared root `.env`, preserves every other assignment, and never prints the retur
 ## Outlook connector
 
 Invoke the installed Outlook Email capability by name. Search using the AgentMail message ID, deterministic
-subject marker, reviewer, and a narrow creation window. Create a forward draft from the rich source message,
-put the complete approved recipient set in `To`, and add no generated wrapper text beyond the provider's
-forward provenance. Never send it.
+subject marker, reviewer, and a narrow creation window. Require one unique rich source match. Create a
+forward draft from it, resolve the current audience recipients from their People dossiers, put that set in
+`To`, and add no generated wrapper text beyond the provider's forward provenance. The AgentMail reviewer and
+the Outlook sender are not stakeholder recipients unless the audience explicitly selects them. Never send
+the draft.
 
 Record the source message ID and forward-draft ID. Reconciliation later searches Sent Items with the same
-correlation data; do not use subject alone.
+correlation data; do not use subject alone. Fetch the unique sent message, hash its actual normalized
+recipient set, and preserve both approved and actual recipient hashes when they differ.

@@ -18,8 +18,9 @@ Not for doing the work the plan describes — only for planning it and getting s
 ## Shape
 
 - **Thin composer, no runtime.** Plan ships no server and no scripts. It authors an artifact and composes
-  three siblings by plain name: `review-loop` for the sign-off gate, `staffing` for "who authors or builds,"
-  and `prototype` for logic/UI design questions (gate 2, or on a reviewer's request at the approval gate).
+  four siblings by plain name: `review-loop` for the sign-off gate, `staffing` for "who authors or builds,"
+  `prototype` for logic/UI design questions, and `research` for source-backed fact questions (gate 2, or on a
+  reviewer's request at the approval gate).
 - **Four gates, stops at Approved.** Decide → settle design questions → write → approve. The deliverable is
   the approval record (verdict, content hash, timestamp). Committing the plan and starting the work are the
   **caller's** concern — there is no gate 5.
@@ -38,16 +39,18 @@ ids, `ac-N` criteria, self-contained). `agents/openai.yaml` is the Codex manifes
 pre-deployment probe eval.
 
 Self-contained at the file level; composes by name. **Sibling dependencies:** `review-loop` (sign-off gate),
-`staffing` (who authors/builds), and `prototype` (design-question artifacts, soft) — invoked by name, never
-imported.
+`staffing` (who authors/builds), `prototype` (design-question artifacts, soft), and `research` (source-backed
+findings, soft) — invoked by name, never imported.
 
 ## Install
 
 `npx skills add <repo-url> --skill plan`, then invoke it on a goal. `setup-asher-skills` guarantees required
-siblings `review-loop` and `staffing`; optional `prototype` is present only when selected or already installed.
+siblings `review-loop` and `staffing`; optional `prototype` and `research` are present only when selected or
+already installed.
 Absent `review-loop`, plan degrades to a local review fallback; absent `staffing`, it states the role question
-rather than inventing a roster; absent `prototype`, design questions fall to spike/research with the gap
-recorded. On a fresh repo with no `docs/agents/planning.md`, the bundled defaults stand.
+rather than inventing a roster; absent `prototype`, design questions fall to a bounded spike with the gap
+recorded; absent `research`, it runs a bounded inline source pass and records the missing audit. On a fresh
+repo with no `docs/agents/planning.md`, the bundled defaults stand.
 
 ## Not in scope (the caller's job)
 
@@ -61,4 +64,5 @@ commit-and-implement dev-tail on its own side.
 - **Relationship:** extracted from this repository's `backlog` skill.
 - **Source:** [`3dacfca`](https://github.com/asasher/asher-skills/commit/3dacfca).
 - **Authority moved:** planning and the approval gate moved here; backlog retains only invocation and its dev-tail.
-- **Local changes:** made the contract caller-neutral and composed review-loop, staffing, and prototype by name.
+- **Local changes:** made the contract caller-neutral and composed review-loop, staffing, prototype, and
+  research by name.

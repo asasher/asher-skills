@@ -7,7 +7,8 @@ Asher-authored skills from this repo, handles any declared external requirements
 gate, and writes the project's `## Agent skills` map. Re-invoke it to audit an existing install for drift.
 
 It audits **three** surfaces, guarantees each skill's **sibling closure**, defaults every install to
-**project-local** (global only for `staffing`, with consent), and reconciles by **LLM audit — no version stamps**.
+**project-local** (global only for `staffing`, with consent), compiles declared provider variants only for
+confirmed active harnesses, and reconciles policy by **LLM audit — no version stamps**.
 
 ## Use
 
@@ -32,9 +33,11 @@ verifies the capability, and records it separately in `external-dependencies.loc
 ## Layout
 
 - `reference/` — the contract plus generated `catalog.json` snapshot.
-- `scripts/catalog.py` — validates source declarations and resolves deterministic closure/setup order.
-- `scripts/install.py` — inspects primary/alias mounts and safely repairs symlink aliases.
-- `templates/` — seeds for the `## Agent skills` block and the repo pointer.
+- `scripts/catalog.py` — validates source declarations, resolves closure, and materializes declared provider trees.
+- `scripts/install.py` — inspects legacy mounts, atomically publishes variants, and audits provider provenance.
+- `scripts/render-global.py` — coordinates the fresh four-module barrier, two-file Presentation preflight,
+  setup-owned apply, final four-section verification, and barrier cleanup.
+- `templates/` — seeds for the skill map, repo pointer, and setup-owned global presentation module/pointers.
 - `evals/` — dual-executor probes + answer key.
 - `agents/openai.yaml` — Codex presentation.
 

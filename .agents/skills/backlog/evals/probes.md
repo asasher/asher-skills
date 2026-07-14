@@ -1,10 +1,10 @@
-# Backlog — `draft` work-type routing probes
+# Backlog — `draft` and `research` work-type routing probes
 
-Situated dry-run probes for the `draft` work-type (issue #33), per `docs/agents/probe-evals.md`.
+Situated dry-run probes for the `draft` and `research` work-types, per `docs/agents/probe-evals.md`.
 
 Method: run the same scenario against the actual deployment targets — an **Opus subagent** (via the Agent
 tool) and **`codex exec --sandbox read-only`** (gpt-5.6-sol) — each given `docs/agents/backlog-policy.md` and
-`.claude/skills/delivery/backlog/reference/issue-loop.md` in context (the routing surfaces a groomer / issue thread
+`skills/delivery/backlog/reference/issue-loop.md` in context (the routing surfaces a groomer / issue thread
 reads). Require the executor to **cite the file and the exact sentence** that decided each answer, and to
 **flag ambiguity as a valid answer**. Grade pass/fail against the key below, which is written before any runs
 and keys on `plans/33-draft-work-type.html` acceptance criteria **ac-7..ac-9** — the plan is the source of
@@ -60,7 +60,7 @@ grooming this issue (it is not yet labelled). Which work-type role do you propos
   equating the two = **fail** (this is the ac-9 conflation check).
 
 - **P5 (reachability):** Work-type **`draft`** — `groom.md` step 2 offers it: **"propose one work-type role —
-  the full set is in `backlog-policy.md` § Label roles → Work-type (bug, enhancement, refactor, draft) …
+  the full set is in `backlog-policy.md` § Label roles → Work-type (bug, enhancement, refactor, research, draft) …
   Propose `draft` for judgment-terminal work whose correctness is taste/fit."** An executor that can only
   reach bug/enhancement/refactor, or proposes `enhancement`, = **fail** (the route is unreachable from
   grooming).
@@ -68,6 +68,47 @@ grooming this issue (it is not yet labelled). Which work-type role do you propos
 Pass bar: **P1–P4 4/4 per executor on both executors** (ac-7 = Claude pass, ac-8 = codex pass, ac-9 = neither
 conflates `draft` with `prototype`), **and P5 proposes `draft` on both executors** (the grooming entry point
 is reachable).
+
+## Research work-type scenario
+
+A backlog issue reads:
+
+> **Establish how Wayfinder works before we decide whether to adopt it.** Inspect its upstream skill source,
+> tracker adapters, and related skills at a pinned commit. Produce a cited dossier that separates direct
+> observations from inferences and unresolved questions. Do not implement or recommend adoption.
+
+The repo's `docs/agents/researching.md` binds durable dossiers to `research/<slug>/`.
+
+**R1 — classification.** Which work-type does grooming propose, and why is this not `draft` or `enhancement`?
+
+**R2 — ownership.** In the issue loop, which skill owns framing, source work, fan-out, reconciliation, dossier,
+and audit? Which lifecycle responsibilities remain with backlog?
+
+**R3 — verification.** Does the product-behavior verify loop run? What gate replaces it, and what condition
+would reveal that the issue was misclassified?
+
+**R4 — evidence boundary.** After review, where does the dossier remain? Should the thread copy the report or
+its citations into `evidence/` because a human reviewed it?
+
+**R5 — substage boundary.** Change the issue to “adopt Wayfinder in this repo, researching its tracker model
+first.” Which work-type owns the issue, and how is research used?
+
+### Research answer key
+
+- **R1:** `research`: the terminal question is what primary sources establish, with traceability and a claim
+  audit. It is not `draft` because taste/voice is not the definition of done, and not `enhancement` because no
+  behavior changes. Cite `backlog-policy.md` and `groom.md`.
+- **R2:** The `research` sibling owns the epistemic work and returns the canonical path, answer, gaps,
+  boundary, and audit. Backlog retains branch, tracker state, commit, PR, review, and closure. Cite issue-loop
+  step 3.
+- **R3:** Product verification does not run; the research claim audit accounts for every material claim and
+  gap. If product behavior also changes, return to grooming because the issue is misclassified. Cite step 4.
+- **R4:** Keep the dossier under `research/<slug>/`. Its citations/audit are intrinsic provenance; do not copy
+  it into `evidence/` merely because it was reviewed. Cite step 7 and the project playbooks.
+- **R5:** `enhancement` owns the behavior change and invokes `research` as a substage before planning/decision.
+  A research subproblem does not replace the issue's terminal work type. Cite the policy boundary note.
+
+Pass bar: R1–R5 5/5 on both executors with citations.
 
 ---
 
@@ -95,7 +136,7 @@ What do you ask the user before scaffolding any playbook, what options do you of
 you propose for this repo? Cite the sentence that decides each part.
 
 **P2 (ac-4/ac-5 — what installs).** Continuing P1, the user confirms `writing`. Exactly which backlog-owned
-templates install into `docs/agents/`, which sibling-owned diagnosis playbook is reconciled separately, and
+templates install into `docs/agents/`, which sibling-owned diagnosis and research playbooks are reconciled separately, and
 what do you flag or report? Where is the chosen domain recorded? Cite the sentences.
 
 **P3 (ac-6 — legacy re-run).** You re-run `backlog setup` on a repo whose `docs/agents/` already holds all
@@ -121,20 +162,22 @@ repo whose recorded work domain is `writing`. Per run's step-1 preflight, which 
   this manuscript's default.)
 - **P2 (ac-4/ac-5):** Install the **four `templates/common/` playbooks** plus — because no `writing` pack
   ships yet — the **six `templates/software/` step playbooks as stand-ins**, each **flagged in its installed
-  header as a code-flavored stand-in to tailor**, and invoke `diagnosing-bugs setup` to reconcile its separate
-  `docs/agents/diagnosing-bugs.md` delta. Name the missing-pack gap and record **`writing`** in the installed
-  `backlog-policy.md` § Work domain. Copying the diagnosis technique from backlog, omitting an owner, or not
+  header as a code-flavored stand-in to tailor**, then invoke `diagnosing-bugs setup` and `research setup` to
+  reconcile their separate `docs/agents/diagnosing-bugs.md` and `docs/agents/researching.md` deltas. Name the
+  missing-pack gap and record **`writing`** in the installed `backlog-policy.md` § Work domain. Copying either
+  sibling method from backlog, omitting an owner, or not
   recording the domain = **fail**.
 - **P3 (ac-6):** **`software`** — an install with no recorded domain reconciles its ten backlog-owned files
-  against `templates/common/` + `templates/software/`; the existing diagnosis playbook is reconciled by its
-  sibling owner. Add the missing § Work domain section recording `software`. Reconciling against another pack,
-  treating the repo as fresh, or absorbing diagnosis back into backlog = **fail**.
+  against `templates/common/` + `templates/software/`; the existing diagnosis playbook and newly required
+  research playbook are reconciled by their sibling owners. Add the missing § Work domain section recording
+  `software`. Reconciling against another pack, treating the repo as fresh, or absorbing a sibling method back
+  into backlog = **fail**.
 - **P4 (ac-4):** The **pack's** file — the install set is `common/` overlaid by `templates/<domain>/`, and a
   same-name pack file **shadows** the common file. Answering common's file, or "conflict/ask the user" =
   **fail**.
 - **P5 (ac-8):** Every playbook in the **resolved scaffold set** must have its `docs/agents/` counterpart:
   common overlaid by the recorded work domain's pack, then same-name software stand-ins for absent required
-  backlog steps. For `writing`, all ten backlog-owned counterparts resolve and diagnosis is sibling-owned.
+  backlog steps. For `writing`, all ten backlog-owned counterparts resolve and diagnosis/research are sibling-owned.
   Citing only a flat `templates/*.md` rule = **fail**.
 
 Pass bar: **P1–P5 5/5 on both executors**, with citations; a flagged genuine ambiguity counts as a pass for
@@ -145,12 +188,12 @@ that probe if the flagged wording is real (and is itself a finding to fix).
 # Backlog — skill-authoring baseline-pack probes (issue #35)
 
 Run the same three situated probes through an in-session executor and an independent read-only CLI executor.
-Give each the categorized backlog references and templates plus the `diagnosing-bugs` setup surface. Require
+Give each the categorized backlog references and templates plus the `diagnosing-bugs` and `research` setup surfaces. Require
 exact citations, preserve both transcripts, and grade against this prewritten key.
 
 **S1 — fresh registration and install.** A fresh repo has `SKILL.md` files below `skills/`, but no app stack
 or test runner. Which domain is proposed, and which project playbooks resolve after confirmation? Separate
-backlog-owned files from the sibling-owned diagnosis playbook and identify every stand-in.
+backlog-owned files from the sibling-owned diagnosis and research playbooks and identify every stand-in.
 
 **S2 — re-run, shadow, and partial resolution.** The recorded domain is `skill-authoring`; both common and
 pack environment templates exist, while `implementing`, `refactoring`, `change-reviewer`, and
@@ -164,10 +207,11 @@ behavioral verification seam?
 
 - **S1:** Offer six domains and propose `skill-authoring`. Backlog resolves ten counterparts: three
   unshadowed common files, native skill-authoring `environment`, `verifying`, and `evidence`, plus four
-  flagged same-name software stand-ins. Invoke `diagnosing-bugs setup` for the eleventh project playbook;
-  it selects its skill-authoring delta. Record the domain and report every stand-in.
+  flagged same-name software stand-ins. Invoke `diagnosing-bugs setup` and `research setup` for the eleventh
+  and twelfth project playbooks; diagnosis selects its skill-authoring delta and research binds the repo's
+  research root/sources. Record the domain and report every stand-in.
 - **S2:** The pack environment shadows common. Preserve the three native pack files, add only the four
-  missing software stand-ins, and keep preflight red until all ten backlog files plus the diagnosis playbook
+  missing software stand-ins, and keep preflight red until all ten backlog files plus the diagnosis and research playbooks
   exist. Silent fallback, replacing pack files, or letting backlog write diagnosis fails.
 - **S3:** Write the answer key first; run the same scenario through an in-session executor and an independent
   read-only CLI executor; require citations; preserve both transcripts; and grade every prewritten criterion
@@ -197,8 +241,8 @@ Does `run` infer them or create an orchestrator child as a safe default?
 
 - **D1:** Before creating either worktree or child, `run` calls `staffing` with work type, surface,
   coordination class/reason, known uncertainty, and required capabilities. `routine` filters to
-  coordinator-eligible reachable models, then uses the normal **pin → capability/taste gates →
-  intelligence > taste > cost** order; cheapest-first and automatic orchestrator both fail. The dispatch
+  coordinator-eligible reachable models, then uses **pin → provider/fallback → eligible executor → taste
+  gate → intelligence > taste > cost**; cheapest-first and automatic orchestrator both fail. The dispatch
   record names the chosen coordinator and session orchestrator as upward successor.
 - **D2:** `orchestrator-required` routes to the session orchestrator, with the next reachable orchestrator
   succession named for route failure. It does not first start a cheaper coordinator and hope it escalates.
@@ -272,3 +316,22 @@ PASS only if setup records standing accounts/tenants and permissions, real scale
 approved synthetic substitute and where it is not valid, collision-safe per-issue fixture names, retention
 through final evidence, named cleanup ownership, and any unmet criterion class as a blocker. Inventing a
 second account or deferring the inventory to verify fails.
+
+---
+
+## Issue #60 — cross-harness wrapper probe
+
+Run with `reference/setup.md` and `templates/common/platform.md`.
+
+**W1.** Backlog setup binds a Claude→Codex route and a Codex→Claude route. For each, what owns the native
+agent-tree node, how is it named and staffed, what work may it do, who verifies the requested effect, and what
+finding remains if the native spawn API cannot select or report the wrapper model?
+
+### Answer key
+
+PASS only if every sibling CLI is nested in a watched native wrapper named with external model/task and
+staffed by the cheapest native model allowed by the current floor. The wrapper only supervises the bounded
+non-interactive process and relays raw output plus lifecycle status; the parent owns prompt, judgment, and
+effect verification. Missing wrapper-model selection/report keeps floor/cost compliance unproven even when
+observability and relay pass. Direct CLI dispatch, wrapper synthesis, or claiming cheapest-model proof from
+exit zero fails.

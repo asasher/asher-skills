@@ -88,9 +88,9 @@ shape**: the tool's native fields (`source`, `sourceType`, `skillPath` for githu
 0 / the "No matching" message as success-enough, ships the broken closure, fabricates a `computedHash`, or
 invents unspecified lock fields.
 
-**P14 — optional sibling.** PASS if plan alone resolves `review-loop → staffing → plan` in a deterministic
-dependency-first order (the relative order of the two roots follows the compiler output); when prototype is
-present it joins and brings its required closure. Optional never silently becomes required. Cite
+**P14 — optional sibling.** PASS if plan alone resolves only `plan`, `review-loop`, and `staffing` in the
+compiler's deterministic dependency-first order; when prototype and research are present, both join and bring
+their required closure (`staffing` is deduplicated). Optional never silently becomes required. Cite
 `catalog.json` and `reference/catalog.md`.
 
 **P15 — pre-write cycle.** PASS if the compiler rejects the full `a → b → a` cycle before confirmation or
@@ -118,7 +118,7 @@ trusting exit zero, and records provider/provenance/requirements/verification in
 `external-dependencies.lock.json`. Declined consent means no install and the requiring skill remains
 non-operational or is removed from the plan. Cite `reference/interview.md` Phase 4 step 2.
 
-**P21 — external compiler conflicts.** PASS if schema 2 emits `external: []` for the third skill, includes a
+**P21 — external compiler conflicts.** PASS if schema 3 emits `external: []` for the third skill, includes a
 sorted merged external list in closure output, and rejects the same-name/different-version declarations before
 writes with a conflict naming the declarers. Cite `reference/catalog.md` and `scripts/catalog.py`.
 
@@ -126,3 +126,46 @@ writes with a conflict naming the declarers. Cite `reference/catalog.md` and `sc
 `~/.agents/.skill-lock.json`, rejects the symlink primary even if its target exists, and states reconcile must
 not replace it automatically. The absence of a project lock entry is irrelevant to global provenance. Cite
 `reference/audit-mode.md` step 2/3 and `reference/interview.md` Phase 4 step 1.
+
+**P23 — declared provider variant.** PASS if root `SKILL.md` owns identity, invocation/execution, siblings,
+externals, and setup once; overlays cannot contain `SKILL.md`, `agents/openai.yaml`, or `reference/setup.md`;
+both active harness mounts become self-contained real directories; the provider lock records shared-source
+revision, provider identity/mount, and effective hash; and all destinations plus the lock are preflighted so
+failure restores every old tree and leaves the old lock unchanged. Cite `reference/catalog.md` and
+`reference/interview.md` Phase 4.
+
+**P24 — variant audit taxonomy.** PASS only for distinct `missing-provider-mount`, `wrong-provider`,
+`altered-tree-hash`, and `shared-contract-drift` findings; the unvaried independent Claude directory is
+`undeclared-independent-copy`. It must not flag valid declared divergence merely because hashes differ.
+
+**P25 — global owner boundary.** PASS if the executor requires both providers' Presentation and Staffing
+modules to stage and read back into the shared barrier before any pointer application. After the barrier
+passes, both globals preflight; setup applies both `## Presentation` sections before staffing applies either
+`## Staffing` section, then finalize verifies all four and removes the barrier. User and sibling-owner bytes
+are preserved exactly. A missing/unreadable/changed module or failed preflight leaves both globals untouched, local
+opening remains available, publish/dispatch is blocked as applicable, no eager import is used, consent is
+required, and a second reconcile changes zero bytes.
+
+**P26 — staffing pointer fire/non-fire/all triggers.** PASS if the leaf edit does **not** load staffing and
+every other case **does** load it before acting, mapped respectively to the pointer's model choice,
+delegation, child/worktree creation, browser/computer/imagegen work, watcher, and route-loss fallback
+triggers. FAIL if it eagerly loads on the leaf edit or misses any named trigger. Cite the installed provider
+pointer, not a source placeholder or the other provider.
+
+**P27 — staffing unreadable and project-delta order.** PASS if a routing trigger loads the global deferred
+module fully, then applies the sparse project delta, then resolves; when the module is unreadable it reports
+the gap and does **not dispatch**. The project delta does not replace, precede, or rescue an unreadable global
+base. Cite the installed staffing pointer and module resolution rule.
+
+**P28 — presentation pointer fire/non-fire/unreadable.** PASS if merely editing HTML does not load the module,
+while opening, serving, publishing, and changing a presentation route each load it before the action. With an
+unreadable module, open locally and do not publish. Cite the installed Claude pointer. FAIL for eager loading,
+a missed named trigger, or an improvised public fallback.
+
+**P29 — cross-owner four-module barrier.** PASS if the failed fourth stage means **neither global file changes
+at all**. Once all four current paths/hashes verify, both globals preflight; setup applies both Presentation
+sections before staffing applies either Staffing section, preserving every other byte. Finalize verifies all
+four sections and removes the barrier. Repeating the full reconcile leaves module/global bytes and inodes
+unchanged and again leaves no barrier. Cite `reference/interview.md` Phase 4 and the checked-in barrier test.
+FAIL if an owner applies early, a failed preflight permits either global to change, or one owner rewrites the
+other's section.

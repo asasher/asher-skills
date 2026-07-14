@@ -18,14 +18,15 @@ drift, that is the wrong mechanism for this skill: read the installed text and t
 (The provider maintains project `skills-lock.json` and global `~/.agents/.skill-lock.json` records for install
 provenance — setup reads their source/scope fields but does not use their hashes as its drift judgment. Declared
 externals have a separate consumer-owned `external-dependencies.lock.json`; setup adds no version stamp to the
-skill payload.)
+skill payload. Declared provider variants additionally use `variant-lock.json` effective-tree hashes to verify
+the installed build product; those hashes prove provider bytes/provenance, not semantic policy freshness.)
 
 ## What the audit does
 
 1. **Fetch the repo's current generated catalog.** Read `skills/system/setup-asher-skills/reference/catalog.json`
    from the public GitHub endpoint (`https://github.com/asasher/asher-skills`) — the source of truth for
-   names, invocation/execution axes, required/optional sibling edges, merged external requirements, and setup
-   branches. If the
+   names, invocation/execution axes, required/optional sibling edges, merged external requirements, setup
+   branches, and declared provider variants. If the
    repo being audited is the source itself (git remote is `asasher/asher-skills`, or a local `skills/` dir
    holds these skills), use the local `skills/` working tree as the catalog instead of the fetched remote, and
    state the branch-vs-origin relationship (for example, "local is ahead of origin"), compile the local
@@ -35,13 +36,16 @@ skill payload.)
    READ path here (which catalog to diff) and the WRITE path in [interview](interview.md) Phase 4 (the install
    guard), so the two cannot diverge.
 2. **Read what's installed and classify every mount.** At project scope read `skills-lock.json`, primary
-   `.agents/skills/` mounts, alias mounts such as `.claude/skills/`, and
-   `external-dependencies.lock.json`. At global scope read `~/.agents/.skill-lock.json` for provenance,
+   `.agents/skills/` mounts, alias mounts such as `.claude/skills/`,
+   `external-dependencies.lock.json`, and `.agents/asher-skills/variant-lock.json`. At global scope read `~/.agents/.skill-lock.json` for provenance,
    primary `~/.agents/skills/` mounts, aliases such as `~/.claude/skills/`, and
    `~/.agents/external-dependencies.lock.json`. Also read the `## Agent skills` block and `docs/agents/`
    playbooks. Run `scripts/install.py inspect` for each installed Asher-authored skill: resolving symlinks is
-   not enough, because it can hide a primary symlink or independent alias directory. One installed package
-   must have a real `.agents/skills/<name>` primary directory and zero or more aliases that are symlinks to it.
+   not enough, because it can hide a primary symlink or independent alias directory. An unvaried package must
+   have a real `.agents/skills/<name>` primary and zero or more aliases that symlink to it. A declared variant
+   instead has one self-contained real directory per confirmed active provider; run
+   `scripts/install.py audit-variant` because comparing those trees to each other misclassifies intentional
+   divergence as drift.
    Do not classify consumer-owned skill instance directories such as `control-plane/` as package mounts or
    drift; their editable scaffold/configuration/state/artifacts survive package reconciliation.
 3. **Compare and report — in prose.** Describe each finding and what to do about it:
@@ -54,6 +58,12 @@ skill payload.)
      installed package, is a regular file, or is an independent directory. Missing/dangling/wrong symlink aliases may be
      reconciled with `scripts/install.py reconcile` after approval. A primary symlink or independent alias
      directory is unsafe and must be refused, not replaced automatically.
+   - **Provider variant** — report separately: `missing-provider-mount`; `wrong-provider` (including a
+     provider symlink where a real tree is declared); `altered-tree-hash`; `undeclared-independent-copy` for
+     a real alias directory on an unvaried skill; and `shared-contract-drift` when provider trees disagree on
+     protected `SKILL.md`, `agents/openai.yaml`, or setup ownership. Also report missing/stale provider-lock
+     provenance. Valid declared divergence with matching source revision, provider identity, effective hash,
+     and mount type passes.
    - **Overlap** — a skill installed both project and global, or listed twice; say which scope should win
      (project-first: keep local, drop the redundant global unless it is `staffing`). Also report
      A `.claude/skills/<name>` alias symlinked to the `.agents/skills/<name>` primary is the expected mount
@@ -77,6 +87,15 @@ skill payload.)
    - **Orphaned map entry** — a `## Agent skills` line for a skill no longer installed; propose removing it.
    - **Missing map** — installed asher-skills are present but there is no `## Agent skills` block; propose
      writing the block, then continue the same one-fix-at-a-time audit discipline.
+   - **Global owner drift** — setup audits only its Presentation pointer/module and leaves Staffing bytes
+     untouched. A missing module blocks publishing but preserves local opening. Pointer migration is proposed
+     through the shared four-module barrier: both providers' Presentation and Staffing modules must be
+     staged/read back before both globals preflight; apply Presentation to both, then Staffing to both, verify
+     all four final sections, and remove the barrier.
+   - **Cross-harness wrapper drift** — a sibling CLI invoked directly, an unbounded or interactive command, a
+     wrapper that synthesizes/judges, a label missing external model/task, or absent wrapper-model evidence.
+     If spawn cannot select or report the assigned native model, observability may pass but cheapest-floor
+     compliance remains unproven; never upgrade that finding from the command's exit status.
 4. **Propose fixes one at a time.** Same discipline as `setup`: present each proposed change with a
    plain-language reason, one decision at a time, and change nothing until the user approves — then apply and
    refresh the `## Agent skills` block.
