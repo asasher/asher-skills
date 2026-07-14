@@ -13,7 +13,9 @@ The body is the index for this change's evidence. In order:
 - **Checks run** — each command and its result (`verifying.md` § Checks: the probe eval, `py_compile`, driven scripts).
 - **CI status** — this repo has no CI (`verifying.md` § CI merge gate), so state that plainly: readiness is the green probe eval + review `LGTM`, not a status check. On a repo with CI, this line names the gate and whether it is green.
 - **Verification** — what stack the criteria were exercised against and the per-criterion outcome, including the verify step's recorded caveats: any criterion verified through a workaround names the gap and the substitute observation, framed as environment gaps vs product issues. Disclosed limitations, never silent claims.
-- **Evidence** — a placeholder: "Captured after review converges." Filled by the evidence step per `evidence.md`.
+- **Evidence** — normally a placeholder: "Captured after review converges." Filled by the evidence step per
+  `evidence.md`. For `research`, use **Research dossier** instead: link the canonical dossier, state its as-of
+  boundary and claim-audit result, and do not imply that a duplicate evidence package is pending.
 
 ## This repo
 

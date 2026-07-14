@@ -25,9 +25,12 @@ Two further lifecycle values appear only where the tracker has no native equival
 - `bug` — diagnose branch. Label: **`bug`** (identity).
 - `enhancement` — plan → implement branch. Label: **`enhancement`** (identity).
 - `refactor` — refactor branch. Label: **`refactor`** (identity).
-- `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a research synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — there is **no mechanical `verify` pass/fail**. The artifact is **kept** (committed and merged): that is the line against `prototype`, which is throwaway — keep the answer, delete the artifact. Label: **`draft`** (identity).
+- `research` — source-audit branch, for **epistemic-terminal** work: the deliverable establishes what primary sources support, what follows by inference, what conflicts, and what remains unknown. Correctness comes from traceability and the `research` skill's claim audit, not taste or implementation behavior. The dossier is kept under `research/<slug>/`; its citations are intrinsic provenance, not an `evidence/` copy. Label: **`research`** (identity).
+- `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a narrative synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — there is **no mechanical `verify` pass/fail**. The artifact is **kept** (committed and merged): that is the line against `prototype`, which is throwaway — keep the answer, delete the artifact. Label: **`draft`** (identity).
 
-> Recognizing `draft`: the deliverable is an artifact judged by taste/fit — a memo, copy, a synthesis, code docs — with no testable spec to run against. When that is the shape, groom to `draft`, not `enhancement`.
+> Recognizing the boundary: if the terminal question is “what do the sources establish?”, groom to `research`.
+> If the sources are inputs to prose judged by voice, persuasion, or fit, groom to `draft`. If behavior must
+> change, retain the applicable bug/enhancement/refactor type and invoke research as a substage.
 
 **Exclusion** — terminal; removed from grooming and from the run queue:
 

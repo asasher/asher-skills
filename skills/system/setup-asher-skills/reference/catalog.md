@@ -53,8 +53,9 @@ The map is a starting point tuned by the project answer, not a fixed bundle.
 
 | Project is for… | Recommend | Why |
 |---|---|---|
-| A shipping product / app repo, ongoing work | `backlog` (pulls its full closure) | The issue→reviewed-PR loop; brings diagnosis, plan, prototype, review-loop, staffing |
-| A one-off feature or decision that needs sign-off | `plan` (requires review-loop + staffing; offer prototype for unresolved design questions) | Reviewed plan with an approval gate, no full backlog machinery |
+| A shipping product / app repo, ongoing work | `backlog` (pulls its full closure) | The issue→reviewed-PR loop; brings diagnosis, research, plan, prototype, review-loop, staffing |
+| A source-backed question or investigation | `research` (requires staffing) | Primary-source dossier with facts/observations, traceable inferences, contradictions, and unknowns |
+| A one-off feature or decision that needs sign-off | `plan` (requires review-loop + staffing; offer prototype/research for unresolved questions) | Reviewed plan with an approval gate, no full backlog machinery |
 | A design/state question that needs to be tried | `prototype` (pulls review-loop + staffing) | Throwaway artifact that settles one question |
 | A greenfield product to pitch/sell | `maquette` (pulls review-loop) | High-fidelity clickable prototype for a demo |
 | Turning a decided conversation into a written spec | `to-spec` (review-loop optional) | Synthesize a spec; feeds `to-tickets` |
@@ -77,7 +78,8 @@ write plan is presented. Closure output includes the sorted, deduplicated `exter
 every active skill.
 
 The current notable edges are visible in `catalog.json`: backlog requires diagnosing-bugs, plan, prototype,
-review-loop, and staffing; plan requires review-loop and staffing and optionally uses prototype; prototype and spreadsheet-loop
+research, review-loop, and staffing; research requires staffing; plan requires review-loop and staffing and
+optionally uses prototype and research; prototype and spreadsheet-loop
 require review-loop and staffing; maquette requires review-loop; review-loop optionally uses staffing for its
 watch; setup-asher-skills requires staffing; to-spec optionally uses review-loop; and to-sprites optionally
 uses codex-imagegen. Document inputs such as to-tickets consuming a spec are not sibling edges.
@@ -95,8 +97,10 @@ inside any working thread. The principal runtime edges are:
 |---|---|---|---|
 | `backlog` | issue coordinator | explicit child dispatch | every ready issue, after `staffing route` |
 | issue coordinator | step worker/reviewer/fixer | explicit child dispatch | branch and gate require it |
-| `backlog` | `plan`, `prototype`, `diagnosing-bugs` | explicit named call | selected issue branch |
+| `backlog` | `plan`, `prototype`, `research`, `diagnosing-bugs` | explicit named call | selected issue branch |
 | `plan`, `prototype` | `review-loop` | explicit named call | artifact needs human sign-off |
+| `research` | `staffing route` | explicit named call | independent source shards or claim challenger |
+| `plan` | `research` | explicit named call | a source-backed fact question blocks a plan decision |
 | composers | `staffing route` | explicit inline named call | role/model must be resolved |
 | any working thread | any installed `model` skill | ambient model invocation | the thread recognizes a matching need |
 

@@ -88,9 +88,9 @@ shape**: the tool's native fields (`source`, `sourceType`, `skillPath` for githu
 0 / the "No matching" message as success-enough, ships the broken closure, fabricates a `computedHash`, or
 invents unspecified lock fields.
 
-**P14 — optional sibling.** PASS if plan alone resolves `review-loop → staffing → plan` in a deterministic
-dependency-first order (the relative order of the two roots follows the compiler output); when prototype is
-present it joins and brings its required closure. Optional never silently becomes required. Cite
+**P14 — optional sibling.** PASS if plan alone resolves only `plan`, `review-loop`, and `staffing` in the
+compiler's deterministic dependency-first order; when prototype and research are present, both join and bring
+their required closure (`staffing` is deduplicated). Optional never silently becomes required. Cite
 `catalog.json` and `reference/catalog.md`.
 
 **P15 — pre-write cycle.** PASS if the compiler rejects the full `a → b → a` cycle before confirmation or

@@ -65,8 +65,8 @@ origin. What do you use as the catalog to diff installed skills against, and why
 the file and sentence."
 
 **P12 — self-host write guard.** "You're invoked with `setup` on the `asasher/asher-skills` repo itself (git
-remote is `asasher/asher-skills`; the closure you're installing — `backlog`, `plan`, `review-loop`,
-`staffing`, `prototype` — has its sources under the repo's categorized `skills/`). You've reached Phase 4 (Write); the
+remote is `asasher/asher-skills`; the closure you're installing — `backlog`, `diagnosing-bugs`, `plan`,
+`prototype`, `research`, `review-loop`, `staffing` — has its sources under the repo's categorized `skills/`). You've reached Phase 4 (Write); the
 user approved the plan. Which install command do you emit for those repo-owned skills, how does each one end
 up loadable by the harness (name the paths that exist afterwards), and what do you still write to the repo?
 Cite the file and sentence."
@@ -76,8 +76,9 @@ Cite the file and sentence."
 is absent afterwards despite exit 0. What do you verify, what do you preserve, and how do you repair only the
 miss? Cite the file and sentence."
 
-**P14 — optional sibling.** "The user selects `plan`; `prototype` is neither selected nor installed. What is
-the closure and setup order? Repeat with `prototype` already installed. Cite the declarations."
+**P14 — optional sibling.** "The user selects `plan`; neither `prototype` nor `research` is selected or
+installed. What is the closure and setup order? Repeat with both optional siblings already installed. Cite the
+declarations."
 
 **P15 — pre-write cycle.** "A local branch accidentally declares required `a → b → a`. When is this found,
 what is reported, and has anything been written?"

@@ -13,7 +13,9 @@ The body is the index for this change's evidence. In order:
 - **Checks run** — each local command (from `verifying.md` § Checks) and its result.
 - **CI status** — the host CI merge-gate (`verifying.md` § CI merge gate) and whether it is green. The PR is a merge candidate only once CI passes; a red or pending gate is disclosed here, not omitted. Where there is no CI, say so.
 - **Verification** — what stack the criteria were exercised against and the per-criterion outcome, including the verify step's recorded caveats: any criterion verified through a workaround names the gap and the substitute observation, framed as environment gaps vs product issues. Disclosed limitations, never silent claims.
-- **Evidence** — a placeholder: "Captured after review converges." Filled by the evidence step per `evidence.md`.
+- **Evidence** — normally a placeholder: "Captured after review converges." Filled by the evidence step per
+  `evidence.md`. For `research`, use **Research dossier** instead: link the canonical dossier, state its as-of
+  boundary and claim-audit result, and do not imply that a duplicate evidence package is pending.
 
 ## This repo
 

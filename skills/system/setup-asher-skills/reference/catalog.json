@@ -12,6 +12,7 @@
         "diagnosing-bugs",
         "plan",
         "prototype",
+        "research",
         "review-loop",
         "staffing"
       ],
@@ -250,7 +251,8 @@
       "internal": false,
       "invocation": "user",
       "optional": [
-        "prototype"
+        "prototype",
+        "research"
       ],
       "requires": [
         "review-loop",
@@ -282,6 +284,20 @@
         "staffing"
       ],
       "source": "skills/delivery/prototype",
+      "variants": {}
+    },
+    "research": {
+      "category": "thinking",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "staffing"
+      ],
+      "setup": "reference/setup.md",
+      "source": "skills/thinking/research",
       "variants": {}
     },
     "review-loop": {

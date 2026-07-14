@@ -7,7 +7,7 @@ disable-model-invocation: true
 metadata:
   invocation: user
   execution: orchestrator
-  requires: [diagnosing-bugs, plan, prototype, review-loop, staffing]
+  requires: [diagnosing-bugs, plan, prototype, research, review-loop, staffing]
   optional: []
   setup: reference/setup.md
 ---
@@ -32,13 +32,14 @@ This file is the command surface; each subcommand loads its own contract from `r
 | `diagnose` | Hand a bug to the `diagnosing-bugs` skill; retain issue lifecycle and downstream verify/evidence | `reference/diagnose.md` + sibling by name | optional `docs/agents/diagnosing-bugs.md` delta + `environment.md` |
 | `plan` | Enhancement: plan or skip; HTML plan, approval gate (backlog keeps the commit-and-implement dev-tail) | the `plan` skill (composed by name) | — |
 | `prototype` | Throwaway code that answers a design question (logic or UI shape) | the `prototype` skill (composed by name) | — |
+| `research` | Establish source-backed facts and inferences; standalone or as the research work-type branch | the `research` skill (composed by name) | `docs/agents/researching.md` |
 | `implement` | Build an approved plan | `reference/implement.md` | `docs/agents/implementing.md` + `environment.md` |
 | `refactor` | Behavior-preserving change locked by tests | `reference/refactor.md` | `docs/agents/refactoring.md` |
 | `verify` | Verdict loop: checks plus pass/fail against acceptance criteria | `reference/verify.md` | `docs/agents/verifying.md` + `environment.md` |
 | `evidence` | Capture and present proof once review converges; fill the PR's evidence block | `reference/evidence.md` | `docs/agents/evidence.md` + `environment.md` + `platform.md` |
 | `adversarial-review` | Reviewer ⇆ fixer subagents on a PR until LGTM or cap | `reference/adversarial-review.md` | `docs/agents/change-reviewer.md`, `docs/agents/change-fixer.md` + `environment.md` |
 
-`docs/agents/environment.md` is the shared playbook (run/isolate/seed/auth + the parallelism verdict `run` reads); references that touch the app read it alongside their step playbook. `docs/agents/platform.md` is the other shared playbook — the platform bindings above. Five capabilities are **composed by plain name**, never imported: `diagnosing-bugs` owns the bug method; `staffing` the roster/roles/fallback; `review-loop` presentation and review; `plan` planning and approval; `prototype` throwaway design questions.
+`docs/agents/environment.md` is the shared playbook (run/isolate/seed/auth + the parallelism verdict `run` reads); references that touch the app read it alongside their step playbook. `docs/agents/platform.md` is the other shared playbook — the platform bindings above. Six capabilities are **composed by plain name**, never imported: `diagnosing-bugs` owns the bug method; `research` source-backed investigation; `staffing` the roster/roles/fallback; `review-loop` presentation and review; `plan` planning and approval; `prototype` throwaway design questions.
 
 ## Dependency surface
 
@@ -46,10 +47,10 @@ Three kinds of dependency, per `AGENTS.md` § Conventions:
 
 1. **Bundled references** — backlog's own dev contract under `reference/` plus the playbook baselines it ships under `templates/`: shared `templates/common/` plus per-domain packs `templates/<domain>/` (`software/` is the shipped default; the domain is chosen at setup). These ship with the skill and are not looked for in the target repo.
 2. **Project playbooks** — `docs/agents/*.md`, installed into the target repo by `setup`. A repo changes how a step works by editing its playbooks, never the skill.
-3. **Sibling skills** — `diagnosing-bugs`, `staffing`, `review-loop`, `plan`, `prototype`, composed by plain name. `setup` ensures they are present; absent a sibling, backlog states the requirement rather than failing silently.
+3. **Sibling skills** — `diagnosing-bugs`, `research`, `staffing`, `review-loop`, `plan`, `prototype`, composed by plain name. `setup` ensures they are present; absent a sibling, backlog states the requirement rather than failing silently.
 
 ## Routing
 
 1. **No argument** → follow `reference/groom.md`, then offer to run the resulting ready-for-agent issues via `reference/run.md`. Show the command table first so the user can redirect.
-2. **First word matches a command** → load that bundled reference and follow it. Everything after the command name is the target (an issue number/URL, PR, branch, or path). A first word of `plan` or `prototype` delegates to that named sibling rather than a bundled reference; invoke `staffing` or `review-loop` directly for their own commands.
+2. **First word matches a command** → load that bundled reference and follow it. Everything after the command name is the target (an issue number/URL, PR, branch, or path). A first word of `plan`, `prototype`, or `research` delegates to that named sibling rather than a bundled reference; invoke `staffing` or `review-loop` directly for their own commands.
 3. **First word does not match** → infer the closest command, state the inferred command, then load its reference and proceed.
