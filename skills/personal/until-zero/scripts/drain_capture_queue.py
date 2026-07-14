@@ -62,7 +62,7 @@ def request_json(url: str, token: str, body: dict[str, Any]) -> dict[str, Any]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, default=Path.cwd())
-    parser.add_argument("--instance", default="control-plane/runway")
+    parser.add_argument("--instance", default="until-zero")
     parser.add_argument("--limit", type=int, default=25)
     parser.add_argument("--lease-seconds", type=int, default=300)
     parser.add_argument("--dry-run", action="store_true")

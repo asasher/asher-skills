@@ -9,7 +9,7 @@ The bundled API is provider-neutral source. The consumer's `deployment.json` ini
    `RUNWAY_PRODUCER_TOKEN` and `RUNWAY_DRAIN_TOKEN`, and bounded `RECEIPT_RETENTION_DAYS` as provider secrets.
    Keep the service at one replica because the file-backed queue's mutex is process-local. Put matching tokens
    in the consumer's ignored mode-0600 `.env` without printing them.
-4. Deploy the materialized `control-plane/runway/api/`, wait for deployment completion, and resolve HTTPS.
+4. Deploy the materialized `until-zero/api/`, wait for deployment completion, and resolve HTTPS.
 5. Verify health reports both auth roles configured; unauthenticated calls fail; producer can append but not
    lease; drain can lease but not append; a lease/ack smoke item is removed exactly once.
 6. Record only provider, URL, project, environment, service, and volume identities in `deployment.json`. After

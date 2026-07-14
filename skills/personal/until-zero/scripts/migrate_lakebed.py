@@ -225,7 +225,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("command", choices=("inspect", "import"))
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--project", type=Path, default=Path.cwd())
-    parser.add_argument("--instance", default="control-plane/runway")
+    parser.add_argument("--instance", default="until-zero")
     parser.add_argument("--owner")
     arguments = parser.parse_args(argv)
     try:

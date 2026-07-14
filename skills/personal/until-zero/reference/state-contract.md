@@ -1,6 +1,6 @@
 # State contract
 
-Canonical state lives under `control-plane/runway/state/`. JSON documents use
+Canonical state lives under `until-zero/state/`. JSON documents use
 `{"schema_version": 1, "items": [...]}`; `approvals.jsonl` and `audit.jsonl` are append-only. All writes use
 the single-writer lock and atomic replacement. Store money as signed integer minor-unit strings and calendar
 dates as `YYYY-MM-DD`. `config.json` is part of the canonical approval hash: base currency, buffer, and horizon

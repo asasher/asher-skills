@@ -3,7 +3,7 @@
 Reconcile a consumer-owned instance. Local materialization is deterministic; provider, external plugin,
 Shortcut, phone, and cutover work remain effect gates.
 
-1. Inspect the consumer root, existing `control-plane/runway/`, private token file, external lock, provider
+1. Inspect the consumer root, existing `until-zero/`, private token file, external lock, provider
    binding, API source, Shortcut artifacts, setup gates, and consumer edits.
 2. Disclose the exact `metadata.external` Shortcuts Playground identity, version policy, capability, file
    access, and optional hook. Obtain explicit consent before project-local installation; record the verified

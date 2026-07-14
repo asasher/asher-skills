@@ -66,7 +66,7 @@ def validate(project: Path, instance_argument: str) -> list[str]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, default=Path.cwd())
-    parser.add_argument("--instance", default="control-plane/runway")
+    parser.add_argument("--instance", default="until-zero")
     arguments = parser.parse_args(argv)
     try:
         findings = validate(arguments.project, arguments.instance)

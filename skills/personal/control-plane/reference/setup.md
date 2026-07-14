@@ -11,7 +11,8 @@ Reconcile the consumer's control-plane bindings; sibling setup owners keep owner
    `until-zero` runway refresh belongs in the morning sequence, and whether any daily, weekly
    opportunity-review, or project-triage cadence should be scheduled. If enabled, invoke `until-zero setup`
    by name and keep all deployment, token, Shortcut, state, and smoke-test ownership in that sibling. Record
-   timezone and consent.
+   its verified standalone instance path, timezone, and consent; pass the instance path explicitly when it is
+   not the sibling's default.
 4. Create `docs/agents/control-plane.md` only when project-specific deltas are needed. On rerun, preserve all
    consumer edits and propose factual corrections rather than replacing the file.
 5. Dry-run [morning-run](morning-run.md) through the phase gates without mutating domain data, then run the

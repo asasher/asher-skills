@@ -30,15 +30,13 @@ and review-before-apply mutations.
   matches, statuses, balances, and candidate rules remain proposed until approval.
 - **`migrate` / `retire`** — read [migration](reference/migration.md). Export and select one owner, prove
   cross-engine parity, dual-run, rehearse rollback, and only then retire Lakebed.
-- **Morning orchestration** — read [control-plane](reference/control-plane.md). This domain skill owns the
-  runway; the `control-plane` sibling owns sequence and the final brief.
 
 Read [state contract](reference/state-contract.md) whenever touching financial state or interpreting model
 semantics. Run `scripts/validate_instance.py` before claiming an instance is healthy.
 
 ## Non-negotiable invariants
 
-1. Treat `control-plane/runway/state/` as canonical; HTML, remote captures, and chat are projections or input.
+1. Treat `until-zero/state/` as canonical; HTML, remote captures, and chat are projections or input.
 2. Keep secrets in the private token file or provider environment. Never print, commit, or copy them into
    proposals, audit rows, reports, deployment metadata, or Shortcut source.
 3. Exclude unmapped captures from every projection. Assignment creates exactly one uncleared transaction.
@@ -69,8 +67,6 @@ run `migrate_lakebed.py inspect` before an explicit-owner `import`; compare old/
 
 - **Bundled:** deterministic Python engine and state operations, setup/validation/migration scripts, Runway
   API template, operating contracts, and evals.
-- **Project:** consumer-owned `control-plane/runway/` instance, private `.env`, reports, and optional
-  `docs/agents/control-plane.md` binding.
-- **Sibling:** optional `control-plane`, invoked by name for morning orchestration; no file import.
+- **Project:** consumer-owned `until-zero/` instance, private `.env`, reports, and generated Shortcut artifacts.
 - **External:** Shortcuts Playground `1.2.x` supplies `build-apple-shortcuts` during setup after explicit
   provenance disclosure and consent. Its files and generated plist do not ship here.

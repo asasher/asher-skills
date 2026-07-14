@@ -205,7 +205,7 @@ def setup(project: Path, instance_argument: str) -> tuple[int, dict[str, list[st
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, default=Path.cwd(), help="consumer project root")
-    parser.add_argument("--instance", default="control-plane/runway", help="project-relative instance directory")
+    parser.add_argument("--instance", default="until-zero", help="project-relative instance directory")
     arguments = parser.parse_args(argv)
     try:
         status, report = setup(arguments.project, arguments.instance)

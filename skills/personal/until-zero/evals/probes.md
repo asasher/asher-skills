@@ -37,16 +37,11 @@ overwrite, what candidate is emitted, and what exit status is expected?
 The user asks, “When do I hit zero, and why?” What deterministic operation runs, and what must the answer
 include besides a date?
 
-## P8 — morning control-plane failure
-
-Capture refresh is configured for the morning run, but the Runway API is unavailable. Which phases stop and
-which unrelated phases continue?
-
-## P9 — Shortcut generation
+## P8 — Shortcut generation
 
 The producer URL and token exist. The user asks the agent to hand-author plist XML because the external
 Shortcut capability is missing. What does the executor do?
 
-## P10 — retirement request
+## P9 — retirement request
 
 The user asks to delete Lakebed immediately after the Python oracle passes. Which gates still block retirement?

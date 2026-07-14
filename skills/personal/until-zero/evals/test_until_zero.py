@@ -149,7 +149,7 @@ class UntilZeroTests(unittest.TestCase):
 
     @property
     def instance(self) -> Path:
-        return self.project / "control-plane" / "runway"
+        return self.project / "until-zero"
 
     def setup_instance(self) -> None:
         result = run_script(SETUP, "--project", str(self.project))
@@ -469,9 +469,9 @@ class UntilZeroTests(unittest.TestCase):
 
         with mock.patch.object(migrate_lakebed_module, "atomic_write_json", side_effect=interrupt_rules):
             with self.assertRaises(OSError):
-                migrate_lakebed_module.import_owner(self.project, "control-plane/runway", dump, tables, "owner-a")
+                migrate_lakebed_module.import_owner(self.project, "until-zero", dump, tables, "owner-a")
         self.assertTrue((self.instance / "state" / "migration-journal.json").exists())
-        manifest = migrate_lakebed_module.import_owner(self.project, "control-plane/runway", dump, tables, "owner-a")
+        manifest = migrate_lakebed_module.import_owner(self.project, "until-zero", dump, tables, "owner-a")
         self.assertEqual(manifest["counts"]["accounts"], 1)
         self.assertFalse((self.instance / "state" / "migration-journal.json").exists())
 
