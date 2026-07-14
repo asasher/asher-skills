@@ -28,6 +28,7 @@ from runway_core import (
     format_minor,
     load_collection,
     load_json,
+    parse_minor,
     parse_iso,
     project,
     sha256_bytes,
@@ -81,7 +82,7 @@ def editable_path(instance: Path, state_dir: Path, name: str) -> Path:
 
 def ensure_no_outstanding_journals(state_dir: Path, *, allow: set[str] | None = None) -> None:
     allowed = allow or set()
-    for name in ("apply-journal.json", "capture-journal.json", "migration-journal.json"):
+    for name in ("apply-journal.json", "capture-journal.json"):
         if name not in allowed and (state_dir / name).exists():
             raise StateError(f"outstanding {name}; complete its documented recovery before any other operation")
 
@@ -369,14 +370,181 @@ def proposal_content_hash(proposal: dict[str, Any]) -> str:
     return sha256_bytes(canonical_bytes(content))
 
 
-def create_proposal(instance: Path, state_dir: Path, changes: dict[str, Any], actor: str) -> dict[str, Any]:
+def validate_proposal_source(proposal: dict[str, Any]) -> None:
+    if "source" not in proposal:
+        return
+    source = proposal["source"]
+    allowed = {"kind", "statement_id", "statement_hash", "account_id", "as_of"}
+    if not isinstance(source, dict) or source.get("kind") != "statement" or set(source) != allowed:
+        raise StateError("proposal source must be exact non-secret statement provenance")
+    if not re.fullmatch(r"[0-9a-f]{64}", str(source.get("statement_hash") or "")):
+        raise StateError("statement source requires a SHA-256 hash")
+
+
+def validate_proposal_semantics(
+    instance: Path,
+    state_dir: Path,
+    proposal: dict[str, Any],
+    base_documents: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, dict[str, Any]]:
+    validate_proposal_source(proposal)
+    operations = proposal.get("operations")
+    if not isinstance(operations, list) or not operations:
+        raise StateError("proposal requires operations")
+    proposal_payload({"operations": operations}, str(proposal.get("actor") or "validation"), proposal.get("before_hashes", {}))
+    changed = sorted({operation["collection"] for operation in operations})
+    bases = copy.deepcopy(base_documents) if base_documents is not None else {
+        name: load_editable_document(instance, state_dir, name) for name in changed
+    }
+    if set(bases) != set(changed):
+        raise StateError("proposal base documents do not match its operations")
+    if document_hashes_after(state_dir, bases) != proposal.get("before_hashes"):
+        raise StateError("canonical state changed after proposal creation; create a fresh proposal")
+    targets = copy.deepcopy(bases)
+    apply_operations(targets, operations)
+    validate_targets(instance, state_dir, targets)
+    preview = proposal.get("preview")
+    if not isinstance(preview, dict) or not isinstance(preview.get("today_iso"), str):
+        raise StateError("proposal requires an exact preview")
+    today = parse_iso(preview["today_iso"]).isoformat()
+    expected = {
+        "today_iso": today,
+        "before": projection_summary(project_targets(instance, state_dir, bases, today)),
+        "after": projection_summary(project_targets(instance, state_dir, targets, today)),
+    }
+    if canonical_bytes(preview) != canonical_bytes(expected):
+        raise StateError("proposal preview does not match its operations")
+    return targets
+
+
+def projection_summary(value: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "opening_balance": value["opening_balance"],
+        "zero_dates": value["zero_dates"],
+        "card_statements": value["card_statements"],
+        "pending_capture_count": value["pending_capture_count"],
+        "warnings": value["warnings"],
+    }
+
+
+def project_targets(instance: Path, state_dir: Path, targets: dict[str, dict[str, Any]], today: str) -> dict[str, Any]:
+    with tempfile.TemporaryDirectory() as temporary_name:
+        root = Path(temporary_name)
+        temporary_state = root / "state"
+        temporary_state.mkdir()
+        for collection in COLLECTIONS:
+            atomic_write_json(temporary_state / f"{collection}.json", targets.get(collection) or load_document(state_dir, collection))
+        config = targets.get("config") or load_json(instance / "config.json")
+        atomic_write_json(root / "config.json", config)
+        return project(temporary_state, config, today)
+
+
+def create_proposal(instance: Path, state_dir: Path, changes: dict[str, Any], actor: str, today: str) -> dict[str, Any]:
     with write_lock(instance):
         ensure_no_outstanding_journals(state_dir)
+        if changes.get("unresolved"):
+            raise StateError("resolve every ambiguous statement row before creating a proposal")
         proposal = proposal_payload(changes, actor, state_hashes(state_dir))
+        changed = sorted({operation["collection"] for operation in proposal["operations"]})
+        targets = {name: load_editable_document(instance, state_dir, name) for name in changed}
+        apply_operations(targets, proposal["operations"])
+        validate_targets(instance, state_dir, targets)
+        proposal["preview"] = {
+            "today_iso": parse_iso(today).isoformat(),
+            "before": projection_summary(project(state_dir, load_json(instance / "config.json"), today)),
+            "after": projection_summary(project_targets(instance, state_dir, targets, today)),
+        }
+        if "source" in changes:
+            proposal["source"] = copy.deepcopy(changes["source"])
+            validate_proposal_source(proposal)
         proposal["content_hash"] = proposal_content_hash(proposal)
         path = instance / "proposals" / f"{proposal['id']}.json"
         atomic_write_json(path, proposal)
-        return {"id": proposal["id"], "content_hash": proposal["content_hash"], "path": str(path)}
+        return {"id": proposal["id"], "content_hash": proposal["content_hash"], "path": str(path), "preview": proposal["preview"]}
+
+
+def statement_changes(instance: Path, state_dir: Path, statement: dict[str, Any], tolerance_days: int) -> dict[str, Any]:
+    if statement.get("schema_version") != 1:
+        raise StateError("statement must be a schema_version 1 object")
+    statement_id = str(statement.get("id") or "")
+    account_id = str(statement.get("account_id") or "")
+    if not re.fullmatch(r"[A-Za-z0-9._:-]+", statement_id):
+        raise StateError("statement id must contain only letters, numbers, dot, underscore, colon, or dash")
+    accounts = load_collection(state_dir, "accounts")
+    account = next((item for item in accounts if str(item.get("id")) == account_id and not item.get("archived")), None)
+    if account is None:
+        raise StateError(f"active account not found: {account_id}")
+    as_of = parse_iso(str(statement.get("as_of") or "")).isoformat()
+    currency = str(statement.get("currency") or account.get("currency") or "").upper()
+    if not re.fullmatch(r"[A-Z]{3}", currency):
+        raise StateError("statement currency must be a three-letter uppercase code")
+    if not 0 <= tolerance_days <= 31:
+        raise StateError("statement tolerance must be from 0 to 31 days")
+    rows = statement.get("rows")
+    if not isinstance(rows, list):
+        raise StateError("statement rows must be an array")
+    transactions = [item for item in load_collection(state_dir, "transactions") if str(item.get("account_id")) == account_id and item.get("status") != "ignored"]
+    operations: list[dict[str, Any]] = []
+    matched: list[dict[str, str]] = []
+    created: list[dict[str, str]] = []
+    unresolved: list[dict[str, Any]] = []
+    used: set[str] = set()
+    row_ids: set[str] = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            raise StateError("statement rows must be objects")
+        row_id = str(row.get("id") or "")
+        if not re.fullmatch(r"[A-Za-z0-9._:-]+", row_id) or row_id in row_ids:
+            raise StateError("statement row ids must be unique safe identifiers")
+        row_ids.add(row_id)
+        row_date = parse_iso(str(row.get("date_iso") or ""))
+        amount = str(parse_minor(row.get("amount_minor")))
+        external_id = str(row.get("external_id") or "")[:160]
+        candidates = []
+        if external_id:
+            candidates = [item for item in transactions if str(item.get("external_id") or "") == external_id and str(item.get("id")) not in used]
+        if not candidates:
+            candidates = [
+                item for item in transactions
+                if str(item.get("id")) not in used
+                and str(parse_minor(item.get("amount_minor"))) == amount
+                and abs((parse_iso(str(item.get("date_iso") or "")) - row_date).days) <= tolerance_days
+            ]
+        if len(candidates) > 1:
+            unresolved.append({"row_id": row_id, "reason": "ambiguous", "candidate_ids": sorted(str(item.get("id")) for item in candidates)})
+            continue
+        if len(candidates) == 1:
+            transaction_id = str(candidates[0]["id"])
+            used.add(transaction_id)
+            update = {"status": "reconciled"}
+            if external_id:
+                update["external_id"] = external_id
+            operations.append({"collection": "transactions", "id": transaction_id, "set": update})
+            matched.append({"row_id": row_id, "transaction_id": transaction_id})
+            continue
+        transaction_id = f"statement:{statement_id}:{row_id}"
+        operations.append({
+            "collection": "transactions", "id": transaction_id, "create": True,
+            "set": {
+                "account_id": account_id, "date_iso": row_date.isoformat(), "amount_minor": amount,
+                "currency": currency, "description": str(row.get("description") or "")[:240],
+                "source": "statement", "status": "reconciled", "external_id": external_id,
+            },
+        })
+        created.append({"row_id": row_id, "transaction_id": transaction_id})
+    if "balance_minor" in statement:
+        operations.append({
+            "collection": "accounts", "id": account_id,
+            "set": {"balance_minor": str(parse_minor(statement["balance_minor"])), "balance_as_of": as_of},
+        })
+    source = {
+        "kind": "statement", "statement_id": statement_id,
+        "statement_hash": sha256_bytes(canonical_bytes(statement)), "account_id": account_id, "as_of": as_of,
+    }
+    return {
+        "note": f"Reconcile statement {statement_id}", "source": source, "operations": operations,
+        "matched": matched, "created": created, "unresolved": unresolved,
+    }
 
 
 def read_proposal(instance: Path, proposal_id: str) -> tuple[Path, dict[str, Any], str]:
@@ -396,6 +564,7 @@ def approve_proposal(instance: Path, state_dir: Path, proposal_id: str, actor: s
     with write_lock(instance):
         ensure_no_outstanding_journals(state_dir)
         path, proposal, file_hash = read_proposal(instance, proposal_id)
+        validate_proposal_semantics(instance, state_dir, proposal)
         approval = {
             "schema_version": 1, "id": str(uuid.uuid4()), "proposal_id": proposal_id,
             "proposal_content_hash": proposal["content_hash"], "proposal_file_hash": file_hash,
@@ -424,6 +593,7 @@ def apply_proposal(instance: Path, state_dir: Path, proposal_id: str, actor: str
     with write_lock(instance):
         ensure_no_outstanding_journals(state_dir)
         path, proposal, file_hash = read_proposal(instance, proposal_id)
+        documents = validate_proposal_semantics(instance, state_dir, proposal)
         approvals = read_jsonl(state_dir / "approvals.jsonl")
         approval = next((item for item in reversed(approvals) if item.get("proposal_id") == proposal_id and item.get("proposal_content_hash") == proposal["content_hash"] and item.get("proposal_file_hash") == file_hash), None)
         if approval is None:
@@ -431,17 +601,15 @@ def apply_proposal(instance: Path, state_dir: Path, proposal_id: str, actor: str
         before = state_hashes(state_dir)
         if any(before.get(name) != digest for name, digest in proposal.get("before_hashes", {}).items()):
             raise StateError("canonical state changed after proposal creation; create a fresh proposal")
-        changed = sorted({operation["collection"] for operation in proposal["operations"]})
-        before_documents = {name: load_editable_document(instance, state_dir, name) for name in changed}
-        documents = copy.deepcopy(before_documents)
-        apply_operations(documents, proposal["operations"])
-        validate_targets(instance, state_dir, documents)
+        before_documents = {name: load_editable_document(instance, state_dir, name) for name in documents}
         expected_after = document_hashes_after(state_dir, documents)
         audit_entry = {
             "schema_version": 1, "id": str(uuid.uuid4()), "timestamp": now_iso(), "actor": actor,
             "action": "apply_proposal", "before_hashes": before, "after_hashes": expected_after,
             "proposal_id": proposal_id, "approval_id": approval["id"],
         }
+        if isinstance(proposal.get("source"), dict):
+            audit_entry["source"] = copy.deepcopy(proposal["source"])
         journal = {
             "schema_version": 1, "proposal_id": proposal_id,
             "before_documents": before_documents,
@@ -481,6 +649,7 @@ def recover_proposal(instance: Path, state_dir: Path, proposal_id: str, actor: s
             if collection != "config" and not isinstance(document.get("items"), list):
                 raise StateError(f"apply journal contains an invalid {collection} document")
         _, proposal, file_hash = read_proposal(instance, proposal_id)
+        validate_proposal_semantics(instance, state_dir, proposal, before_documents)
         approvals = read_jsonl(state_dir / "approvals.jsonl")
         approval = next((item for item in reversed(approvals) if item.get("proposal_id") == proposal_id and item.get("proposal_content_hash") == proposal["content_hash"] and item.get("proposal_file_hash") == file_hash), None)
         if approval is None:
@@ -582,6 +751,14 @@ def main(argv: list[str] | None = None) -> int:
     propose_parser.add_argument("--instance", default="until-zero")
     propose_parser.add_argument("--changes", type=Path, required=True)
     propose_parser.add_argument("--actor", required=True)
+    propose_parser.add_argument("--today", required=True)
+
+    statement_parser = subparsers.add_parser("statement", help="normalize a statement into a reviewable change set")
+    statement_parser.add_argument("--project", type=Path, default=Path.cwd())
+    statement_parser.add_argument("--instance", default="until-zero")
+    statement_parser.add_argument("--statement", type=Path, required=True)
+    statement_parser.add_argument("--output", type=Path, required=True)
+    statement_parser.add_argument("--tolerance-days", type=int, default=3)
 
     approve_parser = subparsers.add_parser("approve", help="approve the exact proposal bytes")
     approve_parser.add_argument("--project", type=Path, default=Path.cwd())
@@ -626,7 +803,16 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(assign_capture(instance, state_dir, arguments.queue_id, arguments.account, arguments.actor), indent=2, sort_keys=True))
             return 0
         if arguments.command == "propose":
-            print(json.dumps(create_proposal(instance, state_dir, load_json(arguments.changes), arguments.actor), indent=2, sort_keys=True))
+            print(json.dumps(create_proposal(instance, state_dir, load_json(arguments.changes), arguments.actor, arguments.today), indent=2, sort_keys=True))
+            return 0
+        if arguments.command == "statement":
+            ensure_no_outstanding_journals(state_dir)
+            changes = statement_changes(instance, state_dir, load_json(arguments.statement), arguments.tolerance_days)
+            atomic_write_json(arguments.output.resolve(), changes)
+            print(json.dumps({
+                "output": str(arguments.output.resolve()),
+                "matched": changes["matched"], "created": changes["created"], "unresolved": changes["unresolved"],
+            }, indent=2, sort_keys=True))
             return 0
         if arguments.command == "approve":
             print(json.dumps(approve_proposal(instance, state_dir, arguments.proposal, arguments.actor), indent=2, sort_keys=True))

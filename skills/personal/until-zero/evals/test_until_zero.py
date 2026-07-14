@@ -17,12 +17,11 @@ from pathlib import Path
 SKILL = Path(__file__).resolve().parents[1]
 SETUP = SKILL / "scripts" / "setup_instance.py"
 CLI = SKILL / "scripts" / "until_zero.py"
-MIGRATE = SKILL / "scripts" / "migrate_lakebed.py"
 DRAIN = SKILL / "scripts" / "drain_capture_queue.py"
+VALIDATE = SKILL / "scripts" / "validate_instance.py"
 API_APP = SKILL / "assets" / "runway-api" / "src" / "app.js"
 sys.path.insert(0, str(SKILL / "scripts"))
 import until_zero as until_zero_module  # noqa: E402
-import migrate_lakebed as migrate_lakebed_module  # noqa: E402
 import drain_capture_queue as drain_capture_queue_module  # noqa: E402
 
 
@@ -167,10 +166,31 @@ class UntilZeroTests(unittest.TestCase):
         self.assertTrue((self.instance / "state" / "approvals.jsonl").is_file())
         self.assertTrue((self.instance / "reports" / "current.html").is_file())
         self.assertEqual(list((self.instance / "shortcut").iterdir()), [])
+        setup = json.loads((self.instance / "setup.json").read_text(encoding="utf-8"))
+        self.assertEqual(setup["gates"]["materialized"]["status"], "complete")
+        self.assertTrue(setup["gates"]["materialized"]["evidence"])
         before = tree_bytes(self.project)
         rerun = run_script(SETUP, "--project", str(self.project))
         self.assertEqual(rerun.returncode, 0, rerun.stderr)
         self.assertEqual(tree_bytes(self.project), before)
+
+    def test_setup_gate_completion_requires_recorded_evidence(self) -> None:
+        self.setup_instance()
+        missing = run_script(SETUP, "--project", str(self.project), "--set-gate", "deployment", "--status", "complete")
+        self.assertEqual(missing.returncode, 2)
+        evidence = self.project / "deployment-evidence.json"
+        write_json(evidence, {"kind": "runway_api_smoke", "observed_at": "2026-07-14T12:00:00Z", "origin": "https://example.test"})
+        updated = run_script(SETUP, "--project", str(self.project), "--set-gate", "deployment", "--status", "complete", "--evidence", str(evidence))
+        self.assertEqual(updated.returncode, 0, updated.stderr)
+        self.assertEqual(json.loads(updated.stdout)["status"], "complete")
+        self.assertEqual(run_script(VALIDATE, "--project", str(self.project)).returncode, 0)
+        setup_path = self.instance / "setup.json"
+        setup = json.loads(setup_path.read_text(encoding="utf-8"))
+        setup["gates"]["shortcut"] = {"status": "complete", "evidence": []}
+        write_json(setup_path, setup)
+        invalid = run_script(VALIDATE, "--project", str(self.project))
+        self.assertEqual(invalid.returncode, 1)
+        self.assertIn("requires evidence", invalid.stdout)
 
     def test_setup_preserves_consumer_api_edits_and_emits_candidate(self) -> None:
         self.setup_instance()
@@ -259,9 +279,13 @@ class UntilZeroTests(unittest.TestCase):
         })
         change = self.project / "change.json"
         write_json(change, {"operations": [{"collection": "events", "id": "rent", "set": {"amount_minor": "-1400000"}}]})
-        proposed = run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test")
+        proposed = run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test", "--today", "2026-06-01")
         self.assertEqual(proposed.returncode, 0, proposed.stderr)
         proposal = json.loads(proposed.stdout)
+        self.assertIsNone(proposal["preview"]["before"]["zero_dates"]["expected"])
+        self.assertEqual(proposal["preview"]["after"]["zero_dates"]["expected"], "2026-06-02")
+        stored = json.loads((self.instance / "proposals" / f"{proposal['id']}.json").read_text(encoding="utf-8"))
+        self.assertEqual(stored["preview"], proposal["preview"])
         denied = run_script(CLI, "apply", "--project", str(self.project), "--proposal", proposal["id"], "--actor", "test")
         self.assertEqual(denied.returncode, 4)
         approved = run_script(CLI, "approve", "--project", str(self.project), "--proposal", proposal["id"], "--actor", "asher")
@@ -276,7 +300,7 @@ class UntilZeroTests(unittest.TestCase):
         self.setup_instance()
         change = self.project / "change.json"
         write_json(change, {"operations": [{"collection": "config", "id": "settings", "set": {"horizon_days": 180}}]})
-        proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test").stdout)
+        proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test", "--today", "2026-07-14").stdout)
         self.assertEqual(run_script(CLI, "approve", "--project", str(self.project), "--proposal", proposal["id"], "--actor", "asher").returncode, 0)
         proposal_path = self.instance / "proposals" / f"{proposal['id']}.json"
         proposal_path.write_text(proposal_path.read_text(encoding="utf-8") + " ", encoding="utf-8")
@@ -284,11 +308,25 @@ class UntilZeroTests(unittest.TestCase):
         self.assertEqual(result.returncode, 4)
         self.assertIn("hash", result.stderr.lower())
 
+    def test_forged_preview_is_rejected_before_approval(self) -> None:
+        self.setup_instance()
+        change = self.project / "change.json"
+        write_json(change, {"operations": [{"collection": "config", "id": "settings", "set": {"horizon_days": 180}}]})
+        proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test", "--today", "2026-07-14").stdout)
+        proposal_path = self.instance / "proposals" / f"{proposal['id']}.json"
+        forged = json.loads(proposal_path.read_text(encoding="utf-8"))
+        forged["preview"]["after"]["warnings"] = ["Nothing changes"]
+        forged["content_hash"] = until_zero_module.proposal_content_hash(forged)
+        write_json(proposal_path, forged)
+        result = run_script(CLI, "approve", "--project", str(self.project), "--proposal", proposal["id"], "--actor", "asher")
+        self.assertEqual(result.returncode, 4)
+        self.assertIn("preview", result.stderr)
+
     def test_config_drift_invalidates_an_approved_proposal(self) -> None:
         self.setup_instance()
         change = self.project / "change.json"
         write_json(change, {"operations": [{"collection": "config", "id": "settings", "set": {"horizon_days": 180}}]})
-        proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test").stdout)
+        proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test", "--today", "2026-07-14").stdout)
         self.assertEqual(run_script(CLI, "approve", "--project", str(self.project), "--proposal", proposal["id"], "--actor", "asher").returncode, 0)
         config = json.loads((self.instance / "config.json").read_text(encoding="utf-8"))
         config["buffer_minor"] = "100"
@@ -301,7 +339,7 @@ class UntilZeroTests(unittest.TestCase):
         self.setup_instance()
         change = self.project / "change.json"
         write_json(change, {"operations": [{"collection": "config", "id": "settings", "set": {"horizon_days": 180}}]})
-        proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test").stdout)
+        proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test", "--today", "2026-07-14").stdout)
         self.assertEqual(run_script(CLI, "approve", "--project", str(self.project), "--proposal", proposal["id"], "--actor", "asher").returncode, 0)
         original = until_zero_module.atomic_write_json
         failed = False
@@ -327,7 +365,7 @@ class UntilZeroTests(unittest.TestCase):
         write_json(self.instance / "state" / "accounts.json", {"schema_version": 1, "items": [{"id": "cash", "name": "Cash", "kind": "cash", "currency": "AED", "balance_minor": "1000", "balance_as_of": "2026-07-14", "archived": False}]})
         change = self.project / "change.json"
         write_json(change, {"operations": [{"collection": "config", "id": "settings", "set": {"horizon_days": 180}}]})
-        proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test").stdout)
+        proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test", "--today", "2026-07-14").stdout)
         self.assertEqual(run_script(CLI, "approve", "--project", str(self.project), "--proposal", proposal["id"], "--actor", "asher").returncode, 0)
         original = until_zero_module.atomic_write_json
         with mock.patch.object(until_zero_module, "atomic_write_json", side_effect=lambda path, value, mode=0o644: (_ for _ in ()).throw(OSError("injected failure")) if path == self.instance / "config.json" else original(path, value, mode)):
@@ -347,7 +385,7 @@ class UntilZeroTests(unittest.TestCase):
         for value in (180, 90):
             change = self.project / f"change-{value}.json"
             write_json(change, {"operations": [{"collection": "config", "id": "settings", "set": {"horizon_days": value}}]})
-            proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test").stdout)
+            proposal = json.loads(run_script(CLI, "propose", "--project", str(self.project), "--changes", str(change), "--actor", "test", "--today", "2026-07-14").stdout)
             self.assertEqual(run_script(CLI, "approve", "--project", str(self.project), "--proposal", proposal["id"], "--actor", "asher").returncode, 0)
             proposals.append(proposal)
         original = until_zero_module.atomic_write_json
@@ -398,32 +436,61 @@ class UntilZeroTests(unittest.TestCase):
         self.assertNotIn("<link rel=", html)
         self.assertIn(hashlib.sha256((self.instance / "state" / "accounts.json").read_bytes()).hexdigest(), html)
 
-    def test_lakebed_inspection_and_import_never_copy_secrets(self) -> None:
+    def test_statement_builds_deterministic_changes_without_mutating_state(self) -> None:
         self.setup_instance()
-        dump = self.project / "lakebed.json"
-        secret = "do-not-copy-this-token"
-        write_json(dump, {"tables": {
-            "accounts": [{"id": "cash", "ownerId": "owner-a", "name": "Cash", "kind": "cash", "currency": "AED", "balanceMinor": "10000", "balanceAsOf": "2026-07-14", "archived": False, "apiToken": "SHOULD_NOT_COPY"}],
-            "rules": [], "events": [], "fxRates": [], "transactions": [], "ingestLog": [],
-            "settings": [{"id": "settings", "ownerId": "owner-a", "baseCurrency": "AED", "bufferMinor": "0", "horizonDays": "365", "ingestToken": secret, "agentToken": secret}],
-        }})
-        inspected = run_script(MIGRATE, "inspect", "--input", str(dump))
-        self.assertEqual(inspected.returncode, 0, inspected.stderr)
-        self.assertNotIn(secret, inspected.stdout)
-        imported = run_script(MIGRATE, "import", "--input", str(dump), "--owner", "owner-a", "--project", str(self.project))
-        self.assertEqual(imported.returncode, 0, imported.stderr)
-        for path in self.instance.rglob("*"):
-            if path.is_file():
-                self.assertNotIn(secret.encode(), path.read_bytes(), str(path))
-        manifest = json.loads((self.instance / "migration" / "lakebed-import.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["secrets"], "excluded")
-        self.assertIn("apiToken", manifest["secret_fields_excluded"])
-        self.assertNotIn(b"SHOULD_NOT_COPY", (self.instance / "state" / "accounts.json").read_bytes())
+        write_json(self.instance / "state" / "accounts.json", {"schema_version": 1, "items": [
+            {"id": "card", "name": "Card", "kind": "credit_card", "currency": "AED", "balance_minor": "0", "archived": False},
+        ]})
+        write_json(self.instance / "state" / "transactions.json", {"schema_version": 1, "items": [
+            {"id": "wallet:known", "account_id": "card", "date_iso": "2026-07-10", "amount_minor": "-2500", "currency": "AED", "description": "Coffee", "status": "uncleared", "source": "wallet", "external_id": "known"},
+            {"id": "wallet:a", "account_id": "card", "date_iso": "2026-07-11", "amount_minor": "-4000", "currency": "AED", "description": "A", "status": "uncleared", "source": "wallet"},
+            {"id": "wallet:b", "account_id": "card", "date_iso": "2026-07-12", "amount_minor": "-4000", "currency": "AED", "description": "B", "status": "uncleared", "source": "wallet"},
+        ]})
+        statement = self.project / "statement.json"
+        changes = self.project / "statement-changes.json"
+        write_json(statement, {
+            "schema_version": 1, "id": "stmt-2026-07", "account_id": "card", "as_of": "2026-07-14",
+            "balance_minor": "-10000", "currency": "AED", "rows": [
+                {"id": "known", "date_iso": "2026-07-10", "amount_minor": "-2500", "description": "Coffee", "external_id": "known"},
+                {"id": "new", "date_iso": "2026-07-13", "amount_minor": "-3500", "description": "Lunch"},
+                {"id": "ambiguous", "date_iso": "2026-07-11", "amount_minor": "-4000", "description": "Unknown"},
+            ],
+        })
+        before = tree_bytes(self.instance / "state")
+        result = run_script(CLI, "statement", "--project", str(self.project), "--statement", str(statement), "--output", str(changes))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        summary = json.loads(result.stdout)
+        self.assertEqual(summary["matched"], [{"row_id": "known", "transaction_id": "wallet:known"}])
+        self.assertEqual(summary["created"], [{"row_id": "new", "transaction_id": "statement:stmt-2026-07:new"}])
+        self.assertEqual(summary["unresolved"][0]["candidate_ids"], ["wallet:a", "wallet:b"])
+        self.assertEqual(tree_bytes(self.instance / "state"), before)
+        blocked = run_script(CLI, "propose", "--project", str(self.project), "--changes", str(changes), "--actor", "test", "--today", "2026-07-14")
+        self.assertEqual(blocked.returncode, 2)
+        self.assertIn("ambiguous", blocked.stderr)
+        resolved_statement = json.loads(statement.read_text(encoding="utf-8"))
+        resolved_statement["rows"] = [row for row in resolved_statement["rows"] if row["id"] != "ambiguous"]
+        write_json(statement, resolved_statement)
+        result = run_script(CLI, "statement", "--project", str(self.project), "--statement", str(statement), "--output", str(changes))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        proposed = run_script(CLI, "propose", "--project", str(self.project), "--changes", str(changes), "--actor", "test", "--today", "2026-07-14")
+        self.assertEqual(proposed.returncode, 0, proposed.stderr)
+        proposal = json.loads(proposed.stdout)
+        stored = json.loads((self.instance / "proposals" / f"{proposal['id']}.json").read_text(encoding="utf-8"))
+        self.assertEqual(stored["source"]["statement_hash"], hashlib.sha256(statement.read_bytes()).hexdigest())
+        self.assertEqual(run_script(CLI, "approve", "--project", str(self.project), "--proposal", proposal["id"], "--actor", "asher").returncode, 0)
+        applied = run_script(CLI, "apply", "--project", str(self.project), "--proposal", proposal["id"], "--actor", "test")
+        self.assertEqual(applied.returncode, 0, applied.stderr)
+        transactions = json.loads((self.instance / "state" / "transactions.json").read_text(encoding="utf-8"))["items"]
+        self.assertEqual(next(item for item in transactions if item["id"] == "wallet:known")["status"], "reconciled")
+        self.assertTrue(any(item["id"] == "statement:stmt-2026-07:new" for item in transactions))
+        self.assertEqual(next(item for item in transactions if item["id"] == "wallet:a")["status"], "uncleared")
+        audit = json.loads((self.instance / "state" / "audit.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+        self.assertEqual(audit["source"], stored["source"])
 
     def test_semantic_validation_rejects_fractional_minor_units_and_broken_dates(self) -> None:
         self.setup_instance()
         write_json(self.instance / "state" / "accounts.json", {"schema_version": 1, "items": [{"id": "cash", "name": "Cash", "kind": "cash", "currency": "AED", "balance_minor": "1.9", "balance_as_of": "2026-99-99"}]})
-        result = run_script(SKILL / "scripts" / "validate_instance.py", "--project", str(self.project))
+        result = run_script(VALIDATE, "--project", str(self.project))
         self.assertEqual(result.returncode, 1)
         self.assertIn("minor-unit", result.stdout)
 
@@ -431,49 +498,9 @@ class UntilZeroTests(unittest.TestCase):
         self.setup_instance()
         write_json(self.instance / "state" / "accounts.json", {"schema_version": 1, "items": [{"id": "cash", "name": "Cash", "kind": "cash", "currency": "AED", "balance_minor": "1000", "balance_as_of": "2026-07-14", "archived": False}]})
         write_json(self.instance / "state" / "rules.json", {"schema_version": 1, "items": [{"id": "rent", "account_id": "cash", "label": "Rent", "amount_minor": "-100", "currency": "AED", "cadence": "monthly", "anchor_date_iso": "2026-07-01", "certainty": "committed", "active": True, "config": {"day_of_month": "abc"}}]})
-        result = run_script(SKILL / "scripts" / "validate_instance.py", "--project", str(self.project))
+        result = run_script(VALIDATE, "--project", str(self.project))
         self.assertEqual(result.returncode, 1)
         self.assertIn("day_of_month", result.stdout)
-
-    def test_invalid_lakebed_owner_is_rejected_before_any_state_write(self) -> None:
-        self.setup_instance()
-        dump = self.project / "lakebed-invalid.json"
-        write_json(dump, {"tables": {
-            "accounts": [{"id": "cash", "ownerId": "owner-a", "name": "Cash"}],
-            "settings": [],
-        }})
-        before = tree_bytes(self.instance / "state")
-        result = run_script(MIGRATE, "import", "--input", str(dump), "--owner", "owner-a", "--project", str(self.project))
-        self.assertEqual(result.returncode, 2)
-        self.assertEqual(tree_bytes(self.instance / "state"), before)
-
-    def test_lakebed_import_recovers_after_a_mid_write_failure(self) -> None:
-        self.setup_instance()
-        dump = self.project / "lakebed-recovery.json"
-        value = {"tables": {
-            "accounts": [{"id": "cash", "ownerId": "owner-a", "name": "Cash", "kind": "cash", "currency": "AED", "balanceMinor": "10000", "balanceAsOf": "2026-07-14", "archived": False}],
-            "rules": [], "events": [], "fxRates": [], "transactions": [],
-            "settings": [{"ownerId": "owner-a", "baseCurrency": "AED", "bufferMinor": "0", "horizonDays": 365}],
-        }}
-        write_json(dump, value)
-        tables = migrate_lakebed_module.tables_from_dump(value)
-        original = migrate_lakebed_module.atomic_write_json
-        failed = False
-
-        def interrupt_rules(path: Path, content: object, mode: int = 0o644) -> None:
-            nonlocal failed
-            if path.name == "rules.json" and not failed:
-                failed = True
-                raise OSError("injected failure")
-            original(path, content, mode)
-
-        with mock.patch.object(migrate_lakebed_module, "atomic_write_json", side_effect=interrupt_rules):
-            with self.assertRaises(OSError):
-                migrate_lakebed_module.import_owner(self.project, "until-zero", dump, tables, "owner-a")
-        self.assertTrue((self.instance / "state" / "migration-journal.json").exists())
-        manifest = migrate_lakebed_module.import_owner(self.project, "until-zero", dump, tables, "owner-a")
-        self.assertEqual(manifest["counts"]["accounts"], 1)
-        self.assertFalse((self.instance / "state" / "migration-journal.json").exists())
 
     def test_refresh_rejects_project_selected_secret_names_before_network_access(self) -> None:
         self.setup_instance()

@@ -53,7 +53,7 @@ describe("Until Zero Runway API", () => {
   it("reports auth readiness without paths or secrets", async () => {
     const response = await fetch(`${baseUrl}/healthz`);
     const body = await response.json();
-    assert.deepEqual(body, { name: "until-zero-runway-api", ok: true, producer_auth_configured: true, drain_auth_configured: true });
+    assert.deepEqual(body, { name: "until-zero-runway-api", ok: true, producer_auth_configured: true, drain_auth_configured: true, auth_roles_separated: true });
     assert.equal(JSON.stringify(body).includes(queueDir), false);
     assert.equal(JSON.stringify(body).includes("producer"), true); // field name only
     assert.equal(JSON.stringify(body).includes('"drain"'), false);
@@ -64,6 +64,21 @@ describe("Until Zero Runway API", () => {
     const badDrain = await fetch(`${baseUrl}/v1/captures/lease`, { method: "POST", headers: { ...auth("producer"), "content-type": "application/json" }, body: JSON.stringify({ worker_id: "x" }) });
     assert.equal(badAppend.status, 401);
     assert.equal(badDrain.status, 401);
+  });
+
+  it("refuses traffic when producer and drain tokens are equal", async () => {
+    await new Promise((resolve) => server.close(resolve));
+    server = createRunwayServer({ queueDir, producerToken: "shared", drainToken: "shared", logger: { error() {} } });
+    await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+    baseUrl = `http://127.0.0.1:${server.address().port}`;
+    const healthResponse = await fetch(`${baseUrl}/healthz`);
+    const health = await healthResponse.json();
+    assert.equal(healthResponse.status, 503);
+    assert.equal(health.ok, false);
+    assert.equal(health.auth_roles_separated, false);
+    const response = await fetch(`${baseUrl}/v1/captures`, { method: "POST", headers: { ...auth("shared"), "content-type": "application/json" }, body: JSON.stringify(envelope()) });
+    assert.equal(response.status, 503);
+    assert.equal((await response.json()).error, "role_tokens_not_separated");
   });
 
   it("rejects unrelated capture shapes", async () => {

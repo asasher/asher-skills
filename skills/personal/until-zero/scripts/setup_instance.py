@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +16,7 @@ from runway_core import atomic_write, atomic_write_json, canonical_bytes, sha256
 
 TEMPLATE_VERSION = "1.0.0"
 SECRET_LINES = ("RUNWAY_PRODUCER_TOKEN=", "RUNWAY_DRAIN_TOKEN=", "RUNWAY_API_ORIGIN=")
+GATES = ("materialized", "external_dependency", "deployment", "shortcut", "live_capture", "statement_reconciliation")
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -179,16 +181,12 @@ def setup(project: Path, instance_argument: str) -> tuple[int, dict[str, list[st
     setup_state = {
         "schema_version": 1,
         "gates": {
-            "materialized": "complete",
-            "owner_export": "pending",
-            "oracle_parity": "pending",
-            "external_dependency": "pending",
-            "deployment": "pending",
-            "shortcut": "pending",
-            "live_capture": "pending",
-            "statement_reconciliation": "pending",
-            "dual_run": "pending",
-            "rollback_rehearsal": "pending",
+            "materialized": {"status": "complete", "evidence": [{"kind": "local_materialization", "template_version": TEMPLATE_VERSION}]},
+            "external_dependency": {"status": "pending", "evidence": []},
+            "deployment": {"status": "pending", "evidence": []},
+            "shortcut": {"status": "pending", "evidence": []},
+            "live_capture": {"status": "pending", "evidence": []},
+            "statement_reconciliation": {"status": "pending", "evidence": []},
         },
     }
     ensure_json(instance / "config.json", config, report)
@@ -202,12 +200,54 @@ def setup(project: Path, instance_argument: str) -> tuple[int, dict[str, list[st
     return (3 if report["conflicts"] else 0), report
 
 
+def update_gate(project: Path, instance_argument: str, gate: str, status: str, evidence_path: Path | None) -> dict[str, Any]:
+    instance, _ = project_relative(project.resolve(), instance_argument)
+    setup_path = instance / "setup.json"
+    setup_state = load_object(setup_path)
+    if not setup_state or setup_state.get("schema_version") != 1 or not isinstance(setup_state.get("gates"), dict):
+        raise ValueError("run setup before updating an effect gate")
+    if gate == "materialized" or gate not in GATES:
+        raise ValueError("materialized is managed by setup; choose an external effect gate")
+    evidence: dict[str, Any] | None = None
+    if evidence_path is not None:
+        evidence = load_object(evidence_path)
+        if not evidence or not str(evidence.get("kind") or "") or not str(evidence.get("observed_at") or ""):
+            raise ValueError("gate evidence must be an object with kind and observed_at")
+        try:
+            datetime.fromisoformat(str(evidence["observed_at"]).replace("Z", "+00:00"))
+        except ValueError as error:
+            raise ValueError("gate evidence observed_at must be an ISO timestamp") from error
+    if status in {"complete", "blocked"} and evidence is None:
+        raise ValueError(f"{status} requires --evidence")
+    record = setup_state["gates"].get(gate)
+    if not isinstance(record, dict) or not isinstance(record.get("evidence"), list):
+        raise ValueError(f"invalid existing gate record: {gate}")
+    record["status"] = status
+    if status == "pending":
+        record["evidence"] = []
+    elif evidence not in record["evidence"]:
+        record["evidence"].append(evidence)
+    atomic_write_json(setup_path, setup_state)
+    return record
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, default=Path.cwd(), help="consumer project root")
     parser.add_argument("--instance", default="until-zero", help="project-relative instance directory")
+    parser.add_argument("--set-gate", choices=GATES[1:])
+    parser.add_argument("--status", choices=("pending", "complete", "blocked"))
+    parser.add_argument("--evidence", type=Path)
     arguments = parser.parse_args(argv)
     try:
+        if arguments.set_gate:
+            if not arguments.status:
+                parser.error("--set-gate requires --status")
+            record = update_gate(arguments.project, arguments.instance, arguments.set_gate, arguments.status, arguments.evidence)
+            print(json.dumps({"gate": arguments.set_gate, **record}, indent=2, sort_keys=True))
+            return 0
+        if arguments.status or arguments.evidence:
+            parser.error("--status and --evidence require --set-gate")
         status, report = setup(arguments.project, arguments.instance)
     except (OSError, ValueError) as error:
         print(f"error: {error}", file=sys.stderr)
@@ -218,7 +258,7 @@ def main(argv: list[str] | None = None) -> int:
     if status:
         print("setup stopped at reconciliation conflicts; consumer files were preserved", file=sys.stderr)
     else:
-        print("until-zero instance materialized; external deployment and live cutover gates remain pending")
+        print("until-zero instance materialized; external dependency, deployment, Shortcut, and live verification gates remain pending")
     return status
 
 

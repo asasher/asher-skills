@@ -445,7 +445,8 @@
       "optional": [],
       "requires": [],
       "setup": "reference/setup.md",
-      "source": "skills/personal/until-zero"
+      "source": "skills/personal/until-zero",
+      "variants": {}
     },
     "watch-video": {
       "category": "creative",

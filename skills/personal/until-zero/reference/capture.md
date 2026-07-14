@@ -24,3 +24,13 @@ The API template is consumer-owned after setup. Its public seam is `/healthz`, `
 `POST /v1/captures/lease`, and per-ID `ack`/`release`. It stores queue files privately and retains bounded
 acknowledgement receipts. Never broaden it into the general Inbox queue or add full financial mutation APIs.
 Run only one API replica unless its mutex and storage are replaced with a multi-process transactional store.
+
+## Assignment
+
+An unmapped capture stays in `pending_captures.json` and affects no projection. Resolve it with:
+
+```bash
+python3 <skill>/scripts/until_zero.py assign --project <root> --queue-id <id> --account <id> --actor <actor>
+```
+
+Completion means one uncleared transaction exists, the pending row is gone, and the audit row names the Queue ID.

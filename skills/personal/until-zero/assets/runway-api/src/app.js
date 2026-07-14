@@ -220,19 +220,26 @@ export function createRunwayServer({
 } = {}) {
   const root = path.resolve(queueDir);
   const withLock = createMutex();
+  const authRolesSeparated = Boolean(producerToken && drainToken && !safeEqual(producerToken, drainToken));
+
+  function requireSeparatedAuth() {
+    if (!authRolesSeparated) throw new HttpError(503, "role_tokens_not_separated");
+  }
 
   async function handle(req, res) {
     const url = new URL(req.url || "/", "http://runway.local");
     if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/healthz")) {
-      sendJson(res, 200, {
+      sendJson(res, authRolesSeparated ? 200 : 503, {
         name: "until-zero-runway-api",
-        ok: true,
+        ok: authRolesSeparated,
         producer_auth_configured: Boolean(producerToken),
         drain_auth_configured: Boolean(drainToken),
+        auth_roles_separated: authRolesSeparated,
       });
       return;
     }
     if (req.method === "POST" && url.pathname === "/v1/captures") {
+      requireSeparatedAuth();
       authorize(req, producerToken, "producer_token_not_configured");
       const envelope = validateEnvelope(await readJson(req));
       const item = await withLock(() => storeCapture(root, envelope));
@@ -240,6 +247,7 @@ export function createRunwayServer({
       return;
     }
     if (req.method === "POST" && url.pathname === "/v1/captures/lease") {
+      requireSeparatedAuth();
       authorize(req, drainToken, "drain_token_not_configured");
       const body = await readJson(req);
       const workerId = text(body.worker_id, 120);
@@ -272,6 +280,7 @@ export function createRunwayServer({
     }
     const match = url.pathname.match(/^\/v1\/captures\/([^/]+)\/(ack|release)$/);
     if (match && req.method === "POST") {
+      requireSeparatedAuth();
       authorize(req, drainToken, "drain_token_not_configured");
       const [, id, action] = match;
       const body = await readJson(req);

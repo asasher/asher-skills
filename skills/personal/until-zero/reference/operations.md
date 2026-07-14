@@ -12,16 +12,6 @@ Answer with expected/pessimistic/optimistic zero dates, opening balance, first m
 statement timing, pending decisions, warnings/assumptions, and the report path. Distinguish “holds through the
 horizon” from an unavailable or invalid projection.
 
-## Capture assignment
-
-An unmapped capture remains in `pending_captures.json` and changes no zero date. Resolve it with:
-
-```bash
-python3 <skill>/scripts/until_zero.py assign --project <root> --queue-id <id> --account <id> --actor <actor>
-```
-
-Verify one uncleared transaction exists, the pending row is gone, and the audit row names the Queue ID.
-
 ## Review-before-apply edits
 
 Translate a requested edit into a change document without touching state:
@@ -35,10 +25,17 @@ Translate a requested edit into a change document without touching state:
 }
 ```
 
-Run `until_zero.py propose`, compute a temporary before/after projection for human review, and show material
-zero-date/card-statement effects. `approve` records the exact proposal content and file hashes. `apply` rejects
-tampering, missing approval, or canonical-state drift; a successful apply writes through a recovery journal
-and appends the audit event.
+Run:
+
+```bash
+python3 <skill>/scripts/until_zero.py propose --project <root> --changes <changes.json> --actor <actor> --today YYYY-MM-DD
+```
+
+The proposal embeds exact before/after opening balance, zero dates, card statements, pending count, and warnings;
+its content hash binds that preview. Show it, then run `until_zero.py approve --project <root> --proposal <id>
+--actor <approver>` only after explicit approval, followed by `until_zero.py apply --project <root> --proposal
+<id> --actor <actor>`. Apply rejects tampering, missing approval, or canonical drift, writes through a recovery
+journal, and appends the audit event.
 
 Never treat conversational assent as approval unless the user has seen the exact proposal and effects. Never
 edit the proposal after approval; create a replacement.
@@ -50,14 +47,23 @@ approval. Complete the already-approved write with:
 python3 <skill>/scripts/until_zero.py recover --project <root> --proposal <id> --actor <actor>
 ```
 
-The advisory writer lock is released automatically if a process exits. Recovery refuses a mismatched journal,
-changed proposal, missing approval, invalid target collection, altered base document, or any target that cannot
-be derived from the exact approved operations; it rewrites every journal target atomically, records a recovery
-audit row, and only then removes the journal.
+Recovery recomputes the approved operations and preview, rewrites every journal target atomically, records its
+audit row, and only then removes the journal; any mismatch leaves the journal in place.
 
 ## Statement reconciliation
 
-Parse a statement into candidate matches by account, signed amount, date tolerance, and external reference.
-Present matched status changes, ignored duplicates, balance snapshot changes, new transactions, and candidate
-rules in one proposal. Keep ambiguous rows unresolved. Apply only after approval; then regenerate the report
-and retain statement/proposal hashes in the audit trail.
+Normalize source material to JSON without editing canonical state:
+
+```json
+{"schema_version":1,"id":"stmt-2026-07","account_id":"card","as_of":"2026-07-14","balance_minor":"-25000","currency":"AED","rows":[{"id":"1","date_iso":"2026-07-10","amount_minor":"-2500","description":"Coffee","external_id":"optional"}]}
+```
+
+```bash
+python3 <skill>/scripts/until_zero.py statement --project <root> --statement <statement.json> --output <changes.json>
+```
+
+The deterministic pass matches an unused transaction by unique external ID, otherwise exact signed amount and
+date within three days. One match proposes `reconciled`; no match proposes a new statement transaction; multiple
+matches remain unresolved. A supplied balance proposes the account snapshot. Resolve every ambiguous row and
+regenerate the change set before the normal propose/approve/apply path. The proposal binds the normalized statement hash; regenerate the report
+after apply. Recurring-rule changes are separate explicit model edits, never inferred from a statement.

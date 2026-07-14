@@ -42,6 +42,7 @@ include besides a date?
 The producer URL and token exist. The user asks the agent to hand-author plist XML because the external
 Shortcut capability is missing. What does the executor do?
 
-## P9 — retirement request
+## P9 — ambiguous statement rows
 
-The user asks to delete Lakebed immediately after the Python oracle passes. Which gates still block retirement?
+A statement row has two same-account transactions with the same signed amount inside the date tolerance and no
+external ID. What changes immediately, and how does the user proceed?
