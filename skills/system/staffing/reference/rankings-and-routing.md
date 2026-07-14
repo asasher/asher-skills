@@ -1,119 +1,85 @@
-# Rankings, capabilities, pins, and the resolution order
+# Rankings, capability providers, pins, and resolution order
 
-Three structures drive routing, and **they are deliberately separate**: a rankings table, a capability
-matrix, and a pin list (task-type and capability pins). Keeping them apart is the whole point — mixing them corrupts the tie-break
-(explained below). The concrete rows come from the machine audit and any project override; this file defines
-what each structure *is* and how a routing question resolves against them.
+Keep three structures separate: a model rankings table, a harness/tool provider registry, and explicit pins.
+Models supply judgment; installed harnesses, skills, plugins, and machine tools supply effects. Never infer a
+provider from a model name or treat installation alone as reachability.
 
-## The rankings table
+## Model rankings
 
-Rankings, **higher = better**, three columns only:
+Rankings are higher-is-better and contain exactly:
 
-- **cost** — reflects what this machine's owner actually pays, not list price.
-- **intelligence** — how hard a problem you can hand the model unsupervised.
-- **taste** — UI/UX, code quality, API design, and copy.
+- **cost** — this machine owner's effective cost;
+- **intelligence** — unsupervised problem difficulty; and
+- **taste** — UI/UX, code/API quality, and copy judgment.
 
-The table contains **only** cost, intelligence, and taste. It never contains a capability boolean. Its rows
-are model names with those three numbers; nothing else belongs here. (The audit fills in *which* models
-appear; the numbers come from a tunable default seed — see [machine-audit](machine-audit.md).)
+No capability boolean belongs in this table. Rows are models the active harness can actually reach, including
+effect-verified sibling-harness workers; bounded CLI workers are not coordinator-eligible merely because they
+are rows.
 
-## The capability matrix — a separate structure
+## Capability-provider registry
 
-Capabilities are **booleans keyed by model**, in their own matrix, never columns in the rankings table:
+Capabilities are named effects routed before model ranking:
 
-| capability     | meaning                                                    |
-|----------------|------------------------------------------------------------|
-| browser-use    | can drive a real browser (navigate, click, read the page)  |
-| computer-use   | can operate a desktop/GUI environment                      |
+| field | meaning |
+|---|---|
+| need | `browser-use`, `computer-use`, `imagegen`, or another required effect |
+| primary provider | the skill/plugin/harness/tool that performs it |
+| fallback | the separately effect-probed successor, or `none` |
+| eligible executor | which reachable harness/model route may operate that provider |
+| route state | effect-verified, intentionally disabled, or unavailable with failure class |
 
-Add capability rows as the environment needs them. A capability is either present or absent for a model; it
-is not "better" or "worse", so it has no place on a higher-is-better axis.
+For example, ChatGPT-in-Chrome and Computer Use are Codex harness/tool providers, not Terra capabilities;
+native Imagegen and the repo `codex-imagegen` skill are separate provider routes. Claude Code may dispatch a
+Codex provider or use a recorded machine fallback, but must not claim the effect as native Claude capability.
 
-**Why they must stay separate:** the rankings tie-break orders models by *degree* (more intelligence beats
-less). A capability is a *kind*, not a degree — a model either drives a browser or it does not. If you fold
-"browser-use" in as a numeric column, you either (a) let a browser-capable-but-dumber model outrank a
-smarter one on an unrelated task, or (b) let raw intelligence override a hard capability requirement and pick
-a model that physically cannot do the job. Either way the `intelligence > taste > cost` ordering stops
-meaning what it says. So capabilities **gate** (filter the candidate set); they never **rank**.
+Provider selection is a hard gate. Select an effect-verified primary, then its recorded fallback if needed;
+only after that form the model candidate set from executors eligible to operate the selected route. A missing
+provider reports a capability gap. Never substitute a different effect or another model.
 
-## Pins — a separate, first-class list
+## Pins
 
-A **pin** binds a task *type* — or a required *capability* — to a specific model, resolved **before** any
-ranking. Pins are an explicit named list, kept distinct from ranking-derived defaults:
+A pin is an explicit routing decision resolved before general ranking:
 
-- **Task-type pins** — e.g. **mechanical / bulk work** (clear-spec implementation, migrations, data
-  analysis, bulk edits) → the pinned bulk model.
-- **Capability pins** — e.g. **browser-use → the pinned browser model**, **computer-use → the pinned
-  computer-use model**. A task requiring a pinned capability routes straight to that model; the capability
-  matrix gates only capabilities that carry **no** pin.
-- (projects add their own pins of either kind as deltas.)
+- a **task pin** binds a task type such as mechanical/bulk work to a worker route;
+- a **provider pin** binds a need to a named provider route and eligible executor.
 
-A pin **short-circuits the ranking**: if the task matches a pin, you return the pinned model and do **not**
-derive a choice from the table. A pin is a routing decision already made; ranking is for tasks no pin
-covers. Do not "double-check" a pinned choice against the rankings — that defeats the pin.
+A matching pin short-circuits the general choice, but it does not manufacture reachability: the named route
+must still be effect-verified. On route loss, follow its recorded provider/model successor and resolve again.
 
 ## Resolution order
 
-Resolve every "which model?" question in this exact order:
+**Issue-coordinator pre-gate.** Before child/worktree creation, the caller supplies groomed work type,
+surface/required effects, coordination class/reason, and known uncertainty. Missing data stops dispatch.
+`orchestrator-required` returns the orchestrator. `routine` starts from the reachable coordinator-eligible
+set and continues below; it never means cheapest-first.
 
-**Issue-coordinator pre-gate.** The caller supplies groomed work type, surface/capabilities, coordination
-class/reason, and known uncertainty before it creates the worktree or child. Missing metadata is a grooming
-gap: stop that dispatch. `orchestrator-required` returns the orchestrator role immediately. `routine` replaces
-the initial candidate set with the roster's coordinator-eligible reachable models, then continues through the
-same resolution order below. It does not introduce a cheaper-first tie-break.
+1. **Matching task/provider pin?** Select it and stop general ranking, subject to effect verification.
+2. **Required effect?** Resolve need → effect-verified primary provider → recorded fallback. If neither works,
+   report a hard capability gap. Filter to reachable executors eligible to operate the selected provider.
+3. **Taste gate?** For user-facing UI, copy, or API design, remove every model below taste 7. This is a hard
+   gate, not a preference.
+4. **Rank survivors** by `intelligence > taste > cost`: intelligence descending, then taste descending, then
+   cheaper cost. Ranking never resurrects a route removed by provider reachability or taste.
+5. **Fallback.** If the selected route becomes unreachable, apply the recorded provider/model successor and
+   rerun the same order. If no model remains reachable, use the current model in a subagent and report the
+   staffing gap; never skip the stage.
 
-1. **Pin?** If the task matches a task-type pin, or requires a capability that carries a capability pin,
-   return the pinned model. **Stop** — skip steps 2–3.
-2. **Gates — filter the candidate set before ranking.** Both gates are **hard constraints**, not
-   preferences: they remove models from contention, they do not merely nudge the tie-break. Apply whichever
-   the task triggers (a task may trigger both, one, or neither):
-   - **Capability gate.** If the task requires a capability that has **no pin** (step 1 already handled
-     pinned ones), filter the candidate models to those the capability matrix marks true for it. A task with
-     no capability requirement keeps all candidates.
-   - **Taste gate.** If the task is **user-facing** (UI, copy, API design), filter the candidates to those
-     with **taste ≥ 7**. This is a floor, not a tie-break: a model below taste 7 is out of contention for
-     user-facing work no matter how high its intelligence. A task that is not user-facing keeps all
-     candidates.
+### Browser example
 
-   The models that survive both applicable gates are the survivor set.
-3. **Rank the survivors** by `intelligence > taste > cost`: highest intelligence wins; ties broken by taste;
-   remaining ties broken by cost (cheaper wins). Cost is a tie-breaker **only**. Ranking never resurrects a
-   model a gate removed — a taste-5 model cannot win user-facing work on intelligence, because the taste gate
-   already dropped it in step 2.
-4. **Fallback ladder.** If the chosen model is unreachable from the current harness, apply the succession
-   line in [roles-and-fallback](roles-and-fallback.md): the next most capable reachable survivor takes the
-   role; if none is reachable, run on the current model in a subagent. A model the harness cannot reach is
-   not a candidate.
+Resolve `browser-use` to its named primary provider. If that provider's effect probe fails, try only its
+recorded fallback. Then form the eligible executor set and rank it. A smarter model that cannot operate either
+provider never enters the survivor set.
 
-### Worked example — a browser-driving task
+### Mechanical example
 
-"Who drives this browser-automation task?" First check pins (step 1): no task-type match — but if the roster
-carries a **capability pin** for `browser-use`, that model wins here and resolution stops. Only when
-`browser-use` has no pin does the capability gate (step 2) decide: filter to models the **capability matrix**
-marks `browser-use: true` — cited by its matrix location — then rank *those survivors only* (step 3) by
-intelligence > taste > cost. The smartest model overall is irrelevant if it is not in the browser-capable
-survivor set — that is exactly the corruption the separation prevents.
+A matching mechanical/bulk task pin selects its recorded worker route at step 1. This is a pin, not a ranking
+derivation.
 
-### Worked example — a bulk mechanical edit
+## Defaults, not quality waivers
 
-"Who does a large mechanical find-and-replace across the codebase?" Step 1 matches the mechanical/bulk pin,
-so return the **pinned** bulk model and stop. The answer is the pin, not a ranking derivation — do not walk
-the table for it.
-
-## How to apply — defaults, not limits
-
-- **These are defaults, not limits.** Standing permission to override: if a cheaper model's output does not
-  meet the bar, rerun the work with a smarter model **without asking**. Judge the output, not the price tag.
-  Escalating costs less than shipping mediocre work.
-- Use cheaper models to gather information and try things first, then move the work up if needed — don't let
-  cost keep work off the right model.
-- **Cost is a tie-breaker only.** When axes conflict for anything that ships: `intelligence > taste > cost`.
-- Anything user-facing (UI, copy, API design) needs **taste ≥ 7** — and this is a **hard gate, not a soft
-  default**: it is enforced in step 2 of the resolution order (the taste gate), which filters out any model
-  below the floor *before* the `intelligence > taste > cost` ranking runs. Unlike cost (a soft default you
-  may escalate past freely), the user-facing taste floor is never overridden by a higher-intelligence model.
+- Cost is the final tie-break only. Escalate to a more capable reachable route without asking when cheaper
+  output misses the bar.
+- Taste ≥ 7 remains a hard gate for user-facing work.
 - Orchestration, design, and hard diagnosis go to the most capable reachable model.
-- Reviews go to a high-taste/high-intelligence model, optionally a second independent model as an extra
-  perspective.
-- Never staff below the floor (see [roles-and-fallback](roles-and-fallback.md)); never use a model the
-  roster names as excluded.
+- Reviews favor high taste/intelligence and may add an independent second model.
+- Never staff below the floor and never attribute a provider's effect to its current model operator.

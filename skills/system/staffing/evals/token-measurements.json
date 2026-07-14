@@ -1,0 +1,12 @@
+{
+  "claude": {
+    "o200k_base_tokens": 65,
+    "tiktoken_version": "0.13.0",
+    "utf8_bytes": 270
+  },
+  "codex": {
+    "o200k_base_tokens": 65,
+    "tiktoken_version": "0.13.0",
+    "utf8_bytes": 269
+  }
+}

@@ -22,12 +22,14 @@ the single project question in (3).
    `~/.claude/skills/`. Also read each scope's `external-dependencies.lock.json` when present and the
    `docs/agents/` playbooks. Use `scripts/install.py inspect` to classify mount shape; resolving paths alone
    can hide an invalid primary symlink or independent alias directory.
-2. **The machine.** Determine the **reachable models** and whether the **Codex CLI** is installed — the
+2. **The machine.** Confirm which harnesses are active; installed directories are evidence, not authority.
+   Determine the **reachable models** and whether sibling harness CLIs are installed — the
    staffing probe. **Do this by invoking the `staffing` skill by name**, not by re-deriving a roster:
    staffing owns the machine audit, the rankings seed, and the consent-gated global write. If `staffing`
    isn't reachable, state that the machine audit needs it rather than inventing a roster. Also check the
-   harness's **global memory file** (`~/.claude/CLAUDE.md` or equivalent) for a `## Conventions` section —
-   phase 4 seeds it when absent.
+   harness's **global memory file** (`~/.claude/CLAUDE.md` or equivalent) for the current
+   `## Presentation` section or setup's legacy seeded `## Conventions` block; phase 4 reconciles that owned
+   policy only after the cross-owner barrier passes.
 3. **The user/project.** Ask **one** question: *what is this project for?* — a shipping web product, a
    research effort, an ops/infra repo, a greenfield pitch, a content project, a library. The answer keys the
    recommendation in [catalog](catalog.md); everything else in this phase is read silently.
@@ -69,6 +71,8 @@ Completion criterion: a resolved set of skills, each with a scope, each sibling 
 Before writing anything, show the user the complete plan and let them edit it:
 
 - the skills to install, with the auto-pulled siblings marked and each skill's scope (project / global);
+- the confirmed active harnesses and, for every declared variant, the real provider mounts and provider-lock
+  records that replace the normal alias only for those harnesses;
 - the deterministic dependency-first install/setup order compiled from the selected roots, including optional
   siblings that are already installed or explicitly selected;
 - every merged external requirement, including the requiring skill, exact source, declared or unpinned
@@ -135,7 +139,16 @@ Execute the approved plan:
    command targets `asasher/asher-skills` and nothing else — see
    [catalog](catalog.md) § Canonical source and declared externals.
 
-   After each batch, verify every named skill with `scripts/install.py inspect`: the primary mount must be a
+   After each batch, compile every selected skill's declared variants for the confirmed active harnesses with
+   `scripts/catalog.py materialize`, then publish all approved provider trees and
+   `.agents/asher-skills/variant-lock.json` in one `scripts/install.py publish-variant` transaction. The lock
+   records the shared source revision and each provider's effective-tree hash. The transaction preflights all
+   destinations and the lock before replacing any tree; an injected or real failure restores every prior
+   mount and leaves the prior lock unchanged. A second identical publication must make zero changes. Skills
+   without `metadata.variants` skip this step and retain the real `.agents` primary plus alias symlinks.
+
+   Then verify every named skill: use `scripts/install.py audit-variant` for declared variants and
+   `scripts/install.py inspect` otherwise. The unvaried primary mount must be a
    real `.agents/skills/<name>` directory, and every expected harness alias must be a symlink to that primary.
    A primary symlink, independent alias directory, regular-file mount, dangling alias, or wrong-target alias
    is not a valid install. Also verify provenance in project `skills-lock.json` or, for global installs,
@@ -187,7 +200,9 @@ Execute the approved plan:
    Staffing preserves an existing global base and writes a missing one only with explicit consent; otherwise
    it reconciles the project delta. Review-loop reconciles only its presentation-surface section. Backlog
    writes its own playbook suite. **setup-asher-skills never reads, copies, or interprets another skill's
-   setup reference.**
+   setup reference.** When both global Presentation and Staffing sections are consented, defer staffing's
+   global module/pointer substep to step 6; the ordinary roster and project-delta setup may complete here,
+   but no global pointer may apply before the cross-owner barrier is ready.
 
    Before each invocation, atomically record the owner and status in
    `.agents/setup-asher-skills/setup-state.json`; after success, record the owned writes. A failure stops every
@@ -208,16 +223,32 @@ Execute the approved plan:
    model obeying and costs a read every session.
 5. **Write the repo pointer.** From `templates/repo-pointer.md`, record that Asher-authored skills come from
    `https://github.com/asasher/asher-skills` and that updates/reconciliation run by re-invoking this skill.
-6. **Seed the global conventions (consent-gated).** If phase 1 found no `## Conventions` section in the
-   harness's global memory file, offer to seed it from `templates/global-conventions.md` — the local-first
-   HTML presentation rule (author locally, open locally or over tailnet; cloud artifacts only on explicit
-   request) and the machine's tailnet up/down commands (fill the placeholder during the interview). Like
-   staffing's global write, this touches home-directory memory: write it **only with explicit consent**, and
-   only the sections not already present. Projects override via their `docs/agents/` playbooks.
+6. **Reconcile global owner policy (consent-gated, barriered).** For each confirmed harness, offer the
+   absolute pointer from `templates/global/presentation-pointer.<provider>.md` and the deferred module from
+   `templates/global/presentation.common.md`. Use `scripts/render-global.py render`/`check` for previews and
+   `begin` to reset one fresh transaction barrier, then `stage` to atomically write/read back both
+   Presentation modules into it. Invoke the public
+   `staffing setup` owner so its two compiled provider renderers stage/read back both Staffing modules into
+   that same barrier. Apply no pointer until the barrier verifies all four current module paths and hashes;
+   any staging failure leaves both global files byte-for-byte untouched. Then run Presentation `preflight`
+   against both global files; either failure stops before any pointer write. After both pass, setup applies
+   `## Presentation` to both files first, staffing applies `## Staffing` to both second, and both preserve
+   user and sibling-owner bytes. Staffing refuses to apply until both Presentation sections match the
+   preflight. Finally setup runs `finalize`, verifies all four final pointer sections, and removes the
+   transaction barrier. Never use an eager import. If a module is
+   unreadable, preserve local opening, block publish/dispatch as its pointer specifies, and do not change a
+   global file. A legacy `## Conventions` block is replaced only when its seeded setup-asher-skills marker is
+   present; an unowned block stops for review. The migration also replaces setup's legacy seeded header with
+   the compact native header. Staging does not rewrite an unchanged module; after finalize, a second full
+   reconcile leaves module/global bytes and inodes unchanged and again leaves no barrier. These
+   home-directory writes require explicit consent; projects may override surface details or roster fields in
+   `docs/agents/`.
 
-Completion criterion: the Asher-authored closure has strict primary/alias mounts and lock provenance; every
+Completion criterion: the Asher-authored closure has the correct shared-primary/alias or provider-specific
+mount shape and lock provenance; every
 consented external is capability-verified and separately locked; each skill's playbooks are present; the
-`## Agent skills` block + pointer are written; and global conventions are seeded or explicitly declined.
+`## Agent skills` block + pointer are written; and global Presentation/Staffing policy is reconciled or
+explicitly declined.
 
 ## What this skill does not do
 

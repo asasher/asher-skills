@@ -83,6 +83,23 @@ capabilities, class/reason, and known uncertainty. The first is `routine`; the s
 `orchestrator-required` for a named product decision. State the candidate set and resolution order for each.
 Does routine mean cheapest reachable model?
 
+**P19 (issue 60).** From each provider package, route one cross-harness worker. Who owns prompt/judgment/effect
+verification, what may the native wrapper do, how is it named/staffed/bounded, and what remains unproven when
+native spawn cannot select or report its model?
+
+**P20 (global modules).** Reconcile an approved global roster while a Presentation section already exists.
+Which canonical templates render the module/pointer, which is written first, what does unreadable-module
+behavior do, and may staffing rewrite Presentation bytes?
+
+**P21 (provider pilot).** Compare staffing's current unified reconcile load with each compiled provider load.
+Does each clear 20%, and does either loaded path contain a conditional branch intended only for the other
+harness? Use the checked-in structural test as evidence.
+
+**P22 (situated pointer).** In one compiled provider package, exercise a non-routing leaf edit and every
+pointer trigger: model choice, delegation, child/worktree creation, browser/computer/imagegen work, watcher,
+and route-loss fallback. When does the module load, when are project deltas applied, and what happens if the
+module is unreadable?
+
 ## Answer key
 
 - **P1 (ac-1):** Frontmatter has `name: staffing`, `user-invocable: true`, and a `description` that reads as
@@ -100,25 +117,22 @@ Does routine mean cheapest reachable model?
   model in a subagent and **report the staffing gap** — never default it to the backend builder, never skip
   the change. Cite `reference/roles-and-fallback.md` (worked example / fallback ladder). Handing it to the
   backend builder or stopping = fail.
-- **P4 (ac-4):** Order is pin → capability gate → rank. Step 1 decides here when the installed roster
-  carries a **capability pin** for `browser-use` (the example roster pins it): the task routes straight to
-  the pinned model and ranking is skipped. Absent such a pin, the **capability matrix** (a separate
-  structure) gates: filter to models marked `browser-use: true`, and the `intelligence > taste > cost`
-  tie-break enters **only after**, ranking the survivor set — not the full roster. Executor must name the
-  pin list, the capability matrix, and the rankings table as **distinct** structures by location
-  (`reference/rankings-and-routing.md`). Ranking first, or treating browser-use as a rankings column, = fail.
+- **P4 (ac-4):** Order is pin → provider/fallback → eligible executor → taste gate → rank. A matching
+  provider pin selects the named effect-verified route. Otherwise the capability-provider registry resolves
+  `browser-use` to its effect-verified primary then recorded fallback; only executors able to operate that
+  route enter the candidate set. `intelligence > taste > cost` ranks those survivors only. Treating browser
+  access as a model boolean or ranking before provider selection = fail.
 - **P5 (ac-5):** The **mechanical/bulk task-type pin** returns the pinned bulk model; resolution **stops at
   step 1** and skips ranking. It is a **pin**, not a ranking derivation — "a pin short-circuits the ranking."
   Cite the Pins section / step 1 of the resolution order in `reference/rankings-and-routing.md`. Deriving the
   answer from the table = fail.
-- **P6 (ac-4):** **Not allowed.** A capability is a *kind*, not a *degree*; folding `browser-use` into the
-  higher-is-better table either lets a browser-capable-but-dumber model outrank a smarter one, or lets
-  intelligence override a hard requirement and pick a model that physically can't do the job — either way the
-  `intelligence > taste > cost` ordering stops meaning what it says. Capabilities **gate**, never **rank**.
-  Cite the "Why they must stay separate" sentence. Saying it's fine = fail.
+- **P6 (ac-4):** **Not allowed.** Browser use is an effect supplied by a named harness/tool provider, not a
+  model trait or ranked degree. Resolve provider reachability first, then form the eligible executor set;
+  putting a boolean on model rows invents access when tooling/session state is absent. Cite the provider
+  registry contract. Saying the model column is authoritative = fail.
 - **P7 (ac-6):** Follow the audit: enumerate **this machine's** reachable models as the rows, seed
   cost/intelligence/taste from the documented default and mark them "tune these", omit the Codex CLI mechanics
-  block (Codex absent), and set capability booleans + pins per what's reachable. You **may not** ship the
+  block (Codex absent), and effect-probe installed tools into a provider registry plus pins. You **may not** ship the
   five-model table as the roster — it is labeled example output, and the roster is compiled from *this*
   machine. Cite `reference/machine-audit.md` (the audit procedure / "compiled from the current machine, never
   shipped fixed"). Reproducing Asher's table as the roster, or inventing reachable models, = fail.
@@ -126,7 +140,7 @@ Does routine mean cheapest reachable model?
   roster** (the file labels it "Example of audit output (illustrative only — NOT the shipped roster)" and
   "audit output for one environment"). Calling it the canonical table = fail.
 - **P9 (ac-7):** The override contains **only the delta** — the raised floor — and nothing else; it must
-  **not** re-copy the rankings table, pins, or capability matrix (those resolve from the base via the
+  **not** re-copy the rankings table, pins, or capability-provider registry (those resolve from the base via the
   resolver). Cite `reference/install-and-reconcile.md` ("carries only deltas … never re-copies the base" /
   the stricter-floor worked example). A full-table copy = fail.
 - **P10 (ac-8):** Branch A — **show the existing global rules to the user and offer to add a project
@@ -145,33 +159,49 @@ Does routine mean cheapest reachable model?
   matches `metadata.invocation: model`: a thread may reach for staffing when it encounters a routing choice,
   independent of whether the caller explicitly named it. Treating execution (`thread`) or global-write
   capability as a reason to disable ambient invocation, or accepting a mismatch, = fail.
-- **P14 (ac-4):** Order is pin → gates → rank. No pin matches (step 1). At the **gates** (step 2) the task is
-  user-facing, so the **taste gate** applies: filter the candidates to **taste ≥ 7**, which **removes the
-  taste-5 model from contention before any ranking**. (No capability gate triggers — no browser/computer
-  requirement.) Only then does step 3 rank the survivors by `intelligence > taste > cost`, so the
+- **P14 (ac-4):** Order is pin → provider/fallback → eligible executor → taste gate → rank. No pin matches
+  (step 1), and no provider gate triggers (step 2; no browser/computer requirement). At the **taste gate**
+  (step 3), the task is user-facing: filter to **taste ≥ 7**, which **removes the taste-5 model before any
+  ranking**. Only then does step 4 rank the survivors by `intelligence > taste > cost`, so the
   **lower-intelligence, taste-≥7 model gets the work**; the taste-5 model's higher intelligence is
-  irrelevant because it was already dropped in step 2 and ranking **never resurrects a gated-out model**.
+  irrelevant because it was already dropped in step 3 and ranking **never resurrects a gated-out model**.
   The taste ≥ 7 floor is a **hard gate, not a soft default** — cite the taste gate in the resolution order
-  (`reference/rankings-and-routing.md`, step 2) and its "ranking never resurrects a model a gate removed"
+  (`reference/rankings-and-routing.md`, step 3) and its "ranking never resurrects a model a gate removed"
   clause. Answering that the taste-5 model wins on intelligence, treating taste ≥ 7 as a mere tie-break or
   soft default, or applying the floor only after ranking = fail.
 - **P15 (setup):** PASS only if `SKILL.md` routes setup to `reference/setup.md`; the executor preserves the
   existing global base, offers or reconciles only a project delta, and requires an explicit request before
   editing the base. Cite `reference/setup.md` and `reference/install-and-reconcile.md`.
-- **P16 (issue 49):** PASS only for a bounded `claude -p` invocation with no `--bare`, closed stdin, timeout,
-  durable return, and effect verification; no vendor-policy or credit monitor is required. Cite
-  `reference/install-and-reconcile.md` § Claude CLI.
+- **P16 (issue 49):** PASS only for a watched native wrapper around bounded `claude -p` with no `--bare`,
+  closed stdin, timeout, and raw durable return; the wrapper reports lifecycle and the parent verifies the
+  effect. No vendor-policy or credit monitor is required. Cite the Codex package's `reference/harness.md` and
+  common `reference/install-and-reconcile.md`.
 - **P17 (issue 49):** PASS only if the failed Codex→Claude direction becomes unavailable, routing is rerun
   over remaining candidates, Claude→Codex remains healthy, and the graph is explicitly asymmetric. Cite
   `reference/roles-and-fallback.md` and `reference/machine-audit.md`.
 - **P18 (issue 48):** PASS only if routine begins with the reachable coordinator-eligible set and applies
-  normal pin → capability/taste gates → `intelligence > taste > cost` → fallback; cost is only the final
+  pin → provider/fallback → eligible executor → taste gate → `intelligence > taste > cost`; cost is the final
   tie-break. `orchestrator-required` returns the orchestrator role at the coordinator pre-gate and records its
   succession. Missing inputs would be a grooming gap. Cite both routing and roles references.
+- **P19 (issue 60):** PASS only if the parent owns prompt, judgment, and effect verification; the wrapper is
+  a watched native child labeled with external model/task, staffed by the cheapest native model allowed by
+  the floor, and limited to bounded process supervision plus raw output/lifecycle relay. If spawn cannot
+  accept or report the wrapper model, observability may pass but floor/cost compliance remains red.
+- **P20 (global modules):** PASS only if compiled `staffing.module.md` has one `{{COMMON}}` marker replaced by
+  `staffing.common.md`, both provider modules enter the shared barrier with both Presentation modules, and no
+  pointer applies before all four read back and hash-match. Both globals then pass Presentation preflight and
+  apply before staffing may write; finalize verifies all four sections and removes the barrier. Unreadable
+  modules or failed preflight leave both globals untouched; staffing preserves Presentation/user bytes. No eager import.
+- **P21 (provider pilot):** PASS only with the checked-in baseline 10,391 bytes and current results at least
+  20% smaller for both providers, plus no opposite-direction path/global-memory branch in the files loaded by
+  reconcile. Cite `evals/test_provider_pilot.py`.
+- **P22 (situated pointer):** PASS only if the leaf edit does not load the module; all named routing,
+  capability, watcher, and fallback triggers load it before acting; readable resolution applies the project
+  delta after the global module; and unreadable module stops dispatch. Cite the compiled provider pointer.
 
 ## Scoring
 
-18 probes × 2 executors (one Claude route + one Codex route). A probe passes only with the **correct action AND
+22 probes × 2 executors (one Claude route + one Codex route). A probe passes only with the **correct action AND
 a correct citation**. Ambiguity flags are recorded as findings, not failures — they are the most valuable
 output and should drive wording fixes before ship. Report a verdict table mapping each probe → its criterion
 → pass/fail per executor. Structural criteria are additionally confirmed by file check: ac-1 (frontmatter +
@@ -194,3 +224,7 @@ grep no cross-skill imports), ac-9 (grep finds no `vNN`/version stamp), ac-10 (Y
 | ac-11     | this file (the eval)  |
 | issue 48  | P18                   |
 | issue 49  | P16, P17              |
+| issue 60  | P19                    |
+| global    | P20                    |
+| variants  | P21                    |
+| pointers  | P22                    |

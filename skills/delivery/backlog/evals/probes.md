@@ -197,8 +197,8 @@ Does `run` infer them or create an orchestrator child as a safe default?
 
 - **D1:** Before creating either worktree or child, `run` calls `staffing` with work type, surface,
   coordination class/reason, known uncertainty, and required capabilities. `routine` filters to
-  coordinator-eligible reachable models, then uses the normal **pin → capability/taste gates →
-  intelligence > taste > cost** order; cheapest-first and automatic orchestrator both fail. The dispatch
+  coordinator-eligible reachable models, then uses **pin → provider/fallback → eligible executor → taste
+  gate → intelligence > taste > cost**; cheapest-first and automatic orchestrator both fail. The dispatch
   record names the chosen coordinator and session orchestrator as upward successor.
 - **D2:** `orchestrator-required` routes to the session orchestrator, with the next reachable orchestrator
   succession named for route failure. It does not first start a cheaper coordinator and hope it escalates.
@@ -272,3 +272,22 @@ PASS only if setup records standing accounts/tenants and permissions, real scale
 approved synthetic substitute and where it is not valid, collision-safe per-issue fixture names, retention
 through final evidence, named cleanup ownership, and any unmet criterion class as a blocker. Inventing a
 second account or deferring the inventory to verify fails.
+
+---
+
+## Issue #60 — cross-harness wrapper probe
+
+Run with `reference/setup.md` and `templates/common/platform.md`.
+
+**W1.** Backlog setup binds a Claude→Codex route and a Codex→Claude route. For each, what owns the native
+agent-tree node, how is it named and staffed, what work may it do, who verifies the requested effect, and what
+finding remains if the native spawn API cannot select or report the wrapper model?
+
+### Answer key
+
+PASS only if every sibling CLI is nested in a watched native wrapper named with external model/task and
+staffed by the cheapest native model allowed by the current floor. The wrapper only supervises the bounded
+non-interactive process and relays raw output plus lifecycle status; the parent owns prompt, judgment, and
+effect verification. Missing wrapper-model selection/report keeps floor/cost compliance unproven even when
+observability and relay pass. Direct CLI dispatch, wrapper synthesis, or claiming cheapest-model proof from
+exit zero fails.

@@ -19,17 +19,18 @@ workflow skill, an ad-hoc session, and any harness — not just one dev loop.
   in each direction, then writes only effect-verified routes. The example table in `machine-audit.md` exists
   only as a *labeled example of audit output*, never as the shipped roster. Cost/intelligence/taste are
   seeded and user-tuned.
-- **Three separate structures.** A rankings table (cost/intelligence/taste, higher = better), a distinct
-  capability matrix (browser-use/computer-use booleans), and a first-class pin list (task-type and
-  capability pins). They stay apart so the `intelligence > taste > cost` tie-break isn't corrupted by mixing
-  a boolean into a ranked axis.
-- **One resolution order.** After any issue-coordination pre-gate: pin → capability/taste gates →
-  `intelligence > taste > cost` → fallback. Routine coordination is never cheapest-first.
-- **Directional sibling harness dispatch.** Effect-verified `codex exec` and bounded `claude -p` routes are
-  tracked independently; a failed direction falls back asymmetrically and no vendor-policy monitor gates it.
+- **Three separate structures.** A rankings table (cost/intelligence/taste), a named harness/tool
+  capability-provider registry, and a pin list. Provider reachability gates the executor set before model
+  ranking, so a model name never invents browser, computer, or image access.
+- **One resolution order.** After any issue-coordination pre-gate: pin → provider/fallback → eligible
+  executor → taste gate → `intelligence > taste > cost`. Routine coordination is never cheapest-first.
+- **Directional sibling harness dispatch.** The active harness's effect-verified sibling route is tracked
+  independently; a failed direction falls back asymmetrically and no vendor-policy monitor gates it.
+  Each external CLI runs inside a cheap, named, watched native relay; provider compilation keeps only the
+  active harness mechanics in the installed tree.
 - **Scope is the human's choice.** Project-only (one project playbook, no global write) or
-  global-with-overrides: a global base (harness-coupled: `~/.claude/CLAUDE.md` or `~/.codex/AGENTS.md`, each
-  filtered to the models that harness can reach) plus sparse project overrides in `docs/agents/` that carry
+  global-with-overrides: a harness-coupled global base filtered to the routes that harness can reach, plus
+  sparse project overrides in `docs/agents/` that carry
   only deltas. A resolver reads base, then applies deltas.
 - **Reconcile by LLM audit, no version stamps** — the shared posture across this repo's operator skills.
 - **Global writes are consent-gated** via a scope-decision flow.
@@ -39,7 +40,11 @@ workflow skill, an ad-hoc session, and any harness — not just one dev loop.
 `SKILL.md` is the command surface (setup / route / reconcile) and points into `reference/`. `setup.md` owns
 the setup branch; the other references hold the reusable audit and routing rules:
 `roles-and-fallback.md`, `rankings-and-routing.md`, `machine-audit.md`, `install-and-reconcile.md`.
+Declared `variants/{codex,claude}` overlays supply one active-harness `reference/harness.md` without
+duplicating the public identity, dependencies, invocation policy, or setup owner.
 `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
+`scripts/render-global.py` renders/checks previews, stages provider modules into the shared four-module
+barrier, and applies only after both preflighted Presentation sections are present.
 
 Self-contained at the file level; composes by name. **Sibling dependency: none — staffing is a root
 primitive** (invoked by siblings, depends on none).

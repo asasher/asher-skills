@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #61 — Harness-specific skills and deferred global context</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#17181c; --muted:#666b76; --line:#dde0e6;
+  --blue:#2856d8; --blue-soft:#edf2ff; --green:#177a4b; --green-soft:#eaf8f0;
+  --amber:#a65b00; --amber-soft:#fff4df; --red:#b42318; --red-soft:#fff0ee; --violet:#6d3fd1;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:#111318; --panel:#191c23; --ink:#eceef3; --muted:#a2a8b5; --line:#303541;
+    --blue:#8aa8ff; --blue-soft:#1d2948; --green:#67d39a; --green-soft:#163428;
+    --amber:#f0b45f; --amber-soft:#3a2a12; --red:#ff8a80; --red-soft:#401f1c; --violet:#b79aff;
+  }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+main { max-width:1040px; margin:0 auto; padding:40px 24px 96px; }
+a { color:var(--blue); }
+header { margin-bottom:28px; }
+h1 { max-width:820px; margin:8px 0; font-size:clamp(28px,4vw,45px); line-height:1.05; letter-spacing:-.035em; }
+h2 { margin:0 0 12px; font-size:13px; text-transform:uppercase; letter-spacing:.11em; color:var(--muted); }
+h3 { margin:0 0 7px; font-size:17px; }
+p { margin:7px 0; }
+.lede { max-width:780px; font-size:18px; color:var(--muted); }
+.chips { display:flex; flex-wrap:wrap; gap:8px; }
+.chip { border:1px solid var(--line); border-radius:999px; padding:4px 10px; font-size:12px; font-weight:650; background:var(--panel); }
+.chip.blue { color:var(--blue); border-color:var(--blue); }
+.chip.amber { color:var(--amber); border-color:var(--amber); }
+section { margin:28px 0; }
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+@media (max-width:760px) { .grid,.grid.three { grid-template-columns:1fr; } }
+.decision { border-left:4px solid var(--blue); }
+.success { border-left:4px solid var(--green); }
+.warning { border-left:4px solid var(--amber); }
+.tag { display:inline-block; padding:2px 7px; border-radius:6px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; }
+.tag.common { color:var(--green); background:var(--green-soft); }
+.tag.codex { color:var(--blue); background:var(--blue-soft); }
+.tag.claude { color:var(--violet); background:color-mix(in srgb,var(--violet) 14%,transparent); }
+.tag.probe { color:var(--amber); background:var(--amber-soft); }
+figure { margin:0; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px; overflow:auto; }
+figcaption { margin:8px 6px 2px; color:var(--muted); font-size:13px; }
+svg { min-width:800px; width:100%; height:auto; }
+svg text { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:var(--ink); }
+svg .muted { fill:var(--muted); }
+svg .box { fill:var(--panel); stroke:var(--line); stroke-width:1.5; }
+svg .common { fill:var(--green-soft); stroke:var(--green); }
+svg .codex { fill:var(--blue-soft); stroke:var(--blue); }
+svg .claude { fill:color-mix(in srgb,var(--violet) 12%,var(--panel)); stroke:var(--violet); }
+svg .arrow { stroke:var(--muted); stroke-width:1.8; fill:none; marker-end:url(#arrow); }
+table { width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+th,td { padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; text-align:left; }
+th { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.06em; }
+tr:last-child td { border-bottom:0; }
+code,pre { font-family:"SFMono-Regular",Consolas,monospace; }
+code { padding:1px 5px; border:1px solid var(--line); border-radius:5px; background:var(--bg); font-size:.9em; }
+pre { margin:9px 0 0; padding:13px; border:1px solid var(--line); border-radius:10px; background:var(--bg); white-space:pre-wrap; overflow-wrap:anywhere; font-size:12.5px; line-height:1.45; }
+ul,ol { margin:8px 0; padding-left:21px; }
+li { margin:5px 0; }
+.criteria { list-style:none; padding:0; counter-reset:criterion; }
+.criteria li { position:relative; margin:8px 0; padding:11px 13px 11px 43px; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
+.criteria li::before { content:"☐"; position:absolute; left:15px; top:10px; color:var(--blue); font-size:18px; }
+.metric { font-size:30px; font-weight:750; letter-spacing:-.03em; }
+.small { color:var(--muted); font-size:13px; }
+.yes { color:var(--green); font-weight:700; }
+.no { color:var(--muted); }
+.route { color:var(--amber); font-weight:700; }
+details { margin:10px 0; border:1px solid var(--line); border-radius:11px; background:var(--panel); padding:10px 13px; }
+summary { cursor:pointer; font-weight:650; }
+.phase { display:grid; grid-template-columns:42px 1fr; gap:12px; align-items:start; }
+.phase-num { width:34px; height:34px; display:grid; place-items:center; border-radius:50%; background:var(--blue-soft); color:var(--blue); font-weight:750; }
+.source-list a { overflow-wrap:anywhere; }
+.markdown-preview { margin:14px 0 4px; padding:20px; border:1px solid var(--line); border-radius:12px; background:var(--bg); }
+.markdown-preview h1 { margin:0 0 18px; font-size:25px; line-height:1.15; letter-spacing:-.02em; }
+.markdown-preview h2 { margin:22px 0 8px; color:var(--ink); font-size:17px; text-transform:none; letter-spacing:0; }
+.markdown-preview p { margin:8px 0; }
+.markdown-preview table { margin:10px 0 14px; font-size:13px; }
+.markdown-preview ul { margin:8px 0; }
+.source-view { margin-top:14px; background:var(--panel); }
+.source-view > summary { color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+<main>
+<header id="plan-header">
+  <div class="chips">
+    <span class="chip blue">Implemented build contract · revision 9</span>
+    <span class="chip"><a href="https://github.com/asasher/asher-skills/issues/61">Issue #61</a></span>
+    <span class="chip amber">Machine reconcile deferred until after merge</span>
+  </div>
+  <h1>Harness-specific skills and deferred global context</h1>
+  <p class="lede">Keep one public contract, compile only the guidance each harness needs, and move cold machine policy behind sharp, fail-safe pointers.</p>
+</header>
+
+<section id="decision-summary">
+  <h2>Decision summary</h2>
+  <div class="grid">
+    <article class="panel decision" id="decision-two-tracks">
+      <h3>Two linked, separately shippable tracks</h3>
+      <p><strong>#61</strong> owns installed skill variants. A companion issue owns global pointer modules and token budgets. They share a design principle, not a migration transaction.</p>
+    </article>
+    <article class="panel decision" id="decision-default-symlink">
+      <h3>Symlink remains the default</h3>
+      <p>Unvaried skills keep one real <code>.agents</code> package plus the Claude symlink. Only a declared variant earns two real harness trees.</p>
+    </article>
+    <article class="panel decision" id="decision-pointer-kernel">
+      <h3>Hot kernel, cold modules</h3>
+      <p>Global files keep exact triggers and safe failure behavior. Harness-specific policy lives in owner-written modules loaded only when a trigger fires.</p>
+    </article>
+    <article class="panel decision" id="decision-route-capability">
+      <h3>Harness capabilities route before models</h3>
+      <p><code>browser-use</code>, <code>computer-use</code>, and <code>imagegen</code> belong to installed harness/tool providers. Choose a working provider route first; rank only models eligible to operate it.</p>
+    </article>
+    <article class="panel decision" id="decision-directional-roster">
+      <h3>Reachability is directional, not native-only</h3>
+      <p>Codex can hand bounded worker tasks to effect-verified Claude Code routes. Its effective roster therefore includes verified Claude models, with probed CLI aliases and native-wrapper mechanics.</p>
+    </article>
+    <article class="panel decision" id="decision-thin-wrapper">
+      <h3>External work stays visible in the native tree</h3>
+      <p>Every cross-harness CLI dispatch travels through a named, watched native relay staffed by the cheapest native model allowed by the floor. The parent owns judgment, the external harness owns the task, and the wrapper owns lifecycle and verbatim relay only.</p>
+    </article>
+  </div>
+</section>
+
+<section id="architecture">
+  <h2>The shape</h2>
+  <figure id="architecture-diagram">
+    <svg viewBox="0 0 960 430" role="img" aria-labelledby="diagram-title diagram-desc">
+      <title id="diagram-title">Common source compiled into harness-specific global modules and skill packages</title>
+      <desc id="diagram-desc">Setup Asher Skills owns conventions, Staffing owns roster policy, and each harness receives a compact pointer plus a compiled module. Skills default to a shared symlinked package and opt into real provider variants.</desc>
+      <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/></marker></defs>
+
+      <text x="25" y="28" class="muted" font-size="12" font-weight="700">CANONICAL OWNERS</text>
+      <rect class="box common" x="25" y="48" rx="10" width="235" height="82"/>
+      <text x="45" y="77" font-size="15" font-weight="700">setup-asher-skills</text>
+      <text x="45" y="100" class="muted" font-size="12">common presentation rules</text>
+      <text x="45" y="119" class="muted" font-size="12">install / audit orchestration</text>
+
+      <rect class="box common" x="25" y="148" rx="10" width="235" height="82"/>
+      <text x="45" y="177" font-size="15" font-weight="700">staffing</text>
+      <text x="45" y="200" class="muted" font-size="12">provider registry + ranking</text>
+      <text x="45" y="219" class="muted" font-size="12">global roster reconciliation</text>
+
+      <rect class="box common" x="25" y="248" rx="10" width="235" height="82"/>
+      <text x="45" y="277" font-size="15" font-weight="700">skill source</text>
+      <text x="45" y="300" class="muted" font-size="12">one identity + dependency graph</text>
+      <text x="45" y="319" class="muted" font-size="12">common core + declared overlays</text>
+
+      <text x="365" y="28" class="muted" font-size="12" font-weight="700">DETERMINISTIC COMPILE / INSTALL</text>
+      <rect class="box" x="350" y="84" rx="14" width="245" height="206"/>
+      <text x="375" y="116" font-size="16" font-weight="700">setup + owner compilers</text>
+      <text x="375" y="147" class="muted" font-size="12">common source + harness overlay</text>
+      <text x="375" y="176" class="muted" font-size="12">active harness selection</text>
+      <text x="375" y="205" class="muted" font-size="12">effect verification</text>
+      <text x="375" y="234" class="muted" font-size="12">provider-specific provenance</text>
+      <text x="375" y="263" class="muted" font-size="12">atomic, idempotent migration</text>
+
+      <path class="arrow" d="M260 89 H350"/><path class="arrow" d="M260 189 H350"/><path class="arrow" d="M260 289 H350"/>
+
+      <text x="680" y="28" class="muted" font-size="12" font-weight="700">EFFECTIVE OUTPUTS</text>
+      <rect class="box codex" x="675" y="48" rx="10" width="255" height="100"/>
+      <text x="695" y="76" font-size="15" font-weight="700">Codex</text>
+      <text x="695" y="99" class="muted" font-size="12">tiny AGENTS.md pointers</text>
+      <text x="695" y="118" class="muted" font-size="12">codex-only deferred modules</text>
+      <text x="695" y="137" class="muted" font-size="12">shared or Codex variant mount</text>
+
+      <rect class="box claude" x="675" y="169" rx="10" width="255" height="100"/>
+      <text x="695" y="197" font-size="15" font-weight="700">Claude</text>
+      <text x="695" y="220" class="muted" font-size="12">tiny CLAUDE.md pointers (no @)</text>
+      <text x="695" y="239" class="muted" font-size="12">Claude-only deferred modules</text>
+      <text x="695" y="258" class="muted" font-size="12">symlink or Claude variant mount</text>
+
+      <rect class="box" x="675" y="290" rx="10" width="255" height="92"/>
+      <text x="695" y="318" font-size="15" font-weight="700">Audit + locks</text>
+      <text x="695" y="341" class="muted" font-size="12">shared contract once</text>
+      <text x="695" y="360" class="muted" font-size="12">effective tree hash per provider</text>
+
+      <path class="arrow" d="M595 132 H675"/><path class="arrow" d="M595 219 H675"/><path class="arrow" d="M595 269 C630 269 630 336 675 336"/>
+      <text x="25" y="407" class="muted" font-size="12">Source sharing prevents drift. Compiled outputs prevent irrelevant runtime branches. Deferred loading creates the token saving.</text>
+    </svg>
+    <figcaption>Source factoring and load factoring are independent: common source improves maintenance; on-demand modules reduce context.</figcaption>
+  </figure>
+</section>
+
+<section id="before-after">
+  <h2>Before → after</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Today</th><th>Planned</th></tr></thead>
+    <tbody>
+      <tr id="ba-global-context"><td>Always-loaded global context</td><td>Codex 1,059; Claude ≈1,210 tokens</td><td>≤140 Asher-owned tokens per harness; modules reported separately</td></tr>
+      <tr id="ba-global-source"><td>Global policy</td><td>Fully inline in two harness memory files</td><td>Sharp pointer kernels + self-contained harness modules</td></tr>
+      <tr id="ba-skill-mount"><td>Skill mount</td><td>Real <code>.agents</code> primary + Claude symlink</td><td>Same default; two real trees only for declared variants</td></tr>
+      <tr id="ba-branching"><td>Harness branching</td><td>Conditional prose inside shared payloads</td><td>Common authoring core + compiled harness overlay</td></tr>
+      <tr id="ba-capabilities"><td>Capability inventory</td><td>Model-keyed booleans blur model and tooling</td><td>Harness/tool provider registry with primary and fallback routes</td></tr>
+      <tr id="ba-codex-roster"><td>Codex-effective roster</td><td>Two native Codex rows; working Claude direction hidden</td><td>Native Codex rows + verified Claude worker rows; directional route state recorded</td></tr>
+      <tr id="ba-cross-harness"><td>Cross-harness dispatch</td><td>External CLI work can disappear behind a direct shell call</td><td>Named native wrapper → bounded external CLI → raw result, all watched in the originating harness</td></tr>
+      <tr id="ba-provenance"><td>Provenance</td><td>One package hash</td><td>Shared source identity + effective hash per declared provider tree</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="token-budget">
+  <h2>Context budget</h2>
+  <div class="grid three">
+    <article class="panel success" id="metric-pointer"><div class="metric">≤65</div><p>o200k-equivalent tokens per pointer stanza.</p></article>
+    <article class="panel success" id="metric-global"><div class="metric">≤140</div><p>Asher-owned always-loaded global tokens per harness.</p></article>
+    <article class="panel success" id="metric-variant"><div class="metric">21%+</div><p><code>staffing</code> pilot: Codex 21.9%, Claude 22.2% below the 10,391-byte unified baseline.</p></article>
+  </div>
+  <p class="small">Today’s measured inline totals are retained as the baseline. Character ceilings provide stdlib-only CI enforcement; tokenizer measurements are recorded as review evidence.</p>
+</section>
+
+<section id="issue-map">
+  <h2>Issue map</h2>
+  <div class="grid">
+    <article class="panel" id="issue-61-track">
+      <h3><a href="https://github.com/asasher/asher-skills/issues/61">#61 · Skill-package variants</a></h3>
+      <p>Catalog schema, deterministic overlays, real provider trees, provider locks, audit semantics, pilot skill, and variant evals.</p>
+    </article>
+    <article class="panel" id="issue-global-track">
+      <h3><a href="https://github.com/asasher/asher-skills/issues/62">#62 · Deferred global context</a></h3>
+      <p>Owner-written modules, sharp triggers, token budgets, pointer probes, current-machine migration, and the harness capability-provider registry.</p>
+    </article>
+    <article class="panel" id="issue-60-track">
+      <h3><a href="https://github.com/asasher/asher-skills/issues/60">#60 · Thin native wrappers</a></h3>
+      <p>Symmetric native observability for every cross-harness CLI handoff: explicit external model/task label, cheapest floor-valid native relay, bounded process lifecycle, and no wrapper synthesis.</p>
+    </article>
+  </div>
+  <p class="small">Related: <a href="https://github.com/asasher/asher-skills/issues/45">#45 knowledge surfaces</a> · <a href="https://github.com/asasher/asher-skills/issues/59">#59 route reconciliation</a>. Issue #62 was created at implementation start; live machine reconciliation remains post-merge.</p>
+</section>
+
+<section id="wrapper-smoke-test">
+  <h2>Thin-wrapper smoke tests · both directions</h2>
+  <p>The prototype question was narrow: can a native harness keep an external worker visibly nested under a watched child while the child remains a relay rather than a second reasoner? Each direction is exercised from the harness that owns the dispatch — Codex→Claude ran from Codex; Claude→Codex ran from this Claude Code session against the real <code>codex exec</code> CLI.</p>
+
+  <h3>Codex → Claude (<code>claude -p</code>, run from Codex)</h3>
+  <table>
+    <thead><tr><th>Assertion</th><th>Result</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr id="smoke-native-visible"><td>Native child is visible and task-labeled</td><td class="yes"><strong>Pass</strong></td><td><code>external_claude_sonnet_wrapper_smoke</code> appeared as a watched Codex child.</td></tr>
+      <tr id="smoke-bounded-route"><td>External route is bounded and non-interactive</td><td class="yes"><strong>Pass</strong></td><td><code>claude -p --model sonnet</code>, 120 s timeout, stdin closed, no <code>--bare</code>; exit 0, no timeout, empty stderr.</td></tr>
+      <tr id="smoke-raw-relay"><td>Wrapper returns the external result without synthesis</td><td class="yes"><strong>Pass</strong></td><td>Exact four-line marker returned; wrapper reported command lifecycle separately.</td></tr>
+      <tr id="smoke-wrapper-model"><td>Cheapest floor-valid native wrapper model is selected and proven</td><td class="no"><strong>Unproven</strong></td><td>The Codex spawn interface used by this run exposed neither a wrapper-model selector nor the child’s assigned model. The wrapper behavior passed; its floor/cost selection could not be asserted.</td></tr>
+    </tbody>
+  </table>
+  <pre id="smoke-stdout">WRAPPER_SMOKE_OK
+external_harness=claude-code
+model_alias=sonnet
+task=relay-observability</pre>
+  <h3>Claude → Codex (<code>codex exec</code>, run from Claude Code)</h3>
+  <p>Direction added in revision 7. Staffing forbids <code>claude -p</code> from the Claude side, so the wrapper here is a native Agent subagent, pinned to the Claude-side floor model, running bounded <code>codex exec</code>. Two consecutive runs were byte-identical (exit 0, ~9 s each).</p>
+  <table>
+    <thead><tr><th>Assertion</th><th>Result</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr id="smoke-c2c-native-visible"><td>Native child is visible and task-labeled</td><td class="yes"><strong>Pass</strong></td><td><code>gpt-5.6-sol:wrapper-smoke</code> ran as a watched native Agent child.</td></tr>
+      <tr id="smoke-c2c-bounded-route"><td>External route is bounded and non-interactive</td><td class="yes"><strong>Pass</strong></td><td><code>codex exec --model gpt-5.6-sol --sandbox read-only</code>, <code>perl</code>-alarm 120 s bound, stdin <code>&lt;/dev/null</code>; exit 0, no timeout.</td></tr>
+      <tr id="smoke-c2c-raw-relay"><td>Wrapper returns the external result without synthesis</td><td class="yes"><strong>Pass</strong></td><td>Exact four-line marker captured via <code>-o</code>; wrapper reported lifecycle in a separate block.</td></tr>
+      <tr id="smoke-c2c-wrapper-model"><td>Cheapest floor-valid native wrapper model is selected and proven</td><td class="yes"><strong>Pass</strong></td><td>Relay pinned to the <code>sonnet</code> floor via the Agent <code>model</code> param; subagent self-reported <code>wrapper_model=claude-sonnet-5</code>. External task model also selected and echoed (<code>-m</code> → <code>model_alias=gpt-5.6-sol</code>).</td></tr>
+    </tbody>
+  </table>
+  <pre id="smoke-c2c-stdout">WRAPPER_SMOKE_OK
+external_harness=codex
+model_alias=gpt-5.6-sol
+task=relay-observability</pre>
+  <article class="panel warning" id="smoke-conclusion">
+    <h3>Design consequence</h3>
+    <p>Both directions prove native-tree observability, bounded lifecycle, and raw relay. Claude→Codex also proves wrapper-model selection and self-report: <code>codex exec</code> takes <code>-m</code> for the external model and the native Agent tool takes a <code>model</code> parameter for the wrapper. Codex→Claude retains one red acceptance seam because the tested native spawn interface did not expose wrapper-model selection or assignment. Adopt the symmetric wrapper contract with its fail-safe: where native spawn cannot select or report the wrapper model, preserve observability, record the staffing gap, and do not claim floor/cost compliance.</p>
+  </article>
+</section>
+
+<section id="ownership">
+  <h2>Canonical ownership</h2>
+  <table>
+    <thead><tr><th>Owner</th><th>Owns</th><th>Must not do</th><th>Canonical source</th></tr></thead>
+    <tbody>
+      <tr id="owner-setup"><td><strong>setup-asher-skills</strong></td><td>Install orchestration; convention source/module/pointer; active harness confirmation</td><td>Interpret or rewrite staffing policy</td><td><a href="https://github.com/asasher/asher-skills/blob/main/skills/system/setup-asher-skills/reference/interview.md">interview.md</a></td></tr>
+      <tr id="owner-staffing"><td><strong>staffing</strong></td><td>Machine audit; route matrix; roster modules/pointers; project deltas</td><td>Rewrite convention modules</td><td><a href="https://github.com/asasher/asher-skills/blob/main/skills/system/staffing/reference/install-and-reconcile.md">install-and-reconcile.md</a></td></tr>
+      <tr id="owner-capability-providers"><td><strong>capability providers</strong></td><td>Skills, plugins, or machine tools that actually expose browser, computer, or image effects</td><td>Own model rankings or imply reachability merely by being installed</td><td>Effect-probed machine inventory</td></tr>
+      <tr id="owner-catalog"><td><strong>catalog/compiler</strong></td><td>One public identity/dependency/setup contract plus declared overlays</td><td>Permit overlay drift in shared fields</td><td><a href="https://github.com/asasher/asher-skills/blob/main/skills/system/setup-asher-skills/reference/catalog.md">catalog.md</a></td></tr>
+      <tr id="owner-consumer"><td><strong>consumer project</strong></td><td>Sparse project deltas and editable skill instances</td><td>Copy global tables or edit installed packages</td><td><code>docs/agents/</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="capability-matrix">
+  <h2>Proposed harness capability-provider registry</h2>
+  <table>
+    <thead><tr><th>Capability</th><th>Primary provider</th><th>Fallback</th><th>Claude Code native?</th><th>Routing note</th></tr></thead>
+    <tbody>
+      <tr id="route-chatgpt-chrome"><td><strong>browser-use</strong></td><td><code>chrome:control-chrome</code> in Codex (ChatGPT-in-Chrome)</td><td><code>agent-browser</code> 0.27.0 when the project records it</td><td class="no">No equivalent installed</td><td>Select the Chrome provider first; fall back only after route failure or absence.</td></tr>
+      <tr id="route-computer-use"><td><strong>computer-use</strong></td><td><code>computer-use:computer-use</code> in Codex</td><td class="no">None</td><td class="no">No</td><td>Loss of the Codex provider is a hard capability gap.</td></tr>
+      <tr id="route-codex-native-imagegen"><td><strong>imagegen</strong></td><td>Codex system <code>imagegen</code> skill/tool</td><td>Repo <code>codex-imagegen</code> skill through Codex CLI</td><td class="no">No</td><td>Claude may dispatch the Codex route; it must not claim native image generation.</td></tr>
+    </tbody>
+  </table>
+  <div class="grid" style="margin-top:12px">
+    <article class="panel decision" id="capability-resolution">
+      <h3>Resolution order</h3>
+      <p><strong>Need → provider → fallback → eligible executor → model ranking.</strong> Installation is evidence, not reachability: each provider is effect-probed in the active harness before it is recorded usable.</p>
+    </article>
+    <article class="panel warning" id="imagegen-routing">
+      <h3>Image generation and taste remain separate</h3>
+      <p>The Codex provider generates. A human or taste-qualified reviewer reviews user-facing output. Claude can review or dispatch the Codex skill, but Claude Code is never recorded as the generating harness.</p>
+    </article>
+  </div>
+  <p class="small" id="capability-skill-shape">These providers already have skill-shaped interfaces except <code>agent-browser</code>, which is currently a machine CLI. Add a thin adapter skill only if the probe shows that invocation, session, or fallback policy needs durable guidance; do not wrap it merely for symmetry.</p>
+  <details id="capability-revision-note">
+    <summary>Revision 2 · why the model rows were retired</summary>
+    <ul>
+      <li id="route-codex-native-sol">The former Codex/sol row mixed a model with tools supplied by the Codex harness.</li>
+      <li id="route-codex-native-terra">The former Codex/terra row mixed a staffing pin with Chrome and Computer Use provider reachability.</li>
+      <li id="route-codex-exec">The former blanket <code>codex exec</code> row was false for image generation: the repo’s <code>codex-imagegen</code> skill is an effect-proven headless route with explicit constraints.</li>
+      <li id="route-claude-native">The former Claude row is now represented as “no native provider”; machine fallback and cross-harness Codex dispatch remain separate routes.</li>
+    </ul>
+  </details>
+</section>
+
+<section id="pointer-text">
+  <h2>Proposed always-loaded text</h2>
+  <div class="grid">
+    <article class="panel" id="pointer-codex-staffing">
+      <span class="tag codex">Codex staffing</span>
+      <pre>## Staffing
+Before model choice, delegation, child/worktree creation, browser/computer/imagegen work, watchers, or route-loss fallback, read `~/.codex/asher-skills/staffing.md` fully, then apply project deltas. If unreadable, do not dispatch. Otherwise do not load it.</pre>
+    </article>
+    <article class="panel" id="pointer-claude-staffing">
+      <span class="tag claude">Claude staffing</span>
+      <pre>## Staffing
+Before model choice, delegation, child/worktree creation, browser/computer/imagegen work, watchers, or route-loss fallback, read `~/.claude/asher-skills/staffing.md` fully, then apply project deltas. If unreadable, do not dispatch. Otherwise do not load it.</pre>
+    </article>
+    <article class="panel" id="pointer-codex-presentation">
+      <span class="tag codex">Codex presentation</span>
+      <pre>## Presentation
+HTML deliverables live on disk. Before opening, serving, publishing, or changing a presentation route, read `~/.codex/asher-skills/presentation.md` fully. If unreadable, open locally and do not publish. Otherwise do not load it.</pre>
+    </article>
+    <article class="panel" id="pointer-claude-presentation">
+      <span class="tag claude">Claude presentation</span>
+      <pre>## Presentation
+HTML deliverables live on disk. Before opening, serving, publishing, or changing a presentation route, read `~/.claude/asher-skills/presentation.md` fully. If unreadable, open locally and do not publish. Otherwise do not load it.</pre>
+    </article>
+  </div>
+  <p class="small">Do not use Claude <code>@</code> imports: they eagerly inline the target and erase the saving. The two generated presentation modules may be byte-identical; one common source still owns them.</p>
+</section>
+
+<section id="copy-ready-bundle">
+  <h2>Copy-ready global bundle</h2>
+  <div class="grid">
+    <article class="panel success" id="copy-ready-boundary">
+      <h3>Six effective machine files</h3>
+      <p>The approved payload below is complete. Each file is rendered for reading, with its byte-authoritative Markdown folded underneath. Application writes and verifies all four deferred modules before either owner reconciles only its pointer section in the two global files.</p>
+    </article>
+    <article class="panel warning" id="copy-ready-exclusion">
+      <h3>#61 is not a static copy</h3>
+      <p>Provider-specific installed skill trees still require catalog, compiler, lock, audit, and migration work. The exact payloads below cover the separately shippable global-context track.</p>
+    </article>
+  </div>
+  <pre id="effective-file-tree">~/.codex/
+  AGENTS.md
+  asher-skills/
+    presentation.md
+    staffing.md
+
+~/.claude/
+  CLAUDE.md
+  asher-skills/
+    presentation.md
+    staffing.md</pre>
+
+  <details id="final-codex-agents" open>
+    <summary><code>~/.codex/AGENTS.md</code> · complete final file</summary>
+    <article class="markdown-preview" id="preview-codex-agents">
+      <h1>Global AGENTS.md</h1>
+      <h2>Presentation</h2>
+      <p>HTML deliverables live on disk. Before opening, serving, publishing, or changing a presentation route, read <code>~/.codex/asher-skills/presentation.md</code> fully. If unreadable, open locally and do not publish. Otherwise do not load it.</p>
+      <h2>Staffing</h2>
+      <p>Before model choice, delegation, child/worktree creation, browser/computer/imagegen work, watchers, or route-loss fallback, read <code>~/.codex/asher-skills/staffing.md</code> fully, then apply project deltas. If unreadable, do not dispatch. Otherwise do not load it.</p>
+    </article>
+    <details class="source-view" id="source-codex-agents"><summary>Exact Markdown source · copy bytes</summary>
+    <pre data-destination="~/.codex/AGENTS.md"># Global AGENTS.md
+
+## Presentation
+HTML deliverables live on disk. Before opening, serving, publishing, or changing a presentation route, read `~/.codex/asher-skills/presentation.md` fully. If unreadable, open locally and do not publish. Otherwise do not load it.
+
+## Staffing
+Before model choice, delegation, child/worktree creation, browser/computer/imagegen work, watchers, or route-loss fallback, read `~/.codex/asher-skills/staffing.md` fully, then apply project deltas. If unreadable, do not dispatch. Otherwise do not load it.
+</pre></details>
+  </details>
+
+  <details id="final-claude-memory" open>
+    <summary><code>~/.claude/CLAUDE.md</code> · complete final file</summary>
+    <article class="markdown-preview" id="preview-claude-memory">
+      <h1>Global CLAUDE.md</h1>
+      <h2>Presentation</h2>
+      <p>HTML deliverables live on disk. Before opening, serving, publishing, or changing a presentation route, read <code>~/.claude/asher-skills/presentation.md</code> fully. If unreadable, open locally and do not publish. Otherwise do not load it.</p>
+      <h2>Staffing</h2>
+      <p>Before model choice, delegation, child/worktree creation, browser/computer/imagegen work, watchers, or route-loss fallback, read <code>~/.claude/asher-skills/staffing.md</code> fully, then apply project deltas. If unreadable, do not dispatch. Otherwise do not load it.</p>
+    </article>
+    <details class="source-view" id="source-claude-memory"><summary>Exact Markdown source · copy bytes</summary>
+    <pre data-destination="~/.claude/CLAUDE.md"># Global CLAUDE.md
+
+## Presentation
+HTML deliverables live on disk. Before opening, serving, publishing, or changing a presentation route, read `~/.claude/asher-skills/presentation.md` fully. If unreadable, open locally and do not publish. Otherwise do not load it.
+
+## Staffing
+Before model choice, delegation, child/worktree creation, browser/computer/imagegen work, watchers, or route-loss fallback, read `~/.claude/asher-skills/staffing.md` fully, then apply project deltas. If unreadable, do not dispatch. Otherwise do not load it.
+</pre></details>
+  </details>
+
+  <details id="final-presentation-module" open>
+    <summary><code>~/.codex/asher-skills/presentation.md</code> and <code>~/.claude/asher-skills/presentation.md</code> · identical complete payload</summary>
+    <article class="markdown-preview" id="preview-presentation-module">
+      <h1>Machine presentation policy</h1>
+      <ul>
+        <li>Write HTML deliverables—plans, reports, prototypes, and review sheets—as local files in the repo or workspace.</li>
+        <li>When Asher is at this machine, open the local file. When he is remote, use the project’s <code>docs/agents/</code> tailnet surface. Always open whatever is presented; never only print a link.</li>
+        <li>Disk is the default presentation surface. Do not use ChatGPT canvas/site, Claude artifacts, or another harness-hosted page. Publish to a cloud surface only when Asher explicitly asks.</li>
+        <li>This machine’s tailnet root is <code>https://ashers-macbook-pro.tail045dd5.ts.net</code>; Funnel stays off.</li>
+        <li>Before publishing, run <code>tailscale status</code>. Run <code>tailscale up</code> only when the node is down and something is being published now. Never cycle a healthy connection. If authentication or startup fails, report it and open locally; never enable Funnel or improvise a public tunnel.</li>
+        <li>Serve through a stdlib static server and <code>tailscale serve --bg --set-path /&lt;path&gt; http://localhost:&lt;port&gt;</code>. On teardown run <code>tailscale serve --set-path /&lt;path&gt; off</code>; use <code>tailscale serve status</code> for orphan checks.</li>
+        <li>The project surface playbook overrides the root path, surface directory, and keep-awake choice.</li>
+      </ul>
+    </article>
+    <details class="source-view" id="source-presentation-module"><summary>Exact Markdown source · copied to both destinations</summary>
+    <pre data-destination="~/.codex/asher-skills/presentation.md ~/.claude/asher-skills/presentation.md"># Machine presentation policy
+
+- Write HTML deliverables—plans, reports, prototypes, and review sheets—as local files in the repo or workspace.
+- When Asher is at this machine, open the local file. When he is remote, use the project’s `docs/agents/` tailnet surface. Always open whatever is presented; never only print a link.
+- Disk is the default presentation surface. Do not use ChatGPT canvas/site, Claude artifacts, or another harness-hosted page. Publish to a cloud surface only when Asher explicitly asks.
+- This machine’s tailnet root is `https://ashers-macbook-pro.tail045dd5.ts.net`; Funnel stays off.
+- Before publishing, run `tailscale status`. Run `tailscale up` only when the node is down and something is being published now. Never cycle a healthy connection. If authentication or startup fails, report it and open locally; never enable Funnel or improvise a public tunnel.
+- Serve through a stdlib static server and `tailscale serve --bg --set-path /&lt;path&gt; http://localhost:&lt;port&gt;`. On teardown run `tailscale serve --set-path /&lt;path&gt; off`; use `tailscale serve status` for orphan checks.
+- The project surface playbook overrides the root path, surface directory, and keep-awake choice.
+</pre></details>
+  </details>
+
+  <details id="final-codex-staffing" open>
+    <summary><code>~/.codex/asher-skills/staffing.md</code> · complete final file</summary>
+    <article class="markdown-preview" id="preview-codex-staffing">
+      <h1>Machine staffing — Codex</h1>
+      <p>Projects add deltas only. Resolve before model choice, delegation, child/worktree creation, capability-provider work, watcher assignment, or fallback.</p>
+      <h2>Models</h2>
+      <table>
+        <thead><tr><th>model</th><th>cost</th><th>intelligence</th><th>taste</th></tr></thead>
+        <tbody>
+          <tr><td>gpt-5.6-sol</td><td>4</td><td>9</td><td>5</td></tr>
+          <tr><td>gpt-5.6-terra</td><td>6</td><td>5</td><td>3</td></tr>
+          <tr><td>sonnet-5</td><td>5</td><td>5</td><td>5</td></tr>
+          <tr><td>opus-4.8</td><td>3</td><td>7</td><td>7</td></tr>
+        </tbody>
+      </table>
+      <p>The Codex models are coordinator-eligible through native agent threads. The Claude rows are effect-verified bounded worker routes, not coordinator-eligible until durable child ownership is separately proven. Fable is omitted until its CLI alias and requested effect are verified. Floor: gpt-5.6-terra for native Codex roles.</p>
+      <h2>Capability providers</h2>
+      <table>
+        <thead><tr><th>need</th><th>primary provider</th><th>fallback</th></tr></thead>
+        <tbody>
+          <tr><td>browser-use</td><td><code>chrome:control-chrome</code> / ChatGPT-in-Chrome, staffed by terra</td><td>project-recorded <code>agent-browser</code></td></tr>
+          <tr><td>computer-use</td><td><code>computer-use:computer-use</code>, staffed by terra</td><td>none</td></tr>
+          <tr><td>imagegen</td><td>Codex system <code>imagegen</code> skill/tool</td><td>repo <code>codex-imagegen</code> skill through bounded Codex CLI</td></tr>
+        </tbody>
+      </table>
+      <p>Capabilities belong to harness/tool providers, never model rows. Resolve need → effect-verified provider → recorded fallback → eligible executor → model ranking. Installation alone is not reachability. Read the selected provider skill fully before use. For user-facing images, generation and taste review are separate stages.</p>
+      <h2>Resolve</h2>
+      <ul>
+        <li>Issue dispatch requires groomed work type, surface/capabilities, coordination class/reason, and known uncertainty. Missing data stops dispatch. Record the route and upward successor before child/worktree creation.</li>
+        <li>Pins short-circuit ranking: mechanical/bulk → sol; browser-use → Chrome/terra, then project <code>agent-browser</code>; computer-use → Computer Use/terra. Imagegen selects its provider without pretending image access is a model trait.</li>
+        <li>Otherwise apply required provider and taste ≥ 7 gates, then rank eligible reachable workers by intelligence, taste, cheaper cost. Opus is the verified taste-qualified Codex→Claude worker; a sibling-route failure removes that direction only and reruns resolution.</li>
+        <li>General/mechanical succession: sol → opus → sonnet → terra. UI/review: opus. Watcher/cron: terra → sol, wait/relay only. A missing capability provider reports a hard gap; do not relabel another tool or model as capable.</li>
+      </ul>
+      <h2>Mechanics</h2>
+      <p>Use one orchestrator thread with watched native subagents; no fire-and-forget shells. Config: <code>~/.codex/config.toml</code> (<code>max_depth=3</code>, <code>max_threads=20</code>).</p>
+      <p>Codex→Claude runs only inside a watched native wrapper staffed by the cheapest native model allowed by the current floor—<code>gpt-5.6-terra</code> on this roster—and named for the external worker and task, such as <code>claude-opus:review-auth</code>. The parent owns the prompt, judgment, and effect verification; the wrapper only supervises the bounded process and relays its raw output and lifecycle status. It runs <code>claude -p --model &lt;verified-alias&gt; '&lt;self-contained prompt&gt;' &lt;/dev/null</code>, never adds <code>--bare</code>, and captures the durable result.</p>
+      <p>If native spawn cannot select or report the wrapper model, do not claim floor/cost compliance: use the observable wrapper, record the staffing gap, and keep that criterion red until the spawn seam is fixed.</p>
+      <p>Verified roster-name → CLI-alias mapping: <code>sonnet-5</code> → <code>sonnet</code>; <code>opus-4.8</code> → <code>opus</code>. Display names are never passed to the CLI without an alias probe. Route state is directional: effect-verified, intentionally disabled, or unavailable with a captured failure class.</p>
+    </article>
+    <details class="source-view" id="source-codex-staffing"><summary>Exact Markdown source · copy bytes</summary>
+    <pre data-destination="~/.codex/asher-skills/staffing.md"># Machine staffing — Codex
+
+Projects add deltas only. Resolve before model choice, delegation, child/worktree creation, capability-provider work, watcher assignment, or fallback.
+
+## Models
+
+| model | cost | intelligence | taste |
+|---|---:|---:|---:|
+| gpt-5.6-sol | 4 | 9 | 5 |
+| gpt-5.6-terra | 6 | 5 | 3 |
+| sonnet-5 | 5 | 5 | 5 |
+| opus-4.8 | 3 | 7 | 7 |
+
+The Codex models are coordinator-eligible through native agent threads. The Claude rows are effect-verified bounded worker routes, not coordinator-eligible until durable child ownership is separately proven. Fable is omitted until its CLI alias and requested effect are verified. Floor: gpt-5.6-terra for native Codex roles.
+
+## Capability providers
+
+| need | primary provider | fallback |
+|---|---|---|
+| browser-use | `chrome:control-chrome` / ChatGPT-in-Chrome, staffed by terra | project-recorded `agent-browser` |
+| computer-use | `computer-use:computer-use`, staffed by terra | none |
+| imagegen | Codex system `imagegen` skill/tool | repo `codex-imagegen` skill through bounded Codex CLI |
+
+Capabilities belong to harness/tool providers, never model rows. Resolve need → effect-verified provider → recorded fallback → eligible executor → model ranking. Installation alone is not reachability. Read the selected provider skill fully before use. For user-facing images, generation and taste review are separate stages.
+
+## Resolve
+
+- Issue dispatch requires groomed work type, surface/capabilities, coordination class/reason, and known uncertainty. Missing data stops dispatch. Record the route and upward successor before child/worktree creation.
+- Pins short-circuit ranking: mechanical/bulk → sol; browser-use → Chrome/terra, then project `agent-browser`; computer-use → Computer Use/terra. Imagegen selects its provider without pretending image access is a model trait.
+- Otherwise apply required provider and taste ≥ 7 gates, then rank eligible reachable workers by intelligence, taste, cheaper cost. Opus is the verified taste-qualified Codex→Claude worker; a sibling-route failure removes that direction only and reruns resolution.
+- General/mechanical succession: sol → opus → sonnet → terra. UI/review: opus. Watcher/cron: terra → sol, wait/relay only. A missing capability provider reports a hard gap; do not relabel another tool or model as capable.
+
+## Mechanics
+
+Use one orchestrator thread with watched native subagents; no fire-and-forget shells. Config: `~/.codex/config.toml` (`max_depth=3`, `max_threads=20`).
+
+Codex→Claude runs only inside a watched native wrapper staffed by the cheapest native model allowed by the current floor—`gpt-5.6-terra` on this roster—and named for the external worker and task, such as `claude-opus:review-auth`. The parent owns the prompt, judgment, and effect verification; the wrapper only supervises the bounded process and relays its raw output and lifecycle status. It runs `claude -p --model &lt;verified-alias&gt; '&lt;self-contained prompt&gt;' &lt;/dev/null`, never adds `--bare`, and captures the durable result.
+
+If native spawn cannot select or report the wrapper model, do not claim floor/cost compliance: use the observable wrapper, record the staffing gap, and keep that criterion red until the spawn seam is fixed.
+
+Verified roster-name → CLI-alias mapping: `sonnet-5` → `sonnet`; `opus-4.8` → `opus`. Display names are never passed to the CLI without an alias probe. Route state is directional: effect-verified, intentionally disabled, or unavailable with a captured failure class.
+</pre></details>
+  </details>
+
+  <details id="final-claude-staffing" open>
+    <summary><code>~/.claude/asher-skills/staffing.md</code> · complete final file</summary>
+    <article class="markdown-preview" id="preview-claude-staffing">
+      <h1>Machine staffing — Claude Code</h1>
+      <p>Projects add deltas only. Resolve before model choice, delegation, child/worktree creation, capability-provider work, watcher assignment, or fallback.</p>
+      <h2>Models</h2>
+      <table>
+        <thead><tr><th>model</th><th>cost</th><th>intelligence</th><th>taste</th></tr></thead>
+        <tbody>
+          <tr><td>gpt-5.6-sol</td><td>4</td><td>9</td><td>5</td></tr>
+          <tr><td>gpt-5.6-terra</td><td>6</td><td>5</td><td>3</td></tr>
+          <tr><td>sonnet-5</td><td>5</td><td>5</td><td>5</td></tr>
+          <tr><td>opus-4.8</td><td>3</td><td>7</td><td>7</td></tr>
+          <tr><td>fable-5</td><td>1</td><td>9</td><td>9</td></tr>
+        </tbody>
+      </table>
+      <p>Coordinator-eligible: fable-5, opus-4.8, sonnet-5 through native Agent/Workflow children. Floor: sonnet-5 Claude-side / gpt-5.6-terra Codex-side; never Haiku.</p>
+      <h2>Capability providers reachable from Claude Code</h2>
+      <p>Claude Code has no native ChatGPT-in-Chrome, Computer Use, or image-generation provider.</p>
+      <table>
+        <thead><tr><th>need</th><th>reachable route</th><th>fallback / hard edge</th></tr></thead>
+        <tbody>
+          <tr><td>browser-use</td><td>project-recorded machine <code>agent-browser</code></td><td>explicit Codex app handoff to <code>chrome:control-chrome</code>; unattended <code>codex exec</code> cannot supply it</td></tr>
+          <tr><td>computer-use</td><td>none in Claude Code</td><td>explicit Codex Computer Use handoff; no substitute</td></tr>
+          <tr><td>imagegen</td><td>installed repo <code>codex-imagegen</code> skill through bounded Codex CLI</td><td>explicit Codex app handoff to the system <code>imagegen</code> skill/tool</td></tr>
+        </tbody>
+      </table>
+      <p>Capabilities belong to harness/tool providers, never model rows. Resolve need → effect-verified provider → recorded fallback/handoff → eligible executor → model ranking. Installation alone is not reachability. Name the actual machine or Codex provider; never attribute its effect to Claude. For user-facing images, generation and taste review are separate stages.</p>
+      <h2>Resolve</h2>
+      <ul>
+        <li>Issue dispatch requires groomed work type, surface/capabilities, coordination class/reason, and known uncertainty. Missing data stops dispatch. Record the route and upward successor before child/worktree creation.</li>
+        <li>Routine coordinators resolve only over the native coordinator-eligible set; orchestrator-required work stays with the session orchestrator. Worker pins cannot add Codex routes to that set.</li>
+        <li>Pins short-circuit ranking: mechanical/bulk → sol through Codex CLI. Capability work follows the provider table above; do not turn a provider into a model capability.</li>
+        <li>Otherwise apply required provider and taste ≥ 7 gates, then rank eligible models by intelligence, taste, cheaper cost.</li>
+        <li>Succession: orchestrator fable → opus → sonnet; mechanical sol → fable → opus → sonnet; UI/review fable → opus; watcher/cron sonnet → fable → opus (Codex-side cron: terra). Watchers wait/relay only. A missing capability provider reports a hard gap.</li>
+      </ul>
+      <h2>Mechanics</h2>
+      <p>Claude models use native Agent/Workflow. Claude→Codex work uses a watched native wrapper staffed by the cheapest Claude model allowed by the floor—<code>sonnet-low</code> on this roster—and named for the external model and task, such as <code>gpt-5.6-sol:inspect-lock</code>. The parent owns the prompt, judgment, and effect verification; the wrapper only supervises the bounded process and relays its raw output and lifecycle status. Under an explicit timeout it runs <code>codex exec</code> read-only for investigation or workspace-write for edits, with closed stdin and worktree isolation when parallel. Never use <code>claude -p</code>.</p>
+    </article>
+    <details class="source-view" id="source-claude-staffing"><summary>Exact Markdown source · copy bytes</summary>
+    <pre data-destination="~/.claude/asher-skills/staffing.md"># Machine staffing — Claude Code
+
+Projects add deltas only. Resolve before model choice, delegation, child/worktree creation, capability-provider work, watcher assignment, or fallback.
+
+## Models
+
+| model | cost | intelligence | taste |
+|---|---:|---:|---:|
+| gpt-5.6-sol | 4 | 9 | 5 |
+| gpt-5.6-terra | 6 | 5 | 3 |
+| sonnet-5 | 5 | 5 | 5 |
+| opus-4.8 | 3 | 7 | 7 |
+| fable-5 | 1 | 9 | 9 |
+
+Coordinator-eligible: fable-5, opus-4.8, sonnet-5 through native Agent/Workflow children. Floor: sonnet-5 Claude-side / gpt-5.6-terra Codex-side; never Haiku.
+
+## Capability providers reachable from Claude Code
+
+Claude Code has no native ChatGPT-in-Chrome, Computer Use, or image-generation provider.
+
+| need | reachable route | fallback / hard edge |
+|---|---|---|
+| browser-use | project-recorded machine `agent-browser` | explicit Codex app handoff to `chrome:control-chrome`; unattended `codex exec` cannot supply it |
+| computer-use | none in Claude Code | explicit Codex Computer Use handoff; no substitute |
+| imagegen | installed repo `codex-imagegen` skill through bounded Codex CLI | explicit Codex app handoff to the system `imagegen` skill/tool |
+
+Capabilities belong to harness/tool providers, never model rows. Resolve need → effect-verified provider → recorded fallback/handoff → eligible executor → model ranking. Installation alone is not reachability. Name the actual machine or Codex provider; never attribute its effect to Claude. For user-facing images, generation and taste review are separate stages.
+
+## Resolve
+
+- Issue dispatch requires groomed work type, surface/capabilities, coordination class/reason, and known uncertainty. Missing data stops dispatch. Record the route and upward successor before child/worktree creation.
+- Routine coordinators resolve only over the native coordinator-eligible set; orchestrator-required work stays with the session orchestrator. Worker pins cannot add Codex routes to that set.
+- Pins short-circuit ranking: mechanical/bulk → sol through Codex CLI. Capability work follows the provider table above; do not turn a provider into a model capability.
+- Otherwise apply required provider and taste ≥ 7 gates, then rank eligible models by intelligence, taste, cheaper cost.
+- Succession: orchestrator fable → opus → sonnet; mechanical sol → fable → opus → sonnet; UI/review fable → opus; watcher/cron sonnet → fable → opus (Codex-side cron: terra). Watchers wait/relay only. A missing capability provider reports a hard gap.
+
+## Mechanics
+
+Claude models use native Agent/Workflow. Claude→Codex work uses a watched native wrapper staffed by the cheapest Claude model allowed by the floor—`sonnet-low` on this roster—and named for the external model and task, such as `gpt-5.6-sol:inspect-lock`. The parent owns the prompt, judgment, and effect verification; the wrapper only supervises the bounded process and relays its raw output and lifecycle status. Under an explicit timeout it runs `codex exec` read-only for investigation or workspace-write for edits, with closed stdin and worktree isolation when parallel. Never use `claude -p`.
+</pre></details>
+  </details>
+</section>
+
+<section id="canonical-source-manifest">
+  <h2>Canonical source that reproduces the bundle</h2>
+  <table>
+    <thead><tr><th>Owner</th><th>Proposed source</th><th>Effective output</th></tr></thead>
+    <tbody>
+      <tr id="source-presentation-common"><td>setup-asher-skills</td><td><code>templates/global/presentation.common.md</code></td><td>Copied byte-for-byte to both <code>presentation.md</code> modules.</td></tr>
+      <tr id="source-presentation-pointers"><td>setup-asher-skills</td><td><code>templates/global/presentation-pointer.{codex,claude}.md</code></td><td>The complete <code>## Presentation</code> section in each global file.</td></tr>
+      <tr id="source-staffing-common"><td>staffing</td><td><code>templates/global/staffing.common.md</code></td><td>Shared resolution vocabulary compiled before the selected harness overlay.</td></tr>
+      <tr id="source-staffing-overlays"><td>staffing</td><td><code>variants/{codex,claude}/templates/global/staffing.module.md</code></td><td>The selected overlay contains one <code>{{COMMON}}</code> marker plus harness-only rows, providers, succession, and mechanics; compilation produces the complete module shown above.</td></tr>
+      <tr id="source-staffing-pointers"><td>staffing</td><td><code>variants/{codex,claude}/templates/global/staffing-pointer.md</code></td><td>The selected provider contributes the complete <code>## Staffing</code> section in its global file.</td></tr>
+    </tbody>
+  </table>
+  <pre id="canonical-source-tree">skills/system/setup-asher-skills/templates/global/
+  presentation.common.md
+  presentation-pointer.codex.md
+  presentation-pointer.claude.md
+skills/system/setup-asher-skills/scripts/render-global.py
+
+skills/system/staffing/templates/global/
+  staffing.common.md
+skills/system/staffing/variants/codex/templates/global/
+  global-header.txt
+  provider.txt
+  staffing.module.md
+  staffing-pointer.md
+skills/system/staffing/variants/claude/templates/global/
+  global-header.txt
+  provider.txt
+  staffing.module.md
+  staffing-pointer.md
+skills/system/staffing/scripts/render-global.py</pre>
+  <p class="small" id="source-assembly-rule">Assembly is deterministic: materialize the selected staffing provider tree; begin a fresh transaction barrier; stage and read back Presentation and Staffing modules for both harnesses; preflight both global files before any pointer write; apply both Presentation sections, then both Staffing sections; verify all four final sections and remove the barrier. Each owner compares actual content and leaves the other owner’s and user bytes untouched. No version stamps and no Claude <code>@</code> imports.</p>
+</section>
+
+<section id="source-shape">
+  <h2>Separate #61 skill-package shape</h2>
+  <div class="grid">
+    <article class="panel" id="global-module-shape">
+      <h3>Global context is now content-complete</h3>
+      <p>The six effective files and their canonical source manifest are specified above. Their application is a byte-for-byte write plus verification, independent of #61’s package compiler.</p>
+    </article>
+    <article class="panel" id="variant-source-shape">
+      <h3>Opt-in skill variants</h3>
+      <pre>skills/&lt;category&gt;/&lt;name&gt;/
+  SKILL.md              # public contract once
+  reference/            # common bundled contract
+  variants/
+    codex/               # overlay only
+    claude/              # overlay only
+
+default install:
+  .agents/skills/&lt;name&gt;  (real)
+  .claude/skills/&lt;name&gt;  (symlink)
+
+declared variant:
+  .agents/skills/&lt;name&gt;  (real Codex tree)
+  .claude/skills/&lt;name&gt;  (real Claude tree)</pre>
+    </article>
+  </div>
+  <details id="variant-declaration">
+    <summary>Implemented catalog declaration</summary>
+    <pre>metadata:
+  variants: {"claude":"variants/claude","codex":"variants/codex"}
+
+# name, invocation/execution policy, siblings, externals, and setup owner
+# remain declared once in the public contract. Overlays cannot change them.</pre>
+  </details>
+</section>
+
+<section id="migration">
+  <h2>Migration sequence</h2>
+  <div class="grid">
+    <article class="panel phase" id="phase-0"><div class="phase-num">0</div><div><h3>Set issue boundaries</h3><p>Keep #61 on package variants; cross-link #62 for global-context source/reconcile work and #60 for thin native wrappers.</p></div></article>
+    <article class="panel phase" id="phase-1"><div class="phase-num">1</div><div><h3>Audit routes and providers; write modules first</h3><p>Record Codex Chrome, Computer Use, native Imagegen, repo <code>codex-imagegen</code>, machine <code>agent-browser</code>, and both sibling-harness directions with effect probes and verified CLI aliases. Each owner then compiles its harness module and leaves the working inline block untouched.</p></div></article>
+    <article class="panel phase" id="phase-2"><div class="phase-num">2</div><div><h3>Shadow-test pointers</h3><p>Add pointer text while inline policy remains. Probe firing, non-firing, project deltas, missing targets, provider selection, browser fallback, route loss, presentation, and image-generation staging.</p></div></article>
+    <article class="panel phase" id="phase-3"><div class="phase-num">3</div><div><h3>Remove inline duplication</h3><p>Only after both real harnesses pass, preflight both globals, replace setup’s recognized legacy seeded header and <code>## Conventions</code> block with both Presentation pointers, then reconcile both Staffing pointers and record token evidence. An unowned <code>## Conventions</code> block stops before either owner writes. Finalize verifies all four sections and removes the transaction barrier; a second full reconcile does not rewrite unchanged modules or globals.</p></div></article>
+    <article class="panel phase" id="phase-4"><div class="phase-num">4</div><div><h3>Build #61 infrastructure</h3><p>Add variant schema, compiler, per-provider locks, safe mount conversion, audit findings, and red-capable fixtures.</p></div></article>
+    <article class="panel phase" id="phase-5"><div class="phase-num">5</div><div><h3>Pilot, measure, roll out</h3><p>Select a genuinely branchy skill, prove ≥20% per-harness runtime-load reduction, then opt in other skills only where measured branches justify it.</p></div></article>
+  </div>
+</section>
+
+<section id="stories">
+  <h2>Stories</h2>
+  <ol>
+    <li id="story-1">As a leaf worker, I want cold machine policy omitted, so that my context is spent on the assigned work.</li>
+    <li id="story-2">As an orchestrator, I want a sharp pointer to the complete active-harness roster, so that routing stays correct without eager context cost.</li>
+    <li id="story-3">As a skill author, I want one public dependency and setup contract with small harness overlays, so that variants cannot drift into unrelated implementations.</li>
+    <li id="story-4">As an auditor, I want declared provider divergence distinguished from accidental copies, so that real drift remains actionable.</li>
+    <li id="story-5">As an image creator, I want image generation routed to a Codex provider and reviewed separately for taste, so that capability and quality gates do not deadlock each other.</li>
+    <li id="story-6">As a task router, I want harness capabilities supplied by named skills/plugins with recorded fallbacks, so that model ranking never invents tool access.</li>
+    <li id="story-7">As an orchestrator, I want every external-harness worker represented by a cheap named native relay, so that the native agent tree shows who is working, on what, and through which route.</li>
+  </ol>
+</section>
+
+<section id="acceptance-criteria">
+  <h2>Definition of done</h2>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion>Canonical ownership is enforceable: setup-asher-skills alone owns convention pointers/modules; staffing alone owns roster pointers/modules; either owner’s reconcile leaves the other owner’s bytes unchanged.</li>
+    <li id="ac-2" data-criterion>Each harness global file contains exact on-demand triggers for routing and presentation, uses no eager import, names an absolute module path, and defines safe behavior when that module is unreadable.</li>
+    <li id="ac-3" data-criterion>All Asher-owned always-loaded global text measures at or below 140 o200k-equivalent tokens per harness; each pointer stanza is at or below 65 tokens, with raw-character gates in stdlib-only tests.</li>
+    <li id="ac-4" data-criterion>A direct leaf task that makes no routing, capability, watcher, fallback, or presentation decision does not read either deferred module.</li>
+    <li id="ac-5" data-criterion>Routing, child/worktree creation, browser/computer/Imagegen work, watcher assignment, route loss, and presentation each read the correct active-harness module before acting; project deltas apply after the global staffing module.</li>
+    <li id="ac-6" data-criterion>Each deferred module is self-contained and contains no runtime branch for the other harness; a missing staffing module blocks dispatch, while a missing presentation module preserves the local artifact and blocks publishing.</li>
+    <li id="ac-7" data-criterion>The compatibility contract records <code>browser-use</code>, <code>computer-use</code>, and <code>imagegen</code> against named harness/tool providers—not model rows—and ranks models only after selecting a reachable provider route.</li>
+    <li id="ac-8" data-criterion>A user-facing image workflow separates Codex-provided generation from human or taste-qualified review; route loss reports an image-generation capability gap rather than substituting browser/computer use.</li>
+    <li id="ac-9" data-criterion>A skill without variants retains the current real <code>.agents</code> primary and expected Claude symlink, with unchanged lock and audit behavior.</li>
+    <li id="ac-10" data-criterion>A declared variant compiles one shared public identity, invocation/execution policy, dependency closure, external contract, and setup owner into correct self-contained real trees for each active harness; overlays that change shared fields are rejected.</li>
+    <li id="ac-11" data-criterion>Variant provenance records the shared source revision plus provider identity and effective-tree hash; install effect-verifies mount type, provider, content, and lock state rather than trusting command exit status.</li>
+    <li id="ac-12" data-criterion>Audit passes valid declared divergence and emits distinct findings for missing provider mount, wrong provider, altered tree/hash, undeclared independent copy, and shared-contract drift.</li>
+    <li id="ac-13" data-criterion>The pilot skill contains zero branches intended only for the other harness and reduces runtime-loaded text by at least 20% in each harness, measured against the current unified package.</li>
+    <li id="ac-14" data-criterion>Migration is module-first, atomic, harness-aware, reversible by proposal rather than deletion, and idempotent: it recognizes and replaces only setup’s seeded legacy header/<code>## Conventions</code> block, refuses an unowned block, preserves unrelated bytes, and a second setup/reconcile makes zero filesystem or lock changes.</li>
+    <li id="ac-15" data-criterion>The provider registry records Codex ChatGPT-in-Chrome as the primary browser route, project-recorded <code>agent-browser</code> as its fallback, Codex Computer Use with no substitute, and native Codex Imagegen with repo <code>codex-imagegen</code> as the headless fallback.</li>
+    <li id="ac-16" data-criterion>Claude Code records no native provider for these three capabilities; any Claude-initiated browser or image work names the machine fallback or dispatched Codex provider explicitly, and never attributes the effect to Claude.</li>
+    <li id="ac-17" data-criterion>The applied contents of the six effective machine files are byte-identical to the complete payloads in this plan, with the two presentation modules intentionally identical.</li>
+    <li id="ac-18" data-criterion>Application begins a fresh transaction barrier, writes and verifies all four deferred modules, preflights both global files before reconciling either, applies both Presentation sections before either Staffing section, verifies all four final sections, and removes the barrier. A stale or partial run cannot satisfy the gate; preflight failure preserves both working inline policies.</li>
+    <li id="ac-19" data-criterion>The Codex-effective roster includes effect-verified Claude worker rows, keeps bounded CLI workers out of coordinator eligibility, maps roster display names to probed CLI aliases, and requires a watched native wrapper for every Codex→Claude invocation.</li>
+    <li id="ac-20" data-criterion>Every cross-harness dispatch runs inside a watched native wrapper whose name identifies the external harness/model and task, whose native staffing is the cheapest model allowed by the current floor, and whose role is limited to process supervision and raw relay. The native spawn seam must accept the resolved wrapper model or report the assigned model; otherwise floor/cost compliance remains unproven.</li>
+  </ul>
+</section>
+
+<section id="checks">
+  <h2>How it will be checked</h2>
+  <table>
+    <thead><tr><th>Seam</th><th>Proof</th><th>Criteria</th></tr></thead>
+    <tbody>
+      <tr id="check-pointer-probes"><td>Real Claude + Codex sessions</td><td>Situated fire / do-not-fire / unreadable-target / project-delta probes with file-read evidence</td><td>ac-2–ac-6</td></tr>
+      <tr id="check-token"><td>Generated global files</td><td>Character budget test plus recorded o200k-equivalent measurements</td><td>ac-3</td></tr>
+      <tr id="check-capability-providers"><td>Harness/provider inventory</td><td>Codex plugin/system skill probes plus Claude-native negative probes prove route-before-model behavior</td><td>ac-7, ac-15–ac-16</td></tr>
+      <tr id="check-browser-fallback"><td>Browser provider failure</td><td>Disable or withhold ChatGPT-in-Chrome; verify the recorded project route selects <code>agent-browser</code>, not another model</td><td>ac-15–ac-16</td></tr>
+      <tr id="check-imagegen"><td>Image providers</td><td>Native Codex generation, repo <code>codex-imagegen</code> headless generation, Claude-native rejection, staged review, and route-loss probes</td><td>ac-7–ac-8, ac-15–ac-16</td></tr>
+      <tr id="check-owner"><td>Owner reconciliation fixtures</td><td>Byte comparison proves each owner leaves the other’s artifacts unchanged</td><td>ac-1, ac-14</td></tr>
+      <tr id="check-variants"><td>Generated skill trees</td><td>Default symlink, valid dual variant, wrong/missing/tampered/independent mounts, and shared-field rejection fixtures</td><td>ac-9–ac-12</td></tr>
+      <tr id="check-pilot"><td>Pilot invocation traces</td><td>Files actually read per harness plus token report and irrelevant-branch audit</td><td>ac-13</td></tr>
+      <tr id="check-retry"><td>Injected migration failures and legacy fixtures</td><td>Failures before pointer swap and between tree/lock publication leave the prior working state accepted; copied seeded legacy shapes compact exactly, while unowned Conventions bytes are refused and preserved</td><td>ac-14</td></tr>
+      <tr id="check-copy-bundle"><td>Six effective machine files</td><td>Extract approved <code>data-destination</code> payloads, byte-compare destinations, then run pointer fire/non-fire probes in both harnesses</td><td>ac-17–ac-18</td></tr>
+      <tr id="check-codex-claude-route"><td>Codex→Claude route</td><td>Bounded wrapper probes for verified <code>sonnet</code>/<code>opus</code> aliases; invalid display alias and direct-orchestrator invocation fixtures must fail</td><td>ac-19</td></tr>
+      <tr id="check-wrapper-observability"><td>Symmetric thin native wrappers</td><td>Native tree shows the external harness/model/task label; trace proves bounded command lifecycle and raw relay; spawn request or child metadata proves the cheapest floor-valid native wrapper model</td><td>ac-20</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="assumptions">
+  <h2>Assumptions to validate</h2>
+  <div class="grid">
+    <article class="panel warning" id="hyp-pointer"><span class="tag probe">Hypothesis</span><h3>Sharp imperative pointers fire reliably</h3><p>Falsify with both harnesses before inline removal, including leaf non-firing and unreadable paths.</p></article>
+    <article class="panel warning" id="hyp-imagegen"><span class="tag probe">Hypothesis</span><h3>Recorded capability providers remain callable from their named harness routes</h3><p>Effect-probe Chrome control, Computer Use, native Imagegen, <code>codex-imagegen</code>, and <code>agent-browser</code> independently. Never infer tool access from a model name or installed executable alone.</p></article>
+    <article class="panel warning" id="hyp-installer"><span class="tag probe">Hypothesis</span><h3>The provider installer can support two effective trees safely</h3><p>Use generated fixtures first; refuse independent directories and avoid destructive conversion.</p></article>
+    <article class="panel warning" id="hyp-active-harness"><span class="tag probe">Hypothesis</span><h3>Active harnesses can be selected explicitly</h3><p>Setup confirmation records active harnesses; directory presence alone is evidence, not authority.</p></article>
+    <article class="panel warning" id="hyp-cli-aliases"><span class="tag probe">Pre-apply check</span><h3>Claude CLI aliases remain valid after upgrades</h3><p>Issue #59 verified <code>sonnet</code> and <code>opus</code>. Re-probe them against the installed Claude CLI immediately before applying the copy bundle; a changed result returns this payload to review.</p></article>
+    <article class="panel warning" id="hyp-wrapper-model"><span class="tag probe">Open Codex seam</span><h3>Native spawn can enforce or expose wrapper staffing</h3><p>Claude→Codex proved wrapper-model selection and self-report. Codex→Claude proved naming, watching, bounded execution, and raw relay, but its tested spawn interface exposed neither model selection nor assignment. Keep floor/cost compliance red in that direction until the seam exists.</p></article>
+  </div>
+</section>
+
+<details id="risks">
+  <summary>Risks and mitigations</summary>
+  <ul>
+    <li id="risk-pointer-skip"><strong>Pointer skipped:</strong> shadow phase, fail-closed text, real-harness probes, and retained inline policy until pass.</li>
+    <li id="risk-third-surface"><strong>Third memory surface:</strong> generate modules inside each harness directory from one source; do not add a new auto-loaded memory system.</li>
+    <li id="risk-variant-drift"><strong>Two implementations drift:</strong> overlays cannot declare shared identity/dependencies/setup; compiler rejects changes.</li>
+    <li id="risk-lock-partial"><strong>Tree/lock split-brain:</strong> stage and publish trees plus lock records atomically; injected-failure tests.</li>
+    <li id="risk-over-variant"><strong>Variants everywhere:</strong> require measured provider branching and ≥20% pilot saving; otherwise retain the symlink.</li>
+    <li id="risk-capability-model"><strong>Capability attached to model:</strong> select a named harness/tool provider before executor or model ranking, then effect-verify that route.</li>
+    <li id="risk-skill-wrapper"><strong>Adapter-skill sprawl:</strong> reuse the installed Codex plugin/system skills and repo <code>codex-imagegen</code>; create an <code>agent-browser</code> adapter only when a probe proves durable procedure is missing.</li>
+    <li id="risk-stale-reachability"><strong>Stale Codex roster:</strong> issue #59’s three-state directional audit and separately consented global-base correction prevent a working Claude route from remaining hidden.</li>
+    <li id="risk-unverifiable-wrapper-cost"><strong>Unverifiable wrapper cost:</strong> require native spawn to select or report the wrapper model. Claude→Codex passed via the Agent <code>model</code> parameter and subagent self-report; Codex→Claude remains unproven at this seam. Preserve agent-tree observability, record the gap, and never claim the floor/cost rule passed where selection or assignment is hidden.</li>
+  </ul>
+</details>
+
+<details id="out-of-scope">
+  <summary>Out of scope</summary>
+  <ul>
+    <li id="oos-write">No live global memory, installed package mount, or machine lock is changed by this source PR.</li>
+    <li id="oos-all-skills">No bulk conversion of all skills; rollout remains opt-in after the pilot.</li>
+    <li id="oos-new-memory">No eager shared memory import and no Claude <code>@</code> indirection.</li>
+    <li id="oos-image-model">No claim that image quality is a staffing score; this plan models provider reachability and staged review.</li>
+    <li id="oos-agent-browser-skill">No automatic creation of an <code>agent-browser</code> skill; that remains a measured adapter decision.</li>
+    <li id="oos-machine-reconcile">No live machine reconciliation in this source PR; apply the approved payloads only after merge.</li>
+  </ul>
+</details>
+
+<section id="sources" class="source-list">
+  <h2>Review links</h2>
+  <ul>
+    <li id="source-61"><a href="https://github.com/asasher/asher-skills/issues/61">Issue #61 — provider variants</a></li>
+    <li id="source-45"><a href="https://github.com/asasher/asher-skills/issues/45">Issue #45 — cross-harness knowledge surfaces</a></li>
+    <li id="source-setup"><a href="https://github.com/asasher/asher-skills/blob/main/skills/system/setup-asher-skills/reference/interview.md">setup-asher-skills canonical setup flow</a></li>
+    <li id="source-staffing"><a href="https://github.com/asasher/asher-skills/blob/main/skills/system/staffing/reference/install-and-reconcile.md">staffing global install/reconcile contract</a></li>
+    <li id="source-audit"><a href="https://github.com/asasher/asher-skills/blob/main/skills/system/setup-asher-skills/reference/audit-mode.md">setup-asher-skills audit contract</a></li>
+    <li id="source-imagegen"><a href="https://github.com/asasher/asher-skills/blob/main/skills/creative/codex-imagegen/SKILL.md">repo codex-imagegen headless provider</a></li>
+    <li id="source-59"><a href="https://github.com/asasher/asher-skills/issues/59">Issue #59 — Codex→Claude reachability and CLI aliases</a></li>
+    <li id="source-60"><a href="https://github.com/asasher/asher-skills/issues/60">Issue #60 — symmetric native wrappers for cross-harness delegation</a></li>
+    <li id="source-62"><a href="https://github.com/asasher/asher-skills/issues/62">Issue #62 — deferred harness-global context</a></li>
+  </ul>
+</section>
+
+</main>
+</body>
+</html>
