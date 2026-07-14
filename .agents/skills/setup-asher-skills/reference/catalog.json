@@ -12,6 +12,7 @@
         "diagnosing-bugs",
         "plan",
         "prototype",
+        "research",
         "review-loop",
         "staffing"
       ],
@@ -84,6 +85,7 @@
       "internal": false,
       "invocation": "user",
       "optional": [
+        "manage-communications",
         "projects-triage",
         "review-opportunities"
       ],
@@ -159,6 +161,20 @@
       "requires": [],
       "source": "skills/personal/learn-anything"
     },
+    "manage-communications": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "manage-opportunities",
+        "manage-tasks"
+      ],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/manage-communications"
+    },
     "manage-notes": {
       "category": "personal",
       "execution": "thread",
@@ -217,7 +233,8 @@
       "internal": false,
       "invocation": "user",
       "optional": [
-        "prototype"
+        "prototype",
+        "research"
       ],
       "requires": [
         "review-loop",
@@ -247,6 +264,19 @@
         "staffing"
       ],
       "source": "skills/delivery/prototype"
+    },
+    "research": {
+      "category": "thinking",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "staffing"
+      ],
+      "setup": "reference/setup.md",
+      "source": "skills/thinking/research"
     },
     "review-loop": {
       "category": "system",

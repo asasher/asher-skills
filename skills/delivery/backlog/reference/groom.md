@@ -15,7 +15,7 @@ This phase is human-in-the-loop: the agent proposes and may self-apply any role 
    - Completion criterion: a working set of open issues (a named batch when the backlog is large), each fetched with title, body, comments, and labels, and any in-flight orphans surfaced.
 
 2. Propose work-type and surface per issue.
-   - Orient on each issue and propose one work-type role — the full set is in `backlog-policy.md` § Label roles → Work-type (bug, enhancement, refactor, draft) — or mark it `needs-info`, `ready-for-human`, or an exclusion role. Propose `draft` for judgment-terminal work whose correctness is taste/fit — a memo, copy, a synthesis, code docs, with no testable spec to run against. Map every proposal to this repo's labels per the playbook.
+   - Orient on each issue and propose one work-type role — the full set is in `backlog-policy.md` § Label roles → Work-type (bug, enhancement, refactor, research, draft) — or mark it `needs-info`, `ready-for-human`, or an exclusion role. Propose `research` when the terminal deliverable is a source-backed account of what is known, inferred, contradicted, and unknown. Propose `draft` when correctness is instead judgment/taste — a memo, copy, or narrative synthesis. Map every proposal to this repo's labels per the playbook.
    - Also propose the dispatch surface from `backlog-policy.md` § Dispatch metadata (`backend`, `ui`, `mixed`, or `non-code`) and name any required capability.
    - Completion criterion: every issue has a proposed role and surface grounded in its content.
 
