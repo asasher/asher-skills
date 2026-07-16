@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "id": "fixture-project-update",
+  "kind": "project_update",
+  "generated_at": "2026-07-16T09:00:00Z",
+  "subject": "Project — delivery update",
+  "preheader": "Verified progress and next steps",
+  "audience_id": "fixture-client",
+  "project_ids": ["fixture-project"],
+  "sender": "relay@fixture.invalid",
+  "recipients": {"to": ["client@fixture.invalid"], "cc": ["operator@fixture.invalid"]},
+  "summary": "A concise summary of verified client-relevant progress.",
+  "sections": [
+    {"title": "Shipped", "items": [{"status": "production_verified", "title": "Example capability", "detail": "The capability is available and verified.", "evidence_ids": ["fixture:evidence:1"]}]},
+    {"title": "Next", "items": [{"status": "in_progress", "title": "Next verification", "detail": "The team is validating the next workflow.", "evidence_ids": ["fixture:evidence:2"]}]}
+  ],
+  "evidence": [
+    {"id": "fixture:evidence:1", "source": "fixture", "observed_at": "2026-07-15T16:00:00Z", "status": "production_verified", "project_id": "fixture-project", "feature": "example-capability"},
+    {"id": "fixture:evidence:2", "source": "fixture", "observed_at": "2026-07-15T17:00:00Z", "status": "in_progress", "project_id": "fixture-project", "feature": "next-verification"}
+  ]
+}

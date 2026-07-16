@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "append_only_ledgers": {
+    "workflow": "workflow.jsonl",
+    "delivery": "delivery.jsonl",
+    "replies": "replies.jsonl",
+    "watermarks": "watermarks.jsonl"
+  },
+  "workflow_states": [
+    "selected", "rendered", "reviewed", "draft-created", "send-submitted", "sent",
+    "excluded", "rejected", "superseded", "blocked", "blocked-ambiguous"
+  ],
+  "delivery_states": [
+    "pending", "receiving-server-delivered", "bounced", "complained", "rejected"
+  ]
+}

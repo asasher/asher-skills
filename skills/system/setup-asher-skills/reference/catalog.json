@@ -91,8 +91,8 @@
       "internal": false,
       "invocation": "user",
       "optional": [
-        "manage-communications",
         "projects-triage",
+        "relay",
         "review-opportunities",
         "until-zero"
       ],
@@ -173,21 +173,6 @@
       "optional": [],
       "requires": [],
       "source": "skills/personal/learn-anything",
-      "variants": {}
-    },
-    "manage-communications": {
-      "category": "personal",
-      "execution": "thread",
-      "external": [],
-      "internal": false,
-      "invocation": "model",
-      "optional": [],
-      "requires": [
-        "manage-opportunities",
-        "manage-tasks"
-      ],
-      "setup": "reference/setup.md",
-      "source": "skills/personal/manage-communications",
       "variants": {}
     },
     "manage-notes": {
@@ -285,6 +270,20 @@
         "staffing"
       ],
       "source": "skills/delivery/prototype",
+      "variants": {}
+    },
+    "relay": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "review-loop"
+      ],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/relay",
       "variants": {}
     },
     "research": {

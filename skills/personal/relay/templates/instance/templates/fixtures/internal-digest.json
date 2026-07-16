@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "id": "fixture-internal-digest",
+  "kind": "internal_digest",
+  "generated_at": "2026-07-16T09:00:00Z",
+  "subject": "Internal delivery digest",
+  "preheader": "Delivery, pending work, cash, and growth",
+  "audience_id": "fixture-internal",
+  "project_ids": ["fixture-project"],
+  "sender": "relay@fixture.invalid",
+  "recipients": {"to": ["team@fixture.invalid"], "cc": []},
+  "summary": "The current operating picture across delivery and commercial work.",
+  "sections": [
+    {"title": "Delivery", "items": []}, {"title": "Pending", "items": []},
+    {"title": "Cash", "items": []}, {"title": "Growth", "items": []}
+  ],
+  "evidence": []
+}

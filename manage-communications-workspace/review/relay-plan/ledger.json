@@ -1,0 +1,16 @@
+{
+  "responses": {
+    "evt_20260716_baef6517": [
+      {
+        "disposition": "changed",
+        "note": "Replaced the fragile SVG workflow drawing with a responsive, accessible flow strip that states each transition and its approval boundary."
+      }
+    ],
+    "evt_20260716_ab8904c3": [
+      {
+        "disposition": "changed",
+        "note": "Made review-loop a required Relay sibling and specified the split: Relay generates the email-specific multi-message/light-dark review document; review-loop owns serving, annotations, hash-bound verdicts, and awaiting."
+      }
+    ]
+  }
+}

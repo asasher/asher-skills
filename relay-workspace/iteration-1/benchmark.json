@@ -1,0 +1,24 @@
+{
+  "iteration": 1,
+  "primary_metric": "situated_probe_pass_rate",
+  "probe_cases_passed": 18,
+  "probe_cases_total": 18,
+  "probe_pass_rate": 1.0,
+  "executors": {
+    "executor-a": {"passed": 9, "total": 9},
+    "executor-b": {"passed": 9, "total": 9}
+  },
+  "deterministic": {
+    "relay_tests": {"passed": 12, "total": 12},
+    "renderer_runtime": {"passed": 1, "total": 1},
+    "catalog_tests": {"passed": 17, "total": 17}
+  },
+  "automatic_failures": [],
+  "ungraded_ambiguities": 0,
+  "fresh_reviewer_verdict": "NO_CHANGE",
+  "model_routing": {
+    "requested_role": "checker",
+    "executor_surface": "in-session isolated agent contexts",
+    "model_identity_observable": false
+  }
+}

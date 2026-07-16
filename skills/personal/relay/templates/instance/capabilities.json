@@ -1,0 +1,19 @@
+{
+  "schema_version": 2,
+  "agentmail": {
+    "provider": "agentmail-cli",
+    "minimum_version": "0.7.12",
+    "credential_file": ".env",
+    "credential_env": "AGENTMAIL_API_KEY",
+    "credential_scope": "pending",
+    "permissions": [],
+    "inbox_id": "",
+    "sender": "",
+    "sender_verified": false,
+    "domain": "",
+    "domain_verified": false,
+    "event_mode": "manual",
+    "webhook_signature_verified": false,
+    "status": "pending"
+  }
+}
