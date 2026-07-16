@@ -18,6 +18,14 @@ REQUIRED = {
     "checkpoint", "expected_return", "escalation_successor", "status",
 }
 
+# Spawn events additionally carry staffing telemetry: the actual model and effort
+# the child runs with (asserted against the staffed role before dispatch) and the
+# worker session id where the route has one (codex/claude CLI workers; null for
+# native children). Resume audits and the roster assertion read these.
+SPAWN_REQUIRED = {"model", "effort", "worker_session"}
+
+TERMINAL_STATUSES = {"complete", "blocked", "deferred", "returned", "interrupted"}
+
 
 class StateError(ValueError):
     pass
@@ -97,6 +105,8 @@ def _project_unlocked(root: Path) -> dict:
 
 def append(root: Path, parent: str, payload: dict) -> dict:
     missing = REQUIRED - set(payload)
+    if payload.get("type") == "spawn":
+        missing |= SPAWN_REQUIRED - set(payload)
     if missing:
         raise StateError("event missing: " + ", ".join(sorted(missing)))
     events = root / "events"
@@ -136,9 +146,21 @@ def verify_owner(record: dict) -> tuple[bool, str]:
     return True, "verified"
 
 
+def verify_terminal(root: Path) -> tuple[bool, dict]:
+    """Completion gate: fresh projection, handoff written, every parent terminal."""
+    status = project(root)
+    problems = []
+    if not (root / "handoff.md").exists():
+        problems.append("missing-handoff")
+    for parent, event in status["parents"].items():
+        if event.get("status") not in TERMINAL_STATUSES:
+            problems.append(f"non-terminal:{parent}:{event.get('status')}")
+    return not problems, {"ok": not problems, "problems": problems, "event_count": status["event_count"]}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("append", "project", "verify-owner", "handoff"))
+    parser.add_argument("command", choices=("append", "project", "verify-owner", "handoff", "verify-terminal"))
     parser.add_argument("--repo", type=Path, default=Path.cwd())
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--parent")
@@ -152,6 +174,10 @@ def main() -> int:
             print(json.dumps(append(root, args.parent, json.loads(args.payload))))
         elif args.command == "project":
             print(json.dumps(project(root)))
+        elif args.command == "verify-terminal":
+            ok, report = verify_terminal(root)
+            print(json.dumps(report))
+            return 0 if ok else 1
         elif args.command == "verify-owner":
             if not args.payload:
                 raise StateError("verify-owner requires --payload")

@@ -2,6 +2,15 @@
 
 This is the orchestrator: discover the queue, claim it, dispatch issue threads, report handoff. Do not solve issues here. Tracker and dispatch mechanics come from `docs/agents/platform.md`; this thread is also the loop's **serialized tracker writer** — where the binding requires main-branch writes (the local binding's abort and creation writes), they happen here, never in a worktree.
 
+## Liveness contract
+
+Binding for this thread and every issue thread it dispatches:
+
+- Report run state in exactly one of **`working | waiting | blocked | stalled | complete`**; announce every phase transition to the user.
+- While any issue is active, emit a heartbeat at most every 10 minutes: phase, last durable effect, next expected event. Status is a lookup, never an investigation.
+- **Never end a turn while children, gates, or CI this thread owns are live unless a verified wake path exists** — a harness-tracked child/task notification, an armed watcher, or a scheduled wakeup. The harness's staffing module names its native wake sources; where the harness tracks the wait, rely on the notification and do not poll (**no-burden rule** — bounded-polling machinery exists only for harnesses without wakeups). Where no wake path exists, hold a bounded foreground wait loop. Report "dispatched"/"resumed" only after the wake path is verified.
+- Every wait is recorded per `reference/run-state.md`: owner, object, expected event, next-check deadline, wake path. A prose-only wait ("awaiting CI") is a contract violation. Terminal CI waits belong to this thread, never to a parked issue thread.
+
 ## Steps
 
 1. Confirm the project is set up.
@@ -26,6 +35,7 @@ This is the orchestrator: discover the queue, claim it, dispatch issue threads, 
 
 4. Claim the queue.
    - Immediately before marking, re-read each queued issue via the tracker binding; skip any that changed since the queue was built — a readiness role dropped or already `in-flight` means another runner claimed it. This closes most of the concurrent-runner window; the loop accepts the residue rather than locking (`backlog-policy.md` § In-flight hygiene).
+   - **Claim exactly what can be staffed and supervised now.** The bound is real capacity — the harness's agent slots, the session budget, and a live supervisor per claim — never an artificial numeric cap. Candidates beyond current capacity stay `ready-for-agent` (unclaimed, no worktree) in the run-state deferred set as `deferred(wave)`; claimed-but-unworkable is forbidden. Release the next wave as capacity frees.
    - Mark each surviving issue `in-flight`, replacing `ready-for-agent`, recording the branch name and dispatch date per the policy playbook.
    - Local tracker binding: commit any uncommitted groomed tracker state first, then commit the `in-flight` marks — worktrees fork from a commit, so this claim commit is the fork point and every work branch is born carrying its own issue marked `in-flight` (`platform.md` § The local binding).
    - Completion criterion: every dispatched-to-be issue is marked `in-flight` on the tracker (committed, on the local binding), and skipped claims are reported.
@@ -41,6 +51,7 @@ This is the orchestrator: discover the queue, claim it, dispatch issue threads, 
    - Completion criterion: before any creation, every claimed issue has a recorded coordinator route and upward successor; then it has a worktree off the right fork point with a created child id and the parallelism constraint, or an explicit creation blocker.
 
 6. Report the handoff table.
+   - **The terminal report enumerates every authorized issue exactly once** as `completed | blocked(edge) | deferred(wave) | returned | interrupted`. "Done" with an unaccounted issue is invalid. Before reporting deliberate completion, run `scripts/run-state.py verify-terminal --run-id <run>` — a missing `handoff.md` or a non-terminal parent refuses completion; fix the state, never the report.
    - One row per claimed or dependency-deferred issue: id, title, reference, coordination class/reason, selected coordinator route, upward successor, child or pending worktree id, blocker/observed dependency if any.
    - Before waiting on a child, dependency wave, parking, interruption, exhaustion, or deliberate completion, load `reference/run-state.md` and write its checkpoint. At every terminal handoff, write its atomic `handoff.md` alongside the tracker table; a later session resumes through the audited-resume boundary in step 1.
    - On bindings where threads write the tracker directly (GitHub), stop only after those handoff outputs exist unless the user explicitly asks this thread to monitor; abort reports arriving later are bookkeeping for the next audited resume.
