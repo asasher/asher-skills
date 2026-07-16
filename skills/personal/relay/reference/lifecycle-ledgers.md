@@ -3,7 +3,8 @@
 Relay state is four JSONL ledgers under `relay/state/`:
 
 - `workflow.jsonl` — selected, rendered, reviewed, draft-created, send-submitted, sent, excluded,
-  rejected, superseded, blocked, and blocked-ambiguous transitions;
+  rejected, superseded, blocked, and blocked-ambiguous transitions; `reviewed` records an approving
+  verdict, never mere presentation;
 - `delivery.jsonl` — pending, receiving-server-delivered, bounced, complained, or rejected per normalized
   recipient hash and unique provider event ID;
 - `replies.jsonl` — reply-received facts keyed by provider event, message, thread, and source communication;

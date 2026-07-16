@@ -1,0 +1,22 @@
+{
+  "iteration": 3,
+  "primary_metric": "situated_probe_pass_rate",
+  "probe_cases_passed": 18,
+  "probe_cases_total": 18,
+  "probe_pass_rate": 1.0,
+  "executors": {
+    "executor-a": {"passed": 9, "total": 9, "surface": "in-session isolated Claude agent (opus-4.8)"},
+    "executor-b": {"passed": 9, "total": 9, "surface": "gpt-5.6-sol via codex exec --sandbox read-only"}
+  },
+  "deterministic": {
+    "relay_tests": {"passed": 12, "total": 12},
+    "renderer_runtime": {"passed": 1, "total": 1},
+    "catalog_tests": {"passed": 17, "total": 17}
+  },
+  "automatic_failures": [],
+  "ungraded_ambiguities": 0,
+  "eval_backed_edits_applied_before_run": [
+    "reference/lifecycle-ledgers.md: `reviewed` records an approving verdict, never mere presentation"
+  ],
+  "fresh_reviewer_verdict": "NO_CHANGE"
+}
