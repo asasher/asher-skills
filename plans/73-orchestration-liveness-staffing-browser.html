@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan #73 — Liveness, staffing &amp; browser-safety fixes</title>
+<style>
+:root { color-scheme: light dark; --fg: #1a1a1e; --muted: #6b6b74; --bg: #fafafa; --card: #fff; --line: #e4e4e7; --accent: #4f46e5; --bad: #dc2626; --good: #16a34a; --warn: #d97706; --badbg: #fef2f2; --goodbg: #f0fdf4; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e4e4e7; --muted: #94949c; --bg: #121216; --card: #1a1a20; --line: #2c2c34; --accent: #818cf8; --bad: #f87171; --good: #4ade80; --warn: #fbbf24; --badbg: #2a1616; --goodbg: #12261a; } }
+body { margin: 0; padding: 2.5rem 1.25rem 6rem; background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 760px; margin: 0 auto; }
+header.plan { margin-bottom: 2rem; }
+h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+.problem { color: var(--muted); margin: 0; }
+.chips { margin-top: .6rem; }
+.chip { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); border: 1px solid currentColor; border-radius: 99px; padding: .05rem .55rem; margin-right: .4rem; }
+section { margin: 2.2rem 0; }
+h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 .6rem; }
+h3 { font-size: 1rem; margin: 1.2rem 0 .4rem; }
+p { margin: .4rem 0; }
+figure { margin: .75rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; overflow-x: auto; }
+figcaption { font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+figure svg { width: 100%; height: auto; display: block; }
+svg text { font: 13px -apple-system, "Segoe UI", sans-serif; fill: currentColor; }
+svg .small { font-size: 11.5px; fill: var(--muted); }
+svg .ttl { font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+svg .lane { font-size: 12px; fill: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+ul.criteria { list-style: none; padding: 0; margin: .5rem 0; }
+ul.criteria li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .55rem .75rem .55rem 2.2rem; margin-bottom: .45rem; position: relative; }
+ul.criteria li::before { content: "\2610"; position: absolute; left: .75rem; color: var(--accent); }
+ul.plain { padding-left: 1.2rem; margin: .4rem 0; }
+ul.plain li { margin: .25rem 0; }
+details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .6rem 1rem; margin: .75rem 0; }
+summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; font-size: .85em; }
+pre { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .7rem .9rem; overflow-x: auto; font-size: .82rem; line-height: 1.45; }
+pre code { border: 0; background: transparent; padding: 0; }
+.md { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--good); border-radius: 10px; padding: .9rem 1.1rem; margin: .6rem 0; }
+.md h4 { margin: .6rem 0 .3rem; font-size: .92rem; }
+.md p, .md li { font-size: .92rem; }
+.md table { font-size: .84rem; }
+.md-current { border-left-color: var(--bad); }
+.lbl { font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 600; }
+.lbl.bad { color: var(--bad); } .lbl.good { color: var(--good); }
+.state { display:inline-block; font-size:.78rem; border:1px solid var(--line); border-radius:6px; padding:.1rem .5rem; margin:.15rem .2rem; background:var(--card); }
+.pathnote { font-size: .78rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+
+<header class="plan" id="plan-header">
+  <h1>Backlog orchestration: liveness, staffing &amp; browser-safety fixes</h1>
+  <p class="problem">Backlog runs go dark — work parks silently, status takes nudges, workers are hired without the permissions or the model their role needs, and browser fallbacks reach into the user's own machine. Observed on Codex; the same seams exist when runs go through Claude Code. This plan closes them harness-symmetrically.</p>
+  <div class="chips"><span class="chip">#73</span><span class="chip">#70</span><span class="chip">#59</span><span class="chip">plan v1</span><span class="chip">machine-wide</span></div>
+</header>
+
+<!-- ============================ THE SHAPE ============================ -->
+<section id="model">
+  <h2>The shape — why runs went dark</h2>
+  <p>One root cause carried three symptoms: <strong>supervision dies at turn boundaries</strong> — completions land durably, but nothing owns waking on them, so the human becomes the wake mechanism.</p>
+  <figure id="model-diagram">
+    <svg viewBox="0 0 720 235" role="img" aria-label="Today: parent turn ends, child completion wakes nobody, user nudges">
+      <defs>
+        <marker id="m1a" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="currentColor"/></marker>
+        <marker id="m1b" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="var(--bad)"/></marker>
+      </defs>
+      <text x="12" y="22" class="ttl" fill="var(--bad)">TODAY &#8212; OBSERVED IN ALL SIX RUNS</text>
+      <!-- swimlanes -->
+      <text x="12" y="79" class="lane">User</text>
+      <text x="12" y="139" class="lane">Orchestrator</text>
+      <text x="12" y="199" class="lane">Child / gate / CI</text>
+      <line x1="120" y1="75" x2="708" y2="75" stroke="var(--line)"/>
+      <line x1="120" y1="135" x2="708" y2="135" stroke="var(--line)"/>
+      <line x1="120" y1="195" x2="708" y2="195" stroke="var(--line)"/>
+      <!-- parked band -->
+      <rect x="255" y="60" width="330" height="150" fill="var(--bad)" opacity="0.07"/>
+      <text x="270" y="52" fill="var(--bad)">parked &#8212; 84 min &#8230; 13 h observed</text>
+      <!-- dispatch -->
+      <line x1="155" y1="135" x2="155" y2="190" stroke="currentColor" marker-end="url(#m1a)"/>
+      <text x="132" y="122" class="small">dispatch</text>
+      <!-- turn ends -->
+      <line x1="242" y1="128" x2="256" y2="142" stroke="var(--bad)" stroke-width="2.5"/>
+      <line x1="256" y1="128" x2="242" y2="142" stroke="var(--bad)" stroke-width="2.5"/>
+      <text x="212" y="118" fill="var(--bad)">turn ends</text>
+      <!-- child completes -->
+      <circle cx="380" cy="195" r="6" fill="var(--good)"/>
+      <text x="322" y="222" class="small">work completes (durable)</text>
+      <line x1="380" y1="186" x2="380" y2="146" stroke="var(--bad)" stroke-dasharray="4 4" marker-end="url(#m1b)"/>
+      <text x="392" y="168" fill="var(--bad)">wakes nobody</text>
+      <!-- user nudge -->
+      <line x1="620" y1="80" x2="620" y2="128" stroke="currentColor" marker-end="url(#m1a)"/>
+      <text x="500" y="52">&#8220;Status?&#8221; &#8212; the wake mechanism</text>
+    </svg>
+    <svg viewBox="0 0 720 250" role="img" aria-label="Planned: orchestrator owns the wait, heartbeats to user, completion consumed" style="margin-top:1rem">
+      <defs>
+        <marker id="m2a" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="currentColor"/></marker>
+        <marker id="m2g" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="var(--good)"/></marker>
+      </defs>
+      <text x="12" y="22" class="ttl" fill="var(--good)">PLANNED &#8212; THE LIVENESS CONTRACT</text>
+      <!-- swimlanes -->
+      <text x="12" y="94" class="lane">User</text>
+      <text x="12" y="154" class="lane">Orchestrator</text>
+      <text x="12" y="214" class="lane">Child / gate / CI</text>
+      <line x1="120" y1="90" x2="708" y2="90" stroke="var(--line)"/>
+      <line x1="120" y1="150" x2="708" y2="150" stroke="var(--line)"/>
+      <line x1="120" y1="210" x2="708" y2="210" stroke="var(--line)"/>
+      <!-- dispatch -->
+      <line x1="155" y1="150" x2="155" y2="205" stroke="currentColor" marker-end="url(#m2a)"/>
+      <text x="128" y="137" class="small">dispatch, wake path verified first</text>
+      <!-- wait loop arcs on orchestrator lane -->
+      <path d="M 340 150 q 22 -30 44 0" fill="none" stroke="var(--good)" stroke-width="1.5"/>
+      <path d="M 400 150 q 22 -30 44 0" fill="none" stroke="var(--good)" stroke-width="1.5"/>
+      <path d="M 460 150 q 22 -30 44 0" fill="none" stroke="var(--good)" stroke-width="1.5"/>
+      <text x="340" y="175" fill="var(--good)">owns the wait &#8212; bounded polls / tracked tasks</text>
+      <!-- heartbeats -->
+      <line x1="250" y1="145" x2="250" y2="96" stroke="var(--good)" stroke-dasharray="4 4" marker-end="url(#m2g)"/>
+      <text x="150" y="40" fill="var(--good)">heartbeat &#8804; 10 min &#183; phase transitions announced</text>
+      <!-- child completes -->
+      <circle cx="560" cy="210" r="6" fill="var(--good)"/>
+      <text x="512" y="237" class="small">work completes</text>
+      <line x1="560" y1="201" x2="560" y2="156" stroke="var(--good)" marker-end="url(#m2g)"/>
+      <text x="574" y="203" fill="var(--good)">consumed</text>
+      <!-- terminal -->
+      <line x1="655" y1="145" x2="655" y2="96" stroke="var(--good)" marker-end="url(#m2g)"/>
+      <text x="440" y="66" fill="var(--good)">final report: every issue accounted</text>
+    </svg>
+    <figcaption>The fix is ownership, not more state: durable state already existed in every parked case — nothing owned consuming it. The contract makes a verified wake path a <em>precondition</em> of dispatching or ending a turn.</figcaption>
+  </figure>
+  <p>Run state vocabulary becomes exactly five states, used in every user-visible report:</p>
+  <p><span class="state">working</span><span class="state">waiting — on what, until when, woken how</span><span class="state">blocked — needs whom</span><span class="state">stalled — liveness lost, recovery started</span><span class="state">complete</span></p>
+</section>
+
+<!-- ============================ BEFORE / AFTER ============================ -->
+<section id="before-after">
+  <h2>Before &#8594; after</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Today (observed)</th><th>Planned</th></tr></thead>
+    <tbody>
+      <tr id="ba-status"><td>Status</td><td>Reconstructed forensically after each &#8220;Status?&#8221; (10 nudges in one metis run)</td><td>Heartbeat &#8804;10&#8202;min + announced phase transitions; status is a lookup, never an investigation</td></tr>
+      <tr id="ba-waits"><td>Waits</td><td>Prose-only (&#8220;awaiting CI&#8221; &#8594; 64&#8202;m&#8202;41&#8202;s untracked; CI was green in 2&#8202;m)</td><td>Every wait records owner, object, expected event, next-check deadline, wake path</td></tr>
+      <tr id="ba-queue"><td>Queue</td><td>&#8220;Done&#8221; silently omitted 4 of 8 authorized issues; 7 issues claimed with no runnable slot</td><td>Authorized set persisted; terminal report must account for every issue; claim only a staffable wave</td></tr>
+      <tr id="ba-workers"><td>Cross-harness workers</td><td><code>claude -p</code> hired opus-4.8 with default-deny permissions: 6/6 builds produced zero file effect, exit 0</td><td>Orchestrator-owned envelope in the dispatch command, both directions — for now yolo/full-access each way (Asher's call), scoped role envelopes documented as the hardening path — plus an effect-class probe before the first substantive dispatch</td></tr>
+      <tr id="ba-model"><td>Model staffing</td><td>Children silently inherit the picker (pipelines wave&#8202;1 build/verify/review ran terra@medium, the floor watcher model)</td><td>Spawn event records model+effort and asserts it against the staffed role; mismatch blocks dispatch</td></tr>
+      <tr id="ba-browser"><td>Browser verification</td><td>Codex pins ChatGPT-in-Chrome primary; Computer Use auto-fallback drove the user's Chrome (Prime Video incident)</td><td>agent-browser isolated default on both harnesses; Chrome only for user-session test cases with consent; Computer Use gated on recorded use case + explicit approval</td></tr>
+      <tr id="ba-merge"><td>Merging</td><td>4 PRs merged without authorization, 1 before CI green</td><td>backlog stops at review-ready PR; merging is the explicit <code>merge-changes</code> workflow (#70)</td></tr>
+      <tr id="ba-verify"><td>Verification language</td><td>&#8220;fully verified&#8221; / &#8220;PASS by inspection&#8221; later contradicted by 4-gap and 2-blocker reviews</td><td>Per-criterion grade: <code>live | static-substitute | not-run | blocked</code>; parents quote the grade</td></tr>
+    </tbody>
+  </table>
+  <details id="evidence-fold">
+    <summary>Evidence base — six audited runs (open for the numbers)</summary>
+    <p>Jul 15–16 Codex-driven runs, audited end-to-end from transcripts: <code>backlog-workspace/run-audits/2026-07-15-{metis,integrations-v2,pipelines}.md</code>, synthesized with retro issues #44/#46/#47 (Jul 10–11 Claude-driven runs) in <code>SYNTHESIS.md</code>; model/effort forensics in <code>MODELS-ADDENDUM.md</code>.</p>
+    <ul class="plain">
+      <li>metis #221: 11&#8202;h&#8202;31&#8202;m overnight park after local work completed; PR-ready state unsurfaced 68&#8202;m; two false all-PASS verification claims.</li>
+      <li>integrations-v2: 12&#8202;h&#8202;55&#8202;m park; two plan approvals landed <em>seconds after</em> their coordinators exited and sat unconsumed overnight; OAuth consent blocker unsurfaced 21&#8202;m; Computer Use pressed Space on Prime Video in the user's Chrome.</li>
+      <li>pipelines: &#8220;Done&#8221; with 4 of 8 issues silently undone; 4 unauthorized merges (1 pre-CI); wave-1 diagnosis/build/verify/review all ran gpt-5.6-terra@medium because dispatch inherited the groom-phase picker default.</li>
+      <li>opus-4.8 as builder: 6/6 dispatches permission-denied (bare <code>claude -p</code>, headless auto-deny), ~30&#8202;m burned, zero effect — while as read-only reviewer it caught the DST regression and a validation bypass. The model was never the problem.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- ============================ HARNESS PARITY ============================ -->
+<section id="parity">
+  <h2>Why this holds for Claude Code too</h2>
+  <p>Every failure class maps to a seam that exists in both harnesses; each fix below is written against the <em>role</em>, and each staffing variant binds it to its harness's mechanics. <strong>No-burden rule:</strong> a workaround earns its cost only where its platform gap exists. The contracts state the invariant ("a verified wake path exists before the turn ends"); each harness binding names its native wake sources — on Claude Code, tracked background tasks and subagent completion notifications already re-invoke the session, so a Claude-led run satisfies the contract natively and inherits none of the bounded-polling machinery Codex-led runs need. Only genuinely untracked waits (fire-and-forget shells, external CI, review verdicts) carry the explicit-ownership cost on either harness.</p>
+  <table id="parity-table">
+    <thead><tr><th>Failure class</th><th>Codex seam (observed)</th><th>Claude Code seam (same risk)</th><th>Fix that covers both</th></tr></thead>
+    <tbody>
+      <tr><td>Turn-end park</td><td>Finalized root; child finals wake nothing</td><td>Thread ends turn &#8220;waiting&#8221; on untracked shells/subagents (the #44/#46/#47 dead-watcher pattern — ≥18 parks)</td><td>Wake-path precondition + bounded foreground waits in <code>run.md</code>/<code>issue-loop.md</code> (harness-neutral); Claude binds to tracked background tasks/Monitor, Codex to owned wait loops</td></tr>
+      <tr><td>Worker permissions</td><td>Bare <code>claude -p</code> &#8594; headless auto-deny</td><td>Claude&#8594;Codex <code>codex exec</code> without sandbox/network config; and any headless <code>claude</code> a workflow spawns</td><td>Per-direction <strong>permission envelope</strong> in staffing Mechanics + effect-class probe before dispatch</td></tr>
+      <tr><td>Silent model inheritance</td><td>Children inherit the Desktop picker</td><td>Subagents inherit the session model unless <code>model:</code> is set</td><td>Spawn event records model+effort; asserted against the staffed role pre-dispatch</td></tr>
+      <tr><td>Browser safety</td><td>Chrome pinned primary; Computer Use auto-fallback</td><td>Claude module lists Codex Chrome handoff as generic fallback</td><td>One policy, both variant tables: agent-browser default, carve-out + gate</td></tr>
+      <tr><td>Overconfident verification</td><td>terra@medium reviewers; &#8220;PASS by inspection&#8221;</td><td>Cheap watchers/checkers doing judgment work</td><td>Taste/role gates already in roster + grading language in <code>verify.md</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============================ WORKSTREAMS ============================ -->
+<section id="workstreams">
+  <h2>Workstreams</h2>
+
+  <h3 id="w1">W1 — Liveness &amp; reporting contract (backlog: <code>run.md</code>, <code>issue-loop.md</code>, <code>run-state.md</code>)</h3>
+  <p>The five-state vocabulary, heartbeat, wake-path precondition, and first-class waits become contract text (rendered in <a href="#copy-run">Updated copy</a>). <code>run-state.py</code> gains a completion gate: a stale projection or missing <code>handoff.md</code> refuses terminal &#8220;Done&#8221;.</p>
+
+  <h3 id="w2">W2 — Queue invariant &amp; runnable waves (backlog: <code>run.md</code>)</h3>
+  <p>Persist the authorized set at dispatch; claim exactly what can be staffed <em>and supervised</em> right now. No artificial numeric cap on subagents — the bound is real capacity: available harness slots, session budget, and a live supervisor per claim. An issue with no runnable worker stays <code>ready-for-agent</code> instead of sitting claimed (the iv2 run held 7 claimed issues against 4 slots for ~18&#8202;h). Terminal reports enumerate every authorized issue or are invalid.</p>
+
+  <h3 id="w3">W3 — Cross-harness dispatch: permission envelope, effect probes, staffing telemetry (staffing skill)</h3>
+  <p><strong>One policy, both directions: the hiring orchestrator owns the envelope.</strong> Whoever spawns a worker is responsible for granting — in the dispatch command itself — every permission the job needs, proving it with a reversible probe, on the model the roster staffed, recorded where resume can audit it. <strong>For now the envelope is yolo both ways</strong> (Asher, review round 4): each harness's full-permission mode, matching how the orchestrators themselves run; the scoped role envelopes below stay documented as the hardening path.</p>
+  <figure id="w3-diagram">
+    <svg viewBox="0 0 720 300" role="img" aria-label="Dispatch pipeline: staff the role, apply the permission envelope, run an effect probe, then dispatch">
+      <defs>
+        <marker id="p1" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="currentColor"/></marker>
+        <marker id="p2" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="var(--bad)"/></marker>
+        <marker id="p3" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="var(--good)"/></marker>
+      </defs>
+      <!-- envelope commands, one per line, above the pipeline -->
+      <text x="12" y="26" class="small">Codex &#8594; Claude:</text>
+      <text x="130" y="26" class="small" style="font-family:ui-monospace,monospace">claude -p --model opus --dangerously-skip-permissions &#8230;  (yolo, for now)</text>
+      <text x="12" y="48" class="small">Claude &#8594; Codex:</text>
+      <text x="130" y="48" class="small" style="font-family:ui-monospace,monospace">codex exec --sandbox danger-full-access &#8230; &lt;/dev/null  + explicit timeout</text>
+      <line x1="250" y1="58" x2="250" y2="108" stroke="var(--accent)" stroke-dasharray="4 4"/>
+      <!-- pipeline boxes -->
+      <rect x="12" y="110" width="128" height="64" rx="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <text x="30" y="137">Staff role</text>
+      <text x="30" y="157" class="small">model + effort</text>
+      <rect x="180" y="110" width="170" height="64" rx="9" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="198" y="137" fill="var(--accent)">Permission envelope</text>
+      <text x="198" y="157" class="small">flags &#38; settings, per direction</text>
+      <rect x="390" y="110" width="140" height="64" rx="9" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+      <text x="410" y="137" fill="var(--warn)">Effect probe</text>
+      <text x="410" y="157" class="small">reversible, role-class</text>
+      <rect x="570" y="110" width="138" height="64" rx="9" fill="none" stroke="var(--good)" stroke-width="1.5"/>
+      <text x="596" y="137" fill="var(--good)">Dispatch</text>
+      <text x="590" y="157" class="small">watched, bounded</text>
+      <line x1="140" y1="142" x2="178" y2="142" stroke="currentColor" marker-end="url(#p1)"/>
+      <line x1="350" y1="142" x2="388" y2="142" stroke="currentColor" marker-end="url(#p1)"/>
+      <line x1="530" y1="142" x2="568" y2="142" stroke="currentColor" marker-end="url(#p1)"/>
+      <!-- probe fail path -->
+      <line x1="460" y1="174" x2="460" y2="216" stroke="var(--bad)" marker-end="url(#p2)"/>
+      <text x="300" y="238" fill="var(--bad)">effect denied &#8594; quarantine the route (directionally), reroute now</text>
+      <text x="300" y="258" class="small" fill="var(--bad)">never burn a worker turn discovering a permission wall</text>
+      <!-- record path -->
+      <line x1="639" y1="174" x2="639" y2="216" stroke="var(--good)" stroke-dasharray="4 4" marker-end="url(#p3)"/>
+      <text x="12" y="238" fill="var(--good)">spawn event &#8594; run-state:</text>
+      <text x="12" y="258" class="small" fill="var(--good)">model &#183; effort &#183; role &#183; route &#183; session id</text>
+      <text x="12" y="276" class="small" fill="var(--good)">(resume by id &#8212; never <tspan style="font-family:ui-monospace,monospace">--last</tspan>)</text>
+    </svg>
+    <figcaption>Prompt text never grants permissions — only the envelope does. The probe is the guard that catches the next config regression in seconds instead of six 10-minute burns.</figcaption>
+  </figure>
+  <p>Also in W3: wrapper purity (a wrapper supervises and relays only — never repurposed to edit), minimal-context child spawns (no full-history forks), and the roster assertion that would have kept pipelines wave&#8202;1 off terra@medium.</p>
+
+  <h3 id="w4">W4 — Browser policy inversion &amp; Computer Use gate (staffing + backlog setup + project playbooks)</h3>
+  <figure id="w4-diagram">
+    <svg viewBox="0 0 720 330" role="img" aria-label="Browser routing: agent-browser default, Chrome carve-out with consent, Computer Use gated, no automatic fallback">
+      <defs>
+        <marker id="b1" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="currentColor"/></marker>
+        <marker id="b2" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="var(--bad)"/></marker>
+      </defs>
+      <rect x="235" y="12" width="250" height="42" rx="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <text x="268" y="39">Need a browser effect?</text>
+      <line x1="360" y1="54" x2="360" y2="92" stroke="currentColor" marker-end="url(#b1)"/>
+      <!-- default -->
+      <rect x="195" y="94" width="330" height="60" rx="9" fill="var(--good)" opacity="0.08"/>
+      <rect x="195" y="94" width="330" height="60" rx="9" fill="none" stroke="var(--good)" stroke-width="2"/>
+      <text x="215" y="119" fill="var(--good)" style="font-weight:600">agent-browser &#8212; isolated profile &#8212; DEFAULT</text>
+      <text x="215" y="141" class="small">both harnesses &#183; headless ok &#183; never the user's session</text>
+      <!-- carve-out -->
+      <line x1="525" y1="124" x2="570" y2="124" stroke="currentColor" marker-end="url(#b1)"/>
+      <text x="440" y="82" class="small">needs the user's own signed-in session?</text>
+      <rect x="572" y="94" width="140" height="72" rx="9" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+      <text x="584" y="116" fill="var(--warn)">ChatGPT-in-</text>
+      <text x="584" y="133" fill="var(--warn)">Chrome</text>
+      <text x="584" y="153" class="small">per-use consent</text>
+      <!-- computer use branch -->
+      <line x1="360" y1="154" x2="360" y2="196" stroke="currentColor" marker-end="url(#b1)"/>
+      <text x="372" y="180" class="small">desktop / native surface?</text>
+      <rect x="195" y="198" width="330" height="72" rx="9" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+      <text x="215" y="223" fill="var(--warn)" style="font-weight:600">Computer Use &#8212; gated</text>
+      <text x="215" y="243" class="small">use case recorded in environment.md</text>
+      <text x="215" y="260" class="small">AND explicit user approval, per engagement</text>
+      <!-- hard gap -->
+      <line x1="525" y1="232" x2="570" y2="232" stroke="var(--bad)" marker-end="url(#b2)"/>
+      <text x="528" y="220" class="small" fill="var(--bad)">gate unmet?</text>
+      <rect x="572" y="204" width="140" height="58" rx="9" fill="var(--bad)" opacity="0.1"/>
+      <rect x="572" y="204" width="140" height="58" rx="9" fill="none" stroke="var(--bad)" stroke-width="1.5"/>
+      <text x="588" y="228" fill="var(--bad)" style="font-weight:600">HARD GAP</text>
+      <text x="588" y="248" class="small">report; never fall back</text>
+      <!-- banned edge -->
+      <path d="M 193 124 C 100 124 100 232 193 232" fill="none" stroke="var(--bad)" stroke-width="1.5" stroke-dasharray="5 5"/>
+      <line x1="115" y1="162" x2="145" y2="192" stroke="var(--bad)" stroke-width="3"/>
+      <line x1="145" y1="162" x2="115" y2="192" stroke="var(--bad)" stroke-width="3"/>
+      <text x="12" y="296" fill="var(--bad)">a failed agent-browser launch is a blocker to surface &#8212;</text>
+      <text x="12" y="316" fill="var(--bad)">never an automatic escalation into the user's own browser</text>
+    </svg>
+    <figcaption>The crossed-out edge is the Prime Video incident: a tool failure must surface as a blocker, never escalate into the user's machine. This encodes the policy Asher set mid-run on Jul 16, whose edits currently sit uncommitted in integrations-v2 only.</figcaption>
+  </figure>
+  <p class="pathnote">Surfaces: both staffing variant modules, <code>machine-audit.md</code> + <code>rankings-and-routing.md</code> examples, backlog <code>setup.md</code> step 6 + <code>templates/common/environment.md</code>, regenerated deployed machine modules, and a reconcile pass over metis/pipelines/integrations-v2 playbooks (superseding the uncommitted iv2 edits).</p>
+
+  <h3 id="w5">W5 — Delivery/merge boundary (existing issue #70)</h3>
+  <p>Scrub &#8220;to a merged PR&#8221; from all high-level backlog copy; backlog ends at review-ready PRs; a new small <code>merge-changes</code> skill is the explicit approval gate (re-verifies checks at merge time, merges in dependency order, stops on semantic conflicts). Specified in #70 — this plan schedules it.</p>
+
+  <h3 id="w6">W6 — Review-loop verdict durability &amp; custody</h3>
+  <p>One canonical durable event path; verdict events consumed on resume without a live watcher (the two orphaned overnight approvals); events copied into the run root before cleanup; token custody split (orchestrator mints, thread awaits) plus client evidence per event, per retro #46's self-approval finding.</p>
+
+  <h3 id="w7">W7 — Regression probes (dual-executor, per <code>docs/agents/probe-evals.md</code>)</h3>
+  <p>Every behavior this plan changes gets a situated probe run against both executors (Claude subagent + <code>codex exec</code>) with a prewritten answer key — see acceptance criteria.</p>
+
+  <h3 id="w8">W8 — Codex platform reports (deferred; not filed upstream)</h3>
+  <p><strong>Deferred per Asher (post-approval, 2026-07-17).</strong> The reports are written up in <a href="https://github.com/asasher/asher-skills/issues/77">issue #77</a> — child completion should wake a finalized parent; <code>list_agents</code> must not omit live children; the collaboration slot cap should be introspectable; unexplained 47–65&#8202;m event gaps need telemetry; <code>resume --last</code> is racy under concurrency — and are <em>not</em> filed to the Codex tracker until Asher says so. The contracts above are written to survive these staying unfixed, so nothing downstream waits on this.</p>
+</section>
+
+<!-- ============================ UPDATED COPY ============================ -->
+<section id="copy">
+  <h2>Updated copy — read the actual text</h2>
+  <p>The load-bearing new text, rendered. Red = current, green = proposed. Full current text folded under each.</p>
+
+  <h3 id="copy-staffing-codex">Staffing, Codex variant — capability providers &amp; pins</h3>
+  <details><summary>Current (the table that caused it)</summary>
+    <div class="md md-current">
+      <table>
+        <thead><tr><th>need</th><th>primary provider</th><th>fallback</th></tr></thead>
+        <tbody>
+          <tr><td>browser-use</td><td><code>chrome:control-chrome</code> / ChatGPT-in-Chrome, staffed by terra</td><td>project-recorded <code>agent-browser</code></td></tr>
+          <tr><td>computer-use</td><td><code>computer-use:computer-use</code>, staffed by terra</td><td>none</td></tr>
+        </tbody>
+      </table>
+      <p>Pins: &#8220;&#8230; browser-use &#8594; Chrome/terra, then project <code>agent-browser</code>; computer-use &#8594; Computer Use/terra.&#8221;</p>
+    </div>
+  </details>
+  <div class="md" id="copy-staffing-codex-new">
+    <span class="lbl good">Proposed</span>
+    <table>
+      <thead><tr><th>need</th><th>primary provider</th><th>fallback / hard edge</th></tr></thead>
+      <tbody>
+        <tr><td>browser-use</td><td>machine <code>agent-browser</code> (isolated or headless profile), staffed by terra</td><td>ChatGPT-in-Chrome (<code>chrome:control-chrome</code>) <strong>only</strong> when the test case needs the user's own signed-in session, with per-use explicit consent; a failed agent-browser launch is a tool failure to surface, not a license to switch surfaces</td></tr>
+        <tr><td>computer-use</td><td><strong>gated</strong>: requires a concrete use case recorded in the project's <code>environment.md</code> <em>and</em> explicit user approval for the engagement; then <code>computer-use:computer-use</code>, staffed by terra</td><td>none — an unmet gate is a hard capability gap; never fall back to the user's browser or desktop</td></tr>
+        <tr><td>imagegen</td><td colspan="2"><em>(unchanged)</em></td></tr>
+      </tbody>
+    </table>
+    <p><strong>Pins:</strong> mechanical/bulk &#8594; sol; browser-use &#8594; <code>agent-browser</code>/terra, ChatGPT-in-Chrome only via the recorded user-session carve-out; computer-use &#8594; only through its gate. Imagegen selects its provider without pretending image access is a model trait.</p>
+  </div>
+
+  <h3 id="copy-staffing-mechanics">Staffing, Codex variant — Mechanics (the opus fix)</h3>
+  <details><summary>Current (one line, no permission envelope)</summary>
+    <div class="md md-current"><p>&#8220;It runs <code>claude -p --model &lt;verified-alias&gt; '&lt;self-contained prompt&gt;' &lt;/dev/null</code>, never adds <code>--bare</code>, and captures the durable result.&#8221;</p></div>
+  </details>
+  <div class="md" id="copy-staffing-mechanics-new">
+    <span class="lbl good">Proposed</span>
+    <p><strong>The envelope policy is bidirectional and orchestrator-owned:</strong> whoever hires a worker grants, in the dispatch command itself, every permission the job needs. Per-harness syntax, one responsibility. Prompt text never grants permissions; only flags and settings do. <strong>Current machine policy (Asher, plan review round 4): yolo both ways for now</strong> — matching how the orchestrators themselves run:</p>
+    <pre><code># Codex &#8594; Claude — worker, run from the target worktree (yolo, for now):
+claude -p --model &lt;verified-alias&gt; --dangerously-skip-permissions \
+  '&lt;self-contained prompt&gt;' &lt;/dev/null
+
+# Claude &#8594; Codex — worker (yolo, for now):
+codex exec --cd &lt;worktree&gt; --sandbox danger-full-access \
+  '&lt;self-contained prompt&gt;' &lt;/dev/null        # + explicit generous timeout
+
+# Hardening path (documented, not active): role-scoped envelopes —
+#   Codex&#8594;Claude:  --permission-mode acceptEdits --allowedTools 'Edit' 'Write' 'Bash(git *)' &#8230;
+#   Claude&#8594;Codex:  --sandbox workspace-write -c sandbox_workspace_write.network_access=true
+#   reviewers/checkers: read-only sandbox / no mutation flags.</code></pre>
+    <ul class="plain">
+      <li><strong>Effect-class probe first.</strong> Before the first substantive dispatch on a route, run a reversible probe matching the role: a one-line file write for a builder, a read for a reviewer. A denied effect quarantines the route <em>directionally</em> (build dead &#8800; review dead) and reroutes immediately. A text-only echo probe verifies nothing about effects.</li>
+      <li><strong>Session identity.</strong> Capture the worker's session id at launch; resume by id, never <code>resume --last</code> — parallel wrappers collide on it.</li>
+      <li><strong>Wrapper purity.</strong> A wrapper supervises the bounded process and relays raw output and lifecycle status. It is never repurposed to edit; if capacity blocks a real worker, free, queue, or report blocked.</li>
+      <li><strong>Telemetry.</strong> Record the spawned model, effort, role, route, and session id in the run-state spawn event and assert model+effort against the staffed role before dispatch; a mismatch is a dispatch blocker.</li>
+      <li><strong>Minimal context.</strong> Children get a self-contained task packet (issue, role, worktree, gate, expected return) — never a full conversation-history fork.</li>
+    </ul>
+  </div>
+
+  <h3 id="copy-staffing-claude">Staffing, Claude Code variant — capability providers</h3>
+  <details><summary>Current</summary>
+    <div class="md md-current">
+      <table><tbody>
+        <tr><td>browser-use</td><td>project-recorded machine <code>agent-browser</code></td><td>explicit Codex app handoff to <code>chrome:control-chrome</code>; unattended <code>codex exec</code> cannot supply it</td></tr>
+        <tr><td>computer-use</td><td>none in Claude Code</td><td>explicit Codex Computer Use handoff; no substitute</td></tr>
+      </tbody></table>
+    </div>
+  </details>
+  <div class="md" id="copy-staffing-claude-new">
+    <span class="lbl good">Proposed</span>
+    <table>
+      <thead><tr><th>need</th><th>reachable route</th><th>fallback / hard edge</th></tr></thead>
+      <tbody>
+        <tr><td>browser-use</td><td>machine <code>agent-browser</code> (isolated profile) — unchanged as primary</td><td>explicit Codex handoff to ChatGPT-in-Chrome <strong>only</strong> for a test case needing the user's own signed-in session, with per-use consent; unattended <code>codex exec</code> cannot supply it</td></tr>
+        <tr><td>computer-use</td><td>none in Claude Code</td><td>explicit Codex Computer Use handoff <strong>only</strong> behind the same gate: recorded project use case + explicit user approval; otherwise report a hard capability gap</td></tr>
+      </tbody>
+    </table>
+    <p>Claude&#8594;Codex mechanics stay as recorded (watched sonnet wrapper, bounded <code>codex exec</code>, closed stdin, explicit timeout) — and carry the same orchestrator-owned envelope policy as the other direction: for now <code>--sandbox danger-full-access</code> (yolo both ways, per Asher), with the role-matched sandboxes (<code>workspace-write</code>/<code>read-only</code>) documented as the hardening path, plus the shared effect-probe, session-id, telemetry, and wrapper-purity rules.</p>
+  </div>
+
+  <h3 id="copy-run">Backlog <code>run.md</code> — new contract blocks</h3>
+  <div class="md" id="copy-run-new">
+    <span class="lbl good">Proposed (added to steps 5–6)</span>
+    <h4>Liveness contract</h4>
+    <ul class="plain">
+      <li>Report state in exactly one of <code>working | waiting | blocked | stalled | complete</code>. Announce every phase transition to the user.</li>
+      <li>While any issue is active, emit a heartbeat at most every 10 minutes: phase, last durable effect, next expected event.</li>
+      <li><strong>Never end a turn while children, gates, or CI you own are live unless a verified wake path exists</strong> (harness notification, tracked background task, scheduled wakeup). Where none exists, hold a bounded foreground wait loop. &#8220;Dispatched&#8221; / &#8220;resumed&#8221; may be reported only after the wake path is verified.</li>
+      <li>Every wait is recorded with owner, object, expected event, next-check deadline, and wake path. A prose-only wait (&#8220;awaiting CI&#8221;) is a contract violation. Terminal CI waits belong to the orchestrator, not a parked issue thread.</li>
+    </ul>
+    <h4>Queue invariant</h4>
+    <ul class="plain">
+      <li>Persist the authorized issue set at dispatch. Claim exactly what can be staffed and supervised <em>now</em> — bounded by real capacity (harness slots, session budget, a live supervisor), never an arbitrary numeric cap; the rest stay <code>ready-for-agent</code> — claimed-but-unworkable is forbidden.</li>
+      <li>The terminal report enumerates every authorized issue as <code>completed | blocked(edge) | deferred(wave) | returned | interrupted</code>. &#8220;Done&#8221; with an unaccounted issue is invalid. Write <code>handoff.md</code> and pass the run-state verify gate before finishing; a stale projection refuses completion.</li>
+    </ul>
+  </div>
+
+  <h3 id="copy-verify">Backlog <code>verify.md</code> / <code>issue-loop.md</code> — grading language</h3>
+  <div class="md" id="copy-verify-new">
+    <span class="lbl good">Proposed</span>
+    <p>Every per-criterion verdict carries a grade: <code>live</code> (exercised on the real surface) | <code>static-substitute</code> (inspection or approved substitute — named) | <code>not-run</code> | <code>blocked</code>. A checker that cannot execute records <code>static-substitute</code> or <code>blocked</code> — <strong>never unqualified PASS</strong> — and coordinator/orchestrator reports quote the grade verbatim. Acceptance requires every criterion <code>live</code> or carrying its pre-approved substitute as a caveat.</p>
+  </div>
+
+  <h3 id="copy-env">Backlog <code>templates/common/environment.md</code> — driver defaults</h3>
+  <details><summary>Current</summary>
+    <div class="md md-current"><p>&#8220;Driver per surface: <em>defaults: shell + the CLI entrypoint; agent-browser for the web app; a simulator + driver for mobile; computer-use tooling for desktop. Adjust to this repo.</em>&#8221;</p></div>
+  </details>
+  <div class="md" id="copy-env-new">
+    <span class="lbl good">Proposed</span>
+    <p>&#8220;Driver per surface: <em>defaults: shell + the CLI entrypoint; <strong>agent-browser with an isolated profile</strong> for the web app (the user's own browser only for a recorded user-session test case, with per-use consent); a simulator + driver for mobile; desktop requires the Computer Use gate — a concrete use case recorded here <strong>and</strong> explicit user approval; absent either, record the surface as a hard verification gap. A driver failure surfaces as a blocker; it never falls back to a less-isolated surface.</em>&#8221;</p>
+  </div>
+</section>
+
+<!-- ============================ DEFINITION OF DONE ============================ -->
+<section id="dod">
+  <h2>Definition of done — acceptance criteria</h2>
+  <ul class="criteria">
+    <li id="ac-1" data-criterion>Both staffing variant modules (codex + claude, plus <code>machine-audit.md</code>/<code>rankings-and-routing.md</code> examples) name <code>agent-browser</code> as the primary browser-use provider; ChatGPT-in-Chrome appears only under the user-session carve-out with per-use consent. Checked by reading the four source files.</li>
+    <li id="ac-2" data-criterion>Computer Use is unavailable without both a recorded project use case and explicit user approval, in both variants and the backlog environment template; no text permits it as an automatic fallback. Checked by reading the sources.</li>
+    <li id="ac-3" data-criterion>Dual-executor probe: a situated browser-verification scenario routes to agent-browser and refuses an unapproved Computer Use request as a hard gap, citing the deciding sentence — pass on both executors (Claude subagent and <code>codex exec</code>) against the prewritten key.</li>
+    <li id="ac-4" data-criterion>Both staffing variants' Mechanics carry the orchestrator-owned envelope for their outbound direction — currently yolo both ways, with the scoped envelopes documented as the hardening path — and a live smoke passes each way: <code>claude -p --model opus --dangerously-skip-permissions &#8230;</code> creates and commits a file in a scratch worktree, and <code>codex exec --sandbox danger-full-access</code> does the same; the bare <code>claude -p</code> invocation is documented as the failure case. Observed by running each once.</li>
+    <li id="ac-5" data-criterion>The effect-class probe rule is in both variants' Mechanics; probe scenario &#8220;builder route returns exit 0 with writes denied&#8221; yields immediate directional quarantine + reroute, not a second dispatch — graded against the key on both executors.</li>
+    <li id="ac-6" data-criterion><code>run.md</code> carries the liveness contract verbatim (five states, &#8804;10-min heartbeat, wake-path precondition); probe scenario &#8220;children live, turn about to end, no wake path&#8221; yields hold-a-bounded-wait or arm-a-tracked-wake, citing the contract line.</li>
+    <li id="ac-7" data-criterion>Queue-invariant probe: terminal report drafted with 8 authorized / 4 finished issues is rejected by the executor, which enumerates all 8 with terminal classes — both executors, against the key.</li>
+    <li id="ac-8" data-criterion>Wait-record probe: a prose-only &#8220;awaiting CI&#8221; is rejected; the executor produces owner, object, expected event, next-check deadline, and wake path, citing the contract.</li>
+    <li id="ac-9" data-criterion>Grading-language probe: a checker that cannot execute tests returns <code>static-substitute</code>/<code>blocked</code> and the coordinator quotes it; an unqualified PASS is graded fail.</li>
+    <li id="ac-10" data-criterion><code>run-state.py</code> spawn events include model, effort, role, route, and session id; its verify gate refuses terminal completion on a stale projection or missing <code>handoff.md</code> — covered by extending <code>evals/test_run_state.py</code>.</li>
+    <li id="ac-11" data-criterion>No skill source instructs or permits <code>codex exec resume --last</code>; the session-id rule is present in both variants. Checked by grep over <code>skills/</code>.</li>
+    <li id="ac-12" data-criterion>All high-level backlog copy says &#8220;review-ready PR&#8221; (no &#8220;merged PR&#8221; as backlog's outcome); a <code>merge-changes</code> skill exists per #70 with its no-merge-authorization and ordered-merge probes passing.</li>
+    <li id="ac-13" data-criterion>review-loop: verdict events live under one canonical durable path, are copied into the run root before cleanup, and an orphaned-approval scenario (verdict lands after the coordinator exits) is consumed on the next audited resume without a live watcher — covered by a review-loop eval.</li>
+    <li id="ac-14" data-criterion>Deployed machine modules are regenerated from the updated sources (staffing setup audit reports no drift), and the three consumer repos' playbooks are reconciled — including superseding integrations-v2's uncommitted policy edits with the canonical text.</li>
+    <li id="ac-15" data-criterion>The full probe set runs green dual-executor per <code>docs/agents/probe-evals.md</code> before the next real backlog run, and the next run's transcript shows zero unexplained &gt;10-minute user-visible silences while issues are active — verified against that run's rollout timestamps.</li>
+  </ul>
+</section>
+
+<!-- ============================ ASSUMPTIONS ============================ -->
+<section id="assumptions">
+  <h2>Assumptions to validate</h2>
+  <table>
+    <thead><tr><th>Hypothesis</th><th>Cheapest falsification</th><th>Blocks</th></tr></thead>
+    <tbody>
+      <tr id="as-1"><td>Headless yolo dispatch works end to end in both directions: <code>claude -p --dangerously-skip-permissions</code> edits, runs checks, and commits; <code>codex exec --sandbox danger-full-access</code> likewise</td><td>Scratch-worktree probe, one invocation each way (this is ac-4's smoke)</td><td>ac-4; the exact envelope text W3 writes into both staffing Mechanics sections</td></tr>
+      <tr id="as-2"><td>A committed <code>.claude/settings.json</code> allowlist applies inside fresh linked worktrees</td><td>Create worktree in a repo with a committed allowlist; run a gated command headless</td><td>Whether <code>backlog setup</code> ships repo allowlists as the belt to W3's suspenders</td></tr>
+      <tr id="as-3"><td>Codex children inherit the root's current model at spawn (basis of the roster assertion)</td><td><em>Validated</em> — observed across all Jul 15–16 rollouts (settings ledgers)</td><td>—</td></tr>
+      <tr id="as-4"><td>Claude Code background-task completion reliably re-invokes the owning session (the wake path W1 binds to on this harness)</td><td><em>Validated</em> — observed in this session's own audit fan-out; re-probe under parallel load as part of ac-15's next-run check</td><td>—</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============================ CHECKS / RISKS / SCOPE ============================ -->
+<section id="checking">
+  <h2>How it will be checked</h2>
+  <p>Three seams, lowest count that proves the criteria: <strong>source reads</strong> (ac-1, 2, 11, 12 — the policy text is the artifact), <strong>dual-executor situated probes</strong> with prewritten keys per <code>docs/agents/probe-evals.md</code> (ac-3, 5–9, 12, 13), and <strong>live smokes</strong> where only reality can answer (ac-4 permission envelope, ac-10 run-state gate via its test file, ac-14 setup audit, ac-15 next-run transcript). Deliberately unchecked: the Codex platform asks (W8) — we can't test their fixes, only that our contracts survive without them.</p>
+
+  <h2 style="margin-top:2rem">Risks &amp; mitigations</h2>
+  <ul class="plain">
+    <li id="risk-1"><strong>Heartbeat spam</strong> — a 10-minute cadence could get noisy on long runs. Mitigation: heartbeat only while issues are active, state-change-first wording, and the cadence is a playbook-tunable default.</li>
+    <li id="risk-2"><strong>Yolo blast radius</strong> — full-access workers in both directions widen what a bad worker can touch. Accepted for now (Asher, round 4): workers run inside isolated worktrees, the effect probe bounds route surprises, adversarial review gates every diff before merge, and the scoped role envelopes stay documented as the hardening path to adopt if this bites.</li>
+    <li id="risk-3"><strong>Contract text that agents ignore</strong> — the Jul 15–16 runs ignored run-state.md's existing rules. Mitigation: the load-bearing rules become <em>mechanical gates</em> (run-state verify refuses completion; probes regress the rest) rather than prose alone.</li>
+    <li id="risk-4"><strong>Cross-repo drift</strong> — consumer playbooks (metis pins Chrome today) lag the source change. Mitigation: ac-14's reconcile pass is in the definition of done, not a follow-up.</li>
+  </ul>
+
+  <h2 style="margin-top:2rem">Out of scope</h2>
+  <ul class="plain">
+    <li id="oos-1">Implementing the Codex platform fixes (W8 files the ask; contracts assume no fix).</li>
+    <li id="oos-2">Merging any PR — humans (or an explicitly invoked <code>merge-changes</code>) merge; this plan never does.</li>
+    <li id="oos-3">Re-auditing the Jul 10–11 runs (retros #44/#46/#47 stand as evidence, already folded in).</li>
+    <li id="oos-4">Changes to the model roster's rankings themselves — only telemetry, assertion, and provider routing change; who ranks where does not.</li>
+  </ul>
+</section>
+
+</main>
+</body>
+</html>
