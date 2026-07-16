@@ -1,0 +1,22 @@
+{
+  "schema_version": 2,
+  "delivery": {
+    "provider": "agentmail",
+    "draft_first": true,
+    "review_gate": "review-loop-exact-hash",
+    "operator_cc_default": true,
+    "operator_address": "operator@fixture.invalid",
+    "ambiguous_outcome": "block-and-reconcile",
+    "automatic_resend": false,
+    "automatic_reply": false,
+    "watermark_advance": "confirmed-send-only"
+  },
+  "external": {
+    "coalescing": "max-one-per-project-per-day",
+    "cadence": "manual"
+  },
+  "internal_digest": {
+    "cadence": "manual",
+    "required_sections": ["Delivery", "Pending", "Cash", "Growth"]
+  }
+}

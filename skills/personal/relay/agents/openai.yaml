@@ -1,0 +1,7 @@
+interface:
+  display_name: "Relay"
+  short_description: "Govern reviewed project email delivery"
+  default_prompt: "Use $relay to prepare and review a governed project update before any AgentMail delivery."
+
+policy:
+  allow_implicit_invocation: true

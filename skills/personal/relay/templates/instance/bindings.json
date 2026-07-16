@@ -1,0 +1,19 @@
+{
+  "schema_version": 2,
+  "projects": [],
+  "evidence_providers": [],
+  "section_recipes": {
+    "project_update": ["Shipped", "In progress", "Next"],
+    "internal_digest": ["Delivery", "Pending", "Cash", "Growth"]
+  },
+  "audiences": [],
+  "editorial": {
+    "playbook": "docs/agents/relay.md"
+  },
+  "template": {
+    "id": "relay-compact-default",
+    "version": "2.0.0",
+    "root": "relay/templates"
+  },
+  "reconciliation_mode": "manual"
+}
