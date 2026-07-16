@@ -147,15 +147,19 @@ def setup(repo: Path, binding_path: Path | None) -> dict[str, Any]:
     for relative in template_files(source):
         target = instance / relative
         data = (source / relative).read_bytes()
-        if relative.as_posix() == "bindings.json" and supplied is not None:
-            if not target.exists() or target.read_bytes() == default_binding:
-                data = supplied
+        supplied_binding = relative.as_posix() == "bindings.json" and supplied is not None
+        if supplied_binding:
+            data = supplied
         if not target.exists():
             atomic_write(target, data, (source / relative).stat().st_mode & 0o777)
             report["created"].append(str(target))
             status = "current"
         elif target.read_bytes() == data:
             report["preserved"].append(str(target))
+            status = "current"
+        elif supplied_binding and target.read_bytes() == default_binding:
+            atomic_write(target, data, (source / relative).stat().st_mode & 0o777)
+            report["created"].append(str(target))
             status = "current"
         else:
             report["preserved"].append(str(target))

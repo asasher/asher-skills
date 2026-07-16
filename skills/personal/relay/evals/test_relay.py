@@ -209,6 +209,26 @@ class RelayTests(unittest.TestCase):
                 self.assertTrue((instance / "template-config.json.setup-candidate").exists())
                 self.assertEqual((root / ".env").read_text().count("AGENTMAIL_API_KEY="), 1)
 
+    def test_binding_applies_over_default_scaffold_and_rerun_is_stable(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / ".git").mkdir()
+            write_json(root / "package.json", {"name": "fixture"})
+            scaffold = run(str(SETUP), str(root))
+            self.assertEqual(scaffold.returncode, 0, scaffold.stdout + scaffold.stderr)
+            binding_file = root / "binding.json"
+            write_json(binding_file, self.binding())
+            bound = run(str(SETUP), str(root), "--binding", str(binding_file))
+            self.assertEqual(bound.returncode, 0, bound.stdout + bound.stderr)
+            bindings = json.loads((root / "relay" / "bindings.json").read_text())
+            self.assertEqual(bindings["audiences"], ["external-a", "external-b", "internal"])
+            self.assertFalse((root / "relay" / "bindings.json.setup-candidate").exists())
+            before = (root / "relay" / "bindings.json").read_bytes()
+            rerun = run(str(SETUP), str(root), "--binding", str(binding_file))
+            self.assertEqual(rerun.returncode, 0, rerun.stdout + rerun.stderr)
+            self.assertEqual((root / "relay" / "bindings.json").read_bytes(), before)
+            self.assertFalse((root / "relay" / "bindings.json.setup-candidate").exists())
+
     def test_complete_instance_validates_and_unverified_sender_blocks(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory); self.make_repo(root)
