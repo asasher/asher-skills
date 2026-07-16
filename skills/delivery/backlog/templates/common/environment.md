@@ -57,7 +57,7 @@
 > Set by `setup`'s app-access audit; read by `verify` (to exercise the app) and `evidence` (to capture proof). One entry per surface the loop verifies.
 
 - Form factor(s): _<CLI | web | mobile | desktop — list every surface issues touch>_.
-- Driver per surface: _<defaults: shell + the CLI entrypoint; agent-browser for the web app; a simulator + driver for mobile; computer-use tooling for desktop. Adjust to this repo>_.
+- Driver per surface: _<defaults: shell + the CLI entrypoint; **agent-browser with an isolated profile** for the web app (the user's own browser only under a recorded user-session carve-out, with per-use consent); a simulator + driver for mobile; desktop requires the **Computer Use gate** — a concrete use case recorded here AND explicit user approval; absent either, record the surface as a hard verification gap. A driver failure surfaces as a blocker; it never falls back to a less-isolated surface. Adjust to this repo>_.
 - Independent runtime verification: _<default: delegate to `codex exec` with a self-contained prompt when a check needs real UI interaction, screenshots, simulator state, or a second opinion outside the orchestrator's context (codex mechanics owned by the `staffing` skill); "n/a" when codex is unreachable>_.
 - Evidence capture per surface: _<e.g. driver screenshots for static states; screen recording → GIF for flows; terminal transcripts for CLI>_.
 - Supporting tools: _<default: agentmail for OTP/magic-link inboxes; add yours>_.
