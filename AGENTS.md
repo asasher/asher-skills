@@ -107,7 +107,7 @@ to reconcile them against the repo.
 
 | Skill | What it does here | Scope |
 |-------|-------------------|-------|
-| backlog | Runs issues through groom → plan → build → review to a merged PR | project |
+| backlog | Runs issues through groom → plan → build → review to a review-ready PR (merging is the explicit `merge-changes` workflow) | project |
 | diagnosing-bugs | Runs the reusable six-phase defect diagnosis discipline | project |
 | plan | Turns an intent into a reviewed plan held at an approval gate | project |
 | prototype | Answers one design question with a throwaway artifact — keep the answer, delete the artifact | project |
