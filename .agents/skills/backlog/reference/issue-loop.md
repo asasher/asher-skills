@@ -8,6 +8,8 @@ handoffs still resolve through `staffing` at their own boundaries.
 
 Each branch below hands off to a bundled reference (`reference/<name>.md`) for the workflow and a project playbook (`docs/agents/<name>.md`) for this repo's conventions. Tracker and PR mechanics come from `docs/agents/platform.md`. If a playbook is missing, report a setup gap and stop — do not improvise.
 
+Liveness: this thread is bound by `reference/run.md` § Liveness contract — five-state reporting, no turn ends with live children/gates and no verified wake path (native harness notifications first; bounded foreground waits only where the harness cannot wake you), every wait recorded with owner/deadline/wake path. Terminal CI waits are the run thread's, not yours: report the PR and hand the CI watch up rather than parking here.
+
 Tracker write discipline: on the local binding, this thread writes only its own issue file, only on its own branch — lifecycle updates that should merge with the change (state flips, plan and review links). Writes that must reach the main branch without a merge — `needs-info`, blockers, clearing `in-flight` — are reported to the run thread, the serialized main writer, never committed here (`platform.md` § The local binding). On bindings with a live tracker (GitHub), write directly via the tracker verbs.
 
 ## Steps
@@ -55,5 +57,5 @@ Tracker write discipline: on the local binding, this thread writes only its own 
    - Completion criterion: the evidence is committed and published, and the PR body carries the verified block in place of the placeholder — or none is required.
 
 8. Report back.
-   - Send the run thread the issue id, work-type, branch, PR reference, checks, evidence, and review outcome — plus any tracker writes it must apply as the serialized main writer.
+   - Send the run thread the issue id, work-type, branch, PR reference, checks, evidence, and review outcome — plus any tracker writes it must apply as the serialized main writer. Quote each acceptance criterion's verification grade verbatim (`live | static-substitute | not-run | blocked` per `reference/verify.md`); never flatten grades into an unqualified PASS.
    - Completion criterion: the run thread can update its handoff table without reading this whole thread.

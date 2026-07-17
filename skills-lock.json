@@ -4,12 +4,17 @@
     "backlog": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "42de3fc7040e86c881af90808aa42ea77d362fef03ec42aa70ff720240457952"
+      "computedHash": "45d2523da336d8961ea4e833e3675d264f5d333ec6178b8d9289c6afc0de69f5"
     },
     "diagnosing-bugs": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
       "computedHash": "c97d1badfb1c3036e2f1469ac296913c0402086f22c2c92bda8933a8ff6ee1ed"
+    },
+    "merge-changes": {
+      "source": "/Users/asher/Projects/asher-skills",
+      "sourceType": "local",
+      "computedHash": "77fb360ecea7be615fc8ab637aba1207812b99916317e4d2713f0bdb1aaed834"
     },
     "plan": {
       "source": "/Users/asher/Projects/asher-skills",
@@ -29,12 +34,12 @@
     "review-loop": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "f88b8e8c1bc6e1272dce865fa791a639377a165a6ccea50b51141bb834d09dc6"
+      "computedHash": "c6bbcd4fcd92b52f6fc33e3bc3cadebcbfc4afc045c3e4b8b2640ca77e7878b6"
     },
     "setup-asher-skills": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "9b97e27ffec7fd5c0c1759e442e45c5ab6a91d323384b6a89692093de25c5132"
+      "computedHash": "d81a8062d38fd6dc7b9b94cfa946cc49350a5c480058bac1a814e521af6a902f"
     },
     "skill-loop": {
       "source": "/Users/asher/Projects/asher-skills",
@@ -44,7 +49,7 @@
     "staffing": {
       "source": "/Users/asher/Projects/asher-skills",
       "sourceType": "local",
-      "computedHash": "e064a0dc1a1b2f7111f45a178d802c9e95365a8d49537f4be46868b2fc2ef658"
+      "computedHash": "ff573b3a08e6e11631c3abb610428a1bd9edb2a820f5743e1085a66541e7f338"
     },
     "writing-great-skills": {
       "source": "/Users/asher/Projects/asher-skills",

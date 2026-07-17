@@ -91,9 +91,10 @@
       "internal": false,
       "invocation": "user",
       "optional": [
-        "manage-communications",
         "projects-triage",
-        "review-opportunities"
+        "relay",
+        "review-opportunities",
+        "until-zero"
       ],
       "requires": [
         "capture-to-inbox",
@@ -172,21 +173,6 @@
       "optional": [],
       "requires": [],
       "source": "skills/personal/learn-anything",
-      "variants": {}
-    },
-    "manage-communications": {
-      "category": "personal",
-      "execution": "thread",
-      "external": [],
-      "internal": false,
-      "invocation": "model",
-      "optional": [],
-      "requires": [
-        "manage-opportunities",
-        "manage-tasks"
-      ],
-      "setup": "reference/setup.md",
-      "source": "skills/personal/manage-communications",
       "variants": {}
     },
     "manage-notes": {
@@ -284,6 +270,20 @@
         "staffing"
       ],
       "source": "skills/delivery/prototype",
+      "variants": {}
+    },
+    "relay": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "review-loop"
+      ],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/relay",
       "variants": {}
     },
     "research": {
@@ -416,19 +416,6 @@
       "source": "skills/delivery/to-spec",
       "variants": {}
     },
-    "to-sprites": {
-      "category": "creative",
-      "execution": "thread",
-      "external": [],
-      "internal": false,
-      "invocation": "user",
-      "optional": [
-        "codex-imagegen"
-      ],
-      "requires": [],
-      "source": "skills/creative/to-sprites",
-      "variants": {}
-    },
     "to-tickets": {
       "category": "delivery",
       "execution": "thread",
@@ -438,6 +425,26 @@
       "optional": [],
       "requires": [],
       "source": "skills/delivery/to-tickets",
+      "variants": {}
+    },
+    "until-zero": {
+      "category": "personal",
+      "execution": "thread",
+      "external": [
+        {
+          "capability": "build-apple-shortcuts",
+          "kind": "codex-plugin",
+          "name": "shortcuts-playground",
+          "source": "https://github.com/viticci/shortcuts-playground-plugin",
+          "version": "1.2.x"
+        }
+      ],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "setup": "reference/setup.md",
+      "source": "skills/personal/until-zero",
       "variants": {}
     },
     "watch-video": {

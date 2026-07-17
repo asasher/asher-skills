@@ -389,6 +389,14 @@ class ReviewHandler(BaseHTTPRequestHandler):
                 {"anchor": a.get("anchor"), "label": a.get("label"), "quote": a.get("quote") or None, "text": str(a.get("text", "")).strip()}
                 for a in annotations
             ],
+            # Client evidence: makes a fabricated verdict (an agent curl posing as
+            # the human) auditable after the fact — see asher-skills#46 Snag 2.
+            "client": {
+                "remote_addr": self.client_address[0] if self.client_address else None,
+                "user_agent": self.headers.get("User-Agent"),
+                "referer": self.headers.get("Referer"),
+                "server_started_at": self.app.get("started_at"),
+            },
         }
         with (self.app["state"] / "events.jsonl").open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(event, separators=(",", ":"), ensure_ascii=False) + "\n")
@@ -520,7 +528,7 @@ def run_server(args, surface: Path, state: Path, managed: bool) -> int:
         "title": args.title, "issue": args.issue, "kind": args.kind,
         "entry_id": entry_id, "url": public_url, "hub_url": hub_url,
         "surface_label": args.surface_label, "instance_id": instance_id,
-        "last_hash": None, "last_activity": time.monotonic(),
+        "last_hash": None, "last_activity": time.monotonic(), "started_at": now_iso(),
     }
     meta = {
         "url": public_url, "local_url": local_url, "hub": hub_url, "port": port,

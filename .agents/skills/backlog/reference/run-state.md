@@ -18,8 +18,14 @@ derived views. Adoption records the prior owner and takes the stream lock before
 
 Every event carries `run_id`, monotonic per-parent `sequence`, timestamp, parent/child ids, issue and stage,
 role/model/route and capacity pool, worktree, checkpoint, expected return, escalation successor, and status.
-Spawn records the pre-spawn staffing decision before a child exists; return records the durable artifact or
+Spawn records the pre-spawn staffing decision before a child exists — including the **actual model, effort,
+and worker session id** (`model`, `effort`, `worker_session`; null session for native children), asserted
+against the staffed role before dispatch (a mismatch blocks dispatch). Return records the durable artifact or
 the child's final text, not a claim that a message was probably delivered.
+
+Deliberate completion is gated: `run-state.py verify-terminal` refuses a terminal report while `handoff.md`
+is missing or any parent's latest status is non-terminal
+(`complete | blocked | deferred | returned | interrupted`).
 
 `status.json` and the human board are projections rebuilt from all streams plus tracker roles, refs,
 worktrees, review events, and verified processes. A stale or missing board is never canonical.
