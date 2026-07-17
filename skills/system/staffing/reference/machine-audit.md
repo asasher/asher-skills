@@ -52,8 +52,8 @@ output*, never the authoritative table — a different machine produces a differ
 # Capability providers — effect-probed harness/tool routes, never model traits
 | need | primary provider | fallback | eligible executor |
 |------|------------------|----------|-------------------|
-| browser-use | chrome provider | project browser CLI | active Codex route |
-| computer-use | computer-use provider | none | active Codex route |
+| browser-use | isolated browser CLI (`agent-browser`) | user-session carve-out (chrome provider, per-use consent) | active harness route |
+| computer-use | gated: recorded project use case + explicit user approval, then computer-use provider | none — unmet gate is a hard gap | active Codex route |
 | imagegen | native imagegen provider | repo headless skill | active Codex route |
 
 # Task-pins

@@ -69,6 +69,25 @@ The chrome polls the server's version endpoint; when the hash changes it auto-re
 banners a tab that has unsent comments (drafts are kept). A revision therefore reaches an already-open tab
 without the human reloading by hand.
 
+## Verdicts outlive watchers
+
+A verdict event is durable the moment it is written; **consuming it never requires a live watcher.** Any
+resume — the same session, a later one, or an audited backlog resume — runs `review-await.py` against the
+state dir and gets an already-landed verdict back immediately from the cursor; a dead watcher therefore
+never loses a verdict, and a verdict landing seconds after its awaiting thread exits is consumed by whoever
+resumes next, not re-requested from the human.
+
+Durable state lives in **one canonical place per review**: `~/.backlog/reviews/<repo>/<scope>/state` (never
+a session scratchpad, never an ad-hoc `review-state/` sibling). When the owning workflow keeps a durable run
+root (backlog's `<git-common-dir>/backlog/runs/<run-id>/`), copy `events.jsonl` and `ledger.json` into it
+before `--stop` — the raw event stream is part of the run's provenance and must survive review cleanup.
+
+Each feedback event records **client evidence** (remote address, user agent, referer, server start time).
+Audit heuristics for a suspect approval, from the #46 self-approval incident: a verdict seconds after server
+start, a loopback/CLI client where a human browser is expected, or an approval on a route that was never
+published are grounds to void and re-present. Custody hardening (the awaiting thread never holding what can
+mint a verdict) remains open follow-up; until then these checks are the guard.
+
 ## The approve event is the approval record
 
 The approve event — verdict, content hash, timestamp, appended to `events.jsonl` — is the durable approval

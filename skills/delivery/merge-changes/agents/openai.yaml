@@ -1,0 +1,5 @@
+interface:
+  display_name: Merge Changes
+  short_description: Explicit approval gate that merges review-ready PRs in dependency order.
+  default_prompt: Merge the review-ready changes I named, in dependency order, re-checking CI at merge time; stop on any semantic conflict.
+allow_implicit_invocation: false

@@ -37,7 +37,8 @@ class RunStateTest(unittest.TestCase):
             "type": "spawn", "issue": issue, "stage": "implement", "role": "builder",
             "model_route": "native", "capacity_pool": "unknown", "worktree": f"/tmp/{issue}",
             "checkpoint": "claimed", "expected_return": "commit", "escalation_successor": "root",
-            "status": "running",
+            "status": "running", "model": "sonnet-5", "effort": "medium",
+            "worker_session": None,
         }
 
     def test_two_parents_append_concurrently_and_rebuild_one_board(self):
@@ -73,6 +74,39 @@ class RunStateTest(unittest.TestCase):
         result = subprocess.run(command, capture_output=True, text=True)
         self.assertEqual(result.returncode, 2)
         self.assertIn("handoff missing", result.stderr)
+
+
+class SpawnTelemetryAndTerminalGate(unittest.TestCase):
+    setUp = RunStateTest.setUp
+    tearDown = RunStateTest.tearDown
+    payload = staticmethod(RunStateTest.payload)
+
+    def test_spawn_without_telemetry_is_rejected(self):
+        payload = self.payload("60")
+        for key in ("model", "effort", "worker_session"):
+            broken = {k: v for k, v in payload.items() if k != key}
+            with self.assertRaises(state.StateError):
+                state.append(self.root, "parent", broken)
+
+    def test_non_spawn_event_does_not_require_telemetry(self):
+        payload = {k: v for k, v in self.payload("61").items()
+                   if k not in ("model", "effort", "worker_session")}
+        payload["type"] = "return"
+        state.append(self.root, "parent", payload)
+
+    def test_verify_terminal_refuses_then_passes(self):
+        running = self.payload("62")
+        state.append(self.root, "p62", running)
+        ok, report = state.verify_terminal(self.root)
+        self.assertFalse(ok)
+        self.assertIn("missing-handoff", report["problems"])
+        self.assertTrue(any(p.startswith("non-terminal:p62") for p in report["problems"]))
+        done = dict(running, type="return", status="complete")
+        del done["model"], done["effort"], done["worker_session"]
+        state.append(self.root, "p62", done)
+        (self.root / "handoff.md").write_text("# Backlog run handoff\n")
+        ok, report = state.verify_terminal(self.root)
+        self.assertTrue(ok, report)
 
 
 if __name__ == "__main__":
