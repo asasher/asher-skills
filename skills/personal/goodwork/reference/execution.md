@@ -26,6 +26,10 @@ Write the final text of every outbound item to `goodwork/artifacts/<art_id>.md` 
 - **Truth gate.** Never invent experience, metrics, credentials, relationships, or evidence.
 - **Proof gate.** Browser and ATS submissions require a confirmation screenshot or equivalent proof reference recorded to the pipeline card.
 
+## User Edits
+
+An `edit_then_approve_requested` event may carry `payload.edited_content` — the user's own final text, typed on the approval page. Treat it as revision and approval in one: write it to the artifact file verbatim, recompute the content hash, and record the approval over the new hash with `source_event_id` linking the event. No re-presentation needed — the user wrote the words. Exception: if the edit introduces a claim you know is false, pause and raise it before sending. Without `edited_content`, the event is a change request: revise, re-present, await a fresh verdict. Edited approvals are always single-item, never batch.
+
 ## Approval Records
 
 Per-item approvals cover exactly one artifact. Session-batch approvals only when `covers` lists every item ID and content hash in the batch. Record schema: [state.md](state.md). Required: `id`, `timestamp`, `item_id`, `channel`, `granularity`, `content_hash`, `covers`, `approved_by`; include `source_event_id` when approval came from the UI.

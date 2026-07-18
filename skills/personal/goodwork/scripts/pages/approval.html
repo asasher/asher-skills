@@ -17,9 +17,17 @@
     h1{font-size:1.3rem;margin:0 0 2px;letter-spacing:-.01em}
     .what{font-size:1.02rem;font-weight:650;margin:14px 0 2px}
     .to{color:var(--muted);font-size:.95rem}
-    .draft{margin-top:14px;background:#fffdf7;border:1px solid #eee7d4;border-radius:10px;
+    .draft,#editor{margin-top:14px;background:#fffdf7;border:1px solid #eee7d4;border-radius:10px;
            padding:16px 18px;font-size:.96rem;white-space:pre-wrap;overflow-wrap:anywhere;
            max-height:46dvh;overflow-y:auto}
+    #editor{display:none;width:100%;font:inherit;line-height:1.55;min-height:220px;resize:vertical;
+           border-color:#d9c98f;outline:none}
+    #editor:focus{border-color:var(--amber)}
+    .draft-tools{display:flex;gap:14px;align-items:center;margin-top:8px;min-height:1.6em}
+    .linkish{border:0;background:none;padding:0;font:inherit;font-size:.9rem;font-weight:650;
+             color:var(--green);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+    .linkish.warn{color:var(--red)}
+    #edited-note{font-size:.85rem;color:var(--amber);font-weight:650;display:none}
     .missing{margin-top:14px;background:var(--amber-bg);border-radius:10px;padding:12px 15px;
            font-size:.92rem;color:var(--amber);font-weight:600}
     .note{color:var(--muted);font-size:.9rem;margin:14px 0 0}
@@ -35,10 +43,10 @@
           padding:10px 12px;font-size:.9rem;white-space:pre-wrap;overflow-wrap:anywhere;max-height:34dvh;overflow-y:auto}
     .mini.none{color:var(--amber);background:var(--amber-bg);border-color:#f0e3c6;font-weight:600}
     .reason-label{display:block;font-size:.9rem;font-weight:650;margin:18px 0 6px}
-    textarea{width:100%;min-height:88px;border:1px solid #d5d0c4;border-radius:10px;
+    textarea.reason{width:100%;min-height:88px;border:1px solid #d5d0c4;border-radius:10px;
              padding:11px;font:inherit;background:#fdfcfa}
     .actions{display:grid;gap:10px;margin-top:18px}
-    button{min-height:48px;border:0;border-radius:10px;padding:12px;font:inherit;
+    button.act{min-height:48px;border:0;border-radius:10px;padding:12px;font:inherit;
            font-weight:700;cursor:pointer}
     .approve{background:var(--green);color:#fff}
     .edit{background:#f0ede6;color:var(--ink);border:1px solid var(--line)}
@@ -55,15 +63,21 @@
     <div class="what" id="what"></div>
     <div class="to" id="to"></div>
     <div id="draft-slot"></div>
+    <textarea id="editor" spellcheck="true"></textarea>
+    <div class="draft-tools">
+      <button class="linkish" id="edit-toggle" hidden>✎ Edit the text</button>
+      <button class="linkish warn" id="undo-edit" hidden>Undo my edits</button>
+      <span id="edited-note">You’ve rewritten it — “Send it” sends your version.</span>
+    </div>
     <p class="note">This is the exact text that will go out — nothing is sent until you say so.
-       Want it worded differently? Choose “Send with my changes” and say what to change.</p>
+       Edit it directly, or choose “Send with my changes” and describe what to change.</p>
     <fieldset id="batch" hidden><legend>Also waiting — tap to read each one</legend></fieldset>
     <label class="reason-label" for="reason">Note for your agent <span style="font-weight:400;color:var(--muted)">(needed if you say don’t send)</span></label>
-    <textarea id="reason" placeholder="e.g. Warmer opening — or: skip this one, wrong team"></textarea>
+    <textarea class="reason" id="reason" placeholder="e.g. Warmer opening — or: skip this one, wrong team"></textarea>
     <div class="actions">
-      <button class="approve" data-action="approve">Send it</button>
-      <button class="edit" data-action="edit_then_approve">Send with my changes</button>
-      <button class="reject" data-action="reject">Don’t send</button>
+      <button class="act approve" data-action="approve" id="btn-approve">Send it</button>
+      <button class="act edit" data-action="edit_then_approve">Send with my changes</button>
+      <button class="act reject" data-action="reject">Don’t send</button>
     </div>
     <p id="status" role="status"></p>
   </section>
@@ -78,13 +92,45 @@ const how = HOW[item.channel] || "Message";
 const dest = item.destination && item.destination !== "manual" ? item.destination : "";
 document.getElementById("to").textContent = dest ? `${how} · ${dest}` : how;
 
+/* draft display + inline editing */
 const slot = document.getElementById("draft-slot");
-if (item.content){
-  slot.innerHTML = `<div class="draft">${esc(item.content)}</div>`;
+const editor = document.getElementById("editor");
+const editToggle = document.getElementById("edit-toggle");
+const undoEdit = document.getElementById("undo-edit");
+const editedNote = document.getElementById("edited-note");
+const original = item.content || null;
+let draftView = null;
+if (original){
+  slot.innerHTML = `<div class="draft" id="draft-view"></div>`;
+  draftView = document.getElementById("draft-view");
+  draftView.textContent = original;
+  editor.value = original;
+  editToggle.hidden = false;
 } else {
   slot.innerHTML = `<div class="missing">The text isn’t attached yet — ask your agent to show it here before approving.</div>`;
 }
+function isEdited(){ return original !== null && editor.value !== original; }
+function refreshEditState(){
+  const on = isEdited();
+  editedNote.style.display = on ? "inline" : "none";
+  undoEdit.hidden = !on;
+  document.getElementById("btn-approve").textContent = on ? "Send my version" : "Send it";
+  batch.querySelectorAll("input[type=checkbox]").forEach(cb => {
+    if (cb.dataset.item !== (item.id || "")){ if (on) cb.checked = false; cb.disabled = on; }
+  });
+  const legend = batch.querySelector("legend");
+  if (legend) legend.textContent = on ? "Sending just this one, since you’ve edited it" : "Also waiting — tap to read each one";
+}
+editToggle.addEventListener("click", () => {
+  draftView.style.display = "none"; editor.style.display = "block";
+  editToggle.hidden = true; editor.focus();
+});
+undoEdit.addEventListener("click", () => {
+  editor.value = original; refreshEditState();
+});
+editor.addEventListener("input", refreshEditState);
 
+/* batch list */
 const batch = document.getElementById("batch");
 const others = (data.items || []);
 if (others.length > 1){
@@ -109,25 +155,34 @@ if (others.length > 1){
 
 async function submit(action){
   const status = document.getElementById("status");
-  const checked = [...batch.querySelectorAll("input:checked")];
-  const covers = checked.map(el => ({item_id: el.dataset.item, content_hash: el.dataset.hash})).filter(x => x.item_id);
   const reason = document.getElementById("reason").value.trim();
+  const edited = isEdited();
   if (action === "reject" && !reason){ status.className = "bad"; status.textContent = "Add a quick note so your agent knows why."; return; }
+  if (action === "edit_then_approve" && !edited && !reason){
+    status.className = "bad"; status.textContent = "Edit the text above, or say what you’d like changed."; return;
+  }
+  if (action === "approve" && edited) action = "edit_then_approve";
+  const checked = [...batch.querySelectorAll("input:checked")].filter(el => !el.disabled);
+  const covers = checked.map(el => ({item_id: el.dataset.item, content_hash: el.dataset.hash})).filter(x => x.item_id);
+  const isBatch = covers.length > 1 && action === "approve";
+  const payload = {action, reason: reason || null};
+  if (edited && action === "edit_then_approve") payload.edited_content = editor.value;
   const event = {
     token: data.token,
-    type: covers.length > 1 && action === "approve" ? "batch_approval_requested" : typeFor[action],
+    type: isBatch ? "batch_approval_requested" : typeFor[action],
     page: "approval",
-    item_id: covers.length > 1 ? null : (item.id || null),
-    content_hash: covers.length > 1 ? null : (item.content_hash || null),
-    granularity: covers.length > 1 ? "session_batch" : "item",
+    item_id: isBatch ? null : (item.id || null),
+    content_hash: isBatch ? null : (item.content_hash || null),
+    granularity: isBatch ? "session_batch" : "item",
     covers,
-    payload: {action, reason: reason || null},
+    payload,
     tags: ["approval"]
   };
   const res = await fetch("/event", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(event)});
   if (res.ok){
     status.className = "good";
     status.textContent = action === "reject" ? "Got it — it won’t be sent." :
+      payload.edited_content ? "Done — your version will be sent." :
       action === "edit_then_approve" ? "Got it — your agent will make the changes first." :
       "Done — your agent will take it from here.";
   } else {
@@ -135,7 +190,7 @@ async function submit(action){
     status.textContent = "That didn’t go through — try again.";
   }
 }
-document.querySelectorAll("button[data-action]").forEach(btn => btn.addEventListener("click", () => submit(btn.dataset.action)));
+document.querySelectorAll("button.act").forEach(btn => btn.addEventListener("click", () => submit(btn.dataset.action)));
 function esc(s){return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
 </script>
 </body>
