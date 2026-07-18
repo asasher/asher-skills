@@ -18,8 +18,7 @@ edges.** A spec captures direction but nothing pickup-able; someone still has to
 tickets, order them, and wire the dependencies by hand. To-tickets automates that split — the consumer half of
 the discussion → work bridge that `to-spec` opens. It reads a direction, drafts vertical slices, **quizzes the
 user** until the granularity and edges are approved, then publishes the tickets into the bound tracker in
-dependency order. Adapted from Matt Pocock's `to-tickets` and shipped as our own; we never install an external
-skill.
+dependency order. Shipped as our own — no external skill is installed for this.
 
 The defining constraint is the pair of postures it holds at once: **draft vertical slices, but quiz before you
 publish.** Each ticket is a **tracer bullet**, with a **wide-refactor** exception for mechanical,

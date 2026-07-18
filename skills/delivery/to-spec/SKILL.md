@@ -23,8 +23,7 @@ primitive, not an interviewer.
 The defining constraint is **pure synthesis, no interview.** To-spec does not re-elicit requirements, does not
 re-ask what the conversation already settled, and does not stall waiting on the user. It captures what's
 decided and **flags what isn't in the spec's Notes** — an open question recorded is worth more here than a
-question asked. Adapted from Matt Pocock's `to-spec` and shipped as our own; we never install an external
-skill.
+question asked. Shipped as our own — no external skill is installed for this.
 
 ## Command surface
 
@@ -47,7 +46,7 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
    sections (Testing decisions, Test seams) and runs the seams step below; a **non-dev spec** skips both and
    uses only the core sections.
 3. **For dev specs only — sketch the test seams.** Name the public seams the work would be tested at and
-   **prefer the highest existing seam** (adapted from Matt Pocock). Skip this entirely for non-dev specs.
+   **prefer the highest existing seam**. Skip this entirely for non-dev specs.
 4. **Write the spec** from the skeleton into `docs/specs/<name>.html`, in generic vocabulary — a
    self-contained HTML deliverable with stable element ids, same house style as a plan.
 5. **Sign-off.** If the user is present, open the rendered spec and take approval inline. If they're AFK,

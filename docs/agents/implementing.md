@@ -1,6 +1,6 @@
 # Playbook: Implementing
 
-> Project playbook for this repo. The backlog `implement` subskill reads this file for how to build; the gates are in the skill's `reference/implement.md`. Base branch, branch naming, and running locally are in `environment.md`. The test-first technique below is the shipped default (adapted from Matt Pocock's `tdd` skill, MIT) — replace it with house practice if this team builds differently.
+> Project playbook for this repo. The backlog `implement` subskill reads this file for how to build; the gates are in the skill's `reference/implement.md`. Base branch, branch naming, and running locally are in `environment.md`. The test-first technique below is the shipped default — replace it with house practice if this team builds differently.
 
 ## What deserves a test
 

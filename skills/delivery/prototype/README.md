@@ -55,3 +55,4 @@ dir. Presenting an answer for feedback needs the `review-loop` skill installed; 
 - **Source:** [`7f8ca23`](https://github.com/asasher/asher-skills/commit/7f8ca23).
 - **Authority moved:** throwaway design-question technique and cleanup gates moved here.
 - **Local changes:** made it usable outside development and composed review-loop/staffing by name.
+- **Technique source:** the two prototype shapes (logic-probe terminal app, UI variants on one route) are adapted from Matt Pocock's MIT-licensed [`prototype`](https://github.com/mattpocock/skills/blob/04fee67571bc52ac58a0e59fc4924a13f61b50a6/skills/engineering/prototype/SKILL.md).

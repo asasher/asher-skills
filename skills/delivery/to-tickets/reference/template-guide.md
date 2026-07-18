@@ -2,8 +2,7 @@
 
 Two scaffolds ship with this skill: [templates/ticket.md](../templates/ticket.md) is one ticket (the shape that
 gets published to the tracker), and [templates/tickets.md](../templates/tickets.md) is the whole ordered split —
-the pre-publish artifact the user reacts to during the quiz. This file says what goes in each field. The section
-set is adapted from Matt Pocock's `to-tickets` and shipped as our own.
+the pre-publish artifact the user reacts to during the quiz. This file says what goes in each field.
 
 ## A single ticket
 

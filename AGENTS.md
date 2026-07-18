@@ -91,6 +91,10 @@ Kinds of skill:
   deliberately, not automatically. A capability that several skills genuinely share — the review surface,
   model staffing — is instead extracted into its own skill and referenced by name, never forked into every
   caller.
+- **Credits live in the README.** Skill content — `SKILL.md`, `reference/`, `templates/`, shipped playbook
+  text — never carries external attribution; each skill's `README.md` (plus `THIRD_PARTY_LICENSES.md` where
+  the license requires it) is the single home for source credits. Internal `Adapted from skills/...` pointers
+  in copied script headers (previous bullet) are provenance plumbing, not credits, and stay.
 - **Composers declare and degrade.** A skill that references siblings names them in its `SKILL.md`; the
   `setup-asher-skills` installer guarantees a project has the siblings a skill needs. Absent a sibling, a
   skill states the requirement rather than failing silently.
