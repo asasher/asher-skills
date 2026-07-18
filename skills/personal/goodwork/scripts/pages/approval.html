@@ -17,16 +17,13 @@
     h1{font-size:1.3rem;margin:0 0 2px;letter-spacing:-.01em}
     .what{font-size:1.02rem;font-weight:650;margin:14px 0 2px}
     .to{color:var(--muted);font-size:.95rem}
-    .draft,#editor{margin-top:14px;background:#fffdf7;border:1px solid #eee7d4;border-radius:10px;
-           padding:16px 18px;font-size:.96rem;white-space:pre-wrap;overflow-wrap:anywhere;
-           max-height:46dvh;overflow-y:auto}
-    #editor{display:none;width:100%;font:inherit;line-height:1.55;min-height:220px;resize:vertical;
-           border-color:#d9c98f;outline:none}
-    #editor:focus{border-color:var(--amber)}
+    #editor{display:none;margin-top:14px;background:#fffdf7;border:1px solid #eee7d4;border-radius:10px;
+           padding:16px 18px;font:inherit;font-size:.96rem;line-height:1.55;color:var(--ink);
+           width:100%;min-height:200px;max-height:46dvh;overflow-y:auto;resize:vertical;outline:none}
+    #editor:focus{border-color:#d9c98f}
     .draft-tools{display:flex;gap:14px;align-items:center;margin-top:8px;min-height:1.6em}
     .linkish{border:0;background:none;padding:0;font:inherit;font-size:.9rem;font-weight:650;
-             color:var(--green);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-    .linkish.warn{color:var(--red)}
+             color:var(--red);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
     #edited-note{font-size:.85rem;color:var(--amber);font-weight:650;display:none}
     .missing{margin-top:14px;background:var(--amber-bg);border-radius:10px;padding:12px 15px;
            font-size:.92rem;color:var(--amber);font-weight:600}
@@ -63,14 +60,13 @@
     <div class="what" id="what"></div>
     <div class="to" id="to"></div>
     <div id="draft-slot"></div>
-    <textarea id="editor" spellcheck="true"></textarea>
+    <textarea id="editor" spellcheck="true" aria-label="The message text — edit freely"></textarea>
     <div class="draft-tools">
-      <button class="linkish" id="edit-toggle" hidden>✎ Edit the text</button>
-      <button class="linkish warn" id="undo-edit" hidden>Undo my edits</button>
-      <span id="edited-note">You’ve rewritten it — “Send it” sends your version.</span>
+      <button class="linkish" id="undo-edit" hidden>Undo my edits</button>
+      <span id="edited-note">You’ve rewritten it — “Send my version” sends your words.</span>
     </div>
-    <p class="note">This is the exact text that will go out — nothing is sent until you say so.
-       Edit it directly, or choose “Send with my changes” and describe what to change.</p>
+    <p class="note">This is the exact text that will go out — nothing is sent until you say so,
+       and you can edit it right here first.</p>
     <fieldset id="batch" hidden><legend>Also waiting — tap to read each one</legend></fieldset>
     <label class="reason-label" for="reason">Note for your agent <span style="font-weight:400;color:var(--muted)">(needed if you say don’t send)</span></label>
     <textarea class="reason" id="reason" placeholder="e.g. Warmer opening — or: skip this one, wrong team"></textarea>
@@ -92,20 +88,20 @@ const how = HOW[item.channel] || "Message";
 const dest = item.destination && item.destination !== "manual" ? item.destination : "";
 document.getElementById("to").textContent = dest ? `${how} · ${dest}` : how;
 
-/* draft display + inline editing */
+/* draft is editable by default */
 const slot = document.getElementById("draft-slot");
 const editor = document.getElementById("editor");
-const editToggle = document.getElementById("edit-toggle");
 const undoEdit = document.getElementById("undo-edit");
 const editedNote = document.getElementById("edited-note");
 const original = item.content || null;
-let draftView = null;
+function autosize(){
+  editor.style.height = "auto";
+  editor.style.height = (editor.scrollHeight + 2) + "px";
+}
 if (original){
-  slot.innerHTML = `<div class="draft" id="draft-view"></div>`;
-  draftView = document.getElementById("draft-view");
-  draftView.textContent = original;
   editor.value = original;
-  editToggle.hidden = false;
+  editor.style.display = "block";
+  requestAnimationFrame(autosize);
 } else {
   slot.innerHTML = `<div class="missing">The text isn’t attached yet — ask your agent to show it here before approving.</div>`;
 }
@@ -121,14 +117,10 @@ function refreshEditState(){
   const legend = batch.querySelector("legend");
   if (legend) legend.textContent = on ? "Sending just this one, since you’ve edited it" : "Also waiting — tap to read each one";
 }
-editToggle.addEventListener("click", () => {
-  draftView.style.display = "none"; editor.style.display = "block";
-  editToggle.hidden = true; editor.focus();
-});
 undoEdit.addEventListener("click", () => {
-  editor.value = original; refreshEditState();
+  editor.value = original; refreshEditState(); autosize();
 });
-editor.addEventListener("input", refreshEditState);
+editor.addEventListener("input", () => { refreshEditState(); autosize(); });
 
 /* batch list */
 const batch = document.getElementById("batch");
