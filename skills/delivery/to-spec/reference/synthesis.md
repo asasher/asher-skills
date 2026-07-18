@@ -13,9 +13,15 @@ When something was genuinely left undecided, **record it as a line in the spec's
 named plainly — and move on. A flagged open question is the correct output; a question bounced back to the
 user is not. The one thing to-spec never produces is an interview.
 
+Notes are not free-floating: at publish time each one is classified **blocking / delegated / deferred**
+(§ Sign-off), because a spec whose material Notes are unclassified cannot feed execution-ready tickets.
+
 ## What to mine
 
-Read back over the conversation and pull out:
+When the conversation ran through `interview` / `interview-with-docs`, start from the crystallised record —
+`CONTEXT.md` terms, ADRs, and the exit classification (settled / delegated / deferred / blocking) — and use
+the conversation to fill in around it; the classification maps straight onto the Notes rule below. Then read
+back over the conversation and pull out:
 
 - **The problem** — what's wrong, from the user's perspective. The reason the direction was needed.
 - **The decided solution** — the direction that was settled, in the same perspective.
@@ -76,6 +82,12 @@ conventions; honor it when present, default to `docs/specs/` otherwise.
 
 ## Sign-off
 
+The spec's approval is the **direction's gate** — the lifecycle has no separate plan stage; per-ticket
+tactics are made just-in-time inside execution. Before presenting: run the **fidelity audit** — every
+material decision from the conversation appears in the spec, and every Notes line carries its
+blocking / delegated / deferred classification. An open **blocking** Note stops the hand-off to
+`to-tickets` until the upstream shaping flow settles it.
+
 - **User present** — take approval inline, in the conversation. This is the default path and depends on no
   other skill.
 - **User AFK** — present the spec for sign-off through the optional `review-loop` sibling: the spec is
@@ -85,3 +97,8 @@ conventions; honor it when present, default to `docs/specs/` otherwise.
 
 `review-loop` is optional and never a hard dependency — if it's unavailable, fall back to inline approval or
 leave the committed spec for the user to read directly. Skipping sign-off still leaves a valid spec on disk.
+
+**On approval:** commit the spec, and — when a live tracker is bound (`docs/agents/platform.md`) — create a
+**thin tracking ticket** carrying the title, a one-line gist, and a link to the canonical spec. The
+projection carries links and state, never content — one source of truth, no drift. `to-tickets` wires each
+slice ticket to it at publish time.

@@ -32,6 +32,15 @@ For the work that deserves tests, work red → green in vertical slices:
 
 - Commit style this repo expects: imperative, sentence-case subject line (e.g. "Add backlog skill", "Update skill-loop with reference to patterns") — no Conventional Commits prefix. Under the Claude Code harness, end the message with its `Co-Authored-By: Claude …` trailer (the harness's own convention; repo history carries no other trailers). Commit/push only when Asher asks.
 
+## UI surfaces
+
+- Building UI always loads the `bare-minimum-ux` skill (Asher's policy overlay — it wins on conflict). When
+  the project's `external-dependencies.lock.json` records the consented `impeccable` external, load it too:
+  `PRODUCT.md`/`DESIGN.md` are ambient context for every UI change (DESIGN.md wins on visual decisions,
+  PRODUCT.md on strategy/voice), and its craft rules govern the build.
+- Ship every interactive state — default, hover, focus, disabled, loading, error, empty — not just the happy
+  path; the verify step inspects them (`verifying.md` § UI surfaces).
+
 ## Code conventions
 
 - Defer to `CLAUDE.md` / linters / formatters in this repo for style.

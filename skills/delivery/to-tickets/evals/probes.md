@@ -155,3 +155,35 @@ ac-12 (key + dual-executor + read-only present).
 | ac-10     | P10              |
 | ac-11     | P11              |
 | ac-12     | P12 (this file)  |
+
+## Publishing-contract probes (issues #86/#80)
+
+Same method as above; surfaces: `SKILL.md` + `reference/slicing.md` + `docs/agents/backlog-policy.md` +
+`docs/agents/platform.md`. Key written before any runs.
+
+**P-H1 (native edges).** You are publishing an approved split in this repo. Ticket B is blocked by ticket A.
+How exactly is that edge written — a body line, or something else? Cite the deciding sentences in the skill
+and the playbook.
+
+**P-H2 (no disk).** Mid-publish you consider writing the tickets under `.scratch/<feature>/` "for
+convenience" since the drafts are already local. Allowed? Cite.
+
+**P-H3 (readiness audit).** A drafted ticket reads: "Add the leaderboard UI — make it look good. Blocked by
+#12." The split was quizzed and approved. Does this ticket publish as-is? Name each audit field it fails.
+Cite.
+
+### Answer key
+
+- **P-H1:** The repo's recorded convention decides, and here it is the **native blocking relation** —
+  backlog-policy § Dependencies records GitHub's native `blocked_by`, written via platform.md's verified
+  verbs; slicing.md: "Where the playbook records the tracker's native blocking relation … write the native
+  edge." Emitting a `- [ ] depends on #N` body line in this repo = **fail**.
+- **P-H2:** No — "never as local files while a live tracker is bound; on-disk tickets exist only when the
+  recorded binding itself is local." Writing the scratch copies as the published tickets = **fail**.
+- **P-H3:** It fails the audit and must be fixed or dropped — "never published thin for grooming to repair
+  later." Failed fields: **observable acceptance** ("look good" is vibes), **inherited context links** (no
+  spec/tracking-ticket/decision links), **authority boundary** (nothing says what the executor may decide),
+  and **UX context** (UI surface with no register/states/PRODUCT-DESIGN links). Publishing it because the
+  quiz approved granularity = **fail** (the quiz settles slicing, not readiness).
+
+Pass bar: 3/3 on both executors.

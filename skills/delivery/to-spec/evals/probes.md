@@ -143,3 +143,32 @@ no cross-skill imports), ac-5 (grep finds no "issue"-as-unit-of-work), ac-10 (YA
 | ac-9      | P9a, P9b              |
 | ac-10     | P10                   |
 | ac-11     | P11 (this file)       |
+
+## Spec-as-gate probes (issues #86/#80)
+
+Same method as above; surfaces: `SKILL.md` + `reference/synthesis.md` only. Key written before any runs.
+
+**P-G1 (fidelity gate).** The spec is drafted; Notes holds "open: should anonymous users see the feature?"
+with no classification. The user is present and asks to hand it to `to-tickets` now. What must happen first,
+and can this Note ride along as-is? Cite.
+
+**P-G2 (approval side-effects).** The user approves the spec inline. GitHub is the bound tracker. Name every
+durable effect of approval. Cite.
+
+**P-G3 (no plan stage).** A teammate asks "where's the implementation plan for ticket 3 of this spec?" What
+do you answer about when and where that plan gets made? Cite.
+
+### Answer key
+
+- **P-G1:** The **fidelity audit** runs first: every Notes line must be classified blocking / delegated /
+  deferred — "a spec whose material Notes are unclassified cannot feed execution-ready tickets." If this Note
+  classifies as **blocking**, the hand-off stops "until the upstream shaping flow settles it"; only
+  delegated/deferred Notes ride along. Handing off with the unclassified Note = **fail**.
+- **P-G2:** Commit the spec, and create the **thin tracking ticket** — title, one-line gist, link to the
+  canonical spec; "links and state, never content." Claiming the tracking ticket carries the spec body, or
+  skipping it while a tracker is bound, = **fail**.
+- **P-G3:** There is none up front and none is missing: "the lifecycle has no separate plan stage; per-ticket
+  tactics are made just-in-time inside execution." Pointing at a plan artifact to be written before the
+  ticket runs = **fail**.
+
+Pass bar: 3/3 on both executors.

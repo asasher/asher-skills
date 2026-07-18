@@ -48,6 +48,20 @@ Three kinds of dependency, per `AGENTS.md` § Conventions:
 2. **Project playbooks** — `docs/agents/*.md`, installed into the target repo by `setup`. A repo changes how a step works by editing its playbooks, never the skill.
 3. **Sibling skills** — `diagnosing-bugs`, `research`, `staffing`, `review-loop`, `prototype`, composed by plain name. `setup` ensures they are present; absent a sibling, backlog states the requirement rather than failing silently.
 
+## Seams
+
+Backlog is deliberately one thin skill with three named internal contracts — documented seams, not separate
+skills:
+
+- **groom = organize.** The tracker as truth: admission audit, route judgment, serialized writes, the
+  verify-first triage discipline. The only stage that stamps readiness.
+- **run = schedule.** Dependency waves, parallelism, worktrees, dispatch, liveness — build-ignorant. **A
+  queue of one is a first-class invocation**: `backlog run <issue>` is the interactive chat-and-build shape —
+  the same build loop, no waves.
+- **build loop = one issue → reviewed PR.** The invariant dev tail (implement · verify · adversarial review ·
+  evidence). Its *inputs* vary by entryway — criteria from the ticket, the spec, or written at loop start;
+  evidence obligation scaling with absence — the gates never do.
+
 ## Routing
 
 1. **No argument** → follow `reference/groom.md`, then offer to run the resulting ready-for-agent issues via `reference/run.md`. Show the command table first so the user can redirect.

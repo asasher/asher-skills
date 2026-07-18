@@ -52,7 +52,7 @@ decisions. The rules:
   why it fits this project, and let the user say no.
 - **Accepting a composer auto-pulls its sibling closure — and you say so.** When the user accepts a skill
   that depends on others, add the whole closure ([catalog](catalog.md) § The closure rules) and **tell the
-  user in plain language which siblings came along and why** ("Adding `plan` also brings `review-loop`, which
+  user in plain language which siblings came along and why** ("Adding `prototype` also brings `review-loop`, which
   you'll use to approve the plan, and `staffing`, which picks which model writes it — they work together").
   Never pull a sibling silently and invisibly.
 - **Declared external requirements are a separate decision.** Show each merged external requirement pulled by

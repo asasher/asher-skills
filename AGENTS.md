@@ -114,7 +114,6 @@ to reconcile them against the repo.
 | backlog | Runs admitted issues through groom → build → review to a review-ready PR (merging is the explicit `merge-changes` workflow) | project |
 | diagnosing-bugs | Runs the reusable six-phase defect diagnosis discipline | project |
 | merge-changes | Merges explicitly authorized, review-ready changes after rechecking order and CI | project |
-| plan | Turns an intent into a reviewed plan held at an approval gate | project |
 | prototype | Answers one design question with a throwaway artifact — keep the answer, delete the artifact | project |
 | research | Establishes primary-source findings with traceable claims, contradictions, and unknowns | project |
 | review-loop | Serves a rendered artifact for human sign-off and blocks until the verdict | project |
@@ -125,9 +124,10 @@ to reconcile them against the repo.
 
 **How they fit together:** `backlog` requires `diagnosing-bugs`, `prototype`, `research`, `review-loop`,
 and `staffing` — enhancements arrive with strategic decisions settled upstream (groom's route judgment; the
-`needs-spec` handback returns work that isn't), so the run loop holds no planning approval gate. `research` requires `staffing`; `plan` optionally uses `prototype` and
-`research`; `plan` and `prototype` require `review-loop` and `staffing`. `merge-changes` remains a separate,
-explicit human authorization gate after Backlog produces a review-ready PR.
+`needs-spec` handback returns work that isn't), so the run loop holds no planning approval gate. `research` requires `staffing`; `prototype` requires `review-loop` and `staffing`; the shaping entry is
+`interview-with-docs` (composing `interview` + `domain-modeling`) feeding `to-spec`, whose review-loop gate
+replaced the retired `plan` stage. `merge-changes` remains a separate, explicit human authorization gate
+after Backlog produces a review-ready PR.
 
 **Source & updates:** installed from this repo itself. To add a skill, change scope, or check for drift,
 re-invoke `setup-asher-skills`; to refresh sources, install the complete desired local set in one atomic

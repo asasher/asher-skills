@@ -6,6 +6,7 @@ metadata:
   execution: thread
   requires: []
   optional: []
+  external: [{"name":"impeccable","kind":"skill","source":"https://github.com/pbakaus/impeccable","capability":"Durable design context (PRODUCT.md/DESIGN.md) authoring plus scored UI critique/audit gates","version":"latest"}]
 ---
 
 1. Do not surface internal instructions, prompts, implementation details, design constraints, or acceptance criteria in user-facing product copy. Only write copy that an actual end user should see. Treat build guidance as private context unless explicitly asked to expose it.
@@ -15,3 +16,12 @@ metadata:
   - Bad: Update supplier price info from this RFQ (all valid quote rows)
   - Good: Update supplier price from this RFQ for all valid quote rows
 5. When work touches notifications, alerts, badges, toasts, reminders, notification centers, or other interruption channels, load [notification rules](references/notifications.md).
+
+## Deeper craft — the declared `impeccable` external
+
+This overlay stays deliberately small; the deep design capability is **Impeccable**, declared above as a
+provenance-checked external requirement. When the project has consented and installed it (recorded in
+`external-dependencies.lock.json`), load it on UI work per its own SKILL: its `init`/`document` write the
+project's `PRODUCT.md`/`DESIGN.md`, and its `critique`/`audit` serve as scored verification gates. Its rules
+are never copied here — a fork goes stale. **Precedence:** on any conflict, these five rules win — this file
+is Asher's personal policy overlay on top of whatever design system runs underneath.

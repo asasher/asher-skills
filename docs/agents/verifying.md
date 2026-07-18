@@ -24,7 +24,13 @@ The commands above are the real, verified checks for this repo (probe eval + `py
 
 ## Acceptance criteria
 
-- Where criteria come from: the issue, and for an enhancement the approved plan's definition of done. For a skill, the answer key in its `evals/` is the executable form of the criteria. The verifier writes them as explicit pass/fail checks driven through an executor.
+- Where criteria come from — by entryway, since the dev tail is invariant but its inputs are not: a ticketed
+  run reads the ticket's acceptance block (inheriting its spec's per-slice acceptance); a spec without
+  tickets reads the spec; interactive chat-and-build reads the criteria the build loop wrote into the PR
+  body at its start. For a skill, the answer key in its `evals/` is the executable form of the criteria. The
+  verifier writes them as explicit pass/fail checks driven through an executor.
+- Evidence obligation scales with absence (`evidence.md`): an AFK run owes the full evidence package;
+  interactive work witnessed live may degrade to the PR body's verification grades.
 - Repo-specific expectations every change must satisfy beyond the issue text:
   - **Self-contained at the file level** — a skill's files stay in its own directory; it never imports another skill's files or a shared library (`AGENTS.md` § Conventions). A change that reaches across skill directories fails.
   - **Compose by name, not by file** — cross-skill reliance is a plain-language runtime pointer, not a file dependency.

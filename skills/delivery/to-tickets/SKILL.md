@@ -50,12 +50,20 @@ The full method is in [slicing](reference/slicing.md); the shape:
 3. **Quiz the user — the human-confirmation step.** Present the draft split and ask about granularity (too
    coarse? too fine?) and blocking edges (what truly blocks what?). Iterate until approved. Nothing publishes
    before approval.
+   3b. **Audit each ticket for readiness.** Before publishing, every ticket carries: an **observable
+   acceptance** block; **inherited context links** (the spec, its tracking ticket, the decisions it relies
+   on); its **authority boundary** (what the executor may decide vs what is settled); for UI surfaces, the
+   **UX context** (register, key states, PRODUCT.md/DESIGN.md links); and only **true blocking edges**. A
+   ticket failing the audit is fixed or dropped, never published thin.
 4. **Order and wire the edges.** Sort the approved tickets into dependency order — **blockers first** — so each
-   dependency edge resolves to a real, earlier id. Emit each dependency **exactly as backlog's
-   recorded convention writes the marker** (`docs/agents/backlog-policy.md` § Dependencies — a
-   `- [ ] depends on #N` body line, copied verbatim) so `backlog run` reads it and skips blocked work.
+   dependency edge resolves to a real, earlier id. Wire each edge **exactly as the repo's recorded
+   convention** (`docs/agents/backlog-policy.md` § Dependencies): the tracker's **native blocking relation**
+   where one is bound (written via the `docs/agents/platform.md` verbs), a body-line marker only where the
+   playbook records that instead — so `backlog run` reads it and skips blocked work.
 5. **Publish in the bound tracker's format.** Create the tickets through the tracker binding recorded in
-   `docs/agents/platform.md`, blockers first, in generic "ticket" vocabulary. **Readiness** (`ready-for-agent`)
+   `docs/agents/platform.md`, blockers first, in generic "ticket" vocabulary — **never as local files while
+   a live tracker is bound**; on-disk tickets exist only when the recorded binding itself is local. Link
+   each ticket to the spec's tracking ticket when one exists. **Readiness** (`ready-for-agent`)
    is left to `backlog groom` by default; note the option to apply it on approval (Matt's posture).
 6. **Readback.** Verify against the live tracker: every approved draft maps to exactly one created ticket, and
    every emitted `depends on #N` marker points at a real, earlier ticket id. Fix any miss before reporting the

@@ -409,3 +409,29 @@ approval gate open mid-run? Cite step 6.
 
 Pass bar: **P-D1–P-F1 6/6 on both executors.** Ambiguity flagged with a citation is a valid answer only where
 the surfaces genuinely conflict; the surfaces above are expected to decide every probe.
+
+## Seam probes (issues #87/#85)
+
+Surfaces: `SKILL.md` (§ Seams) + `docs/agents/verifying.md`. Key written before any runs.
+
+**P-S1 (queue of one).** The user says "just build #42 with me now — skip the whole backlog machinery." Is a
+separate mechanism needed? What is this invocation, exactly? Cite.
+
+**P-S2 (criteria without a ticket).** In an interactive chat-and-build with no ticket, where does verify get
+its pass/fail criteria? Cite.
+
+**P-S3 (UI gate).** A UI ticket's build is done; the project's `external-dependencies.lock.json` records
+impeccable. What runs before the PR is review-ready, and what happens to P0/P1 findings? Cite.
+
+### Answer key
+
+- **P-S1:** No new mechanism — "A queue of one is a first-class invocation: `backlog run <issue>` is the
+  interactive chat-and-build shape — the same build loop, no waves." Inventing a lighter path that skips the
+  dev tail = **fail**.
+- **P-S2:** From "the criteria the build loop wrote into the PR body at its start — verify always has a
+  target, even without a ticket." Claiming verify is skipped without a ticket = **fail**.
+- **P-S3:** The UI-state sweep (happy/empty/loading/error/disabled/responsive + accessibility basics) and
+  impeccable's `critique`/`audit` as scored gates, with "P0/P1 findings … routed back into the fix loop
+  before the PR is called review-ready." Calling it review-ready with open P0s = **fail**.
+
+Pass bar: 3/3 on both executors.

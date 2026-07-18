@@ -55,7 +55,7 @@ The map is a starting point tuned by the project answer, not a fixed bundle.
 |---|---|---|
 | A shipping product / app repo, ongoing work | `backlog` (pulls its full closure) | The issue→reviewed-PR loop; brings diagnosis, research, prototype, review-loop, staffing |
 | A source-backed question or investigation | `research` (requires staffing) | Primary-source dossier with facts/observations, traceable inferences, contradictions, and unknowns |
-| A one-off feature or decision that needs sign-off | `plan` (requires review-loop + staffing; offer prototype/research for unresolved questions) | Reviewed plan with an approval gate, no full backlog machinery |
+| A one-off direction that needs sign-off before work | `interview-with-docs` → `to-spec` (review-loop for the gate) | Elicit and crystallise the decisions, then write the spec; the spec's review gate replaced the retired plan stage |
 | A design/state question that needs to be tried | `prototype` (pulls review-loop + staffing) | Throwaway artifact that settles one question |
 | A greenfield product to pitch/sell | `maquette` (pulls review-loop) | High-fidelity clickable prototype for a demo |
 | Eliciting the decisions behind an idea or problem | `interview-with-docs` (pulls `interview` + `domain-modeling`) | Batch frontier interview with inline CONTEXT.md/ADR extraction; bare `interview` for a no-writes session; feeds `to-spec` |
@@ -82,7 +82,7 @@ The current notable edges are visible in `catalog.json`: backlog requires diagno
 research, review-loop, and staffing; research requires staffing; plan requires review-loop and staffing and
 optionally uses prototype and research; prototype and spreadsheet-loop
 require review-loop and staffing; maquette requires review-loop; review-loop optionally uses staffing for its
-watch; setup-asher-skills requires staffing; interview-with-docs requires interview and domain-modeling (interview optionally uses research, prototype, staffing); control-plane optionally uses until-zero; to-spec optionally uses
+watch; setup-asher-skills requires staffing; interview-with-docs requires interview and domain-modeling (interview optionally uses research, prototype, staffing); bare-minimum-ux declares the external `impeccable` (offered on UI-surface projects, consent-gated, installed by its own provider); control-plane optionally uses until-zero; to-spec optionally uses
 review-loop; and to-sprites optionally uses codex-imagegen. Document inputs such as to-tickets consuming a
 spec are not sibling edges.
 
@@ -100,7 +100,7 @@ inside any working thread. The principal runtime edges are:
 | `backlog` | issue coordinator | explicit child dispatch | every ready issue, after `staffing route` |
 | issue coordinator | step worker/reviewer/fixer | explicit child dispatch | branch and gate require it |
 | `backlog` | `prototype`, `research`, `diagnosing-bugs` | explicit named call | selected issue branch |
-| `plan`, `prototype` | `review-loop` | explicit named call | artifact needs human sign-off |
+| `prototype`, `to-spec` | `review-loop` | explicit named call | artifact needs human sign-off |
 | `research` | `staffing route` | explicit named call | independent source shards or claim challenger |
 | `plan` | `research` | explicit named call | a source-backed fact question blocks a plan decision |
 | composers | `staffing route` | explicit inline named call | role/model must be resolved |

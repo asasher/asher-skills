@@ -13,8 +13,8 @@ same way — mine the decided direction, the actors, and the full surface:
 - **A spec** (the primary input) — `to-spec`'s output at `docs/specs/<name>.html` (a self-contained HTML deliverable; an older `.md` spec reads the same way), given as the command argument.
   This is the contract path; a repo may record a different specs location in its `docs/agents/`, honor it when
   present.
-- **A plan** — a per-ticket, gated design doc. Read it as direction for a single slice's worth of work, or a
-  small cluster.
+- **A legacy plan document** — a per-ticket design doc from the retired plan stage. Read it as direction for
+  a single slice's worth of work, or a small cluster.
 - **The raw current conversation** — when no spec or plan was written, mine the conversation and the
   codebase/project understanding built up in it.
 
@@ -67,17 +67,34 @@ Once the split is approved, sort the tickets into **dependency order — blocker
 the tracker assigns an id at creation time: a ticket can only reference its blocker once that id exists, so
 every blocker must be **created before its dependents.** Topologically sort the graph; publish in that order.
 
-Emit each dependency **exactly as the repo's dependency playbook records the marker** — verbatim, so
-`backlog run` reads it and skips blocked work. In this repo that convention
-(`docs/agents/backlog-policy.md` § Dependencies) is a **`- [ ] depends on #N` task-list line in the ticket
-body**; `run` treats a ticket with any unchecked, unclosed dependency as blocked and skips it. Copy the
-playbook's literal form — don't restyle it. The convention is a **project playbook**, not a `backlog` import:
-to-tickets emits *into* it, so the playbook's wording is the authority. A repo that records a different
-convention (native blocking links, a `deps:` frontmatter) is honored per its `docs/agents/`.
+Wire each dependency **exactly as the repo's dependency playbook records it** (`docs/agents/backlog-policy.md`
+§ Dependencies), so `backlog run` reads it and skips blocked work. Where the playbook records the tracker's
+**native blocking relation** (this repo: GitHub `blocked_by`, written via the verified verbs in
+`docs/agents/platform.md`), write the native edge — it renders the frontier in the tracker's own UI. Where it
+records a body-line marker (`- [ ] depends on #N`) or `deps:` frontmatter instead, copy the playbook's
+literal form — don't restyle it. The convention is a **project playbook**, not a `backlog` import: to-tickets
+emits *into* it, so the playbook's wording is the authority.
+
+## Audit each ticket for readiness
+
+Before publishing, audit every approved ticket. Each must carry:
+
+- **Observable acceptance** — criteria a verifier can exercise, not vibes.
+- **Inherited context links** — the spec, its thin tracking ticket, and the decisions the slice relies on;
+  a fresh context window must reach everything it needs from the ticket alone.
+- **An authority boundary** — what the executor may decide (feeding backlog's route judgment and the
+  just-in-time tactical plan) vs what is settled and must not be re-decided.
+- **UX context, for UI surfaces** — the register, the key states (empty / loading / error / disabled /
+  responsive), and links to `PRODUCT.md`/`DESIGN.md` where they exist.
+- **True blocking edges only** — an edge that merely sequences convenience is not a blocker.
+
+A ticket failing the audit is fixed or dropped — never published thin for grooming to repair later.
 
 ## Publish in the bound tracker's format
 
-Create the tickets through the **tracker binding** recorded in `docs/agents/platform.md`, blockers first. On
+Create the tickets through the **tracker binding** recorded in `docs/agents/platform.md`, blockers first —
+**never as local ticket files while a live tracker is bound**; on-disk tickets exist only when the recorded
+binding itself is local. Link each ticket to the spec's tracking ticket when one exists. On
 this repo that binding is GitHub via `gh` (`gh issue create --title '...' --body '...'`), and a ticket is a
 GitHub issue — but the skill's own text stays generic: a **ticket** is the tracker's issue role in a
 tracker-agnostic word. Publish the body from [templates/ticket.md](../templates/ticket.md), carrying the

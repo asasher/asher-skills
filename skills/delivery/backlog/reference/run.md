@@ -11,6 +11,10 @@ Binding for this thread and every issue thread it dispatches:
 - **Never end a turn while children, gates, or CI this thread owns are live unless a verified wake path exists** — a harness-tracked child/task notification, an armed watcher, or a scheduled wakeup. The harness's staffing module names its native wake sources; where the harness tracks the wait, rely on the notification and do not poll (**no-burden rule** — bounded-polling machinery exists only for harnesses without wakeups). Where no wake path exists, hold a bounded foreground wait loop. Report "dispatched"/"resumed" only after the wake path is verified.
 - Every wait is recorded per `reference/run-state.md`: owner, object, expected event, next-check deadline, wake path. A prose-only wait ("awaiting CI") is a contract violation. Terminal CI waits belong to this thread, never to a parked issue thread.
 
+A **queue of one** is a normal run: the user names a single issue, no waves form, and the one build loop
+runs under the same claim, dispatch, and liveness contract — interactive chat-and-build is this shape, not a
+separate mechanism.
+
 ## Steps
 
 1. Confirm the project is set up.

@@ -39,9 +39,12 @@ in each section. The fillable scaffold is [templates/spec-skeleton.html](templat
 
 The full method is in [synthesis](reference/synthesis.md); the shape:
 
-1. **Mine, don't ask.** Read the conversation and the codebase/project understanding it built. Extract the
-   problem, the decided solution, the decisions taken and the constraints that forced them. Anything left
-   undecided becomes a line in **Notes**, never a question back to the user.
+1. **Mine, don't ask.** Read the conversation and the codebase/project understanding it built. When the
+   conversation ran through the `interview` / `interview-with-docs` siblings, their crystallised artifacts —
+   `CONTEXT.md` terms, ADRs, the exit classification of open threads — are the primary inputs: synthesis
+   reads the record, not memory alone. Extract the problem, the decided solution, the decisions taken and
+   the constraints that forced them. Anything left undecided becomes a line in **Notes**, never a question
+   back to the user.
 2. **Classify the work — dev or non-dev.** Our work isn't all software. A **dev spec** keeps the dev-only
    sections (Testing decisions, Test seams) and runs the seams step below; a **non-dev spec** skips both and
    uses only the core sections.
@@ -49,9 +52,17 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
    **prefer the highest existing seam**. Skip this entirely for non-dev specs.
 4. **Write the spec** from the skeleton into `docs/specs/<name>.html`, in generic vocabulary — a
    self-contained HTML deliverable with stable element ids, same house style as a plan.
-5. **Sign-off.** If the user is present, open the rendered spec and take approval inline. If they're AFK,
-   serve the spec directly through the optional `review-loop` sibling (it is already review-ready HTML) —
-   see the dependency surface.
+5. **Audit fidelity, then classify the Notes.** Before sign-off: every material decision from the
+   conversation appears in the spec, and every Notes line is classified **blocking** (must be settled
+   upstream before tickets), **delegated** (the executor may choose; boundary named), or **deferred**
+   (parked, with a home). A spec with an unclassified material Note, or an open blocking Note, must not
+   feed `to-tickets`.
+6. **Sign-off — the direction's approval gate.** There is no separate plan stage; the spec's approval *is*
+   the gate, and per-ticket tactics are made just-in-time in execution. If the user is present, open the
+   rendered spec and take approval inline. If they're AFK, serve it through the optional `review-loop`
+   sibling (it is already review-ready HTML). **On approval:** commit the spec, and — when a live tracker
+   is bound (`docs/agents/platform.md`) — create a **thin tracking ticket**: title, one-line gist, and a
+   link to the canonical spec. Links and state, never content; `to-tickets` wires the slice tickets to it.
 
 ## What a spec is (and isn't)
 
