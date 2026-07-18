@@ -128,6 +128,18 @@
       "source": "skills/thinking/dissolve",
       "variants": {}
     },
+    "domain-modeling": {
+      "category": "thinking",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "setup": null,
+      "source": "skills/thinking/domain-modeling",
+      "variants": {}
+    },
     "eloquent": {
       "category": "personal",
       "execution": "thread",
@@ -161,6 +173,37 @@
       "requires": [],
       "setup": "reference/setup.md",
       "source": "skills/personal/goodwork",
+      "variants": {}
+    },
+    "interview": {
+      "category": "thinking",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [
+        "research",
+        "prototype",
+        "staffing"
+      ],
+      "requires": [],
+      "setup": null,
+      "source": "skills/thinking/interview",
+      "variants": {}
+    },
+    "interview-with-docs": {
+      "category": "thinking",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "interview",
+        "domain-modeling"
+      ],
+      "setup": null,
+      "source": "skills/thinking/interview-with-docs",
       "variants": {}
     },
     "learn-anything": {
