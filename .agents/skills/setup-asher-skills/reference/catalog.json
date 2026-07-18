@@ -10,7 +10,6 @@
       "optional": [],
       "requires": [
         "diagnosing-bugs",
-        "plan",
         "prototype",
         "research",
         "review-loop",
@@ -23,7 +22,15 @@
     "bare-minimum-ux": {
       "category": "creative",
       "execution": "thread",
-      "external": [],
+      "external": [
+        {
+          "capability": "Durable design context (PRODUCT.md/DESIGN.md) authoring plus scored UI critique/audit gates",
+          "kind": "skill",
+          "name": "impeccable",
+          "source": "https://github.com/pbakaus/impeccable",
+          "version": "latest"
+        }
+      ],
       "internal": false,
       "invocation": "model",
       "optional": [],
@@ -129,6 +136,18 @@
       "source": "skills/thinking/dissolve",
       "variants": {}
     },
+    "domain-modeling": {
+      "category": "thinking",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [],
+      "setup": null,
+      "source": "skills/thinking/domain-modeling",
+      "variants": {}
+    },
     "eloquent": {
       "category": "personal",
       "execution": "thread",
@@ -162,6 +181,37 @@
       "requires": [],
       "setup": "reference/setup.md",
       "source": "skills/personal/goodwork",
+      "variants": {}
+    },
+    "interview": {
+      "category": "thinking",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [
+        "research",
+        "prototype",
+        "staffing"
+      ],
+      "requires": [],
+      "setup": null,
+      "source": "skills/thinking/interview",
+      "variants": {}
+    },
+    "interview-with-docs": {
+      "category": "thinking",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "model",
+      "optional": [],
+      "requires": [
+        "interview",
+        "domain-modeling"
+      ],
+      "setup": null,
+      "source": "skills/thinking/interview-with-docs",
       "variants": {}
     },
     "learn-anything": {
@@ -230,21 +280,17 @@
       "source": "skills/creative/maquette",
       "variants": {}
     },
-    "plan": {
+    "merge-changes": {
       "category": "delivery",
       "execution": "orchestrator",
       "external": [],
       "internal": false,
       "invocation": "user",
       "optional": [
-        "prototype",
-        "research"
-      ],
-      "requires": [
-        "review-loop",
         "staffing"
       ],
-      "source": "skills/delivery/plan",
+      "requires": [],
+      "source": "skills/delivery/merge-changes",
       "variants": {}
     },
     "projects-triage": {

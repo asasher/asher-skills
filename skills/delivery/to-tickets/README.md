@@ -43,7 +43,7 @@ ordering and backlog's edge convention, the readiness default, no-stale-content,
 is the whole ordered split drafted before the quiz. `agents/openai.yaml` is the Codex manifest.
 `evals/probes.md` is the pre-deployment probe eval.
 
-Self-contained at the file level; composes by name. **Inputs** — consumes `to-spec`'s output, or a `plan`, or a
+Self-contained at the file level; composes by name. **Inputs** — consumes `to-spec`'s output, or a legacy plan document, or a
 raw conversation — are read as documents, not imported. The **dependency convention** and **tracker binding**
 come from the repo's project playbooks (`backlog-policy.md`, `platform.md`): to-tickets emits *into* backlog's
 convention, it does not import the `backlog` skill.

@@ -26,8 +26,7 @@
       "skills": [
         "./skills/delivery/backlog",
         "./skills/delivery/diagnosing-bugs",
-        "./skills/delivery/plan",
-        "./skills/delivery/prototype",
+          "./skills/delivery/prototype",
         "./skills/delivery/spreadsheet-loop",
         "./skills/delivery/to-spec",
         "./skills/delivery/to-tickets"

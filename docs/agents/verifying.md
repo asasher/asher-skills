@@ -13,6 +13,11 @@ Run narrowest-first, then broaden by touched surface. This is a skills repo — 
 - Full / aggregate gate (before PR): the changed skill's probe eval passes against its answer key, and any changed script compiles and runs. New or reworked skills must clear a pre-deployment probe eval before first real use (`AGENTS.md` convention).
 - Independent second-opinion verification: delegate a scenario to `codex exec` as a second, differently-modeled executor when a criterion is subjective or benefits from a perspective outside the orchestrator's context; grading against the answer key and running scripts stay local.
 
+## UI surfaces
+
+- Rare in this repo (skills, not product UI), but any change shipping a rendered HTML artifact (plan/spec/review page, a skill's chrome) is exercised in its rendered states: happy, empty/error where they exist, and both color schemes; accessibility basics per the `bare-minimum-ux` overlay.
+- When a consumer project's `external-dependencies.lock.json` records the consented `impeccable` external, its `critique`/`audit` run as scored gates on touched UI surfaces and P0/P1 findings route back into the fix loop before the PR is review-ready (shipped default: `templates/software/verifying.md` § UI surfaces).
+
 The commands above are the real, verified checks for this repo (probe eval + `py_compile` + drive-the-script) — there is no discovered test/lint/build pipeline to record because this repo has none.
 
 ## CI merge gate

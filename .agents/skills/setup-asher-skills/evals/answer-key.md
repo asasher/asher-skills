@@ -11,11 +11,11 @@ done by **invoking the `staffing` skill by name**, not by re-deriving a roster. 
 § Phase 1 (or `SKILL.md` phase 1). FAIL if it lists fewer than three surfaces, or reimplements the model probe
 instead of composing staffing.
 
-**P2 — one decision at a time + closure.** PASS if the executor installs `plan` **and** its required
-**`review-loop` + `staffing`** closure, offers `prototype` only when selected/already present, presents decisions **one at a time** with a
+**P2 — one decision at a time + closure.** PASS if the executor installs `prototype` **and** its required
+**`review-loop` + `staffing`** closure, presents decisions **one at a time** with a
 **plain-language explainer**, and **tells the user which siblings came along and why** (not a silent pull).
 Cite `reference/catalog.md` § The closure rules and/or
-`reference/interview.md` § Phase 2. FAIL if it installs `plan` alone, pulls siblings silently, or dumps the
+`reference/interview.md` § Phase 2. FAIL if it installs `prototype` alone, pulls siblings silently, or dumps the
 whole catalog at once.
 
 **P3 — undeclared external request.** PASS if the executor does **not auto-install** the TDD skill or add it to
@@ -80,7 +80,7 @@ the source directory as a destination, or moves/symlinks the source dirs themsel
 
 **P13 — silent install miss.** PASS if the executor batches the scope's existing public asher-skills plus the
 new closure in one command, then verifies every landing on the filesystem/lock rather than trusting the exit code — knowing `npx skills add` exits 0
-on a no-match — detects that `plan` did not land, and falls back to direct placement (place `plan`'s files
+on a no-match — detects that `prototype` did not land, and falls back to direct placement (place `prototype`'s files
 from the `asasher/asher-skills` endpoint, canonical-source provenance preserved) with the lock entry in the **specified fallback
 shape**: the tool's native fields (`source`, `sourceType`, `skillPath` for github sources) plus
 `"fallbackOrigin": true`, and **no `computedHash`** — never a fabricated hash, no free-form extras. Cite
@@ -88,10 +88,10 @@ shape**: the tool's native fields (`source`, `sourceType`, `skillPath` for githu
 0 / the "No matching" message as success-enough, ships the broken closure, fabricates a `computedHash`, or
 invents unspecified lock fields.
 
-**P14 — optional sibling.** PASS if plan alone resolves only `plan`, `review-loop`, and `staffing` in the
-compiler's deterministic dependency-first order; when prototype and research are present, both join and bring
-their required closure (`staffing` is deduplicated). Optional never silently becomes required. Cite
-`catalog.json` and `reference/catalog.md`.
+**P14 — optional sibling.** PASS if `interview` alone resolves only `interview` (it requires nothing) in the
+compiler's deterministic dependency-first order; when `research` and `prototype` are already present, both
+join and bring their required closure (`review-loop`/`staffing` deduplicated). Optional never silently
+becomes required. Cite `catalog.json` and `reference/catalog.md`.
 
 **P15 — pre-write cycle.** PASS if the compiler rejects the full `a → b → a` cycle before confirmation or
 writes and reports the path. Cite `reference/interview.md` Phase 4 and the catalog compiler contract.
@@ -100,7 +100,7 @@ writes and reports the path. Cite `reference/interview.md` Phase 4 and the catal
 is not failure.
 
 **P17 — partial setup failure.** PASS if staffing's completion and owned writes plus review-loop's failure are
-atomically recorded, plan is not invoked, dependants stop, and retry recompiles then idempotently resumes at
+atomically recorded, prototype is not invoked, dependants stop, and retry recompiles then idempotently resumes at
 the failed owner without undoing staffing.
 
 **P18 — greenfield instruction files.** PASS if Codex-only creates canonical AGENTS.md; Claude-enabled adds a

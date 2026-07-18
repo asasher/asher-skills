@@ -48,7 +48,7 @@ Where a skill lives — three distinct places, three terms:
 How skills and instructions relate:
 
 - **Sibling skill** — another skill in this repo that a skill relies on by name (§ Conventions:
-  compose-by-name), e.g. `plan` presents through the `review-loop` sibling. A plain-language runtime
+  compose-by-name), e.g. `to-spec` presents through the `review-loop` sibling. A plain-language runtime
   pointer resolved by the installed skill set — never a file import.
 - **External requirement** — a skill or Codex plugin relied on by a selected skill whose canonical source
   lives outside this repo and is declared in that skill source's `metadata.external`. It is not a sibling and

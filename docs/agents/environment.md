@@ -76,7 +76,7 @@
 
 ## Presenting to the human
 
-> Owned by the **`review-loop`** skill (composed by name): the presentation surface and interactive review — how plans, prototypes, and review sheets reach a human who may not be at the machine. Read by `plan` and `prototype` when they pause for review; review-loop's setup records this repo's surface config here. The shipped default is a singular tailnet surface; local-only and custom channels are legitimate alternates.
+> Owned by the **`review-loop`** skill (composed by name): the presentation surface and interactive review — how plans, prototypes, and review sheets reach a human who may not be at the machine. Read by `prototype` and `to-spec` when they pause for review; review-loop's setup records this repo's surface config here. The shipped default is a singular tailnet surface; local-only and custom channels are legitimate alternates.
 
 - Surface: **tailnet** (`tailscale serve`, Funnel off — private to Asher's own devices: this MacBook + iphone-14-pro-max).
 - **Always open in the browser:** whenever a plan or prototype is published for review, open its URL locally with `open <url>` immediately after presenting — standing instruction from Asher, every presentation, no need to ask.

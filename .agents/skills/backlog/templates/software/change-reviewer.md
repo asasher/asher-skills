@@ -1,6 +1,6 @@
 # Playbook: Change Reviewer Criteria
 
-> Project playbook for this repo. The backlog `adversarial-review` Reviewer subagent reads this file for what to scrutinize, how to comment, and the approval bar; the loop mechanics are in the skill's `reference/adversarial-review.md`. The quality bar below is the shipped default (adapted from Cursor's thermo-nuclear code-quality review; smell baseline from Matt Pocock's `code-review` skill, MIT) — tune it to what matters in this codebase.
+> Project playbook for this repo. The backlog `adversarial-review` Reviewer subagent reads this file for what to scrutinize, how to comment, and the approval bar; the loop mechanics are in the skill's `reference/adversarial-review.md`. The quality bar below is the shipped default — tune it to what matters in this codebase.
 
 ## Correctness first
 

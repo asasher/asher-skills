@@ -97,6 +97,6 @@ The full method is in [slicing](reference/slicing.md); the shape:
   repo, not from the `backlog` skill's files: to-tickets emits **into** backlog's convention, it does not import
   backlog. A repo may record a different specs location or dependency convention; honor it when present.
 - **Sibling skills** — to-tickets **consumes `to-spec`'s output** (a spec) as its primary input, and can also
-  take a **`plan`** or a **raw conversation**. These inputs are composed by name — to-tickets reads the spec doc
+  take a **legacy plan document** (from the retired plan stage) or a **raw conversation**. These inputs are composed by name — to-tickets reads the spec doc
   or the conversation, it does not import another skill's files. There is no hard skill dependency: given any of
   the three inputs, to-tickets runs standalone.

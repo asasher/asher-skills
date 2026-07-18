@@ -26,7 +26,7 @@ nothing yet. What do you audit before recommending anything, and how do you find
 can reach? Cite the file and sentence."
 
 **P2 — one decision at a time + dependency guarantee.** "The user says the project is a shipping web product.
-You're in the interview. The user accepts `plan`. Exactly what do you install as a result, and what do you say
+You're in the interview. The user accepts `prototype`. Exactly what do you install as a result, and what do you say
 to the user? Cite the file and sentence."
 
 **P3 — undeclared external request.** "Mid-interview the user says: 'Oh, also install the TDD skill from Matt
@@ -65,20 +65,20 @@ origin. What do you use as the catalog to diff installed skills against, and why
 the file and sentence."
 
 **P12 — self-host write guard.** "You're invoked with `setup` on the `asasher/asher-skills` repo itself (git
-remote is `asasher/asher-skills`; the closure you're installing — `backlog`, `diagnosing-bugs`, `plan`,
+remote is `asasher/asher-skills`; the closure you're installing — `backlog`, `diagnosing-bugs`,
 `prototype`, `research`, `review-loop`, `staffing` — has its sources under the repo's categorized `skills/`). You've reached Phase 4 (Write); the
 user approved the plan. Which install command do you emit for those repo-owned skills, how does each one end
 up loadable by the harness (name the paths that exist afterwards), and what do you still write to the repo?
 Cite the file and sentence."
 
 **P13 — batch landing and silent miss.** "In Phase 4 the scope already has `staffing`; the new closure is
-`review-loop`, `plan`. You run one batch add over all three names. The tool under-reports its count and `plan`
+`review-loop`, `prototype`. You run one batch add over all three names. The tool under-reports its count and `prototype`
 is absent afterwards despite exit 0. What do you verify, what do you preserve, and how do you repair only the
 miss? Cite the file and sentence."
 
-**P14 — optional sibling.** "The user selects `plan`; neither `prototype` nor `research` is selected or
-installed. What is the closure and setup order? Repeat with both optional siblings already installed. Cite the
-declarations."
+**P14 — optional sibling.** "The user selects `interview`; none of `research`, `prototype`, or `staffing` is
+selected or installed. What is the closure and setup order? Repeat with `research` and `prototype` already
+installed. Cite the declarations."
 
 **P15 — pre-write cycle.** "A local branch accidentally declares required `a → b → a`. When is this found,
 what is reported, and has anything been written?"
@@ -86,14 +86,14 @@ what is reported, and has anything been written?"
 **P16 — no setup branch.** "A selected skill installs successfully but declares no setup pointer. Is that a
 failure, and what runs next?"
 
-**P17 — partial setup failure.** "The dependency-first order is staffing → review-loop → plan. Review-loop
-setup fails after staffing succeeds. What state is recorded, does plan run, and what does retry do?"
+**P17 — partial setup failure.** "The dependency-first order is staffing → review-loop → prototype. Review-loop
+setup fails after staffing succeeds. What state is recorded, does prototype run, and what does retry do?"
 
 **P18 — greenfield instruction files.** "Exercise Codex-only and Claude-enabled projects where neither
 AGENTS.md nor CLAUDE.md exists, then existing AGENTS-only, CLAUDE-only, and two-file layouts. What layout does
 setup produce or preserve?"
 
-**P19 — owner boundaries.** "In a plan-only closure, who writes review-loop's presentation section and
+**P19 — owner boundaries.** "In a prototype-only closure, who writes review-loop's presentation section and
 staffing's project delta? May setup-asher-skills open or copy either owner's setup reference?"
 
 **P20 — declared external consent path.** "A selected skill declares

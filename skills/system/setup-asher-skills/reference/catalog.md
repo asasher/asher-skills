@@ -79,8 +79,7 @@ write plan is presented. Closure output includes the sorted, deduplicated `exter
 every active skill.
 
 The current notable edges are visible in `catalog.json`: backlog requires diagnosing-bugs, prototype,
-research, review-loop, and staffing; research requires staffing; plan requires review-loop and staffing and
-optionally uses prototype and research; prototype and spreadsheet-loop
+research, review-loop, and staffing; research requires staffing; prototype and spreadsheet-loop
 require review-loop and staffing; maquette requires review-loop; review-loop optionally uses staffing for its
 watch; setup-asher-skills requires staffing; interview-with-docs requires interview and domain-modeling (interview optionally uses research, prototype, staffing); bare-minimum-ux declares the external `impeccable` (offered on UI-surface projects, consent-gated, installed by its own provider); control-plane optionally uses until-zero; to-spec optionally uses
 review-loop; and to-sprites optionally uses codex-imagegen. Document inputs such as to-tickets consuming a
@@ -102,7 +101,7 @@ inside any working thread. The principal runtime edges are:
 | `backlog` | `prototype`, `research`, `diagnosing-bugs` | explicit named call | selected issue branch |
 | `prototype`, `to-spec` | `review-loop` | explicit named call | artifact needs human sign-off |
 | `research` | `staffing route` | explicit named call | independent source shards or claim challenger |
-| `plan` | `research` | explicit named call | a source-backed fact question blocks a plan decision |
+| `interview` | `research`, `prototype` | explicit named call | facts looked up, never asked; paper-unsettleable questions probed |
 | composers | `staffing route` | explicit inline named call | role/model must be resolved |
 | any working thread | any installed `model` skill | ambient model invocation | the thread recognizes a matching need |
 

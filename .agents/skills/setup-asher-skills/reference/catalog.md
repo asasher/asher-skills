@@ -53,11 +53,12 @@ The map is a starting point tuned by the project answer, not a fixed bundle.
 
 | Project is for… | Recommend | Why |
 |---|---|---|
-| A shipping product / app repo, ongoing work | `backlog` (pulls its full closure) | The issue→reviewed-PR loop; brings diagnosis, research, plan, prototype, review-loop, staffing |
+| A shipping product / app repo, ongoing work | `backlog` (pulls its full closure) | The issue→reviewed-PR loop; brings diagnosis, research, prototype, review-loop, staffing |
 | A source-backed question or investigation | `research` (requires staffing) | Primary-source dossier with facts/observations, traceable inferences, contradictions, and unknowns |
-| A one-off feature or decision that needs sign-off | `plan` (requires review-loop + staffing; offer prototype/research for unresolved questions) | Reviewed plan with an approval gate, no full backlog machinery |
+| A one-off direction that needs sign-off before work | `interview-with-docs` → `to-spec` (review-loop for the gate) | Elicit and crystallise the decisions, then write the spec; the spec's review gate replaced the retired plan stage |
 | A design/state question that needs to be tried | `prototype` (pulls review-loop + staffing) | Throwaway artifact that settles one question |
 | A greenfield product to pitch/sell | `maquette` (pulls review-loop) | High-fidelity clickable prototype for a demo |
+| Eliciting the decisions behind an idea or problem | `interview-with-docs` (pulls `interview` + `domain-modeling`) | Batch frontier interview with inline CONTEXT.md/ADR extraction; bare `interview` for a no-writes session; feeds `to-spec` |
 | Turning a decided conversation into a written spec | `to-spec` (review-loop optional) | Synthesize a spec; feeds `to-tickets` |
 | Splitting a spec/plan into backlog tickets | `to-tickets` | Vertical-slice tickets with blocking edges into backlog's convention |
 | Any project that will route work across models | `staffing` — offer **global** | A reusable model roster; the one skill worth installing once for every project |
@@ -77,11 +78,10 @@ pointers, invalid provider overlays, required cycles, malformed external declara
 write plan is presented. Closure output includes the sorted, deduplicated `external` requirements merged from
 every active skill.
 
-The current notable edges are visible in `catalog.json`: backlog requires diagnosing-bugs, plan, prototype,
-research, review-loop, and staffing; research requires staffing; plan requires review-loop and staffing and
-optionally uses prototype and research; prototype and spreadsheet-loop
+The current notable edges are visible in `catalog.json`: backlog requires diagnosing-bugs, prototype,
+research, review-loop, and staffing; research requires staffing; prototype and spreadsheet-loop
 require review-loop and staffing; maquette requires review-loop; review-loop optionally uses staffing for its
-watch; setup-asher-skills requires staffing; control-plane optionally uses until-zero; to-spec optionally uses
+watch; setup-asher-skills requires staffing; interview-with-docs requires interview and domain-modeling (interview optionally uses research, prototype, staffing); bare-minimum-ux declares the external `impeccable` (offered on UI-surface projects, consent-gated, installed by its own provider); control-plane optionally uses until-zero; to-spec optionally uses
 review-loop; and to-sprites optionally uses codex-imagegen. Document inputs such as to-tickets consuming a
 spec are not sibling edges.
 
@@ -98,10 +98,10 @@ inside any working thread. The principal runtime edges are:
 |---|---|---|---|
 | `backlog` | issue coordinator | explicit child dispatch | every ready issue, after `staffing route` |
 | issue coordinator | step worker/reviewer/fixer | explicit child dispatch | branch and gate require it |
-| `backlog` | `plan`, `prototype`, `research`, `diagnosing-bugs` | explicit named call | selected issue branch |
-| `plan`, `prototype` | `review-loop` | explicit named call | artifact needs human sign-off |
+| `backlog` | `prototype`, `research`, `diagnosing-bugs` | explicit named call | selected issue branch |
+| `prototype`, `to-spec` | `review-loop` | explicit named call | artifact needs human sign-off |
 | `research` | `staffing route` | explicit named call | independent source shards or claim challenger |
-| `plan` | `research` | explicit named call | a source-backed fact question blocks a plan decision |
+| `interview` | `research`, `prototype` | explicit named call | facts looked up, never asked; paper-unsettleable questions probed |
 | composers | `staffing route` | explicit inline named call | role/model must be resolved |
 | any working thread | any installed `model` skill | ambient model invocation | the thread recognizes a matching need |
 

@@ -1,6 +1,6 @@
 # Evidence
 
-Target: a branch whose behavior `reference/verify.md` has confirmed against its acceptance criteria. Terminal capture step — runs once. In the issue loop it runs **after adversarial review converges**, against the branch's final HEAD, so the captured proof matches what merges and is never invalidated by fixer commits; standalone it follows verify directly. Never run it on a change that has not passed verification; the point is to prove to a human that the criteria are met, so capturing a half-working state defeats it.
+Target: a branch whose behavior `reference/verify.md` has confirmed against its acceptance criteria. Terminal capture step — runs once. In the build loop it runs **after adversarial review converges**, against the branch's final HEAD, so the captured proof matches what merges and is never invalidated by fixer commits; standalone it follows verify directly. Never run it on a change that has not passed verification; the point is to prove to a human that the criteria are met, so capturing a half-working state defeats it.
 
 Staffing: capture is mechanical — a subagent filling the **checker** role runs it; the role and its fallback ladder are resolved by the `staffing` skill (by name).
 
