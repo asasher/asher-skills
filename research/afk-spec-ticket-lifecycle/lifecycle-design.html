@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDLC end-to-end — lifecycle design brainstorm (issue #80+)</title>
+<style>
+  :root {
+    --bg: #faf9f7; --ink: #1a1a1e; --muted: #6b6b74; --line: #e3e1dc;
+    --card: #ffffff; --accent: #8a3ffc; --accent-ink: #6929c4;
+    --stage: #eef4ff; --stage-line: #b8cdf8;
+    --artifact: #fff7e6; --artifact-line: #f0d9a8;
+    --lane: #eafaf1; --lane-line: #b5e3c8;
+    --gate: #fdeef0; --gate-line: #f2bcc5;
+    --human: #f3eefc; --human-line: #d3bff2;
+    --steal: #0e7a4d; --skip: #a33; --adapt: #9a6b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17171a; --ink: #e8e6e1; --muted: #9a9aa4; --line: #34343a;
+      --card: #202024; --accent: #b98aff; --accent-ink: #c9a6ff;
+      --stage: #1d2636; --stage-line: #3a5488;
+      --artifact: #2b2517; --artifact-line: #6d5a2a;
+      --lane: #17281e; --lane-line: #2f5c40;
+      --gate: #2e1d20; --gate-line: #6d3a44;
+      --human: #241d31; --human-line: #4d3a70;
+      --steal: #4cc38a; --skip: #e77; --adapt: #d9a521;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); }
+  main { max-width: 980px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+  h1 { font-size: 1.9rem; line-height: 1.25; margin: 0 0 .4rem; }
+  h2 { font-size: 1.35rem; margin: 3rem 0 .8rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+  h3 { font-size: 1.05rem; margin: 1.6rem 0 .5rem; }
+  p, li { max-width: 72ch; }
+  .sub { color: var(--muted); margin: 0 0 2rem; }
+  .kicker { display:inline-block; font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; color: var(--accent-ink); font-weight:600; margin-bottom:.3rem;}
+  code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: .05em .35em; font-size: .86em; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .92rem; }
+  th, td { text-align: left; padding: .5rem .7rem; border: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--card); }
+  .wide { overflow-x: auto; }
+  .tldr { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 8px; padding: 1rem 1.3rem; margin: 1.5rem 0; }
+  .tldr ul { margin: .4rem 0 0; padding-left: 1.2rem; }
+
+  .pipe { margin: 1.5rem 0; }
+  .prow { display: flex; gap: .6rem; align-items: stretch; flex-wrap: wrap; margin: 0; }
+  .pbox { border-radius: 8px; padding: .55rem .8rem; flex: 1 1 140px; min-width: 130px; font-size: .85rem; line-height: 1.35; }
+  .pbox b { display: block; font-size: .92rem; }
+  .pbox small { color: var(--muted); }
+  .stage { background: var(--stage); border: 1.5px solid var(--stage-line); }
+  .artifact { background: var(--artifact); border: 1.5px solid var(--artifact-line); }
+  .lane { background: var(--lane); border: 1.5px solid var(--lane-line); }
+  .gate { background: var(--gate); border: 1.5px solid var(--gate-line); }
+  .human { background: var(--human); border: 1.5px solid var(--human-line); }
+  .down { text-align: center; color: var(--muted); font-size: 1.1rem; line-height: 1.4; margin: .15rem 0; }
+  .legend { display: flex; gap: 1rem; flex-wrap: wrap; font-size: .8rem; color: var(--muted); margin-top: .8rem; }
+  .legend span { display: inline-flex; align-items: center; gap: .35rem; }
+  .chip { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+
+  .verdict { font-weight: 700; }
+  .v-steal { color: var(--steal); } .v-skip { color: var(--skip); } .v-adapt { color: var(--adapt); }
+
+  .qcard { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0; }
+  .qcard h3 { margin: 0 0 .4rem; }
+  .qcard .lean { color: var(--accent-ink); font-weight: 600; }
+  .shapes td:first-child { white-space: nowrap; font-weight: 600; }
+  .flow { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; margin: .4rem 0 1.2rem; }
+  .fbox { border-radius: 6px; padding: .25rem .55rem; font-size: .8rem; line-height: 1.3; border: 1.5px solid var(--stage-line); background: var(--stage); }
+  .fgate { border-color: var(--gate-line); background: var(--gate); }
+  .fhuman { border-color: var(--human-line); background: var(--human); }
+  .fart { border-color: var(--artifact-line); background: var(--artifact); }
+  .farr { color: var(--muted); font-size: .95rem; }
+  .flabel { margin: 1rem 0 0; font-size: .86rem; }
+  .flabel b { color: var(--accent-ink); }
+  svg.graph { width: 100%; height: auto; margin: 1rem 0; }
+  svg.graph.swim { min-width: 1200px; }
+  svg.graph text { font: 12.5px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: var(--ink); }
+  svg.graph text.t { font-weight: 600; font-size: 13px; }
+  svg.graph text.s { font-size: 10.5px; fill: var(--muted); }
+  svg.graph text.ph { font-weight: 700; font-size: 12px; fill: var(--accent-ink); }
+  svg.graph line, svg.graph path.edge { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+  svg.graph .dash { stroke-dasharray: 4 3; }
+  svg.graph .sep { stroke: var(--line); stroke-width: 1; stroke-dasharray: 6 4; }
+  .note { size: .85rem; font-size: .85rem; color: var(--muted); }
+  .rev { background: var(--artifact); border: 1px solid var(--artifact-line); border-radius: 6px; padding: .2rem .6rem; font-size: .78rem; }
+</style>
+</head>
+<body>
+<main>
+
+<span class="kicker">Brainstorm · feeds issue #80 and the next skill refactors</span>
+<h1 id="title">The end-to-end SDLC, as a family of skills</h1>
+<p class="sub"><span class="rev">rev 5</span> — rev 4 fixed the "implement" naming collision (the per-issue orchestrator is the existing <b>issue loop</b>) and walked decomposition back to naming seams inside a thin backlog. Rev 5 replaces the simple session chains with <b>one full swim-lane diagram</b> (§ 1b): lanes for you / orchestrator / subagents / tracker&amp;repo, with collapse notes showing how simpler sessions delete columns, never lanes. Annotate anything; ids are stable.</p>
+
+<div class="tldr" id="tldr">
+<b>Proposed shape, in one breath.</b>
+<ul>
+<li><b>You route; skills are legible.</b> There is no router stage. Each skill states plainly what it does and what artifact it leaves behind, so invoking the right one is obvious. The one automated nudge lives in <b>grooming</b>: "this is small enough to implement directly" vs "this needs a spec first" — moved out of the run loop (#80), stamped before execution.</li>
+<li><b>Interview = <code>batch-grill-me</code> × <code>domain-modeling</code>.</b> Frontier questions in rounds, facts looked up not asked, and the useful shape written down the moment it crystallizes — glossary terms, ADRs, PRODUCT.md deltas. No Q&amp;A transcript, no ledger.</li>
+<li><b><code>to-spec</code> is enough; <code>plan</code> dissolves.</b> The spec is an <b>HTML document</b> reviewed through review-loop — it inherits plan's artifact form and its approval gate. Tactical planning happens just-in-time inside implement, ungated.</li>
+<li><b>Backlog stays the thin head; its seams become contracts.</b> The per-issue orchestrator already exists and has a name — the <b>issue loop</b> (whose build sub-step is <code>implement.md</code>). No new skills: groom = organize, run = schedule, issue loop = one issue → reviewed PR, and run already takes a queue of one. Over-decomposition is as bad as under-decomposition.</li>
+<li><b>Impeccable fits as a lane, not a spine.</b> That was the real clash. It's invoked at three named points (project setup, spec's design direction, verification) and never owns the workflow. Kept external; mechanics absorbed.</li>
+</ul>
+</div>
+
+<h2 id="pipeline">1 · The pipeline</h2>
+<p>Same spine as rev 1, minus the router pretending to be a stage. The fork after the interview is <b>your call</b> — made obvious by what each path produces, with groom's recommendation as the only automated nudge.</p>
+<div class="pipe">
+  <div class="prow">
+    <div class="pbox stage" id="p-intake"><b>Intake</b>idea · problem · PDF · existing repo<br><small>artifacts are read, not asked about</small></div>
+  </div>
+  <div class="down">↓</div>
+  <div class="prow">
+    <div class="pbox stage" id="p-interview"><b>Interview</b>batch-grill-me frontier rounds × domain-modeling extraction<br><small>facts researched · decisions asked · prototype invoked when paper can't settle it</small></div>
+    <div class="pbox artifact" id="p-crystal"><b>Crystallizes inline →</b>CONTEXT.md terms · ADRs (3-gate test) · PRODUCT.md / DESIGN.md deltas · spec sections<br><small>the extraction IS the record</small></div>
+  </div>
+  <div class="down">↓</div>
+  <div class="prow">
+    <div class="pbox human" id="p-choice"><b>You choose the shape</b>implement now · tickets · spec first — see § 5<br><small>groom recommends when work arrives as issues; otherwise it's just you talking</small></div>
+  </div>
+  <div class="down">↓</div>
+  <div class="prow">
+    <div class="pbox stage" id="p-spec"><b>to-spec</b> <small>(when shared decisions need a home)</small><br>HTML spec → review-loop gate → repo + thin tracking issue</div>
+    <div class="pbox stage" id="p-tickets"><b>to-tickets</b> <small>(when slicing/async wanted)</small><br>tracer-bullet slices, native blocked-by edges, readiness audit</div>
+  </div>
+  <div class="down">↓</div>
+  <div class="prow">
+    <div class="pbox gate" id="p-admission"><b>Admission (groom)</b>readiness audit + the route stamp: direct-implement vs needs-spec<br><small>repairs small omissions; substantial shaping bounces upstream — never mid-run</small></div>
+  </div>
+  <div class="down">↓</div>
+  <div class="prow">
+    <div class="pbox stage" id="p-run"><b>run × issue loop</b>AFK: dependency waves, parallel worktrees, N × (claim → JIT tactical plan → implement → verify → adversarial review → evidence → PR)<br><small>interactive: run with a queue of one — same loop, no waves</small></div>
+    <div class="pbox gate" id="p-merge"><b>Human gates</b>PR review · <code>merge-changes</code><br><small>unchanged</small></div>
+  </div>
+  <div class="down">— cross-cutting lanes, bound per-surface —</div>
+  <div class="prow">
+    <div class="pbox lane" id="p-ux"><b>UX/UI lane</b>register + design direction at interview · states in tickets · impeccable + bare-minimum-ux at build · critique/audit at verify</div>
+    <div class="pbox lane" id="p-other"><b>Other lanes</b>research · prototype · security · staffing<br><small>same pattern: selected during shaping, verified at the tail</small></div>
+  </div>
+  <div class="legend">
+    <span><span class="chip" style="background:var(--stage);border:1.5px solid var(--stage-line)"></span>workflow stage</span>
+    <span><span class="chip" style="background:var(--human);border:1.5px solid var(--human-line)"></span>your decision</span>
+    <span><span class="chip" style="background:var(--artifact);border:1.5px solid var(--artifact-line)"></span>durable artifact</span>
+    <span><span class="chip" style="background:var(--gate);border:1.5px solid var(--gate-line)"></span>gate</span>
+    <span><span class="chip" style="background:var(--lane);border:1.5px solid var(--lane-line)"></span>cross-cutting lane</span>
+  </div>
+</div>
+
+<h2 id="skill-graph">1b · The skill family, mapped</h2>
+<p>How the pieces relate — solid arrows are the main flow, dashed are compose-by-name calls or writes. Proposed pieces have dashed borders; everything else exists today.</p>
+<svg class="graph" id="graph-svg" viewBox="0 0 960 560" role="img" aria-label="Skill relationship graph">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="var(--muted)"/>
+    </marker>
+  </defs>
+
+  <!-- repo artifacts -->
+  <rect x="600" y="14" width="344" height="58" rx="8" fill="var(--artifact)" stroke="var(--artifact-line)" stroke-width="1.5"/>
+  <text class="t" x="614" y="38">Repo durable artifacts</text>
+  <text class="s" x="614" y="56">CONTEXT.md · docs/adr/ · PRODUCT.md · DESIGN.md · specs/*.html</text>
+
+  <!-- shaping probes -->
+  <rect x="24" y="28" width="170" height="44" rx="8" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text class="t" x="38" y="47">domain-modeling</text>
+  <text class="s" x="38" y="63">proposed · the extractor</text>
+  <rect x="250" y="28" width="104" height="44" rx="8" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="266" y="55">prototype</text>
+  <rect x="376" y="28" width="104" height="44" rx="8" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="396" y="55">research</text>
+  <line class="dash" x1="194" y1="50" x2="600" y2="44" marker-end="url(#arr)"/>
+  <text class="s" x="400" y="14">writes terms &amp; ADRs the moment they land</text>
+
+  <!-- main flow -->
+  <rect x="24" y="150" width="170" height="56" rx="8" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text class="t" x="38" y="173">interview</text>
+  <text class="s" x="38" y="190">proposed · batch frontier</text>
+  <line class="dash" x1="109" y1="150" x2="109" y2="72"/>
+  <text class="s" x="116" y="112">runs alongside</text>
+  <line class="dash" x1="150" y1="150" x2="296" y2="72" marker-end="url(#arr)"/>
+  <line class="dash" x1="172" y1="150" x2="420" y2="72" marker-end="url(#arr)"/>
+  <text class="s" x="268" y="118">probes · facts</text>
+
+  <rect x="240" y="152" width="110" height="52" rx="8" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="262" y="182">to-spec</text>
+  <rect x="390" y="152" width="110" height="52" rx="8" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="404" y="182">to-tickets</text>
+  <line x1="194" y1="178" x2="240" y2="178" marker-end="url(#arr)"/>
+  <line x1="350" y1="178" x2="390" y2="178" marker-end="url(#arr)"/>
+  <line x1="500" y1="178" x2="540" y2="178" marker-end="url(#arr)"/>
+
+  <!-- backlog container -->
+  <rect x="540" y="120" width="280" height="200" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+  <text class="t" x="556" y="142">backlog — the thin head</text>
+  <rect x="556" y="152" width="116" height="44" rx="8" fill="var(--gate)" stroke="var(--gate-line)" stroke-width="1.5"/>
+  <text class="t" x="570" y="171">groom</text>
+  <text class="s" x="570" y="187">admission + route</text>
+  <rect x="688" y="152" width="116" height="44" rx="8" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="710" y="171">run</text>
+  <text class="s" x="702" y="187">schedule waves ∥</text>
+  <line x1="672" y1="174" x2="688" y2="174" marker-end="url(#arr)"/>
+  <rect x="556" y="210" width="248" height="96" rx="8" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="570" y="232">issue loop — per-issue orchestrator</text>
+  <text class="s" x="570" y="250">implement · verify · adversarial review ·</text>
+  <text class="s" x="570" y="264">evidence → review-ready PR</text>
+  <text class="s" x="570" y="282">bug → diagnosing-bugs · design → prototype</text>
+  <text class="s" x="570" y="296">research → research · draft → review-loop</text>
+  <line x1="746" y1="196" x2="746" y2="210" marker-end="url(#arr)"/>
+
+  <rect x="846" y="228" width="100" height="60" rx="8" fill="var(--gate)" stroke="var(--gate-line)" stroke-width="1.5"/>
+  <text class="t" x="860" y="252">PR review</text>
+  <text class="s" x="860" y="270">merge-changes</text>
+  <line x1="804" y1="258" x2="846" y2="258" marker-end="url(#arr)"/>
+
+  <!-- service bars -->
+  <rect x="24" y="372" width="922" height="44" rx="8" fill="var(--gate)" stroke="var(--gate-line)" stroke-width="1.5"/>
+  <text class="t" x="40" y="391">review-loop</text>
+  <text class="s" x="40" y="407">rendered-artifact sign-off gates: spec approval · draft verdicts · (this document, right now)</text>
+  <line class="dash" x1="295" y1="204" x2="295" y2="372" marker-end="url(#arr)"/>
+  <line class="dash" x1="680" y1="320" x2="680" y2="372" marker-end="url(#arr)"/>
+
+  <rect x="24" y="432" width="922" height="40" rx="8" fill="var(--lane)" stroke="var(--lane-line)" stroke-width="1.5"/>
+  <text class="t" x="40" y="450">staffing</text>
+  <text class="s" x="40" y="465">resolves who runs every task (coordinator · builder · checker · watcher) — loaded before any dispatch, by every skill above</text>
+
+  <rect x="24" y="488" width="650" height="56" rx="8" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="40" y="510">setup-asher-skills</text>
+  <text class="s" x="40" y="528">installs the set · runs each skill's setup · reconciles playbooks &amp; platform bindings (docs/agents/*)</text>
+  <rect x="694" y="488" width="252" height="56" rx="8" fill="var(--lane)" stroke="var(--lane-line)" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text class="t" x="708" y="508">impeccable (external)</text>
+  <text class="s" x="708" y="524">PRODUCT/DESIGN writer · critique/audit</text>
+  <text class="s" x="708" y="538">+ bare-minimum-ux overlay on UI builds</text>
+  <line class="dash" x1="674" y1="516" x2="694" y2="516" marker-end="url(#arr)"/>
+</svg>
+
+<h3 id="session-flows">The full session, in swim lanes</h3>
+<p>One diagram, the fullest flow (plan-ahead initiative, executed AFK). The collapse test you asked for: <b>simpler sessions delete columns, never lanes</b> — the notes under the diagram say which columns each shape drops. ✋ marks your touch points; ↻ marks loops; ∥ marks parallelism.</p>
+<div class="wide">
+<svg class="graph swim" id="swimlane-svg" viewBox="0 0 1360 620" role="img" aria-label="Full session swim-lane diagram">
+  <defs>
+    <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="var(--muted)"/>
+    </marker>
+  </defs>
+
+  <!-- lane backgrounds -->
+  <rect x="124" y="34"  width="1232" height="140" fill="var(--human)" fill-opacity="0.35"/>
+  <rect x="124" y="178" width="1232" height="150" fill="var(--stage)" fill-opacity="0.35"/>
+  <rect x="124" y="332" width="1232" height="130" fill="var(--lane)" fill-opacity="0.35"/>
+  <rect x="124" y="466" width="1232" height="140" fill="var(--artifact)" fill-opacity="0.35"/>
+
+  <!-- lane labels -->
+  <text class="t" x="10" y="98">You ✋</text>
+  <text class="t" x="10" y="245">Orchestrator</text>
+  <text class="s" x="10" y="261">(your session)</text>
+  <text class="t" x="10" y="390">Subagents</text>
+  <text class="s" x="10" y="406">&amp; watchers</text>
+  <text class="t" x="10" y="530">Tracker &amp; repo</text>
+  <text class="s" x="10" y="546">(durable state)</text>
+
+  <!-- phase titles -->
+  <text class="ph" x="168" y="22">Intake</text>
+  <text class="ph" x="310" y="22">Interview rounds ↻</text>
+  <text class="ph" x="505" y="22">Spec + approval gate</text>
+  <text class="ph" x="700" y="22">Tickets</text>
+  <text class="ph" x="850" y="22">Admission</text>
+  <text class="ph" x="1010" y="22">AFK run ∥</text>
+  <text class="ph" x="1215" y="22">Merge</text>
+
+  <!-- phase separators -->
+  <line class="sep" x1="275"  y1="34" x2="275"  y2="606"/>
+  <line class="sep" x1="470"  y1="34" x2="470"  y2="606"/>
+  <line class="sep" x1="665"  y1="34" x2="665"  y2="606"/>
+  <line class="sep" x1="825"  y1="34" x2="825"  y2="606"/>
+  <line class="sep" x1="955"  y1="34" x2="955"  y2="606"/>
+  <line class="sep" x1="1165" y1="34" x2="1165" y2="606"/>
+
+  <!-- ================= YOU lane ================= -->
+  <rect x="132" y="70" width="134" height="56" rx="7" fill="var(--human)" stroke="var(--human-line)" stroke-width="1.5"/>
+  <text class="t" x="140" y="90">bring the idea</text>
+  <text class="s" x="140" y="106">problem · PDF · repo</text>
+
+  <rect x="286" y="70" width="174" height="56" rx="7" fill="var(--human)" stroke="var(--human-line)" stroke-width="1.5"/>
+  <text class="t" x="294" y="90">answer the round</text>
+  <text class="s" x="294" y="106">accept · modify · defer · unknown</text>
+
+  <rect x="481" y="70" width="160" height="56" rx="7" fill="var(--human)" stroke="var(--human-line)" stroke-width="1.5"/>
+  <text class="t" x="489" y="90">annotate → verdict ✋</text>
+  <text class="s" x="489" y="106">approve / changes ↻</text>
+
+  <rect x="676" y="70" width="140" height="56" rx="7" fill="var(--human)" stroke="var(--human-line)" stroke-width="1.5"/>
+  <text class="t" x="684" y="90">quiz ✋</text>
+  <text class="s" x="684" y="106">granularity + edges</text>
+
+  <rect x="836" y="76" width="110" height="44" rx="7" fill="var(--human)" stroke="var(--human-line)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text class="s" x="844" y="95">small repairs</text>
+  <text class="s" x="844" y="109">only, if asked</text>
+
+  <rect x="966" y="76" width="186" height="44" rx="7" fill="var(--human)" stroke="var(--human-line)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text class="s" x="974" y="95">escalations only —</text>
+  <text class="s" x="974" y="109">handback ⤴ if a plan invalidates</text>
+
+  <rect x="1176" y="70" width="170" height="56" rx="7" fill="var(--human)" stroke="var(--human-line)" stroke-width="1.5"/>
+  <text class="t" x="1184" y="90">PR review ✋</text>
+  <text class="s" x="1184" y="106">merge-changes ✋</text>
+
+  <!-- ================= ORCHESTRATOR lane ================= -->
+  <rect x="132" y="214" width="134" height="52" rx="7" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="140" y="233">read artifacts</text>
+  <text class="s" x="140" y="249">ask nothing a doc answers</text>
+
+  <rect x="286" y="196" width="174" height="46" rx="7" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="294" y="215">ask the whole frontier</text>
+  <text class="s" x="294" y="231">recommended answer attached</text>
+  <rect x="286" y="252" width="174" height="52" rx="7" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="294" y="271">crystallize inline</text>
+  <text class="s" x="294" y="287">playback delta · recompute frontier ↻</text>
+
+  <rect x="481" y="196" width="160" height="46" rx="7" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="489" y="215">to-spec: HTML spec</text>
+  <text class="s" x="489" y="231">no new questions</text>
+  <rect x="481" y="252" width="160" height="46" rx="7" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="489" y="271">serve via review-loop</text>
+  <text class="s" x="489" y="287">revise on changes ↻</text>
+
+  <rect x="676" y="214" width="140" height="52" rx="7" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="684" y="233">to-tickets</text>
+  <text class="s" x="684" y="249">draft tracer-bullet slices</text>
+
+  <rect x="836" y="214" width="110" height="52" rx="7" fill="var(--gate)" stroke="var(--gate-line)" stroke-width="1.5"/>
+  <text class="t" x="844" y="233">groom</text>
+  <text class="s" x="844" y="249">audit + route stamp</text>
+
+  <rect x="966" y="214" width="190" height="52" rx="7" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
+  <text class="t" x="974" y="233">run: waves ∥</text>
+  <text class="s" x="974" y="249">dispatch via staffing · liveness watch</text>
+
+  <!-- ================= SUBAGENTS lane ================= -->
+  <rect x="286" y="356" width="150" height="52" rx="7" fill="var(--lane)" stroke="var(--lane-line)" stroke-width="1.5"/>
+  <text class="t" x="294" y="375">fact lookups</text>
+  <text class="s" x="294" y="391">research · prototype probes</text>
+
+  <rect x="481" y="362" width="160" height="44" rx="7" fill="var(--lane)" stroke="var(--lane-line)" stroke-width="1.5"/>
+  <text class="t" x="489" y="381">verdict watcher</text>
+  <text class="s" x="489" y="397">holds the await</text>
+
+  <rect x="962" y="340" width="196" height="112" rx="7" fill="var(--lane)" stroke="var(--lane-line)" stroke-width="1.5"/>
+  <text class="t" x="972" y="360">issue loop × N ∥</text>
+  <text class="s" x="972" y="378">parallel worktrees, one per issue:</text>
+  <text class="s" x="972" y="394">implement · verify ·</text>
+  <text class="s" x="972" y="410">adversarial review · evidence</text>
+  <text class="s" x="972" y="428">builders/checkers via staffing</text>
+
+  <rect x="1250" y="414" width="96" height="38" rx="7" fill="var(--lane)" stroke="var(--lane-line)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text class="s" x="1258" y="430">PR-merge</text>
+  <text class="s" x="1258" y="444">watcher</text>
+
+  <!-- ================= TRACKER & REPO lane ================= -->
+  <rect x="286" y="492" width="174" height="56" rx="7" fill="var(--artifact)" stroke="var(--artifact-line)" stroke-width="1.5"/>
+  <text class="t" x="294" y="512">CONTEXT.md · ADRs</text>
+  <text class="s" x="294" y="528">PRODUCT / DESIGN deltas</text>
+
+  <rect x="481" y="492" width="160" height="56" rx="7" fill="var(--artifact)" stroke="var(--artifact-line)" stroke-width="1.5"/>
+  <text class="t" x="489" y="512">specs/*.html committed</text>
+  <text class="s" x="489" y="528">+ thin tracking issue</text>
+
+  <rect x="676" y="492" width="140" height="56" rx="7" fill="var(--artifact)" stroke="var(--artifact-line)" stroke-width="1.5"/>
+  <text class="t" x="684" y="512">tickets published</text>
+  <text class="s" x="684" y="528">native blocked-by edges</text>
+
+  <rect x="836" y="492" width="110" height="56" rx="7" fill="var(--artifact)" stroke="var(--artifact-line)" stroke-width="1.5"/>
+  <text class="t" x="844" y="512">labels</text>
+  <text class="s" x="844" y="528">ready-for-agent · route</text>
+
+  <rect x="962" y="492" width="196" height="56" rx="7" fill="var(--artifact)" stroke="var(--artifact-line)" stroke-width="1.5"/>
+  <text class="t" x="972" y="512">branches · PRs</text>
+  <text class="s" x="972" y="528">review-ready + evidence/</text>
+
+  <rect x="1176" y="492" width="170" height="56" rx="7" fill="var(--artifact)" stroke="var(--artifact-line)" stroke-width="1.5"/>
+  <text class="t" x="1184" y="512">merged</text>
+  <text class="s" x="1184" y="528">issues closed via Closes #n</text>
+
+  <!-- ================= ARROWS ================= -->
+  <!-- Intake: you -> orchestrator -->
+  <line x1="199" y1="126" x2="199" y2="214" marker-end="url(#arr2)"/>
+
+  <!-- Interview: question up / answers down, loop -->
+  <line x1="350" y1="196" x2="350" y2="126" marker-end="url(#arr2)"/>
+  <line x1="396" y1="126" x2="396" y2="196" marker-end="url(#arr2)"/>
+  <text class="s" x="286" y="168">↻ until the frontier is empty</text>
+  <!-- dispatch facts / results back -->
+  <line x1="320" y1="304" x2="320" y2="356" marker-end="url(#arr2)"/>
+  <line x1="410" y1="356" x2="410" y2="304" marker-end="url(#arr2)"/>
+  <!-- writes -->
+  <line x1="373" y1="470" x2="373" y2="490" marker-end="url(#arr2)"/>
+
+  <!-- Spec: serve up, verdict down through watcher, relay up, commit -->
+  <line x1="530" y1="196" x2="530" y2="126" marker-end="url(#arr2)"/>
+  <line x1="650" y1="126" x2="650" y2="362" marker-end="url(#arr2)"/>
+  <line x1="560" y1="362" x2="560" y2="298" marker-end="url(#arr2)"/>
+  <line x1="568" y1="470" x2="568" y2="490" marker-end="url(#arr2)"/>
+
+  <!-- Tickets: quiz up / approve down, publish -->
+  <line x1="726" y1="214" x2="726" y2="126" marker-end="url(#arr2)"/>
+  <line x1="766" y1="126" x2="766" y2="214" marker-end="url(#arr2)"/>
+  <line x1="746" y1="470" x2="746" y2="490" marker-end="url(#arr2)"/>
+
+  <!-- Admission: stamp -->
+  <line x1="891" y1="470" x2="891" y2="490" marker-end="url(#arr2)"/>
+
+  <!-- Run: dispatch loops, artifacts, escalation -->
+  <line x1="1060" y1="266" x2="1060" y2="340" marker-end="url(#arr2)"/>
+  <line x1="1060" y1="470" x2="1060" y2="490" marker-end="url(#arr2)"/>
+  <line class="dash" x1="960" y1="340" x2="960" y2="128" marker-end="url(#arr2)"/>
+
+  <!-- Merge: you act on tracker -->
+  <line x1="1200" y1="126" x2="1200" y2="492" marker-end="url(#arr2)"/>
+</svg>
+</div>
+
+<p id="collapse-notes"><b>The collapse test.</b> Delete columns; the lanes and the remaining arrows stay true:</p>
+<ul id="collapse-list">
+<li><b>Chat &amp; build</b> — keep <i>Intake</i>, a short <i>Interview</i>, one issue loop from <i>AFK run</i> (queue of one, no waves — the run column shrinks to a single subagent box), and <i>Merge</i>. <i>Spec</i>, <i>Tickets</i>, <i>Admission</i> collapse; the interview's tracker writes still happen.</li>
+<li><b>Chat → spec → build</b> — adds the <i>Spec</i> column back (with its watcher and your verdict); <i>Tickets</i>/<i>Admission</i> stay collapsed.</li>
+<li><b>Chat → tickets → AFK</b> — drops <i>Spec</i>; keeps <i>Tickets → Admission → AFK run</i>.</li>
+<li><b>Plan-ahead initiative</b> — the diagram as drawn.</li>
+<li><b>Standing AFK run</b> — starts at <i>AFK run</i> (the queue was admitted earlier); your lane is empty until <i>Merge</i>, except the dashed escalation box.</li>
+</ul>
+
+<h2 id="extraction">2 · Fidelity, not reproducibility</h2>
+<p>Fair challenge. Dropping the word: nobody needs <code>to-spec</code> to be a deterministic function that re-derives the same spec twice. The spec is written once, in the same context window as the conversation that produced it. What actually went wrong in practice (your words, turn one: outputs you couldn't get to come out well "in a reliable fashion") is a <b>fidelity</b> problem — material things agreed in conversation silently missing from the artifact, or things never asked at all. Two honest observations survive the reframe:</p>
+<ul>
+<li><b>"Go back to the context window" has a shelf life.</b> Sessions end, context compacts. Whatever should outlive the conversation has to be written somewhere during it. That's all the extraction discipline is: <code>domain-modeling</code>'s "update CONTEXT.md right there, don't batch it up" — terms → glossary, hard-to-reverse decisions → one-paragraph ADRs (3-gate test: hard-to-reverse ∧ surprising ∧ real trade-off), everything else deliberately evaporates. No transcript, no ledger.</li>
+<li><b>Fidelity is checkable at publish time.</b> Before the spec or tickets go out: does every material decision from the conversation appear, and is every open thread classified — <i>delegated</i> (executor's call), <i>deferred</i> (parked, with a home), or <i>blocking</i> (can't publish)? A cheap audit pass, not a determinism guarantee.</li>
+</ul>
+<p id="pure-synthesis"><b>"Pure synthesis," in plain words</b> (it was jargon, sorry): <code>to-spec</code> <i>asks no new questions and invents no new decisions</i> — it only writes down what the conversation already settled. Matt's rule ("Do NOT interview the user — just synthesize what you already know") keeps the interview and the writing honest about which mode they're in. The "crystallized artifacts" part just meant: since the interview wrote terms and decisions down as it went, the spec-writer draws on those notes plus the conversation, rather than on vibes and memory alone.</p>
+
+<div class="wide">
+<table id="artifact-map">
+<tr><th>Artifact</th><th>Question it answers</th><th>Written by</th><th>Lives</th></tr>
+<tr><td><code>CONTEXT.md</code> + ADRs</td><td>What do words mean here? Which hard-to-reverse choices were made, and why?</td><td>interview, inline; any skill that changes the model</td><td>repo</td></tr>
+<tr><td><code>PRODUCT.md</code> / <code>DESIGN.md</code></td><td>Who's this for, what register, how it looks — DESIGN.md wins on visual, PRODUCT.md on strategy</td><td>project setup / first interview; UX lane</td><td>repo</td></tr>
+<tr><td>Spec</td><td>Shared direction for a multi-ticket effort: decisions, seams, UX direction, out-of-scope</td><td><code>to-spec</code>, end of the interview, same context window</td><td>repo as <b>HTML</b> (reviewed via review-loop) + thin tracking issue — § 4</td></tr>
+<tr><td>Tickets</td><td>Smallest executable, verifiable units + blocking edges + acceptance + inherited links</td><td><code>to-tickets</code></td><td>tracker (GitHub, per <code>platform.md</code>)</td></tr>
+<tr><td>Tactical plan</td><td>How this one ticket gets built, given the codebase <i>now</i></td><td>implement, just-in-time, within delegated authority</td><td>work branch / PR</td></tr>
+</table>
+</div>
+
+<h2 id="spec-vs-plan">3 · Is <code>to-spec</code> enough? What did <code>plan</code> add?</h2>
+<p>Everything <code>plan</code> provides today has a better home in the new shape — the accounting:</p>
+<div class="wide">
+<table id="plan-ledger">
+<tr><th>What <code>plan</code> adds today</th><th>Where it goes</th></tr>
+<tr><td>The reviewed HTML artifact held at an approval gate (review-loop)</td><td>The <b>spec</b> — now an HTML document presented through the same review-loop gate. Same muscle, one stage earlier, once per effort instead of once per issue.</td></tr>
+<tr><td>Plan-or-skip: "is this small enough to just build?"</td><td><b>Grooming's route stamp</b> — decided before execution, so the AFK run never pauses on it (#80). Interactively, it's simply you choosing not to invoke to-spec.</td></tr>
+<tr><td>Settling blocking design questions, composing <code>prototype</code></td><td>The <b>interview</b> (and spec-time) — prototype as a probe when paper can't settle it, matching Impeccable's shape probes.</td></tr>
+<tr><td>Step-level implementation detail per issue</td><td><b>JIT tactical planning inside implement</b> — fresher, ungated, within the authority the ticket delegates. Seams (the durable fraction) move up into the spec.</td></tr>
+<tr><td>Tracker posterity digest of the approved plan</td><td>The spec's thin tracking issue (§ 4).</td></tr>
+</table>
+</div>
+<p><b>So: yes, to-spec is enough.</b> <code>plan</code> stops being a skill in the family; its dev-tail conventions (commit-the-artifact, posterity digest) transfer to spec handling. And on TDD — we already own it: Matt's <code>tdd</code> was absorbed (credited) into <code>docs/agents/implementing.md</code>, the playbook backlog's implement step reads. Test-first at pre-agreed seams, what-deserves-a-test, mock-at-boundaries — all there. Nothing to adopt; the only move left is spec-time seam agreement feeding it.</p>
+
+<h2 id="projection">4 · Where things live</h2>
+<p><b>Spec: HTML, in the repo, reviewed like plans are today.</b> Written by <code>to-spec</code> as a rendered document (decisions, seams, UX direction, out-of-scope), served through review-loop for annotation and sign-off, committed on approval. It's the same presentation discipline this repo already uses for plans — the spec simply takes over the slot.</p>
+<p><b>Tracker projection stays thin.</b> A tracking issue carries the gist, a link to the canonical spec, and the slice list wired with native blocked-by edges so the frontier renders in GitHub's own UI. Links and state, never content — one source of truth, no drift.</p>
+<p><b>The to-tickets disk bug stays fixed the same way:</b> tickets always publish through <code>platform.md</code>'s verified tracker verbs; local files only when the binding says local.</p>
+
+<h2 id="shapes">5 · Session shapes — compositions, not a router</h2>
+<p>Instead of a router stage: these are the shapes you invoke, all built from the same units. Legibility is the mechanism — each skill's one-line contract tells you which shape you're in.</p>
+<div class="wide">
+<table class="shapes" id="shapes-table">
+<tr><th>Shape</th><th>Composition</th><th>When</th></tr>
+<tr><td>Chat &amp; build</td><td>interview (short) → <b>issue loop</b></td><td>Settled in one sitting; nothing another agent must inherit. An interactive issue loop without the ticket ceremony.</td></tr>
+<tr><td>Chat → spec → build</td><td>interview → to-spec (review gate) → <b>issue loop</b></td><td>One coherent piece of work, but decisions worth a reviewed, durable home first. Your "conversation, spec, implement … repeat" cadence.</td></tr>
+<tr><td>Chat → tickets → run</td><td>interview → to-tickets → admission → <b>run × issue loop</b></td><td>Sliceable now, execute async/AFK; no shared decisions beyond what CONTEXT/ADRs hold.</td></tr>
+<tr><td>Chat → spec → tickets → run</td><td>interview → to-spec → to-tickets → admission → <b>run × issue loop</b></td><td>The full plan-ahead flow: front-load decisions across an initiative, approve once, drain the queue AFK.</td></tr>
+<tr><td>AFK run</td><td><b>run × issue loop</b> over admitted issues</td><td>Backlog's home turf — now guaranteed gate-free because admission stamped every route beforehand.</td></tr>
+</table>
+</div>
+
+<h3 id="dev-tail">The dev tail is the same in every shape — only its inputs change</h3>
+<p>Your question about verification and evidence across the entryways has a clean answer once the tail is seen as part of the <b>issue loop</b>, not part of the queue: verify → adversarial review → evidence attach to the <b>PR boundary</b>, so every shape that produces a code change flows through them. What varies per entryway is what feeds each gate:</p>
+<div class="wide">
+<table id="tail-table">
+<tr><th>Gate</th><th>Invariant</th><th>What varies by entryway</th></tr>
+<tr><td>Verify</td><td>Always runs; exercises acceptance criteria against the running change; grades reported verbatim (live / static-substitute / not-run / blocked)</td><td><b>Where criteria come from:</b> the ticket's acceptance block (run shapes) · the spec's per-slice acceptance (spec shapes) · <b>chat-and-build: the issue loop's first act is writing the criteria down</b> from the conversation into the PR body, so verify has a target even without a ticket</td></tr>
+<tr><td>Adversarial review</td><td>Always runs on product code — it reviews the <i>diff</i> for correctness and quality, which your live product judgment doesn't cover</td><td>Nothing structural; interactive shapes just iterate faster because the fixer's audience is present</td></tr>
+<tr><td>Evidence</td><td>Proves behavior to someone who wasn't there</td><td><b>Obligation scales with absence.</b> AFK run: full evidence package — nobody watched. Spec shapes: evidence keyed to the spec's acceptance so a reviewer checks without replaying the conversation. Chat-and-build: you witnessed it live, so evidence degrades to the PR body's verification grades plus whatever the playbook demands — cheap insurance for the PR reviewer, not a package</td></tr>
+<tr><td>Merge</td><td>Human PR review + explicit <code>merge-changes</code></td><td>Nothing — the boundary every shape exits through</td></tr>
+</table>
+</div>
+<p class="note">This is also the argument for the seam-naming below: because the gates ride the issue loop, running that loop with or without a queue around it loses nothing.</p>
+
+<h3 id="decompose">Backlog's seams — name them, don't split them</h3>
+<p>Correction from chat, and it simplifies things: the per-issue orchestrator <b>already exists and already has a name</b> — backlog's <b>issue loop</b> (<code>reference/issue-loop.md</code>), which coordinates the sub-steps: <code>implement.md</code> (the build), <code>verify.md</code>, <code>adversarial-review.md</code>, <code>evidence.md</code>, with <code>diagnose.md</code>/<code>refactor.md</code> as work-type branches. Rev 2 accidentally reused "implement" for the loop itself — wrong altitude; "implement" stays the build sub-step's name.</p>
+<p>And with that correction, the decomposition mostly evaporates as a <i>skill-splitting</i> project — <b>over-decomposition is as bad as under-decomposition</b>, and backlog should stay the thin head. What remains is naming its three internal seams as contracts, all inside the one skill:</p>
+<ul>
+<li><b>groom</b> = organize: the tracker as truth — admission audit, route stamps, serialized tracker writes, verify-first triage discipline.</li>
+<li><b>run</b> = schedule: dependency waves, parallelism, worktrees, dispatch, liveness — and it <b>already supports a single issue</b> (a queue of one), so interactive chat-and-build needs no new skill: it's the same issue loop, invoked without waves.</li>
+<li><b>issue loop</b> = one issue → reviewed PR, carrying the dev tail above.</li>
+</ul>
+<p>The only structural change anyone actually needs is #80's: the planning gate leaves the issue loop's enhancement branch (replaced by groom's route stamp + the spec stage upstream). Everything else is documentation of seams that already exist.</p>
+
+<h2 id="interview">6 · The interview: batch-grill-me × domain-modeling</h2>
+<p>Adopted as-is in spirit — the composition Matt gestures at in 7 lines (<code>grill-with-docs</code>), with his batch shape rather than one-at-a-time:</p>
+<ul>
+<li><b>Frontier rounds.</b> Map decisions as a tree; each round asks every question whose prerequisites are settled; answers reshape the tree and unblock the next round. Facts get sub-agents (a running lookup blocks only its downstream questions). Recommended answer attached to each question.</li>
+<li><b>Extraction inline.</b> domain-modeling alongside: challenge terms against the glossary, sharpen fuzzy language, stress-test with concrete scenarios, cross-reference claims against the code — and write CONTEXT.md/ADRs the moment something lands.</li>
+<li><b>Done when</b> the frontier is empty and you confirm shared understanding — then to-spec (or straight to implement) in the same window.</li>
+</ul>
+<p id="bounded-rounds"><b>"Bounded rounds," explained</b> — and then mostly withdrawn. It meant: cap the number of questions per round (say 4) so a round never lands as a 15-question wall. Since the full-frontier batch is precisely what you like, the default is Matt's: <b>ask the whole frontier</b>. Early frontiers are naturally small (few prerequisites settled), so the wall problem mostly self-limits; keep a common-sense escape valve — if a frontier balloons, split it by dependency cluster and say so. Not a numeric rule, just manners.</p>
+<p class="note">Two refinements kept from Impeccable's interview craft, both compatible with full-frontier: one topic per question (no compound either-ors), and assert-then-confirm when the evidence already points one way ("This reads as X — confirm?" beats a four-option menu).</p>
+
+<h2 id="impeccable-bits">7 · Impeccable — the fit, settled</h2>
+<p>The real issue was never Impeccable's quality — it was that it ships a <i>workflow</i> (init → shape → craft → critique/audit → polish) that competes with ours. Resolution: it plugs in at three named points and never owns the spine:</p>
+<div class="wide">
+<table id="impeccable-table">
+<tr><th>Lifecycle point</th><th>What Impeccable does there</th><th>Ours vs theirs</th></tr>
+<tr><td>Project setup</td><td><code>init</code>/<code>document</code>: PRODUCT.md + DESIGN.md written once, read by everything after</td><td>The artifacts become <b>ours</b> (repo-owned, listed in § 2's map); Impeccable is one writer of them</td></tr>
+<tr><td>Interview / spec, UI surfaces</td><td><code>shape</code>-style design direction: register, scene sentence, named anchor references, anti-references, states</td><td>Question families absorbed into <b>our</b> interview's UX coverage; its visual-direction probes = our prototype probe</td></tr>
+<tr><td>Verification tail, UI surfaces</td><td><code>critique</code> (Nielsen rubric 0–4, P0–P3, score trend) + <code>audit</code> (5 measurable dimensions, AI-slop pass/fail)</td><td>Invoked by <b>our</b> implement/verify as scored gates; findings route into the fix loop</td></tr>
+</table>
+</div>
+<p>Craft rules (the 7k lines of typography/color/motion judgment, per-model tells, absolute bans) stay external and current — declared external requirement, consent-gated, recorded in <code>external-dependencies.lock.json</code>. <code>bare-minimum-ux</code> remains your five-rule personal overlay on top, always loaded for UI work. Never merged — a fork goes stale in a month.</p>
+
+<h3 id="setup-external">Installing it: <code>setup-asher-skills</code> owns the moment</h3>
+<p>Since setup already means "install the selected skill set <i>and run each skill's setup</i> to bind playbooks," a near-always external like Impeccable rides the same flow rather than being a manual afterthought:</p>
+<ul>
+<li><b>Offer at detect.</b> Setup sees a UI surface (or you name one) → offers Impeccable as a declared external requirement → provenance review + your consent → recorded, version-pinned, in <code>external-dependencies.lock.json</code>.</li>
+<li><b>Install via its own provider</b> (its npm installer / plugin mechanism — we don't vendor or wrap it), then <b>run its setup like any sibling's</b>: <code>/impeccable init</code> writes PRODUCT.md + DESIGN.md + live config as part of project onboarding.</li>
+<li><b>Two boundaries.</b> (1) <code>init</code> is an interview — Impeccable itself forbids synthesizing PRODUCT.md from a one-line prompt — so it runs with you present; if setup is running unattended it records a pending step ("run <code>/impeccable init</code>") instead of fabricating context. (2) Setup never wraps Impeccable's own updater; audit mode just diffs recorded version vs installed and re-offers init when PRODUCT.md is missing.</li>
+<li><b>Either way, setup guarantees the artifacts' existence path:</b> with Impeccable installed, init is the writer of PRODUCT.md/DESIGN.md; without it, the first interview writes them. Downstream skills read the files, never care who wrote them.</li>
+</ul>
+
+<h2 id="wayfinder">8 · Wayfinder-shaped work — deferred</h2>
+<p>Agreed: with PRODUCT.md/DESIGN.md, CONTEXT.md/ADRs, and a good interview in place, most "too foggy" cases collapse into <i>talk, then spec</i> — the stack removes the fog that made a map feel necessary. So no new skill now. Worth keeping on the shelf from the pattern, for the day an initiative genuinely outgrows one conversation:</p>
+<ul>
+<li>The map as <b>index, not store</b> — gist + link, a decision lives in exactly one place;</li>
+<li><b>Fog-of-war test</b> — "ticket when you can state the question precisely, fog when you can't; don't pre-slice fog";</li>
+<li><b>Out-of-scope</b> as a first-class list that never silently re-enters.</li>
+</ul>
+<p class="note">If/when adopted, it needs a name that says what it is — candidates: <code>chart</code>, <code>scout</code>, <code>horizon</code>. Parked.</p>
+
+<h2 id="decisions">9 · Open decisions — annotate your calls</h2>
+
+<div class="qcard" id="q-plan">
+<h3>Q1 — Confirm: dissolve <code>plan</code>; <code>to-spec</code> (HTML, review-loop-gated) is the survivor</h3>
+<p>Per the ledger in § 3 — every plan capability re-homed; groom carries the route stamp; implement carries JIT tactics. <span class="lean">Lean: yes.</span></p>
+</div>
+
+<div class="qcard" id="q-decompose">
+<h3>Q2 — Backlog seams: document, don't split</h3>
+<p>Resolved direction from chat: backlog stays the thin head; groom / run / issue loop are named internal contracts (run already handles a queue of one, so no new "implement" skill and no naming collision with the <code>implement.md</code> build sub-step). The only structural change is #80's gate removal. <span class="lean">Lean: confirm — no new skills.</span></p>
+</div>
+
+<div class="qcard" id="q-groom-stamp">
+<h3>Q3 — The route stamp: what does groom actually record?</h3>
+<p>Minimal: a label/field per enhancement — <code>route: direct</code> (small enough, implement straight) vs <code>route: needs-spec</code> (bounce upstream before admission). The old in-run plan-or-skip judgment, made once, before execution. Vocabulary and where it lives (label vs issue field vs body line) to be settled at build time. <span class="lean">Lean: a label, matching the existing role-label pattern in <code>backlog-policy.md</code>.</span></p>
+</div>
+
+<div class="qcard" id="q-spec-home">
+<h3>Q4 — Spec home confirmed: repo HTML + thin tracking issue?</h3>
+<p>HTML spec in-repo (review-loop-gated, committed on approval), tracking issue carrying gist + link + natively-wired slice list. <span class="lean">Lean: yes, § 4.</span></p>
+</div>
+
+<div class="qcard" id="q-interview-shape">
+<h3>Q5 — Interview: one skill or two (interview × domain-modeling)?</h3>
+<p>Matt splits asker from extractor and composes by name — matches our compose-by-name convention, and the extractor is reusable from groom/spec/triage contexts; a single skill is simpler to invoke. <span class="lean">Lean: two, mirroring his split.</span></p>
+</div>
+
+<div class="qcard" id="q-impeccable">
+<h3>Q6 — Impeccable as a declared external requirement for UI projects?</h3>
+<p>Provenance review + consent, recorded in <code>external-dependencies.lock.json</code>; setup offers it when a project has UI surfaces. <span class="lean">Lean: yes.</span></p>
+</div>
+
+<div class="qcard" id="q-sequencing">
+<h3>Q7 — Build order</h3>
+<p>Proposed: ① #80 — route stamp into groom, planning gate out of the run, handback state → ② interview + domain-modeling primitives → ③ to-spec as HTML+review-loop successor to plan; to-tickets readiness audit + platform binding → ④ UX lane wiring (PRODUCT/DESIGN in setup, impeccable external, critique/audit in verify) → ⑤ backlog decomposition contracts. Wayfinder off the list. <span class="lean">Lean: as listed; each step ships alone.</span></p>
+</div>
+
+<div class="qcard" id="q-setup-external">
+<h3>Q8 — <code>setup-asher-skills</code> runs external-requirement setups (Impeccable init) during project setup?</h3>
+<p>Per § 7: offer on UI-surface detect, consent + lockfile record, install via its own provider, run <code>/impeccable init</code> with you present (pending-step note when unattended), audit mode checks version drift + missing PRODUCT.md. <span class="lean">Lean: yes — setup means "installed <i>and</i> bound," and that should hold for externals too.</span></p>
+</div>
+
+<p class="note" id="colophon">Sources: <code>research/afk-spec-ticket-lifecycle/</code> (brief + findings, 2026-07-18, pinned SHAs) · mattpocock/skills @ 9603c1c (grill-with-docs, domain-modeling + CONTEXT/ADR formats, batch-grill-me, grilling, to-spec, to-tickets, wayfinder, triage, tdd, codebase-design, implement, setup) · pbakaus/impeccable @ 8967edc (structural core read directly; 19 craft references via sub-agent digest) · issue #80 · docs/agents/platform.md, implementing.md · backlog reference/issue-loop.md.</p>
+
+</main>
+</body>
+</html>
