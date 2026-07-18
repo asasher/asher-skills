@@ -75,7 +75,7 @@ Prepares a repo for the loop — and reconciles a repo an earlier version alread
 
 8. Ensure the staffing skill (model roster).
    - The model roster (rankings, roles, capability-provider registry, pins, fallback ladder) is owned by the **`staffing`** skill (composed by name). Ensure it is present; staffing's own setup writes the roster — global base plus this project's delta — with user consent, probing what this machine can actually staff. backlog does not install the picking-models sections.
-   - The issue-loop branches also compose **`prototype`**, **`research`**, and **`diagnosing-bugs`** by name. Ensure they are present; invoke `diagnosing-bugs setup` and `research setup` to reconcile their owned playbooks, while prototype may use its bundled defaults.
+   - The build-loop branches also compose **`prototype`**, **`research`**, and **`diagnosing-bugs`** by name. Ensure they are present; invoke `diagnosing-bugs setup` and `research setup` to reconcile their owned playbooks, while prototype may use its bundled defaults.
    - Completion criterion: the declared siblings (`diagnosing-bugs`, `research`, `staffing`, `review-loop`, `prototype`) resolve and both sibling-owned playbooks are reconciled, or the gaps are reported.
 
 9. Write the contracts into the playbooks.

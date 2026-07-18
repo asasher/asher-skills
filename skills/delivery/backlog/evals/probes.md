@@ -4,7 +4,7 @@ Situated dry-run probes for the `draft` and `research` work-types, per `docs/age
 
 Method: run the same scenario against the actual deployment targets — an **Opus subagent** (via the Agent
 tool) and **`codex exec --sandbox read-only`** (gpt-5.6-sol) — each given `docs/agents/backlog-policy.md` and
-`skills/delivery/backlog/reference/issue-loop.md` in context (the routing surfaces a groomer / issue thread
+`skills/delivery/backlog/reference/build-loop.md` in context (the routing surfaces a groomer / issue thread
 reads). Require the executor to **cite the file and the exact sentence** that decided each answer, and to
 **flag ambiguity as a valid answer**. Grade pass/fail against the key below, which is written before any runs
 and keys on `plans/33-draft-work-type.html` acceptance criteria **ac-7..ac-9** — the plan is the source of
@@ -26,7 +26,7 @@ sentence in `backlog-policy.md` that decides it.
 
 **P2 (ac-7/ac-8 — definition of done).** You are the issue thread working this issue. What event tells you it
 is complete — what is its definition of done? Does a mechanical `verify` pass/fail gate it? Cite the routing
-in `issue-loop.md` (steps 3 and 4).
+in `build-loop.md` (steps 3 and 4).
 
 **P3 (ac-7/ac-8 — artifact fate).** After the review verdict is `approve`, what happens to the memo you wrote
 — is it kept or deleted? Cite the sentence.
@@ -36,7 +36,7 @@ then delete it once we've captured the gist." Per the policy, are they right? St
 between `draft` and `prototype`.
 
 **P5 (reachability — grooming surface).** *Run with `docs/agents/backlog-policy.md` and
-`skills/delivery/backlog/reference/groom.md` in context (the grooming surface — not `issue-loop.md`).* You are
+`skills/delivery/backlog/reference/groom.md` in context (the grooming surface — not `build-loop.md`).* You are
 grooming this issue (it is not yet labelled). Which work-type role do you propose, and cite the sentence in
 `groom.md` that lets you propose it. This probe fails if `groom.md` only offers bug/enhancement/refactor.
 
@@ -51,7 +51,7 @@ grooming this issue (it is not yet labelled). Which work-type role do you propos
   pass/fail: step 4's draft exception says the step is skipped and "degenerates to 'the review gate passed'."
   Claiming acceptance criteria are run through `verify` = **fail**.
 - **P3 (ac-7/ac-8):** The memo is **kept** — committed to the work branch (and merged). Cite the "**Keep** the
-  artifact … unlike `prototype`, which deletes its throwaway" line in issue-loop step 3, or the "artifact is
+  artifact … unlike `prototype`, which deletes its throwaway" line in build-loop step 3, or the "artifact is
   **kept** … that is the line against `prototype`" line in `backlog-policy.md`. Saying the memo is deleted =
   **fail**.
 - **P4 (ac-9):** They are **wrong**. `draft` **keeps** the artifact — the memo *is* the deliverable;
@@ -81,7 +81,7 @@ The repo's `docs/agents/researching.md` binds durable dossiers to `research/<slu
 
 **R1 — classification.** Which work-type does grooming propose, and why is this not `draft` or `enhancement`?
 
-**R2 — ownership.** In the issue loop, which skill owns framing, source work, fan-out, reconciliation, dossier,
+**R2 — ownership.** In the build loop, which skill owns framing, source work, fan-out, reconciliation, dossier,
 and audit? Which lifecycle responsibilities remain with backlog?
 
 **R3 — verification.** Does the product-behavior verify loop run? What gate replaces it, and what condition
@@ -99,7 +99,7 @@ first.” Which work-type owns the issue, and how is research used?
   audit. It is not `draft` because taste/voice is not the definition of done, and not `enhancement` because no
   behavior changes. Cite `backlog-policy.md` and `groom.md`.
 - **R2:** The `research` sibling owns the epistemic work and returns the canonical path, answer, gaps,
-  boundary, and audit. Backlog retains branch, tracker state, commit, PR, review, and closure. Cite issue-loop
+  boundary, and audit. Backlog retains branch, tracker state, commit, PR, review, and closure. Cite build-loop
   step 3.
 - **R3:** Product verification does not run; the research claim audit accounts for every material claim and
   gap. If product behavior also changes, return to grooming because the issue is misclassified. Cite step 4.
@@ -344,7 +344,7 @@ via the Agent tool, and `codex exec --sandbox read-only` on gpt-5.6-sol), with o
 context, requiring file + exact-sentence citations. Key written before any runs; keys on issue #80's
 acceptance criteria.
 
-### Scenario D — dispatched enhancement (surfaces: `reference/issue-loop.md` + `docs/agents/backlog-policy.md`)
+### Scenario D — dispatched enhancement (surfaces: `reference/build-loop.md` + `docs/agents/backlog-policy.md`)
 
 You are the issue thread for a `ready-for-agent` → `in-flight` **enhancement**. Its grooming comment carries a
 complete Dispatch block including `route: direct — decisions settled in linked spec #91; UI copy delegated to

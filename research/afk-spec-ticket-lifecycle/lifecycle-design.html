@@ -92,7 +92,7 @@
 
 <span class="kicker">Brainstorm · feeds issue #80 and the next skill refactors</span>
 <h1 id="title">The end-to-end SDLC, as a family of skills</h1>
-<p class="sub"><span class="rev">rev 5</span> — rev 4 fixed the "implement" naming collision (the per-issue orchestrator is the existing <b>issue loop</b>) and walked decomposition back to naming seams inside a thin backlog. Rev 5 replaces the simple session chains with <b>one full swim-lane diagram</b> (§ 1b): lanes for you / orchestrator / subagents / tracker&amp;repo, with collapse notes showing how simpler sessions delete columns, never lanes. Annotate anything; ids are stable.</p>
+<p class="sub"><span class="rev">rev 5</span> — rev 4 fixed the "implement" naming collision (the per-issue orchestrator is the existing <b>build loop</b>) and walked decomposition back to naming seams inside a thin backlog. Rev 5 replaces the simple session chains with <b>one full swim-lane diagram</b> (§ 1b): lanes for you / orchestrator / subagents / tracker&amp;repo, with collapse notes showing how simpler sessions delete columns, never lanes. Annotate anything; ids are stable.</p>
 
 <div class="tldr" id="tldr">
 <b>Proposed shape, in one breath.</b>
@@ -100,7 +100,7 @@
 <li><b>You route; skills are legible.</b> There is no router stage. Each skill states plainly what it does and what artifact it leaves behind, so invoking the right one is obvious. The one automated nudge lives in <b>grooming</b>: "this is small enough to implement directly" vs "this needs a spec first" — moved out of the run loop (#80), stamped before execution.</li>
 <li><b>Interview = <code>batch-grill-me</code> × <code>domain-modeling</code>.</b> Frontier questions in rounds, facts looked up not asked, and the useful shape written down the moment it crystallizes — glossary terms, ADRs, PRODUCT.md deltas. No Q&amp;A transcript, no ledger.</li>
 <li><b><code>to-spec</code> is enough; <code>plan</code> dissolves.</b> The spec is an <b>HTML document</b> reviewed through review-loop — it inherits plan's artifact form and its approval gate. Tactical planning happens just-in-time inside implement, ungated.</li>
-<li><b>Backlog stays the thin head; its seams become contracts.</b> The per-issue orchestrator already exists and has a name — the <b>issue loop</b> (whose build sub-step is <code>implement.md</code>). No new skills: groom = organize, run = schedule, issue loop = one issue → reviewed PR, and run already takes a queue of one. Over-decomposition is as bad as under-decomposition.</li>
+<li><b>Backlog stays the thin head; its seams become contracts.</b> The per-issue orchestrator already exists (shipped as <code>build-loop.md</code>, since renamed the <b>build loop</b> — platform-agnostic; its sub-step stays <code>implement.md</code>). No new skills: groom = organize, run = schedule, build loop = one issue → reviewed PR, and run already takes a queue of one. Over-decomposition is as bad as under-decomposition.</li>
 <li><b>Impeccable fits as a lane, not a spine.</b> That was the real clash. It's invoked at three named points (project setup, spec's design direction, verification) and never owns the workflow. Kept external; mechanics absorbed.</li>
 </ul>
 </div>
@@ -131,7 +131,7 @@
   </div>
   <div class="down">↓</div>
   <div class="prow">
-    <div class="pbox stage" id="p-run"><b>run × issue loop</b>AFK: dependency waves, parallel worktrees, N × (claim → JIT tactical plan → implement → verify → adversarial review → evidence → PR)<br><small>interactive: run with a queue of one — same loop, no waves</small></div>
+    <div class="pbox stage" id="p-run"><b>run × build loop</b>AFK: dependency waves, parallel worktrees, N × (claim → JIT tactical plan → implement → verify → adversarial review → evidence → PR)<br><small>interactive: run with a queue of one — same loop, no waves</small></div>
     <div class="pbox gate" id="p-merge"><b>Human gates</b>PR review · <code>merge-changes</code><br><small>unchanged</small></div>
   </div>
   <div class="down">— cross-cutting lanes, bound per-surface —</div>
@@ -202,7 +202,7 @@
   <text class="s" x="702" y="187">schedule waves ∥</text>
   <line x1="672" y1="174" x2="688" y2="174" marker-end="url(#arr)"/>
   <rect x="556" y="210" width="248" height="96" rx="8" fill="var(--stage)" stroke="var(--stage-line)" stroke-width="1.5"/>
-  <text class="t" x="570" y="232">issue loop — per-issue orchestrator</text>
+  <text class="t" x="570" y="232">build loop — per-issue orchestrator</text>
   <text class="s" x="570" y="250">implement · verify · adversarial review ·</text>
   <text class="s" x="570" y="264">evidence → review-ready PR</text>
   <text class="s" x="570" y="282">bug → diagnosing-bugs · design → prototype</text>
@@ -347,7 +347,7 @@
   <text class="s" x="489" y="397">holds the await</text>
 
   <rect x="962" y="340" width="196" height="112" rx="7" fill="var(--lane)" stroke="var(--lane-line)" stroke-width="1.5"/>
-  <text class="t" x="972" y="360">issue loop × N ∥</text>
+  <text class="t" x="972" y="360">build loop × N ∥</text>
   <text class="s" x="972" y="378">parallel worktrees, one per issue:</text>
   <text class="s" x="972" y="394">implement · verify ·</text>
   <text class="s" x="972" y="410">adversarial review · evidence</text>
@@ -422,7 +422,7 @@
 
 <p id="collapse-notes"><b>The collapse test.</b> Delete columns; the lanes and the remaining arrows stay true:</p>
 <ul id="collapse-list">
-<li><b>Chat &amp; build</b> — keep <i>Intake</i>, a short <i>Interview</i>, one issue loop from <i>AFK run</i> (queue of one, no waves — the run column shrinks to a single subagent box), and <i>Merge</i>. <i>Spec</i>, <i>Tickets</i>, <i>Admission</i> collapse; the interview's tracker writes still happen.</li>
+<li><b>Chat &amp; build</b> — keep <i>Intake</i>, a short <i>Interview</i>, one build loop from <i>AFK run</i> (queue of one, no waves — the run column shrinks to a single subagent box), and <i>Merge</i>. <i>Spec</i>, <i>Tickets</i>, <i>Admission</i> collapse; the interview's tracker writes still happen.</li>
 <li><b>Chat → spec → build</b> — adds the <i>Spec</i> column back (with its watcher and your verdict); <i>Tickets</i>/<i>Admission</i> stay collapsed.</li>
 <li><b>Chat → tickets → AFK</b> — drops <i>Spec</i>; keeps <i>Tickets → Admission → AFK run</i>.</li>
 <li><b>Plan-ahead initiative</b> — the diagram as drawn.</li>
@@ -472,36 +472,36 @@
 <div class="wide">
 <table class="shapes" id="shapes-table">
 <tr><th>Shape</th><th>Composition</th><th>When</th></tr>
-<tr><td>Chat &amp; build</td><td>interview (short) → <b>issue loop</b></td><td>Settled in one sitting; nothing another agent must inherit. An interactive issue loop without the ticket ceremony.</td></tr>
-<tr><td>Chat → spec → build</td><td>interview → to-spec (review gate) → <b>issue loop</b></td><td>One coherent piece of work, but decisions worth a reviewed, durable home first. Your "conversation, spec, implement … repeat" cadence.</td></tr>
-<tr><td>Chat → tickets → run</td><td>interview → to-tickets → admission → <b>run × issue loop</b></td><td>Sliceable now, execute async/AFK; no shared decisions beyond what CONTEXT/ADRs hold.</td></tr>
-<tr><td>Chat → spec → tickets → run</td><td>interview → to-spec → to-tickets → admission → <b>run × issue loop</b></td><td>The full plan-ahead flow: front-load decisions across an initiative, approve once, drain the queue AFK.</td></tr>
-<tr><td>AFK run</td><td><b>run × issue loop</b> over admitted issues</td><td>Backlog's home turf — now guaranteed gate-free because admission stamped every route beforehand.</td></tr>
+<tr><td>Chat &amp; build</td><td>interview (short) → <b>build loop</b></td><td>Settled in one sitting; nothing another agent must inherit. An interactive build loop without the ticket ceremony.</td></tr>
+<tr><td>Chat → spec → build</td><td>interview → to-spec (review gate) → <b>build loop</b></td><td>One coherent piece of work, but decisions worth a reviewed, durable home first. Your "conversation, spec, implement … repeat" cadence.</td></tr>
+<tr><td>Chat → tickets → run</td><td>interview → to-tickets → admission → <b>run × build loop</b></td><td>Sliceable now, execute async/AFK; no shared decisions beyond what CONTEXT/ADRs hold.</td></tr>
+<tr><td>Chat → spec → tickets → run</td><td>interview → to-spec → to-tickets → admission → <b>run × build loop</b></td><td>The full plan-ahead flow: front-load decisions across an initiative, approve once, drain the queue AFK.</td></tr>
+<tr><td>AFK run</td><td><b>run × build loop</b> over admitted issues</td><td>Backlog's home turf — now guaranteed gate-free because admission stamped every route beforehand.</td></tr>
 </table>
 </div>
 
 <h3 id="dev-tail">The dev tail is the same in every shape — only its inputs change</h3>
-<p>Your question about verification and evidence across the entryways has a clean answer once the tail is seen as part of the <b>issue loop</b>, not part of the queue: verify → adversarial review → evidence attach to the <b>PR boundary</b>, so every shape that produces a code change flows through them. What varies per entryway is what feeds each gate:</p>
+<p>Your question about verification and evidence across the entryways has a clean answer once the tail is seen as part of the <b>build loop</b>, not part of the queue: verify → adversarial review → evidence attach to the <b>PR boundary</b>, so every shape that produces a code change flows through them. What varies per entryway is what feeds each gate:</p>
 <div class="wide">
 <table id="tail-table">
 <tr><th>Gate</th><th>Invariant</th><th>What varies by entryway</th></tr>
-<tr><td>Verify</td><td>Always runs; exercises acceptance criteria against the running change; grades reported verbatim (live / static-substitute / not-run / blocked)</td><td><b>Where criteria come from:</b> the ticket's acceptance block (run shapes) · the spec's per-slice acceptance (spec shapes) · <b>chat-and-build: the issue loop's first act is writing the criteria down</b> from the conversation into the PR body, so verify has a target even without a ticket</td></tr>
+<tr><td>Verify</td><td>Always runs; exercises acceptance criteria against the running change; grades reported verbatim (live / static-substitute / not-run / blocked)</td><td><b>Where criteria come from:</b> the ticket's acceptance block (run shapes) · the spec's per-slice acceptance (spec shapes) · <b>chat-and-build: the build loop's first act is writing the criteria down</b> from the conversation into the PR body, so verify has a target even without a ticket</td></tr>
 <tr><td>Adversarial review</td><td>Always runs on product code — it reviews the <i>diff</i> for correctness and quality, which your live product judgment doesn't cover</td><td>Nothing structural; interactive shapes just iterate faster because the fixer's audience is present</td></tr>
 <tr><td>Evidence</td><td>Proves behavior to someone who wasn't there</td><td><b>Obligation scales with absence.</b> AFK run: full evidence package — nobody watched. Spec shapes: evidence keyed to the spec's acceptance so a reviewer checks without replaying the conversation. Chat-and-build: you witnessed it live, so evidence degrades to the PR body's verification grades plus whatever the playbook demands — cheap insurance for the PR reviewer, not a package</td></tr>
 <tr><td>Merge</td><td>Human PR review + explicit <code>merge-changes</code></td><td>Nothing — the boundary every shape exits through</td></tr>
 </table>
 </div>
-<p class="note">This is also the argument for the seam-naming below: because the gates ride the issue loop, running that loop with or without a queue around it loses nothing.</p>
+<p class="note">This is also the argument for the seam-naming below: because the gates ride the build loop, running that loop with or without a queue around it loses nothing.</p>
 
 <h3 id="decompose">Backlog's seams — name them, don't split them</h3>
-<p>Correction from chat, and it simplifies things: the per-issue orchestrator <b>already exists and already has a name</b> — backlog's <b>issue loop</b> (<code>reference/issue-loop.md</code>), which coordinates the sub-steps: <code>implement.md</code> (the build), <code>verify.md</code>, <code>adversarial-review.md</code>, <code>evidence.md</code>, with <code>diagnose.md</code>/<code>refactor.md</code> as work-type branches. Rev 2 accidentally reused "implement" for the loop itself — wrong altitude; "implement" stays the build sub-step's name.</p>
+<p>Correction from chat, and it simplifies things: the per-issue orchestrator <b>already exists</b> — backlog's <code>reference/build-loop.md</code>, renamed the <b>build loop</b> (platform-agnostic: nothing about the loop is issue-tracker-specific; the issue stays the role noun for the work item), which coordinates the sub-steps: <code>implement.md</code> (the build), <code>verify.md</code>, <code>adversarial-review.md</code>, <code>evidence.md</code>, with <code>diagnose.md</code>/<code>refactor.md</code> as work-type branches. Rev 2 accidentally reused "implement" for the loop itself — wrong altitude; "implement" stays the build sub-step's name.</p>
 <p>And with that correction, the decomposition mostly evaporates as a <i>skill-splitting</i> project — <b>over-decomposition is as bad as under-decomposition</b>, and backlog should stay the thin head. What remains is naming its three internal seams as contracts, all inside the one skill:</p>
 <ul>
 <li><b>groom</b> = organize: the tracker as truth — admission audit, route stamps, serialized tracker writes, verify-first triage discipline.</li>
-<li><b>run</b> = schedule: dependency waves, parallelism, worktrees, dispatch, liveness — and it <b>already supports a single issue</b> (a queue of one), so interactive chat-and-build needs no new skill: it's the same issue loop, invoked without waves.</li>
-<li><b>issue loop</b> = one issue → reviewed PR, carrying the dev tail above.</li>
+<li><b>run</b> = schedule: dependency waves, parallelism, worktrees, dispatch, liveness — and it <b>already supports a single issue</b> (a queue of one), so interactive chat-and-build needs no new skill: it's the same build loop, invoked without waves.</li>
+<li><b>build loop</b> = one issue → reviewed PR, carrying the dev tail above.</li>
 </ul>
-<p>The only structural change anyone actually needs is #80's: the planning gate leaves the issue loop's enhancement branch (replaced by groom's route stamp + the spec stage upstream). Everything else is documentation of seams that already exist.</p>
+<p>The only structural change anyone actually needs is #80's: the planning gate leaves the build loop's enhancement branch (replaced by groom's route stamp + the spec stage upstream). Everything else is documentation of seams that already exist.</p>
 
 <h2 id="interview">6 · The interview: batch-grill-me × domain-modeling</h2>
 <p>Adopted as-is in spirit — the composition Matt gestures at in 7 lines (<code>grill-with-docs</code>), with his batch shape rather than one-at-a-time:</p>
@@ -552,7 +552,7 @@
 
 <div class="qcard" id="q-decompose">
 <h3>Q2 — Backlog seams: document, don't split</h3>
-<p>Resolved direction from chat: backlog stays the thin head; groom / run / issue loop are named internal contracts (run already handles a queue of one, so no new "implement" skill and no naming collision with the <code>implement.md</code> build sub-step). The only structural change is #80's gate removal. <span class="lean">Lean: confirm — no new skills.</span></p>
+<p>Resolved direction from chat: backlog stays the thin head; groom / run / build loop are named internal contracts (run already handles a queue of one, so no new "implement" skill and no naming collision with the <code>implement.md</code> build sub-step). The only structural change is #80's gate removal. <span class="lean">Lean: confirm — no new skills.</span></p>
 </div>
 
 <div class="qcard" id="q-groom-stamp">
@@ -585,7 +585,7 @@
 <p>Per § 7: offer on UI-surface detect, consent + lockfile record, install via its own provider, run <code>/impeccable init</code> with you present (pending-step note when unattended), audit mode checks version drift + missing PRODUCT.md. <span class="lean">Lean: yes — setup means "installed <i>and</i> bound," and that should hold for externals too.</span></p>
 </div>
 
-<p class="note" id="colophon">Sources: <code>research/afk-spec-ticket-lifecycle/</code> (brief + findings, 2026-07-18, pinned SHAs) · mattpocock/skills @ 9603c1c (grill-with-docs, domain-modeling + CONTEXT/ADR formats, batch-grill-me, grilling, to-spec, to-tickets, wayfinder, triage, tdd, codebase-design, implement, setup) · pbakaus/impeccable @ 8967edc (structural core read directly; 19 craft references via sub-agent digest) · issue #80 · docs/agents/platform.md, implementing.md · backlog reference/issue-loop.md.</p>
+<p class="note" id="colophon">Sources: <code>research/afk-spec-ticket-lifecycle/</code> (brief + findings, 2026-07-18, pinned SHAs) · mattpocock/skills @ 9603c1c (grill-with-docs, domain-modeling + CONTEXT/ADR formats, batch-grill-me, grilling, to-spec, to-tickets, wayfinder, triage, tdd, codebase-design, implement, setup) · pbakaus/impeccable @ 8967edc (structural core read directly; 19 craft references via sub-agent digest) · issue #80 · docs/agents/platform.md, implementing.md · backlog reference/build-loop.md.</p>
 
 </main>
 </body>

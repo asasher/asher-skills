@@ -1,4 +1,4 @@
-# Issue Loop — One Issue to a Reviewed PR
+# Build Loop — One Issue to a Reviewed PR
 
 You are the staffed issue coordinator for `<issue-reference>`. Dispatch selected this route before creating the
 worktree/child and supplied the coordination reason plus upward successor; do not re-triage or silently

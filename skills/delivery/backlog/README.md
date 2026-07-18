@@ -1,6 +1,6 @@
 # Backlog
 
-Groom the backlog with the human, then run each ready-for-agent issue through the issue loop to a reviewed PR. Subcommands also run standalone. Platform-bound, not platform-bound-to-GitHub: the tracker, review surface, version control, and harness are roles the skill reasons in, bound per repo by `backlog setup` — GitHub and a local on-disk tracker ship as defaults; anything else is derived at setup.
+Groom the backlog with the human, then run each ready-for-agent issue through the build loop to a reviewed PR. Subcommands also run standalone. Platform-bound, not platform-bound-to-GitHub: the tracker, review surface, version control, and harness are roles the skill reasons in, bound per repo by `backlog setup` — GitHub and a local on-disk tracker ship as defaults; anything else is derived at setup.
 
 ## File locations
 

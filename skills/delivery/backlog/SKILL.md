@@ -1,6 +1,6 @@
 ---
 name: backlog
-description: Groom the backlog; run ready-for-agent issues through the issue loop to reviewed changes; subcommands run standalone. Works against GitHub, a local on-disk tracker, or any bound platform.
+description: Groom the backlog; run ready-for-agent issues through the build loop to reviewed changes; subcommands run standalone. Works against GitHub, a local on-disk tracker, or any bound platform.
 argument-hint: "[command] [issue, PR, or target]"
 user-invocable: true
 disable-model-invocation: true
@@ -27,7 +27,7 @@ This file is the command surface; each subcommand loads its own contract from `r
 | Command | Role | Bundled reference | Project playbook |
 |---|---|---|---|
 | `groom` | With the human: classify work-type, clarify, resolve relationships, label readiness | `reference/groom.md` | `docs/agents/backlog-policy.md` + `platform.md` |
-| `run` | Queue ready issues; staff each coordinator before creating its worktree/child | `reference/run.md`, `reference/run-state.md`, `reference/issue-loop.md` | `docs/agents/backlog-policy.md` + `platform.md`; threads read `change-description.md` + their step playbooks |
+| `run` | Queue ready issues; staff each coordinator before creating its worktree/child | `reference/run.md`, `reference/run-state.md`, `reference/build-loop.md` | `docs/agents/backlog-policy.md` + `platform.md`; threads read `change-description.md` + their step playbooks |
 | `setup` | Ask the work domain and install its baseline pack; reconcile playbooks; bind platforms; set isolation, app access, seed/checks, readiness; ensure siblings | `reference/setup.md`, `reference/worktree-isolation.md`, `templates/` | writes them |
 | `diagnose` | Hand a bug to the `diagnosing-bugs` skill; retain issue lifecycle and downstream verify/evidence | `reference/diagnose.md` + sibling by name | optional `docs/agents/diagnosing-bugs.md` delta + `environment.md` |
 | `prototype` | Throwaway code that answers a design question (logic or UI shape) | the `prototype` skill (composed by name) | — |

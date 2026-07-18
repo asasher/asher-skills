@@ -1,6 +1,6 @@
 # Playbook: Change Description
 
-> Project playbook for this repo. The issue loop's create-PR step reads this file for the body structure; the orchestration constraints (ready-for-review not draft, base branch, the deferred evidence capture) are in the skill's `reference/issue-loop.md`, and where the PR physically lives — GitHub, a committed review file, elsewhere — in `platform.md` § Change review. Tailor the outline to this team's conventions.
+> Project playbook for this repo. The build loop's create-PR step reads this file for the body structure; the orchestration constraints (ready-for-review not draft, base branch, the deferred evidence capture) are in the skill's `reference/build-loop.md`, and where the PR physically lives — GitHub, a committed review file, elsewhere — in `platform.md` § Change review. Tailor the outline to this team's conventions.
 
 ## Body outline
 
