@@ -58,6 +58,7 @@ The map is a starting point tuned by the project answer, not a fixed bundle.
 | A one-off feature or decision that needs sign-off | `plan` (requires review-loop + staffing; offer prototype/research for unresolved questions) | Reviewed plan with an approval gate, no full backlog machinery |
 | A design/state question that needs to be tried | `prototype` (pulls review-loop + staffing) | Throwaway artifact that settles one question |
 | A greenfield product to pitch/sell | `maquette` (pulls review-loop) | High-fidelity clickable prototype for a demo |
+| Eliciting the decisions behind an idea or problem | `interview-with-docs` (pulls `interview` + `domain-modeling`) | Batch frontier interview with inline CONTEXT.md/ADR extraction; bare `interview` for a no-writes session; feeds `to-spec` |
 | Turning a decided conversation into a written spec | `to-spec` (review-loop optional) | Synthesize a spec; feeds `to-tickets` |
 | Splitting a spec/plan into backlog tickets | `to-tickets` | Vertical-slice tickets with blocking edges into backlog's convention |
 | Any project that will route work across models | `staffing` — offer **global** | A reusable model roster; the one skill worth installing once for every project |
@@ -81,7 +82,7 @@ The current notable edges are visible in `catalog.json`: backlog requires diagno
 research, review-loop, and staffing; research requires staffing; plan requires review-loop and staffing and
 optionally uses prototype and research; prototype and spreadsheet-loop
 require review-loop and staffing; maquette requires review-loop; review-loop optionally uses staffing for its
-watch; setup-asher-skills requires staffing; control-plane optionally uses until-zero; to-spec optionally uses
+watch; setup-asher-skills requires staffing; interview-with-docs requires interview and domain-modeling (interview optionally uses research, prototype, staffing); control-plane optionally uses until-zero; to-spec optionally uses
 review-loop; and to-sprites optionally uses codex-imagegen. Document inputs such as to-tickets consuming a
 spec are not sibling edges.
 
