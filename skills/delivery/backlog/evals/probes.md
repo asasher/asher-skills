@@ -335,3 +335,77 @@ non-interactive process and relays raw output plus lifecycle status; the parent 
 effect verification. Missing wrapper-model selection/report keeps floor/cost compliance unproven even when
 observability and relay pass. Direct CLI dispatch, wrapper synthesis, or claiming cheapest-model proof from
 exit zero fails.
+
+## Enhancement degating probes (issue #80)
+
+Situated dry-run probes for the decoupled enhancement route: no in-run planning gate, groom's route judgment,
+and the `needs-spec` handback. Same method as above — run each probe against both executors (Claude subagent
+via the Agent tool, and `codex exec --sandbox read-only` on gpt-5.6-sol), with only the named surfaces in
+context, requiring file + exact-sentence citations. Key written before any runs; keys on issue #80's
+acceptance criteria.
+
+### Scenario D — dispatched enhancement (surfaces: `reference/issue-loop.md` + `docs/agents/backlog-policy.md`)
+
+You are the issue thread for a `ready-for-agent` → `in-flight` **enhancement**. Its grooming comment carries a
+complete Dispatch block including `route: direct — decisions settled in linked spec #91; UI copy delegated to
+the thread`. The linked spec records the schema and UX decisions and the acceptance criteria.
+
+**P-D1 (no gate).** You reach step 3 and route on `enhancement`. Is there any point before implementation
+where you invoke a planning skill or pause for a human planning approval? What do you produce before
+following `reference/implement.md`, and where is it recorded? Cite the enhancement bullet.
+
+**P-D2 (invalidation handback).** Mid-implement you discover the spec's recorded schema decision cannot work
+(the platform API it assumed does not exist). Name the exact state you apply, the other actions you take, and
+what you do **not** do. Cite the sentences.
+
+**P-D3 (delegated vs strategic).** Two questions arise: (a) which of two equivalent list-virtualization
+libraries to use; (b) whether the feature should also be shown to anonymous users. For each: settle it
+yourself, prototype it, or hand back? Cite the authority language.
+
+### Scenario E — grooming surface (surfaces: `reference/groom.md` + `docs/agents/backlog-policy.md`)
+
+An open issue reads: "**Add gamification to the driver app** — make deliveries feel rewarding. Streaks?
+Badges? Leaderboard?" It has no spec link, no recorded decisions, and the human, asked, says "good question —
+I need to think about what we actually want."
+
+**P-E1 (route stamp).** Which readiness role does this issue get, and why is it not `needs-info` and not
+`ready-for-agent`? Cite the route-judgment sentence.
+
+**P-E2 (admission contract).** What must an `enhancement`'s dispatch record contain before `ready-for-agent`
+may be applied? Cite § Dispatch metadata.
+
+### Scenario F — run surface (surfaces: `reference/run.md` + `docs/agents/backlog-policy.md`)
+
+**P-F1 (run never pauses).** During an AFK run on the local tracker binding, an issue thread reports back:
+"strategic decision invalidated — handing back." What does the run thread write, and does any planning
+approval gate open mid-run? Cite step 6.
+
+### Answer key (issue #80)
+
+- **P-D1:** **No** planning skill, **no** human planning gate — "There is no in-run planning approval gate."
+  Before `implement.md` the thread drafts a **just-in-time tactical plan**, "scoped to this ticket, inside
+  the delegated authority, recorded in the thread and reflected in the PR body; never a human gate."
+  Invoking a `plan` skill, or pausing for approval = **fail**.
+- **P-D2:** Apply **`needs-spec`** (not `needs-info`, not `ready-for-human`): record the finding on the
+  issue, drop the in-flight claim, tell the run thread, open **no PR** (step 2 handback + "implementation
+  **invalidates** an approved decision … hand it back as `needs-spec`"). Not done: settling the product
+  question in-thread ("do not settle it here"), or a planning session. Choosing `needs-info`, deciding the
+  new schema alone, or opening a PR anyway = **fail**.
+- **P-D3:** (a) is **within delegated authority** → settle it in the tactical plan (a prototype is allowed:
+  "only for questions **within the issue's delegated authority**"). (b) is **strategic** (product scope) →
+  `needs-spec` handback: "A strategic question is a `needs-spec` handback, never a prototype session."
+  Prototyping (b), or handing back (a) = **fail**.
+- **P-E1:** **`needs-spec`** — the route judgment: the enhancement is not **direct-executable** (product
+  decisions neither settled nor delegated), and the human cannot settle them in this conversation. Not
+  `needs-info` (the reporter owes no facts; the *product owner* owes shaping), not `ready-for-agent` (no
+  route judgment possible). `ready-for-agent`, `needs-info`, or inventing the gamification design = **fail**.
+- **P-E2:** Surface (+capabilities), coordination class, coordination reason, **and** the
+  `route: direct — <why settled/delegated>` line; "A `ready-for-agent` enhancement without it is a grooming
+  gap." Omitting route = **fail**.
+- **P-F1:** The run thread, as serialized writer, clears `in-flight` and sets **`needs-spec`** with the
+  reported comment ("`needs-spec` for unsettled or invalidated strategic decisions"), and the run
+  **continues** — no planning gate exists to open. Pausing the run for approval, or setting `needs-info` =
+  **fail**.
+
+Pass bar: **P-D1–P-F1 6/6 on both executors.** Ambiguity flagged with a citation is a valid answer only where
+the surfaces genuinely conflict; the surfaces above are expected to decide every probe.

@@ -19,6 +19,7 @@ Two independent axes, plus exclusions. Readiness decides *whether and who* picks
 - `in-flight` — dispatched: an issue thread owns it, so `run` never selects it. Set by `run` at dispatch, replacing `ready-for-agent`; records what's flying (branch name and dispatch date — local: frontmatter; GitHub: a comment alongside the label). Cleared by the run thread on abort, superseded by closure when the change merges, or reset by `groom`'s human-confirmed orphan sweep (§ In-flight hygiene). Default `in-flight` — _<your label>_.
 - `ready-for-human` — only a human; the agent skips it entirely. Also the abort target for verify caps and environment blockers: the agent hands the issue back with the blocker commented, since a human must look before it can be re-released. Default `ready-for-human` — _<your label>_.
 - `needs-info` — parked, waiting on the reporter. Default `needs-info` — _<your label>_.
+- `needs-spec` — parked for strategic shaping: the issue carries product/design/scope decisions that are neither settled nor delegated, or execution invalidated an approved decision. Set by `groom`'s route judgment or by an issue thread's handback; cleared when the upstream shaping flow (interview → spec → tickets) delivers execution-ready work. Never selectable by `run`. Default `needs-spec` — _<your label>_.
 - *(no readiness label)* — not yet groomed; a target for `backlog groom`, not for `run`.
 
 Two further lifecycle values appear only where the tracker has no native equivalent (the local binding's `state:` field), written by the loop, never by grooming: `in-review` (a PR is open for it — set on the work branch at PR-open) and `closed` (set on the work branch once review converges; the merge carries it to main). On trackers with native state (GitHub), an open PR and native closure express these.
@@ -26,7 +27,7 @@ Two further lifecycle values appear only where the tracker has no native equival
 **Work-type** — required for `ready-for-agent`; decides the branch:
 
 - `bug` — diagnose branch. Default `bug` — _<your label>_.
-- `enhancement` — plan → implement branch. Default `enhancement` — _<your label>_.
+- `enhancement` — implement branch: strategic decisions arrive settled or delegated (groom's route judgment), and the issue thread makes only a just-in-time tactical plan within that authority. Default `enhancement` — _<your label>_.
 - `refactor` — refactor branch. Default `refactor` — _<your label>_.
 - `research` — source-audit branch, for **epistemic-terminal** work: the deliverable establishes what primary sources support, what follows by inference, what conflicts, and what remains unknown. Correctness comes from traceability and the research skill's claim audit, not taste or implementation behavior. The dossier is kept under the project's research root; its citations are intrinsic provenance, not an `evidence/` copy. Default `research` — _<your label>_.
 - `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a narrative synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — no mechanical `verify` pass/fail. The artifact is **kept** (committed and merged), unlike `prototype`, which is throwaway — keep the answer, delete the artifact. Default `draft` — _<your label>_.
@@ -45,6 +46,8 @@ Groom records the facts `run` passes to `staffing` **before** it creates a workt
   uncertainty. This is not a difficulty score.
 - **Coordination reason** — one sentence naming why the class applies and any known uncertainty. Required for
   both classes so the decision is auditable.
+- **Route (enhancements)** — `route: direct` plus one line on why the strategic decisions are settled or
+  delegated. A `ready-for-agent` enhancement without it is a grooming gap.
 
 Tracker encoding: _<GitHub: a stable `Dispatch:` block in the body or grooming comment; local: `surface`,
 `coordination`, and `coordination-reason` frontmatter; custom: name the fields here>_. Missing metadata is a

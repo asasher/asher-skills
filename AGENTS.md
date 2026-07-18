@@ -123,8 +123,9 @@ to reconcile them against the repo.
 | skill-loop | Iterates a skill through eval → revise cycles | project |
 | writing-great-skills | Authoring guidance for writing skills (from mattpocock/skills) | project |
 
-**How they fit together:** `backlog` requires `diagnosing-bugs`, `plan`, `prototype`, `research`,
-`review-loop`, and `staffing`. `research` requires `staffing`; `plan` optionally uses `prototype` and
+**How they fit together:** `backlog` requires `diagnosing-bugs`, `prototype`, `research`, `review-loop`,
+and `staffing` — enhancements arrive with strategic decisions settled upstream (groom's route judgment; the
+`needs-spec` handback returns work that isn't), so the run loop holds no planning approval gate. `research` requires `staffing`; `plan` optionally uses `prototype` and
 `research`; `plan` and `prototype` require `review-loop` and `staffing`. `merge-changes` remains a separate,
 explicit human authorization gate after Backlog produces a review-ready PR.
 
