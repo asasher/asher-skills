@@ -3,21 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Goodwork Health</title>
+  <title>Connected</title>
   <style>
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;padding:24px;background:#f7f7f4;color:#20201d}
-    main{max-width:720px;margin:auto}
-    code{background:#fff;border:1px solid #ddd;padding:2px 5px;border-radius:4px}
+    *{box-sizing:border-box}
+    body{margin:0;background:#f7f4ee;color:#26251f;
+         font:17px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         display:grid;min-height:100dvh;place-items:center;-webkit-font-smoothing:antialiased}
+    main{text-align:center;padding:24px;max-width:380px}
+    .dot{width:14px;height:14px;border-radius:50%;background:#1e6f50;display:inline-block;margin-right:8px}
+    h1{font-size:1.3rem;margin:0 0 6px}
+    p{color:#7a766b;margin:0 0 22px}
+    button{min-height:52px;width:100%;border:0;border-radius:12px;background:#1e6f50;color:#fff;
+           font:inherit;font-weight:700;padding:14px;cursor:pointer}
+    #status{min-height:1.5em;margin-top:14px;font-weight:650;color:#1e6f50}
   </style>
 </head>
 <body>
-  <main>
-    <h1>Goodwork is running</h1>
-    <p id="session"></p>
-  </main>
-  <script>
-    const data = __GOODWORK_BOOTSTRAP__;
-    document.getElementById("session").textContent = `Session ${data.session_id}`;
-  </script>
+<main>
+  <h1><span class="dot"></span>You’re connected</h1>
+  <p>This is where you’ll say yes or no before anything is sent on your behalf. Tap the button to check the connection works both ways.</p>
+  <button id="test">Tap to test</button>
+  <p id="status" role="status"></p>
+</main>
+<script>
+const data = __GOODWORK_BOOTSTRAP__;
+document.getElementById("test").addEventListener("click", async () => {
+  const status = document.getElementById("status");
+  const res = await fetch("/event", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({token: data.token, type: "test_tap", page: "health", covers: [], payload: {}, tags: ["setup"]})});
+  status.textContent = res.ok ? "It works — you’re all set." : "Hmm, that didn’t land. Try again.";
+});
+</script>
 </body>
 </html>

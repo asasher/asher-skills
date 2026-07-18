@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Good Work — how the user and the agent find good work together</title>
+<style>
+  :root{
+    --ink:#1c1917; --muted:#78716c; --paper:#faf9f7; --card:#ffffff; --line:#e7e5e4;
+    --user:#b45309;  --user-bg:#fef3e2;  --user-line:#f5d7ab;
+    --agent:#4338ca; --agent-bg:#eef2ff; --agent-line:#c7d2fe;
+    --ws:#0f766e;    --ws-bg:#ecfdf8;    --ws-line:#b8e8dd;
+    --world:#6d28d9; --world-bg:#f5f1fd; --world-line:#ddd0f7;
+    --gate:#be123c;  --gate-bg:#fff1f2;  --gate-line:#fecdd3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  main{max-width:1200px;margin:0 auto;padding:48px 32px 96px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:0 0 8px}
+  h2{font-size:22px;letter-spacing:-.01em;margin:64px 0 6px}
+  h2 .no{color:var(--muted);font-weight:600;margin-right:8px}
+  .sub{color:var(--muted);margin:0 0 24px;max-width:70ch}
+  .lede{color:var(--muted);font-size:18px;max-width:72ch;margin:0 0 8px}
+
+  /* actor legend */
+  .legend{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 0}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;
+        border:1px solid var(--line);border-radius:999px;padding:5px 13px;background:var(--card)}
+  .dot{width:9px;height:9px;border-radius:50%}
+
+  /* phase arc */
+  .arc{display:flex;gap:0;align-items:stretch;overflow-x:auto;padding:8px 0 16px}
+  .phase{flex:1 1 0;min-width:150px;position:relative;background:var(--card);border:1px solid var(--line);
+         border-radius:12px;padding:14px 16px;margin-right:26px}
+  .phase:last-child{margin-right:0}
+  .phase:not(:last-child)::after{content:"";position:absolute;right:-19px;top:50%;width:12px;height:12px;
+         border-top:2px solid #a8a29e;border-right:2px solid #a8a29e;transform:translateY(-50%) rotate(45deg)}
+  .phase b{display:block;font-size:15px}
+  .phase .cat{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+  .phase .cmds{margin-top:6px;font-size:12.5px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
+  /* swim lanes */
+  .lanes-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:4px}
+  .lanes{display:grid;grid-template-columns:110px repeat(6, minmax(190px,1fr));min-width:1280px}
+  .lane-head,.stage-head{padding:12px 10px;font-weight:700}
+  .stage-head{font-size:13.5px;border-bottom:2px solid var(--line);text-align:center}
+  .stage-head .n{display:inline-flex;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;
+                 font-size:11px;align-items:center;justify-content:center;margin-right:6px}
+  .lane-head{display:flex;align-items:center;gap:8px;font-size:13px;border-right:2px solid var(--line)}
+  .cell{margin:6px;border-radius:10px;padding:10px 11px;font-size:13px;line-height:1.45;border:1px solid var(--line);background:#fcfcfb}
+  .cell.empty{border-style:dashed;background:transparent;color:#d6d3d1}
+  .cell b{display:block;font-size:12.5px;margin-bottom:3px}
+  .u  .cell:not(.empty){background:var(--user-bg); border-color:var(--user-line)}
+  .a  .cell:not(.empty){background:var(--agent-bg);border-color:var(--agent-line)}
+  .w  .cell:not(.empty){background:var(--ws-bg);   border-color:var(--ws-line)}
+  .o  .cell:not(.empty){background:var(--world-bg);border-color:var(--world-line)}
+  .u .lane-head{color:var(--user)} .a .lane-head{color:var(--agent)}
+  .w .lane-head{color:var(--ws)}   .o .lane-head{color:var(--world)}
+  .file{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;background:rgba(255,255,255,.75);
+        border:1px solid rgba(0,0,0,.08);border-radius:5px;padding:1px 5px;white-space:nowrap;display:inline-block;margin:1px 0}
+  .lane-row{display:contents}
+
+  /* sequence diagrams */
+  .seq{position:relative;max-width:860px;margin:0 auto}
+  .seq::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--line)}
+  .step{position:relative;display:flex;margin:14px 0}
+  .step .bubble{width:calc(50% - 34px);border-radius:12px;padding:12px 15px;font-size:14px;border:1px solid var(--line);background:var(--card)}
+  .step.left{justify-content:flex-start}
+  .step.right{justify-content:flex-end}
+  .step.center{justify-content:center}
+  .step.center .bubble{width:70%;text-align:center}
+  .step .who{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;display:block;margin-bottom:3px}
+  .step.u-step .bubble{background:var(--user-bg);border-color:var(--user-line)} .step.u-step .who{color:var(--user)}
+  .step.a-step .bubble{background:var(--agent-bg);border-color:var(--agent-line)} .step.a-step .who{color:var(--agent)}
+  .step.s-step .bubble{background:#f5f5f4;border-color:var(--line)} .step.s-step .who{color:var(--muted)}
+  .step.g-step .bubble{background:var(--gate-bg);border-color:var(--gate-line)} .step.g-step .who{color:var(--gate)}
+  .step .knot{position:absolute;left:50%;top:18px;width:11px;height:11px;border-radius:50%;
+              transform:translateX(-50%);background:#fff;border:3px solid #a8a29e}
+  .step.u-step .knot{border-color:var(--user)} .step.a-step .knot{border-color:var(--agent)}
+  .step.s-step .knot{border-color:#a8a29e} .step.g-step .knot{border-color:var(--gate)}
+  .gates{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+  .gate{font-size:11px;font-weight:700;color:var(--gate);background:#fff;border:1px solid var(--gate-line);
+        border-radius:999px;padding:2px 9px}
+  .seq .split{display:flex;gap:16px;position:relative;margin:14px 0}
+  .seq .split .bubble{flex:1}
+
+  /* artifact inventory */
+  .inv{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .inv-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .inv-card h3{margin:0 0 2px;font-size:16px}
+  .inv-card .from{font-size:12px;color:var(--muted);margin-bottom:10px}
+  .inv-card ul{margin:0;padding-left:18px;font-size:13.5px}
+  .inv-card li{margin:5px 0}
+  .inv-card li .file{background:#f5f5f4}
+
+  /* trust model */
+  .trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .trust-card{border-radius:14px;padding:18px 20px;border:1px solid var(--line)}
+  .trust-card h3{margin:0 0 6px;font-size:15px}
+  .trust-card p{margin:0;font-size:13.5px;color:#44403c}
+  .trust-card.t-a{background:var(--agent-bg);border-color:var(--agent-line)}
+  .trust-card.t-s{background:#f5f5f4}
+  .trust-card.t-u{background:var(--user-bg);border-color:var(--user-line)}
+
+  .foot{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body>
+<main>
+
+<header id="hero">
+  <h1 id="title">Good Work — how the user and the agent find good work together</h1>
+  <p class="lede" id="lede">One person, one agent, one workspace. The agent defines what good work means for this
+     person, then runs the campaign operation — targets, reach-outs, applications, inbound mail — while the user
+     holds every gate that touches the outside world. Everything either of them produces lands as a durable
+     artifact in the <span class="file">goodwork/</span> workspace.</p>
+  <div class="legend" id="legend">
+    <span class="chip"><span class="dot" style="background:var(--user)"></span> User</span>
+    <span class="chip"><span class="dot" style="background:var(--agent)"></span> Agent</span>
+    <span class="chip"><span class="dot" style="background:var(--ws)"></span> Workspace state (goodwork/)</span>
+    <span class="chip"><span class="dot" style="background:var(--world)"></span> Outside world</span>
+    <span class="chip"><span class="dot" style="background:var(--gate)"></span> Hard gate</span>
+  </div>
+</header>
+
+<section id="arc-section">
+  <h2 id="arc-h"><span class="no">1</span>The arc — six phases, sixteen commands</h2>
+  <p class="sub" id="arc-sub">Every engagement moves left to right; the last three commands loop forever. No campaign
+     command runs against an empty profile — direction is settled before messages go out.</p>
+  <div class="arc" id="arc">
+    <div class="phase" id="ph-connect"><span class="cat">Connect</span><b>Wire the workspace</b><span class="cmds">setup</span></div>
+    <div class="phase" id="ph-define"><span class="cat">Define</span><b>What is good work, for you?</b><span class="cmds">interview · profile · odysseys</span></div>
+    <div class="phase" id="ph-test"><span class="cat">Test</span><b>Cheap reality checks</b><span class="cmds">prototype · craft</span></div>
+    <div class="phase" id="ph-position"><span class="cat">Position</span><b>Own an intersection</b><span class="cmds">niche · assets</span></div>
+    <div class="phase" id="ph-campaign"><span class="cat">Campaign</span><b>Run the search as a CRM</b><span class="cmds">targets · scout · outreach · apply · pipeline</span></div>
+    <div class="phase" id="ph-sustain"><span class="cat">Sustain</span><b>The forever loop</b><span class="cmds">reconcile · daily · review</span></div>
+  </div>
+</section>
+
+<section id="lanes-section">
+  <h2 id="lanes-h"><span class="no">2</span>Swim lanes — one pass through the campaign engine</h2>
+  <p class="sub" id="lanes-sub">Who does what at each stage, and what it leaves behind. The user is never a spectator:
+     they answer, veto, approve, press Send, judge ambiguous mail, and journal. The agent drafts, scores, gates,
+     executes, and is the only writer of state.</p>
+  <div class="lanes-wrap">
+  <div class="lanes" id="lanes">
+    <div class="lane-head" style="border-bottom:2px solid var(--line)"></div>
+    <div class="stage-head" id="st-1"><span class="n">1</span>Target &amp; scout</div>
+    <div class="stage-head" id="st-2"><span class="n">2</span>Reach out</div>
+    <div class="stage-head" id="st-3"><span class="n">3</span>Approve &amp; send</div>
+    <div class="stage-head" id="st-4"><span class="n">4</span>Apply</div>
+    <div class="stage-head" id="st-5"><span class="n">5</span>Reconcile inbound</div>
+    <div class="stage-head" id="st-6"><span class="n">6</span>Daily &amp; review</div>
+
+    <div class="lane-row u">
+      <div class="lane-head">🧑 User</div>
+      <div class="cell" id="u-1"><b>Shapes the Top 10</b>Confirms rankings, vetoes values-misfit orgs, names insiders they already know.</div>
+      <div class="cell" id="u-2"><b>Reviews every message</b>Each draft individually approved — voice, the one true compliment, the small ask.</div>
+      <div class="cell" id="u-3"><b>Holds the physical gate</b>Approves on phone or browser; for email, presses <i>Send</i> in Gmail themselves.</div>
+      <div class="cell" id="u-4"><b>Owns the go/no-go</b>Approves the package; performs manual submissions from field-by-field instructions.</div>
+      <div class="cell" id="u-5"><b>Judges the ambiguous</b>Matches low-confidence replies, sends draft responses, confirms interview slots.</div>
+      <div class="cell" id="u-6"><b>Does the queue, journals</b>3–5 actions ≤90 min; a 60-second Good Time Journal line; drags kanban cards.</div>
+    </div>
+
+    <div class="lane-row a">
+      <div class="lane-head">🤖 Agent</div>
+      <div class="cell" id="a-1"><b>Builds the bench</b>Ranks employers on advocacy·motivation·posting; sweeps sources; scores leads with reason codes.</div>
+      <div class="cell" id="a-2"><b>Drafts the human layer</b>Listening-tour prep sheets (TIARA arc), referral asks, cold notes — never mass-personalized spam.</div>
+      <div class="cell" id="a-3"><b>Validates &amp; executes</b>Checks content hash + quota, writes the approval record, runs the best rung: Gmail draft → ATS → Chrome → manual.</div>
+      <div class="cell" id="a-4"><b>Gates then tailors</b>Fit check, ~70% evidence gate on must-haves, weekly quota cap; truthful tailoring — selection, not invention.</div>
+      <div class="cell" id="a-5"><b>Sweeps &amp; advances</b>Reads Gmail/LinkedIn, matches replies to cards, moves stages with reason codes, drafts replies &amp; calendar slots.</div>
+      <div class="cell" id="a-6"><b>Diagnoses the funnel</b>Builds today's queue; weekly, finds the narrowest constriction and routes the fix (targets? message? evidence?).</div>
+    </div>
+
+    <div class="lane-row w">
+      <div class="lane-head">🗂 Workspace</div>
+      <div class="cell" id="w-1"><span class="file">targets.json</span> <span class="file">sources.json</span> <span class="file">leads.json</span> — ranked list, swept boards, scored bench.</div>
+      <div class="cell" id="w-2"><span class="file">pipeline.json</span> card per thread with <span class="file">draft_</span> records + content hashes; prep sheets.</div>
+      <div class="cell" id="w-3"><span class="file">events.jsonl</span> → <span class="file">approvals.jsonl</span> → proof refs on the card. Append-only, hash-bound.</div>
+      <div class="cell" id="w-4"><b>Application package</b><span class="file">metrics.json</span> quota tick; card gets version sent, referral status, follow-up date.</div>
+      <div class="cell" id="w-5">Replies nested on cards, <span class="file">unmatched_replies</span> queue, patterns → <span class="file">evidence-inbox.json</span>.</div>
+      <div class="cell" id="w-6"><span class="file">JOURNAL.md</span> <span class="file">metrics.json</span>; inbox drained into dated <span class="file">PROFILE.md</span> updates.</div>
+    </div>
+
+    <div class="lane-row o">
+      <div class="lane-head">🌍 World</div>
+      <div class="cell empty" id="o-1">boards &amp; communities read, nothing sent</div>
+      <div class="cell" id="o-2"><b>Warm paths open</b>Intros &gt; communities &gt; weak ties &gt; cold — referrals carry most opportunity.</div>
+      <div class="cell" id="o-3"><b>A message lands</b>With a real person, individually written, provably approved.</div>
+      <div class="cell" id="o-4"><b>Application in process</b>Ideally with an insider referral already working it.</div>
+      <div class="cell" id="o-5"><b>The market answers</b>Replies, screens, interviews, offers, rejections, ghosts — all captured.</div>
+      <div class="cell" id="o-6"><b>Proof compounds</b>A public artifact every 1–2 weeks keeps the niche visible between sends.</div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section id="outbound-section">
+  <h2 id="ob-h"><span class="no">3</span>Sequence — one outbound reach-out or application</h2>
+  <p class="sub" id="ob-sub">The execution contract: nothing reaches the world without a truth-checked draft, a
+     hash-matched approval, and a recorded proof. The server can request; only the agent writes; only the user sends.</p>
+  <div class="seq" id="ob-seq">
+    <div class="step right a-step" id="ob-1"><span class="knot"></span><div class="bubble"><span class="who">Agent</span>
+      Drafts the message or application package from the profile and niche story.
+      <div class="gates"><span class="gate">truth gate — nothing invented, ever</span></div></div></div>
+    <div class="step right a-step" id="ob-2"><span class="knot"></span><div class="bubble"><span class="who">Agent</span>
+      Stores the artifact, computes its <b>content hash</b>, and presents the exact final text for review.</div></div>
+    <div class="step left u-step" id="ob-3"><span class="knot"></span><div class="bubble"><span class="who">User</span>
+      Reads the real text — on the phone approval page, the kanban, or in chat — and clicks <b>approve</b> (or edits).</div></div>
+    <div class="step center s-step" id="ob-4"><span class="knot"></span><div class="bubble"><span class="who">Local server</span>
+      Appends the click as a <b>request event</b> to <span class="file">events.jsonl</span> — a request, not yet an approval.</div></div>
+    <div class="step right a-step" id="ob-5"><span class="knot"></span><div class="bubble"><span class="who">Agent</span>
+      Validates the event and writes the approval record to <span class="file">approvals.jsonl</span>.
+      <div class="gates"><span class="gate">hash gate — text unchanged since seen</span>
+      <span class="gate">evidence gate — ~70% of must-haves evidenced</span>
+      <span class="gate">quota gate — weekly cap is hard</span></div></div></div>
+    <div class="step right a-step" id="ob-6"><span class="knot"></span><div class="bubble"><span class="who">Agent</span>
+      Executes on the best available rung of the ladder:<br>
+      ① <b>Gmail draft</b> — placed in the user's mailbox &nbsp;② <b>ATS-direct</b> (Greenhouse/Lever/Ashby)<br>
+      ③ <b>authenticated Chrome</b> for logged-in boards &nbsp;④ <b>manual package</b> — draft + field-by-field instructions.</div></div>
+    <div class="step left u-step" id="ob-7"><span class="knot"></span><div class="bubble"><span class="who">User</span>
+      On rung ① presses <b>Send</b> in Gmail — the physical gate. On rung ④ performs the action themselves.</div></div>
+    <div class="step right a-step" id="ob-8"><span class="knot"></span><div class="bubble"><span class="who">Agent</span>
+      Records the outcome on the pipeline card and pre-decides the follow-up so anxiety doesn't improvise:
+      <b>+3 business days → +7 days → monthly nurture</b>, never more.
+      <div class="gates"><span class="gate">proof gate — screenshot / confirmation ref required</span></div></div></div>
+  </div>
+</section>
+
+<section id="inbound-section">
+  <h2 id="ib-h"><span class="no">4</span>Sequence — an inbound message (reconcile)</h2>
+  <p class="sub" id="ib-sub">Runs before <span class="file">daily</span>, because inbound mail decides today's queue.
+     The sweep is strictly read-only — nothing is sent from any channel while sweeping.</p>
+  <div class="seq" id="ib-seq">
+    <div class="step right a-step" id="ib-1"><span class="knot"></span><div class="bubble"><span class="who">Agent</span>
+      Sweeps in order: <b>Gmail</b> via connector → <b>LinkedIn</b> via the persistent Chrome profile →
+      <b>WhatsApp</b> read-only, only if the user explicitly accepted that risk at setup.</div></div>
+    <div class="step right a-step" id="ib-2"><span class="knot"></span><div class="bubble"><span class="who">Agent</span>
+      Matches each item to a pipeline card by thread ID, sender/domain, company, role, URLs, quoted text.</div></div>
+    <div class="step right a-step" id="ib-3"><span class="knot"></span><div class="bubble"><span class="who">Agent</span>
+      <b>Confident match</b> → advances the stage (reply · booked · referral · screen · interview · offer ·
+      rejection · ghost) and records a reason code. Every open card keeps a next action + due date.</div></div>
+    <div class="step left u-step" id="ib-4"><span class="knot"></span><div class="bubble"><span class="who">User</span>
+      <b>Low-confidence match</b> → lands in <span class="file">unmatched_replies</span>; the user says which thread
+      it belongs to before any stage changes.</div></div>
+    <div class="step right a-step" id="ib-5"><span class="knot"></span><div class="bubble"><span class="who">Agent</span>
+      Drafts responses as Gmail drafts; interview requests become calendar-slot proposals
+      (holds are created only after approval).</div></div>
+    <div class="step left u-step" id="ib-6"><span class="knot"></span><div class="bubble"><span class="who">User</span>
+      Sends the reply drafts, confirms the slot that works.</div></div>
+    <div class="step right a-step" id="ib-7"><span class="knot"></span><div class="bubble"><span class="who">Agent</span>
+      Tags what the market is teaching into <span class="file">evidence-inbox.json</span> — repeated rejections
+      for a missing skill, roles the user keeps dismissing, calls that energized them — and refreshes today's priorities.</div></div>
+  </div>
+</section>
+
+<section id="artifacts-section">
+  <h2 id="art-h"><span class="no">5</span>Everything that gets created</h2>
+  <p class="sub" id="art-sub">The five artifact families, each with its home in the workspace. JSON when a matcher or
+     approval flow consumes it; Markdown when a person does.</p>
+  <div class="inv" id="inv">
+    <div class="inv-card" id="art-evidence">
+      <h3>🧾 Evidence</h3><div class="from">from interviews, prototypes, and what the market keeps saying</div>
+      <ul>
+        <li>Profile claims marked <b>reported / evidenced / tested</b> in <span class="file">PROFILE.md</span>, with a dated changelog</li>
+        <li><span class="file">evidence-inbox.json</span> — queued signals: rejection patterns, dismissed-role patterns, energizing calls</li>
+        <li>Good Time Journal lines in <span class="file">JOURNAL.md</span> — did · win · energy · flow, instrumentation not diary</li>
+        <li>Prototype &amp; craft debriefs in <span class="file">EXPERIMENTS.md</span></li>
+        <li>Reason codes on every rejection/retirement — profile evidence, not just bookkeeping</li>
+      </ul>
+    </div>
+    <div class="inv-card" id="art-docs">
+      <h3>📄 Documents</h3><div class="from">from <span class="file">assets</span> + <span class="file">niche</span>, mechanics delegated to eloquent when present</div>
+      <ul>
+        <li>CV/resume plus truthfully tailored variants and cover letters</li>
+        <li>LinkedIn headline &amp; summary telling the bridge story — same story on every surface</li>
+        <li>Portfolio case studies and the niche two-pager in <span class="file">NICHE.md</span></li>
+        <li>Proof-of-work artifacts — the repo, teardown, or essay an insider actually inspects, one per 1–2 weeks</li>
+        <li>A consistency audit: every surface names the same niche, strengths, and proof links</li>
+      </ul>
+    </div>
+    <div class="inv-card" id="art-outreach">
+      <h3>🤝 Captured reach-outs</h3><div class="from">from <span class="file">outreach</span> — the human layer that carries the search</div>
+      <ul>
+        <li>One <span class="file">pipeline.json</span> card per relationship thread, with thread IDs and warmth</li>
+        <li>Draft records with content hashes — what was said, provably the approved version</li>
+        <li>Per-conversation prep sheets: their background, why-them, ten TIARA questions</li>
+        <li>Call debriefs feeding niche hypotheses back into <span class="file">NICHE.md</span></li>
+        <li>The 3-day / 7-day / nurture follow-up schedule, pre-decided per thread</li>
+      </ul>
+    </div>
+    <div class="inv-card" id="art-apps">
+      <h3>📬 Applications</h3><div class="from">from <span class="file">apply</span> — deliberate, evidence-gated, quota-capped</div>
+      <ul>
+        <li>The go/no-go score: fit, evidence coverage, warmth, posting freshness</li>
+        <li>The truthful application package — keywords mirrored only where evidence exists</li>
+        <li>An approval record in <span class="file">approvals.jsonl</span> bound to the exact submitted text</li>
+        <li>Submission proof — confirmation screenshot or reference on the card</li>
+        <li>Weekly funnel numbers in <span class="file">metrics.json</span>: sent → screens → interviews → offers</li>
+      </ul>
+    </div>
+    <div class="inv-card" id="art-msgs">
+      <h3>💬 Messages</h3><div class="from">from <span class="file">reconcile</span> — every inbound touch, matched and kept small</div>
+      <ul>
+        <li>Reply records nested on their pipeline cards, with stage signals</li>
+        <li>The <span class="file">unmatched_replies</span> queue awaiting the user's judgment</li>
+        <li>Gmail reply drafts waiting on the user's Send</li>
+        <li>Calendar-slot proposals for interview requests</li>
+        <li>A <span class="file">reply_digest</span> per card — old threads compacted, stage-changing IDs kept</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="trust-section">
+  <h2 id="tr-h"><span class="no">6</span>Why this is safe to run on your career</h2>
+  <p class="sub" id="tr-sub">Three actors, three strictly separated powers.</p>
+  <div class="trust" id="trust">
+    <div class="trust-card t-a" id="tr-agent"><h3>🤖 The agent is the sole writer</h3>
+      <p>Every state file is written by the agent only — cumulatively, never regenerated. It validates every
+      request before acting and may never invent experience, metrics, credentials, or relationships.</p></div>
+    <div class="trust-card t-s" id="tr-server"><h3>🖥 The server can only ask</h3>
+      <p>The local UI (kanban, phone approval page) appends request events to <span class="file">events.jsonl</span>
+      and nothing else. A click is a request; the agent turns it into an approval only after the hash check.</p></div>
+    <div class="trust-card t-u" id="tr-user"><h3>🧑 The user holds the physical gates</h3>
+      <p>Approvals bind to the exact text seen. Email leaves only when the user presses Send in Gmail. Quotas are
+      hard caps. Every submission needs proof. The definition of good work itself is elicited, never assumed.</p></div>
+  </div>
+</section>
+
+<p class="foot" id="foot">Source: <span class="file">skills/personal/goodwork/</span> — SKILL.md plus the pipeline,
+state, execution, outreach, apply, assets, reconcile, and daily references, at main (2c8a5c6).</p>
+
+</main>
+</body>
+</html>

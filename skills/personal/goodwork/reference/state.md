@@ -1,12 +1,10 @@
 # state - v2 workspace state model
 
-This is the single source of truth for Goodwork v2 state. If a matcher, scheduler, approval flow, or presentation layer consumes it, it is JSON/JSONL. If a person or the interview consumes it, it is Markdown.
+Single source of truth for Goodwork v2 state. If a matcher, scheduler, approval flow, or presentation layer consumes it, it is JSON/JSONL. If a person or the interview consumes it, it is Markdown.
 
 ## Workspace shape
 
-One project folder is one person. The `goodwork/` folder holds state, vendored UI assets, the persistent Chrome profile, and a gitignored `.env`. Never install Goodwork globally. Degrade to draft-and-instruct when a capability is absent.
-
-Initialize missing v2 state with `scripts/init_workspace.py` from the project root before writing workspace files.
+One project folder is one person. `goodwork/` holds state, vendored UI assets, the persistent Chrome profile, and a gitignored `.env`. Never install Goodwork globally. Degrade to draft-and-instruct when a capability is absent. Initialize missing state with `scripts/init_workspace.py` from the project root before writing workspace files.
 
 ## Writer rule
 
@@ -14,15 +12,15 @@ The agent is the sole writer of state files. The server never mutates JSON or Ma
 
 ## IDs
 
-Every JSON record has a stable `id`, generated once and never reused. Use lowercase prefixes plus a sortable suffix: `tgt_`, `src_`, `lead_`, `pipe_`, `act_`, `art_`, `draft_`, `reply_`, `appr_`, `evt_`, `metric_`, `ev_`. Cross-file links use IDs, not names, URLs, or row numbers. Events that become approvals link by `source_event_id`; pipeline cards keep `target_id`, `lead_id`, `approval_ids`, `artifact_ids`, `drafts`, and `proof_ids`.
+Every JSON record has a stable `id`, generated once and never reused: lowercase prefix plus sortable suffix — `tgt_`, `src_`, `lead_`, `pipe_`, `act_`, `art_`, `draft_`, `reply_`, `appr_`, `evt_`, `metric_`, `ev_`. Cross-file links use IDs, not names, URLs, or row numbers. Events that become approvals link by `source_event_id`; pipeline cards keep `target_id`, `lead_id`, `approval_ids`, `artifact_ids`, `drafts`, and `proof_ids`.
 
 ## Operational Files
 
-- `pipeline.json`: live CRM cards, compacted inbound reply summaries, drafts, and next actions.
+- `pipeline.json`: live CRM cards, compacted inbound reply summaries, drafts, next actions.
   Schema: `{version, updated_at, cards:[{id,target_id?,lead_id?,role,stage,warmth,last_touch_at?,next_action?,due_at?,owner,status,reason_code?,thread_ids:[],replies:[{id,channel,received_at,from,summary,stage_signal?,event_id?}],reply_digest?,drafts:[{id,channel,provider_draft_id?,thread_id?,artifact_id,content_hash,created_at,status}],artifact_ids:[],approval_ids:[],proof_ids:[]}], unmatched_replies:[{id,channel,received_at,from,summary,match_candidates:[],status}]}`.
 - `leads.json`: posting leads found by `scout`, including the bench.
   Schema: `{version, updated_at, leads:[{id,source_id,target_id?,title,org,url,location?,posted_at?,found_at,score,status,score_reasons:[],must_haves:[],evidence_coverage?,pipeline_id?}]}`.
-- `sources.json`: boards, newsletters, communities, saved searches, and job channels.
+- `sources.json`: boards, newsletters, communities, saved searches, job channels.
   Schema: `{version, updated_at, sources:[{id,type,name,url?,query?,niche_tags:[],cadence,status,last_swept_at?,auth_required,notes?}]}`.
 - `targets.json`: employer/segment target list and Top 10.
   Schema: `{version, updated_at, targets:[{id,name,kind,segment?,location?,url?,scores:{advocacy,motivation,posting},rank?,status,reason_codes:[],insider_ids:[],notes?}]}`.
@@ -45,8 +43,8 @@ Every JSON record has a stable `id`, generated once and never reused. Use lowerc
 - `NICHE.md`: positioning hypotheses, two-pager, community map, visibility plan.
 - `JOURNAL.md`: Good Time Journal and weekly reviews.
 
-Legacy `TARGETS.md` and `PIPELINE.md` may be read during migration, but v2 authority is `targets.json` and `pipeline.json`.
+Legacy `TARGETS.md` and `PIPELINE.md` may be read during migration; v2 authority is `targets.json` and `pipeline.json`.
 
 ## Evidence Inbox
 
-Profile-relevant events are queued in `evidence-inbox.json`: lead approvals/dismissals, CV rejection reasons, recurring reply reason codes, stage-change patterns, and prototype debriefs. `profile` and `review` drain this inbox into dated `PROFILE.md` updates using the confidence-mark discipline, then mark inbox entries drained or dismissed.
+Profile-relevant events queue in `evidence-inbox.json`: lead approvals/dismissals, CV rejection reasons, recurring reply reason codes, stage-change patterns, prototype debriefs. `profile` and `review` drain the inbox into dated `PROFILE.md` updates with confidence marks, then mark entries drained or dismissed.

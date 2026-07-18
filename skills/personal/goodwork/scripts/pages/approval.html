@@ -3,36 +3,54 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Goodwork Approval</title>
+  <title>OK to send?</title>
   <style>
-    *{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f6f5f0;color:#20211f}
-    main{max-width:780px;margin:0 auto;padding:18px}.panel{background:#fff;border:1px solid #dedbd2;border-radius:8px;padding:16px}
-    h1{font-size:1.45rem;margin:0 0 12px}.meta{display:grid;gap:8px;margin:12px 0;color:#4d504b}.meta div{overflow-wrap:anywhere}
-    .actions{display:grid;gap:10px;margin-top:16px}button{min-height:44px;border:0;border-radius:7px;padding:10px 12px;font-weight:650}
-    .approve{background:#196b4d;color:#fff}.edit{background:#244b74;color:#fff}.reject{background:#8a2727;color:#fff}
-    textarea{width:100%;min-height:96px;border:1px solid #c9c5bb;border-radius:7px;padding:10px;font:inherit}
-    fieldset{border:1px solid #dedbd2;border-radius:8px;margin:14px 0 0;padding:10px}label{display:block;padding:8px 0}
-    @media(min-width:680px){.actions{grid-template-columns:1fr 1fr 1fr}}
+    *{box-sizing:border-box}
+    :root{--paper:#f7f4ee;--card:#fff;--ink:#26251f;--muted:#7a766b;--line:#e8e3d8;
+          --green:#1e6f50;--red:#a63a2e}
+    body{margin:0;background:var(--paper);color:var(--ink);
+         font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         -webkit-font-smoothing:antialiased}
+    main{max-width:560px;margin:0 auto;padding:22px 18px 40px}
+    .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;
+           padding:20px;box-shadow:0 1px 3px rgba(40,35,20,.06)}
+    h1{font-size:1.3rem;margin:0 0 2px;letter-spacing:-.01em}
+    .what{font-size:1.02rem;font-weight:650;margin:14px 0 2px}
+    .to{color:var(--muted);font-size:.95rem}
+    .note{color:var(--muted);font-size:.9rem;margin:14px 0 0}
+    fieldset{border:1px solid var(--line);border-radius:10px;margin:18px 0 0;padding:6px 12px 10px}
+    legend{font-size:.85rem;font-weight:650;color:var(--muted);padding:0 4px}
+    label{display:flex;gap:9px;align-items:center;padding:7px 0;font-size:.95rem}
+    input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
+    .reason-label{display:block;font-size:.9rem;font-weight:650;margin:18px 0 6px}
+    textarea{width:100%;min-height:88px;border:1px solid #d5d0c4;border-radius:10px;
+             padding:11px;font:inherit;background:#fdfcfa}
+    .actions{display:grid;gap:10px;margin-top:18px}
+    button{min-height:48px;border:0;border-radius:10px;padding:12px;font:inherit;
+           font-weight:700;cursor:pointer}
+    .approve{background:var(--green);color:#fff}
+    .edit{background:#f0ede6;color:var(--ink);border:1px solid var(--line)}
+    .reject{background:#fff;color:var(--red);border:1.5px solid #e5beb8}
+    #status{margin:14px 0 0;font-size:.95rem;min-height:1.4em}
+    #status.good{color:var(--green);font-weight:650}
+    #status.bad{color:var(--red)}
   </style>
 </head>
 <body>
 <main>
   <section class="panel">
-    <h1 id="title">Approval</h1>
-    <div class="meta">
-      <div><strong>Artifact:</strong> <span id="item"></span></div>
-      <div><strong>Channel:</strong> <span id="channel"></span></div>
-      <div><strong>Destination:</strong> <span id="destination"></span></div>
-      <div><strong>Content hash:</strong> <code id="hash"></code></div>
-      <div><strong>Requested action:</strong> validate this exact content before execution</div>
-    </div>
-    <fieldset id="batch"></fieldset>
-    <label for="reason"><strong>Reject or edit reason</strong></label>
-    <textarea id="reason" placeholder="Required for reject; optional for edit-then-approve"></textarea>
+    <h1>OK to send?</h1>
+    <div class="what" id="what"></div>
+    <div class="to" id="to"></div>
+    <p class="note">Nothing goes out until you say so. If you'd like wording changed,
+       choose “Send with my changes” and say what to change.</p>
+    <fieldset id="batch" hidden><legend>Also include</legend></fieldset>
+    <label class="reason-label" for="reason">Note for your agent <span style="font-weight:400;color:var(--muted)">(needed if you say don’t send)</span></label>
+    <textarea id="reason" placeholder="e.g. Warmer opening — or: skip this one, wrong team"></textarea>
     <div class="actions">
-      <button class="approve" data-action="approve">Approve</button>
-      <button class="edit" data-action="edit_then_approve">Edit then approve</button>
-      <button class="reject" data-action="reject">Reject</button>
+      <button class="approve" data-action="approve">Send it</button>
+      <button class="edit" data-action="edit_then_approve">Send with my changes</button>
+      <button class="reject" data-action="reject">Don’t send</button>
     </div>
     <p id="status" role="status"></p>
   </section>
@@ -41,23 +59,32 @@
 const data = __GOODWORK_BOOTSTRAP__;
 const item = data.item || {};
 const typeFor = {approve:"approval_requested", reject:"rejection_requested", edit_then_approve:"edit_then_approve_requested"};
-document.getElementById("title").textContent = item.title || "Approval";
-document.getElementById("item").textContent = item.id || "";
-document.getElementById("channel").textContent = item.channel || "manual";
-document.getElementById("destination").textContent = item.destination || "manual";
-document.getElementById("hash").textContent = item.content_hash || "missing";
+const HOW = {gmail:"Email", email:"Email", linkedin:"LinkedIn message", ats:"Online application", browser:"Online application", manual:"Sent by hand"};
+document.getElementById("what").textContent = item.title || "This message";
+const how = HOW[item.channel] || "Message";
+const dest = item.destination && item.destination !== "manual" ? item.destination : "";
+document.getElementById("to").textContent = dest ? `${how} · ${dest}` : how;
+
 const batch = document.getElementById("batch");
-batch.innerHTML = "<legend>Batch</legend>";
-(data.items || []).forEach((it, idx) => {
-  const id = `batch_${idx}`;
-  const checked = it.id === item.id ? "checked" : "";
-  batch.insertAdjacentHTML("beforeend", `<label><input type="checkbox" id="${id}" ${checked} data-item="${it.id || ""}" data-hash="${it.content_hash || ""}"> ${it.title || it.id}</label>`);
-});
-async function submit(action) {
+const others = (data.items || []);
+if (others.length > 1){
+  batch.hidden = false;
+  others.forEach((it, idx) => {
+    const checked = it.id === item.id ? "checked" : "";
+    batch.insertAdjacentHTML("beforeend",
+      `<label><input type="checkbox" id="batch_${idx}" ${checked} data-item="${esc(it.id || "")}" data-hash="${esc(it.content_hash || "")}"> ${esc(it.title || "Untitled")}</label>`);
+  });
+} else if (others.length === 1){
+  batch.insertAdjacentHTML("beforeend",
+    `<label style="display:none"><input type="checkbox" checked data-item="${esc(others[0].id || "")}" data-hash="${esc(others[0].content_hash || "")}"></label>`);
+}
+
+async function submit(action){
+  const status = document.getElementById("status");
   const checked = [...batch.querySelectorAll("input:checked")];
   const covers = checked.map(el => ({item_id: el.dataset.item, content_hash: el.dataset.hash})).filter(x => x.item_id);
   const reason = document.getElementById("reason").value.trim();
-  if (action === "reject" && !reason) { document.getElementById("status").textContent = "Reason required."; return; }
+  if (action === "reject" && !reason){ status.className = "bad"; status.textContent = "Add a quick note so your agent knows why."; return; }
   const event = {
     token: data.token,
     type: covers.length > 1 && action === "approve" ? "batch_approval_requested" : typeFor[action],
@@ -70,9 +97,18 @@ async function submit(action) {
     tags: ["approval"]
   };
   const res = await fetch("/event", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(event)});
-  document.getElementById("status").textContent = res.ok ? `Recorded ${JSON.stringify(await res.json())}` : `Failed: ${await res.text()}`;
+  if (res.ok){
+    status.className = "good";
+    status.textContent = action === "reject" ? "Got it — it won’t be sent." :
+      action === "edit_then_approve" ? "Got it — your agent will make the changes first." :
+      "Done — your agent will take it from here.";
+  } else {
+    status.className = "bad";
+    status.textContent = "That didn’t go through — try again.";
+  }
 }
 document.querySelectorAll("button[data-action]").forEach(btn => btn.addEventListener("click", () => submit(btn.dataset.action)));
+function esc(s){return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
 </script>
 </body>
 </html>

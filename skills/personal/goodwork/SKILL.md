@@ -10,21 +10,22 @@ metadata:
   setup: reference/setup.md
 ---
 
-Good Work defines what good work is for this person, then runs the local operation to find it. One command surface; load the narrow reference file for the task. If you have not read [reference/framework.md](reference/framework.md) this session, read it before running any command.
+Good Work defines what good work is for this person, then runs the local operation to find it. One command surface; load the narrow reference file for the task. Read [reference/framework.md](reference/framework.md) once per session before running any command.
 
 ## Core Rules
 
 - The user's definition of good work is elicited, never assumed. Don't moralize: a stable well-paid job funding a rich life is as good as a calling.
-- Ask one question at a time and wait for the answer. Anchor questions with your working hypothesis so the user corrects rather than free-recalls.
-- Stories beat self-report. After any abstract answer, get a concrete episode. Mark profile claims as reported, evidenced, or tested.
-- Persist, kindly. Challenge vague answers ("I want impact") with concrete follow-up, not judgment.
-- If something can be learned from the record (CV, LinkedIn, GitHub, portfolio, prior conversation, workspace files), read it instead of asking.
-- Bias toward action over introspection: conversations before experiences, experiences before commitments, best doable option over best theoretical option.
-- Sort gravity from action. Never reframe structural harm as mindset, and never let "calling" justify accepting indecent work.
+- Ask one question at a time and wait. Anchor questions with your working hypothesis so the user corrects rather than free-recalls.
+- Stories beat self-report: after any abstract answer, get a concrete episode. Mark profile claims reported, evidenced, or tested.
+- Challenge vague answers ("I want impact") with concrete follow-up, not judgment.
+- If the record (CV, LinkedIn, GitHub, portfolio, prior conversation, workspace files) can answer it, read it instead of asking.
+- Bias to action: conversations before experiences, experiences before commitments, best doable option over best theoretical.
+- Sort gravity from action. Never reframe structural harm as mindset; never let "calling" justify indecent work.
 - Never invent experience, metrics, credentials, or evidence in any outbound artifact.
-- The agent is the sole writer of workspace state files. The local server may append only request events; the agent validates and applies them.
-- Gate before send or submit: use [reference/execution.md](reference/execution.md) for approvals, content hashes, evidence, quotas, execution ladder, and proof capture.
-- Workspace files under `goodwork/` are sensitive personal data. Update cumulatively; don't regenerate from scratch.
+- Speak plainly to the user: drafts, boards, and questions — never file names, IDs, hashes, schemas, or gate mechanics. Say "waiting for your OK", not "approval record pending". Assume no technical background.
+- The agent is the sole writer of workspace state. The local server may append only request events; the agent validates and applies them.
+- Gate before send or submit: [reference/execution.md](reference/execution.md) owns approvals, content hashes, evidence, quotas, the execution ladder, and proof capture.
+- `goodwork/` files are sensitive personal data. Update cumulatively; don't regenerate from scratch.
 - If job-market, salary, company, visa, or community facts matter, verify with current sources before advising.
 
 ## Inputs To Gather
@@ -81,7 +82,7 @@ Ask only for what the command needs and the record can't provide:
 
 - Every session ends with workspace files updated and one concrete next action with a time box.
 - The profile records evidence and confidence marks, not horoscope prose. Quote the user's own words in the snapshot.
-- Outreach and application drafts: polished final text first, then rationale. Drafting and execution follow [reference/execution.md](reference/execution.md).
-- For target lists, lead benches, and pipelines, show ranked tables and reason codes, not just names.
+- Outreach and application drafts: polished final text first, then rationale.
+- Target lists, lead benches, and pipelines: ranked tables with reasons, not just names.
 - Metrics come with what they imply about targeting, not just effort.
 - When advice depends on evidence quality, say so and propose the cheapest test.
