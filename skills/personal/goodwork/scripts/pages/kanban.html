@@ -22,7 +22,9 @@
             color:var(--muted);margin:0 0 8px;padding:0 2px;display:flex;justify-content:space-between}
     .col h2 .n{font-weight:600}
     .card{background:var(--card);border:1px solid var(--line);border-radius:12px;
-          padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(40,35,20,.05)}
+          padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(40,35,20,.05);
+          cursor:pointer;transition:border-color .12s}
+    .card:hover{border-color:#c9c2b2}
     .card strong{display:block;font-size:.98rem;line-height:1.3}
     .org{color:var(--muted);font-size:.88rem;margin-top:1px}
     .next{font-size:.9rem;margin-top:8px}
@@ -38,6 +40,42 @@
     .warm{color:var(--amber);font-size:.78rem;font-weight:650}
     .empty{max-width:420px;margin:14vh auto;text-align:center;color:var(--muted);padding:0 24px}
     .empty b{color:var(--ink)}
+
+    /* card detail sheet */
+    #overlay{position:fixed;inset:0;background:rgba(38,37,31,.4);display:none;z-index:9}
+    #overlay.on{display:block}
+    #sheet{position:fixed;z-index:10;background:var(--card);display:none;flex-direction:column;
+           box-shadow:0 -6px 30px rgba(40,35,20,.18);border:1px solid var(--line)}
+    #sheet.on{display:flex}
+    @media(max-width:679px){#sheet{left:0;right:0;bottom:0;max-height:82dvh;border-radius:16px 16px 0 0}}
+    @media(min-width:680px){#sheet{top:50%;left:50%;transform:translate(-50%,-50%);
+           width:min(560px,92vw);max-height:84dvh;border-radius:16px}}
+    .sheet-head{padding:18px 20px 12px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+    .sheet-head .t{flex:1}
+    .sheet-head strong{font-size:1.08rem;display:block}
+    .sheet-head .org{margin-top:2px}
+    .sheet-head .stage{margin-top:8px;display:inline-block;font-size:.78rem;font-weight:700;
+           color:var(--green);background:var(--green-bg);border-radius:999px;padding:3px 10px}
+    #close{border:0;background:#f0ede6;border-radius:50%;width:34px;height:34px;font-size:17px;
+           cursor:pointer;color:var(--muted);flex:0 0 auto}
+    .sheet-body{overflow-y:auto;padding:14px 20px 22px}
+    .sheet-next{background:var(--amber-bg);border-radius:10px;padding:10px 13px;font-size:.92rem;margin-bottom:16px}
+    .sheet-next b{color:var(--amber);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:2px}
+    .tl-h{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:0 0 10px}
+    .tl{list-style:none;margin:0;padding:0;position:relative}
+    .tl::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line)}
+    .tl li{position:relative;padding:0 0 16px 24px}
+    .tl li:last-child{padding-bottom:2px}
+    .tl .d{position:absolute;left:0;top:5px;width:12px;height:12px;border-radius:50%;
+           background:#cfc9ba;border:2.5px solid var(--card)}
+    .tl li.k-reply .d{background:var(--green)}
+    .tl li.k-sent .d,.tl li.k-applied .d{background:#4a72a8}
+    .tl li.k-call .d{background:var(--amber)}
+    .tl li.k-draft .d{background:#b39a3f}
+    .tl li.k-stage .d{background:#8f86c9}
+    .tl .when{font-size:.78rem;color:var(--muted)}
+    .tl .what{font-size:.93rem;margin-top:1px}
+    .tl-none{color:var(--muted);font-size:.92rem}
   </style>
 </head>
 <body>
@@ -46,6 +84,19 @@
   <p class="sum" id="summary"></p>
 </header>
 <section id="board" class="board"></section>
+<div id="overlay"></div>
+<aside id="sheet" role="dialog" aria-modal="true">
+  <div class="sheet-head">
+    <div class="t"><strong id="sh-role"></strong><div class="org" id="sh-org"></div>
+      <span class="stage" id="sh-stage"></span></div>
+    <button id="close" aria-label="Close">✕</button>
+  </div>
+  <div class="sheet-body">
+    <div class="sheet-next" id="sh-next" hidden><b>Up next</b><span id="sh-next-text"></span></div>
+    <p class="tl-h">The story so far</p>
+    <ul class="tl" id="sh-tl"></ul>
+  </div>
+</aside>
 <script>
 const data = __GOODWORK_BOOTSTRAP__;
 const STAGES = [
@@ -61,6 +112,7 @@ const STAGES = [
   ["closed_lost","Didn't work out"],
   ["retired","Resting"]
 ];
+const LABEL = Object.fromEntries(STAGES);
 const cards = (data.pipeline && data.pipeline.cards) || [];
 const orgOf = {};
 ((data.targets && data.targets.targets) || []).forEach(t => { if (t && t.id) orgOf[t.id] = t.name; });
@@ -102,6 +154,7 @@ STAGES.forEach(([stage, label]) => {
       ${org ? `<div class="org">${esc(org)}</div>` : ""}
       ${card.next_action ? `<div class="next">${esc(card.next_action)}</div>` : ""}
       <div class="row">${pills.join("")}</div>`;
+    el.addEventListener("click", () => openSheet(card, org));
     col.appendChild(el);
   });
   board.appendChild(col);
@@ -112,6 +165,45 @@ if (!shown){
   board.outerHTML = `<div class="empty"><p><b>Nothing in motion yet.</b></p>
   <p>As your search gets going, every conversation, application, and reply shows up here.</p></div>`;
 }
+
+/* ---- card detail ---- */
+const overlay = document.getElementById("overlay");
+const sheet = document.getElementById("sheet");
+function timeline(card){
+  const t = [];
+  (card.history || []).forEach(h => t.push({at: h.at, kind: h.kind || "note", text: h.summary || ""}));
+  (card.replies || []).forEach(r => t.push({at: r.received_at, kind: "reply",
+    text: (r.from ? r.from + ": " : "") + (r.summary || "replied")}));
+  (card.drafts || []).forEach(d => { if (d.status === "pending")
+    t.push({at: d.created_at, kind: "draft", text: "Draft written — waiting for your OK"}); });
+  if (card.reply_digest) t.push({at: null, kind: "note", text: card.reply_digest});
+  return t.sort((a,b) => String(b.at||"").localeCompare(String(a.at||"")));
+}
+function fmtWhen(at){
+  if (!at) return "earlier";
+  const d = new Date(at);
+  return isNaN(d) ? esc(at) : d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+}
+function openSheet(card, org){
+  document.getElementById("sh-role").textContent = card.role || "Untitled";
+  document.getElementById("sh-org").textContent = org || "";
+  document.getElementById("sh-stage").textContent = LABEL[card.stage] || card.stage || "";
+  const nextBox = document.getElementById("sh-next");
+  nextBox.hidden = !card.next_action;
+  document.getElementById("sh-next-text").textContent = card.next_action || "";
+  const tl = document.getElementById("sh-tl");
+  const events = timeline(card);
+  tl.innerHTML = events.length
+    ? events.map(e => `<li class="k-${esc(e.kind)}"><span class="d"></span>
+        <div class="when">${fmtWhen(e.at)}</div><div class="what">${esc(e.text)}</div></li>`).join("")
+    : `<li class="tl-none">No touches yet — the story starts once the first message goes out.</li>`;
+  overlay.classList.add("on"); sheet.classList.add("on");
+}
+function closeSheet(){ overlay.classList.remove("on"); sheet.classList.remove("on"); }
+overlay.addEventListener("click", closeSheet);
+document.getElementById("close").addEventListener("click", closeSheet);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
+
 function esc(s){return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
 </script>
 </body>

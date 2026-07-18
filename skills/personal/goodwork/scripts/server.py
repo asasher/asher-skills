@@ -160,6 +160,8 @@ class GoodworkHandler(BaseHTTPRequestHandler):
         leads = load_json(workspace / "leads.json", {"leads": []})
         targets = load_json(workspace / "targets.json", {"targets": []})
         items = collect_items(pipeline, leads, targets)
+        for it in items:
+            it["content"] = read_artifact(workspace / "artifacts", it.get("id"))
         item_id = (query.get("item_id") or query.get("artifact_id") or [""])[0]
         item = next((it for it in items if it["id"] == item_id), None) if item_id else (items[0] if items else None)
         return {
@@ -184,6 +186,19 @@ class GoodworkHandler(BaseHTTPRequestHandler):
                 self._send(HTTPStatus.OK, data, ctype)
                 return
         self._send(HTTPStatus.NOT_FOUND, b"not found", "text/plain; charset=utf-8")
+
+
+def read_artifact(art_dir: Path, artifact_id) -> str | None:
+    aid = str(artifact_id or "")
+    if not aid.startswith("art_") or "/" in aid or "\\" in aid:
+        return None
+    path = art_dir / f"{aid}.md"
+    try:
+        if path.parent != art_dir or not path.is_file():
+            return None
+        return path.read_text(encoding="utf-8")[:20000]
+    except OSError:
+        return None
 
 
 def collect_items(pipeline: dict, leads: dict, targets: dict) -> list[dict]:

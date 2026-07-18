@@ -17,7 +17,9 @@ Every JSON record has a stable `id`, generated once and never reused: lowercase 
 ## Operational Files
 
 - `pipeline.json`: live CRM cards, compacted inbound reply summaries, drafts, next actions.
-  Schema: `{version, updated_at, cards:[{id,target_id?,lead_id?,role,stage,warmth,last_touch_at?,next_action?,due_at?,owner,status,reason_code?,thread_ids:[],replies:[{id,channel,received_at,from,summary,stage_signal?,event_id?}],reply_digest?,drafts:[{id,channel,provider_draft_id?,thread_id?,artifact_id,content_hash,created_at,status}],artifact_ids:[],approval_ids:[],proof_ids:[]}], unmatched_replies:[{id,channel,received_at,from,summary,match_candidates:[],status}]}`.
+  Schema: `{version, updated_at, cards:[{id,target_id?,lead_id?,role,stage,warmth,last_touch_at?,next_action?,due_at?,owner,status,reason_code?,thread_ids:[],history:[{at,kind,summary,ref_id?}],replies:[{id,channel,received_at,from,summary,stage_signal?,event_id?}],reply_digest?,drafts:[{id,channel,provider_draft_id?,thread_id?,artifact_id,content_hash,created_at,status}],artifact_ids:[],approval_ids:[],proof_ids:[]}], unmatched_replies:[{id,channel,received_at,from,summary,match_candidates:[],status}]}`.
+  `history` is the card's user-visible timeline — one entry per touch (`sent`, `reply`, `call`, `note`, `stage`, `applied`, `draft`), appended by the agent on every event; the board renders it, so write summaries in plain language.
+- `artifacts/<art_id>.md`: one file per outbound artifact — the exact final text of a message, application answer set, or document, agent-written before it is presented for approval. The approval page displays this file, and the approval `content_hash` is computed over its exact bytes. Compact or archive files only after their card closes.
 - `leads.json`: posting leads found by `scout`, including the bench.
   Schema: `{version, updated_at, leads:[{id,source_id,target_id?,title,org,url,location?,posted_at?,found_at,score,status,score_reasons:[],must_haves:[],evidence_coverage?,pipeline_id?}]}`.
 - `sources.json`: boards, newsletters, communities, saved searches, job channels.

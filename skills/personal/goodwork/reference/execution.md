@@ -13,6 +13,10 @@ Consult `capabilities.json`; use the best available rung for the specific item.
 
 When no rung is connected, degrade to draft-and-instruct. Never silently skip an execution attempt; record the chosen rung or the fallback.
 
+## Artifacts
+
+Write the final text of every outbound item to `goodwork/artifacts/<art_id>.md` before presenting it for approval. The approval page shows the user that file — never ask for approval on text they cannot see there or in the Gmail draft itself — and `content_hash` is computed over its exact bytes.
+
 ## Hard Gates
 
 - **Approval gate.** Before any actual send, submit, publish, calendar hold, connector-sent email, or browser final action, `approvals.jsonl` must contain a matching approval record. Creating a Gmail draft needs no approval record: the draft is the review surface and Gmail's Send button is the physical gate.

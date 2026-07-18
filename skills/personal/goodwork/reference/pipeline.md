@@ -8,7 +8,7 @@ One card per live thread: target, lead, outreach thread, application, interview 
 
 ## Operating Rules
 
-- Update immediately on any event: reply, ghost, interview, rejection, user drag request, approval, draft, submission, follow-up.
+- Update immediately on any event: reply, ghost, interview, rejection, user drag request, approval, draft, submission, follow-up — and append a plain-language `history` entry to the card each time. The history is what the user sees when they open a card on the board; it must read as the story of the relationship so far, not bookkeeping.
 - Rejections and retirements get reason codes: `no_response`, `position_filled`, `failed_screen`, `withdrew_values`, `withdrew_energy`, `comp_below_floor`, `duplicate`, `not_now`.
 - Reason codes are profile evidence. Repeated patterns go to `evidence-inbox.json`.
 - Respect stage physics: one exciting interview must not freeze all other threads.

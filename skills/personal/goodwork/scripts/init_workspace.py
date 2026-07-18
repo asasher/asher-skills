@@ -101,6 +101,7 @@ def main() -> int:
         return 2
     workspace.mkdir(parents=True, exist_ok=True)
     (workspace / "chrome-profile").mkdir(exist_ok=True)
+    (workspace / "artifacts").mkdir(exist_ok=True)
     created: list[str] = []
     for name, payload in json_defaults(args.workspace).items():
         if write_if_missing(workspace / name, json.dumps(payload, indent=2, ensure_ascii=False) + "\n"):
