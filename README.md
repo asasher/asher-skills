@@ -33,6 +33,7 @@ including one marked `user`.
 | system | `staffing` | model | thread |
 | delivery | `backlog` | user | orchestrator |
 | delivery | `diagnosing-bugs` | model | thread |
+| delivery | `merge-changes` | user | orchestrator |
 | delivery | `plan` | user | orchestrator |
 | delivery | `prototype` | model | orchestrator |
 | delivery | `spreadsheet-loop` | user | orchestrator |

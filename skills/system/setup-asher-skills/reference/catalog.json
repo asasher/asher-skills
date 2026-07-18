@@ -230,6 +230,19 @@
       "source": "skills/creative/maquette",
       "variants": {}
     },
+    "merge-changes": {
+      "category": "delivery",
+      "execution": "orchestrator",
+      "external": [],
+      "internal": false,
+      "invocation": "user",
+      "optional": [
+        "staffing"
+      ],
+      "requires": [],
+      "source": "skills/delivery/merge-changes",
+      "variants": {}
+    },
     "plan": {
       "category": "delivery",
       "execution": "orchestrator",
