@@ -58,7 +58,7 @@
 - **Three write classes** — every tracker write falls in exactly one:
   1. *Grooming writes* (labels, clarifications, dependencies, dedup) — on the main branch, in the primary checkout, committed before `run` dispatches. Groom never edits an in-flight issue's file — changes for one go through the run thread or wait — with one exception: the human-confirmed orphan reset (`backlog-policy.md` § In-flight hygiene), safe because the claim is dead.
   2. *PR-bound lifecycle writes* (state → `in-review` at PR-open, → `closed` once review converges — the one post-LGTM commit besides evidence, per `reference/issue-loop.md` step 7; plan and review links) — committed on the issue's own work branch, landing with the merge. A branch edits only its own issue file, so parallel worktrees cannot conflict.
-  3. *Abort writes* (`needs-info` plus its open question, blockers, clearing `in-flight`) — never written from a worktree: the issue thread reports to the run thread, the sole serialized writer to main.
+  3. *Abort writes* (`needs-info` plus its open question, `needs-spec` plus its open strategic decisions, blockers, clearing `in-flight`) — never written from a worktree: the issue thread reports to the run thread, the sole serialized writer to main.
 - **ID allocation** — new issues are created only by the serialized main-branch writers (groom, or the run thread on behalf of an issue thread), so sequential ids never collide.
 - **Commit-before-fork** — `run` commits the groomed tracker state, marks its queue `in-flight`, commits again, and creates every worktree from that commit; each work branch is born carrying its own issue marked `in-flight`.
 

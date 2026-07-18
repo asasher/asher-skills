@@ -111,7 +111,7 @@ to reconcile them against the repo.
 
 | Skill | What it does here | Scope |
 |-------|-------------------|-------|
-| backlog | Runs issues through groom → plan → build → review to a review-ready PR (merging is the explicit `merge-changes` workflow) | project |
+| backlog | Runs admitted issues through groom → build → review to a review-ready PR (merging is the explicit `merge-changes` workflow) | project |
 | diagnosing-bugs | Runs the reusable six-phase defect diagnosis discipline | project |
 | merge-changes | Merges explicitly authorized, review-ready changes after rechecking order and CI | project |
 | plan | Turns an intent into a reviewed plan held at an approval gate | project |

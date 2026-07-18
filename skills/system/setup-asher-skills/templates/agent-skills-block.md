@@ -15,7 +15,7 @@ reconcile them against the repo.
 | <skill> | <one plain-language line — what it does for someone working this repo> | project / global |
 
 <!-- Example rows (delete and replace with the actual installed set):
-| backlog | Runs issues through groom → plan → build → review to a merged PR | project |
+| backlog | Runs admitted issues through groom → build → review to a merged PR | project |
 | plan | Turns a feature into a reviewed plan held at an approval gate | project |
 | research | Establishes primary-source findings and separates supported inferences | project |
 | review-loop | Shows a plan or design in the browser to approve or comment on | project |

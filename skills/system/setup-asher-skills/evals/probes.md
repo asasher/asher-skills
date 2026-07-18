@@ -65,7 +65,7 @@ origin. What do you use as the catalog to diff installed skills against, and why
 the file and sentence."
 
 **P12 — self-host write guard.** "You're invoked with `setup` on the `asasher/asher-skills` repo itself (git
-remote is `asasher/asher-skills`; the closure you're installing — `backlog`, `diagnosing-bugs`, `plan`,
+remote is `asasher/asher-skills`; the closure you're installing — `backlog`, `diagnosing-bugs`,
 `prototype`, `research`, `review-loop`, `staffing` — has its sources under the repo's categorized `skills/`). You've reached Phase 4 (Write); the
 user approved the plan. Which install command do you emit for those repo-owned skills, how does each one end
 up loadable by the harness (name the paths that exist afterwards), and what do you still write to the repo?
