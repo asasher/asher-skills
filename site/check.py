@@ -73,6 +73,12 @@ def check_view(name: str, view: dict, all_views: dict[str, dict]) -> tuple[list[
                     continue
                 warnings.append(f"{nid}: unlisted file {node['source']}/{rel}")
 
+        for b in node.get("bindings", []):
+            for k in ("binding", "default"):
+                path = b.get(k)
+                if path and not (ROOT / path).exists():
+                    errors.append(f"{nid}: bindings[{b.get('port')}].{k} missing: {path}")
+
         open_t = node.get("open") or {}
         if "file" in open_t and not (ROOT / open_t["file"]).exists():
             errors.append(f"{nid}: open.file missing: {open_t['file']}")

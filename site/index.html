@@ -77,6 +77,13 @@
   .chip.dep { cursor: pointer; border-color: var(--stage-line); background: var(--stage); color: var(--ink); }
   .chip.dep.opt { border-style: dashed; }
   .chip.dep.ext { border-color: var(--artifact-line); background: var(--artifact); }
+  .ports { margin: .35rem 0 .2rem; }
+  .ports summary { font-size: .78rem; color: var(--accent-ink); cursor: pointer; font-weight: 600; }
+  .ports-table { border-collapse: collapse; width: 100%; font-size: .74rem; margin-top: .45rem; }
+  .ports-table th, .ports-table td { border: 1px solid var(--line); padding: .26rem .5rem; text-align: left; vertical-align: top; }
+  .ports-table th { background: var(--card); color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; font-size: .64rem; }
+  .ports-table code { background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; padding: .02em .3em; font-size: .92em; white-space: nowrap; }
+  .ports-table a { color: var(--accent-ink); font-family: ui-monospace, monospace; font-size: .95em; word-break: break-all; }
   .tabs { display: flex; flex-wrap: wrap; gap: .28rem .32rem; padding: .5rem 1.4rem .6rem; border-bottom: 1px solid var(--line); }
   .tabs .grp { font-size: .68rem; color: var(--muted); align-self: center; margin-left: .45rem; text-transform: uppercase; letter-spacing: .04em; }
   .tabs button { font: inherit; font-size: .78rem; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 6px; padding: .14rem .55rem; cursor: pointer; }

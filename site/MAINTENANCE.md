@@ -13,8 +13,10 @@ cannot fetch.
 - **Layer 2 (can drift, gated):** `views/*.json` — three views today: `sdlc` (family dependency graph;
   edges from frontmatter), `flow` (the user/orchestrator/subagent/tracker swim-lane; every box opens the
   contract behind it), `backlog` (the skill exploded: seams, references, playbooks, composed siblings).
-  Rosters, lanes/phases, blurbs, file lists, and open targets live here. `check.py` turns that drift into a
-  failing check — including open targets pointing at missing files or unknown nodes/views.
+  Rosters, lanes/phases, blurbs, file lists, open targets, and each skill node's `bindings` table (its
+  ports: what the skill expects a project to bind, the playbook this repo binds it to, and the shipped
+  template default) live here. `check.py` turns that drift into a failing check — including open targets
+  or binding/default paths pointing at missing files or unknown nodes/views.
 
 ## Agent instructions
 

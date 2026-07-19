@@ -343,7 +343,7 @@
     setActiveCell(nodeId);
   }
 
-  function sheetChrome(title, desc, fm) {
+  function sheetChrome(title, desc, fm, bindings) {
     const head = $('#sheet-head'); head.innerHTML = '';
     head.append(el('div', { class: 'node-head' }, el('h2', {}, title), el('p', { class: 'desc' }, desc || '')));
     if (fm) {
@@ -354,6 +354,21 @@
       for (const o of fm.optional || []) chips.append(el('span', { class: 'chip dep opt', onclick: () => jumpTo('sdlc', o) }, `optional ${o}`));
       for (const e of (Array.isArray(fm.external) ? fm.external : [])) if (e.name) chips.append(el('span', { class: 'chip dep ext', onclick: () => window.open(e.source, '_blank') }, `external ${e.name}`));
       head.querySelector('.node-head').append(chips);
+    }
+    if (bindings && bindings.length) {
+      const fileLink = (path) => el('a', {
+        href: '#', onclick: (ev) => { ev.preventDefault(); renderFile(path, '  (binding)'); },
+      }, path.includes('templates/') ? path.slice(path.indexOf('templates/')) : path);
+      const tbl = el('table', { class: 'ports-table' },
+        el('thead', {}, el('tr', {},
+          el('th', {}, 'port'), el('th', {}, 'expects'), el('th', {}, 'bound in this repo'), el('th', {}, 'shipped default'))),
+        el('tbody', {}, ...bindings.map(b => el('tr', {},
+          el('td', {}, el('code', {}, b.port)),
+          el('td', {}, b.expects || ''),
+          el('td', {}, b.binding ? fileLink(b.binding) : '—'),
+          el('td', {}, b.default ? fileLink(b.default) : '—')))));
+      head.querySelector('.node-head').append(
+        el('details', { class: 'ports' }, el('summary', {}, `Ports & bindings (${bindings.length})`), tbl));
     }
   }
 
@@ -436,7 +451,7 @@
     if (!node) return;
     markActive(activeNodeId || node.id);
     const fm = state.fm[node.id] || {};
-    sheetChrome(node.title, fm.description || node.blurb, fm);
+    sheetChrome(node.title, fm.description || node.blurb, fm, node.bindings);
     const files = skillTabs(node, filePath || `${node.source}/${node.files[0].path}`);
     const file = files.find(f => f.full === filePath) || files[0];
     document.body.classList.add('sheet-open');

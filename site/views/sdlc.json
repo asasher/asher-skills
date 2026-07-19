@@ -133,7 +133,15 @@
           "path": "README.md"
         }
       ],
-      "playbooks": []
+      "playbooks": [],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "tracker verbs for the thin tracking ticket (when a live tracker is bound)",
+          "binding": "docs/agents/platform.md",
+          "default": "skills/delivery/backlog/templates/common/platform.md"
+        }
+      ]
     },
     {
       "id": "to-tickets",
@@ -176,6 +184,20 @@
       "playbooks": [
         "docs/agents/backlog-policy.md",
         "docs/agents/platform.md"
+      ],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "tracker verbs: create tickets, native blocking edges, labels",
+          "binding": "docs/agents/platform.md",
+          "default": "skills/delivery/backlog/templates/common/platform.md"
+        },
+        {
+          "port": "backlog-policy",
+          "expects": "label roles, dispatch metadata, admission states",
+          "binding": "docs/agents/backlog-policy.md",
+          "default": "skills/delivery/backlog/templates/common/backlog-policy.md"
+        }
       ]
     },
     {
@@ -333,6 +355,85 @@
         "docs/agents/change-fixer.md",
         "docs/agents/refactoring.md",
         "docs/agents/probe-evals.md"
+      ],
+      "bindings": [
+        {
+          "port": "backlog-policy",
+          "expects": "label roles, dispatch metadata, routes, needs-spec/needs-info",
+          "binding": "docs/agents/backlog-policy.md",
+          "default": "skills/delivery/backlog/templates/common/backlog-policy.md"
+        },
+        {
+          "port": "platform",
+          "expects": "tracker, PR, git, harness verbs",
+          "binding": "docs/agents/platform.md",
+          "default": "skills/delivery/backlog/templates/common/platform.md"
+        },
+        {
+          "port": "environment",
+          "expects": "run commands, isolation, parallelism, model roster",
+          "binding": "docs/agents/environment.md",
+          "default": "skills/delivery/backlog/templates/common/environment.md"
+        },
+        {
+          "port": "change-description",
+          "expects": "the PR body outline",
+          "binding": "docs/agents/change-description.md",
+          "default": "skills/delivery/backlog/templates/common/change-description.md"
+        },
+        {
+          "port": "implementing",
+          "expects": "build conventions (work-typed pack)",
+          "binding": "docs/agents/implementing.md",
+          "default": "skills/delivery/backlog/templates/software/implementing.md"
+        },
+        {
+          "port": "verifying",
+          "expects": "checks and criteria by entryway (work-typed pack)",
+          "binding": "docs/agents/verifying.md",
+          "default": "skills/delivery/backlog/templates/software/verifying.md"
+        },
+        {
+          "port": "evidence",
+          "expects": "what proof this repo expects (work-typed pack)",
+          "binding": "docs/agents/evidence.md",
+          "default": "skills/delivery/backlog/templates/software/evidence.md"
+        },
+        {
+          "port": "change-reviewer",
+          "expects": "the adversarial reviewer brief",
+          "binding": "docs/agents/change-reviewer.md",
+          "default": "skills/delivery/backlog/templates/software/change-reviewer.md"
+        },
+        {
+          "port": "change-fixer",
+          "expects": "the fixer brief",
+          "binding": "docs/agents/change-fixer.md",
+          "default": "skills/delivery/backlog/templates/software/change-fixer.md"
+        },
+        {
+          "port": "refactoring",
+          "expects": "the behavior-preserving route",
+          "binding": "docs/agents/refactoring.md",
+          "default": "skills/delivery/backlog/templates/software/refactoring.md"
+        },
+        {
+          "port": "diagnosing-bugs",
+          "expects": "bug-route method (port owned by the diagnosing-bugs sibling)",
+          "binding": "docs/agents/diagnosing-bugs.md",
+          "default": "skills/delivery/diagnosing-bugs/templates/diagnosing-bugs.md"
+        },
+        {
+          "port": "researching",
+          "expects": "research work-type contract (port owned by the research sibling)",
+          "binding": "docs/agents/researching.md",
+          "default": "skills/thinking/research/templates/researching.md"
+        },
+        {
+          "port": "probe-evals",
+          "expects": "repo-authored eval discipline; no shipped default",
+          "binding": "docs/agents/probe-evals.md"
+        }
       ]
     },
     {
@@ -353,7 +454,15 @@
           "path": "README.md"
         }
       ],
-      "playbooks": []
+      "playbooks": [],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "merge, checks-read, PR-read, branch verbs (playbook written by backlog setup)",
+          "binding": "docs/agents/platform.md",
+          "default": "skills/delivery/backlog/templates/common/platform.md"
+        }
+      ]
     },
     {
       "id": "prototype",
@@ -380,6 +489,13 @@
       ],
       "playbooks": [
         "docs/agents/prototyping.md"
+      ],
+      "bindings": [
+        {
+          "port": "prototyping",
+          "expects": "optional: repo-specific artifact placement only",
+          "binding": "docs/agents/prototyping.md"
+        }
       ]
     },
     {
@@ -417,6 +533,14 @@
       ],
       "playbooks": [
         "docs/agents/researching.md"
+      ],
+      "bindings": [
+        {
+          "port": "researching",
+          "expects": "where dossiers live, citation norms, source policy",
+          "binding": "docs/agents/researching.md",
+          "default": "skills/thinking/research/templates/researching.md"
+        }
       ]
     },
     {
@@ -459,6 +583,14 @@
       ],
       "playbooks": [
         "docs/agents/diagnosing-bugs.md"
+      ],
+      "bindings": [
+        {
+          "port": "diagnosing-bugs",
+          "expects": "repro commands, log locations, observability for the six phases",
+          "binding": "docs/agents/diagnosing-bugs.md",
+          "default": "skills/delivery/diagnosing-bugs/templates/diagnosing-bugs.md"
+        }
       ]
     },
     {
@@ -504,7 +636,15 @@
           "path": "README.md"
         }
       ],
-      "playbooks": []
+      "playbooks": [],
+      "bindings": [
+        {
+          "port": "environment",
+          "expects": "serving: port range, host, tunnel policy (playbook written by backlog setup)",
+          "binding": "docs/agents/environment.md",
+          "default": "skills/delivery/backlog/templates/common/environment.md"
+        }
+      ]
     },
     {
       "id": "staffing",
@@ -561,6 +701,24 @@
       ],
       "playbooks": [
         "docs/agents/environment.md"
+      ],
+      "bindings": [
+        {
+          "port": "global module",
+          "expects": "~/.claude/asher-skills/staffing.md + the ~/.codex twin (machine-level, consented; outside this repo)",
+          "default": "skills/system/staffing/templates/global/staffing.common.md"
+        },
+        {
+          "port": "project deltas",
+          "expects": "sparse overrides in the project agent instruction files (\u00a7 Staffing)",
+          "binding": "CLAUDE.md"
+        },
+        {
+          "port": "roster",
+          "expects": "docs/agents/environment.md \u00a7 Model roster",
+          "binding": "docs/agents/environment.md",
+          "default": "skills/delivery/backlog/templates/common/environment.md"
+        }
       ]
     },
     {
@@ -621,7 +779,26 @@
           "path": "README.md"
         }
       ],
-      "playbooks": []
+      "playbooks": [],
+      "bindings": [
+        {
+          "port": "repo pointer",
+          "expects": "the pointer block installed into consumer project instructions",
+          "binding": "AGENTS.md",
+          "default": "skills/system/setup-asher-skills/templates/repo-pointer.md"
+        },
+        {
+          "port": "agent-skills table",
+          "expects": "the \u00a7 Agent skills roster in project instructions",
+          "binding": "AGENTS.md",
+          "default": "skills/system/setup-asher-skills/templates/agent-skills-block.md"
+        },
+        {
+          "port": "presentation module",
+          "expects": "machine-level global module (outside this repo)",
+          "default": "skills/system/setup-asher-skills/templates/global/presentation.common.md"
+        }
+      ]
     },
     {
       "id": "bare-minimum-ux",
@@ -654,6 +831,20 @@
       "playbooks": [
         "docs/agents/implementing.md",
         "docs/agents/verifying.md"
+      ],
+      "bindings": [
+        {
+          "port": "implementing",
+          "expects": "UI-lane conventions fold in the five rules",
+          "binding": "docs/agents/implementing.md",
+          "default": "skills/delivery/backlog/templates/software/implementing.md"
+        },
+        {
+          "port": "verifying",
+          "expects": "UI acceptance includes the five rules",
+          "binding": "docs/agents/verifying.md",
+          "default": "skills/delivery/backlog/templates/software/verifying.md"
+        }
       ]
     }
   ],
