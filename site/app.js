@@ -217,6 +217,42 @@
     }
   }
 
+  /* Hover + click are driven by plain DOM delegation on the container (bubbling mouseover/click
+   * against the data-cell-id the engine stamps on every cell <g>) — no dependency on X6's
+   * synthetic delegated-mouseenter events. */
+  let hoverId = null, downAt = null;
+  function cellFromEvent(ev) {
+    const g = ev.target.closest && ev.target.closest('g[data-cell-id]');
+    if (!g || !graph) return null;
+    const cell = graph.getCellById(g.getAttribute('data-cell-id'));
+    return cell && cell.isNode() && (cell.getData() || {}).item ? cell : null;
+  }
+  function wireCanvasEvents() {
+    const pane = $('#cy');
+    pane.addEventListener('mouseover', (ev) => {
+      const cell = cellFromEvent(ev);
+      const id = cell ? cell.id : null;
+      if (id === hoverId) return;
+      hoverId = id;
+      if (cell) focusNode(cell); else unfocus();
+    });
+    pane.addEventListener('mouseleave', () => { hoverId = null; unfocus(); });
+    pane.addEventListener('mousedown', (ev) => { downAt = [ev.clientX, ev.clientY]; });
+    pane.addEventListener('click', (ev) => {
+      if (downAt && Math.hypot(ev.clientX - downAt[0], ev.clientY - downAt[1]) > 6) return; // a pan, not a click
+      const cell = cellFromEvent(ev);
+      if (!cell) return;
+      const v = state.views[state.current];
+      const vn = v.nodes.find(n => n.id === cell.id);
+      if (!vn) { // synthesized external node
+        const owner = v.nodes.map(n => (state.fm[n.id] || {}).external || []).flat().find(x => x && x.name === cell.id);
+        if (owner) window.open(owner.source, '_blank');
+        return;
+      }
+      openNode(state.current, cell.id);
+    });
+  }
+
   function focusNode(node) {
     const keep = new Set([node.id]);
     for (const e of graph.getConnectedEdges(node)) {
@@ -261,20 +297,7 @@
     });
     const built = view.type === 'swimlane' ? buildSwimElements(view) : buildGraphElements(view);
     drawCells(built, view.id);
-    graph.on('node:mouseenter', ({ node }) => { if ((node.getData() || {}).item) focusNode(node); });
-    graph.on('node:mouseleave', ({ node }) => { if ((node.getData() || {}).item) unfocus(); });
-    graph.on('node:click', ({ node }) => {
-      if (!(node.getData() || {}).item) return;
-      const id = node.id;
-      const v = state.views[state.current];
-      const vn = v.nodes.find(n => n.id === id);
-      if (!vn) { // synthesized external node
-        const owner = v.nodes.map(n => (state.fm[n.id] || {}).external || []).flat().find(x => x && x.name === id);
-        if (owner) window.open(owner.source, '_blank');
-        return;
-      }
-      openNode(state.current, id);
-    });
+    hoverId = null;
     graph.zoomToFit({ padding: 28, maxScale: 1 });
     if (state.active) setActiveCell(state.active);
   }
@@ -420,6 +443,7 @@
       try { state.fm[n.id] = parseFrontmatter(await fetchText(`${n.source}/SKILL.md`)).fm; }
       catch { state.fm[n.id] = {}; }
     }));
+    wireCanvasEvents();
     $('#zoom-in').addEventListener('click', () => graph && graph.zoom(0.25));
     $('#zoom-out').addEventListener('click', () => graph && graph.zoom(-0.25));
     $('#zoom-fit').addEventListener('click', () => graph && graph.zoomToFit({ padding: 28, maxScale: 1 }));
