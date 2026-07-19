@@ -32,6 +32,10 @@ An `edit_then_approve_requested` event may carry `payload.edited_content` — th
 
 ## Approval Records
 
+Approval requests arrive from any presentation rung ([presentation.md](presentation.md)): a server-page UI
+event, an inline-widget message (e.g. `sendPrompt`), or a typed chat reply. All pass the same gates; record
+the source (event ID, widget message, or quoted chat reply) in the approval record.
+
 Per-item approvals cover exactly one artifact. Session-batch approvals only when `covers` lists every item ID and content hash in the batch. Record schema: [state.md](state.md). Required: `id`, `timestamp`, `item_id`, `channel`, `granularity`, `content_hash`, `covers`, `approved_by`; include `source_event_id` when approval came from the UI.
 
 ## Gmail Drafts

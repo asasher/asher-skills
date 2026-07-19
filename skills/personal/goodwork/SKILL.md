@@ -66,7 +66,7 @@ Ask only for what the command needs and the record can't provide:
 3. **Aliases**: `grill` or `me` -> `interview`; `plans` -> `odysseys`; `test` -> `prototype`; `redesign` -> `craft`; `community` -> `niche`; `lamp` -> `targets`; `inbox` -> `reconcile`.
 4. **First word does not match**: infer the best command, state the inferred command, load its reference, and proceed. "What should I do with my life" infers `interview`; "help me find a job" with a profile infers `targets`.
 5. **Compound requests**: load references in arc order (Connect -> Define -> Test -> Position -> Campaign -> Sustain), one at a time.
-6. **State touch**: when a command reads or writes operational JSON/JSONL, load [reference/state.md](reference/state.md). When it drafts, sends, submits, publishes, or automates, load [reference/execution.md](reference/execution.md).
+6. **State touch**: when a command reads or writes operational JSON/JSONL, load [reference/state.md](reference/state.md). When it drafts, sends, submits, publishes, or automates, load [reference/execution.md](reference/execution.md). When it presents a board, draft, or approval surface to the user, load [reference/presentation.md](reference/presentation.md).
 7. **Campaign guard**: no Campaign command runs against an empty profile. If `goodwork/PROFILE.md` is missing, run the short-form interview from [reference/interview.md](reference/interview.md) first.
 
 ## Common Workflows

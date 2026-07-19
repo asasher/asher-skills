@@ -12,6 +12,7 @@ Run once per person; rerun when capabilities change. Can run before a profile ex
 6. Install or verify Tailscale as the default remote layer — `tailscale serve`, never `tailscale funnel`. Declined → record `desk-only`.
 7. Ask for reconcile cadence: `manual`, `on-demand`, or `scheduled`. Write it to `capabilities.json`.
 8. Run the live phone loop: start the local server, expose it through the tailnet when available, open the phone URL, tap the test button, confirm the test event lands in `events.jsonl` and the agent can drain it.
+9. Record presentation rungs in `capabilities.json` (`presentation.rungs`, best-first from [presentation.md](presentation.md)): probe this session's surface for an inline widget renderer, note whether the server pages open in a browser, and always include `markdown`. Note inline availability is per-surface — sessions re-detect at present time.
 
 Present this to the user as plumbing they don't need to understand: what they get (a board, a yes/no page on their phone), not how it works.
 

@@ -27,7 +27,7 @@ Every JSON record has a stable `id`, generated once and never reused: lowercase 
 - `targets.json`: employer/segment target list and Top 10.
   Schema: `{version, updated_at, targets:[{id,name,kind,segment?,location?,url?,scores:{advocacy,motivation,posting},rank?,status,reason_codes:[],insider_ids:[],notes?}]}`.
 - `capabilities.json`: setup results and best available execution rungs.
-  Schema: `{version, updated_at, workspace_id, connectors:{gmail,calendar}, chrome:{profile_path,status,sites:{}}, tailscale:{status,magicdns_url?}, ui:{diffs_vendor,status}, reconcile:{cadence,last_run_at?}, execution:{rungs:[]}, notifications:{status}}`.
+  Schema: `{version, updated_at, workspace_id, connectors:{gmail,calendar}, chrome:{profile_path,status,sites:{}}, tailscale:{status,magicdns_url?}, ui:{diffs_vendor,status}, reconcile:{cadence,last_run_at?}, execution:{rungs:[]}, presentation:{rungs:[]}, notifications:{status}}`.
 - `metrics.json`: quotas and weekly funnel metrics.
   Schema: `{version, updated_at, quotas:{weekly_applications}, weeks:[{week_start,outreach_sent,applications,screens,interviews,offers,response_rate?,notes?}]}`.
 - `evidence-inbox.json`: pending profile evidence queue.

@@ -73,6 +73,7 @@ def json_defaults(workspace_name: str) -> dict[str, dict]:
             "ui": {"diffs_vendor": "missing", "status": "missing"},
             "reconcile": {"cadence": "manual", "last_run_at": None},
             "execution": {"rungs": ["manual"]},
+            "presentation": {"rungs": ["markdown"]},
             "notifications": {"status": "missing"},
         },
         "metrics.json": {"version": 1, "updated_at": ts, "quotas": {"weekly_applications": 0}, "weeks": []},

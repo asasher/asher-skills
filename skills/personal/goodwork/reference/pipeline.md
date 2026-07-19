@@ -1,6 +1,6 @@
 # pipeline - the search as a CRM
 
-`pipeline.json` is the operational source of truth for live campaign work. UI pages are projections from this file; the server never writes it. Schema and ID rules: [state.md](state.md).
+`pipeline.json` is the operational source of truth for live campaign work. UI pages are projections from this file; the server never writes it. Schema and ID rules: [state.md](state.md). Present the board on the best rung per [presentation.md](presentation.md) — inline widget, server page, or markdown table.
 
 ## Structure
 
