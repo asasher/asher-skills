@@ -9,6 +9,7 @@ Run narrowest-first, then broaden by touched surface. This is a skills repo — 
 - Targeted check (skill behavior): run the changed skill's probe scenarios through an executor model per `docs/agents/probe-evals.md` — situated dry-run prompts graded against the skill's answer key. Scenarios live in the skill's `evals/`. Drive them via the executors in `environment.md` § Driving the app (Claude subagent + `codex exec`).
 - Script check: for any changed stdlib-Python script, `python3 -m py_compile <script>` then drive it directly (e.g. `review-server.py --sweep`, `--help`) to confirm it runs on this machine's Python 3.14.
 - Docs/prose check: skills are mostly markdown — re-read the changed reference/SKILL against the skill's own contract; no automated linter.
+- Site drift check: a change touching any SDLC-family skill runs `python3 site/check.py` — the documentation app's manifest must list the family's real files (`site/MAINTENANCE.md`); errors block.
 - Lint / type check / build: **n/a** (no build system; stdlib Python + markdown).
 - Full / aggregate gate (before PR): the changed skill's probe eval passes against its answer key, and any changed script compiles and runs. New or reworked skills must clear a pre-deployment probe eval before first real use (`AGENTS.md` convention).
 - Independent second-opinion verification: delegate a scenario to `codex exec` as a second, differently-modeled executor when a criterion is subjective or benefits from a perspective outside the orchestrator's context; grading against the answer key and running scripts stay local.

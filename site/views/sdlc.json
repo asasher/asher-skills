@@ -1,0 +1,682 @@
+{
+  "id": "sdlc",
+  "title": "The SDLC skill family",
+  "subtitle": "Idea \u2192 interview \u2192 spec \u2192 tickets \u2192 AFK execution \u2014 every node renders its real files, live from this repo.",
+  "lanes": [
+    {
+      "id": "shaping",
+      "title": "Shaping",
+      "blurb": "Elicit and settle the strategic decisions; write the useful shape down as it crystallises."
+    },
+    {
+      "id": "formation",
+      "title": "Formation",
+      "blurb": "Turn the settled direction into a gated spec and audited, tracker-native tickets."
+    },
+    {
+      "id": "execution",
+      "title": "Execution",
+      "blurb": "The backlog drains admitted work through the build loop to review-ready PRs; a human merges."
+    },
+    {
+      "id": "probes",
+      "title": "Probes & disciplines",
+      "blurb": "Called by name from any stage when a question needs facts, an artifact, or a diagnosis."
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "blurb": "The layer everything stands on: sign-off gates, model staffing, and the installer."
+    },
+    {
+      "id": "ux",
+      "title": "UX lane",
+      "blurb": "Cross-cutting: a personal policy overlay plus a consent-gated external design system."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "interview",
+      "lane": "shaping",
+      "title": "interview",
+      "blurb": "Batch frontier rounds; facts looked up, decisions asked; writes nothing durable",
+      "source": "skills/thinking/interview",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "domain-modeling",
+      "lane": "shaping",
+      "title": "domain-modeling",
+      "blurb": "CONTEXT.md terms inline; three-gate ADRs; the extractor",
+      "source": "skills/thinking/domain-modeling",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "context-format",
+          "path": "reference/context-format.md"
+        },
+        {
+          "group": "Reference",
+          "label": "adr-format",
+          "path": "reference/adr-format.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "interview-with-docs",
+      "lane": "shaping",
+      "title": "interview-with-docs",
+      "blurb": "The composer: interview asks, domain-modeling writes \u2014 extraction over transcript",
+      "source": "skills/thinking/interview-with-docs",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "to-spec",
+      "lane": "formation",
+      "title": "to-spec",
+      "blurb": "Pure synthesis into an HTML spec; fidelity audit; approval is the direction's gate",
+      "source": "skills/delivery/to-spec",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "synthesis",
+          "path": "reference/synthesis.md"
+        },
+        {
+          "group": "Reference",
+          "label": "template-guide",
+          "path": "reference/template-guide.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "to-tickets",
+      "lane": "formation",
+      "title": "to-tickets",
+      "blurb": "Tracer-bullet slices, quiz, per-ticket readiness audit, native blocking edges",
+      "source": "skills/delivery/to-tickets",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "slicing",
+          "path": "reference/slicing.md"
+        },
+        {
+          "group": "Reference",
+          "label": "template-guide",
+          "path": "reference/template-guide.md"
+        },
+        {
+          "group": "Templates",
+          "label": "ticket",
+          "path": "templates/ticket.md"
+        },
+        {
+          "group": "Templates",
+          "label": "tickets",
+          "path": "templates/tickets.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/backlog-policy.md",
+        "docs/agents/platform.md"
+      ]
+    },
+    {
+      "id": "backlog",
+      "lane": "execution",
+      "title": "backlog",
+      "blurb": "Thin head, three seams: groom = organize \u00b7 run = schedule \u00b7 build loop = one issue \u2192 reviewed PR",
+      "source": "skills/delivery/backlog",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "groom",
+          "path": "reference/groom.md"
+        },
+        {
+          "group": "Reference",
+          "label": "run",
+          "path": "reference/run.md"
+        },
+        {
+          "group": "Reference",
+          "label": "build-loop",
+          "path": "reference/build-loop.md"
+        },
+        {
+          "group": "Reference",
+          "label": "implement",
+          "path": "reference/implement.md"
+        },
+        {
+          "group": "Reference",
+          "label": "verify",
+          "path": "reference/verify.md"
+        },
+        {
+          "group": "Reference",
+          "label": "adversarial-review",
+          "path": "reference/adversarial-review.md"
+        },
+        {
+          "group": "Reference",
+          "label": "evidence",
+          "path": "reference/evidence.md"
+        },
+        {
+          "group": "Reference",
+          "label": "diagnose",
+          "path": "reference/diagnose.md"
+        },
+        {
+          "group": "Reference",
+          "label": "refactor",
+          "path": "reference/refactor.md"
+        },
+        {
+          "group": "Reference",
+          "label": "run-state",
+          "path": "reference/run-state.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Reference",
+          "label": "worktree-isolation",
+          "path": "reference/worktree-isolation.md"
+        },
+        {
+          "group": "Templates",
+          "label": "backlog-policy",
+          "path": "templates/common/backlog-policy.md"
+        },
+        {
+          "group": "Templates",
+          "label": "platform",
+          "path": "templates/common/platform.md"
+        },
+        {
+          "group": "Templates",
+          "label": "environment",
+          "path": "templates/common/environment.md"
+        },
+        {
+          "group": "Templates",
+          "label": "change-description",
+          "path": "templates/common/change-description.md"
+        },
+        {
+          "group": "Templates",
+          "label": "implementing",
+          "path": "templates/software/implementing.md"
+        },
+        {
+          "group": "Templates",
+          "label": "verifying",
+          "path": "templates/software/verifying.md"
+        },
+        {
+          "group": "Templates",
+          "label": "evidence (software)",
+          "path": "templates/software/evidence.md"
+        },
+        {
+          "group": "Templates",
+          "label": "refactoring",
+          "path": "templates/software/refactoring.md"
+        },
+        {
+          "group": "Templates",
+          "label": "change-reviewer",
+          "path": "templates/software/change-reviewer.md"
+        },
+        {
+          "group": "Templates",
+          "label": "change-fixer",
+          "path": "templates/software/change-fixer.md"
+        },
+        {
+          "group": "Templates (skill-authoring pack)",
+          "label": "environment",
+          "path": "templates/skill-authoring/environment.md"
+        },
+        {
+          "group": "Templates (skill-authoring pack)",
+          "label": "evidence",
+          "path": "templates/skill-authoring/evidence.md"
+        },
+        {
+          "group": "Templates (skill-authoring pack)",
+          "label": "verifying",
+          "path": "templates/skill-authoring/verifying.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/backlog-policy.md",
+        "docs/agents/platform.md",
+        "docs/agents/environment.md",
+        "docs/agents/implementing.md",
+        "docs/agents/verifying.md",
+        "docs/agents/evidence.md",
+        "docs/agents/change-description.md",
+        "docs/agents/change-reviewer.md",
+        "docs/agents/change-fixer.md",
+        "docs/agents/refactoring.md",
+        "docs/agents/probe-evals.md"
+      ]
+    },
+    {
+      "id": "merge-changes",
+      "lane": "execution",
+      "title": "merge-changes",
+      "blurb": "The explicit human authorization gate after a review-ready PR",
+      "source": "skills/delivery/merge-changes",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "prototype",
+      "lane": "probes",
+      "title": "prototype",
+      "blurb": "One design question, one throwaway artifact \u2014 keep the answer, delete the scaffolding",
+      "source": "skills/delivery/prototype",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "prototyping",
+          "path": "reference/prototyping.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/prototyping.md"
+      ]
+    },
+    {
+      "id": "research",
+      "lane": "probes",
+      "title": "research",
+      "blurb": "Primary-source dossiers with traceable claims, contradictions, and unknowns",
+      "source": "skills/thinking/research",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "research-contract",
+          "path": "reference/research-contract.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Templates",
+          "label": "researching",
+          "path": "templates/researching.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/researching.md"
+      ]
+    },
+    {
+      "id": "diagnosing-bugs",
+      "lane": "probes",
+      "title": "diagnosing-bugs",
+      "blurb": "The six-phase defect diagnosis discipline behind the bug work-type",
+      "source": "skills/delivery/diagnosing-bugs",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "diagnosis",
+          "path": "reference/diagnosis.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Templates",
+          "label": "diagnosing-bugs",
+          "path": "templates/diagnosing-bugs.md"
+        },
+        {
+          "group": "Templates",
+          "label": "diagnosing-bugs (skill-authoring)",
+          "path": "templates/skill-authoring/diagnosing-bugs.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/diagnosing-bugs.md"
+      ]
+    },
+    {
+      "id": "review-loop",
+      "lane": "services",
+      "title": "review-loop",
+      "blurb": "Rendered-artifact sign-off: detached serving, anchored annotations, hash-bound verdicts",
+      "source": "skills/system/review-loop",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "review-loop",
+          "path": "reference/review-loop.md"
+        },
+        {
+          "group": "Reference",
+          "label": "scripts",
+          "path": "reference/scripts.md"
+        },
+        {
+          "group": "Reference",
+          "label": "surface-and-hub",
+          "path": "reference/surface-and-hub.md"
+        },
+        {
+          "group": "Reference",
+          "label": "watch",
+          "path": "reference/watch.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "staffing",
+      "lane": "services",
+      "title": "staffing",
+      "blurb": "Who runs every task: the machine roster, roles, routing, and fallback ladders",
+      "source": "skills/system/staffing",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "roles-and-fallback",
+          "path": "reference/roles-and-fallback.md"
+        },
+        {
+          "group": "Reference",
+          "label": "rankings-and-routing",
+          "path": "reference/rankings-and-routing.md"
+        },
+        {
+          "group": "Reference",
+          "label": "machine-audit",
+          "path": "reference/machine-audit.md"
+        },
+        {
+          "group": "Reference",
+          "label": "harness",
+          "path": "reference/harness.md"
+        },
+        {
+          "group": "Reference",
+          "label": "install-and-reconcile",
+          "path": "reference/install-and-reconcile.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Templates",
+          "label": "staffing.common (global module)",
+          "path": "templates/global/staffing.common.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/environment.md"
+      ]
+    },
+    {
+      "id": "setup-asher-skills",
+      "lane": "services",
+      "title": "setup-asher-skills",
+      "blurb": "Installer/auditor: sibling closure, consent-gated externals, playbook reconciliation \u2014 catalog compiled fresh from frontmatter",
+      "source": "skills/system/setup-asher-skills",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "interview",
+          "path": "reference/interview.md"
+        },
+        {
+          "group": "Reference",
+          "label": "catalog",
+          "path": "reference/catalog.md"
+        },
+        {
+          "group": "Reference",
+          "label": "audit-mode",
+          "path": "reference/audit-mode.md"
+        },
+        {
+          "group": "Templates",
+          "label": "agent-skills-block",
+          "path": "templates/agent-skills-block.md"
+        },
+        {
+          "group": "Templates",
+          "label": "repo-pointer",
+          "path": "templates/repo-pointer.md"
+        },
+        {
+          "group": "Templates",
+          "label": "presentation.common",
+          "path": "templates/global/presentation.common.md"
+        },
+        {
+          "group": "Templates",
+          "label": "presentation-pointer (claude)",
+          "path": "templates/global/presentation-pointer.claude.md"
+        },
+        {
+          "group": "Templates",
+          "label": "presentation-pointer (codex)",
+          "path": "templates/global/presentation-pointer.codex.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "bare-minimum-ux",
+      "lane": "ux",
+      "title": "bare-minimum-ux",
+      "blurb": "Asher's five non-negotiable UX rules; wins on conflict; declares impeccable as its external",
+      "source": "skills/creative/bare-minimum-ux",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "notifications",
+          "path": "references/notifications.md"
+        },
+        {
+          "group": "Reference",
+          "label": "planning",
+          "path": "references/planning.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/implementing.md",
+        "docs/agents/verifying.md"
+      ]
+    }
+  ],
+  "flow": [
+    {
+      "from": "interview-with-docs",
+      "to": "to-spec",
+      "label": "crystallised record + classified threads"
+    },
+    {
+      "from": "to-spec",
+      "to": "to-tickets",
+      "label": "approved spec + thin tracking ticket"
+    },
+    {
+      "from": "to-tickets",
+      "to": "backlog",
+      "label": "audited tickets, native blocking edges"
+    },
+    {
+      "from": "backlog",
+      "to": "merge-changes",
+      "label": "review-ready PR"
+    }
+  ]
+}

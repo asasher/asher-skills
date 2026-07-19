@@ -1,0 +1,40 @@
+# site/ — maintenance contract
+
+The repo's documentation app: a static, framework-free viewer for the skill family, eventually deployed at
+skills.ashanjum.com (no deployment yet). Serve locally from the **repo root** — `python3 -m http.server`,
+open `http://localhost:8000/site/` — because the app fetches skill files by relative path and `file://`
+cannot fetch.
+
+## Drift design — what can and cannot go stale
+
+- **Layer 1 (cannot drift):** everything a reader reads. Skill content is fetched from the real files at
+  view time; the dependency edges and header chips are parsed from each `SKILL.md`'s frontmatter — the same
+  bytes rendered in the panel. Nothing is copied into the app.
+- **Layer 2 (can drift, gated):** `views/*.json` — the roster (which skills are in a view), lane placement,
+  blurbs, file lists, and playbook attachments. `check.py` turns that drift into a failing check.
+
+## Agent instructions
+
+- **Touching a family skill?** The site is part of the change's blast radius. Adding/renaming/removing a
+  skill, a reference file, or an attached playbook must update `views/sdlc.json` in the same change, then run
+  `python3 site/check.py` — errors block; warnings mean a file exists that the manifest doesn't list.
+- **Never copy skill prose into the site.** If a description reads wrong in the app, fix the skill's
+  frontmatter/SKILL.md — the app is a viewer, not a second home for content. Blurbs in the manifest are
+  one-line orientation labels only.
+- The verify step for changes under `skills/` in this family includes `site/check.py` (see
+  `docs/agents/verifying.md` § Checks).
+
+## Vendored dependencies
+
+- `vendor/markdown-it.min.js` — markdown-it **14.1.0**, MIT (`vendor/markdown-it.LICENSE`). CommonMark +
+  GFM tables. To upgrade: replace the file from the pinned npm dist, update the version here, and reload a
+  few heavy pages (backlog references, tables) to eyeball parity.
+
+## Future deployment (recorded intent, not built)
+
+- Target: Vercel behind skills.ashanjum.com, still static. Content source becomes either the deployed repo
+  files or `raw.githubusercontent.com` via the `?base=` query/`BASE` constant in `app.js` — the app already
+  abstracts the content root, so deployment is configuration, not a rewrite.
+- A deploy-time roster (all-skills view) can be generated with the installer's compiler:
+  `python3 skills/system/setup-asher-skills/scripts/catalog.py compile` — a build product, not a committed
+  registry.

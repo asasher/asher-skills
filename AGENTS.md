@@ -13,6 +13,9 @@ Skills Asher made or likes, kept in one repo so they can be installed elsewhere 
   research, scratch artifacts produced while building it; not part of any install.
 - `plans/`, `evidence/` — artifacts from running the loop on this repo (plan HTML, review evidence);
   working state, not part of any install.
+- `site/` — the repo's documentation app (eventually skills.ashanjum.com): a static, framework-free viewer
+  that renders skill sources live with dependency edges parsed from frontmatter. Maintained per
+  `site/MAINTENANCE.md`; `site/check.py` gates manifest drift. Not part of any install.
 - `.agents/skills/` — primary mounts for skills installed *into* this repo; `.claude/skills/` may hold alias
   mounts. Install provenance is tracked in `skills-lock.json`. See § Vocabulary.
 
