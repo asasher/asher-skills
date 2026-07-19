@@ -87,7 +87,8 @@
     const addEdge = (from, to, cls, label) => {
       if (!pos[from] || !pos[to]) return;
       const horiz = Math.abs(pos[from].y - pos[to].y) < NH;
-      edges.push({ data: { id: `e${edges.length}:${from}:${to}`, source: from, target: to, label: label || '' }, classes: `${cls}${horiz ? ' horiz' : ''}` });
+      const rev = horiz && pos[to].x < pos[from].x;
+      edges.push({ data: { id: `e${edges.length}:${from}:${to}`, source: from, target: to, label: label || '' }, classes: `${cls}${horiz ? ' horiz' : ''}${rev ? ' horizrev' : ''}` });
     };
     for (const f of view.flow || []) addEdge(f.from, f.to, 'flow', f.label);
     for (const e of view.edges || []) addEdge(e.from, e.to, e.style || '', e.label);
@@ -161,6 +162,7 @@
         'transition-property': 'opacity', 'transition-duration': '0.12s' } },
       { selector: 'edge.horiz', style: {
         'curve-style': 'unbundled-bezier', 'control-point-distances': [46], 'control-point-weights': [0.5] } },
+      { selector: 'edge.horizrev', style: { 'control-point-distances': [-46] } },
       { selector: 'edge.optional', style: { 'line-style': 'dashed' } },
       { selector: 'edge.external', style: { 'line-style': 'dashed', 'line-color': cssVar('--artifact-line'), 'target-arrow-color': cssVar('--artifact-line'), opacity: .85 } },
       { selector: 'edge.flow', style: { 'line-color': accent, 'target-arrow-color': accent, width: 2.2, opacity: .85 } },
