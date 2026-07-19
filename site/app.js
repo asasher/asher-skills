@@ -1,7 +1,6 @@
-/* asher-skills documentation app — v2 (full-screen graphs, sheet reader, multi-view).
- * Drift design: node content and dependency edges come from the real files (SKILL.md fetched live,
- * frontmatter parsed from the same bytes the reader sees). Only rosters/lanes/blurbs live in views/*.json,
- * gated by site/check.py. See site/MAINTENANCE.md. */
+/* asher-skills documentation app — v3 (Cytoscape canvas: zoom/pan, engine-routed edges).
+ * Drift design unchanged: content + dependency edges come from the real files; views/*.json holds only
+ * rosters/lanes/blurbs, gated by site/check.py. See site/MAINTENANCE.md. */
 (() => {
   const params = new URLSearchParams(location.search);
   const BASE = (params.get('base') || '..').replace(/\/$/, '');
@@ -9,6 +8,7 @@
   const md = window.markdownit({ html: false, linkify: true });
 
   const state = { views: {}, fm: {}, current: 'sdlc', active: null };
+  let cy = null;
 
   const $ = (s) => document.querySelector(s);
   const el = (tag, attrs = {}, ...kids) => {
@@ -20,11 +20,8 @@
     for (const k of kids) n.append(k);
     return n;
   };
-  const svgEl = (tag, attrs = {}) => {
-    const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
-    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
-    return n;
-  };
+  const esc = (s) => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
   async function fetchText(path) {
     const r = await fetch(`${BASE}/${path}`);
@@ -47,95 +44,13 @@
     return { fm, body: text.slice(m[0].length) };
   }
 
-  /* ---------- shared geometry ---------- */
-  const NW = 172, NH = 54;
-  const hashOff = (s) => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) | 0; return ((Math.abs(h) % 5) - 2) * 13; };
+  /* ---------- element builders (positions are node centers) ---------- */
+  const NW = 172, NH = 56;
 
-  function roundedElbow(x1, y1, x2, y2, r = 9) {
-    if (Math.abs(x1 - x2) < 2) return `M ${x1} ${y1} L ${x2} ${y2}`;
-    const my = (y1 + y2) / 2;
-    const dirY = y2 > y1 ? 1 : -1, dirX = x2 > x1 ? 1 : -1;
-    const rr = Math.min(r, Math.abs(x2 - x1) / 2, Math.abs(y2 - y1) / 2);
-    return [
-      `M ${x1} ${y1}`, `L ${x1} ${my - dirY * rr}`,
-      `Q ${x1} ${my} ${x1 + dirX * rr} ${my}`, `L ${x2 - dirX * rr} ${my}`,
-      `Q ${x2} ${my} ${x2} ${my + dirY * rr}`, `L ${x2} ${y2}`,
-    ].join(' ');
-  }
-  function sideElbow(x1, y1, x2, y2, r = 9) {
-    const mx = (x1 + x2) / 2;
-    const dirX = x2 > x1 ? 1 : -1, dirY = y2 > y1 ? 1 : -1;
-    if (Math.abs(y1 - y2) < 2) return `M ${x1} ${y1} L ${x2} ${y2}`;
-    const rr = Math.min(r, Math.abs(x2 - x1) / 2, Math.abs(y2 - y1) / 2);
-    return [
-      `M ${x1} ${y1}`, `L ${mx - dirX * rr} ${y1}`,
-      `Q ${mx} ${y1} ${mx} ${y1 + dirY * rr}`, `L ${mx} ${y2 - dirY * rr}`,
-      `Q ${mx} ${y2} ${mx + dirX * rr} ${y2}`, `L ${x2} ${y2}`,
-    ].join(' ');
-  }
+  function laneKind(laneId) { return `k-${laneId}`; }
 
-  function routeBetween(a, b, key) {
-    const off = hashOff(key);
-    const aC = { x: a.x + NW / 2 + off, y: a.y }, bC = { x: b.x + NW / 2 + off, y: b.y };
-    const sameRow = Math.abs(a.y - b.y) < NH;
-    if (sameRow) {
-      const [l, r] = a.x < b.x ? [a, b] : [b, a];
-      const y = a.y + NH / 2 + off / 2;
-      const p = `M ${a.x < b.x ? a.x + NW : a.x} ${y} L ${a.x < b.x ? b.x : b.x + NW} ${y}`;
-      return { d: p, mid: { x: (l.x + NW + r.x) / 2, y: y - 5 } };
-    }
-    if (b.y > a.y) {
-      const d = roundedElbow(aC.x, a.y + NH, bC.x, b.y);
-      return { d, mid: { x: (aC.x + bC.x) / 2, y: (a.y + NH + b.y) / 2 - 5 } };
-    }
-    const d = roundedElbow(aC.x, a.y, bC.x, b.y + NH);
-    return { d, mid: { x: (aC.x + bC.x) / 2, y: (a.y + b.y + NH) / 2 - 5 } };
-  }
-
-  function nodeGroup(n, p, kind, extraClass = '') {
-    const g = svgEl('g');
-    g.setAttribute('class', `node k-${kind} ${extraClass}${state.active === n.id ? ' active' : ''}`);
-    g.dataset.id = n.id;
-    const rect = svgEl('rect', { x: p.x, y: p.y, width: NW, height: NH, rx: 8 });
-    g.append(rect);
-    const t = svgEl('text', { x: p.x + 10, y: p.y + 19, class: 't' });
-    t.textContent = n.title; g.append(t);
-    const words = (n.blurb || '').split(' '); const lines = ['', ''];
-    for (const w of words) { if (lines[0].length + w.length < 30 && !lines[1]) lines[0] += w + ' '; else lines[1] += w + ' '; }
-    lines.forEach((ln, i) => {
-      if (!ln.trim()) return;
-      const b = svgEl('text', { x: p.x + 10, y: p.y + 33 + i * 11, class: 'b' });
-      b.textContent = ln.trim().slice(0, 33); g.append(b);
-    });
-    return g;
-  }
-
-  function attachHover(svg, adjacency) {
-    svg.querySelectorAll('.node').forEach(g => {
-      g.addEventListener('mouseenter', () => {
-        svg.classList.add('dimming');
-        const hot = adjacency[g.dataset.id] || new Set([g.dataset.id]);
-        svg.querySelectorAll('.node').forEach(x => x.classList.toggle('hot', hot.has(x.dataset.id)));
-        svg.querySelectorAll('.edge').forEach(e => e.classList.toggle('hot', e.dataset.from === g.dataset.id || e.dataset.to === g.dataset.id));
-      });
-      g.addEventListener('mouseleave', () => {
-        svg.classList.remove('dimming');
-        svg.querySelectorAll('.hot').forEach(x => x.classList.remove('hot'));
-      });
-    });
-  }
-
-  const arrowDefs = () => {
-    const defs = svgEl('defs');
-    defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor" opacity=".6"/></marker>`;
-    return defs;
-  };
-
-  /* ---------- renderer: dependency graph (sdlc, backlog) ---------- */
-  function renderGraph(view) {
-    const pane = $('#graph-pane');
-    const W = Math.max(980, Math.min(pane.clientWidth - 40, 1500));
-    const GX = 18, GY = 16, LPAD = 12, LHEAD = 34, LGAP = 14;
+  function buildGraphElements(view) {
+    const W = 1500, GX = 20, GY = 18, LPAD = 26, LHEAD = 34, LGAP = 46;
     const perLane = {};
     for (const n of view.nodes) (perLane[n.lane] = perLane[n.lane] || []).push(n);
     if (view.id === 'sdlc') {
@@ -147,30 +62,32 @@
         }
       }
     }
-    const pos = {}; let y = 0; const lanes = [];
+    const elements = []; const pos = {};
+    let y = 0;
     for (const lane of view.lanes) {
       const nodes = perLane[lane.id] || [];
+      if (!nodes.length) continue;
+      elements.push({ data: { id: `lane:${lane.id}`, title: lane.title, blurb: lane.blurb }, classes: 'lane', selectable: false, grabbable: false });
       const cols = Math.max(1, Math.floor((W - 2 * LPAD + GX) / (NW + GX)));
-      const rows = Math.ceil(nodes.length / cols) || 1;
-      const h = LHEAD + rows * (NH + GY) + LPAD - GY + 6;
-      lanes.push({ ...lane, y, h });
-      nodes.forEach((n, i) => { pos[n.id] = { x: LPAD + (i % cols) * (NW + GX), y: y + LHEAD + Math.floor(i / cols) * (NH + GY), node: n }; });
-      y += h + LGAP;
+      const rows = Math.ceil(nodes.length / cols);
+      nodes.forEach((n, i) => {
+        const cx = LPAD + (i % cols) * (NW + GX) + NW / 2;
+        const cyy = y + LHEAD + Math.floor(i / cols) * (NH + GY) + NH / 2;
+        pos[n.id] = { x: cx, y: cyy };
+        elements.push({
+          data: { id: n.id, parent: `lane:${lane.id}`, title: n.title, blurb: n.blurb, view: view.id },
+          position: { x: cx, y: cyy },
+          classes: `item ${laneKind(n.lane)}${n.external ? ' external' : ''}${n.id === 'merge-changes' ? ' gate' : ''}`,
+        });
+        if (n.external) pos[n.id].external = n.external;
+      });
+      y += LHEAD + rows * (NH + GY) + LGAP;
     }
-
-    const svg = svgEl('svg', { viewBox: `0 0 ${W} ${y}`, width: W });
-    svg.append(arrowDefs());
-    for (const lane of lanes) {
-      svg.append(svgEl('rect', { x: 2, y: lane.y, width: W - 4, height: lane.h, rx: 10, class: 'lane-bg' }));
-      const t = svgEl('text', { x: LPAD + 2, y: lane.y + 16, class: 'lane-title' }); t.textContent = lane.title; svg.append(t);
-      const b = svgEl('text', { x: LPAD + 4 + lane.title.length * 8.6, y: lane.y + 16, class: 'lane-blurb' }); b.textContent = '— ' + lane.blurb; svg.append(b);
-    }
-
-    const adjacency = {}; const touch = (a, b) => { (adjacency[a] = adjacency[a] || new Set([a])).add(b); (adjacency[b] = adjacency[b] || new Set([b])).add(a); };
     const edges = [];
     const addEdge = (from, to, cls, label) => {
       if (!pos[from] || !pos[to]) return;
-      edges.push({ from, to, cls, label }); touch(from, to);
+      const horiz = Math.abs(pos[from].y - pos[to].y) < NH;
+      edges.push({ data: { id: `e${edges.length}:${from}:${to}`, source: from, target: to, label: label || '' }, classes: `${cls}${horiz ? ' horiz' : ''}` });
     };
     for (const f of view.flow || []) addEdge(f.from, f.to, 'flow', f.label);
     for (const e of view.edges || []) addEdge(e.from, e.to, e.style || '', e.label);
@@ -180,113 +97,150 @@
       for (const o of fm.optional || []) addEdge(n.id, o, 'optional');
       for (const e of (Array.isArray(fm.external) ? fm.external : [])) if (e.name) addEdge(n.id, e.name, 'external');
     }
-    for (const e of edges) {
-      const { d, mid } = routeBetween(pos[e.from], pos[e.to], e.from + e.to);
-      const p = svgEl('path', { d, class: `edge ${e.cls}`, 'marker-end': 'url(#arr)' });
-      p.dataset.from = e.from; p.dataset.to = e.to; svg.append(p);
-      if (e.label) { const t = svgEl('text', { x: mid.x, y: mid.y, class: 'edge-label', 'text-anchor': 'middle' }); t.textContent = e.label; svg.append(t); }
-    }
-
-    for (const [id, p] of Object.entries(pos)) {
-      const n = p.node;
-      const kind = n.external ? n.lane : n.lane;
-      const g = nodeGroup(n, p, kind, `${n.external ? 'external ' : ''}${id === 'merge-changes' ? 'gate' : ''}`);
-      g.addEventListener('click', () => n.external ? window.open(n.external.source, '_blank') : openNode(view.id, id));
-      svg.append(g);
-    }
-    pane.innerHTML = ''; pane.append(svg);
-    attachHover(svg, adjacency);
+    return elements.concat(edges);
   }
 
-  /* ---------- renderer: swimlane (flow) ---------- */
-  function renderSwimlane(view) {
-    const pane = $('#graph-pane');
-    const GUTTER = 128, PHEAD = 30, GX = 22, GY = 16, LPAD = 8;
-    const cell = {}; // lane -> phase -> nodes
+  function buildSwimElements(view) {
+    const GX = 26, GY = 18, LPAD = 30, LGAP = 44, PHEAD = 44;
+    const cell = {};
     for (const n of view.nodes) ((cell[n.lane] = cell[n.lane] || {})[n.phase] = cell[n.lane][n.phase] || []).push(n);
-    const colX = {}; let x = GUTTER;
-    for (const ph of view.phases) { colX[ph.id] = x; x += NW + GX; }
-    const W = x + 10;
-    const rowY = {}; let y = PHEAD + 6; const laneRows = [];
+    const colX = {}; let x = 0;
+    for (const ph of view.phases) { colX[ph.id] = x + NW / 2; x += NW + GX; }
+    const elements = [];
+    for (const ph of view.phases) {
+      elements.push({ data: { id: `phase:${ph.id}`, title: ph.title }, classes: 'phase-head', position: { x: colX[ph.id], y: 0 }, selectable: false, grabbable: false });
+    }
+    let y = PHEAD;
     for (const lane of view.lanes) {
       const depth = Math.max(1, ...view.phases.map(p => (cell[lane.id] && cell[lane.id][p.id] || []).length));
-      const h = LPAD * 2 + depth * (NH + GY) - GY;
-      rowY[lane.id] = y; laneRows.push({ ...lane, y, h });
-      y += h + 12;
-    }
-    const H = y + 6;
-
-    const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: Math.max(W, 900) });
-    svg.append(arrowDefs());
-    for (const lane of laneRows) {
-      svg.append(svgEl('rect', { x: 2, y: lane.y - 4, width: W - 6, height: lane.h + 8, rx: 10, class: 'lane-bg' }));
-      const t = svgEl('text', { x: 10, y: lane.y + 14, class: 'lane-title' }); t.textContent = lane.title; svg.append(t);
-      const b = svgEl('text', { x: 10, y: lane.y + 27, class: 'lane-blurb' }); b.textContent = lane.blurb; svg.append(b);
-    }
-    for (const ph of view.phases) {
-      const t = svgEl('text', { x: colX[ph.id] + NW / 2, y: 18, class: 'phase-title', 'text-anchor': 'middle' }); t.textContent = ph.title; svg.append(t);
-      svg.append(svgEl('line', { x1: colX[ph.id] - GX / 2, y1: 26, x2: colX[ph.id] - GX / 2, y2: H - 4, class: 'edge', 'stroke-dasharray': '2 5', opacity: .25 }));
-    }
-
-    const pos = {};
-    for (const n of view.nodes) {
-      const stack = cell[n.lane][n.phase];
-      const idx = stack.indexOf(n);
-      pos[n.id] = { x: colX[n.phase], y: rowY[n.lane] + LPAD + idx * (NH + GY), node: n };
-    }
-
-    const adjacency = {};
-    const touch = (a, b) => { (adjacency[a] = adjacency[a] || new Set([a])).add(b); (adjacency[b] = adjacency[b] || new Set([b])).add(a); };
-    for (const e of view.edges || []) {
-      const a = pos[e.from], b = pos[e.to];
-      if (!a || !b) continue;
-      touch(e.from, e.to);
-      let d, mid;
-      const samePhase = a.node.phase === b.node.phase, sameLane = a.node.lane === b.node.lane;
-      if (samePhase && !sameLane) {
-        const [top, bot] = a.y < b.y ? [a, b] : [b, a];
-        const x0 = a.x + NW / 2 + hashOff(e.from + e.to);
-        d = `M ${x0} ${a.y < b.y ? a.y + NH : a.y} L ${x0} ${a.y < b.y ? b.y : b.y + NH}`;
-        mid = { x: x0 + 4, y: (top.y + NH + bot.y) / 2 };
-      } else if (sameLane) {
-        const y0 = a.y + NH / 2 + hashOff(e.from + e.to) / 2;
-        d = `M ${a.x + NW} ${y0} L ${b.x} ${y0}`;
-        mid = { x: (a.x + NW + b.x) / 2, y: y0 - 6 };
-      } else {
-        d = sideElbow(a.x + NW, a.y + NH / 2, b.x + (b.x > a.x ? 0 : NW), b.y + NH / 2);
-        mid = { x: (a.x + NW + b.x) / 2, y: (a.y + b.y + NH) / 2 - 6 };
+      elements.push({ data: { id: `lane:${lane.id}`, title: lane.title, blurb: lane.blurb }, classes: 'lane', selectable: false, grabbable: false });
+      for (const ph of view.phases) {
+        (cell[lane.id] && cell[lane.id][ph.id] || []).forEach((n, idx) => {
+          elements.push({
+            data: { id: n.id, parent: `lane:${lane.id}`, title: n.title, blurb: n.blurb, view: view.id },
+            position: { x: colX[ph.id], y: y + LPAD + idx * (NH + GY) + NH / 2 },
+            classes: `item ${laneKind(n.lane)}${n.dashed ? ' dashedn' : ''}`,
+          });
+        });
       }
-      const p = svgEl('path', { d, class: `edge ${e.style || ''}`, 'marker-end': 'url(#arr)' });
-      if (e.bidir) p.setAttribute('marker-start', 'url(#arr)');
-      p.dataset.from = e.from; p.dataset.to = e.to; svg.append(p);
-      if (e.label) { const t = svgEl('text', { x: mid.x, y: mid.y, class: 'edge-label', 'text-anchor': 'middle' }); t.textContent = e.label; svg.append(t); }
+      y += LPAD * 2 + depth * (NH + GY) - GY + LGAP;
     }
+    const nodesById = Object.fromEntries(view.nodes.map(n => [n.id, n]));
+    return elements.concat((view.edges || []).map((e, i) => {
+      const a = nodesById[e.from], b = nodesById[e.to];
+      const horiz = a && b && a.lane === b.lane && a.phase !== b.phase;
+      return { data: { id: `e${i}:${e.from}:${e.to}`, source: e.from, target: e.to, label: e.label || '' }, classes: `${e.style || ''}${horiz ? ' horiz' : ''}${e.bidir ? ' bidir' : ''}` };
+    }));
+  }
 
-    for (const [id, p] of Object.entries(pos)) {
-      const g = nodeGroup(p.node, p, p.node.lane, p.node.dashed ? 'dashed' : '');
-      g.addEventListener('click', () => openNode(view.id, id));
-      svg.append(g);
-    }
-    pane.innerHTML = ''; pane.append(svg);
-    attachHover(svg, adjacency);
+  /* ---------- cytoscape ---------- */
+  function cyStyle() {
+    const muted = cssVar('--muted'), accent = cssVar('--accent'), line = cssVar('--line'), card = cssVar('--card'), bg = cssVar('--bg');
+    const fill = (v, b) => ({ 'background-color': cssVar(v), 'border-color': cssVar(b) });
+    return [
+      { selector: 'node.item', style: {
+        shape: 'round-rectangle', width: NW, height: NH, 'border-width': 1.5, label: '',
+        'transition-property': 'opacity', 'transition-duration': '0.12s', ...fill('--stage', '--stage-line') } },
+      { selector: '.k-services, .k-probes, .k-sub, .k-siblings', style: fill('--lane', '--lane-line') },
+      { selector: '.k-ux, .k-you', style: fill('--human', '--human-line') },
+      { selector: '.k-repo, .k-playbooks, .k-setup', style: fill('--artifact', '--artifact-line') },
+      { selector: 'node.gate', style: fill('--gate', '--gate-line') },
+      { selector: 'node.external, node.dashedn', style: { 'border-style': 'dashed' } },
+      { selector: 'node.external', style: fill('--artifact', '--artifact-line') },
+      { selector: 'node.active', style: { 'border-color': accent, 'border-width': 3 } },
+      { selector: 'node.lane', style: {
+        shape: 'round-rectangle', 'background-color': card, 'background-opacity': .55,
+        'border-color': line, 'border-width': 1, label: '', padding: '20px' } },
+      { selector: 'node.phase-head', style: { 'background-opacity': 0, 'border-width': 0, width: NW, height: 24, label: '' } },
+      { selector: 'edge', style: {
+        'curve-style': 'taxi', 'taxi-direction': 'vertical', 'taxi-turn': '45%', 'taxi-turn-min-distance': 12,
+        width: 1.5, 'line-color': muted, 'target-arrow-color': muted, 'target-arrow-shape': 'triangle',
+        'arrow-scale': .75, opacity: .5, label: 'data(label)', 'font-size': 9.5, color: muted,
+        'text-background-color': bg, 'text-background-opacity': .9, 'text-background-padding': 2,
+        'transition-property': 'opacity', 'transition-duration': '0.12s' } },
+      { selector: 'edge.horiz', style: { 'taxi-direction': 'horizontal' } },
+      { selector: 'edge.optional', style: { 'line-style': 'dashed' } },
+      { selector: 'edge.external', style: { 'line-style': 'dashed', 'line-color': cssVar('--artifact-line'), 'target-arrow-color': cssVar('--artifact-line'), opacity: .85 } },
+      { selector: 'edge.flow', style: { 'line-color': accent, 'target-arrow-color': accent, width: 2.2, opacity: .85 } },
+      { selector: 'edge.bidir', style: { 'source-arrow-shape': 'triangle', 'source-arrow-color': muted } },
+      { selector: '.dim', style: { opacity: .12 } },
+    ];
+  }
+
+  function dimHtmlLabels(keepIds) {
+    document.querySelectorAll('#cy .cy-title').forEach(d => {
+      d.classList.toggle('dimmed', keepIds ? !keepIds.has(d.dataset.nid) : false);
+    });
+  }
+
+  function renderView() {
+    const view = state.views[state.current];
+    $('#view-subtitle').textContent = view.subtitle;
+    document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('active', b.dataset.view === state.current));
+    const elements = view.type === 'swimlane' ? buildSwimElements(view) : buildGraphElements(view);
+    if (cy) { cy.destroy(); cy = null; }
+    $('#cy').innerHTML = '';
+    cy = window.cytoscape({
+      container: $('#cy'), elements, style: cyStyle(), layout: { name: 'preset' },
+      autoungrabify: true, boxSelectionEnabled: false, wheelSensitivity: .25,
+      minZoom: .25, maxZoom: 2.75,
+    });
+    cy.nodeHtmlLabel([
+      { query: 'node.item', tpl: d => `<div class="cy-title" data-nid="${esc(d.id)}"><b>${esc(d.title)}</b><span>${esc(d.blurb)}</span></div>` },
+      { query: 'node.lane', valign: 'top', valignBox: 'top', tpl: d => `<div class="cy-lane"><b>${esc(d.title)}</b><span> — ${esc(d.blurb)}</span></div>` },
+      { query: 'node.phase-head', tpl: d => `<div class="cy-phase">${esc(d.title)}</div>` },
+    ], { enablePointerEvents: false });
+    cy.on('mouseover', 'node.item', (e) => {
+      const hood = e.target.closedNeighborhood();
+      cy.elements('node.item, edge').not(hood).addClass('dim');
+      dimHtmlLabels(new Set(hood.nodes().map(n => n.id())));
+      $('#cy').style.cursor = 'pointer';
+    });
+    cy.on('mouseout', 'node.item', () => {
+      cy.elements().removeClass('dim');
+      dimHtmlLabels(null);
+      $('#cy').style.cursor = '';
+    });
+    cy.on('tap', 'node.item', (e) => {
+      const id = e.target.id();
+      const view = state.views[state.current];
+      const node = view.nodes.find(n => n.id === id);
+      if (!node) { // synthesized external node
+        const owner = view.nodes.map(n => (state.fm[n.id] || {}).external || []).flat().find(x => x && x.name === id);
+        if (owner) window.open(owner.source, '_blank');
+        return;
+      }
+      openNode(state.current, id);
+    });
+    cy.fit(undefined, 28);
+    if (state.active) cy.$id(state.active).addClass('active');
   }
 
   /* ---------- sheet ---------- */
-  function closeSheet() { document.body.classList.remove('sheet-open'); state.active = null; render(); setHash(); }
+  function closeSheet() {
+    document.body.classList.remove('sheet-open');
+    state.active = null;
+    if (cy) cy.$('.active').removeClass('active');
+    setHash();
+  }
   $('#backdrop').addEventListener('click', closeSheet);
   $('#sheet-close').addEventListener('click', closeSheet);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.body.classList.contains('sheet-open')) closeSheet(); });
 
-  function sheetChrome(title, desc, fm, node) {
+  function markActive(nodeId) {
+    state.active = nodeId;
+    if (cy) { cy.$('.active').removeClass('active'); if (nodeId) cy.$id(nodeId).addClass('active'); }
+  }
+
+  function sheetChrome(title, desc, fm) {
     const head = $('#sheet-head'); head.innerHTML = '';
-    head.append(el('div', { class: 'node-head' },
-      el('h2', {}, title), el('p', { class: 'desc' }, desc || '')));
+    head.append(el('div', { class: 'node-head' }, el('h2', {}, title), el('p', { class: 'desc' }, desc || '')));
     if (fm) {
       const chips = el('div', { class: 'chips' });
       if (fm.invocation) chips.append(el('span', { class: 'chip' }, `invocation: ${fm.invocation}`));
       if (fm.execution) chips.append(el('span', { class: 'chip' }, `execution: ${fm.execution}`));
-      for (const r of fm.requires || []) chips.append(el('span', { class: 'chip dep', onclick: () => openNode('sdlc', r) }, `requires ${r}`));
-      for (const o of fm.optional || []) chips.append(el('span', { class: 'chip dep opt', onclick: () => openNode('sdlc', o) }, `optional ${o}`));
+      for (const r of fm.requires || []) chips.append(el('span', { class: 'chip dep', onclick: () => jumpTo('sdlc', r) }, `requires ${r}`));
+      for (const o of fm.optional || []) chips.append(el('span', { class: 'chip dep opt', onclick: () => jumpTo('sdlc', o) }, `optional ${o}`));
       for (const e of (Array.isArray(fm.external) ? fm.external : [])) if (e.name) chips.append(el('span', { class: 'chip dep ext', onclick: () => window.open(e.source, '_blank') }, `external ${e.name}`));
       head.querySelector('.node-head').append(chips);
     }
@@ -334,7 +288,7 @@
     let lastGroup = null;
     for (const f of files) {
       if (f.group !== lastGroup) { bar.append(el('span', { class: 'grp' }, f.group)); lastGroup = f.group; }
-      const b = el('button', { onclick: () => { openNode('sdlc', node.id, f.full); } }, f.label);
+      const b = el('button', { onclick: () => openSkillSheet(node, f.full, state.current, state.active) }, f.label);
       if (f.full === activeFull) b.classList.add('active');
       bar.append(b);
     }
@@ -342,18 +296,20 @@
     return files;
   }
 
+  function jumpTo(viewId, nodeId) {
+    if (state.current !== viewId) { state.current = viewId; renderView(); }
+    openNode(viewId, nodeId);
+  }
+
   async function openNode(viewId, nodeId, filePath) {
-    const sdlc = state.views.sdlc;
     const view = state.views[viewId];
     const node = view.nodes.find(n => n.id === nodeId);
     if (!node) return;
-
-    // flow/backlog nodes: resolve their open target
     if (node.open) {
-      if (node.open.jump) { switchView(node.open.jump, () => openNode(node.open.jump, node.open.node)); return; }
-      if (node.open.node) { openSkillSheet(sdlc.nodes.find(n => n.id === node.open.node), undefined, viewId, nodeId); return; }
+      if (node.open.jump) { jumpTo(node.open.jump, node.open.node); return; }
+      if (node.open.node) { openSkillSheet(state.views.sdlc.nodes.find(n => n.id === node.open.node), undefined, viewId, nodeId); return; }
       if (node.open.file) {
-        state.active = nodeId; render();
+        markActive(nodeId);
         sheetChrome(node.title, node.blurb, null);
         $('#sheet-tabs').innerHTML = '';
         document.body.classList.add('sheet-open');
@@ -367,17 +323,17 @@
 
   function openSkillSheet(node, filePath, viewId, activeNodeId) {
     if (!node) return;
-    state.active = activeNodeId || node.id; render();
+    markActive(activeNodeId || node.id);
     const fm = state.fm[node.id] || {};
-    sheetChrome(node.title, fm.description || node.blurb, fm, node);
+    sheetChrome(node.title, fm.description || node.blurb, fm);
     const files = skillTabs(node, filePath || `${node.source}/${node.files[0].path}`);
     const file = files.find(f => f.full === filePath) || files[0];
     document.body.classList.add('sheet-open');
-    setHash(viewId || 'sdlc', node.id, file.full);
+    setHash(viewId || 'sdlc', state.active, file.full);
     renderFile(file.full);
   }
 
-  /* ---------- routing / shell ---------- */
+  /* ---------- shell ---------- */
   function setHash(viewId, nodeId, file) {
     const parts = [viewId || state.current];
     if (nodeId) parts.push(nodeId);
@@ -385,18 +341,10 @@
     history.replaceState(null, '', '#' + parts.join('/'));
   }
 
-  function render() {
-    const view = state.views[state.current];
-    $('#view-subtitle').textContent = view.subtitle;
-    document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('active', b.dataset.view === state.current));
-    (view.type === 'swimlane' ? renderSwimlane : renderGraph)(view);
-  }
-
-  function switchView(id, after) {
+  function switchView(id) {
     state.current = id; state.active = null;
     document.body.classList.remove('sheet-open');
-    render(); setHash(id);
-    if (after) after();
+    renderView(); setHash(id);
   }
 
   async function init() {
@@ -404,21 +352,23 @@
       state.views[id] = JSON.parse(await fetchText(`site/views/${id}.json`).catch(() => fetchText(`views/${id}.json`)));
     }));
     const nav = $('#nav');
-    for (const id of VIEW_IDS) {
-      nav.append(el('button', { 'data-view': id, onclick: () => switchView(id) }, state.views[id].title));
-    }
+    for (const id of VIEW_IDS) nav.append(el('button', { 'data-view': id, onclick: () => switchView(id) }, state.views[id].title));
     await Promise.all(state.views.sdlc.nodes.map(async n => {
       try { state.fm[n.id] = parseFrontmatter(await fetchText(`${n.source}/SKILL.md`)).fm; }
       catch { state.fm[n.id] = {}; }
     }));
+    $('#zoom-in').addEventListener('click', () => cy && cy.zoom({ level: cy.zoom() * 1.25, renderedPosition: { x: $('#cy').clientWidth / 2, y: $('#cy').clientHeight / 2 } }));
+    $('#zoom-out').addEventListener('click', () => cy && cy.zoom({ level: cy.zoom() / 1.25, renderedPosition: { x: $('#cy').clientWidth / 2, y: $('#cy').clientHeight / 2 } }));
+    $('#zoom-fit').addEventListener('click', () => cy && cy.fit(undefined, 28));
+    window.addEventListener('resize', () => cy && cy.resize());
+
     const h = location.hash.slice(1);
     if (h) {
       const [v, nodeId, ...rest] = h.split('/');
       if (state.views[v]) state.current = v;
-      render();
+      renderView();
       if (nodeId) openNode(state.current, nodeId, rest.length ? decodeURIComponent(rest.join('/')) : undefined);
-    } else render();
-    window.addEventListener('resize', () => render());
+    } else renderView();
   }
-  init().catch(e => { $('#graph-pane').innerHTML = `<div class="err" style="margin:2rem">Failed to load: ${e.message}. Serve from the repo root: <code>python3 -m http.server</code>, open <code>/site/</code>.</div>`; });
+  init().catch(e => { $('#cy').innerHTML = `<div class="err" style="margin:2rem">Failed to load: ${e.message}. Serve from the repo root: <code>python3 -m http.server</code>, open <code>/site/</code>.</div>`; });
 })();

@@ -30,8 +30,13 @@ cannot fetch.
 ## Vendored dependencies
 
 - `vendor/markdown-it.min.js` — markdown-it **14.1.0**, MIT (`vendor/markdown-it.LICENSE`). CommonMark +
-  GFM tables. To upgrade: replace the file from the pinned npm dist, update the version here, and reload a
-  few heavy pages (backlog references, tables) to eyeball parity.
+  GFM tables.
+- `vendor/cytoscape.min.js` — Cytoscape.js **3.30.4**, MIT (`vendor/cytoscape.LICENSE`). The canvas engine:
+  pan/zoom, taxi-routed edges with boundary-clipped arrowheads, compound lane nodes, hover neighborhoods.
+- `vendor/cytoscape-node-html-label.min.js` — **1.2.2**, MIT. Renders the rich node labels (bold title +
+  muted blurb) as HTML overlays on the canvas.
+- To upgrade any of them: replace the file from the pinned npm dist, update the version here, and reload
+  all three views to eyeball parity (edge routing and label alignment are the regressions to watch).
 
 ## Future deployment (recorded intent, not built)
 

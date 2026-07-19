@@ -44,31 +44,21 @@
   .lg.flw { border-top-color: var(--accent); }
   .lg.ext { border-top-style: dashed; border-top-color: var(--artifact-line); }
 
-  #graph-pane { position: absolute; inset: 49px 0 0 0; overflow: auto; padding: 14px 18px 40px; }
-  #graph-pane svg { display: block; margin: 0 auto; }
+  #graph-pane { position: absolute; inset: 49px 0 0 0; }
+  #cy { position: absolute; inset: 0; }
+  #cy-controls { position: absolute; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 6px; z-index: 10; }
+  #cy-controls button { font: inherit; font-size: 1.05rem; width: 34px; height: 34px; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 8px; cursor: pointer; line-height: 1; }
+  #cy-controls button:hover { border-color: var(--accent); color: var(--accent-ink); }
 
-  /* graph */
-  .lane-bg { fill: var(--card); stroke: var(--line); }
-  .lane-title { font-size: 11px; font-weight: 700; fill: var(--accent-ink); letter-spacing: .05em; text-transform: uppercase; }
-  .lane-blurb { font-size: 10px; fill: var(--muted); }
-  .phase-title { font-size: 11px; font-weight: 700; fill: var(--accent-ink); letter-spacing: .04em; }
-  .node rect { fill: var(--stage); stroke: var(--stage-line); stroke-width: 1.5; cursor: pointer; transition: opacity .15s; }
-  .node.k-services rect, .node.k-probes rect, .node.k-sub rect, .node.k-siblings rect { fill: var(--lane); stroke: var(--lane-line); }
-  .node.k-ux rect, .node.k-you rect { fill: var(--human); stroke: var(--human-line); }
-  .node.k-repo rect, .node.k-playbooks rect, .node.k-setup rect { fill: var(--artifact); stroke: var(--artifact-line); }
-  .node.gate rect { fill: var(--gate); stroke: var(--gate-line); }
-  .node.external rect, .node.dashed rect { stroke-dasharray: 5 3; }
-  .node.external rect { fill: var(--artifact); stroke: var(--artifact-line); }
-  .node text.t { font-size: 12.5px; font-weight: 650; fill: var(--ink); pointer-events: none; }
-  .node text.b { font-size: 9.5px; fill: var(--muted); pointer-events: none; }
-  .node.active rect { stroke: var(--accent); stroke-width: 2.5; }
-  svg.dimming .node:not(.hot) { opacity: .28; }
-  svg.dimming .edge:not(.hot) { opacity: .08; }
-  .edge { stroke: var(--muted); stroke-width: 1.4; fill: none; opacity: .5; transition: opacity .15s; }
-  .edge.optional { stroke-dasharray: 4 3; }
-  .edge.external { stroke-dasharray: 4 3; stroke: var(--artifact-line); opacity: .85; }
-  .edge.flow { stroke: var(--accent); stroke-width: 2.1; opacity: .85; }
-  .edge-label { font-size: 9.5px; fill: var(--muted); }
+  /* canvas node labels (cytoscape-node-html-label overlays; boxes are drawn by the engine) */
+  .cy-title { width: 156px; pointer-events: none; text-align: left; line-height: 1.25; transition: opacity .12s; }
+  .cy-title b { display: block; font-size: 12.5px; font-weight: 650; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cy-title span { display: block; font-size: 9.5px; color: var(--muted); max-height: 24px; overflow: hidden; }
+  .cy-title.dimmed { opacity: .18; }
+  .cy-lane { pointer-events: none; white-space: nowrap; transform: translateY(14px); }
+  .cy-lane b { font-size: 11px; font-weight: 700; color: var(--accent-ink); letter-spacing: .05em; text-transform: uppercase; }
+  .cy-lane span { font-size: 10px; color: var(--muted); }
+  .cy-phase { pointer-events: none; font-size: 11.5px; font-weight: 700; color: var(--accent-ink); letter-spacing: .04em; white-space: nowrap; }
 
   /* sheet */
   #backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.35); opacity: 0; pointer-events: none; transition: opacity .18s; z-index: 40; }
@@ -119,7 +109,14 @@
     <span><span class="lg flw"></span> flow</span>
   </div>
 </header>
-<div id="graph-pane"></div>
+<div id="graph-pane">
+  <div id="cy"></div>
+  <div id="cy-controls">
+    <button id="zoom-in" title="Zoom in">+</button>
+    <button id="zoom-out" title="Zoom out">−</button>
+    <button id="zoom-fit" title="Fit">⤢</button>
+  </div>
+</div>
 <div id="backdrop"></div>
 <aside id="sheet" aria-modal="true" role="dialog">
   <button id="sheet-close" title="Close (Esc)">×</button>
@@ -128,6 +125,8 @@
   <div id="sheet-body"></div>
 </aside>
 <script src="vendor/markdown-it.min.js"></script>
+<script src="vendor/cytoscape.min.js"></script>
+<script src="vendor/cytoscape-node-html-label.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
