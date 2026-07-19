@@ -1,0 +1,41 @@
+{
+ "version": 2,
+ "updated_at": "2026-07-19T09:00:00+04:00",
+ "workspace_id": "gw_walkthrough",
+ "connectors": {
+  "gmail": "unavailable",
+  "calendar": "unavailable"
+ },
+ "chrome": {
+  "profile_path": "goodwork/chrome-profile",
+  "status": "missing",
+  "sites": {}
+ },
+ "tailscale": {
+  "status": "available",
+  "magicdns_url": "https://ashers-macbook-pro.tail045dd5.ts.net"
+ },
+ "ui": {
+  "diffs_vendor": "missing",
+  "status": "ok"
+ },
+ "reconcile": {
+  "cadence": "manual",
+  "last_run_at": "2026-07-15T09:00:00+04:00"
+ },
+ "execution": {
+  "rungs": [
+   "manual"
+  ]
+ },
+ "presentation": {
+  "rungs": [
+   "inline-widget",
+   "server-page",
+   "markdown"
+  ]
+ },
+ "notifications": {
+  "status": "missing"
+ }
+}

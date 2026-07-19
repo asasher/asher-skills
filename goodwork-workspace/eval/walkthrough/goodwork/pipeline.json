@@ -1,0 +1,252 @@
+{
+ "version": 2,
+ "updated_at": "2026-07-19T09:00:00+04:00",
+ "cards": [
+  {
+   "id": "pipe_001",
+   "target_id": "tgt_01",
+   "role": "Staff Data Engineer",
+   "stage": "interview",
+   "warmth": "hot",
+   "next_action": "Prep the systems-design round with Dana's notes",
+   "due_at": "2026-07-20",
+   "owner": "user",
+   "status": "open",
+   "thread_ids": [
+    "th_11"
+   ],
+   "history": [
+    {
+     "at": "2026-07-02",
+     "kind": "sent",
+     "summary": "You reached out to Dana \u2014 warm intro via the payer-data guild"
+    },
+    {
+     "at": "2026-07-04",
+     "kind": "reply",
+     "summary": "Dana replied, happy to chat \u2014 call booked for the 8th"
+    },
+    {
+     "at": "2026-07-08",
+     "kind": "call",
+     "summary": "Great conversation; they're rebuilding claims ingestion and Dana offered a referral"
+    },
+    {
+     "at": "2026-07-10",
+     "kind": "applied",
+     "summary": "Application went in with Dana's referral attached"
+    },
+    {
+     "at": "2026-07-15",
+     "kind": "stage",
+     "summary": "Recruiter screen passed \u2014 systems-design round scheduled"
+    }
+   ],
+   "replies": [],
+   "reply_digest": null,
+   "drafts": [],
+   "artifact_ids": [],
+   "approval_ids": [
+    "appr_09"
+   ],
+   "proof_ids": [
+    "prf_02"
+   ]
+  },
+  {
+   "id": "pipe_002",
+   "target_id": "tgt_02",
+   "role": "Data Platform Lead",
+   "stage": "outreach",
+   "warmth": "warm",
+   "next_action": "Intro note to Priya \u2014 waiting for your OK",
+   "due_at": "2026-07-19",
+   "owner": "agent",
+   "status": "open",
+   "thread_ids": [],
+   "history": [
+    {
+     "at": "2026-07-16",
+     "kind": "note",
+     "summary": "Sam offered to introduce you to Priya, their data platform lead"
+    },
+    {
+     "at": "2026-07-18",
+     "kind": "draft",
+     "summary": "Intro note drafted \u2014 waiting for your OK"
+    }
+   ],
+   "replies": [],
+   "reply_digest": null,
+   "drafts": [
+    {
+     "id": "draft_21",
+     "channel": "gmail",
+     "artifact_id": "art_21",
+     "content_hash": "08b5571735f9efce",
+     "created_at": "2026-07-18T09:12:00+04:00",
+     "status": "pending"
+    }
+   ],
+   "artifact_ids": [
+    "art_21"
+   ],
+   "approval_ids": [],
+   "proof_ids": []
+  },
+  {
+   "id": "pipe_003",
+   "target_id": "tgt_03",
+   "role": "Analytics Engineer",
+   "stage": "conversation",
+   "warmth": "warm",
+   "next_action": "Send Maya the thank-you + dbt teardown you promised",
+   "due_at": "2026-07-19",
+   "owner": "agent",
+   "status": "open",
+   "thread_ids": [
+    "th_31"
+   ],
+   "history": [
+    {
+     "at": "2026-07-09",
+     "kind": "sent",
+     "summary": "Note to Maya referencing her grid-emissions talk"
+    },
+    {
+     "at": "2026-07-12",
+     "kind": "reply",
+     "summary": "Maya replied warmly \u2014 call booked"
+    },
+    {
+     "at": "2026-07-14",
+     "kind": "call",
+     "summary": "45 minutes; she wants the dbt teardown and offered an intro to their data lead"
+    },
+    {
+     "at": "2026-07-18",
+     "kind": "draft",
+     "summary": "Thank-you with the teardown link drafted \u2014 waiting for your OK"
+    }
+   ],
+   "replies": [
+    {
+     "id": "reply_07",
+     "channel": "gmail",
+     "received_at": "2026-07-18T18:40:00+04:00",
+     "from": "maya@cascadia.org",
+     "summary": "Checking in \u2014 did you still want that intro to our data lead?",
+     "stage_signal": "referral"
+    }
+   ],
+   "reply_digest": null,
+   "drafts": [
+    {
+     "id": "draft_34",
+     "channel": "gmail",
+     "artifact_id": "art_34",
+     "content_hash": "562bd713c7bce73d",
+     "created_at": "2026-07-18T21:00:00+04:00",
+     "status": "pending"
+    }
+   ],
+   "artifact_ids": [
+    "art_34"
+   ],
+   "approval_ids": [],
+   "proof_ids": []
+  },
+  {
+   "id": "pipe_004",
+   "target_id": "tgt_04",
+   "role": "Senior Data Engineer",
+   "stage": "applied",
+   "warmth": "cold",
+   "next_action": "Nudge the insider referral \u2014 one-week mark",
+   "due_at": "2026-07-22",
+   "owner": "agent",
+   "status": "open",
+   "thread_ids": [],
+   "history": [
+    {
+     "at": "2026-07-15",
+     "kind": "applied",
+     "summary": "Applied via Greenhouse \u2014 tailored CV v3, referral working"
+    },
+    {
+     "at": "2026-07-16",
+     "kind": "note",
+     "summary": "No confirmation email yet; follow-up set for the one-week mark"
+    }
+   ],
+   "replies": [],
+   "reply_digest": null,
+   "drafts": [],
+   "artifact_ids": [],
+   "approval_ids": [
+    "appr_06"
+   ],
+   "proof_ids": []
+  },
+  {
+   "id": "pipe_006",
+   "target_id": "tgt_06",
+   "role": "Data Engineering Manager",
+   "stage": "offer",
+   "warmth": "hot",
+   "next_action": "Score the offer against your profile \u2014 comp call Monday",
+   "due_at": "2026-07-20",
+   "owner": "user",
+   "status": "open",
+   "thread_ids": [
+    "th_61"
+   ],
+   "history": [
+    {
+     "at": "2026-06-20",
+     "kind": "sent",
+     "summary": "Referred by Tomas after the meetup talk"
+    },
+    {
+     "at": "2026-07-01",
+     "kind": "call",
+     "summary": "Hiring-manager conversation \u2014 strong mutual fit"
+    },
+    {
+     "at": "2026-07-09",
+     "kind": "stage",
+     "summary": "Final loop done; team debrief positive"
+    },
+    {
+     "at": "2026-07-16",
+     "kind": "stage",
+     "summary": "Offer received \u2014 comp call Monday"
+    }
+   ],
+   "replies": [],
+   "reply_digest": null,
+   "drafts": [],
+   "artifact_ids": [],
+   "approval_ids": [
+    "appr_08"
+   ],
+   "proof_ids": [
+    "prf_03"
+   ]
+  }
+ ],
+ "unmatched_replies": [
+  {
+   "id": "reply_90",
+   "channel": "gmail",
+   "received_at": "2026-07-18T22:10:00+04:00",
+   "from": "talent@brightops.io",
+   "summary": "'Loved your profile \u2014 open to a chat about a data role?' Mentions both Meridian and Bluepeak in the signature block.",
+   "match_candidates": [
+    "pipe_001",
+    "pipe_004"
+   ],
+   "status": "pending"
+  }
+ ]
+}

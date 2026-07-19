@@ -1,0 +1,98 @@
+{
+ "version": 2,
+ "updated_at": "2026-07-19T09:00:00+04:00",
+ "targets": [
+  {
+   "id": "tgt_01",
+   "name": "Meridian Health",
+   "kind": "employer",
+   "scores": {
+    "advocacy": 3,
+    "motivation": 5,
+    "posting": 3
+   },
+   "rank": 1,
+   "status": "active",
+   "reason_codes": [],
+   "insider_ids": [
+    "Dana"
+   ]
+  },
+  {
+   "id": "tgt_02",
+   "name": "Northwind Robotics",
+   "kind": "employer",
+   "scores": {
+    "advocacy": 2,
+    "motivation": 4,
+    "posting": 2
+   },
+   "rank": 2,
+   "status": "active",
+   "reason_codes": [],
+   "insider_ids": [
+    "Sam\u2192Priya"
+   ]
+  },
+  {
+   "id": "tgt_03",
+   "name": "Cascadia Climate Fund",
+   "kind": "employer",
+   "scores": {
+    "advocacy": 2,
+    "motivation": 5,
+    "posting": 1
+   },
+   "rank": 3,
+   "status": "active",
+   "reason_codes": [],
+   "insider_ids": [
+    "Maya"
+   ]
+  },
+  {
+   "id": "tgt_04",
+   "name": "Bluepeak Logistics",
+   "kind": "employer",
+   "scores": {
+    "advocacy": 1,
+    "motivation": 3,
+    "posting": 3
+   },
+   "rank": 6,
+   "status": "active",
+   "reason_codes": [],
+   "insider_ids": []
+  },
+  {
+   "id": "tgt_05",
+   "name": "Lumen Bio",
+   "kind": "employer",
+   "scores": {
+    "advocacy": 1,
+    "motivation": 4,
+    "posting": 2
+   },
+   "rank": 5,
+   "status": "active",
+   "reason_codes": [],
+   "insider_ids": []
+  },
+  {
+   "id": "tgt_06",
+   "name": "Atlas Grid",
+   "kind": "employer",
+   "scores": {
+    "advocacy": 3,
+    "motivation": 4,
+    "posting": 3
+   },
+   "rank": 4,
+   "status": "active",
+   "reason_codes": [],
+   "insider_ids": [
+    "Tomas"
+   ]
+  }
+ ]
+}
