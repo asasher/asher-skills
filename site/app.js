@@ -316,7 +316,9 @@
     $('#cy').innerHTML = '';
     graph = new X6.Graph({
       container: $('#cy'), autoResize: true, interacting: false,
-      panning: { enabled: true }, mousewheel: { enabled: true, minScale: .25, maxScale: 2.75 },
+      panning: { enabled: true },
+      // default wheel factor is 1.2× per event — a trackpad flick fires dozens and compounds wildly
+      mousewheel: { enabled: true, minScale: .25, maxScale: 2.75, factor: 1.04 },
     });
     const built = view.type === 'swimlane' ? buildSwimElements(view) : buildGraphElements(view);
     drawCells(built, view.id);
