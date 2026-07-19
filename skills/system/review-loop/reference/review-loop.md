@@ -2,17 +2,15 @@
 
 The annotate→revise→approve contract. An artifact pausing for a verdict — a plan awaiting approval, a
 prototype's answer sheet, a maquette, any reviewed document — is served through `scripts/review-server.py`,
-not as a bare file, so the human can talk back. The scripts implement this contract; this doc *is* the
-contract. The CLI that drives it is in [scripts](scripts.md); the surface it serves over and the hub are in
+not as a bare file, so the human can talk back. This doc is the contract the scripts implement. The CLI that
+drives it is in [scripts](scripts.md); the surface it serves over and the hub are in
 [surface-and-hub](surface-and-hub.md).
 
 ## Durable serve
 
-The public serve command returns only after a detached worker answers its authenticated health check. Its OS
-session, closed inherited descriptors, state-scoped log, and atomic PID/port/instance record make the endpoint
-independent of the issuing exec session, PTY, agent turn, and watcher. Teardown is explicit and idempotent:
-`--stop --state <dir>` verifies the live instance before signaling and removes its hub row. The watcher only
-delivers an event after submission; it never owns the server that must receive that event.
+The serve command returns only after a detached worker answers its authenticated health check; mechanics and
+teardown in [scripts](scripts.md). The watcher only delivers an event after submission; it never owns the
+server that must receive that event.
 
 ## Serve-time chrome
 
@@ -41,15 +39,13 @@ Comments accumulate in the browser and submit as **one batch** carrying a verdic
 
 An approval carries the **content hash** of the rendered document. The server recomputes the current hash on
 every request and **rejects an approval whose `doc_hash` no longer matches** — HTTP 409 `{"error":"stale"}`
-with the current hash, and the chrome banners "the document changed since you loaded it — reload latest."
-Editing the artifact after a page load invalidates any prior-hash approval, so the human can never sign off
-on a version they did not see. This is the load-bearing safety invariant.
+with the current hash, and the chrome banners "the document changed since you loaded it — reload latest" —
+so the human can never sign off on a version they did not see. This is the load-bearing safety invariant.
 
 ## The verdict-coded await gate
 
 The agent blocks on `scripts/review-await.py --state <dir> --timeout <secs>`. Its **exit code is the
-verdict**: `0` approve, `3` approve_with_nits, `10` request_changes, `124` timeout — branch on it without
-parsing. The event log (`events.jsonl` in the run's state dir) is durable and **cursor-tracked**
+verdict** — branch on it without parsing ([scripts](scripts.md)). The event log (`events.jsonl` in the run's state dir) is durable and **cursor-tracked**
 (`state/.await-cursor`), so feedback submitted while no agent was listening is drained by the next await. On
 timeout, end the turn with the pause message's two links (see [surface-and-hub](surface-and-hub.md)); the
 next invocation re-awaits from the cursor.
@@ -83,10 +79,9 @@ root (backlog's `<git-common-dir>/backlog/runs/<run-id>/`), copy `events.jsonl` 
 before `--stop` — the raw event stream is part of the run's provenance and must survive review cleanup.
 
 Each feedback event records **client evidence** (remote address, user agent, referer, server start time).
-Audit heuristics for a suspect approval, from the #46 self-approval incident: a verdict seconds after server
+Audit heuristics for a suspect approval: a verdict seconds after server
 start, a loopback/CLI client where a human browser is expected, or an approval on a route that was never
-published are grounds to void and re-present. Custody hardening (the awaiting thread never holding what can
-mint a verdict) remains open follow-up; until then these checks are the guard.
+published are grounds to void and re-present. These checks are the guard.
 
 ## The approve event is the approval record
 

@@ -1,9 +1,7 @@
 # Split: <name of the direction being split>
 
-<!-- The whole split, drafted BEFORE publishing — the artifact the user reacts to during the quiz. Revise it
-     against their feedback on granularity and blocking edges; re-present until approved. Only then publish,
-     blockers first, turning local Tn labels into tracker ids and the edge list into `- [ ] depends on #N`
-     lines copied verbatim from the repo's dependency playbook. -->
+<!-- The whole split, drafted BEFORE publishing — the artifact the user reacts to during the quiz. Revise
+     through the quiz; publish only after approval (reference/slicing.md § Quiz, § Order and wire). -->
 
 > Source: <spec path / plan / "this conversation">. Read as direction — never modified by to-tickets.
 

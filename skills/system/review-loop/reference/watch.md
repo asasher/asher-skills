@@ -32,14 +32,13 @@ time without draining the orchestrator's budget or context.
   class staffing names (`roles-and-fallback.md`: the minimum, "nothing staffs below it"). The watch task
   justifies the Floor exactly: it needs no intelligence, taste, or capability above the minimum — it only
   runs `review-await.py` and reports an exit code. **Do not resolve the watcher with a generic
-  `staffing route` of the watch task:** an unpinned, no-capability task is ranked by
-  `intelligence > taste > cost`, so `route` returns the **most capable** reachable model (cost is only a
-  tie-break) — the opposite of a cheap park. Read the Floor value the roster publishes instead. Do **not**
-  bake in a model name: read the Floor from the current harness's effect-verified reachability graph. A
-  Codex-driven run may include Claude through sibling harness dispatch (`claude -p`, never `--bare`), but a
-  failure removes only that direction and may change the reachable Floor. Walk staffing's succession ladder
-  if the Floor route is unavailable; if none remains, run the watch on the current model in a subagent—never
-  skip it. (The watcher reads the existing Floor; it does not add a pin or role.)
+  `staffing route` of the watch task:** a generic route returns the **most capable** reachable model — the
+  opposite of a cheap park (why: staffing's `rankings-and-routing.md`). Read the Floor value the roster
+  publishes instead. Do **not** bake in a model name: read the Floor from the current harness's
+  effect-verified reachability graph. A Codex-driven run may include Claude through sibling harness dispatch
+  (`claude -p`, never `--bare`), but a failure removes only that direction and may change the reachable
+  Floor. On route loss follow staffing's succession ladder; absent staffing, degrade per SKILL.md. (The
+  watcher reads the existing Floor; it does not add a pin or role.)
 - **Separation is by thread, not by model.** Even if the same model would nominally orchestrate and watch,
   delegating the watch into its own thread is what keeps the orchestrator free — not parked, not burning
   context on a wait.
@@ -55,22 +54,15 @@ The watcher **loops-until-verdict** rather than relying on one long single-timeo
 
 Re-arm is **lossless** because `review-await.py` is cursor-tracked (`state/.await-cursor`): a verdict
 submitted while no await was blocking is drained by the next call. So a verdict that lands *between* two
-blocks — or while the watcher is spending a turn to re-invoke — is not missed. This defangs **both** ceilings
-at once: the `--timeout` exit and the harness Bash-tool ceiling are just re-arm boundaries, not the end of
-the watch, so an arbitrarily long AFK review survives. **No change to `review-await.py` is needed** — the
-existing cursor already makes cross-turn re-arming safe; the loop lives in the watcher's contract, not the
-script.
+blocks — or while the watcher is spending a turn to re-invoke — is not missed. Both ceilings become re-arm
+boundaries, so an arbitrarily long AFK review survives.
 
 ## The wake — completion carries the verdict, no polling
 
 When the watcher gets a real verdict it **returns it as its final message**. The subagent's completion is the
 wake signal: the Agent-tool result carries the verdict (and its code) back to the parent, which resumes the
 gate — proceed on `approve`/`approve_with_nits`, revise on `request_changes`. **The parent never polls
-`events.jsonl` itself.** This is the property the approval-delivery hardening turns on: an in-page `approve` /
-`approve_with_nits` / `request_changes` reliably wakes the waiting thread without manual log-watching, and it
-holds through a path-prefixed mount (the real deployment shape — see [surface-and-hub](surface-and-hub.md)
-§ Path-prefix mounts), where the verdict POST reaches the server and fires the verdict-coded await regardless
-of whether the proxy strips or preserves the prefix.
+`events.jsonl` itself.**
 
 `events.jsonl` + `.await-cursor` remain the **durable backstop**, not the primary path. If the watcher dies
 before waking the parent, nothing is lost: the verdict is already appended to the log, and a fresh watcher
@@ -86,6 +78,3 @@ The same delegated watch covers every place a thread pauses for an out-of-band s
 - **The PR-merge watch** — the watcher holds the merge poll (the `ScheduleWakeup` / `Monitor` loop named in
   the platform binding) and wakes the parent when the PR merges. Same shape: a floor-staffed subagent
   loops-until-signal and wakes the parent on completion, so the orchestrator is not parked on the merge wait.
-
-In both cases the rule is identical: don't park the orchestrator, delegate the hold to a cheap
-staffing-resolved watcher, loop-until-signal, and wake the parent on completion.

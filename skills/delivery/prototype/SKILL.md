@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Answer one design question with a throwaway artifact, then throw it away — keep the answer, delete the scaffolding. Usable anywhere, not only dev. Use to settle a state model, layout, UI, or document direction with real alternatives rather than argument — directly, or when a workflow skill hits a question paper can't settle. Not for building the real thing.
+description: Answer one design question with a throwaway artifact — keep the answer, delete the scaffolding. Usable anywhere, not only dev. Use to settle a state model, UI, or document direction with real alternatives — directly, or when a workflow skill hits a question paper can't settle. Not for building the real thing.
 argument-hint: "<design question>"
 user-invocable: true
 metadata:
@@ -28,14 +28,14 @@ it before building. The invoking thread keeps framing and interpretation; dispat
 2. **Built and exposed.** Provide one command or URL and visible state. Serve rendered answer sheets through
    `review-loop`; drive live interactive artifacts directly. Iterate only to settle the named question.
 3. **Answer captured.** Write the decision, why, and relevant variant captures into the caller's durable
-   record. The prototype itself is never the record.
+   record.
 4. **Cleaned.** Delete the artifact or deliberately absorb only its validated core into real work.
 
-Failure to expose a falsifiable observation returns to gate 1. Missing project placement uses a self-contained
-scratch/workspace artifact. Missing `review-loop` degrades to local open; missing `staffing` is reported.
+Failure to expose a falsifiable observation returns to gate 1. Missing `review-loop` degrades to local open;
+missing `staffing` is reported.
 
 ## Dependency surface
 
 - **Bundled:** `reference/prototyping.md`, the caller-neutral technique.
 - **Project:** optional placement delta `docs/agents/prototyping.md`.
-- **Siblings:** required `review-loop` and `staffing`, invoked by name with no file imports.
+- **Siblings:** required `review-loop` and `staffing`, invoked by name.

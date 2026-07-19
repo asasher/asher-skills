@@ -4,7 +4,7 @@ The loop dispatches one issue thread per issue, each in its own worktree, and ea
 
 "Worktree" here is the role noun for an isolated working copy; the mechanics — `git worktree add`, a jj workspace, whatever the repo uses — live in the version-control binding of `docs/agents/platform.md`. The regimes, probes, and scaffold below are about the *stack*, not the VCS, and apply unchanged across bindings.
 
-Do not impose a scheme blindly. First classify the regime, then detect whether the repo already solves it, then — only with approval — scaffold.
+Do not impose a scheme blindly.
 
 ## Regimes
 
@@ -36,7 +36,7 @@ Local-filesystem singletons:
 
 ### The shared-singleton list — the required output
 
-The probes above are not just a report; they compile into an explicit **shared-singleton list** that setup records in `environment.md` § Worktree isolation and that `run` reads before dispatch. One row per resource, each carrying: the resource, its collision mode, and whether local namespacing can isolate it (locally-isolatable vs. not). An empty list is a real result for a greenfield repo with no stack; a real application never produces one. The list *gates* the parallelism verdict below asymmetrically: a `parallel-safe` verdict must be backed by a list with no un-isolated collision (a parallel verdict without a clear list behind it is unverified), while `serialize-verification` may equally be a plain user preference to serialize — the list is what licenses parallel, not what forbids serialize.
+The probes above are not just a report; they compile into an explicit **shared-singleton list** that setup records in `environment.md` § Worktree isolation and that `run` reads before dispatch. One row per resource, each carrying: the resource, its collision mode, and whether local namespacing can isolate it (locally-isolatable vs. not). An empty list is a real result for a greenfield repo with no stack; a real application never produces one. The list *gates* the verdict (§ Parallelism verdict).
 
 ## Detect an existing solution before scaffolding
 
@@ -60,6 +60,6 @@ Setup records one verdict in `environment.md`, derived from the shared-singleton
 - **parallel-safe** — local-isolatable and every singleton on the list is isolated (existing isolation or scaffolded). Never granted by preference alone. Issue threads may verify concurrently.
 - **serialize-verification** — cloud-singleton; or local-isolatable but at least one listed singleton is not yet isolated; or the user simply chose to serialize. Dispatch may still fan out worktrees, but only one may stand up the stack and verify at a time; the others queue on that resource. When singletons force it, **name the exact ones** — pulled from the list, not left abstract; when it is a pure preference (the list is clear), say so.
 
-When the list holds un-isolated singletons, `serialize-verification` is a **hard constraint, not a policy choice**: the resources genuinely collide, so a parallel fan-out that ignores it corrupts shared state (interleaved DB writes, clobbered build artifacts, a mid-run install pulled out from under a running check). A user preference for parallel does not override a shared datastore or a shared build cache — the only routes to `parallel-safe` are isolating every listed singleton or removing it.
+When the list holds un-isolated singletons, `serialize-verification` is a **hard constraint, not a policy choice**: the resources genuinely collide, so a parallel fan-out that ignores it corrupts shared state (see the probes' collision modes). Preference does not override the list — the only routes to `parallel-safe` are isolating every listed singleton or removing it.
 
 A `parallel-safe` verdict may carry a **serialized exception lane**: named classes of issues that must serialize anyway — destructive operations on a shared tenant, real third-party endpoints without per-worktree credentials, features needing deliberately distinct users. Setup records the lane in `environment.md`; `run` tells any dispatched thread whose issue falls in it to serialize its verification.

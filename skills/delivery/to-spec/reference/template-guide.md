@@ -1,8 +1,7 @@
 # Template guide — what each section holds
 
-The scaffold is [templates/spec-skeleton.html](../templates/spec-skeleton.html) — a self-contained HTML
-deliverable with stable element ids, same house style as a plan; this file says what goes in each section and which
-sections are dev-only. Two
+The scaffold is [templates/spec-skeleton.html](../templates/spec-skeleton.html); this file says what goes in
+each section and which sections are dev-only. Two
 groups: **core** sections appear in every spec; **dev-only** sections are kept for dev specs and **skipped
 when they don't apply** (see [synthesis](synthesis.md) § Classify the work).
 
@@ -35,6 +34,6 @@ Don't manufacture prose to fill a heading that doesn't apply.
 ## Order and altitude
 
 Sections stay in template order so `to-tickets` and any human reader find them in a predictable place. Keep
-every section at the altitude of **direction**: a spec is coarser than a plan (which is per-ticket and gated
-for approval before implementation). If a section is drifting into file-by-file implementation detail, pull it
+every section at the altitude of **direction**: a spec is coarser than a plan (the retired per-ticket plan
+stage). If a section is drifting into file-by-file implementation detail, pull it
 back up — the tickets carry that detail, the spec sets the direction they're cut from.

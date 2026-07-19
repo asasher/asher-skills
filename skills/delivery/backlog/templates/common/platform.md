@@ -14,7 +14,6 @@
   - Close an issue: _<e.g. `gh issue close <n>`, or via the close linkage below; local: flip `state: closed` — on the work branch when a PR carries it, on the main branch otherwise>_.
   - Read an issue's unresolved blockers (so `run` skips blocked work): _<GitHub: `gh api repos/<owner>/<repo>/issues/<n> --jq '.issue_dependencies_summary'` and treat `.blocked_by > 0` as blocked; local: read `deps` frontmatter; another native tracker: its verified list/count verb; fallback: the explicitly recorded convention>_.
   - Write a blocker link between two issues: _<GitHub: resolve the blocker's numeric database id with `gh api repos/<owner>/<repo>/issues/<blocker> --jq '.id'`, then `gh api -X POST repos/<owner>/<repo>/issues/<blocked>/dependencies/blocked_by -F issue_id=<numeric-id>`; local: add the blocker id to `deps`; another tracker: its verified native write verb; fallback: the explicitly recorded convention>_.
-  - Duplicate links: recorded per `backlog-policy.md` § Dependencies.
 - Close-on-merge linkage: _<github: `Closes #<n>` in the PR body closes the issue at merge; local: the issue file's `state: closed` flip is committed on the work branch and lands with the merge — closure is atomic with the change by construction; custom: state how closure follows a merged change, or that it is manual>_.
 
 ## Change review — where a change is proposed and reviewed

@@ -14,10 +14,9 @@ Per change type — the shipped baseline; tune to this repo:
 - Data or migration change: the migration/command result plus before/after proof that the affected store is safe.
 - Repo-specific expectations beyond these: _<add yours, or "none">_.
 
-Captured once, after adversarial review converges, each artifact mapped to the acceptance criterion it proves.
-Styling-only verification captures may be reused only when their HEAD is the final reviewed HEAD and the
-Reviewer records **“no product-code change; no recapture”**; product-code, fixture, environment, or HEAD drift
-forces fresh final-HEAD evidence.
+Timing and styling-only reuse follow the skill's `reference/evidence.md`: capture once after adversarial
+review converges, each artifact mapped to the criterion it proves; reuse only under its Reviewer-confirmed
+styling-only exception.
 
 ## Format and storage
 

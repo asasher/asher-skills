@@ -1,6 +1,6 @@
 ---
 name: backlog
-description: Groom the backlog; run ready-for-agent issues through the build loop to reviewed changes; subcommands run standalone. Works against GitHub, a local on-disk tracker, or any bound platform.
+description: Groom the backlog; run ready-for-agent issues through the build loop to reviewed changes; subcommands run standalone.
 argument-hint: "[command] [issue, PR, or target]"
 user-invocable: true
 disable-model-invocation: true
@@ -18,7 +18,7 @@ This file is the command surface; each subcommand loads its own contract from `r
 
 ## References
 
-`reference/` and `templates/` are bundled with this skill; `docs/agents/` is the target repo's playbook, created by `backlog setup` and sibling setups. A subcommand's bundled reference is the **orchestration contract** — target, gates, staffing, handoffs. Project playbooks carry repo-specific working instructions; reusable disciplines may instead live in a named sibling. If a required playbook is missing, stop and tell the user to run `backlog setup`; do not improvise.
+A subcommand's bundled reference is the **orchestration contract** — target, gates, staffing, handoffs. Project playbooks carry repo-specific working instructions; reusable disciplines may instead live in a named sibling. If a required playbook is missing, stop and tell the user to run `backlog setup`; do not improvise.
 
 **Nouns are roles.** The references speak in a fixed vocabulary — *issue*, *label*, *PR*, *branch*, *worktree*, *push* — but each is a role, not a platform feature. `docs/agents/platform.md` binds every role to this repo's real tracker, review surface, version control, and harness, with verified commands per verb. On GitHub the bindings match the words; on other platforms (a local on-disk tracker, GitLab, jj) the words stay and the mechanics change. A reference never assumes a platform beyond what the binding records.
 
@@ -46,21 +46,19 @@ Three kinds of dependency, per `AGENTS.md` § Conventions:
 
 1. **Bundled references** — backlog's own dev contract under `reference/` plus the playbook baselines it ships under `templates/`: shared `templates/common/` plus per-domain packs `templates/<domain>/` (`software/` is the shipped default; the domain is chosen at setup). These ship with the skill and are not looked for in the target repo.
 2. **Project playbooks** — `docs/agents/*.md`, installed into the target repo by `setup`. A repo changes how a step works by editing its playbooks, never the skill.
-3. **Sibling skills** — `diagnosing-bugs`, `research`, `staffing`, `review-loop`, `prototype`, composed by plain name. `setup` ensures they are present; absent a sibling, backlog states the requirement rather than failing silently.
+3. **Sibling skills** — the five named above, composed by plain name. `setup` ensures they are present; absent a sibling, backlog states the requirement rather than failing silently.
 
 ## Seams
 
 Backlog is deliberately one thin skill with three named internal contracts — documented seams, not separate
 skills:
 
-- **groom = organize.** The tracker as truth: admission audit, route judgment, serialized writes, the
-  verify-first triage discipline. The only stage that stamps readiness.
+- **groom = organize.** The tracker as truth: admission audit, route judgment, serialized writes. The only
+  stage that stamps readiness.
 - **run = schedule.** Dependency waves, parallelism, worktrees, dispatch, liveness — build-ignorant. **A
-  queue of one is a first-class invocation**: `backlog run <issue>` is the interactive chat-and-build shape —
-  the same build loop, no waves.
+  queue of one is first-class** (`backlog run <issue>`).
 - **build loop = one issue → reviewed PR.** The invariant dev tail (implement · verify · adversarial review ·
-  evidence). Its *inputs* vary by entryway — criteria from the ticket, the spec, or written at loop start;
-  evidence obligation scaling with absence — the gates never do.
+  evidence). Its *inputs* vary by entryway; the gates never do.
 
 ## Routing
 

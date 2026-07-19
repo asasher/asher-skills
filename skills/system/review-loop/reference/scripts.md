@@ -7,8 +7,7 @@ reading the source. The loop they implement is in [review-loop](review-loop.md);
 
 ## `review-server.py`
 
-The public invocation starts one detached worker, verifies its authenticated `/version`, then exits with the
-review metadata as JSON. The worker serves chrome, writes feedback to `<state>/events.jsonl`, binds approvals
+Starts one detached worker and exits with the review metadata as JSON. The worker serves chrome, writes feedback to `<state>/events.jsonl`, binds approvals
 to the document hash, and maintains the hub independently of the issuing exec session and verdict watcher.
 
 | flag | default | meaning |

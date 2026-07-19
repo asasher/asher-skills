@@ -15,8 +15,7 @@ style/copy seam—ends this lane. Preserve that observation and the attempted di
 
 For every other bug, invoke the **`diagnosing-bugs`** sibling by name in the issue thread. Give it the reporter's exact symptom,
 the issue/worktree identity, `docs/agents/environment.md` for running and authentication, the repo's required
-checks, and the durable issue record for its ranked hypotheses and root cause. Do not restate or edit its
-six-phase method here.
+checks, and the durable issue record for its ranked hypotheses and root cause.
 
 Accept the handoff only when it returns the red-capable command and captured symptom, minimal reproduction,
 named root cause, fix, regression proof or explicit no-seam finding, original loop green, cleanup, and project

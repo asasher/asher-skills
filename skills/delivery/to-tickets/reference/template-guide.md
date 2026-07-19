@@ -17,12 +17,12 @@ the pre-publish artifact the user reacts to during the quiz. This file says what
   acceptance, not a test plan.
 - **Depends on** — the blocking edges, copied verbatim from the repo's recorded dependency convention (default
   `- [ ] depends on #N`, per `backlog-policy.md` § Dependencies). Omitted when the ticket is a root with no
-  blockers. These are what `backlog run` reads to skip blocked work.
+  blockers.
 - **Work-type (optional)** — if the tracker's routing wants it (`bug` / `enhancement` / `refactor`), name it so
   grooming has a head start. Left off when unknown — grooming sets it.
 
-Keep every field at the altitude of **direction**: a ticket is pickup-able work, coarser than a plan (which is
-per-ticket and gated before implementation). If a field drifts into file-by-file implementation detail, pull it
+Keep every field at the altitude of **direction**: a ticket is pickup-able work, coarser than a plan (the
+retired per-ticket plan stage). If a field drifts into file-by-file implementation detail, pull it
 back up — the implementing agent (or the plan step) carries that detail.
 
 ## The whole split (tickets.md)
@@ -30,7 +30,7 @@ back up — the implementing agent (or the plan step) carries that detail.
 The pre-publish artifact, drafted before the quiz and revised through it:
 
 - **Source** — what direction this split came from (the spec path, the plan, or "this conversation"). Recorded
-  so a reader can trace tickets back; never edited by to-tickets.
+  so a reader can trace tickets back.
 - **Ordered tickets** — the tickets in **dependency order, blockers first**, each in the single-ticket shape
   above but numbered locally (T1, T2, …) since tracker ids don't exist until publish.
 - **Edge list** — the dependency graph as a compact list (`T2 depends on T1`, `T3 depends on T1`), so the user
@@ -41,6 +41,5 @@ The pre-publish artifact, drafted before the quiz and revised through it:
 
 ## Order and altitude
 
-Publish order is the topological sort of the edge list — blockers first — so each `depends on #N` resolves to a
-real, earlier id. The tickets file exists to make the quiz concrete: one artifact, ordered, with the edges
+The tickets file exists to make the quiz concrete: one artifact, ordered, with the edges
 visible, that the user approves before anything reaches the tracker.

@@ -1,18 +1,15 @@
 # Audit mode — reconcile an existing install
 
-Re-invoking setup on a project that already has a `## Agent skills` block runs `audit`. A project with
-installed asher-skills but no block also reaches `audit`; this mode handles that populated-but-no-map state
-and repairs it through the **Missing map** finding. Compare what's installed against this repo's current
-catalog and report what drifted, overlaps, or broke — then propose fixes one at a time. This file stands
-alone.
+Routing into `audit` is per SKILL.md; this mode also handles the populated-but-no-map state and repairs it
+through the **Missing map** finding. Compare what's installed against this repo's current
+catalog and report what drifted, overlaps, or broke — then propose fixes one at a time.
 
 ## Reconciliation is an LLM audit — no version stamps
 
 **Reconciliation is the model reading the live repo against what's installed and judging it — not a number
 comparison.** setup writes **no version stamp, no `vNN` marker, no content hash, and no template-version
 comment** as the drift-detection mechanism, and it does not look for one. This is the shared posture across
-this repo's operator skills (backlog's earlier `vNN` stamps are retired; its setup reconciles the same way).
-**setup introduces no such stamp.** If you find yourself wanting to write or diff a version token to detect
+this repo's operator skills. If you find yourself wanting to write or diff a version token to detect
 drift, that is the wrong mechanism for this skill: read the installed text and the repo, and judge.
 
 (The provider maintains project `skills-lock.json` and global `~/.agents/.skill-lock.json` records for install
@@ -51,8 +48,8 @@ the installed build product; those hashes prove provider bytes/provenance, not s
    Do not classify consumer-owned skill instance directories such as `control-plane/` as package mounts or
    drift; their editable scaffold/configuration/state/artifacts survive package reconciliation.
 3. **Compare and report — in prose.** Describe each finding and what to do about it:
-   - **Drift** — a skill installed here whose content diverges from the repo's current version (read both and
-     judge; don't diff a stamp). A fallback-origin `skills-lock.json` entry (`"fallbackOrigin": true`, no
+   - **Drift** — a skill installed here whose content diverges from the repo's current version. A
+     fallback-origin `skills-lock.json` entry (`"fallbackOrigin": true`, no
      `computedHash` — the shape specified in [interview](interview.md) Phase 4), hand-placed because the tool
      could not install the skill, is expected, not drift: its `computedHash` is intentionally uncomputed, so
      do not flag it as drifted.
@@ -67,9 +64,9 @@ the installed build product; those hashes prove provider bytes/provenance, not s
      provenance. Valid declared divergence with matching source revision, provider identity, effective hash,
      and mount type passes.
    - **Overlap** — a skill installed both project and global, or listed twice; say which scope should win
-     (project-first: keep local, drop the redundant global unless it is `staffing`). Also report
-     A `.claude/skills/<name>` alias symlinked to the `.agents/skills/<name>` primary is the expected mount
-     shape, not overlap and not a second installed package. An independent alias directory is a Mount-shape failure.
+     (project-first: keep local, drop the redundant global unless it is `staffing`). A
+     `.claude/skills/<name>` alias symlinked to the primary is the expected mount shape, not overlap; an
+     independent alias directory is a Mount-shape finding, not overlap.
    - **Broken closure** — a composer installed without its required sibling closure; name the missing
      siblings from the generated catalog. Optional siblings are findings only when explicitly selected or
      previously installed; never silently promote one to required.
@@ -91,9 +88,7 @@ the installed build product; those hashes prove provider bytes/provenance, not s
      writing the block, then continue the same one-fix-at-a-time audit discipline.
    - **Global owner drift** — setup audits only its Presentation pointer/module and leaves Staffing bytes
      untouched. A missing module blocks publishing but preserves local opening. Pointer migration is proposed
-     through the shared four-module barrier: both providers' Presentation and Staffing modules must be
-     staged/read back before both globals preflight; apply Presentation to both, then Staffing to both, verify
-     all four final sections, and remove the barrier.
+     through the shared four-module barrier ([interview](interview.md) Phase 4 step 6).
    - **Cross-harness wrapper drift** — a sibling CLI invoked directly, an unbounded or interactive command, a
      wrapper that synthesizes/judges, a label missing external model/task, or absent wrapper-model evidence.
      If spawn cannot select or report the assigned native model, observability may pass but cheapest-floor

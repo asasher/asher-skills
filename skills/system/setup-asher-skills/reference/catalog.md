@@ -25,9 +25,7 @@ edges. The compiler merges identical declarations across the selected closure an
 declarations whose source, kind, capability, or version differs.
 
 An external declaration is permission to **offer**, not permission to install. Before any external write,
-follow [interview](interview.md) Phase 4: verify provenance, inspect and disclose source/version/scope/hooks,
-get explicit consent, use the provider-specific installer, verify the declared capability, and record the
-result in the consumer's separate `external-dependencies.lock.json`. An arbitrary external request that is
+follow [interview](interview.md) Phase 4 step 2. An arbitrary external request that is
 not in the selected closure is never auto-installed; offer an Asher-authored equivalent if one exists, or
 state that the request needs a separate deliberate install outside this setup run.
 
@@ -66,8 +64,7 @@ The map is a starting point tuned by the project answer, not a fixed bundle.
 
 The single-purpose catalog skills (`bayes`, `constraints`, `dissolve`, `eloquent`, `fair-deal`, `goodwork`,
 `learn-anything`, `teamdrive`, `watch-video`, `shadixfy`, `bare-minimum-ux`, `skill-loop`) are
-offered only when the project answer clearly calls for one; they carry no sibling closure. `fair-deal` installs
-inside a deal project and is **never** global.
+offered only when the project answer clearly calls for one; they carry no sibling closure.
 
 ## Install and setup closure
 
@@ -78,15 +75,8 @@ pointers, invalid provider overlays, required cycles, malformed external declara
 write plan is presented. Closure output includes the sorted, deduplicated `external` requirements merged from
 every active skill.
 
-The current notable edges are visible by compiling the catalog: backlog requires diagnosing-bugs, prototype,
-research, review-loop, and staffing; research requires staffing; prototype and spreadsheet-loop
-require review-loop and staffing; maquette requires review-loop; review-loop optionally uses staffing for its
-watch; setup-asher-skills requires staffing; interview-with-docs requires interview and domain-modeling (interview optionally uses research, prototype, staffing); bare-minimum-ux declares the external `impeccable` (offered on UI-surface projects, consent-gated, installed by its own provider); control-plane optionally uses until-zero; to-spec optionally uses
-review-loop; and to-sprites optionally uses codex-imagegen. Document inputs such as to-tickets consuming a
-spec are not sibling edges.
-
-When closure resolution adds a sibling, **tell the user which sibling came along and why** — the pull is never
-silent ([interview](interview.md) § Phase 2).
+Edges come from compiling the catalog (`closure`); never maintain a prose copy. Document inputs such as
+to-tickets consuming a spec are not sibling edges.
 
 ## Runtime composition
 
@@ -105,9 +95,7 @@ inside any working thread. The principal runtime edges are:
 | composers | `staffing route` | explicit inline named call | role/model must be resolved |
 | any working thread | any installed `model` skill | ambient model invocation | the thread recognizes a matching need |
 
-Category and execution declarations remain in the root README table; exact required/optional/setup closure
-comes from compiling the sources (`scripts/catalog.py compile` / `closure`). A required install edge may support more than one runtime reach and is not
-itself proof that a dispatch occurs.
+Category and execution declarations remain in the root README table.
 
 ## Scope — project-first
 

@@ -1,9 +1,7 @@
 # Slicing — the method
 
 To-tickets' job is to split a decided direction into backlog-ready tickets with blocking edges, quizzing the
-user until the split is approved, then publishing in dependency order. This file is the method. It imports no
-other skill's files; the tracker and dependency conventions it names are read from the repo's project
-playbooks, not from another skill.
+user until the split is approved, then publishing in dependency order. This file is the method.
 
 ## Read the direction — three inputs, one treatment
 
@@ -96,8 +94,7 @@ Create the tickets through the **tracker binding** recorded in `docs/agents/plat
 **never as local ticket files while a live tracker is bound**; on-disk tickets exist only when the recorded
 binding itself is local. Link each ticket to the spec's tracking ticket when one exists. On
 this repo that binding is GitHub via `gh` (`gh issue create --title '...' --body '...'`), and a ticket is a
-GitHub issue — but the skill's own text stays generic: a **ticket** is the tracker's issue role in a
-tracker-agnostic word. Publish the body from [templates/ticket.md](../templates/ticket.md), carrying the
+GitHub issue. Publish the body from [templates/ticket.md](../templates/ticket.md), carrying the
 dependency edges in the playbook's recorded form.
 
 ## Readiness alignment — leave it to groom
@@ -105,7 +102,7 @@ dependency edges in the playbook's recorded form.
 Do **not** auto-apply the `ready-for-agent` readiness role on a fresh split. The default is to **leave readiness
 to `backlog groom`** — a fresh split is drafted work, not yet blessed for pickup, and grooming is where a human
 confirms the shortlist (`backlog-policy.md` § Readiness decision). **Note the option** to apply readiness on
-approval — Matt Pocock's posture is that the quiz *is* the human confirmation, so a user who wants it may bless
+approval — the quiz *is* the human confirmation, so a user who wants it may bless
 the tickets on the spot — but the recommended default, and what the skill does absent a request, is to leave it
 to groom.
 
@@ -122,5 +119,4 @@ decision-rich fragment and note it came from a prototype. Absent that exception,
 
 Speak generically. A **ticket** is the unit of pickup-able work — exactly the tracker's "issue" role, in a
 tracker-agnostic word. Never assume GitHub's "issue" in the skill's own text; the pair is deliberately
-tracker-agnostic. ("Ticket" == "issue," same role — worth standardizing the repo on eventually, not required
-here.)
+tracker-agnostic.

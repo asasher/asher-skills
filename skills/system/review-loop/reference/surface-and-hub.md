@@ -14,8 +14,7 @@ artifact-agnostic contract those settings implement.
   stays off.** Where the platform's tailscale client cannot serve file paths (the sandboxed macOS app), the
   document half is a small local static server rooted at the surface directory, proxied once.
 - **Publish, don't fork.** A presented artifact is the committed file, served in place — never a diverging
-  copy. The review server serves the file on disk and injects the chrome at serve time, so the committed
-  file stays byte-pure while the human still gets the review UI.
+  copy.
 - **The pause is the notification.** Any step that stops for a human ends its message with **two links,
   always both**: the artifact's surface URL first, the hub URL second — so the review is findable even
   without the message. The harness's own notification says the thread stopped; the URLs are what the human
@@ -36,9 +35,7 @@ The tailnet surface presumes the machine's tailscale node is **logged in and con
 only proxies a path once the node is on the tailnet, so it is a separate concern from *publishing* a path
 (`tailscale up` brings the node onto the tailnet; `tailscale serve` mounts the path). When the node is
 logged out or stopped, every published URL and the review server's proxy fail with opaque network errors
-rather than a clear "tailnet down." So the **serve step owns a connectivity precondition**: before it
-publishes an artifact or starts the review server, it confirms the node is up and brings it up only when it
-is not.
+rather than a clear "tailnet down." So the **serve step owns a connectivity precondition**:
 
 - **Detect, don't assume.** This applies only when the surface binding is a tailnet — a local-only or custom
   surface skips it entirely. Before publishing, check node state: `tailscale status` exits non-zero and
@@ -56,22 +53,16 @@ is not.
 - **Interactive auth or a hard failure falls back to local.** `tailscale up` may print an auth URL and wait
   for an interactive login, or fail outright (expired key, SSO required, admin approval). An agent cannot
   complete an interactive login headless and must not loop retrying. Surface the auth URL or the failure to
-  the human as the thing that unblocks the review, and **fall back to the local-only review** — open the
-  rendered file on the machine and say remote review is unavailable, the same degradation as an unrecorded
-  surface. **Never enable Funnel or improvise a public tunnel** to route around a down tailnet.
-
-This is the connectivity companion to *The surface is only as awake as the machine* above: that bullet
-covers a sleeping machine, this covers a disconnected node. Both keep the surface honest — a review only
-publishes to a URL the human can actually reach.
+  the human as the thing that unblocks the review, and **fall back to the local-only review** (§ Local
+  fallback).
 
 ## Path-prefix mounts
 
 The real deployment serves the artifact under a tailnet path prefix (e.g. `/asher-skills/2/review/`), not at
 the domain root. The chrome therefore builds every client→server call **mount-relative** — it derives a base
 from the served page's path rather than posting to root-absolute `/event` or `/version` — so requests
-resolve whether the page is served at `/` (loopback) or under a prefix. The server matches its endpoints
-(`/`, `/version`, `/event`, `/hub`) **suffix-tolerantly**, so it works whether the proxy strips the prefix
-before forwarding (the backend sees `/event`) or preserves it (the backend sees `/asher-skills/2/review/event`).
+resolve whether the page is served at `/` (loopback) or under a prefix. The server side is suffix-tolerant
+([scripts](scripts.md)).
 
 ## The hub
 
@@ -86,8 +77,6 @@ human:
 - **Dumb, read-only, derived.** Rows show title, kind, scope tag, state, and age, linking to the direct URL
   — nothing more. No hub event log, no approve-from-the-hub (approval binds to a rendered document's hash),
   no history. Nothing reads the hub but the human; registry loss degrades to an empty index while every
-  direct URL keeps working. An optional `--surface-label` adds a suffix to the hub heading (e.g. a repo
-  name); default none.
+  direct URL keeps working.
 - **Swept, not trusted.** A crashed run leaves an orphaned registry entry — clutter, not exposure. A setup
-  health check runs `review-server.py --sweep --surface <dir>`, which probes each entry's URL, drops the
-  dead, regenerates the index, and prints `{"swept":[…]}`.
+  health check runs the sweep ([scripts](scripts.md) § Sweep mode).

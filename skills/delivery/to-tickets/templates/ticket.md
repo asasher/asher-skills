@@ -1,8 +1,7 @@
 # <capability the slice delivers, from the user's perspective>
 
-<!-- One ticket = one tracer bullet: a narrow-but-complete path through every layer, demoable on its own,
-     sized to one fresh context window. Not a horizontal layer. No file paths or code (prototype-validated
-     snippet excepted). This is what gets published to the tracker, blockers first. -->
+<!-- One tracer bullet — see reference/template-guide.md for each field. This is what gets published to the
+     tracker, blockers first. -->
 
 ## Intent
 

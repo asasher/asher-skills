@@ -1,7 +1,6 @@
 # Synthesis — the method
 
-To-spec's job is to write the spec a conversation already earned, not to run a fresh requirements pass. This
-file is the method. It imports no other skill's files.
+The method. It imports no other skill's files.
 
 ## The one rule: synthesize, never interview
 
@@ -11,10 +10,7 @@ re-ask what the discussion already settled, and do not stop and wait on the user
 
 When something was genuinely left undecided, **record it as a line in the spec's Notes** — an open question,
 named plainly — and move on. A flagged open question is the correct output; a question bounced back to the
-user is not. The one thing to-spec never produces is an interview.
-
-Notes are not free-floating: at publish time each one is classified **blocking / delegated / deferred**
-(§ Sign-off), because a spec whose material Notes are unclassified cannot feed execution-ready tickets.
+user is not.
 
 ## What to mine
 
@@ -41,8 +37,7 @@ Our work isn't all software, so the template flexes. Before writing, decide what
 - **Dev spec** — the direction is a code change (a skill, a feature, a refactor). Keep the dev-only sections
   (**Testing decisions**, **Test seams**) and run the seams step below.
 - **Non-dev spec** — the direction is a process, a piece of content, a decision, an operating change. **Skip**
-  the dev-only sections entirely; use only the core sections (Problem, Solution, User stories, Implementation
-  decisions, Out of scope, Notes). Don't invent testing prose to fill a heading that doesn't apply.
+  the dev-only sections entirely; use only the core sections ([template-guide](template-guide.md)).
 
 If a spec is mostly non-dev but has one testable surface, keep the dev-only sections and scope them to that
 surface — the gate is "does it apply," not "is the whole thing code."
@@ -51,11 +46,8 @@ surface — the gate is "does it apply," not "is the whole thing code."
 
 For a dev spec, name the **public seams** the work would be tested at, and **prefer the highest existing
 seam** — test at the outermost interface that already exists rather than reaching into internals or adding a
-new seam. The fewer seams, the better; note what's deliberately left untested and why. (Adapted from Matt
-Pocock's `to-spec`, shipped as our own.) This is direction for how the work will be proven, not a test plan —
-keep it to the seams, in prose.
-
-For a non-dev spec this step does not run at all.
+new seam. The fewer seams, the better; note what's deliberately left untested and why. This is direction for
+how the work will be proven, not a test plan — keep it to the seams, in prose.
 
 ## No stale content
 

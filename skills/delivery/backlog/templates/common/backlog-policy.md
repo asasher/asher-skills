@@ -5,7 +5,7 @@
 ## Work domain
 
 - Domain: _<software | skill-authoring | writing | research | ops | general>_.
-- Chosen at `backlog setup`, this is the kind of work this repo's backlog tracks. Playbooks resolve from `templates/common/` overlaid by `templates/<domain>/`, then same-name `templates/software/` stand-ins for any required step the domain pack omits.
+- Chosen at `backlog setup`, this is the kind of work this repo's backlog tracks. Playbooks resolve per the skill's `reference/setup.md` § Resolved scaffold set.
 - Absent this section (an install from before domain packs existed), the domain is `software`.
 - When the chosen domain's pack was not yet shipped at install time, or a shipped pack omitted a required step, those step playbooks are `software` baselines standing in, each flagged in its own header as a code-flavored stand-in to tailor.
 
@@ -29,8 +29,8 @@ Two further lifecycle values appear only where the tracker has no native equival
 - `bug` — diagnose branch. Default `bug` — _<your label>_.
 - `enhancement` — implement branch: strategic decisions arrive settled or delegated (groom's route judgment), and the issue thread makes only a just-in-time tactical plan within that authority. Default `enhancement` — _<your label>_.
 - `refactor` — refactor branch. Default `refactor` — _<your label>_.
-- `research` — source-audit branch, for **epistemic-terminal** work: the deliverable establishes what primary sources support, what follows by inference, what conflicts, and what remains unknown. Correctness comes from traceability and the research skill's claim audit, not taste or implementation behavior. The dossier is kept under the project's research root; its citations are intrinsic provenance, not an `evidence/` copy. Default `research` — _<your label>_.
-- `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a narrative synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — no mechanical `verify` pass/fail. The artifact is **kept** (committed and merged), unlike `prototype`, which is throwaway — keep the answer, delete the artifact. Default `draft` — _<your label>_.
+- `research` — source-audit branch, for **epistemic-terminal** work: the deliverable establishes what primary sources support, what follows by inference, what conflicts, and what remains unknown. Correctness comes from traceability and the research skill's claim audit, not taste or implementation behavior. Default `research` — _<your label>_.
+- `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a narrative synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — no mechanical `verify` pass/fail. Default `draft` — _<your label>_.
 
 > Recognizing the boundary: if the terminal question is “what do the sources establish?”, groom to `research`.
 > If the sources are inputs to prose judged by voice, persuasion, or fit, groom to `draft`. If behavior must
@@ -73,5 +73,5 @@ grooming gap: `run` skips the issue rather than inferring it or defaulting to th
 
 ## In-flight hygiene
 
-- Concurrent runners are possible (two machines, two humans, one tracker); `in-flight` is the claim marker, applied optimistically — the loop accepts the rare duplicate pickup in the window between queue build and marking rather than carrying a lock. `run` re-reads each issue immediately before marking it and skips any that changed.
+- Concurrent runners are possible (two machines, two humans, one tracker); `in-flight` is the claim marker, applied optimistically — the loop accepts the rare duplicate pickup in the window between queue build and marking rather than carrying a lock.
 - **Orphan sweep** — an `in-flight` issue whose recorded branch no longer exists, or has gone quiet past _<horizon, e.g. 7 days>_, is a corpse: `groom` surfaces it to the human as a candidate reset to `ready-for-agent` (or `needs-info`). Never silently reset — the branch may hold unmerged work.

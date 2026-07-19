@@ -1,6 +1,6 @@
 ---
 name: staffing
-description: Own the model roster for a machine and its projects — who staffs which task. Use to install or reconcile the roster, add a project override, or resolve any "which model should do this?" question — directly or from a sibling skill. Not for running the task itself.
+description: Own the model roster for a machine and its projects. Use to install or reconcile the roster, add a project override, or resolve any "which model should do this?" question — directly or from a sibling skill. Not for running the task itself.
 argument-hint: "[setup | route <task> | reconcile]"
 user-invocable: true
 metadata:
@@ -46,8 +46,8 @@ current model in a subagent and report the gap; never skip the stage.
 ## Layers and sibling harnesses
 
 The user chooses project-only or a consented harness-specific global base plus sparse project deltas. Existing
-bases are preserved unless separately requested. Reachability is directional and effect-verified; one failed
-direction produces an asymmetric graph. For cross-harness routing or delegation, load the active installed
+bases are preserved unless separately requested. Reachability is directional and effect-verified. For
+cross-harness routing or delegation, load the active installed
 package's `reference/harness.md`; provider compilation supplies that file without changing this shared public
 contract.
 

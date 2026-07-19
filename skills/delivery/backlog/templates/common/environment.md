@@ -75,6 +75,6 @@
 
 > Read by `run` before dispatch.
 
-- Verdict: _<parallel-safe | serialize-verification>_ — gated by the shared-singleton list above, asymmetrically: `parallel-safe` requires a list with no un-isolated collision; `serialize-verification` may come from that list (a hard constraint) or from a plain preference to serialize.
-- If serialized, why: _<either "user preference — sequential by choice" (the list is clear), or name the un-isolated rows from the list that force it — a hard constraint, since a parallel fan-out would corrupt that shared state>_.
-- Serialized exception lane: _<issue classes that must serialize even when parallel-safe — destructive shared-tenant operations, real third-party endpoints, deliberately distinct users; or "none">_.
+- Verdict: _<parallel-safe | serialize-verification>_ — derived by `setup` from the shared-singleton list above (`reference/worktree-isolation.md` § Parallelism verdict).
+- If serialized, why: _<either "user preference — sequential by choice" (the list is clear), or name the un-isolated rows from the list that force it>_.
+- Serialized exception lane: _<issue classes that must serialize even when parallel-safe (see `reference/worktree-isolation.md` § Parallelism verdict); or "none">_.

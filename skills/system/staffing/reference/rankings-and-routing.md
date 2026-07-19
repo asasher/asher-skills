@@ -81,9 +81,5 @@ derivation.
 
 ## Defaults, not quality waivers
 
-- Cost is the final tie-break only. Escalate to a more capable reachable route without asking when cheaper
-  output misses the bar.
-- Taste ≥ 7 remains a hard gate for user-facing work.
-- Orchestration, design, and hard diagnosis go to the most capable reachable model.
+- Escalate to a more capable reachable route without asking when cheaper output misses the bar.
 - Reviews favor high taste/intelligence and may add an independent second model.
-- Never staff below the floor and never attribute a provider's effect to its current model operator.

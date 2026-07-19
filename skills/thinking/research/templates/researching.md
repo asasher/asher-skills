@@ -8,8 +8,6 @@
 - Durable general research root: `research/<slug>/`.
 - Research supporting a local skill source: _<record the workspace path, or “use the general root”>_.
 - Temporary shard/executor material: _<record scratch convention>_.
-- Evidence boundary: research deliverables remain under the research root even when reviewed; `evidence/` is
-  reserved for criterion-linked proof of a separate completed change.
 
 ## Source bindings
 

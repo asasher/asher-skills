@@ -1,6 +1,6 @@
 ---
 name: merge-changes
-description: Merge reviewed, review-ready changes on the user's explicit request — verify readiness, order dependent PRs, merge, reconcile, and report. Invoking this skill is the merge approval gate; backlog and every implementation loop stop at review-ready PRs and never merge. Not for reviewing changes or building them.
+description: Merge review-ready changes on the user's explicit request — the merge approval gate that backlog and every implementation loop stop short of.
 argument-hint: "<PRs, branches, or 'everything review-ready'>"
 user-invocable: true
 disable-model-invocation: true
@@ -47,8 +47,7 @@ stop.
 
 ## Boundaries
 
-- Never merge outside the request's scope; never interpret lifecycle labels, green checks, or reviewer
-  approval as a merge request.
+- Never merge outside the request's scope.
 - Never force-push over, close, or delete someone else's branch to make a merge work.
 - Staffing (optional sibling, by name): the whole flow is judgment-light coordination — it stays with the
   invoking session; delegate nothing but mechanical check-watching.

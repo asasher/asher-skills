@@ -11,8 +11,9 @@ Run these probes and record the results:
 
 1. **Which routes work from this harness?** Enumerate native models, then probe the sibling-harness route
    defined by the compiled `reference/harness.md`. Record command shape, timestamp, return/failure class,
-   native wrapper label/model evidence, and fallback successor. A failure removes this direction only. Do not
-   poll vendor policy or credit notices; real invocation behavior is the operational signal.
+   native wrapper label/model evidence, and fallback successor. A failure removes this direction only. Real
+   invocation behavior is the operational signal
+   ([install-and-reconcile](install-and-reconcile.md) § External-worker contract).
 2. **Which sibling harness CLIs are installed?** Probe `codex --version` and `claude --version`, then retain
    only the routes step 1 actually exercised. Presence alone is not reachability. The result decides which
    mechanics the base includes (see [install-and-reconcile](install-and-reconcile.md) § External-worker contract).
@@ -21,10 +22,7 @@ Run these probes and record the results:
 4. **Do global staffing rules already exist?** Read the detected memory layer for an existing staffing
    roster. Its presence or absence chooses the scope-decision branch (see install-and-reconcile).
 
-From (1) you have the **rows** of the rankings table and directional route states. Independently effect-probe
-installed skills/plugins/tools to build the capability-provider registry. From (2) you have the **sibling harness
-mechanics** the base needs. What the audit **cannot** probe is the *judgment numbers* — cost, intelligence,
-and taste are human assessments, not machine-detectable — so seed them, then let the user tune.
+Steps (1)–(2) feed § Writing the roster; the judgment numbers cannot be probed — see § The default seed.
 
 ## The default seed (numbers the user tunes)
 
@@ -35,8 +33,7 @@ model the example omits.
 
 ### Example of audit output (illustrative only — NOT the shipped roster)
 
-The following is **one machine's audit result**, shown so you know the shape to write. It is an *example of
-output*, never the authoritative table — a different machine produces a different set of rows. Reproduce the
+The following is **one machine's audit result**, shown so you know the shape to write. Reproduce the
 *shape*, not these values:
 
 ```
@@ -68,17 +65,12 @@ output*, never the authoritative table — a different machine produces a differ
 # The direction has its own timestamp, failure class, and successor.
 ```
 
-Everything above is **audit output for one environment**. On a machine with, say, no Codex CLI and a
-different model lineup, the audit produces a different table, different pins, and different CLI mechanics.
-Never present the five-model rows as the canonical staffing roster; they are a labeled example of what step
-(1) plus the seed produces here.
-
 ## Writing the roster from the audit
 
 1. Reachable models → rows of the rankings table, each seeded with cost/intelligence/taste and flagged
    "tune these".
 2. Effect-probed harness skills/plugins/tools → the capability-provider registry, with primary, fallback,
-   eligible executor, and route state. Installation or model documentation alone is insufficient.
+   eligible executor, and route state (presence alone is insufficient — step 2).
 3. Task/provider pins → the named pin list; carry the mechanical/bulk pin if its worker route is reachable, else leave
    it for the user to set.
 4. CLI mechanics → include only effect-verified directions; never infer symmetry from one working route.
@@ -86,6 +78,3 @@ Never present the five-model rows as the canonical staffing roster; they are a l
    dispatch/escalate its worker stages. Presence or low cost alone does not qualify a route.
 6. Floor → set to the lowest capability class the user wants staffed; default it and tell the user to
    confirm.
-
-Then hand the seeded numbers to the user to tune — the deliberately-untested part of this skill is the
-subjective quality of those seed numbers.

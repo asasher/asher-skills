@@ -8,8 +8,7 @@ Reconcile exactly one owned artifact: `docs/agents/diagnosing-bugs.md`.
    placeholders only with facts verified in this repo.
 3. If it exists, preserve every project delta and deliberate house-practice substitution. Offer only missing
    or stale factual corrections; never replace the file wholesale and never copy the six-phase method into it.
-4. Re-read the result and confirm it contains only project-specific deltas. Re-running setup with unchanged
-   facts must produce no diff.
+4. Re-read the result and confirm it contains only project-specific deltas.
 
 Do not write another skill's playbook or any global instruction file.
 

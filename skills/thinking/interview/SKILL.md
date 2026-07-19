@@ -1,6 +1,6 @@
 ---
 name: interview
-description: Interview the user about an idea, problem, or direction until shared understanding is real — batch frontier rounds, facts looked up not asked, recommendations offered as hypotheses. Use to elicit and settle the strategic decisions behind new work, directly or when a workflow skill needs an intent sharpened before spec or tickets. It asks and classifies; it writes no durable artifacts — compose `interview-with-docs` for that.
+description: Interview the user about an idea or problem until shared understanding is real. Use to elicit and settle the strategic decisions behind new work, directly or when a workflow skill needs an intent sharpened before spec or tickets. It asks and classifies; it writes no durable artifacts — compose `interview-with-docs` for that.
 argument-hint: "<idea, problem, or reference to intake material>"
 user-invocable: true
 metadata:
@@ -14,15 +14,14 @@ metadata:
 
 Elicit the decisions behind a piece of work by walking its **decision tree**: every decision branches into
 the decisions that hang off it. Work the tree in **rounds** over the **frontier** — every decision whose
-prerequisites are already settled. The session is done when the frontier is empty, coverage holds, and the
-user confirms — not when the conversation feels aligned.
+prerequisites are already settled.
 
 ## Intake first
 
 Before asking anything, read what already exists: named files (a PDF, a brief, a doc), the repo, and the
 durable context — `PRODUCT.md`, `DESIGN.md`, `CONTEXT.md`, ADRs, prior specs — wherever the project keeps
-them. **Provided artifacts are read, not asked about**: a question whose answer is in the material is never
-put to the user. Intake seeds the tree with what is already settled and what the evidence leaves open.
+them. **Provided artifacts are read, not asked about.** Intake seeds the tree with what is already settled
+and what the evidence leaves open.
 
 ## Facts are yours; decisions are the user's
 
@@ -37,14 +36,12 @@ put to the user. Intake seeds the tree with what is already settled and what the
 
 ## Rounds
 
-Ask the whole frontier in one numbered round. Early frontiers are naturally small; if one balloons past
-comfortable answering, split it by dependency cluster and say so — a cap is manners, not a rule. Each
-question carries:
+Ask the whole frontier in one numbered round. If a round balloons past comfortable answering, split it by
+dependency cluster and say so — a cap is manners, not a rule. Each question carries:
 
 - the **evidence already in hand** (from intake or earlier answers);
 - what the answer **unlocks** downstream;
-- a **recommended hypothesis with its trade-off** — labelled as provisional, never presented as a default the
-  user is nudged to accept;
+- a **recommended hypothesis with its trade-off** — labelled provisional, never a nudged default;
 - cheap affordances: **accept / modify / defer / unknown** — agreeing costs a word, disagreeing a sentence.
 
 One topic per question; never a compound either-or. When the evidence already points one way,
@@ -76,9 +73,8 @@ State, in one confirmable line each:
 - the **depth call** — implement now, slice to tickets, or spec first — as a recommendation the user
   confirms or overrides.
 
-This skill records nothing durable: settled terms and decisions live in the conversation and the playback.
-When they should outlive it — a glossary term, an ADR, spec input — run `interview-with-docs`, which composes
-this skill with `domain-modeling` so the useful shape is written the moment it crystallises.
+This skill records nothing durable. When settled terms and decisions should outlive the conversation — a
+glossary term, an ADR, spec input — run `interview-with-docs`.
 
 ## Dependency surface
 

@@ -10,7 +10,7 @@ Test-first is the default for logic-bearing work, not a ritual for every change.
 - **Fluid UI** — visual appeal, layout, spacing, copy, a button's label. Correctness here is judged by eye and changes too often to lock down; the verify step and evidence capture cover it against the running app.
 - **Declarative glue with no branching** — configuration, straight pass-through wiring.
 
-When in doubt, the tie-breaker is the cost of being wrong: a payment calculation deserves a test even where it looks type-safe; a marketing page never does. A skipped test is a stated decision, recorded in the seam agreement below — not an omission.
+When in doubt, the tie-breaker is the cost of being wrong: a payment calculation deserves a test even where it looks type-safe; a marketing page never does. A skipped test is a stated decision, not an omission.
 
 ## Build test-first
 

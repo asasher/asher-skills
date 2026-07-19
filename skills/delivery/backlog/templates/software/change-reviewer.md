@@ -19,7 +19,7 @@ Treat these as presumptive blockers the author must justify:
 - Thin wrappers, identity abstractions, magic genericity, or cast/`any`/optionality churn that obscures the real contract — prefer direct, boring code with explicit type boundaries.
 - Avoidably sequential orchestration or non-atomic updates where the cleaner structure is obvious — without over-indexing on micro-optimizations.
 
-Preferred remedies point the same direction: delete a layer of indirection rather than polishing it; reframe the state model so conditionals disappear; extract the helper or split the file; move logic behind the abstraction that owns it; reuse the canonical utility.
+Preferred remedies point the same direction: delete a layer of indirection rather than polishing it; reframe the state model so conditionals disappear; extract the helper or split the file.
 
 ## Smell baseline
 
