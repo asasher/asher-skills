@@ -138,7 +138,6 @@
         {
           "port": "platform",
           "expects": "tracker verbs for the thin tracking ticket (when a live tracker is bound)",
-          "binding": "docs/agents/platform.md",
           "default": "skills/delivery/backlog/templates/common/platform.md"
         }
       ]
@@ -189,13 +188,11 @@
         {
           "port": "platform",
           "expects": "tracker verbs: create tickets, native blocking edges, labels",
-          "binding": "docs/agents/platform.md",
           "default": "skills/delivery/backlog/templates/common/platform.md"
         },
         {
           "port": "backlog-policy",
           "expects": "label roles, dispatch metadata, admission states",
-          "binding": "docs/agents/backlog-policy.md",
           "default": "skills/delivery/backlog/templates/common/backlog-policy.md"
         }
       ]
@@ -360,79 +357,66 @@
         {
           "port": "backlog-policy",
           "expects": "label roles, dispatch metadata, routes, needs-spec/needs-info",
-          "binding": "docs/agents/backlog-policy.md",
           "default": "skills/delivery/backlog/templates/common/backlog-policy.md"
         },
         {
           "port": "platform",
           "expects": "tracker, PR, git, harness verbs",
-          "binding": "docs/agents/platform.md",
           "default": "skills/delivery/backlog/templates/common/platform.md"
         },
         {
           "port": "environment",
           "expects": "run commands, isolation, parallelism, model roster",
-          "binding": "docs/agents/environment.md",
           "default": "skills/delivery/backlog/templates/common/environment.md"
         },
         {
           "port": "change-description",
           "expects": "the PR body outline",
-          "binding": "docs/agents/change-description.md",
           "default": "skills/delivery/backlog/templates/common/change-description.md"
         },
         {
           "port": "implementing",
           "expects": "build conventions (work-typed pack)",
-          "binding": "docs/agents/implementing.md",
           "default": "skills/delivery/backlog/templates/software/implementing.md"
         },
         {
           "port": "verifying",
           "expects": "checks and criteria by entryway (work-typed pack)",
-          "binding": "docs/agents/verifying.md",
           "default": "skills/delivery/backlog/templates/software/verifying.md"
         },
         {
           "port": "evidence",
           "expects": "what proof this repo expects (work-typed pack)",
-          "binding": "docs/agents/evidence.md",
           "default": "skills/delivery/backlog/templates/software/evidence.md"
         },
         {
           "port": "change-reviewer",
           "expects": "the adversarial reviewer brief",
-          "binding": "docs/agents/change-reviewer.md",
           "default": "skills/delivery/backlog/templates/software/change-reviewer.md"
         },
         {
           "port": "change-fixer",
           "expects": "the fixer brief",
-          "binding": "docs/agents/change-fixer.md",
           "default": "skills/delivery/backlog/templates/software/change-fixer.md"
         },
         {
           "port": "refactoring",
           "expects": "the behavior-preserving route",
-          "binding": "docs/agents/refactoring.md",
           "default": "skills/delivery/backlog/templates/software/refactoring.md"
         },
         {
           "port": "diagnosing-bugs",
           "expects": "bug-route method (port owned by the diagnosing-bugs sibling)",
-          "binding": "docs/agents/diagnosing-bugs.md",
           "default": "skills/delivery/diagnosing-bugs/templates/diagnosing-bugs.md"
         },
         {
           "port": "researching",
           "expects": "research work-type contract (port owned by the research sibling)",
-          "binding": "docs/agents/researching.md",
           "default": "skills/thinking/research/templates/researching.md"
         },
         {
           "port": "probe-evals",
-          "expects": "repo-authored eval discipline; no shipped default",
-          "binding": "docs/agents/probe-evals.md"
+          "expects": "consumer-authored eval discipline; no shipped default"
         }
       ]
     },
@@ -459,7 +443,6 @@
         {
           "port": "platform",
           "expects": "merge, checks-read, PR-read, branch verbs (playbook written by backlog setup)",
-          "binding": "docs/agents/platform.md",
           "default": "skills/delivery/backlog/templates/common/platform.md"
         }
       ]
@@ -493,8 +476,7 @@
       "bindings": [
         {
           "port": "prototyping",
-          "expects": "optional: repo-specific artifact placement only",
-          "binding": "docs/agents/prototyping.md"
+          "expects": "optional: project-specific artifact placement only"
         }
       ]
     },
@@ -538,7 +520,6 @@
         {
           "port": "researching",
           "expects": "where dossiers live, citation norms, source policy",
-          "binding": "docs/agents/researching.md",
           "default": "skills/thinking/research/templates/researching.md"
         }
       ]
@@ -588,7 +569,6 @@
         {
           "port": "diagnosing-bugs",
           "expects": "repro commands, log locations, observability for the six phases",
-          "binding": "docs/agents/diagnosing-bugs.md",
           "default": "skills/delivery/diagnosing-bugs/templates/diagnosing-bugs.md"
         }
       ]
@@ -641,7 +621,6 @@
         {
           "port": "environment",
           "expects": "serving: port range, host, tunnel policy (playbook written by backlog setup)",
-          "binding": "docs/agents/environment.md",
           "default": "skills/delivery/backlog/templates/common/environment.md"
         }
       ]
@@ -710,13 +689,11 @@
         },
         {
           "port": "project deltas",
-          "expects": "sparse overrides in the project agent instruction files (\u00a7 Staffing)",
-          "binding": "CLAUDE.md"
+          "expects": "sparse overrides in the consumer project\u2019s agent instruction files (\u00a7 Staffing)"
         },
         {
           "port": "roster",
           "expects": "docs/agents/environment.md \u00a7 Model roster",
-          "binding": "docs/agents/environment.md",
           "default": "skills/delivery/backlog/templates/common/environment.md"
         }
       ]
@@ -784,13 +761,11 @@
         {
           "port": "repo pointer",
           "expects": "the pointer block installed into consumer project instructions",
-          "binding": "AGENTS.md",
           "default": "skills/system/setup-asher-skills/templates/repo-pointer.md"
         },
         {
           "port": "agent-skills table",
-          "expects": "the \u00a7 Agent skills roster in project instructions",
-          "binding": "AGENTS.md",
+          "expects": "the \u00a7 Agent skills roster installed into consumer project instructions",
           "default": "skills/system/setup-asher-skills/templates/agent-skills-block.md"
         },
         {
@@ -836,13 +811,11 @@
         {
           "port": "implementing",
           "expects": "UI-lane conventions fold in the five rules",
-          "binding": "docs/agents/implementing.md",
           "default": "skills/delivery/backlog/templates/software/implementing.md"
         },
         {
           "port": "verifying",
           "expects": "UI acceptance includes the five rules",
-          "binding": "docs/agents/verifying.md",
           "default": "skills/delivery/backlog/templates/software/verifying.md"
         }
       ]

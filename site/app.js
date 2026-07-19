@@ -357,15 +357,14 @@
     }
     if (bindings && bindings.length) {
       const fileLink = (path) => el('a', {
-        href: '#', onclick: (ev) => { ev.preventDefault(); renderFile(path, '  (binding)'); },
+        href: '#', onclick: (ev) => { ev.preventDefault(); renderFile(path, '  (shipped default)'); },
       }, path.includes('templates/') ? path.slice(path.indexOf('templates/')) : path);
       const tbl = el('table', { class: 'ports-table' },
         el('thead', {}, el('tr', {},
-          el('th', {}, 'port'), el('th', {}, 'expects'), el('th', {}, 'bound in this repo'), el('th', {}, 'shipped default'))),
+          el('th', {}, 'port'), el('th', {}, 'expects'), el('th', {}, 'shipped default'))),
         el('tbody', {}, ...bindings.map(b => el('tr', {},
           el('td', {}, el('code', {}, b.port)),
           el('td', {}, b.expects || ''),
-          el('td', {}, b.binding ? fileLink(b.binding) : '—'),
           el('td', {}, b.default ? fileLink(b.default) : '—')))));
       head.querySelector('.node-head').append(
         el('details', { class: 'ports' }, el('summary', {}, `Ports & bindings (${bindings.length})`), tbl));

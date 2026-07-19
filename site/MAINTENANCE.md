@@ -14,9 +14,10 @@ cannot fetch.
   edges from frontmatter), `flow` (the user/orchestrator/subagent/tracker swim-lane; every box opens the
   contract behind it), `backlog` (the skill exploded: seams, references, playbooks, composed siblings).
   Rosters, lanes/phases, blurbs, file lists, open targets, and each skill node's `bindings` table (its
-  ports: what the skill expects a project to bind, the playbook this repo binds it to, and the shipped
-  template default) live here. `check.py` turns that drift into a failing check — including open targets
-  or binding/default paths pointing at missing files or unknown nodes/views.
+  ports: what the skill expects a consumer project to bind, and the shipped template default) live here.
+  The site documents the shipped skills — never this repo's own installation of them, which is a separate
+  consumer-side matter. `check.py` turns manifest drift into a failing check — including open targets or
+  binding defaults pointing at missing files or unknown nodes/views.
 
 ## Agent instructions
 
