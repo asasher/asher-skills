@@ -1,0 +1,80 @@
+{
+  "id": "backlog",
+  "type": "graph",
+  "title": "Inside backlog",
+  "subtitle": "One thin skill, three seams — every reference, template, playbook, and composed sibling as its own node. Click to read.",
+  "skill_source": "skills/delivery/backlog",
+  "lanes": [
+    { "id": "surface", "title": "Command surface", "blurb": "The skill's entry point and routing." },
+    { "id": "organize", "title": "groom = organize", "blurb": "Tracker as truth: admission audit, route judgment, serialized writes." },
+    { "id": "schedule", "title": "run = schedule", "blurb": "Waves, claims, dispatch, liveness — build-ignorant; a queue of one is first-class." },
+    { "id": "buildloop", "title": "build loop = one issue → reviewed PR", "blurb": "The invariant dev tail; inputs vary by entryway, gates never do." },
+    { "id": "siblings", "title": "Composed siblings (by name)", "blurb": "Named runtime pointers, never file imports — jump to the family view." },
+    { "id": "playbooks", "title": "This repo's playbooks", "blurb": "docs/agents/* — the repo-tuned half of every step." },
+    { "id": "setup", "title": "Setup & shipped templates", "blurb": "backlog setup writes the playbooks from these baselines." }
+  ],
+  "nodes": [
+    { "id": "b-skill", "lane": "surface", "title": "SKILL.md", "blurb": "commands · seams · routing", "open": { "file": "skills/delivery/backlog/SKILL.md" } },
+
+    { "id": "b-groom", "lane": "organize", "title": "groom", "blurb": "triage · clarify · route judgment · shortlist", "open": { "file": "skills/delivery/backlog/reference/groom.md" } },
+    { "id": "b-policy", "lane": "organize", "title": "backlog-policy (playbook)", "blurb": "label roles · dispatch metadata · needs-spec", "open": { "file": "docs/agents/backlog-policy.md" } },
+
+    { "id": "b-run", "lane": "schedule", "title": "run", "blurb": "queue · claim · staff · dispatch · handoff", "open": { "file": "skills/delivery/backlog/reference/run.md" } },
+    { "id": "b-runstate", "lane": "schedule", "title": "run-state", "blurb": "checkpoints · audited resume", "open": { "file": "skills/delivery/backlog/reference/run-state.md" } },
+    { "id": "b-worktree", "lane": "schedule", "title": "worktree-isolation", "blurb": "parallel working copies", "open": { "file": "skills/delivery/backlog/reference/worktree-isolation.md" } },
+
+    { "id": "b-loop", "lane": "buildloop", "title": "build-loop", "blurb": "the per-issue orchestrator", "open": { "file": "skills/delivery/backlog/reference/build-loop.md" } },
+    { "id": "b-implement", "lane": "buildloop", "title": "implement", "blurb": "JIT tactical plan · test-first build", "open": { "file": "skills/delivery/backlog/reference/implement.md" } },
+    { "id": "b-verify", "lane": "buildloop", "title": "verify", "blurb": "criteria → pass/fail, graded", "open": { "file": "skills/delivery/backlog/reference/verify.md" } },
+    { "id": "b-review", "lane": "buildloop", "title": "adversarial-review", "blurb": "reviewer ⇆ fixer to LGTM", "open": { "file": "skills/delivery/backlog/reference/adversarial-review.md" } },
+    { "id": "b-evidence", "lane": "buildloop", "title": "evidence", "blurb": "proof for whoever wasn't there", "open": { "file": "skills/delivery/backlog/reference/evidence.md" } },
+    { "id": "b-diagnose", "lane": "buildloop", "title": "diagnose (bug route)", "blurb": "hands to diagnosing-bugs", "open": { "file": "skills/delivery/backlog/reference/diagnose.md" } },
+    { "id": "b-refactor", "lane": "buildloop", "title": "refactor route", "blurb": "behavior-preserving, test-locked", "open": { "file": "skills/delivery/backlog/reference/refactor.md" } },
+
+    { "id": "b-sib-diag", "lane": "siblings", "title": "diagnosing-bugs", "blurb": "the bug method", "open": { "jump": "sdlc", "node": "diagnosing-bugs" } },
+    { "id": "b-sib-proto", "lane": "siblings", "title": "prototype", "blurb": "design questions within authority", "open": { "jump": "sdlc", "node": "prototype" } },
+    { "id": "b-sib-res", "lane": "siblings", "title": "research", "blurb": "the research work-type", "open": { "jump": "sdlc", "node": "research" } },
+    { "id": "b-sib-review", "lane": "siblings", "title": "review-loop", "blurb": "draft verdicts · sign-off gates", "open": { "jump": "sdlc", "node": "review-loop" } },
+    { "id": "b-sib-staff", "lane": "siblings", "title": "staffing", "blurb": "every role, every dispatch", "open": { "jump": "sdlc", "node": "staffing" } },
+
+    { "id": "b-pb-platform", "lane": "playbooks", "title": "platform", "blurb": "tracker/PR/git/harness verbs", "open": { "file": "docs/agents/platform.md" } },
+    { "id": "b-pb-env", "lane": "playbooks", "title": "environment", "blurb": "run · isolate · parallelism · roster", "open": { "file": "docs/agents/environment.md" } },
+    { "id": "b-pb-impl", "lane": "playbooks", "title": "implementing", "blurb": "test-first · UI lane · conventions", "open": { "file": "docs/agents/implementing.md" } },
+    { "id": "b-pb-verif", "lane": "playbooks", "title": "verifying", "blurb": "checks · criteria by entryway", "open": { "file": "docs/agents/verifying.md" } },
+    { "id": "b-pb-evid", "lane": "playbooks", "title": "evidence", "blurb": "what proof this repo expects", "open": { "file": "docs/agents/evidence.md" } },
+    { "id": "b-pb-desc", "lane": "playbooks", "title": "change-description", "blurb": "the PR body outline", "open": { "file": "docs/agents/change-description.md" } },
+    { "id": "b-pb-rev", "lane": "playbooks", "title": "change-reviewer / fixer", "blurb": "the adversarial pair's briefs", "open": { "file": "docs/agents/change-reviewer.md" } },
+
+    { "id": "b-setup", "lane": "setup", "title": "setup", "blurb": "bind platforms · write playbooks · smoke test", "open": { "file": "skills/delivery/backlog/reference/setup.md" } },
+    { "id": "b-tmpl-policy", "lane": "setup", "title": "templates/common", "blurb": "policy · platform · environment · description", "open": { "file": "skills/delivery/backlog/templates/common/backlog-policy.md" } },
+    { "id": "b-tmpl-sw", "lane": "setup", "title": "templates/software", "blurb": "implementing · verifying · evidence · reviewer", "open": { "file": "skills/delivery/backlog/templates/software/implementing.md" } }
+  ],
+  "edges": [
+    { "from": "b-skill", "to": "b-groom", "style": "flow" },
+    { "from": "b-skill", "to": "b-run", "style": "flow" },
+    { "from": "b-groom", "to": "b-run", "style": "flow", "label": "admitted queue" },
+    { "from": "b-run", "to": "b-loop", "style": "flow", "label": "one thread per issue" },
+    { "from": "b-loop", "to": "b-implement", "style": "flow" },
+    { "from": "b-implement", "to": "b-verify", "style": "flow" },
+    { "from": "b-verify", "to": "b-review", "style": "flow" },
+    { "from": "b-review", "to": "b-evidence", "style": "flow" },
+    { "from": "b-loop", "to": "b-diagnose", "style": "optional" },
+    { "from": "b-loop", "to": "b-refactor", "style": "optional" },
+    { "from": "b-run", "to": "b-runstate", "style": "optional" },
+    { "from": "b-run", "to": "b-worktree", "style": "optional" },
+    { "from": "b-groom", "to": "b-policy", "style": "optional" },
+    { "from": "b-diagnose", "to": "b-sib-diag", "style": "external" },
+    { "from": "b-loop", "to": "b-sib-proto", "style": "external" },
+    { "from": "b-loop", "to": "b-sib-res", "style": "external" },
+    { "from": "b-loop", "to": "b-sib-review", "style": "external" },
+    { "from": "b-run", "to": "b-sib-staff", "style": "external" },
+    { "from": "b-implement", "to": "b-pb-impl", "style": "optional" },
+    { "from": "b-verify", "to": "b-pb-verif", "style": "optional" },
+    { "from": "b-evidence", "to": "b-pb-evid", "style": "optional" },
+    { "from": "b-review", "to": "b-pb-rev", "style": "optional" },
+    { "from": "b-loop", "to": "b-pb-platform", "style": "optional" },
+    { "from": "b-run", "to": "b-pb-env", "style": "optional" },
+    { "from": "b-setup", "to": "b-tmpl-policy", "style": "optional" },
+    { "from": "b-setup", "to": "b-tmpl-sw", "style": "optional" }
+  ]
+}

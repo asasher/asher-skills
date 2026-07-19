@@ -13,7 +13,7 @@
     --lane: #eafaf1; --lane-line: #b5e3c8;
     --gate: #fdeef0; --gate-line: #f2bcc5;
     --human: #f3eefc; --human-line: #d3bff2;
-    --code-bg: #f4f2ee;
+    --code-bg: #f4f2ee; --sheet-shadow: 0 0 60px rgba(0,0,0,.25);
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -24,70 +24,83 @@
       --lane: #17281e; --lane-line: #2f5c40;
       --gate: #2e1d20; --gate-line: #6d3a44;
       --human: #241d31; --human-line: #4d3a70;
-      --code-bg: #26262b;
+      --code-bg: #26262b; --sheet-shadow: 0 0 60px rgba(0,0,0,.6);
     }
   }
   * { box-sizing: border-box; }
-  body { margin: 0; font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); }
-  header { padding: 1.4rem 1.6rem .9rem; border-bottom: 1px solid var(--line); }
-  header h1 { font-size: 1.25rem; margin: 0; }
-  header p { margin: .25rem 0 0; color: var(--muted); font-size: .87rem; max-width: 72ch; }
-  .layout { display: grid; grid-template-columns: minmax(430px, 46%) 1fr; min-height: calc(100vh - 90px); }
-  @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
-  #graph-pane { border-right: 1px solid var(--line); padding: 1rem 1.2rem 2rem; overflow-x: auto; }
-  #graph-pane svg { width: 100%; height: auto; min-width: 400px; }
-  #reader { padding: 1.2rem 1.6rem 4rem; min-width: 0; }
+  html, body { height: 100%; }
+  body { margin: 0; font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); overflow: hidden; }
 
-  /* graph */
-  .lane-bg { fill: var(--card); stroke: var(--line); rx: 10; }
-  .lane-title { font-size: 11px; font-weight: 700; fill: var(--accent-ink); letter-spacing: .05em; text-transform: uppercase; }
-  .lane-blurb { font-size: 10px; fill: var(--muted); }
-  .node rect { fill: var(--stage); stroke: var(--stage-line); stroke-width: 1.5; rx: 8; cursor: pointer; }
-  .node.lane-services rect { fill: var(--lane); stroke: var(--lane-line); }
-  .node.lane-probes rect { fill: var(--lane); stroke: var(--lane-line); }
-  .node.lane-ux rect { fill: var(--human); stroke: var(--human-line); }
-  .node.lane-execution rect.gate { fill: var(--gate); stroke: var(--gate-line); }
-  .node.external rect { stroke-dasharray: 5 3; fill: var(--artifact); stroke: var(--artifact-line); }
-  .node text.t { font-size: 12.5px; font-weight: 650; fill: var(--ink); pointer-events: none; }
-  .node text.b { font-size: 9.5px; fill: var(--muted); pointer-events: none; }
-  .node.active rect { stroke: var(--accent); stroke-width: 2.5; }
-  .edge { stroke: var(--muted); stroke-width: 1.3; fill: none; opacity: .55; }
-  .edge.optional { stroke-dasharray: 4 3; }
-  .edge.external { stroke-dasharray: 4 3; stroke: var(--artifact-line); opacity: .9; }
-  .edge.flow { stroke: var(--accent); stroke-width: 2; opacity: .8; }
-  .edge-label { font-size: 9px; fill: var(--muted); }
-  #legend { display: flex; gap: .9rem; flex-wrap: wrap; font-size: .74rem; color: var(--muted); margin: .5rem 0 0; }
+  header { display: flex; align-items: baseline; gap: 1.1rem; padding: .7rem 1.2rem; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  header h1 { font-size: 1.02rem; margin: 0; white-space: nowrap; }
+  nav { display: flex; gap: .3rem; }
+  nav button { font: inherit; font-size: .84rem; border: 1px solid transparent; background: none; color: var(--muted); border-radius: 7px; padding: .18rem .7rem; cursor: pointer; }
+  nav button.active { border-color: var(--accent); color: var(--accent-ink); font-weight: 650; background: var(--card); }
+  #view-subtitle { color: var(--muted); font-size: .8rem; margin: 0; flex: 1 1 300px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #legend { display: flex; gap: .8rem; font-size: .72rem; color: var(--muted); white-space: nowrap; }
   #legend span { display: inline-flex; align-items: center; gap: .3rem; }
-  .lg { width: 22px; height: 0; border-top: 2px solid var(--muted); display: inline-block; }
+  .lg { width: 20px; height: 0; border-top: 2px solid var(--muted); display: inline-block; }
   .lg.opt { border-top-style: dashed; }
   .lg.flw { border-top-color: var(--accent); }
   .lg.ext { border-top-style: dashed; border-top-color: var(--artifact-line); }
 
-  /* reader */
-  #reader .placeholder { color: var(--muted); max-width: 62ch; }
-  .node-head h2 { margin: 0 0 .2rem; font-size: 1.2rem; }
-  .node-head .desc { color: var(--muted); font-size: .88rem; max-width: 72ch; margin: 0 0 .6rem; }
-  .chips { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0 0 .9rem; }
-  .chip { font-size: .72rem; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: .12rem .55rem; color: var(--muted); }
+  #graph-pane { position: absolute; inset: 49px 0 0 0; overflow: auto; padding: 14px 18px 40px; }
+  #graph-pane svg { display: block; margin: 0 auto; }
+
+  /* graph */
+  .lane-bg { fill: var(--card); stroke: var(--line); }
+  .lane-title { font-size: 11px; font-weight: 700; fill: var(--accent-ink); letter-spacing: .05em; text-transform: uppercase; }
+  .lane-blurb { font-size: 10px; fill: var(--muted); }
+  .phase-title { font-size: 11px; font-weight: 700; fill: var(--accent-ink); letter-spacing: .04em; }
+  .node rect { fill: var(--stage); stroke: var(--stage-line); stroke-width: 1.5; cursor: pointer; transition: opacity .15s; }
+  .node.k-services rect, .node.k-probes rect, .node.k-sub rect, .node.k-siblings rect { fill: var(--lane); stroke: var(--lane-line); }
+  .node.k-ux rect, .node.k-you rect { fill: var(--human); stroke: var(--human-line); }
+  .node.k-repo rect, .node.k-playbooks rect, .node.k-setup rect { fill: var(--artifact); stroke: var(--artifact-line); }
+  .node.gate rect { fill: var(--gate); stroke: var(--gate-line); }
+  .node.external rect, .node.dashed rect { stroke-dasharray: 5 3; }
+  .node.external rect { fill: var(--artifact); stroke: var(--artifact-line); }
+  .node text.t { font-size: 12.5px; font-weight: 650; fill: var(--ink); pointer-events: none; }
+  .node text.b { font-size: 9.5px; fill: var(--muted); pointer-events: none; }
+  .node.active rect { stroke: var(--accent); stroke-width: 2.5; }
+  svg.dimming .node:not(.hot) { opacity: .28; }
+  svg.dimming .edge:not(.hot) { opacity: .08; }
+  .edge { stroke: var(--muted); stroke-width: 1.4; fill: none; opacity: .5; transition: opacity .15s; }
+  .edge.optional { stroke-dasharray: 4 3; }
+  .edge.external { stroke-dasharray: 4 3; stroke: var(--artifact-line); opacity: .85; }
+  .edge.flow { stroke: var(--accent); stroke-width: 2.1; opacity: .85; }
+  .edge-label { font-size: 9.5px; fill: var(--muted); }
+
+  /* sheet */
+  #backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.35); opacity: 0; pointer-events: none; transition: opacity .18s; z-index: 40; }
+  #sheet { position: fixed; top: 0; right: 0; bottom: 0; width: min(760px, 94vw); background: var(--bg); border-left: 1px solid var(--line); box-shadow: var(--sheet-shadow); transform: translateX(102%); transition: transform .2s ease; z-index: 50; display: flex; flex-direction: column; }
+  body.sheet-open #backdrop { opacity: 1; pointer-events: auto; }
+  body.sheet-open #sheet { transform: none; }
+  #sheet-head { padding: 1rem 1.4rem .6rem; border-bottom: 1px solid var(--line); }
+  #sheet-close { position: absolute; top: .7rem; right: .9rem; font: inherit; font-size: 1.1rem; border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 7px; width: 30px; height: 30px; cursor: pointer; line-height: 1; }
+  #sheet-body { overflow-y: auto; padding: 1rem 1.4rem 4rem; }
+  .node-head h2 { margin: 0 0 .15rem; font-size: 1.15rem; padding-right: 2.2rem; }
+  .node-head .desc { color: var(--muted); font-size: .86rem; margin: 0 0 .5rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: .32rem; margin: 0 0 .3rem; }
+  .chip { font-size: .72rem; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: .1rem .55rem; color: var(--muted); }
   .chip.dep { cursor: pointer; border-color: var(--stage-line); background: var(--stage); color: var(--ink); }
   .chip.dep.opt { border-style: dashed; }
   .chip.dep.ext { border-color: var(--artifact-line); background: var(--artifact); }
-  .tabs { display: flex; flex-wrap: wrap; gap: .3rem .35rem; border-bottom: 1px solid var(--line); padding-bottom: .55rem; margin-bottom: 1rem; }
-  .tabs .grp { font-size: .7rem; color: var(--muted); align-self: center; margin-left: .5rem; text-transform: uppercase; letter-spacing: .04em; }
-  .tabs button { font: inherit; font-size: .8rem; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 6px; padding: .18rem .6rem; cursor: pointer; }
+  .tabs { display: flex; flex-wrap: wrap; gap: .28rem .32rem; padding: .5rem 1.4rem .6rem; border-bottom: 1px solid var(--line); }
+  .tabs .grp { font-size: .68rem; color: var(--muted); align-self: center; margin-left: .45rem; text-transform: uppercase; letter-spacing: .04em; }
+  .tabs button { font: inherit; font-size: .78rem; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 6px; padding: .14rem .55rem; cursor: pointer; }
   .tabs button.active { border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
   .filepath { font-size: .72rem; color: var(--muted); margin: 0 0 .8rem; font-family: ui-monospace, monospace; }
-  .fm-card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .6rem .9rem; margin: 0 0 1rem; font-size: .8rem; }
+  .fm-card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .6rem .9rem; margin: 0 0 1rem; font-size: .8rem; overflow: auto; }
   .fm-card dt { color: var(--muted); font-weight: 600; float: left; clear: left; width: 7.5rem; }
   .fm-card dd { margin: 0 0 .15rem 8rem; font-family: ui-monospace, monospace; font-size: .76rem; }
-  #md { max-width: 78ch; }
-  #md h1 { font-size: 1.35rem; } #md h2 { font-size: 1.12rem; margin-top: 1.8rem; border-top: 1px solid var(--line); padding-top: .9rem; }
-  #md h3 { font-size: .98rem; }
+  #md { max-width: 76ch; }
+  #md h1 { font-size: 1.3rem; } #md h2 { font-size: 1.08rem; margin-top: 1.7rem; border-top: 1px solid var(--line); padding-top: .85rem; }
+  #md h3 { font-size: .96rem; }
   #md code { background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; padding: .04em .3em; font-size: .85em; }
   #md pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px; padding: .8rem 1rem; overflow-x: auto; }
   #md pre code { background: none; border: none; padding: 0; }
-  #md table { border-collapse: collapse; width: 100%; font-size: .87rem; display: block; overflow-x: auto; }
-  #md th, #md td { border: 1px solid var(--line); padding: .35rem .6rem; text-align: left; vertical-align: top; }
+  #md table { border-collapse: collapse; width: 100%; font-size: .86rem; display: block; overflow-x: auto; }
+  #md th, #md td { border: 1px solid var(--line); padding: .32rem .55rem; text-align: left; vertical-align: top; }
   #md th { background: var(--card); }
   #md blockquote { border-left: 3px solid var(--accent); margin: 0; padding: .1rem 0 .1rem 1rem; color: var(--muted); }
   #md a { color: var(--accent-ink); }
@@ -96,20 +109,24 @@
 </head>
 <body>
 <header>
-  <h1>asher-skills · <span id="view-title">…</span></h1>
+  <h1>asher-skills</h1>
+  <nav id="nav"></nav>
   <p id="view-subtitle"></p>
   <div id="legend">
     <span><span class="lg"></span> requires</span>
-    <span><span class="lg opt"></span> optional</span>
-    <span><span class="lg ext"></span> external requirement</span>
-    <span><span class="lg flw"></span> lifecycle flow</span>
-    <span>· click any node — its real files render below, live from the repo</span>
+    <span><span class="lg opt"></span> optional / reads</span>
+    <span><span class="lg ext"></span> external / by-name</span>
+    <span><span class="lg flw"></span> flow</span>
   </div>
 </header>
-<div class="layout">
-  <div id="graph-pane"></div>
-  <div id="reader"><p class="placeholder">Select a node to read its skill — the content is fetched from the actual files on disk, never copied into this page. Frontmatter (the sibling and external declarations drawn as edges) comes from the same bytes.</p></div>
-</div>
+<div id="graph-pane"></div>
+<div id="backdrop"></div>
+<aside id="sheet" aria-modal="true" role="dialog">
+  <button id="sheet-close" title="Close (Esc)">×</button>
+  <div id="sheet-head"></div>
+  <div id="sheet-tabs"></div>
+  <div id="sheet-body"></div>
+</aside>
 <script src="vendor/markdown-it.min.js"></script>
 <script src="app.js"></script>
 </body>

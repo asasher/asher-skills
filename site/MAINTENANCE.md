@@ -10,13 +10,16 @@ cannot fetch.
 - **Layer 1 (cannot drift):** everything a reader reads. Skill content is fetched from the real files at
   view time; the dependency edges and header chips are parsed from each `SKILL.md`'s frontmatter — the same
   bytes rendered in the panel. Nothing is copied into the app.
-- **Layer 2 (can drift, gated):** `views/*.json` — the roster (which skills are in a view), lane placement,
-  blurbs, file lists, and playbook attachments. `check.py` turns that drift into a failing check.
+- **Layer 2 (can drift, gated):** `views/*.json` — three views today: `sdlc` (family dependency graph;
+  edges from frontmatter), `flow` (the user/orchestrator/subagent/tracker swim-lane; every box opens the
+  contract behind it), `backlog` (the skill exploded: seams, references, playbooks, composed siblings).
+  Rosters, lanes/phases, blurbs, file lists, and open targets live here. `check.py` turns that drift into a
+  failing check — including open targets pointing at missing files or unknown nodes/views.
 
 ## Agent instructions
 
 - **Touching a family skill?** The site is part of the change's blast radius. Adding/renaming/removing a
-  skill, a reference file, or an attached playbook must update `views/sdlc.json` in the same change, then run
+  skill, a reference file, or an attached playbook must update the affected `views/*.json` in the same change (a backlog reference belongs in both `sdlc` and `backlog` views), then run
   `python3 site/check.py` — errors block; warnings mean a file exists that the manifest doesn't list.
 - **Never copy skill prose into the site.** If a description reads wrong in the app, fix the skill's
   frontmatter/SKILL.md — the app is a viewer, not a second home for content. Blurbs in the manifest are

@@ -1,0 +1,72 @@
+{
+  "id": "flow",
+  "type": "swimlane",
+  "title": "Lifecycle flow",
+  "subtitle": "The fullest session — plan-ahead initiative executed AFK. Simpler sessions delete columns, never lanes. Click any box to read the contract behind it.",
+  "lanes": [
+    { "id": "you", "title": "You ✋", "blurb": "Every human touch point" },
+    { "id": "orch", "title": "Orchestrator", "blurb": "Your session" },
+    { "id": "sub", "title": "Subagents & watchers", "blurb": "Staffed workers" },
+    { "id": "repo", "title": "Tracker & repo", "blurb": "Durable state" }
+  ],
+  "phases": [
+    { "id": "intake", "title": "Intake" },
+    { "id": "interview", "title": "Interview ↻" },
+    { "id": "spec", "title": "Spec + gate" },
+    { "id": "tickets", "title": "Tickets" },
+    { "id": "admission", "title": "Admission" },
+    { "id": "run", "title": "AFK run ∥" },
+    { "id": "merge", "title": "Merge" }
+  ],
+  "nodes": [
+    { "id": "f-idea", "lane": "you", "phase": "intake", "title": "Bring the idea", "blurb": "problem · PDF · repo", "open": { "file": "skills/thinking/interview/SKILL.md" } },
+    { "id": "f-intake", "lane": "orch", "phase": "intake", "title": "Read artifacts", "blurb": "ask nothing a doc answers", "open": { "file": "skills/thinking/interview/SKILL.md" } },
+
+    { "id": "f-round", "lane": "orch", "phase": "interview", "title": "Ask the whole frontier", "blurb": "hypotheses attached, one topic per question", "open": { "file": "skills/thinking/interview/SKILL.md" } },
+    { "id": "f-answer", "lane": "you", "phase": "interview", "title": "Answer the round", "blurb": "accept · modify · defer · unknown ↻", "open": { "file": "skills/thinking/interview/SKILL.md" } },
+    { "id": "f-facts", "lane": "sub", "phase": "interview", "title": "Fact lookups · probes", "blurb": "research · prototype, staffing-resolved", "open": { "node": "research" } },
+    { "id": "f-crystal", "lane": "repo", "phase": "interview", "title": "CONTEXT.md · ADRs", "blurb": "written the moment they crystallise", "open": { "node": "domain-modeling" } },
+
+    { "id": "f-tospec", "lane": "orch", "phase": "spec", "title": "to-spec + fidelity audit", "blurb": "no new questions; Notes classified", "open": { "node": "to-spec" } },
+    { "id": "f-verdict", "lane": "you", "phase": "spec", "title": "Annotate → verdict ✋", "blurb": "approve / changes ↻", "open": { "node": "review-loop" } },
+    { "id": "f-watch", "lane": "sub", "phase": "spec", "title": "Verdict watcher", "blurb": "holds the await", "open": { "file": "skills/system/review-loop/reference/watch.md" } },
+    { "id": "f-specfile", "lane": "repo", "phase": "spec", "title": "Spec committed", "blurb": "+ thin tracking ticket", "open": { "file": "skills/delivery/to-spec/reference/synthesis.md" } },
+
+    { "id": "f-slices", "lane": "orch", "phase": "tickets", "title": "to-tickets + readiness audit", "blurb": "tracer bullets, authority boundaries", "open": { "node": "to-tickets" } },
+    { "id": "f-quiz", "lane": "you", "phase": "tickets", "title": "Quiz ✋", "blurb": "granularity + blocking edges", "open": { "file": "skills/delivery/to-tickets/reference/slicing.md" } },
+    { "id": "f-published", "lane": "repo", "phase": "tickets", "title": "Tickets published", "blurb": "native blocked-by edges", "open": { "file": "skills/delivery/to-tickets/reference/slicing.md" } },
+
+    { "id": "f-groom", "lane": "orch", "phase": "admission", "title": "Groom: route judgment", "blurb": "direct-executable, or needs-spec", "open": { "file": "skills/delivery/backlog/reference/groom.md" } },
+    { "id": "f-labels", "lane": "repo", "phase": "admission", "title": "ready-for-agent + route", "blurb": "admission is the only readiness stamp", "open": { "file": "docs/agents/backlog-policy.md" } },
+
+    { "id": "f-run", "lane": "orch", "phase": "run", "title": "Run: waves ∥", "blurb": "dispatch via staffing · liveness", "open": { "file": "skills/delivery/backlog/reference/run.md" } },
+    { "id": "f-loops", "lane": "sub", "phase": "run", "title": "Build loop × N", "blurb": "implement · verify · review · evidence", "open": { "file": "skills/delivery/backlog/reference/build-loop.md" } },
+    { "id": "f-prs", "lane": "repo", "phase": "run", "title": "Branches · PRs · evidence", "blurb": "review-ready, never merged by agents", "open": { "file": "skills/delivery/backlog/reference/evidence.md" } },
+    { "id": "f-esc", "lane": "you", "phase": "run", "title": "Escalations only", "blurb": "needs-spec handback ⤴", "dashed": true, "open": { "file": "skills/delivery/backlog/reference/build-loop.md" } },
+
+    { "id": "f-merge", "lane": "you", "phase": "merge", "title": "PR review · merge ✋", "blurb": "the explicit authorization gate", "open": { "node": "merge-changes" } },
+    { "id": "f-closed", "lane": "repo", "phase": "merge", "title": "Merged", "blurb": "issues closed via Closes #n", "open": { "file": "docs/agents/platform.md" } }
+  ],
+  "edges": [
+    { "from": "f-idea", "to": "f-intake" },
+    { "from": "f-intake", "to": "f-round", "style": "flow" },
+    { "from": "f-round", "to": "f-answer", "bidir": true, "label": "↻ until the frontier is empty" },
+    { "from": "f-round", "to": "f-facts", "style": "optional" },
+    { "from": "f-round", "to": "f-crystal", "style": "optional", "label": "inline extraction" },
+    { "from": "f-round", "to": "f-tospec", "style": "flow" },
+    { "from": "f-tospec", "to": "f-verdict" },
+    { "from": "f-verdict", "to": "f-watch", "style": "optional" },
+    { "from": "f-tospec", "to": "f-specfile", "style": "optional" },
+    { "from": "f-tospec", "to": "f-slices", "style": "flow" },
+    { "from": "f-slices", "to": "f-quiz", "bidir": true },
+    { "from": "f-slices", "to": "f-published", "style": "optional" },
+    { "from": "f-slices", "to": "f-groom", "style": "flow" },
+    { "from": "f-groom", "to": "f-labels", "style": "optional" },
+    { "from": "f-groom", "to": "f-run", "style": "flow" },
+    { "from": "f-run", "to": "f-loops" },
+    { "from": "f-loops", "to": "f-prs", "style": "optional" },
+    { "from": "f-loops", "to": "f-esc", "style": "external", "label": "only if a decision invalidates" },
+    { "from": "f-run", "to": "f-merge", "style": "flow" },
+    { "from": "f-merge", "to": "f-closed", "style": "optional" }
+  ]
+}
