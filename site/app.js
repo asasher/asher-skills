@@ -150,15 +150,17 @@
       { selector: 'node.active', style: { 'border-color': accent, 'border-width': 3 } },
       { selector: 'node.lane', style: {
         shape: 'round-rectangle', 'background-color': card, 'background-opacity': .55,
-        'border-color': line, 'border-width': 1, label: '', padding: '20px' } },
+        'border-color': line, 'border-width': 1, label: '', padding: '26px' } },
       { selector: 'node.phase-head', style: { 'background-opacity': 0, 'border-width': 0, width: NW, height: 24, label: '' } },
       { selector: 'edge', style: {
         'curve-style': 'taxi', 'taxi-direction': 'vertical', 'taxi-turn': '45%', 'taxi-turn-min-distance': 12,
         width: 1.5, 'line-color': muted, 'target-arrow-color': muted, 'target-arrow-shape': 'triangle',
         'arrow-scale': .75, opacity: .5, label: 'data(label)', 'font-size': 9.5, color: muted,
-        'text-background-color': bg, 'text-background-opacity': .9, 'text-background-padding': 2,
+        'text-background-color': bg, 'text-background-opacity': 1, 'text-background-shape': 'round-rectangle',
+        'text-background-padding': 4, 'text-border-color': line, 'text-border-width': 1, 'text-border-opacity': 1,
         'transition-property': 'opacity', 'transition-duration': '0.12s' } },
-      { selector: 'edge.horiz', style: { 'taxi-direction': 'horizontal' } },
+      { selector: 'edge.horiz', style: {
+        'curve-style': 'unbundled-bezier', 'control-point-distances': [46], 'control-point-weights': [0.5] } },
       { selector: 'edge.optional', style: { 'line-style': 'dashed' } },
       { selector: 'edge.external', style: { 'line-style': 'dashed', 'line-color': cssVar('--artifact-line'), 'target-arrow-color': cssVar('--artifact-line'), opacity: .85 } },
       { selector: 'edge.flow', style: { 'line-color': accent, 'target-arrow-color': accent, width: 2.2, opacity: .85 } },
@@ -187,7 +189,7 @@
     });
     cy.nodeHtmlLabel([
       { query: 'node.item', tpl: d => `<div class="cy-title" data-nid="${esc(d.id)}"><b>${esc(d.title)}</b><span>${esc(d.blurb)}</span></div>` },
-      { query: 'node.lane', valign: 'top', valignBox: 'top', tpl: d => `<div class="cy-lane"><b>${esc(d.title)}</b><span> — ${esc(d.blurb)}</span></div>` },
+      { query: 'node.lane', halign: 'left', halignBox: 'right', valign: 'top', valignBox: 'top', tpl: d => `<div class="cy-lane"><b>${esc(d.title)}</b><span> — ${esc(d.blurb)}</span></div>` },
       { query: 'node.phase-head', tpl: d => `<div class="cy-phase">${esc(d.title)}</div>` },
     ], { enablePointerEvents: false });
     cy.on('mouseover', 'node.item', (e) => {
