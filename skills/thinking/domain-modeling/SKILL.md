@@ -27,6 +27,11 @@ Formats: [context-format](reference/context-format.md), [adr-format](reference/a
 Create files lazily — only when there is something to write. No `CONTEXT.md`? Create it when the first term
 resolves. No `docs/adr/`? Create it when the first ADR is needed.
 
+**Register on create.** The first time `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` comes into existence,
+add its line to the project instruction file's `## Context documents` index (`AGENTS.md`; `CLAUDE.md` reaches
+it via its `@AGENTS.md` import — create the section if absent): path, what it is, when to read it, one line
+each. The index is how a session running no skill still finds the model.
+
 ## During the session
 
 - **Challenge against the glossary.** A term that conflicts with `CONTEXT.md` gets called out immediately:

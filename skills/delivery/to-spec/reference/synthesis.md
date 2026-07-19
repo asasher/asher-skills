@@ -93,4 +93,6 @@ leave the committed spec for the user to read directly. Skipping sign-off still 
 **On approval:** commit the spec, and — when a live tracker is bound (`docs/agents/platform.md`) — create a
 **thin tracking ticket** carrying the title, a one-line gist, and a link to the canonical spec. The
 projection carries links and state, never content — one source of truth, no drift. `to-tickets` wires each
-slice ticket to it at publish time.
+slice ticket to it at publish time. The first spec also registers the specs location in the project
+instruction file's `## Context documents` index (path, what it is, when to read — create the section if
+absent).

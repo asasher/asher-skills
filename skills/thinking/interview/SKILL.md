@@ -19,8 +19,8 @@ prerequisites are already settled.
 ## Intake first
 
 Before asking anything, read what already exists: named files (a PDF, a brief, a doc), the repo, and the
-durable context — `PRODUCT.md`, `DESIGN.md`, `CONTEXT.md`, ADRs, prior specs — wherever the project keeps
-them. **Provided artifacts are read, not asked about.** Intake seeds the tree with what is already settled
+durable context — `PRODUCT.md`, `DESIGN.md`, `CONTEXT.md`, ADRs, prior specs — the instruction file's
+`## Context documents` index is the map when one exists. **Provided artifacts are read, not asked about.** Intake seeds the tree with what is already settled
 and what the evidence leaves open.
 
 ## Facts are yours; decisions are the user's

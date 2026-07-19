@@ -29,6 +29,7 @@ The deep design capability is **Impeccable**, the external declared above. When 
 `external-dependencies.lock.json`), load it on UI work per its own SKILL: its `init`/`document` write the
 project's `PRODUCT.md`/`DESIGN.md`, and its `critique`/`audit` serve as scored verification gates. On a blank
 project whose direction hasn't crystallised, defer `init` — don't scaffold empty `PRODUCT.md`/`DESIGN.md`;
-run it once shaping (interview → spec) lands a direction. Its rules
+run it once shaping (interview → spec) lands a direction, and register both files in the project instruction
+file's `## Context documents` index when it does. Its rules
 are never copied here — a fork goes stale. **Precedence:** on any conflict, these rules win — this file
 is Asher's personal policy overlay on top of whatever design system runs underneath.
