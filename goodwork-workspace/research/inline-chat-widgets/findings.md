@@ -33,7 +33,7 @@ architecture goodwork already has.
 | claude.ai web | MCP Apps ("interactive connectors") | **GA** since 2026-01-26, all plans; remote connectors only | CLA-7, CLA-8, CLA-9, INT-3 |
 | Claude desktop | MCP Apps | **GA**; docs show only remote directory connectors and are silent on local servers; local-stdio rendering **undocumented** | CLA-7, CLA-8, CLA-9 (O, corrected), INT-13 (U) |
 | Claude mobile | MCP Apps | GA | CLA-8 |
-| Claude Code (CLI/desktop/web) | none inline | No widget rendering documented anywhere; MCP surface = tools/resources/elicitation dialogs. Alternatives: desktop Browser pane (localhost preview), Claude Code artifacts (browser-side) | CLA-19 (O), INT-14 (O), INT-17, CLA-17, CLA-18 |
+| Claude Code (CLI/desktop/web) | **`visualize` (first-party, undocumented)** — see §9 addendum | Product evidence 2026-07-18: inline SVG/HTML widgets render in the desktop app via auto-provisioned `mcp__visualize__*` tools; nothing in official docs. Also: desktop Browser pane (localhost preview), Claude Code artifacts (browser-side) | VIS-1..6, CLA-19 (O), INT-14 (O), INT-17, CLA-17, CLA-18 |
 | ChatGPT web/desktop/mobile | Apps SDK on MCP Apps | Fully MCP Apps compatible since 2026-02-22; dev mode for unreviewed servers; distribution via plugins | OAI-3, OAI-4, OAI-7, OAI-8, OAI-2 |
 | Codex (CLI / IDE / desktop-now-merged-into-ChatGPT-desktop) | none shipped | MCP tools yes (stdio + HTTP via config.toml); widget rendering **not shipped per any official source** — `enable_mcp_apps` flag merged 2026-04-27, default-off, "under development"; a user report observes non-rendering (pre-merge build; see U-4) | OAI-9, OAI-10, OAI-11, OAI-12 (O), OAI-18, INT-15 (U) |
 
@@ -185,7 +185,7 @@ repo's installed skill files. Bounded absences are recorded as Unknowns with the
 several OpenAI help/announcement pages returned HTTP 403 (noted in OAI-21). No hands-on product experiments
 were run — U-1 is deliberately left to a probe.
 
-## 8. Source index
+## 8. Source index (see also §9 addendum sources in claims/vis.md)
 
 Spec & standard: github.com/modelcontextprotocol/ext-apps (spec 2026-01-26 + draft; SDK)
 · blog.modelcontextprotocol.io 2025-11-21 & 2026-01-26 posts · modelcontextprotocol.io/seps/1865
@@ -201,3 +201,35 @@ OpenAI: developers.openai.com/apps-sdk{,/reference,/changelog,/build/chatgpt-ui,
 · github.com/openai/openai-apps-sdk-examples.
 Local: .agents/skills/review-loop/SKILL.md · skills/personal/goodwork (state/execution references).
 All web sources accessed 2026-07-18.
+
+## 9. Addendum (2026-07-19) — the `visualize` channel in Claude Code desktop
+
+Product evidence arrived after delivery that revises the Claude Code row: a Claude Code **desktop** session
+on 2026-07-18 rendered an SVG diagram inline in the transcript through an auto-provisioned first-party MCP
+server named `visualize` (VIS-1). It appears in no user or project MCP config (VIS-2) and its renderer ships
+in the desktop app's own front-end bundle (VIS-3). This is exactly the gap the original CLA-19/INT-14
+limitations reserved: the *documented* absence stands (nothing in the docs map — VIS-5), but the *product*
+has the capability.
+
+Mechanism per the tool's own relayed guidance (VIS-4): raw markup travels in the `show_widget` tool's
+`widget_code` argument (SVG auto-detected, else HTML); the host injects a design-system stylesheet
+(class ramps, CSS variables) so widgets adapt to light/dark; CSP restricts external loads to a short CDN
+allowlist; `position:fixed` is forbidden; scripts run after streaming; and a global `sendPrompt(text)`
+inside the frame sends a message back into the conversation — the interactivity channel. A `read_me` tool
+serves the design-system/constraint modules and is meant to be called first.
+
+**Not established** (VIS-5 quarantine, VIS-6): whether this is the MCP Apps extension internally (the
+visible shape — markup in tool arguments, no ui:// template, no postMessage JSON-RPC bridge — differs from
+the spec), where the server runs, surface/version gating, and stability (a guide-agent-surfaced GitHub
+issue alleges post-render 400s since April; the 2026-07-18 session rendered and persisted fine).
+
+- **I-7.** Goodwork's in-chat story on Claude Code desktop is feasible *today* via `visualize`: the approval
+  card (draft text in an editable field, Send/Edit/Don't-send buttons calling `sendPrompt` with the decision
+  and content hash) and the kanban board can render inline, with every user action arriving as a visible
+  chat message — weaker than `events.jsonl` as a machine gate but stronger as user-visible provenance; the
+  agent still validates before acting, preserving the trust model. Where `mcp__visualize__*` tools are
+  absent from a session, degrade to the existing local server + Browser pane/tailnet page. (From VIS-1,
+  VIS-2, VIS-4; goodwork execution contract.) Caveat: an undocumented channel can change or vanish without
+  notice — ship it as a progressive enhancement rung, never the only path.
+- **Next probe:** from a Claude Code desktop session, call `read_me` (all modules), render an interactive
+  HTML approval card, and exercise `sendPrompt` round-trip — settles VIS-6 empirically.
