@@ -54,8 +54,10 @@
   #cy .x6-cell { transition: opacity .12s; }
   #cy .dim { opacity: .12; }
   #cy g[data-shape="skill-node"] { cursor: pointer; }
-  .x-node { width: 100%; height: 100%; padding: 9px 12px 8px; pointer-events: none; text-align: left; line-height: 1.25; overflow: hidden; }
+  .x-node { position: relative; width: 100%; height: 100%; padding: 9px 12px 8px; pointer-events: none; text-align: left; line-height: 1.25; overflow: hidden; }
   .x-node b { display: block; font-size: 12.5px; font-weight: 650; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .x-node.has-ports b { padding-right: 44px; }
+  .x-node .pb { position: absolute; top: 6px; right: 7px; font-style: normal; font-size: 8px; font-weight: 650; letter-spacing: .03em; color: var(--accent-ink); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 1px 6px; }
   .x-node span { display: block; font-size: 9.5px; color: var(--muted); max-height: 24px; overflow: hidden; }
   .x-lane { width: 100%; height: 100%; padding: 9px 16px; pointer-events: none; white-space: nowrap; overflow: hidden; }
   .x-lane b { font-size: 11px; font-weight: 700; color: var(--accent-ink); letter-spacing: .05em; text-transform: uppercase; }

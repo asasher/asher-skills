@@ -138,8 +138,9 @@
       html(cell) {
         const d = cell.getData() || {};
         const div = document.createElement('div');
-        div.className = 'x-node';
-        div.innerHTML = `<b>${esc(d.title)}</b><span>${esc(d.blurb)}</span>`;
+        div.className = d.ports ? 'x-node has-ports' : 'x-node';
+        div.innerHTML = `<b>${esc(d.title)}</b><span>${esc(d.blurb)}</span>`
+          + (d.ports ? `<em class="pb">${d.ports} port${d.ports > 1 ? 's' : ''}</em>` : '');
         return div;
       },
     });
@@ -213,7 +214,8 @@
       const stroke = cssVar(sv);
       graph.addNode({
         id: n.id, shape: 'skill-node', x: n.cx - NW / 2, y: n.cy - NH / 2, width: NW, height: NH, zIndex: 20,
-        data: { title: n.title, blurb: n.blurb, stroke, item: true, external: n.external || null, view: viewId },
+        data: { title: n.title, blurb: n.blurb, stroke, item: true, external: n.external || null, view: viewId,
+          ports: (n.bindings || []).length },
         attrs: { body: {
           fill: cssVar(fv), stroke, strokeWidth: 1.5, rx: 8, ry: 8,
           ...(n.external || n.dashed ? { strokeDasharray: '5 3' } : {}),
