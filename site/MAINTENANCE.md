@@ -31,12 +31,16 @@ cannot fetch.
 
 - `vendor/markdown-it.min.js` — markdown-it **14.1.0**, MIT (`vendor/markdown-it.LICENSE`). CommonMark +
   GFM tables.
-- `vendor/cytoscape.min.js` — Cytoscape.js **3.30.4**, MIT (`vendor/cytoscape.LICENSE`). The canvas engine:
-  pan/zoom, taxi-routed edges with boundary-clipped arrowheads, compound lane nodes, hover neighborhoods.
-- `vendor/cytoscape-node-html-label.min.js` — **1.2.2**, MIT. Renders the rich node labels (bold title +
-  muted blurb) as HTML overlays on the canvas.
+- `vendor/x6.min.js` — AntV X6 **3.1.7**, MIT (`vendor/x6.LICENSE`), single UMD bundle (global `X6`,
+  all former plugin subpackages merged in as of 3.x). The canvas engine: pan/zoom, obstacle-avoiding
+  `manhattan` edge routing, HTML shapes (nodes and lane headers are `Shape.HTML` cells, so lane titles
+  are part of the lane shape, not floating labels).
+- Layout is deliberately NOT a library: node lane/phase membership is fixed by the manifests, so
+  placement is a deterministic grid computed in `app.js` and only edge routing is delegated to the
+  engine — the architecture the swimlane-layout literature converges on
+  (see `research/site-diagram-stack/findings.md` for the evaluation that chose X6).
 - To upgrade any of them: replace the file from the pinned npm dist, update the version here, and reload
-  all three views to eyeball parity (edge routing and label alignment are the regressions to watch).
+  all three views to eyeball parity (edge routing and lane-header alignment are the regressions to watch).
 
 ## Future deployment (recorded intent, not built)
 

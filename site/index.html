@@ -50,15 +50,17 @@
   #cy-controls button { font: inherit; font-size: 1.05rem; width: 34px; height: 34px; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 8px; cursor: pointer; line-height: 1; }
   #cy-controls button:hover { border-color: var(--accent); color: var(--accent-ink); }
 
-  /* canvas node labels (cytoscape-node-html-label overlays; boxes are drawn by the engine) */
-  .cy-title { width: 156px; pointer-events: none; text-align: left; line-height: 1.25; transition: opacity .12s; }
-  .cy-title b { display: block; font-size: 12.5px; font-weight: 650; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .cy-title span { display: block; font-size: 9.5px; color: var(--muted); max-height: 24px; overflow: hidden; }
-  .cy-title.dimmed { opacity: .18; }
-  .cy-lane { pointer-events: none; white-space: nowrap; transform: translate(8px, -30px); }
-  .cy-lane b { font-size: 11px; font-weight: 700; color: var(--accent-ink); letter-spacing: .05em; text-transform: uppercase; }
-  .cy-lane span { font-size: 10px; color: var(--muted); }
-  .cy-phase { pointer-events: none; font-size: 11.5px; font-weight: 700; color: var(--accent-ink); letter-spacing: .04em; white-space: nowrap; }
+  /* canvas cell content (X6 HTML shapes: the div is part of the shape, boxes are the shape's SVG body) */
+  #cy .x6-cell { transition: opacity .12s; }
+  #cy .dim { opacity: .12; }
+  #cy g[data-shape="skill-node"] { cursor: pointer; }
+  .x-node { width: 100%; height: 100%; padding: 9px 12px 8px; pointer-events: none; text-align: left; line-height: 1.25; overflow: hidden; }
+  .x-node b { display: block; font-size: 12.5px; font-weight: 650; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .x-node span { display: block; font-size: 9.5px; color: var(--muted); max-height: 24px; overflow: hidden; }
+  .x-lane { width: 100%; height: 100%; padding: 9px 16px; pointer-events: none; white-space: nowrap; overflow: hidden; }
+  .x-lane b { font-size: 11px; font-weight: 700; color: var(--accent-ink); letter-spacing: .05em; text-transform: uppercase; }
+  .x-lane span { font-size: 10px; color: var(--muted); }
+  .x-phase { width: 100%; height: 100%; pointer-events: none; font-size: 11.5px; font-weight: 700; color: var(--accent-ink); letter-spacing: .04em; white-space: nowrap; text-align: center; }
 
   /* sheet */
   #backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.35); opacity: 0; pointer-events: none; transition: opacity .18s; z-index: 40; }
@@ -125,8 +127,7 @@
   <div id="sheet-body"></div>
 </aside>
 <script src="vendor/markdown-it.min.js"></script>
-<script src="vendor/cytoscape.min.js"></script>
-<script src="vendor/cytoscape-node-html-label.min.js"></script>
+<script src="vendor/x6.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

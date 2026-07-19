@@ -1,4 +1,5 @@
-/* asher-skills documentation app — v3 (Cytoscape canvas: zoom/pan, engine-routed edges).
+/* asher-skills documentation app — v4 (AntV X6 canvas: obstacle-avoiding manhattan edges,
+ * lanes with headers attached to the lane shape, grid placement computed from the manifests).
  * Drift design unchanged: content + dependency edges come from the real files; views/*.json holds only
  * rosters/lanes/blurbs, gated by site/check.py. See site/MAINTENANCE.md. */
 (() => {
@@ -8,7 +9,8 @@
   const md = window.markdownit({ html: false, linkify: true });
 
   const state = { views: {}, fm: {}, current: 'sdlc', active: null };
-  let cy = null;
+  let graph = null;
+  let activeCell = null;
 
   const $ = (s) => document.querySelector(s);
   const el = (tag, attrs = {}, ...kids) => {
@@ -44,13 +46,18 @@
     return { fm, body: text.slice(m[0].length) };
   }
 
-  /* ---------- element builders (positions are node centers) ---------- */
+  /* ---------- geometry (positions are node centers; lanes/phases carry px rects) ---------- */
   const NW = 172, NH = 56;
 
-  function laneKind(laneId) { return `k-${laneId}`; }
+  const kindVars = (laneId) => {
+    if (['services', 'probes', 'sub', 'siblings'].includes(laneId)) return ['--lane', '--lane-line'];
+    if (['ux', 'you'].includes(laneId)) return ['--human', '--human-line'];
+    if (['repo', 'playbooks', 'setup'].includes(laneId)) return ['--artifact', '--artifact-line'];
+    return ['--stage', '--stage-line'];
+  };
 
   function buildGraphElements(view) {
-    const W = 1500, GX = 20, GY = 18, LPAD = 26, LHEAD = 34, LGAP = 46;
+    const W = 1500, GX = 36, GY = 30, LPAD = 26, LHEAD = 42, LGAP = 48;
     const perLane = {};
     for (const n of view.nodes) (perLane[n.lane] = perLane[n.lane] || []).push(n);
     if (view.id === 'sdlc') {
@@ -62,33 +69,28 @@
         }
       }
     }
-    const elements = []; const pos = {};
+    const lanes = [], nodes = [];
     let y = 0;
     for (const lane of view.lanes) {
-      const nodes = perLane[lane.id] || [];
-      if (!nodes.length) continue;
-      elements.push({ data: { id: `lane:${lane.id}`, title: lane.title, blurb: lane.blurb }, classes: 'lane', selectable: false, grabbable: false });
+      const laneNodes = perLane[lane.id] || [];
+      if (!laneNodes.length) continue;
       const cols = Math.max(1, Math.floor((W - 2 * LPAD + GX) / (NW + GX)));
-      const rows = Math.ceil(nodes.length / cols);
-      nodes.forEach((n, i) => {
-        const cx = LPAD + (i % cols) * (NW + GX) + NW / 2;
-        const cyy = y + LHEAD + Math.floor(i / cols) * (NH + GY) + NH / 2;
-        pos[n.id] = { x: cx, y: cyy };
-        elements.push({
-          data: { id: n.id, parent: `lane:${lane.id}`, title: n.title, blurb: n.blurb, view: view.id },
-          position: { x: cx, y: cyy },
-          classes: `item ${laneKind(n.lane)}${n.external ? ' external' : ''}${n.id === 'merge-changes' ? ' gate' : ''}`,
+      const rows = Math.ceil(laneNodes.length / cols);
+      const laneH = LHEAD + rows * (NH + GY) + LPAD - GY + 14;
+      lanes.push({ id: `lane:${lane.id}`, title: lane.title, blurb: lane.blurb, x: 0, y, w: W, h: laneH });
+      laneNodes.forEach((n, i) => {
+        nodes.push({
+          ...n,
+          cx: LPAD + (i % cols) * (NW + GX) + NW / 2,
+          cy: y + LHEAD + Math.floor(i / cols) * (NH + GY) + NH / 2,
         });
-        if (n.external) pos[n.id].external = n.external;
       });
-      y += LHEAD + rows * (NH + GY) + LGAP;
+      y += laneH + LGAP;
     }
+    const have = new Set(nodes.map(n => n.id));
     const edges = [];
     const addEdge = (from, to, cls, label) => {
-      if (!pos[from] || !pos[to]) return;
-      const horiz = Math.abs(pos[from].y - pos[to].y) < NH;
-      const rev = horiz && pos[to].x < pos[from].x;
-      edges.push({ data: { id: `e${edges.length}:${from}:${to}`, source: from, target: to, label: label || '' }, classes: `${cls}${horiz ? ' horiz' : ''}${rev ? ' horizrev' : ''}` });
+      if (have.has(from) && have.has(to)) edges.push({ from, to, style: cls, label });
     };
     for (const f of view.flow || []) addEdge(f.from, f.to, 'flow', f.label);
     for (const e of view.edges || []) addEdge(e.from, e.to, e.style || '', e.label);
@@ -98,133 +100,190 @@
       for (const o of fm.optional || []) addEdge(n.id, o, 'optional');
       for (const e of (Array.isArray(fm.external) ? fm.external : [])) if (e.name) addEdge(n.id, e.name, 'external');
     }
-    return elements.concat(edges);
+    return { lanes, phases: [], nodes, edges };
   }
 
   function buildSwimElements(view) {
-    const GX = 26, GY = 18, LPAD = 30, LGAP = 44, PHEAD = 44;
+    const GX = 40, GY = 26, LPAD = 42, LGAP = 46, PHEAD = 46;
     const cell = {};
     for (const n of view.nodes) ((cell[n.lane] = cell[n.lane] || {})[n.phase] = cell[n.lane][n.phase] || []).push(n);
     const colX = {}; let x = 0;
     for (const ph of view.phases) { colX[ph.id] = x + NW / 2; x += NW + GX; }
-    const elements = [];
-    for (const ph of view.phases) {
-      elements.push({ data: { id: `phase:${ph.id}`, title: ph.title }, classes: 'phase-head', position: { x: colX[ph.id], y: 0 }, selectable: false, grabbable: false });
-    }
+    const totalW = x - GX + 2 * LPAD;
+    const phases = view.phases.map(ph => ({ id: `phase:${ph.id}`, title: ph.title, cx: colX[ph.id] + LPAD, cy: PHEAD / 2 }));
+    const lanes = [], nodes = [];
     let y = PHEAD;
     for (const lane of view.lanes) {
       const depth = Math.max(1, ...view.phases.map(p => (cell[lane.id] && cell[lane.id][p.id] || []).length));
-      elements.push({ data: { id: `lane:${lane.id}`, title: lane.title, blurb: lane.blurb }, classes: 'lane', selectable: false, grabbable: false });
+      const laneH = LPAD + depth * (NH + GY) - GY + 24;
+      lanes.push({ id: `lane:${lane.id}`, title: lane.title, blurb: lane.blurb, x: 0, y, w: totalW, h: laneH });
       for (const ph of view.phases) {
         (cell[lane.id] && cell[lane.id][ph.id] || []).forEach((n, idx) => {
-          elements.push({
-            data: { id: n.id, parent: `lane:${lane.id}`, title: n.title, blurb: n.blurb, view: view.id },
-            position: { x: colX[ph.id], y: y + LPAD + idx * (NH + GY) + NH / 2 },
-            classes: `item ${laneKind(n.lane)}${n.dashed ? ' dashedn' : ''}`,
-          });
+          nodes.push({ ...n, cx: colX[ph.id] + LPAD, cy: y + LPAD + idx * (NH + GY) + NH / 2 });
         });
       }
-      y += LPAD * 2 + depth * (NH + GY) - GY + LGAP;
+      y += laneH + LGAP;
     }
-    const nodesById = Object.fromEntries(view.nodes.map(n => [n.id, n]));
-    return elements.concat((view.edges || []).map((e, i) => {
-      const a = nodesById[e.from], b = nodesById[e.to];
-      const horiz = a && b && a.lane === b.lane && a.phase !== b.phase;
-      return { data: { id: `e${i}:${e.from}:${e.to}`, source: e.from, target: e.to, label: e.label || '' }, classes: `${e.style || ''}${horiz ? ' horiz' : ''}${e.bidir ? ' bidir' : ''}` };
-    }));
+    const edges = (view.edges || []).map(e => ({ from: e.from, to: e.to, style: e.style || '', label: e.label, bidir: e.bidir }));
+    return { lanes, phases, nodes, edges };
   }
 
-  /* ---------- cytoscape ---------- */
-  function cyStyle() {
-    const muted = cssVar('--muted'), accent = cssVar('--accent'), line = cssVar('--line'), card = cssVar('--card'), bg = cssVar('--bg');
-    const fill = (v, b) => ({ 'background-color': cssVar(v), 'border-color': cssVar(b) });
-    return [
-      { selector: 'node.item', style: {
-        shape: 'round-rectangle', width: NW, height: NH, 'border-width': 1.5, label: '',
-        'transition-property': 'opacity', 'transition-duration': '0.12s', ...fill('--stage', '--stage-line') } },
-      { selector: '.k-services, .k-probes, .k-sub, .k-siblings', style: fill('--lane', '--lane-line') },
-      { selector: '.k-ux, .k-you', style: fill('--human', '--human-line') },
-      { selector: '.k-repo, .k-playbooks, .k-setup', style: fill('--artifact', '--artifact-line') },
-      { selector: 'node.gate', style: fill('--gate', '--gate-line') },
-      { selector: 'node.external, node.dashedn', style: { 'border-style': 'dashed' } },
-      { selector: 'node.external', style: fill('--artifact', '--artifact-line') },
-      { selector: 'node.active', style: { 'border-color': accent, 'border-width': 3 } },
-      { selector: 'node.lane', style: {
-        shape: 'round-rectangle', 'background-color': card, 'background-opacity': .55,
-        'border-color': line, 'border-width': 1, label: '', padding: '26px' } },
-      { selector: 'node.phase-head', style: { 'background-opacity': 0, 'border-width': 0, width: NW, height: 24, label: '' } },
-      { selector: 'edge', style: {
-        'curve-style': 'taxi', 'taxi-direction': 'vertical', 'taxi-turn': '45%', 'taxi-turn-min-distance': 12,
-        width: 1.5, 'line-color': muted, 'target-arrow-color': muted, 'target-arrow-shape': 'triangle',
-        'arrow-scale': .75, opacity: .5, label: 'data(label)', 'font-size': 9.5, color: muted,
-        'text-background-color': bg, 'text-background-opacity': 1, 'text-background-shape': 'round-rectangle',
-        'text-background-padding': 4, 'text-border-color': line, 'text-border-width': 1, 'text-border-opacity': 1,
-        'transition-property': 'opacity', 'transition-duration': '0.12s' } },
-      { selector: 'edge.horiz', style: {
-        'curve-style': 'unbundled-bezier', 'control-point-distances': [46], 'control-point-weights': [0.5] } },
-      { selector: 'edge.horizrev', style: { 'control-point-distances': [-46] } },
-      { selector: 'edge.optional', style: { 'line-style': 'dashed' } },
-      { selector: 'edge.external', style: { 'line-style': 'dashed', 'line-color': cssVar('--artifact-line'), 'target-arrow-color': cssVar('--artifact-line'), opacity: .85 } },
-      { selector: 'edge.flow', style: { 'line-color': accent, 'target-arrow-color': accent, width: 2.2, opacity: .85 } },
-      { selector: 'edge.bidir', style: { 'source-arrow-shape': 'triangle', 'source-arrow-color': muted } },
-      { selector: '.dim', style: { opacity: .12 } },
-    ];
-  }
-
-  function dimHtmlLabels(keepIds) {
-    document.querySelectorAll('#cy .cy-title').forEach(d => {
-      d.classList.toggle('dimmed', keepIds ? !keepIds.has(d.dataset.nid) : false);
+  /* ---------- X6 renderer ---------- */
+  let shapesRegistered = false;
+  function registerShapes() {
+    if (shapesRegistered) return;
+    shapesRegistered = true;
+    X6.Shape.HTML.register({
+      shape: 'skill-node', width: NW, height: NH,
+      html(cell) {
+        const d = cell.getData() || {};
+        const div = document.createElement('div');
+        div.className = 'x-node';
+        div.innerHTML = `<b>${esc(d.title)}</b><span>${esc(d.blurb)}</span>`;
+        return div;
+      },
     });
+    X6.Shape.HTML.register({
+      shape: 'lane-box', width: 100, height: 100,
+      html(cell) {
+        const d = cell.getData() || {};
+        const div = document.createElement('div');
+        div.className = 'x-lane';
+        div.innerHTML = `<b>${esc(d.title)}</b>${d.blurb ? `<span> — ${esc(d.blurb)}</span>` : ''}`;
+        return div;
+      },
+    });
+    X6.Shape.HTML.register({
+      shape: 'phase-head', width: NW, height: 26,
+      html(cell) {
+        const d = cell.getData() || {};
+        const div = document.createElement('div');
+        div.className = 'x-phase';
+        div.textContent = d.title || '';
+        return div;
+      },
+    });
+  }
+
+  const ROUTER = { name: 'manhattan', args: { step: 10, padding: 14, excludeShapes: ['lane-box', 'phase-head'] } };
+
+  function drawCells(built, viewId) {
+    const muted = cssVar('--muted'), accent = cssVar('--accent'), line = cssVar('--line'),
+      card = cssVar('--card'), bg = cssVar('--bg'), artifact = cssVar('--artifact-line');
+    for (const l of built.lanes) {
+      graph.addNode({
+        id: l.id, shape: 'lane-box', x: l.x, y: l.y, width: l.w, height: l.h, zIndex: 1,
+        data: { title: l.title, blurb: l.blurb },
+        attrs: { body: { fill: card, fillOpacity: .55, stroke: line, strokeWidth: 1, rx: 10, ry: 10 } },
+      });
+    }
+    for (const p of built.phases) {
+      graph.addNode({
+        id: p.id, shape: 'phase-head', x: p.cx - NW / 2, y: p.cy - 13, width: NW, height: 26, zIndex: 2,
+        data: { title: p.title },
+        attrs: { body: { fill: 'transparent', stroke: 'none' } },
+      });
+    }
+    for (const n of built.nodes) {
+      const gate = n.id === 'merge-changes';
+      const [fv, sv] = gate ? ['--gate', '--gate-line'] : n.external ? ['--artifact', '--artifact-line'] : kindVars(n.lane);
+      const stroke = cssVar(sv);
+      graph.addNode({
+        id: n.id, shape: 'skill-node', x: n.cx - NW / 2, y: n.cy - NH / 2, width: NW, height: NH, zIndex: 20,
+        data: { title: n.title, blurb: n.blurb, stroke, item: true, external: n.external || null, view: viewId },
+        attrs: { body: {
+          fill: cssVar(fv), stroke, strokeWidth: 1.5, rx: 8, ry: 8,
+          ...(n.external || n.dashed ? { strokeDasharray: '5 3' } : {}),
+        } },
+      });
+    }
+    for (const e of built.edges) {
+      const flow = e.style === 'flow', ext = e.style === 'external', opt = e.style === 'optional';
+      const stroke = flow ? accent : ext ? artifact : muted;
+      const marker = { name: 'block', width: 8, height: 6 };
+      graph.addEdge({
+        source: { cell: e.from }, target: { cell: e.to }, zIndex: 10,
+        router: ROUTER, connector: { name: 'rounded', args: { radius: 10 } },
+        attrs: { line: {
+          stroke, strokeWidth: flow ? 2.2 : 1.5, opacity: flow || ext ? .85 : .5,
+          targetMarker: marker, ...(e.bidir ? { sourceMarker: marker } : {}),
+          ...(opt || ext ? { strokeDasharray: '5 3' } : {}),
+        } },
+        ...(e.label ? { labels: [{ position: 0.5, attrs: {
+          label: { text: e.label, fontSize: 9.5, fill: muted },
+          body: { fill: bg, stroke: line, strokeWidth: 1, rx: 4, ry: 4, refWidth2: 10, refHeight2: 6, refX: -5, refY: -3 },
+        } }] } : {}),
+      });
+    }
+  }
+
+  function focusNode(node) {
+    const keep = new Set([node.id]);
+    for (const e of graph.getConnectedEdges(node)) {
+      keep.add(e.id); keep.add(e.getSourceCellId()); keep.add(e.getTargetCellId());
+    }
+    for (const cell of graph.getCells()) {
+      if (cell.shape === 'lane-box' || cell.shape === 'phase-head') continue;
+      const v = graph.findViewByCell(cell);
+      if (v) v.container.classList.toggle('dim', !keep.has(cell.id));
+    }
+  }
+  function unfocus() {
+    if (!graph) return;
+    for (const cell of graph.getCells()) {
+      const v = graph.findViewByCell(cell);
+      if (v) v.container.classList.remove('dim');
+    }
+  }
+
+  function setActiveCell(nodeId) {
+    if (activeCell) {
+      activeCell.attr({ body: { stroke: (activeCell.getData() || {}).stroke, strokeWidth: 1.5 } });
+      activeCell = null;
+    }
+    const cell = nodeId && graph && graph.getCellById(nodeId);
+    if (cell && (cell.getData() || {}).item) {
+      cell.attr({ body: { stroke: cssVar('--accent'), strokeWidth: 3 } });
+      activeCell = cell;
+    }
   }
 
   function renderView() {
     const view = state.views[state.current];
     $('#view-subtitle').textContent = view.subtitle;
     document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('active', b.dataset.view === state.current));
-    const elements = view.type === 'swimlane' ? buildSwimElements(view) : buildGraphElements(view);
-    if (cy) { cy.destroy(); cy = null; }
+    registerShapes();
+    if (graph) { graph.dispose(); graph = null; activeCell = null; }
     $('#cy').innerHTML = '';
-    cy = window.cytoscape({
-      container: $('#cy'), elements, style: cyStyle(), layout: { name: 'preset' },
-      autoungrabify: true, boxSelectionEnabled: false, wheelSensitivity: .25,
-      minZoom: .25, maxZoom: 2.75,
+    graph = new X6.Graph({
+      container: $('#cy'), autoResize: true, interacting: false,
+      panning: { enabled: true }, mousewheel: { enabled: true, minScale: .25, maxScale: 2.75 },
     });
-    cy.nodeHtmlLabel([
-      { query: 'node.item', tpl: d => `<div class="cy-title" data-nid="${esc(d.id)}"><b>${esc(d.title)}</b><span>${esc(d.blurb)}</span></div>` },
-      { query: 'node.lane', halign: 'left', halignBox: 'right', valign: 'top', valignBox: 'top', tpl: d => `<div class="cy-lane"><b>${esc(d.title)}</b><span> — ${esc(d.blurb)}</span></div>` },
-      { query: 'node.phase-head', tpl: d => `<div class="cy-phase">${esc(d.title)}</div>` },
-    ], { enablePointerEvents: false });
-    cy.on('mouseover', 'node.item', (e) => {
-      const hood = e.target.closedNeighborhood();
-      cy.elements('node.item, edge').not(hood).addClass('dim');
-      dimHtmlLabels(new Set(hood.nodes().map(n => n.id())));
-      $('#cy').style.cursor = 'pointer';
-    });
-    cy.on('mouseout', 'node.item', () => {
-      cy.elements().removeClass('dim');
-      dimHtmlLabels(null);
-      $('#cy').style.cursor = '';
-    });
-    cy.on('tap', 'node.item', (e) => {
-      const id = e.target.id();
-      const view = state.views[state.current];
-      const node = view.nodes.find(n => n.id === id);
-      if (!node) { // synthesized external node
-        const owner = view.nodes.map(n => (state.fm[n.id] || {}).external || []).flat().find(x => x && x.name === id);
+    const built = view.type === 'swimlane' ? buildSwimElements(view) : buildGraphElements(view);
+    drawCells(built, view.id);
+    graph.on('node:mouseenter', ({ node }) => { if ((node.getData() || {}).item) focusNode(node); });
+    graph.on('node:mouseleave', ({ node }) => { if ((node.getData() || {}).item) unfocus(); });
+    graph.on('node:click', ({ node }) => {
+      if (!(node.getData() || {}).item) return;
+      const id = node.id;
+      const v = state.views[state.current];
+      const vn = v.nodes.find(n => n.id === id);
+      if (!vn) { // synthesized external node
+        const owner = v.nodes.map(n => (state.fm[n.id] || {}).external || []).flat().find(x => x && x.name === id);
         if (owner) window.open(owner.source, '_blank');
         return;
       }
       openNode(state.current, id);
     });
-    cy.fit(undefined, 28);
-    if (state.active) cy.$id(state.active).addClass('active');
+    graph.zoomToFit({ padding: 28, maxScale: 1 });
+    if (state.active) setActiveCell(state.active);
   }
 
   /* ---------- sheet ---------- */
   function closeSheet() {
     document.body.classList.remove('sheet-open');
     state.active = null;
-    if (cy) cy.$('.active').removeClass('active');
+    setActiveCell(null);
     setHash();
   }
   $('#backdrop').addEventListener('click', closeSheet);
@@ -233,7 +292,7 @@
 
   function markActive(nodeId) {
     state.active = nodeId;
-    if (cy) { cy.$('.active').removeClass('active'); if (nodeId) cy.$id(nodeId).addClass('active'); }
+    setActiveCell(nodeId);
   }
 
   function sheetChrome(title, desc, fm) {
@@ -361,10 +420,9 @@
       try { state.fm[n.id] = parseFrontmatter(await fetchText(`${n.source}/SKILL.md`)).fm; }
       catch { state.fm[n.id] = {}; }
     }));
-    $('#zoom-in').addEventListener('click', () => cy && cy.zoom({ level: cy.zoom() * 1.25, renderedPosition: { x: $('#cy').clientWidth / 2, y: $('#cy').clientHeight / 2 } }));
-    $('#zoom-out').addEventListener('click', () => cy && cy.zoom({ level: cy.zoom() / 1.25, renderedPosition: { x: $('#cy').clientWidth / 2, y: $('#cy').clientHeight / 2 } }));
-    $('#zoom-fit').addEventListener('click', () => cy && cy.fit(undefined, 28));
-    window.addEventListener('resize', () => cy && cy.resize());
+    $('#zoom-in').addEventListener('click', () => graph && graph.zoom(0.25));
+    $('#zoom-out').addEventListener('click', () => graph && graph.zoom(-0.25));
+    $('#zoom-fit').addEventListener('click', () => graph && graph.zoomToFit({ padding: 28, maxScale: 1 }));
 
     const h = location.hash.slice(1);
     if (h) {
