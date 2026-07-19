@@ -9,7 +9,7 @@ degrades to draft-and-instruct by design).
 **Setup:** open a Claude Code **desktop** session (so the inline-widget rung is live) with this repo's
 worktree checked out on `goodwork-polish`, working directory = this `walkthrough/` folder. First message:
 
-> Read ../../skills/personal/goodwork/SKILL.md and run as the goodwork skill for this project. goodwork
+> Read ../../../skills/personal/goodwork/SKILL.md and run as the goodwork skill for this project. goodwork
 
 At each station, judge two things: **did it do the right thing** (mechanics) and **did it feel right**
 (plain language, no internals, calm tone). Note anything that reads like a developer talking to a
