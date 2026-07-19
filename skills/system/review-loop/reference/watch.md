@@ -3,8 +3,8 @@
 Who holds the wait for a verdict, and how the verdict wakes the parent. The low-level exit-code contract —
 what `review-await.py` returns and what each verdict requires next — is in [review-loop](review-loop.md)
 § The verdict-coded await gate; this doc layers the *operational* contract on top: the watch is **not held by
-the orchestrator blocking inline**, it is delegated to a dedicated, cheap watcher subagent. The same contract
-covers the plan/prototype approval gate and the PR-merge watch.
+the orchestrator blocking inline** — it rides the harness's cheapest verified wake path (§ The wake-path
+roster). The same contract covers the plan/prototype approval gate and the PR-merge watch.
 
 ## Why the orchestrator must not hold it inline
 
@@ -21,9 +21,25 @@ wait has two failure modes, both observed in practice:
 The verdict then strands: recorded in `events.jsonl`, but the thread that should resume never sees it, and we
 fall back to approving in chat or hand-polling the log. The delegated watch closes that gap.
 
+## The wake-path roster — cheapest verified wake first
+
+The watch is a staffing decision with its own roster: the machine staffing module publishes a **Wake paths**
+table — per harness, the cheapest wake mechanism the audit verified, and the fallback. Pick the top verified
+row:
+
+1. **Harness-tracked wake — no model at all.** Where the harness re-invokes the session when a tracked
+   background process exits (background tasks, subagent completions, monitors), the await script is its own
+   watcher: launch `review-await.py` as a tracked background task; its verdict-coded exit *is* the wake,
+   carrying the code and comments. On `124`, re-arm — the same loop-until-verdict below, zero tokens spent
+   waiting.
+2. **Floor-staffed watcher subagent** (next section) — where no tracked wake exists or the exit cannot be
+   observed.
+3. **Degrade** per SKILL.md — the watch on the current model in a subagent; never skip the gate.
+
 ## Who holds it — a floor-staffed watcher subagent
 
-The caller spawns a **dedicated watcher subagent** whose *only* task is to hold the watch. Because holding it
+Where no harness-tracked wake exists, the caller spawns a **dedicated watcher subagent** whose *only* task is
+to hold the watch. Because holding it
 *is* its whole job, it never abandons the wait to save tokens, and it is cheap enough to park for a long
 time without draining the orchestrator's budget or context.
 

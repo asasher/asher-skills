@@ -23,10 +23,11 @@ and repo hub. It never authors the artifact.
 - **serve** — run `scripts/review-server.py` with the flags in [scripts](reference/scripts.md).
 - **stop** — `scripts/review-server.py --stop --state <dir>`; verified and idempotent.
 - **await** — `scripts/review-await.py --state <dir> --timeout <secs>`; exits `0` approve, `3` nits, `10`
-  changes, `124` timeout. Delegate the wait to a watcher — a pure wait-and-relay job staffed by the cheapest
-  harness-native model the roster's published Floor allows ([watch](reference/watch.md) § Who holds it — a
-  floor-staffed watcher subagent): it only runs the await script and relays the verdict and comments to the
-  parent, no synthesis. Never park the orchestrator or poll `events.jsonl`.
+  changes, `124` timeout. Hold the wait on the harness's cheapest verified wake path
+  ([watch](reference/watch.md) § The wake-path roster): a tracked background await where the harness wakes on
+  completion, else a pure wait-and-relay watcher at the roster's published Floor — it only runs the await
+  script and relays the verdict and comments, no synthesis. Never park the orchestrator or poll
+  `events.jsonl`.
 - **sweep** — `scripts/review-server.py --sweep --surface <dir>` removes dead hub rows.
 
 With a rendered artifact and no command, serve then await.

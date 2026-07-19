@@ -31,6 +31,8 @@ and what the evidence leaves open.
 - A running lookup is an unsettled prerequisite: only the questions downstream of it wait — ask the rest of
   the frontier now.
 - A **decision** is the user's. Put each one to them and wait.
+- An interface's non-obvious presentation choices — the visual hierarchy, which actions are overt, what each
+  journey step shows — are decisions, not taste calls: settle them here; implementation never invents them.
 - A question paper cannot settle — a state model or form direction that needs something concrete to react
   to — goes to the `prototype` skill (by name) as a probe, not to another round of prose.
 

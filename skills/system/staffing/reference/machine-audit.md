@@ -21,6 +21,9 @@ Run these probes and record the results:
    compiled `reference/harness.md`. This also feeds the scope-decision flow.
 4. **Do global staffing rules already exist?** Read the detected memory layer for an existing staffing
    roster. Its presence or absence chooses the scope-decision branch (see install-and-reconcile).
+5. **Which waits does each harness track?** Probe the wake mechanisms — background-task completion, subagent
+   completion, monitors, cron — and record which ones re-invoke the session, effect-verified. These become
+   the Wake-paths rows.
 
 Steps (1)–(2) feed § Writing the roster; the judgment numbers cannot be probed — see § The default seed.
 
@@ -61,6 +64,15 @@ The following is **one machine's audit result**, shown so you know the shape to 
 # Floor: sonnet-5 (Claude-side) / gpt-5.6-terra (Codex-side). Watcher/cron duty runs at the Floor per
 # harness — a Floor assignment, not a pin (review-loop reads the Floor directly for its watcher).
 
+# Wake paths — cheapest verified wake first; a model watcher only where nothing is tracked
+| harness | tracked wake (no model) | watcher fallback |
+|-------------|-------------------------------------------------------------|--------------------|
+| Claude Code | background tasks / subagent completions / Monitor re-invoke | sonnet-5, low effort |
+| Codex CLI   | none verified                                               | gpt-5.6-terra loop |
+
+# Effort defaults (where the harness exposes per-dispatch effort): low — mechanical/bulk, watch/relay,
+# cron; medium — default; high — orchestration, design, hard diagnosis, final adversarial review.
+
 # Reachability (illustrative): active harness → sibling route works through the compiled native wrapper.
 # The direction has its own timestamp, failure class, and successor.
 ```
@@ -78,3 +90,7 @@ The following is **one machine's audit result**, shown so you know the shape to 
    dispatch/escalate its worker stages. Presence or low cost alone does not qualify a route.
 6. Floor → set to the lowest capability class the user wants staffed; default it and tell the user to
    confirm.
+7. Wake paths → per harness, the effect-verified tracked wake mechanisms (step 5) and the Floor watcher
+   fallback; out-of-band waits (review verdicts, merge watches) hold on the top verified row.
+8. Effort defaults → the per-role effort lever (see [rankings-and-routing](rankings-and-routing.md)
+   § Effort), recorded where the harness exposes it.

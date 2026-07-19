@@ -793,11 +793,6 @@
           "path": "references/notifications.md"
         },
         {
-          "group": "Reference",
-          "label": "planning",
-          "path": "references/planning.md"
-        },
-        {
           "group": "Provenance",
           "label": "README",
           "path": "README.md"

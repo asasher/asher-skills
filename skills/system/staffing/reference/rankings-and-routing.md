@@ -79,6 +79,13 @@ provider never enters the survivor set.
 A matching mechanical/bulk task pin selects its recorded worker route at step 1. This is a pin, not a ranking
 derivation.
 
+## Effort
+
+Where the harness exposes per-dispatch effort, it is part of the staffing decision, set with the model:
+**low** for mechanical/bulk, watch/relay, and cron duty; **medium** default; **high** for orchestration,
+design, hard diagnosis, and final adversarial review. Effort never substitutes for a failed taste or
+capability gate.
+
 ## Defaults, not quality waivers
 
 - Escalate to a more capable reachable route without asking when cheaper output misses the bar.
