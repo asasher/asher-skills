@@ -6,7 +6,7 @@ user-invocable: true
 metadata:
   invocation: model
   execution: orchestrator
-  requires: [interview, domain-modeling]
+  requires: [domain-modeling, interview]
   optional: []
 ---
 

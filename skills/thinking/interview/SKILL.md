@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: []
-  optional: [research, prototype, staffing]
+  optional: [prototype, research, staffing]
 ---
 
 # Interview

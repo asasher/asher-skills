@@ -57,12 +57,6 @@ class CatalogTests(unittest.TestCase):
         temp = tempfile.TemporaryDirectory()
         return temp, Path(temp.name)
 
-    def test_live_snapshot_matches_sources(self) -> None:
-        root = Path(__file__).parents[4]
-        actual = catalog.compile_catalog(root)
-        snapshot = root / "skills/system/setup-asher-skills/reference/catalog.json"
-        self.assertEqual(actual, json.loads(snapshot.read_text()))
-
     def test_live_migration_map_and_root_catalog_match_sources(self) -> None:
         root = Path(__file__).parents[4]
         graph = catalog.discover(root)

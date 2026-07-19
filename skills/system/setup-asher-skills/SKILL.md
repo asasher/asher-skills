@@ -55,7 +55,8 @@ correctness rule. A missing setup pointer is a no-op; a failed owner stops depen
 
 ## Dependency surface
 
-- **Bundled:** the three references, generated `reference/catalog.json`, catalog/provider compiler, mount
+- **Bundled:** the three references, the catalog/provider compiler (`scripts/catalog.py` — the catalog is
+  compiled fresh from skill frontmatter every run, never stored), mount
   publisher/auditor, and this skill's templates.
 - **Project/global artifacts:** map, repo pointer, consented setup-owned presentation pointer/module, and the
   ephemeral four-module reconciliation barrier. Owner

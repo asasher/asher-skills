@@ -4,4 +4,4 @@ interface:
   default_prompt: "Use $interview-with-docs to interview me about this and record what we settle."
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

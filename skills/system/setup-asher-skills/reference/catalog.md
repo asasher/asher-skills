@@ -2,11 +2,11 @@
 
 Which skills fit which project and how their dependency surface is declared. Canonical invocation, execution,
 required-sibling, optional-sibling, external, setup, and internal-hold declarations live under `metadata` in
-each source `SKILL.md`; schema-3 [`catalog.json`](catalog.json) is their generated snapshot and emits
-`external: []` and `variants: {}` when absent. Internal roots are cataloged for audit but cannot be selected or required by a
-public skill. Validate a
-self-host checkout with `python3 skills/system/setup-asher-skills/scripts/catalog.py validate --root . --snapshot
-skills/system/setup-asher-skills/reference/catalog.json` before using the snapshot.
+each source `SKILL.md` — the frontmatter is the single source of truth. **No snapshot is stored:** the
+catalog is compiled fresh from those declarations every run (`python3
+skills/system/setup-asher-skills/scripts/catalog.py compile --root <checkout>`; `closure` resolves a
+selection's siblings), so it can never go stale. Absent fields compile to `external: []` and
+`variants: {}`. Internal roots are cataloged for audit but cannot be selected or required by a public skill.
 
 ## Canonical source and declared externals
 
@@ -78,7 +78,7 @@ pointers, invalid provider overlays, required cycles, malformed external declara
 write plan is presented. Closure output includes the sorted, deduplicated `external` requirements merged from
 every active skill.
 
-The current notable edges are visible in `catalog.json`: backlog requires diagnosing-bugs, prototype,
+The current notable edges are visible by compiling the catalog: backlog requires diagnosing-bugs, prototype,
 research, review-loop, and staffing; research requires staffing; prototype and spreadsheet-loop
 require review-loop and staffing; maquette requires review-loop; review-loop optionally uses staffing for its
 watch; setup-asher-skills requires staffing; interview-with-docs requires interview and domain-modeling (interview optionally uses research, prototype, staffing); bare-minimum-ux declares the external `impeccable` (offered on UI-surface projects, consent-gated, installed by its own provider); control-plane optionally uses until-zero; to-spec optionally uses
@@ -106,7 +106,7 @@ inside any working thread. The principal runtime edges are:
 | any working thread | any installed `model` skill | ambient model invocation | the thread recognizes a matching need |
 
 Category and execution declarations remain in the root README table; exact required/optional/setup closure
-remains in generated `catalog.json`. A required install edge may support more than one runtime reach and is not
+comes from compiling the sources (`scripts/catalog.py compile` / `closure`). A required install edge may support more than one runtime reach and is not
 itself proof that a dispatch occurs.
 
 ## Scope — project-first

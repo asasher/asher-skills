@@ -91,7 +91,7 @@ invents unspecified lock fields.
 **P14 — optional sibling.** PASS if `interview` alone resolves only `interview` (it requires nothing) in the
 compiler's deterministic dependency-first order; when `research` and `prototype` are already present, both
 join and bring their required closure (`review-loop`/`staffing` deduplicated). Optional never silently
-becomes required. Cite `catalog.json` and `reference/catalog.md`.
+becomes required. Cite the skills' frontmatter declarations and `reference/catalog.md`.
 
 **P15 — pre-write cycle.** PASS if the compiler rejects the full `a → b → a` cycle before confirmation or
 writes and reports the path. Cite `reference/interview.md` Phase 4 and the catalog compiler contract.

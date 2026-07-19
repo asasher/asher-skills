@@ -23,10 +23,12 @@ the installed build product; those hashes prove provider bytes/provenance, not s
 
 ## What the audit does
 
-1. **Fetch the repo's current generated catalog.** Read `skills/system/setup-asher-skills/reference/catalog.json`
-   from the public GitHub endpoint (`https://github.com/asasher/asher-skills`) — the source of truth for
-   names, invocation/execution axes, required/optional sibling edges, merged external requirements, setup
-   branches, and declared provider variants. If the
+1. **Compile the repo's current catalog.** Fetch the repo (the public GitHub endpoint
+   `https://github.com/asasher/asher-skills`) and compile the catalog fresh from its `skills/` sources
+   (`python3 skills/system/setup-asher-skills/scripts/catalog.py compile --root <checkout>`) — each skill's
+   frontmatter is the source of truth for names, invocation/execution axes, required/optional sibling edges,
+   merged external requirements, setup branches, and declared provider variants; **no stored snapshot
+   exists to read or to drift**. If the
    repo being audited is the source itself (git remote is `asasher/asher-skills`, or a local `skills/` dir
    holds these skills), use the local `skills/` working tree as the catalog instead of the fetched remote, and
    state the branch-vs-origin relationship (for example, "local is ahead of origin"), compile the local

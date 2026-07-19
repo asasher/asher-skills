@@ -46,6 +46,9 @@ including one marked `user`.
 | thinking | `bayes` | user | thread |
 | thinking | `constraints` | user | thread |
 | thinking | `dissolve` | user | orchestrator |
+| thinking | `domain-modeling` | model | orchestrator |
+| thinking | `interview` | model | orchestrator |
+| thinking | `interview-with-docs` | model | orchestrator |
 | thinking | `research` | model | orchestrator |
 | personal | `capture-to-inbox` | model | thread |
 | personal | `control-plane` | user | orchestrator |
@@ -62,8 +65,8 @@ including one marked `user`.
 | personal | `teamdrive` | user | thread |
 | personal | `until-zero` | model | thread |
 
-The generated install/setup graph is
-[`skills/system/setup-asher-skills/reference/catalog.json`](skills/system/setup-asher-skills/reference/catalog.json);
+The install/setup graph is compiled on demand from each skill's frontmatter
+(`python3 skills/system/setup-asher-skills/scripts/catalog.py compile`);
 the separate runtime composition view is in
 [`reference/catalog.md`](skills/system/setup-asher-skills/reference/catalog.md#runtime-composition);
 [`skills/source-migration.json`](skills/source-migration.json) records the flat-to-category move.

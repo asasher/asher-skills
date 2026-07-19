@@ -32,7 +32,7 @@ verifies the capability, and records it separately in `external-dependencies.loc
 
 ## Layout
 
-- `reference/` — the contract plus generated `catalog.json` snapshot.
+- `reference/` — the contract; the catalog is compiled on demand from skill frontmatter (`scripts/catalog.py compile`), never stored.
 - `scripts/catalog.py` — validates source declarations, resolves closure, and materializes declared provider trees.
 - `scripts/install.py` — inspects legacy mounts, atomically publishes variants, and audits provider provenance.
 - `scripts/render-global.py` — coordinates the fresh four-module barrier, two-file Presentation preflight,
