@@ -3,19 +3,19 @@
 For a **fresh session** (clean context — do not run from the session that authored the rework). Preferred
 surface: Claude Code desktop, repo worktree `asher-skills-worktrees/goodwork-viz`, branch `goodwork-polish`
 (if this session is cloud-cloned, make sure that branch is pushed first). Discipline:
-`docs/agents/probe-evals.md`. Assets under test: `skills/personal/goodwork/` on this branch.
+`docs/agents/probe-evals.md`. Assets under test: `skills/in-progress/goodwork/` on this branch.
 
 ## Order
 
 **Tier 2 first (cheap, mechanical):**
 ```
-bash skills/personal/goodwork/evals/dryrun.sh
+bash skills/in-progress/goodwork/evals/dryrun.sh
 ```
 Record the full output. Any FAIL stops the eval — fix mechanics before spending on probes.
 (Authoring baseline 2026-07-19: 12/12 pass.)
 
-**Tier 1 — situated probes, dual-executor.** Probes: `skills/personal/goodwork/evals/probes.md`.
-Key: `skills/personal/goodwork/evals/key.md` — **grader-only; never in any executor's context.**
+**Tier 1 — situated probes, dual-executor.** Probes: `skills/in-progress/goodwork/evals/probes.md`.
+Key: `skills/in-progress/goodwork/evals/key.md` — **grader-only; never in any executor's context.**
 
 For each probe, run both executors with ONLY the context the probe's tag names ([S] = SKILL.md;
 [S+R] = SKILL.md + the one named reference):

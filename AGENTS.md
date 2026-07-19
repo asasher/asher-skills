@@ -7,6 +7,9 @@ Skills Asher made or likes, kept in one repo so they can be installed elsewhere 
 
 - `skills/<category>/<name>/` — one published skill per directory: `SKILL.md` (entry point), `README.md`, and optionally
   `reference/`, `templates/`, `scripts/`, `agents/`, `evals/`.
+- `skills/in-progress/<name>/` — the holding category for skills under active development: mergeable to
+  main and installable knowingly, but not yet graduated into a permanent category. A skill leaves
+  in-progress when its field test passes; record the move in `skills/source-migration.json`.
 - `docs/agents/` — this repo's own project playbooks, written by the installed skills' setups
   (`backlog setup` and its siblings) plus the repo-authored `probe-evals.md` (the eval discipline).
 - `<skill>-workspace/` dirs at the root — the working space for developing a skill: eval and test runs,

@@ -1,5 +1,9 @@
 # Good Work
 
+> **Status: in progress.** v3 rework (compacted references, artifact-backed approvals, card history,
+> presentation ladder, redesigned pages). Tier 1/2 probe evals pass both executors; human field test
+> pending. Install knowingly.
+
 A local career ops skill: interview the person to define what good work means for them, then operate the search from one folder for one person — setup, futures, prototypes, positioning, targets, scouting, outreach, applications, reconciliation, pipeline, approvals, and daily/weekly loops.
 
 ## Sources
