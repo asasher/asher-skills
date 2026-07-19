@@ -34,9 +34,11 @@ findings, not noise.
 raw executor transcripts to `goodwork-workspace/eval/runs/<date>-v3/`. Ship bar: all probes pass both
 executors (or the wording gets fixed and the failed probes re-run — record both rounds).
 
-**Tier 3 — human-in-the-loop:** hand the human `goodwork-workspace/eval/walkthrough/WALKTHROUGH.md`
-(seeded workspace beside it). This tier is judged by the human; your only job is to leave the seed
-untouched until they start.
+**Tier 3 — human-in-the-loop:** the human installs the skill into a separate real project
+(`npx skills add <path-to-this-worktree> --skill goodwork -y`), runs `goodwork setup` there, and QAs the
+live workflow themselves — boards, approvals, edits, daily — on their real surface. Judged entirely by
+the human; verdicts land in `goodwork-workspace/eval/runs/`. (An earlier seeded-walkthrough variant of
+this tier was retired 2026-07-19 in favor of real-install testing.)
 
 ## Report
 
