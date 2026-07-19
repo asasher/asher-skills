@@ -165,7 +165,24 @@
     });
   }
 
-  const ROUTER = { name: 'manhattan', args: { step: 10, padding: 14, excludeShapes: ['lane-box', 'phase-head'] } };
+  const ROUTER = { name: 'manhattan', args: { step: 10, padding: 14, excludeShapes: ['lane-box'] } };
+
+  /* Measure a lane header's rendered width with the real CSS so an invisible obstacle node can
+   * cover exactly the title text — the router then avoids the text but can still cross the lane
+   * boundary elsewhere. */
+  const headerWidths = {};
+  function laneHeaderWidth(title, blurb) {
+    const key = `${title}|${blurb || ''}`;
+    if (headerWidths[key]) return headerWidths[key];
+    const probe = document.createElement('div');
+    probe.className = 'x-lane';
+    probe.style.cssText = 'position:absolute;visibility:hidden;width:auto;height:auto;left:-9999px';
+    probe.innerHTML = `<b>${esc(title)}</b>${blurb ? `<span> — ${esc(blurb)}</span>` : ''}`;
+    document.body.append(probe);
+    const w = probe.offsetWidth;
+    probe.remove();
+    return (headerWidths[key] = w);
+  }
 
   function drawCells(built, viewId) {
     const muted = cssVar('--muted'), accent = cssVar('--accent'), line = cssVar('--line'),
@@ -175,6 +192,12 @@
         id: l.id, shape: 'lane-box', x: l.x, y: l.y, width: l.w, height: l.h, zIndex: 1,
         data: { title: l.title, blurb: l.blurb },
         attrs: { body: { fill: card, fillOpacity: .55, stroke: line, strokeWidth: 1, rx: 10, ry: 10 } },
+      });
+      // invisible router obstacle over the header text (lane-box itself is excluded from obstacles)
+      graph.addNode({
+        id: `${l.id}:title-block`, shape: 'rect', zIndex: 0,
+        x: l.x, y: l.y, width: Math.min(l.w - 40, laneHeaderWidth(l.title, l.blurb) + 8), height: 34,
+        attrs: { body: { fill: 'none', stroke: 'none' } },
       });
     }
     for (const p of built.phases) {
