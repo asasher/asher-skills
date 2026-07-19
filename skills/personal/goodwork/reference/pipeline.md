@@ -20,7 +20,7 @@ Keep active cards small: preserve thread IDs, the newest decision-relevant reply
 
 ## Funnel Diagnosis
 
-Use `metrics.json` plus cards to find the narrowest constriction:
+Use `metrics.json` plus cards to find the narrowest constriction (`metrics.json` is written weekly by `review`; cards are the per-event record — no per-event metrics writes):
 
 - No responses -> message or targeting problem (`outreach`, `targets`).
 - Responses but no referrals/applications -> evidence or positioning problem (`niche`, `assets`).

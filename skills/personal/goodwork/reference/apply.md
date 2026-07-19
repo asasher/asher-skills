@@ -10,7 +10,7 @@ Read [execution.md](execution.md) before creating an application package: it own
 
 Score the posting against the profile before any tailoring:
 - **Fit**: does the actual work (tasks, not title) feed the energy map? Does the org pass the values/dealbreaker check and decent-work floor?
-- **Evidence**: run the evidence gate against must-have requirements. If it fails, the fix is a proof artifact (`assets`) or a prototype, not adjectives.
+- **Evidence**: run the evidence gate — ~70% of must-have requirements evidenced ([execution.md](execution.md)). If it fails, the fix is a proof artifact (`assets`) or a prototype, not adjectives.
 - **Warmth**: is there an insider, or a plausible path to one this week? Cold-applying to a Top 5 target *wastes the target* — it files the user into the portal pile before outreach could route them. For Top 10 targets, default order: outreach first, apply second (or simultaneously *with* the referral, when the insider advises it).
 - Verify the posting is real and current — stale and ghost postings are common.
 

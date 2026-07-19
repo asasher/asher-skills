@@ -4,7 +4,7 @@ The sustain loop, run at the start (queue) and end (journal) of a working day. M
 
 ## First - reconcile
 
-Run [reconcile.md](reconcile.md) first whenever `capabilities.json` records `manual` requested now, `on-demand`, or a due scheduled cadence. Inbound replies change today's queue before new outbound work is chosen.
+Start every `daily` with the [reconcile.md](reconcile.md) sweep, unless one already ran today (`capabilities.json` → `reconcile.last_run_at`) or the user declines it: inbound replies change today's queue before new outbound work is chosen. The recorded cadence governs *standalone* reconcile scheduling only — it never exempts `daily` from sweeping first.
 
 ## Morning — the action queue
 
