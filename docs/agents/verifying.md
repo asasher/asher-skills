@@ -19,6 +19,10 @@ Run narrowest-first, then broaden by touched surface. This is a skills repo — 
 - Rare in this repo (skills, not product UI), but any change shipping a rendered HTML artifact (plan/spec/review page, a skill's chrome) is exercised in its rendered states: happy, empty/error where they exist, and both color schemes; accessibility basics per the `bare-minimum-ux` overlay.
 - When a consumer project's `external-dependencies.lock.json` records the consented `impeccable` external, its `critique`/`audit` run as scored gates on touched UI surfaces and P0/P1 findings route back into the fix loop before the PR is review-ready (shipped default: `templates/software/verifying.md` § UI surfaces).
 
+## Audience-facing prose
+
+- This is a skills repo — most changes *are* audience-facing prose (skill content a future agent reads cold). Any change shipping such text — skill prose, templates, UI copy, docs — gets a **cold-reader check**: a subagent with none of the authoring conversation reads the artifact alone and flags every sentence it cannot ground in the artifact itself. Authoring-context leakage — change-log framing ("now", "no longer", "replaces"), justifications addressed to the collaborator, provenance asides — is fixed or explicitly justified before the PR is review-ready; history belongs in the commit message.
+
 The commands above are the real, verified checks for this repo (probe eval + `py_compile` + drive-the-script) — there is no discovered test/lint/build pipeline to record because this repo has none.
 
 ## CI merge gate

@@ -41,3 +41,12 @@ Run narrowest-first, then broaden by touched surface. Discovered and invocation-
 - When the project's `external-dependencies.lock.json` records the consented `impeccable` external, run its
   `critique`/`audit` as scored gates on the touched surface and route P0/P1 findings back into the fix loop
   before the PR is called review-ready.
+
+## Audience-facing prose
+
+- Any change shipping text a different audience will read — UI copy, docs, README content, prompts or
+  instructions another agent will consume — gets a **cold-reader check**: a subagent with none of the
+  authoring conversation reads the artifact alone and flags every sentence it cannot ground in the artifact
+  itself. Authoring-context leakage — change-log framing ("now", "no longer", "replaces"), justifications
+  addressed to the collaborator, provenance asides — is fixed or explicitly justified before the PR is
+  review-ready; history belongs in the commit message.
