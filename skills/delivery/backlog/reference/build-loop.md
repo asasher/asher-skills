@@ -17,7 +17,10 @@ Tracker write discipline: on the local binding, follow `platform.md` § The loca
 
 1. Orient.
    - Read the issue title, body, comments, labels, and linked artifacts, including the findings and clarifications grooming recorded. Read the relevant code and tests when the text alone is ambiguous.
-   - Completion criterion: you can state the issue's expected outcome, work-type, surface, coordination reason, and upward successor.
+   - When no ticket or spec supplies acceptance criteria (interactive chat-and-build), record them in the
+     issue thread now, at loop start — verify reads them from there, and the PR body carries them from
+     creation.
+   - Completion criterion: you can state the issue's expected outcome, work-type, surface, coordination reason, and upward successor — and acceptance criteria exist in the ticket, the spec, or the thread.
 
 2. Confirm the work-type and route. Read `docs/agents/backlog-policy.md` for this repo's label roles.
    - Grooming set the work-type, so read it and route in step 3. If no work-type role is present, report a grooming gap and stop — do not classify from scratch here.

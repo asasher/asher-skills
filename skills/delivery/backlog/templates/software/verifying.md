@@ -26,7 +26,8 @@ Run narrowest-first, then broaden by touched surface. Discovered and invocation-
 - Where criteria come from — by entryway, since the dev tail is invariant but its inputs are not:
   - a ticketed run: the ticket's acceptance block (inheriting its spec's per-slice acceptance);
   - a spec without tickets: the spec's acceptance for the slice being built;
-  - interactive chat-and-build: the criteria the build loop wrote into the PR body at its start — verify
+  - interactive chat-and-build: the criteria the build loop recorded in the issue thread at loop start
+    (the PR body carries them from creation) — verify
     always has a target, even without a ticket.
   The verifier writes them as explicit pass/fail checks against a running app.
 - Evidence obligation scales with absence (`evidence.md`): an AFK run owes the full evidence package —

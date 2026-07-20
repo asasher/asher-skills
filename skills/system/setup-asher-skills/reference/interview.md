@@ -163,8 +163,9 @@ Execute the approved plan:
    the entry is fallback-origin.
 2. **Install only consented declared external requirements.** Use the compiler's merged `external` output;
    never add an external merely because the user mentioned it. For each requirement, confirm that the fetched
-   repository exactly matches the declared GitHub HTTPS `source`, resolve the declared `version` when present
-   (otherwise disclose that it is unpinned), inspect provider manifests/scripts for install or lifecycle hooks,
+   repository exactly matches the declared GitHub HTTPS `source`, resolve the declared `version` when present —
+   `latest` is an agent instruction, not a tag: install the provider's current release or default branch
+   and record the concrete commit actually installed — (otherwise disclose that it is unpinned), inspect provider manifests/scripts for install or lifecycle hooks,
    and compare the expected name, kind, and capability. Disclose source, resolved version/commit, inherited
    scope, capability, and every hook (or explicitly "none found") before obtaining explicit consent.
 

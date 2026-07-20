@@ -36,8 +36,8 @@ The commands above are the real, verified checks for this repo (probe eval + `py
 
 - Where criteria come from — by entryway, since the dev tail is invariant but its inputs are not: a ticketed
   run reads the ticket's acceptance block (inheriting its spec's per-slice acceptance); a spec without
-  tickets reads the spec; interactive chat-and-build reads the criteria the build loop wrote into the PR
-  body at its start. For a skill, the answer key in its `evals/` is the executable form of the criteria. The
+  tickets reads the spec; interactive chat-and-build reads the criteria the build loop recorded in the issue thread at loop
+  start (the PR body carries them from creation). For a skill, the answer key in its `evals/` is the executable form of the criteria. The
   verifier writes them as explicit pass/fail checks driven through an executor.
 - Evidence obligation scales with absence (`evidence.md`): an AFK run owes the full evidence package;
   interactive work witnessed live may degrade to the PR body's verification grades.

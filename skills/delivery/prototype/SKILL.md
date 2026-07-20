@@ -24,14 +24,17 @@ it before building. The invoking thread keeps framing and interpretation; dispat
 
 ## Gates
 
-1. **Question stated.** Record one question, the claim it can falsify, and behavior/form shape.
+1. **Question stated.** Record one question and its shape (behavior, form, or falsification per the
+   reference): for behavior/falsification, the claim the artifact can falsify; for form, the alternatives
+   presented and the decision they settle.
 2. **Built and exposed.** Provide one command or URL and visible state. Serve rendered answer sheets through
    `review-loop`; drive live interactive artifacts directly. Iterate only to settle the named question.
 3. **Answer captured.** Write the decision, why, and relevant variant captures into the caller's durable
    record.
 4. **Cleaned.** Delete the artifact or deliberately absorb only its validated core into real work.
 
-Failure to expose a falsifiable observation returns to gate 1. Missing `review-loop` degrades to local open;
+Failure to expose a falsifiable observation — or, for form, real alternatives a human can react to —
+returns to gate 1. Missing `review-loop` degrades to local open;
 missing `staffing` is reported.
 
 ## Dependency surface
