@@ -1,9 +1,10 @@
-# Machine audit — compile the roster, don't hardcode it
+# Machine audit — verify the shipped defaults against this machine
 
-The roster is **compiled from the current machine, never shipped fixed.** Native models and effect-verified
-sibling harness routes differ by machine, person, and direction. Setup audits them and writes rankings,
-capabilities, coordinator eligibility, and CLI mechanics from observed results—not from an example. This is
-an agent-driven procedure; **it ships no scripts.**
+The module templates ship **seed defaults** (model rows, provider bindings, wake paths). The audit's job is
+to verify each default against the current machine: prune rows the machine cannot reach, surface unsupported
+provider bindings to the owner and ask what to bind instead, add reachable models the seed omits, and hand
+the judgment numbers to the owner to tune. Never install a default this machine failed to verify. The audit
+is performed by the agent directly; no audit script is bundled.
 
 ## The audit procedure
 
@@ -29,10 +30,10 @@ Steps (1)–(2) feed § Writing the roster; the judgment numbers cannot be probe
 
 ## The default seed (numbers the user tunes)
 
-Cost/intelligence/taste can't be probed, so the audit seeds them from a documented default and states plainly
-that **the user edits these to fit their own machine and pricing.** Seed only rows for models the audit found
-reachable; drop any example row whose model this machine can't reach, and add a seeded row for any reachable
-model the example omits.
+Cost/intelligence/taste/effort can't be probed, so the seed values come from the shipped module template and
+**the user edits them to fit their own machine and pricing.** Keep only rows for models the audit found
+reachable; drop any seed row whose model this machine can't reach, and add a seeded row for any reachable
+model the template omits.
 
 ### Example of audit output (illustrative only — NOT the shipped roster)
 
@@ -41,13 +42,13 @@ The following is **one machine's audit result**, shown so you know the shape to 
 
 ```
 # Rankings (higher = better) — SEED VALUES, tune to your machine
-| model         | cost | intelligence | taste |
-|---------------|------|--------------|-------|
-| gpt-5.6-sol   | 4    | 9            | 5     |
-| gpt-5.6-terra | 6    | 5            | 3     |
-| sonnet-5      | 5    | 5            | 5     |
-| opus-4.8      | 3    | 7            | 7     |
-| fable-5       | 1    | 9            | 9     |
+| model         | cost | intelligence | taste | effort |
+|---------------|------|--------------|-------|--------|
+| gpt-5.6-sol   | 4    | 9            | 5     | high   |
+| gpt-5.6-terra | 6    | 5            | 3     | xhigh  |
+| sonnet-5      | 5    | 5            | 5     | high   |
+| opus-4.8      | 3    | 7            | 7     | high   |
+| fable-5       | 1    | 9            | 9     | high   |
 
 # Capability providers — effect-probed harness/tool routes, never model traits
 | need | primary provider | fallback | eligible executor |
@@ -70,8 +71,8 @@ The following is **one machine's audit result**, shown so you know the shape to 
 | Claude Code | background tasks / subagent completions / Monitor re-invoke | sonnet-5, low effort |
 | Codex CLI   | none verified                                               | gpt-5.6-terra loop |
 
-# Effort defaults (where the harness exposes per-dispatch effort): low — mechanical/bulk, watch/relay,
-# cron; medium — default; high — orchestration, design, hard diagnosis, final adversarial review.
+# Effort rule: dispatch at the model row's effort value; pure wait/relay and cron duty runs at low
+# regardless of model.
 
 # Reachability (illustrative): active harness → sibling route works through the compiled native wrapper.
 # The direction has its own timestamp, failure class, and successor.

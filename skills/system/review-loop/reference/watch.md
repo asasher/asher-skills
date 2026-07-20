@@ -91,6 +91,7 @@ The same delegated watch covers every place a thread pauses for an out-of-band s
 
 - **The plan/prototype approval gate** — the watcher holds `review-await.py` for the served artifact and
   wakes the parent on the verdict.
-- **The PR-merge watch** — the watcher holds the merge poll (the `ScheduleWakeup` / `Monitor` loop named in
-  the platform binding) and wakes the parent when the PR merges. Same shape: a floor-staffed subagent
-  loops-until-signal and wakes the parent on completion, so the orchestrator is not parked on the merge wait.
+- **The PR-merge watch** — the watcher holds the merge poll (named in the owning workflow's platform
+  playbook, where one exists) and wakes the parent when the PR merges. The merge watch belongs to the
+  owning workflow; it reuses this watch *shape* — loop-until-signal, wake on completion, orchestrator never
+  parked — not these scripts.

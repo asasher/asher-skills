@@ -34,7 +34,7 @@ For the work that deserves tests, work red → green in vertical slices:
 
 ## UI surfaces
 
-- Building UI always loads the `bare-minimum-ux` skill (Asher's policy overlay — it wins on conflict). When
+- Building UI loads the `bare-minimum-ux` sibling skill where installed (the UX baseline overlay — it wins on conflict); absent, state the gap rather than skipping. When
   the project's `external-dependencies.lock.json` records the consented `impeccable` external, load it too:
   `PRODUCT.md`/`DESIGN.md` are ambient context for every UI change (DESIGN.md wins on visual decisions,
   PRODUCT.md on strategy/voice), and its craft rules govern the build.

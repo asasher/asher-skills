@@ -25,7 +25,7 @@
   - Read review comments since a SHA: _<e.g. `gh pr view --comments` / `gh api .../comments`; local: read the review file's appended review sections>_.
   - Post a review comment / reply: _<e.g. `gh pr comment`; local: append to the review file — Reviewer and Fixer each sign their sections>_.
   - Signal approval: _<an exact `LGTM` comment via the comment verb>_.
-  - Merge: _<who merges and how — e.g. human merges on GitHub; local: human merges the branch; the loop never merges>_.
+  - Merge: _<who merges and how — e.g. human merges on GitHub or explicitly authorizes the `merge-changes` skill; local: human merges the branch; the automated loop itself never merges>_.
 - Where the review conversation persists: _<github: the PR thread; local: the review file, which merges with the change as its durable record>_.
 
 ## Version control — working copies and publication

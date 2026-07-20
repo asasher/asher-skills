@@ -74,7 +74,8 @@ The full method is in [slicing](reference/slicing.md); the shape:
   These are the authority; they import no other skill's files.
 - **Project playbooks** — the repo's conventions, read from `docs/agents/`: the **dependency convention**
   (`backlog-policy.md` § Dependencies — how a blocking edge is recorded, so `backlog run` can skip blocked work)
-  and the **tracker binding** (`platform.md` — how tickets are created and in what format).
+  and the **tracker binding** (`platform.md` — how tickets are created and in what format). Absent a
+  recorded binding, state the gap and ask the user before publishing anything.
 - **Sibling skills** — to-tickets **consumes `to-spec`'s output** (a spec) as its primary input, and can also
   take a **legacy plan document** (from the retired plan stage) or a **raw conversation**. These inputs are
   composed by name — to-tickets reads the spec doc or the conversation, it does not import another skill's

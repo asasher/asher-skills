@@ -81,10 +81,9 @@ derivation.
 
 ## Effort
 
-Where the harness exposes per-dispatch effort, it is part of the staffing decision, set with the model:
-**low** for mechanical/bulk, watch/relay, and cron duty; **medium** default; **high** for orchestration,
-design, hard diagnosis, and final adversarial review. Effort never substitutes for a failed taste or
-capability gate.
+Where the harness exposes per-dispatch effort, dispatch at the model row's effort value from the rankings
+table. One exception: pure wait/relay and cron duty runs at **low** regardless of model. Effort never
+substitutes for a failed taste or capability gate.
 
 ## Defaults, not quality waivers
 

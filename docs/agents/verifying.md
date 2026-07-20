@@ -16,7 +16,7 @@ Run narrowest-first, then broaden by touched surface. This is a skills repo — 
 
 ## UI surfaces
 
-- Rare in this repo (skills, not product UI), but any change shipping a rendered HTML artifact (plan/spec/review page, a skill's chrome) is exercised in its rendered states: happy, empty/error where they exist, and both color schemes; accessibility basics per the `bare-minimum-ux` overlay.
+- Rare in this repo (skills, not product UI), but any change shipping a rendered HTML artifact (plan/spec/review page, a skill's chrome) is exercised in its rendered states: happy, empty/error where they exist, and both color schemes; accessibility basics per the `bare-minimum-ux` sibling where installed (absent, state the gap).
 - When a consumer project's `external-dependencies.lock.json` records the consented `impeccable` external, its `critique`/`audit` run as scored gates on touched UI surfaces and P0/P1 findings route back into the fix loop before the PR is review-ready (shipped default: `templates/software/verifying.md` § UI surfaces).
 
 ## Audience-facing prose

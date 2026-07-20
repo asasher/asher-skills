@@ -37,7 +37,7 @@ Run narrowest-first, then broaden by touched surface. Discovered and invocation-
 ## UI surfaces
 
 - Exercise every state the change touches: happy, empty, loading, error, disabled, responsive breakpoints;
-  check accessibility basics (focus visibility, contrast, reduced-motion) per the `bare-minimum-ux` overlay.
+  check accessibility basics (focus visibility, contrast, reduced-motion) per the `bare-minimum-ux` sibling where installed (absent, state the gap).
 - When the project's `external-dependencies.lock.json` records the consented `impeccable` external, run its
   `critique`/`audit` as scored gates on the touched surface and route P0/P1 findings back into the fix loop
   before the PR is called review-ready.

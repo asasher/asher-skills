@@ -195,6 +195,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--pointer", type=Path)
     parser.add_argument("--barrier", type=Path)
     parser.add_argument("--global-file", type=Path)
+    parser.add_argument(
+        "--audited", type=Path,
+        help="machine-tuned module content (placeholders filled); replaces the template seed for check/stage",
+    )
     args = parser.parse_args(argv)
     try:
         if args.command == "begin":
@@ -212,6 +216,10 @@ def main(argv: list[str] | None = None) -> int:
         if not args.provider:
             parser.error(f"{args.command} requires --provider")
         expected = payloads(args.provider)
+        if args.audited is not None:
+            if args.command not in {"check", "stage"}:
+                parser.error("--audited applies only to check and stage")
+            expected["module"] = args.audited.read_bytes()
         if args.command in {"render", "check"}:
             if not args.module or not args.pointer:
                 parser.error(f"{args.command} requires --module and --pointer")

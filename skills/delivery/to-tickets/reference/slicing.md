@@ -92,7 +92,9 @@ A ticket failing the audit is fixed or dropped — never published thin for groo
 
 Create the tickets through the **tracker binding** recorded in `docs/agents/platform.md`, blockers first —
 **never as local ticket files while a live tracker is bound**; on-disk tickets exist only when the recorded
-binding itself is local. Link each ticket to the spec's tracking ticket when one exists. On
+binding itself is local. No recorded binding at all: state the gap and ask the user how to proceed — a
+backlog needs a tracker, so publishing waits on that decision. Link each ticket to the spec's tracking
+ticket when one exists. On
 this repo that binding is GitHub via `gh` (`gh issue create --title '...' --body '...'`), and a ticket is a
 GitHub issue. Publish the body from [templates/ticket.md](../templates/ticket.md), carrying the
 dependency edges in the playbook's recorded form.

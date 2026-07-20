@@ -210,9 +210,11 @@ Execute the approved plan:
    `https://github.com/asasher/asher-skills` and that updates/reconciliation run by re-invoking this skill.
 6. **Reconcile global owner policy (consent-gated, barriered).** For each confirmed harness, offer the
    absolute pointer from `templates/global/presentation-pointer.<provider>.md` and the deferred module from
-   `templates/global/presentation.common.md`. Use `scripts/render-global.py render`/`check` for previews and
-   `begin` to reset one fresh transaction barrier, then `stage` to atomically write/read back both
-   Presentation modules into it. Invoke the public
+   `templates/global/presentation.common.md` — a seed whose `<owner>`/`<tailnet-root>` placeholders setup
+   fills from this machine's facts before staging; never stage the placeholders verbatim. Use
+   `scripts/render-global.py render`/`check` for previews and
+   `begin` to reset one fresh transaction barrier, then `stage` (with `--audited <filled-module>`) to
+   atomically write/read back both Presentation modules into it. Invoke the public
    `staffing setup` owner so its two compiled provider renderers stage/read back both Staffing modules into
    that same barrier. Apply no pointer until the barrier verifies all four current module paths and hashes;
    any staging failure leaves both global files byte-for-byte untouched. Then run Presentation `preflight`

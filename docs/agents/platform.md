@@ -26,7 +26,7 @@
   - Read review comments since a SHA: `gh pr view <n> --comments`; for inline threads `gh api repos/asasher/asher-skills/pulls/<n>/comments`.
   - Post a review comment / reply: `gh pr comment <n> --body '...'`.
   - Signal approval: an exact `LGTM` comment via `gh pr comment`.
-  - Merge: the human merges on GitHub — the loop never merges.
+  - Merge: the human merges on GitHub, or explicitly authorizes the `merge-changes` skill (`gh pr merge <n> --squash --delete-branch`) — the automated loop itself never merges.
 - Where the review conversation persists: the PR thread on GitHub.
 
 ## Version control — working copies and publication

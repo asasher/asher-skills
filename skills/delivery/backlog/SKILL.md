@@ -8,7 +8,7 @@ metadata:
   invocation: user
   execution: orchestrator
   requires: [diagnosing-bugs, prototype, research, review-loop, staffing]
-  optional: []
+  optional: [bare-minimum-ux]
   setup: reference/setup.md
 ---
 
@@ -29,7 +29,7 @@ A subcommand's bundled reference is the **orchestration contract** — target, g
 | `groom` | With the human: classify work-type, clarify, resolve relationships, label readiness | `reference/groom.md` | `docs/agents/backlog-policy.md` + `platform.md` |
 | `run` | Queue ready issues; staff each coordinator before creating its worktree/child | `reference/run.md`, `reference/run-state.md`, `reference/build-loop.md` | `docs/agents/backlog-policy.md` + `platform.md`; threads read `change-description.md` + their step playbooks |
 | `setup` | Ask the work domain and install its baseline pack; reconcile playbooks; bind platforms; set isolation, app access, seed/checks, readiness; ensure siblings | `reference/setup.md`, `reference/worktree-isolation.md`, `templates/` | writes them |
-| `diagnose` | Hand a bug to the `diagnosing-bugs` skill; retain issue lifecycle and downstream verify/evidence | `reference/diagnose.md` + sibling by name | optional `docs/agents/diagnosing-bugs.md` delta + `environment.md` |
+| `diagnose` | Hand a bug to the `diagnosing-bugs` skill; retain issue lifecycle and downstream verify/evidence | `reference/diagnose.md` + sibling by name | `docs/agents/diagnosing-bugs.md` + `environment.md` |
 | `prototype` | Throwaway code that answers a design question (logic or UI shape) | the `prototype` skill (composed by name) | — |
 | `research` | Establish source-backed facts and inferences; standalone or as the research work-type branch | the `research` skill (composed by name) | `docs/agents/researching.md` |
 | `implement` | Build the enhancement: just-in-time tactical plan, then test-first build | `reference/implement.md` | `docs/agents/implementing.md` + `environment.md` |
