@@ -11,18 +11,15 @@ sign-off, not the test.
 
 - An idea, problem, PDF, or half-formed direction needs its decisions surfaced and settled before spec,
   tickets, or a build.
-- A workflow skill (to-spec's caller, backlog groom, a shaping session) needs an intent sharpened.
-- Use bare `interview` when nothing durable is wanted; use the `shape` skill when settled terms and
-  decisions should be written down as they land.
 
 ## Shape
 
 - **Intake first** — repo, artifacts, PRODUCT/CONTEXT/ADRs read before the first question.
 - **Frontier rounds** — the whole unblocked set per round; dependency-ordered; split by cluster only if a
   round balloons. One topic per question; assert-then-confirm over option menus.
-- **Facts vs decisions** — environment facts via lookup or the `research` sibling (a running lookup blocks
-  only its downstream questions); decisions go to the user and wait. Paper-unsettleable questions go to the
-  `prototype` sibling as probes.
+- **Facts vs decisions** — environment facts are looked up, or classified `needs-lookup` when out of reach
+  (a running lookup blocks only its downstream questions); decisions go to the user and wait.
+  Paper-unsettleable questions are classified `needs-probe`.
 - **Playback per round** — delta, unlocks, contradictions — then recompute the frontier.
 - **Exit** — every open thread classified settled / delegated / deferred / blocking, plus a one-line depth
   call (implement now / tickets / spec first) for the user to confirm.
@@ -30,8 +27,7 @@ sign-off, not the test.
 ## Dependency surface
 
 - **Bundled:** `SKILL.md` only.
-- **Siblings (optional, by name):** `research`, `prototype`, `staffing`.
-- **Composed by:** `shape` (adds `domain-modeling` extraction, synthesis, and projection).
+- **Siblings:** none — a sealed primitive.
 
 ## Provenance
 

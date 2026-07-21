@@ -1,0 +1,7 @@
+interface:
+  display_name: "To Subagent"
+  short_description: "Dispatch non-interactive work to a subagent — staffed from the roster, isolated when it edits files, with a wake path"
+  default_prompt: "Use $to-subagent to dispatch this work to a staffed subagent."
+
+policy:
+  allow_implicit_invocation: true

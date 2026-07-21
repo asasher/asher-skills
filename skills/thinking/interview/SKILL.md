@@ -1,6 +1,6 @@
 ---
 name: interview
-description: Interview the user about an idea or problem until shared understanding is real. Use to elicit and settle the strategic decisions behind new work, directly or when a composing skill needs decisions settled. It asks and classifies; it writes nothing durable.
+description: Interview the user about an idea or problem until shared understanding is real. Use to elicit and settle the strategic decisions behind new work.
 argument-hint: "<idea, problem, or reference to intake material>"
 user-invocable: true
 metadata:
@@ -18,8 +18,8 @@ prerequisites are already settled.
 
 ## Intake first
 
-Before asking anything, read what was handed to this session — named files, pasted material, whatever
-intake the caller provides. **Provided artifacts are read, not asked about.** Intake seeds the tree with
+Before asking anything, read what was handed to this session — named files, pasted material, anything the
+opening message points at. **Provided artifacts are read, not asked about.** Intake seeds the tree with
 what is already settled and what the evidence leaves open.
 
 ## Facts are yours; decisions are the user's
@@ -30,8 +30,8 @@ what is already settled and what the evidence leaves open.
 - A **decision** is the user's. Put each one to them and wait.
 - A question paper cannot settle — a state model or presentation direction that needs something concrete to
   react to — is classified **needs-probe** and deferred the same way.
-- Classified questions are the composer's to resolve between rounds; standalone, present them to the user
-  as open threads.
+- A classified question is an open thread: present it alongside the round it came from, and defer only
+  what depends on it.
 - An interface's non-obvious presentation choices — the visual hierarchy, which actions are overt, what each
   journey step shows — are decisions, not taste calls: settle them here; implementation never invents them.
 
@@ -74,6 +74,3 @@ State, in one confirmable line each:
   named), *deferred* (parked, with a home), or *blocking* (cannot proceed);
 - the **depth call** — implement now, slice to tickets, or spec first — as a recommendation the user
   confirms or overrides.
-
-This skill records nothing durable. Durable capture — glossary terms, decisions, spec input — belongs to
-whatever composed the interview.

@@ -50,6 +50,9 @@ including one marked `user`.
 | thinking | `interview` | model | orchestrator |
 | thinking | `shape` | model | orchestrator |
 | thinking | `research` | model | orchestrator |
+| software-development | `to-thread` | model | orchestrator |
+| software-development | `to-subagent` | model | orchestrator |
+| software-development | `watch-until` | model | orchestrator |
 | personal | `capture-to-inbox` | model | thread |
 | personal | `control-plane` | user | orchestrator |
 | personal | `eloquent` | model | thread |

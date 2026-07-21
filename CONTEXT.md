@@ -5,24 +5,42 @@ Terms of art for this repo's domain: designing and shipping agent skills. Kept p
 vocabulary stay in `AGENTS.md` § Vocabulary.
 
 **Primitive skill**:
-The bottom of the composition axis. Names no other skill, reads only what is handed to it, and
-classifies what it cannot settle (a fact to look up, a question paper can't settle) instead of
-dispatching anywhere — whoever composed it acts on the classifications. Example: `interview`.
-_Avoid_: a "primitive" that names an upper-layer skill — that is the layer law broken.
+The bottom of the composition axis, and **sealed**: it names no other skill and never addresses
+"the caller" — its text reads complete to an agent that knows nothing about what composed it. It
+reads what is handed to it plus the environment (repo playbooks are environment, not caller), and
+classifies what it cannot settle instead of naming who settles it. Example: `interview`.
+_Avoid_: a primitive that names a sibling, an upper layer, or "whoever composed this" — all three
+break the seal.
 
 **Composite skill**:
 Composes named lower-layer skills by plain-language reference, declares them in its dependency
-surface, and degrades explicitly when one is absent. Example: `shape` (composes `interview`,
-`domain-modeling`, `to-spec`, `to-tickets`).
+surface, and degrades explicitly when one is absent. All composition knowledge lives here: the
+composite knows its parts' contracts, the parts know nothing back. Example: `shape` (composes
+`interview` and `domain-modeling`, dispatching `research` and `prototype` through `to-subagent`).
 
 **Orchestrator skill**:
-Runs a loop of composites/primitives over many units of work, owning dispatch, liveness, and
-lifecycle state. Examples: `backlog run` (build loop per issue), `backlog groom` (shape loop per
-subject).
+Runs a loop over many units of work, owning dispatch, liveness, and lifecycle state. A
+**dispatcher** is the thin case: it only fans units out (via `to-thread` or `to-subagent`) and
+reports status on request — no result flows back. Examples: `backlog build` (dispatches a build
+thread per ready ticket), `backlog groom` (dispatches a shaping thread per `needs-shaping` ticket).
+
+**Dispatch adapter**:
+A primitive owning *how* work is dispatched, not what the work is: `to-thread` spawns named,
+interactive, harness-native sessions the user attends; `to-subagent` spawns non-interactive
+subagents with a wake path. Harness and staffing knowledge live only here — `to-subagent` is the
+one skill permitted to name `staffing`; every other skill reaches models and wake paths solely by
+saying "via `to-subagent`".
 
 **Layer law**:
-A skill may name only skills at layers below its own. A lower-layer skill naming an upper one is a
-leaky abstraction; the fix is moving the reference up, never documenting it in place.
+A skill may name only skills at layers below its own — and a primitive names none at all. A
+lower-layer skill naming an upper one is a leaky abstraction; the fix is moving the reference up,
+never documenting it in place.
+
+**Redundant negation**:
+A prohibition on behavior no reader would otherwise assume ("this skill writes no durable
+artifacts"). It is noise and a leakage tell — meaningful only to an author remembering a design
+where the behavior existed. A prohibition earns its place only against demonstrated drift ("never
+modify the source spec" stays; "records nothing durable" goes).
 
 **Pure skill**:
 The bottom of the persistence axis: writes nothing durable — its output lives in the conversation
@@ -46,8 +64,10 @@ each on its side: never script a judgment call, never leave failure-prone mechan
 
 **Shaping**:
 The stage between raw intent and execution-ready work: interviewing the decisions, researching
-facts, prototyping unsettleable questions, writing the domain model and spec, projecting tickets.
-Owned by the `shape` skill; `backlog groom` sweeps `needs-shaping` work into it.
+facts, prototyping unsettleable questions, maintaining the domain model as terms land. Owned by the
+`shape` skill, run in interactive threads the user attends; crystallising the settled direction
+(`to-spec`, `to-tickets`) is the user's call inside the thread, not a shape step. `backlog groom`
+dispatches `needs-shaping` work into these threads.
 
 **needs-shaping**:
 The tracker label role marking work whose strategic decisions are unsettled — cleared when shaping
