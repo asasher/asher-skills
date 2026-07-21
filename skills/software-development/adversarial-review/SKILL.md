@@ -16,6 +16,9 @@ Two agents converge on one change request. The change request is their only shar
 fixes, and the verdict all live in its comments and commits, so either side can die and be respawned
 without losing the loop. Dispatch both via the `to-subagent` skill, concurrently.
 
+Both briefs — comment conduct, the LGTM bar, iteration state, the product-semantics escalation — are in
+[conduct](reference/conduct.md); each dispatch carries it.
+
 ## The reviewer
 
 Run the `code-review` skill against the change request; post each finding as a change request comment

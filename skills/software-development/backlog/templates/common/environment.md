@@ -1,12 +1,16 @@
 # Playbook: Environment
 
-> Project playbook for this repo. Shared — read by any backlog subskill that builds a branch, runs, or tests the app (`implement`, `verify`, `evidence`, `diagnose`, the PR step, the review fixer) and by `run` for the parallelism verdict. Tailor every section to this codebase. `setup` fills the isolation, seed, and parallelism sections from its audit.
+> Project playbook for this repo — the verification-environment contract. Read by any session that
+> builds, runs, or proves the app: build threads, `verify-your-work`, `prove-your-work`,
+> `merge-changes` (cleanup), and `backlog build` (isolation and parallelism verdicts). Tailor every
+> section to this codebase; `setup` fills the isolation, seed, and parallelism sections from its audit.
 
 ## Branching & deploys
 
-- Base branch: _<e.g. main, or staging>_ — create worktrees and work branches from it, and target PRs at it. Sync it per `platform.md` § Version control before branching (on the local tracker binding, `run`'s claim commit is the fork point).
-- Branch naming: _<e.g. `<issue-number>-<slug>`>_.
-- What a PR produces: _<e.g. a preview deployment per PR, or nothing>_.
+- Base branch: _<e.g. main, or staging>_ — create worktrees and work branches from it, and target
+  change requests at it. Sync it per `platform.md` § Version control before branching.
+- Branch naming: _<e.g. `<ticket-number>-<slug>`>_.
+- What a change request produces: _<e.g. a preview deployment per PR, or nothing>_.
 - What a merge produces: _<e.g. merge to staging → staging deployment; promotion path to production>_.
 
 ## Running locally
@@ -17,18 +21,21 @@
 
 ## Worktree isolation
 
-> Set by `setup` per `reference/worktree-isolation.md`.
+> Set by `setup` from its audit; read by `backlog build` before dispatching parallel threads.
 
-- Regime: _<local-isolatable | cloud-singleton>_.
-- How to bring up an **isolated** stack for one worktree: _<the derived-env command / hook, or "main checkout only">_.
-- **Shared-singleton list** — every resource two concurrent worktrees would contend for, from the isolation audit's probes. One row each; `setup` derives the verdict below from it, and `run` reads the recorded verdict. _<Fill the table, or "none — no runnable stack".>_
+- Regime: _<local-isolatable | cloud-singleton | none>_ — whether one worktree can run its own full
+  stack beside another's.
+- How to bring up an **isolated** stack for one worktree: _<the derived-env command / hook, or "main
+  checkout only">_.
+- Teardown for a worktree's stack (read by `merge-changes` cleanup): _<command, or "nothing to tear
+  down">_.
+- **Shared-singleton list** — every resource two concurrent worktrees would contend for. One row each;
+  the parallelism verdict below derives from it.
 
   | Singleton | Collision mode | Locally isolatable? |
   |-----------|----------------|---------------------|
   | _<e.g. Postgres `app_dev`>_ | _<shared data across worktrees>_ | _<yes — per-worktree DB / no>_ |
   | _<e.g. host port 3000>_ | _<second stack fails to bind>_ | _<yes — derived port>_ |
-  | _<e.g. shared `node_modules`>_ | _<install mutates a running tree>_ | _<yes — per-worktree install>_ |
-  | _<e.g. `.next` build cache>_ | _<interleaved writes corrupt artifacts>_ | _<yes — per-worktree cache dir>_ |
   | _<e.g. one managed deployment / auth tenant>_ | _<one backend behind every worktree>_ | _<no — cloud singleton>_ |
 
 ## Seed data
@@ -36,45 +43,67 @@
 - Seed regime: _<real seed command | load-from-dataset | none — drive the app>_.
 - Command (if any): _<e.g. `pnpm dev:seed`, or the dataset-load command>_.
 - What a freshly seeded stack contains: _<add yours>_.
-- **Drive-to-feature path** — from a running, seeded stack, how to reach a state that exercises a feature: the entry command/route, the navigation steps, and any precondition state a criterion needs (a logged-in role, a created record, a selected workspace). Set by `setup`'s access audit; `verify`/`evidence` drive it. _<add yours, or "n/a — no app surface">_.
+- **Drive-to-feature path** — from a running, seeded stack, how to reach a state that exercises a
+  feature: the entry command/route, the navigation steps, and any precondition state a criterion needs
+  (a logged-in role, a created record, a selected workspace). _<add yours, or "n/a — no app surface">_.
 
 ## Authenticating for testing
 
 - Auth model: _<e.g. email magic-link/OTP, OAuth, username+password, API token>_.
-- How an agent mints a session: _<e.g. trigger an OTP → read it from the agentmail inbox → open the link with agent-browser>_.
+- How an agent mints a session: _<e.g. trigger an OTP → read it from the test inbox → complete login in
+  the browser driver>_.
+- **Session reuse:** mint once per run and persist the browser storage state
+  (_<e.g. `e2e/.auth/state.json`, gitignored>_); every subsequent check loads it instead of
+  re-authenticating.
 - Test accounts / where credentials live: _<env vars or secrets store; never hardcode, never echo `.env`>_.
 
 ## Verification data
 
 - Standing accounts/tenants and permissions: _<inventory what exists and the criterion classes each unlocks>_.
-- Per-issue fixture naming: `VERIFY-<issue>-<purpose>` unless this repo records another collision-safe form.
-- Scale affordances and limits: _<largest feasible real fixture; plan-approved synthetic substitutes and the criterion classes where each is/is not valid>_.
-- Lifetime/cleanup: provision before the criteria loop, retain through final evidence, then let the named
-  issue owner remove only its fixtures. Never share a mutable scratch entity across issues.
+- Per-ticket fixture naming: `VERIFY-<ticket>-<purpose>` unless this repo records another collision-safe form.
+- Scale affordances and limits: _<largest feasible real fixture; approved synthetic substitutes and the
+  criterion classes where each is/is not valid>_.
+- Lifetime/cleanup: provision before verification, retain through final evidence, then remove only this
+  ticket's fixtures. Never share a mutable scratch entity across tickets.
 
 ## Driving the app & capturing evidence
 
-> Set by `setup`'s app-access audit; read by `verify` (to exercise the app) and `evidence` (to capture proof). One entry per surface the loop verifies.
+> Read by `verify-your-work` (to exercise the app) and `prove-your-work` (to capture proof). One entry
+> per surface. Verification is **code, not improvisation**: a browser check is a script whose run is
+> reproducible, and the scripts accumulate into this repo's end-to-end suite.
 
-- Form factor(s): _<CLI | web | mobile | desktop — list every surface issues touch>_.
-- Driver per surface: _<defaults: shell + the CLI entrypoint; **agent-browser with an isolated profile** for the web app (the user's own browser only under a recorded user-session carve-out, with per-use consent); a simulator + driver for mobile; desktop requires the **Computer Use gate** — a concrete use case recorded here AND explicit user approval; absent either, record the surface as a hard verification gap. A driver failure surfaces as a blocker; it never falls back to a less-isolated surface. Adjust to this repo>_.
-- Independent runtime verification: _<default: delegate to `codex exec` with a self-contained prompt when a check needs real UI interaction, screenshots, simulator state, or a second opinion outside the orchestrator's context (codex mechanics owned by the `staffing` skill); "n/a" when codex is unreachable>_.
-- Evidence capture per surface: _<e.g. driver screenshots for static states; screen recording → GIF for flows; terminal transcripts for CLI>_.
-- Supporting tools: _<default: agentmail for OTP/magic-link inboxes; add yours>_.
+- Form factor(s): _<CLI | web | mobile | desktop — list every surface tickets touch>_.
+- Web driver: **Playwright** — scripts live in _<e.g. `e2e/`>_ and run with _<e.g. `npx playwright
+  test`>_. New checks are written as specs there, named for the ticket, and left in the tree: today's
+  verification is tomorrow's regression suite. Evidence comes from Playwright's own artifacts — traces,
+  screenshots, video — captured per run into _<artifact dir>_. Setup verifies the bundled browser
+  actually launches headless on this machine; if it cannot, record headed mode here as the fallback.
+- Other surfaces: _<defaults: shell + the CLI entrypoint; a simulator + driver for mobile; desktop only
+  behind a recorded use case AND explicit user approval — absent either, record the surface as a hard
+  verification gap. A driver failure surfaces as a blocker; it never falls back to a less-isolated
+  surface>_.
+- Evidence capture per surface: _<e.g. Playwright trace/screenshots for web; terminal transcripts for
+  CLI; screen recording → GIF for flows the driver can't script>_.
+- Supporting tools: _<e.g. a test email inbox for OTP/magic links; add yours>_.
 - Gaps: _<surfaces the agent cannot drive or capture, and the fallback; or "none">_.
 
 ## Presenting to the human
 
-> Owned by the **`review-loop`** skill (composed by name): the presentation surface and interactive review — how plans and prototypes reach a human who may not be at the machine. review-loop's setup records this repo's surface config here (tailnet root, surface dir, publish/proxy commands, hub, keep-awake). backlog does not install the surface.
+> Owned by the **`serve-via-tailnet`** skill (composed by name): how rendered artifacts reach a human
+> who may not be at the machine. Its setup records this repo's surface config here (root path, surface
+> dir, publish/proxy commands); this playbook does not install the surface.
 
-## Model staffing
+## Staffing delta
 
-> Owned by the **`staffing`** skill (composed by name): the model roster — roles (orchestrator, builder by surface, checker, floor), rankings, and the fallback ladder. `run` and every reference that spawns work resolve staffing questions against it; staffing's setup writes the compiled roster here (global base + this project's delta).
+> Written by `staffing setup` when this repo diverges from the machine roster; dispatch resolves models
+> through the `to-subagent` skill. _<delta rows, or "none — machine roster as-is">_.
 
 ## Parallelism verdict
 
-> Read by `run` before dispatch.
+> Read by `backlog build` before dispatch.
 
-- Verdict: _<parallel-safe | serialize-verification>_ — derived by `setup` from the shared-singleton list above (`reference/worktree-isolation.md` § Parallelism verdict).
-- If serialized, why: _<either "user preference — sequential by choice" (the list is clear), or name the un-isolated rows from the list that force it>_.
-- Serialized exception lane: _<issue classes that must serialize even when parallel-safe (see `reference/worktree-isolation.md` § Parallelism verdict); or "none">_.
+- Verdict: _<parallel-safe | serialize-verification | sequential>_ — derived from the shared-singleton
+  list above.
+- If serialized, why: _<either "user preference — sequential by choice", or name the un-isolated rows
+  that force it>_.
+- Serialized exception lane: _<ticket classes that must serialize even when parallel-safe; or "none">_.

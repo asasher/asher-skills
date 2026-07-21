@@ -33,7 +33,9 @@ whether a spec or tickets come out of it — is the user's call there, not this 
 Sweep for tickets carrying the ready role whose dependency edges are clear, or take the ids given. For
 each: mark it in-flight per the label roles — a dispatched ticket must never dispatch twice — then spawn
 a worktree-isolated thread via the `to-thread` skill, named for the ticket, seeded to run the `build`
-skill on it. Report each thread and how to attach. Merging the resulting change requests waits for
+skill on it. Isolation and concurrency follow the environment playbook's verdicts
+(`docs/agents/environment.md` § Worktree isolation, § Parallelism): a repo that can't isolate runs one
+thread at a time in the main checkout. Report each thread and how to attach. Merging the resulting change requests waits for
 explicit authorization.
 
 ## setup

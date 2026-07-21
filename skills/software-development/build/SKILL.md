@@ -30,7 +30,8 @@ fixing; loop until the report is clean.
 
 Create the change request through the platform verbs in `docs/agents/platform.md`, carrying the ticket's
 closing reference (the platform's `Closes #N` form) so merging closes the ticket. The description states
-what changed and why in the ticket's terms.
+what changed and why in the ticket's terms — in the repo's change-description format
+(`docs/agents/change-description.md`) when one is recorded.
 
 ## 4. Adversarial review
 

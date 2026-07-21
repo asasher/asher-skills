@@ -11,7 +11,8 @@ reply per comment, stop on LGTM) — both bounded by a deadline and an iteration
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` only.
+- **Bundled:** `reference/conduct.md` — both roles' briefs: comment conduct, the LGTM bar, iteration
+  state, the product-semantics escalation.
 - **Siblings (required, by name):** `code-review`, `watch-until`, `to-subagent`.
 
 ## Provenance

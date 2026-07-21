@@ -1,7 +1,7 @@
 {
   "id": "sdlc",
   "title": "The SDLC skill family",
-  "subtitle": "Groom fans shaping threads; the user crystallises spec → tickets; build fans worktree threads to review-ready change requests; a human merges — every node renders its real files, live from this repo.",
+  "subtitle": "Groom fans shaping threads; the user crystallises spec \u2192 tickets; build fans worktree threads to review-ready change requests; a human merges \u2014 every node renders its real files, live from this repo.",
   "lanes": [
     {
       "id": "dispatch",
@@ -21,7 +21,7 @@
     {
       "id": "build",
       "title": "Build",
-      "blurb": "One ready ticket through implement → verify to a review-ready change request."
+      "blurb": "One ready ticket through implement \u2192 verify to a review-ready change request."
     },
     {
       "id": "review",
@@ -39,24 +39,54 @@
       "id": "backlog",
       "lane": "dispatch",
       "title": "backlog",
-      "blurb": "The dispatcher: groom fans needs-shaping tickets into shaping threads, build fans ready tickets into build threads — no result flows back",
+      "blurb": "The dispatcher: groom fans needs-shaping tickets into shaping threads, build fans ready tickets into build threads \u2014 no result flows back",
       "source": "skills/software-development/backlog",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Templates", "label": "platform", "path": "templates/common/platform.md" },
-        { "group": "Templates", "label": "backlog-policy", "path": "templates/common/backlog-policy.md" },
-        { "group": "Templates", "label": "environment", "path": "templates/common/environment.md" },
-        { "group": "Templates", "label": "change-description", "path": "templates/common/change-description.md" },
-        { "group": "Templates (software pack)", "label": "implementing", "path": "templates/software/implementing.md" },
-        { "group": "Templates (software pack)", "label": "verifying", "path": "templates/software/verifying.md" },
-        { "group": "Templates (software pack)", "label": "evidence", "path": "templates/software/evidence.md" },
-        { "group": "Templates (software pack)", "label": "refactoring", "path": "templates/software/refactoring.md" },
-        { "group": "Templates (software pack)", "label": "change-reviewer", "path": "templates/software/change-reviewer.md" },
-        { "group": "Templates (software pack)", "label": "change-fixer", "path": "templates/software/change-fixer.md" },
-        { "group": "Templates (skill-authoring pack)", "label": "environment", "path": "templates/skill-authoring/environment.md" },
-        { "group": "Templates (skill-authoring pack)", "label": "evidence", "path": "templates/skill-authoring/evidence.md" },
-        { "group": "Templates (skill-authoring pack)", "label": "verifying", "path": "templates/skill-authoring/verifying.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Templates",
+          "label": "platform",
+          "path": "templates/common/platform.md"
+        },
+        {
+          "group": "Templates",
+          "label": "backlog-policy",
+          "path": "templates/common/backlog-policy.md"
+        },
+        {
+          "group": "Templates",
+          "label": "environment",
+          "path": "templates/common/environment.md"
+        },
+        {
+          "group": "Templates",
+          "label": "change-description",
+          "path": "templates/common/change-description.md"
+        },
+        {
+          "group": "Templates (software pack)",
+          "label": "evidence",
+          "path": "templates/software/evidence.md"
+        },
+        {
+          "group": "Templates (skill-authoring pack)",
+          "label": "environment",
+          "path": "templates/skill-authoring/environment.md"
+        },
+        {
+          "group": "Templates (skill-authoring pack)",
+          "label": "evidence",
+          "path": "templates/skill-authoring/evidence.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/platform.md",
@@ -67,7 +97,7 @@
       "bindings": [
         {
           "port": "platform",
-          "expects": "tracker, change-request, git, harness verbs — each verified live at setup",
+          "expects": "tracker, change-request, git, harness verbs \u2014 each verified live at setup",
           "default": "skills/software-development/backlog/templates/common/platform.md"
         },
         {
@@ -94,8 +124,16 @@
       "blurb": "Spawns one named, attachable, harness-native background session seeded with a standalone prompt",
       "source": "skills/software-development/to-thread",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": []
     },
@@ -103,11 +141,19 @@
       "id": "to-subagent",
       "lane": "dispatch",
       "title": "to-subagent",
-      "blurb": "Staffed non-interactive subagent with a wake path — the only skill that reads the roster",
+      "blurb": "Staffed non-interactive subagent with a wake path \u2014 the only skill that reads the roster",
       "source": "skills/software-development/to-subagent",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": []
     },
@@ -115,11 +161,19 @@
       "id": "watch-until",
       "lane": "dispatch",
       "title": "watch-until",
-      "blurb": "Watches a target — file, URL, thread, CI run, review surface — until a condition holds, then relays",
+      "blurb": "Watches a target \u2014 file, URL, thread, CI run, review surface \u2014 until a condition holds, then relays",
       "source": "skills/software-development/watch-until",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": []
     },
@@ -130,8 +184,16 @@
       "blurb": "Settles one subject's strategic decisions: interviews, models the terms, researches and prototypes what paper can't settle",
       "source": "skills/software-development/shape",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [],
       "bindings": [
@@ -149,8 +211,16 @@
       "blurb": "Frontier rounds until shared understanding is real; facts looked up, decisions asked",
       "source": "skills/software-development/interview",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": []
     },
@@ -161,10 +231,26 @@
       "blurb": "CONTEXT.md terms and three-gate ADRs, written the moment decisions land (sealed primitive)",
       "source": "skills/software-development/domain-modeling",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Reference", "label": "context-format", "path": "reference/context-format.md" },
-        { "group": "Reference", "label": "adr-format", "path": "reference/adr-format.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "context-format",
+          "path": "reference/context-format.md"
+        },
+        {
+          "group": "Reference",
+          "label": "adr-format",
+          "path": "reference/adr-format.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": []
     },
@@ -175,11 +261,31 @@
       "blurb": "Primary-source dossiers with traceable claims, contradictions, and unknowns",
       "source": "skills/software-development/research",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Reference", "label": "research-contract", "path": "reference/research-contract.md" },
-        { "group": "Reference", "label": "setup", "path": "reference/setup.md" },
-        { "group": "Templates", "label": "researching", "path": "templates/researching.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "research-contract",
+          "path": "reference/research-contract.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Templates",
+          "label": "researching",
+          "path": "templates/researching.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/researching.md"
@@ -196,12 +302,24 @@
       "id": "prototype",
       "lane": "shaping",
       "title": "prototype",
-      "blurb": "One design question, one throwaway artifact — keep the answer, delete the scaffolding",
+      "blurb": "One design question, one throwaway artifact \u2014 keep the answer, delete the scaffolding",
       "source": "skills/software-development/prototype",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Reference", "label": "prototyping", "path": "reference/prototyping.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "prototyping",
+          "path": "reference/prototyping.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/prototyping.md"
@@ -217,13 +335,29 @@
       "id": "to-spec",
       "lane": "crystallise",
       "title": "to-spec",
-      "blurb": "Conversation → self-contained HTML spec at docs/specs/; pure synthesis, no interview",
+      "blurb": "Conversation \u2192 self-contained HTML spec at docs/specs/; pure synthesis, no interview",
       "source": "skills/software-development/to-spec",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Reference", "label": "synthesis", "path": "reference/synthesis.md" },
-        { "group": "Reference", "label": "template-guide", "path": "reference/template-guide.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "synthesis",
+          "path": "reference/synthesis.md"
+        },
+        {
+          "group": "Reference",
+          "label": "template-guide",
+          "path": "reference/template-guide.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/platform.md",
@@ -237,7 +371,7 @@
         },
         {
           "port": "backlog-policy",
-          "expects": "spec→ticket vocabulary and label roles the tracking ticket uses",
+          "expects": "spec\u2192ticket vocabulary and label roles the tracking ticket uses",
           "default": "skills/software-development/backlog/templates/common/backlog-policy.md"
         }
       ]
@@ -246,15 +380,39 @@
       "id": "to-tickets",
       "lane": "crystallise",
       "title": "to-tickets",
-      "blurb": "Direction → tracer-bullet tickets with native blocking edges; quizzes granularity before publishing",
+      "blurb": "Direction \u2192 tracer-bullet tickets with native blocking edges; quizzes granularity before publishing",
       "source": "skills/software-development/to-tickets",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Reference", "label": "slicing", "path": "reference/slicing.md" },
-        { "group": "Reference", "label": "template-guide", "path": "reference/template-guide.md" },
-        { "group": "Templates", "label": "ticket", "path": "templates/ticket.md" },
-        { "group": "Templates", "label": "tickets", "path": "templates/tickets.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "slicing",
+          "path": "reference/slicing.md"
+        },
+        {
+          "group": "Reference",
+          "label": "template-guide",
+          "path": "reference/template-guide.md"
+        },
+        {
+          "group": "Templates",
+          "label": "ticket",
+          "path": "templates/ticket.md"
+        },
+        {
+          "group": "Templates",
+          "label": "tickets",
+          "path": "templates/tickets.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/platform.md",
@@ -277,11 +435,19 @@
       "id": "build",
       "lane": "build",
       "title": "build",
-      "blurb": "One ready ticket → review-ready change request: implement · verify & fix · review · evidence",
+      "blurb": "One ready ticket \u2192 review-ready change request: implement \u00b7 verify & fix \u00b7 review \u00b7 evidence",
       "source": "skills/software-development/build",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/platform.md"
@@ -301,8 +467,16 @@
       "blurb": "Routes defects to diagnosis and new behavior to test-first construction; commits to the current branch",
       "source": "skills/software-development/implement",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": []
     },
@@ -310,13 +484,29 @@
       "id": "tdd",
       "lane": "build",
       "title": "tdd",
-      "blurb": "Red–green test-first construction (sealed primitive)",
+      "blurb": "Red\u2013green test-first construction (sealed primitive)",
       "source": "skills/software-development/tdd",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Reference", "label": "tests", "path": "reference/tests.md" },
-        { "group": "Reference", "label": "mocking", "path": "reference/mocking.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "tests",
+          "path": "reference/tests.md"
+        },
+        {
+          "group": "Reference",
+          "label": "mocking",
+          "path": "reference/mocking.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": []
     },
@@ -327,12 +517,36 @@
       "blurb": "The six-phase red-capable defect diagnosis discipline (sealed primitive)",
       "source": "skills/software-development/diagnosing-bugs",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Reference", "label": "diagnosis", "path": "reference/diagnosis.md" },
-        { "group": "Reference", "label": "setup", "path": "reference/setup.md" },
-        { "group": "Templates", "label": "diagnosing-bugs", "path": "templates/diagnosing-bugs.md" },
-        { "group": "Templates", "label": "diagnosing-bugs (skill-authoring)", "path": "templates/skill-authoring/diagnosing-bugs.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "diagnosis",
+          "path": "reference/diagnosis.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Templates",
+          "label": "diagnosing-bugs",
+          "path": "templates/diagnosing-bugs.md"
+        },
+        {
+          "group": "Templates",
+          "label": "diagnosing-bugs (skill-authoring)",
+          "path": "templates/skill-authoring/diagnosing-bugs.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/diagnosing-bugs.md"
@@ -349,11 +563,19 @@
       "id": "verify-your-work",
       "lane": "build",
       "title": "verify-your-work",
-      "blurb": "Fresh-eyes proof the change does what it claims — findings, never fixes (sealed)",
+      "blurb": "Fresh-eyes proof the change does what it claims \u2014 findings, never fixes (sealed)",
       "source": "skills/software-development/verify-your-work",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": []
     },
@@ -361,11 +583,23 @@
       "id": "adversarial-review",
       "lane": "review",
       "title": "adversarial-review",
-      "blurb": "Reviewer ⇆ fixer subagents converge a change request to LGTM without a human in the loop",
+      "blurb": "Reviewer \u21c6 fixer subagents converge a change request to LGTM without a human in the loop",
       "source": "skills/software-development/adversarial-review",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "conduct",
+          "path": "reference/conduct.md"
+        }
       ],
       "playbooks": []
     },
@@ -376,9 +610,21 @@
       "blurb": "Two-axis review from a fixed point: Standards (repo's documented rules) and Spec (what the ticket asked)",
       "source": "skills/software-development/code-review",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Reference", "label": "smells", "path": "reference/smells.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "smells",
+          "path": "reference/smells.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/platform.md"
@@ -395,11 +641,19 @@
       "id": "prove-your-work",
       "lane": "review",
       "title": "prove-your-work",
-      "blurb": "The evidence package — claims, proofs, what wasn't verified — posted where the merge decision happens (sealed)",
+      "blurb": "The evidence package \u2014 claims, proofs, what wasn't verified \u2014 posted where the merge decision happens (sealed)",
       "source": "skills/software-development/prove-your-work",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/platform.md",
@@ -425,8 +679,16 @@
       "blurb": "The explicit human authorization gate: merges, closes tickets, cleans worktrees and stacks",
       "source": "skills/software-development/merge-changes",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/platform.md"
@@ -443,14 +705,34 @@
       "id": "serve-via-tailnet",
       "lane": "services",
       "title": "serve-via-tailnet",
-      "blurb": "Serves an HTML artifact on the tailnet — plain, or annotated with comments and a verdict",
+      "blurb": "Serves an HTML artifact on the tailnet \u2014 plain, or annotated with comments and a verdict",
       "source": "skills/software-development/serve-via-tailnet",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Reference", "label": "scripts", "path": "reference/scripts.md" },
-        { "group": "Reference", "label": "surface-and-hub", "path": "reference/surface-and-hub.md" },
-        { "group": "Reference", "label": "annotation-contract", "path": "reference/annotation-contract.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "scripts",
+          "path": "reference/scripts.md"
+        },
+        {
+          "group": "Reference",
+          "label": "surface-and-hub",
+          "path": "reference/surface-and-hub.md"
+        },
+        {
+          "group": "Reference",
+          "label": "annotation-contract",
+          "path": "reference/annotation-contract.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": []
     },
@@ -461,8 +743,16 @@
       "blurb": "Compacts the current conversation into a handoff document for another agent to pick up",
       "source": "skills/software-development/handoff",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": []
     },
@@ -473,15 +763,51 @@
       "blurb": "Who runs every task: the machine roster, roles, routing, and fallback ladders",
       "source": "skills/system/staffing",
       "files": [
-        { "group": "Skill", "label": "SKILL.md", "path": "SKILL.md" },
-        { "group": "Reference", "label": "roles-and-fallback", "path": "reference/roles-and-fallback.md" },
-        { "group": "Reference", "label": "rankings-and-routing", "path": "reference/rankings-and-routing.md" },
-        { "group": "Reference", "label": "machine-audit", "path": "reference/machine-audit.md" },
-        { "group": "Reference", "label": "harness", "path": "reference/harness.md" },
-        { "group": "Reference", "label": "install-and-reconcile", "path": "reference/install-and-reconcile.md" },
-        { "group": "Reference", "label": "setup", "path": "reference/setup.md" },
-        { "group": "Templates", "label": "staffing.common (global module)", "path": "templates/global/staffing.common.md" },
-        { "group": "Provenance", "label": "README", "path": "README.md" }
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "roles-and-fallback",
+          "path": "reference/roles-and-fallback.md"
+        },
+        {
+          "group": "Reference",
+          "label": "rankings-and-routing",
+          "path": "reference/rankings-and-routing.md"
+        },
+        {
+          "group": "Reference",
+          "label": "machine-audit",
+          "path": "reference/machine-audit.md"
+        },
+        {
+          "group": "Reference",
+          "label": "harness",
+          "path": "reference/harness.md"
+        },
+        {
+          "group": "Reference",
+          "label": "install-and-reconcile",
+          "path": "reference/install-and-reconcile.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Templates",
+          "label": "staffing.common (global module)",
+          "path": "templates/global/staffing.common.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        }
       ],
       "playbooks": [
         "docs/agents/environment.md"
@@ -494,11 +820,11 @@
         },
         {
           "port": "project deltas",
-          "expects": "sparse overrides in the consumer project's agent instruction files (§ Staffing)"
+          "expects": "sparse overrides in the consumer project's agent instruction files (\u00a7 Staffing)"
         },
         {
           "port": "roster",
-          "expects": "docs/agents/environment.md § Model roster",
+          "expects": "docs/agents/environment.md \u00a7 Model roster",
           "default": "skills/software-development/backlog/templates/common/environment.md"
         }
       ]

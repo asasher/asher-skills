@@ -22,6 +22,13 @@ Read what the change says it does — the ticket, the commit messages, the diff 
 thing that must be demonstrably true, including the implicit ones: nothing that worked before broke, and
 the change behaves at its edges, not just its happy path.
 
+## Read the environment contract
+
+`docs/agents/environment.md`, when the repo has one, records how to run the stack, seed data, reach a
+feature, authenticate (including a reusable browser session), and which driver exercises each surface.
+Honor it — a verifier that improvises around the recorded contract produces evidence nobody can
+reproduce. Absent the playbook, say so and verify what the repo's own commands reach.
+
 ## Pick the proof that could fail
 
 For each claim, choose the check that would go red if the claim were false:
@@ -30,8 +37,9 @@ For each claim, choose the check that would go red if the claim were false:
 - typecheck and build;
 - the changed surface exercised directly — a CLI invocation, an HTTP call, a script against the real
   entry point;
-- for UI work, a real browser walk through the changed journey: the states named in the ticket (empty,
-  loading, error, disabled), not just the golden path.
+- for UI work, a browser check **written as a script** with the repo's recorded browser driver, walking
+  the changed journey through the states named in the ticket (empty, loading, error, disabled), not
+  just the golden path — and left in the tree where the repo keeps such specs.
 
 A check that cannot fail is not proof. "It compiles" verifies nothing about behavior.
 

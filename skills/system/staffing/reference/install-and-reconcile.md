@@ -29,10 +29,9 @@ installed package. Directory presence is evidence, not authority: setup confirms
 
 ## Module-first owner reconciliation
 
-Staffing owns only its pointer, module, and roster; never presentation policy. Each owner applies its own
-module and pointer section independently through its `render-global.py apply`: the audited module is written
-atomically and read back, then the owner's `## Staffing` (or `## Presentation`) section is reconciled into
-the global file with every foreign byte preserved. Module-first: the deferred module lands before the pointer
+Staffing owns only its pointer, module, and roster — nothing else in the global file. The apply is
+`render-global.py apply`: the audited module is written atomically and read back, then the `## Staffing`
+section is reconciled into the global file with every foreign byte preserved. Module-first: the deferred module lands before the pointer
 that names it, within the same apply. Never use an eager import.
 
 An apply failure changes nothing: the read-back check fails closed. Missing, unreadable, or changed staffing
