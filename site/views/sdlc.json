@@ -86,11 +86,11 @@
       "playbooks": []
     },
     {
-      "id": "interview-with-docs",
+      "id": "shape",
       "lane": "shaping",
-      "title": "interview-with-docs",
-      "blurb": "The composer: interview asks, domain-modeling writes \u2014 extraction over transcript",
-      "source": "skills/thinking/interview-with-docs",
+      "title": "shape",
+      "blurb": "The shaping stage: batch interview, probes between rounds, model inline, spec, tickets",
+      "source": "skills/thinking/shape",
       "files": [
         {
           "group": "Skill",
@@ -356,7 +356,7 @@
       "bindings": [
         {
           "port": "backlog-policy",
-          "expects": "label roles, dispatch metadata, routes, needs-spec/needs-info",
+          "expects": "label roles, dispatch metadata, routes, needs-shaping/needs-info",
           "default": "skills/delivery/backlog/templates/common/backlog-policy.md"
         },
         {
@@ -818,7 +818,7 @@
   ],
   "flow": [
     {
-      "from": "interview-with-docs",
+      "from": "shape",
       "to": "to-spec",
       "label": "crystallised record + classified threads"
     },

@@ -10,7 +10,7 @@ crystallise**: terms into `CONTEXT.md` (a glossary and nothing else), decisions 
 
 - Pinning down domain terminology or a ubiquitous language.
 - Recording an architectural decision worth remembering.
-- Another skill needs the model maintained while it works: `interview-with-docs` composes it with
+- Another skill needs the model maintained while it works: `shape` composes it with
   `interview`; groom, spec, and triage sessions may invoke it directly.
 - Not for merely *reading* `CONTEXT.md` — consuming the glossary is a one-line habit any skill can do.
 

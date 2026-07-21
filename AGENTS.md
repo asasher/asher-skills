@@ -68,14 +68,15 @@ How skills and instructions relate:
   plus Claude Code-specific additions and deltas). They extend and override the global files for work in
   this repo.
 
-Kinds of skill:
+Kinds of skill: defined in `CONTEXT.md` (the two axes — primitive/composite/orchestrator and
+pure/effectful/stateful — the layer law, and the agent-decision/shipped-script split).
 
-- **Stateless skill** — each invocation is self-contained; nothing carries over between sessions.
-- **Stateful skill** — maintains skill state in the consumer's working directory (for example `bayes`,
-  `goodwork`, `backlog`), so a bare invocation reads it and resumes exactly where
-  the last session left off — no human recap. State lives with the work, never in chat context or memory
-  files; a session's last act is updating it. Stateful skills get extra probe-eval attention on the
-  resume-after-a-gap path, since their mistakes compound across sessions.
+## Context documents
+
+Durable documents carrying this repo's domain and direction — read the one whose clause matches the work:
+
+- `CONTEXT.md` — the domain glossary (skill kinds, layer law, shaping vocabulary); read before naming
+  things or when a term of art is ambiguous.
 
 ## Conventions
 
@@ -127,8 +128,8 @@ to reconcile them against the repo.
 
 **How they fit together:** `backlog` requires `diagnosing-bugs`, `prototype`, `research`, `review-loop`,
 and `staffing` — enhancements arrive with strategic decisions settled upstream (groom's route judgment; the
-`needs-spec` handback returns work that isn't), so the run loop holds no planning approval gate. `research` requires `staffing`; `prototype` requires `review-loop` and `staffing`; the shaping entry is
-`interview-with-docs` (composing `interview` + `domain-modeling`) feeding `to-spec`, whose review-loop gate
+`needs-shaping` handback returns work that isn't), so the run loop holds no planning approval gate. `research` requires `staffing`; `prototype` requires `review-loop` and `staffing`; the shaping entry is
+`shape` (composing `interview`, `domain-modeling`, `to-spec`, `to-tickets`) feeding `to-spec`, whose review-loop gate
 replaced the retired `plan` stage. `merge-changes` remains a separate, explicit human authorization gate
 after Backlog produces a review-ready PR.
 

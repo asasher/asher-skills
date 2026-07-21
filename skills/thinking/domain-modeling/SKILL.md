@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: Sharpen the project's domain model as decisions land. Use when pinning down domain terminology, recording an architectural decision, or when another skill (interview-with-docs, groom, a spec session) needs the model maintained while it works. Not for merely reading CONTEXT.md — that is a one-line habit any skill can do.
+description: Sharpen the project's domain model as decisions land. Use when pinning down domain terminology, recording an architectural decision, or when another skill or workflow (`shape`, a backlog grooming pass, a spec session) needs the model maintained while it works. Not for merely reading CONTEXT.md — that is a one-line habit any skill can do.
 argument-hint: "[term, decision, or nothing — runs alongside a conversation]"
 user-invocable: true
 metadata:

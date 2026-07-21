@@ -19,7 +19,7 @@ Two independent axes, plus exclusions. Readiness decides *whether and who* picks
 - `in-flight` — dispatched: an issue thread owns it, so `run` never selects it. Set by `run` at dispatch, replacing `ready-for-agent`; records what's flying (branch name and dispatch date — local: frontmatter; GitHub: a comment alongside the label). Cleared by the run thread on abort, superseded by closure when the change merges, or reset by `groom`'s human-confirmed orphan sweep (§ In-flight hygiene). Default `in-flight` — _<your label>_.
 - `ready-for-human` — only a human; the agent skips it entirely. Also the abort target for verify caps and environment blockers: the agent hands the issue back with the blocker commented, since a human must look before it can be re-released. Default `ready-for-human` — _<your label>_.
 - `needs-info` — parked, waiting on the reporter. Default `needs-info` — _<your label>_.
-- `needs-spec` — parked for strategic shaping: the issue carries product/design/scope decisions that are neither settled nor delegated, or execution invalidated an approved decision. Set by `groom`'s route judgment or by an issue thread's handback; cleared when the upstream shaping flow (interview → spec → tickets) delivers execution-ready work. Boundary with `needs-info`: there the reporter owes facts; here the product owner owes shaping. Never selectable by `run`. Default `needs-spec` — _<your label>_.
+- `needs-shaping` — parked for strategic shaping: the issue carries product/design/scope decisions that are neither settled nor delegated, or execution invalidated an approved decision. Set by `groom`'s route judgment or by an issue thread's handback; cleared when shaping (the `shape` skill, swept by groom or run standalone) delivers execution-ready work. Boundary with `needs-info`: there the reporter owes facts; here the product owner owes shaping. Never selectable by `run`. Default `needs-shaping` — _<your label>_.
 - *(no readiness label)* — not yet groomed; a target for `backlog groom`, not for `run`.
 
 Two further lifecycle values appear only where the tracker has no native equivalent (the local binding's `state:` field), written by the loop, never by grooming: `in-review` (a PR is open for it — set on the work branch at PR-open) and `closed` (set on the work branch once review converges; the merge carries it to main). On trackers with native state (GitHub), an open PR and native closure express these.
@@ -68,7 +68,7 @@ grooming gap: `run` skips the issue rather than inferring it or defaulting to th
 
 ## Readiness decision
 
-- The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. The agent may apply `ready-for-human`, `needs-info`, `needs-spec`, and exclusion roles on its own.
+- The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. The agent may apply `ready-for-human`, `needs-info`, `needs-shaping`, and exclusion roles on its own.
 - Adjust this rule if this team wants more or less agent autonomy (e.g. let the agent auto-bless low-risk bugs).
 
 ## In-flight hygiene

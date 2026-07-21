@@ -21,9 +21,9 @@ This phase is human-in-the-loop: the agent proposes and may self-apply any role 
 
 3. Clarify.
    - Where scope or requirements are ambiguous, ask the human directly and fold the answers into the issue body or a comment so they persist. For questions the human cannot answer now, comment the open question on the issue and set `needs-info`.
-   - **Route judgment (enhancements).** For each `enhancement`, judge whether it is **direct-executable**: every product, design, and scope decision is settled in the issue's groomed context or explicitly delegated with its boundary named. Record the judgment in the dispatch record (`route: direct — <one line why>`). An enhancement that still needs strategic shaping beyond what the human settles in this conversation is stamped **`needs-spec`** with the open decisions commented, and routed to the upstream shaping flow (interview → spec → tickets); it re-enters grooming when that flow delivers execution-ready work.
+   - **Route judgment (enhancements).** For each `enhancement`, judge whether it is **direct-executable**: every product, design, and scope decision is settled in the issue's groomed context or explicitly delegated with its boundary named. Record the judgment in the dispatch record (`route: direct — <one line why>`). An enhancement that still needs strategic shaping beyond what the human settles in this conversation is stamped **`needs-shaping`** with the open decisions commented, and routed to shaping — run the `shape` sibling skill (by name) over the batch, each subject in its own subagent with this session muxing the interview rounds; absent `shape`, park the issues for the human. Work re-enters grooming when shaping delivers it execution-ready.
    - Assign a coordination class and reason: `routine` when the work is settled enough for a normal issue coordinator; `orchestrator-required` only for named product judgment, design, hard diagnosis, or another uncertainty the session orchestrator must own. Record the class, reason, and known uncertainty using the playbook's tracker encoding.
-   - Completion criterion: each issue has work-type, surface, coordination class, and reason, or is parked as `needs-info` with its open question recorded — or `needs-spec` with its open strategic decisions recorded.
+   - Completion criterion: each issue has work-type, surface, coordination class, and reason, or is parked as `needs-info` with its open question recorded — or `needs-shaping` with its open strategic decisions recorded.
 
 4. Resolve relationships.
    - Detect dependencies between issues and record them per the playbook's convention (`backlog-policy.md` § Dependencies — a task-list line, frontmatter, or the tracker's native blocker relation) so `run` can read them. Mark superseded, duplicate, and already-resolved issues with the matching exclusion role, link the canonical issue, and close them when the tools and the user allow.
@@ -31,7 +31,7 @@ This phase is human-in-the-loop: the agent proposes and may self-apply any role 
    - Completion criterion: dependencies are recorded, genuine duplicates collapsed, and stale or redundant issues excluded or closed — without re-opening settled ones.
 
 5. Shortlist and label.
-   - Present the groomed candidates and let the human confirm which become `ready-for-agent`. Apply `ready-for-agent` only to confirmed issues carrying work-type plus complete dispatch metadata (for an `enhancement`, that includes the recorded `route: direct` judgment). Apply `ready-for-human`, `needs-info`, `needs-spec`, and exclusion roles as proposed.
+   - Present the groomed candidates and let the human confirm which become `ready-for-agent`. Apply `ready-for-agent` only to confirmed issues carrying work-type plus complete dispatch metadata (for an `enhancement`, that includes the recorded `route: direct` judgment). Apply `ready-for-human`, `needs-info`, `needs-shaping`, and exclusion roles as proposed.
    - Completion criterion: every issue carries its readiness role, and every `ready-for-agent` issue carries work-type, surface, coordination class, and reason — plus the route judgment for enhancements.
 
 6. Write back and hand off.

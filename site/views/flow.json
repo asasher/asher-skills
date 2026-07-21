@@ -36,13 +36,13 @@
     { "id": "f-quiz", "lane": "you", "phase": "tickets", "title": "Quiz ✋", "blurb": "granularity + blocking edges", "open": { "file": "skills/delivery/to-tickets/reference/slicing.md" } },
     { "id": "f-published", "lane": "repo", "phase": "tickets", "title": "Tickets published", "blurb": "native blocked-by edges", "open": { "file": "skills/delivery/to-tickets/reference/slicing.md" } },
 
-    { "id": "f-groom", "lane": "orch", "phase": "admission", "title": "Groom: route judgment", "blurb": "direct-executable, or needs-spec", "open": { "file": "skills/delivery/backlog/reference/groom.md" } },
+    { "id": "f-groom", "lane": "orch", "phase": "admission", "title": "Groom: route judgment", "blurb": "direct-executable, or needs-shaping", "open": { "file": "skills/delivery/backlog/reference/groom.md" } },
     { "id": "f-labels", "lane": "repo", "phase": "admission", "title": "ready-for-agent + route", "blurb": "admission is the only readiness stamp", "open": { "file": "docs/agents/backlog-policy.md" } },
 
     { "id": "f-run", "lane": "orch", "phase": "run", "title": "Run: waves ∥", "blurb": "dispatch via staffing · liveness", "open": { "file": "skills/delivery/backlog/reference/run.md" } },
     { "id": "f-loops", "lane": "sub", "phase": "run", "title": "Build loop × N", "blurb": "implement · verify · review · evidence", "open": { "file": "skills/delivery/backlog/reference/build-loop.md" } },
     { "id": "f-prs", "lane": "repo", "phase": "run", "title": "Branches · PRs · evidence", "blurb": "review-ready, never merged by agents", "open": { "file": "skills/delivery/backlog/reference/evidence.md" } },
-    { "id": "f-esc", "lane": "you", "phase": "run", "title": "Escalations only", "blurb": "needs-spec handback ⤴", "dashed": true, "open": { "file": "skills/delivery/backlog/reference/build-loop.md" } },
+    { "id": "f-esc", "lane": "you", "phase": "run", "title": "Escalations only", "blurb": "needs-shaping handback ⤴", "dashed": true, "open": { "file": "skills/delivery/backlog/reference/build-loop.md" } },
 
     { "id": "f-merge", "lane": "you", "phase": "merge", "title": "PR review · merge ✋", "blurb": "the explicit authorization gate", "open": { "node": "merge-changes" } },
     { "id": "f-closed", "lane": "repo", "phase": "merge", "title": "Merged", "blurb": "issues closed via Closes #n", "open": { "file": "docs/agents/platform.md" } }

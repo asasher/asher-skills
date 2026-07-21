@@ -33,7 +33,7 @@ separate mechanism.
    - Completion criterion: the active wave holds every currently unblocked `ready-for-agent` issue exactly once, every blocked candidate is durably deferred with its observed edge, or the user is told to groom first / that the queue is empty.
 
 3. Check the bindings.
-   - `backlog setup` provisions the role labels and records the platform verbs; this is a safety net. Confirm the roles in `docs/agents/backlog-policy.md` still resolve on the tracker — the readiness roles `run` reads (`ready-for-agent`) and writes (`in-flight`), the ones issue threads may apply (`needs-info`, `needs-spec`), and the work-type roles they route on.
+   - `backlog setup` provisions the role labels and records the platform verbs; this is a safety net. Confirm the roles in `docs/agents/backlog-policy.md` still resolve on the tracker — the readiness roles `run` reads (`ready-for-agent`) and writes (`in-flight`), the ones issue threads may apply (`needs-info`, `needs-shaping`), and the work-type roles they route on.
    - If any are missing, create them when the binding's verbs allow; otherwise record each as a blocker and tell the user to re-run `backlog setup`.
    - Completion criterion: each required role is available or has an explicit blocker.
 

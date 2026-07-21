@@ -17,7 +17,7 @@
     { "id": "b-skill", "lane": "surface", "title": "SKILL.md", "blurb": "commands · seams · routing", "open": { "file": "skills/delivery/backlog/SKILL.md" } },
 
     { "id": "b-groom", "lane": "organize", "title": "groom", "blurb": "triage · clarify · route judgment · shortlist", "open": { "file": "skills/delivery/backlog/reference/groom.md" } },
-    { "id": "b-policy", "lane": "organize", "title": "backlog-policy (playbook)", "blurb": "label roles · dispatch metadata · needs-spec", "open": { "file": "docs/agents/backlog-policy.md" } },
+    { "id": "b-policy", "lane": "organize", "title": "backlog-policy (playbook)", "blurb": "label roles · dispatch metadata · needs-shaping", "open": { "file": "docs/agents/backlog-policy.md" } },
 
     { "id": "b-run", "lane": "schedule", "title": "run", "blurb": "queue · claim · staff · dispatch · handoff", "open": { "file": "skills/delivery/backlog/reference/run.md" } },
     { "id": "b-runstate", "lane": "schedule", "title": "run-state", "blurb": "checkpoints · audited resume", "open": { "file": "skills/delivery/backlog/reference/run-state.md" } },

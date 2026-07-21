@@ -8,7 +8,7 @@ metadata:
   invocation: user
   execution: orchestrator
   requires: [diagnosing-bugs, prototype, research, review-loop, staffing]
-  optional: [bare-minimum-ux]
+  optional: [bare-minimum-ux, shape]
   setup: reference/setup.md
 ---
 

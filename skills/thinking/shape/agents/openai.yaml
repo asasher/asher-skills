@@ -1,0 +1,7 @@
+interface:
+  display_name: "Shape"
+  short_description: "Shape raw intent into execution-ready work: interview the decisions, resolve lookups and probes, write the model and spec, project tickets"
+  default_prompt: "Use $shape to settle this work's strategic decisions and produce its execution-ready record."
+
+policy:
+  allow_implicit_invocation: true

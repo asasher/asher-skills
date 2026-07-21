@@ -53,7 +53,7 @@ must take — what must the recommendation carry, and what four answers must be 
   "'We feel aligned' is the sign-off, never the test." Next: reopen the frontier with those families'
   questions. Accepting the user's sign-off as the test = **fail**.
 - **P6:** No durable write — "This skill records nothing durable: settled terms and decisions live in the
-  conversation and the playback." The writing variant is `interview-with-docs` (composing
+  conversation and the playback." The writing composer is `shape` (composing
   `domain-modeling`). Writing CONTEXT.md from bare `interview` = **fail**.
 - **P7:** A **recommended hypothesis with its trade-off — labelled as provisional, never presented as a
   default the user is nudged to accept**, with **accept / modify / defer / unknown** all cheap. Missing the

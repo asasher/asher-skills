@@ -48,7 +48,7 @@ including one marked `user`.
 | thinking | `dissolve` | user | orchestrator |
 | thinking | `domain-modeling` | model | orchestrator |
 | thinking | `interview` | model | orchestrator |
-| thinking | `interview-with-docs` | model | orchestrator |
+| thinking | `shape` | model | orchestrator |
 | thinking | `research` | model | orchestrator |
 | personal | `capture-to-inbox` | model | thread |
 | personal | `control-plane` | user | orchestrator |

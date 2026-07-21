@@ -14,7 +14,7 @@ user is not.
 
 ## What to mine
 
-When the conversation ran through `interview` / `interview-with-docs`, start from the crystallised record —
+When the conversation ran through `interview` or the `shape` sibling, start from the crystallised record —
 `CONTEXT.md` terms, ADRs, and the exit classification (settled / delegated / deferred / blocking) — and use
 the conversation to fill in around it; the classification maps straight onto the Notes rule below. Then read
 back over the conversation and pull out:
@@ -54,7 +54,7 @@ how the work will be proven, not a test plan — keep it to the seams, in prose.
 The spec carries **no file paths and no code snippets.** They rot the moment the codebase moves, and a spec
 is direction, not implementation — describe the module, the contract, or the shape in prose instead.
 
-The single exception, carried over from the plan/PRD rule: a **prototype-validated snippet** that encodes a
+The single exception: a **prototype-validated snippet** that encodes a
 decision more precisely than prose can — a state machine, a reducer, a schema, a type shape. Inline only that
 decision-rich fragment and note it came from a prototype. Absent that exception, everything is prose.
 
@@ -78,7 +78,7 @@ The spec's approval is the **direction's gate** — the lifecycle has no separat
 tactics are made just-in-time inside execution. Before presenting: run the **fidelity audit** — every
 material decision from the conversation appears in the spec, and every Notes line carries its
 blocking / delegated / deferred classification. An open **blocking** Note stops the hand-off to
-`to-tickets` until the upstream shaping flow settles it.
+`to-tickets` until shaping settles it.
 
 - **User present** — take approval inline, in the conversation. This is the default path and depends on no
   other skill.

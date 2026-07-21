@@ -113,7 +113,7 @@ to groom.
 A ticket carries **no file paths and no code snippets.** They rot the moment the codebase moves; a ticket is
 intent and the slice, not implementation — describe the module, the contract, or the shape in prose instead.
 
-The single exception, carried from the plan/spec rule: a **prototype-validated snippet** that encodes a decision
+The single exception: a **prototype-validated snippet** that encodes a decision
 more precisely than prose can — a state machine, a reducer, a schema, a type shape. Inline only that
 decision-rich fragment and note it came from a prototype. Absent that exception, everything is prose.
 

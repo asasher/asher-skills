@@ -1,7 +1,0 @@
-interface:
-  display_name: "Interview With Docs"
-  short_description: "A relentless interview that writes the useful shape down as it goes — CONTEXT.md terms and ADRs the moment they crystallise"
-  default_prompt: "Use $interview-with-docs to interview me about this and record what we settle."
-
-policy:
-  allow_implicit_invocation: true

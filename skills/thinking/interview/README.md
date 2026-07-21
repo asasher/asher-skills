@@ -12,7 +12,7 @@ sign-off, not the test.
 - An idea, problem, PDF, or half-formed direction needs its decisions surfaced and settled before spec,
   tickets, or a build.
 - A workflow skill (to-spec's caller, backlog groom, a shaping session) needs an intent sharpened.
-- Use bare `interview` when nothing durable is wanted; use `interview-with-docs` when settled terms and
+- Use bare `interview` when nothing durable is wanted; use the `shape` skill when settled terms and
   decisions should be written down as they land.
 
 ## Shape
@@ -31,7 +31,7 @@ sign-off, not the test.
 
 - **Bundled:** `SKILL.md` only.
 - **Siblings (optional, by name):** `research`, `prototype`, `staffing`.
-- **Composed by:** `interview-with-docs` (adds `domain-modeling` extraction).
+- **Composed by:** `shape` (adds `domain-modeling` extraction, synthesis, and projection).
 
 ## Provenance
 

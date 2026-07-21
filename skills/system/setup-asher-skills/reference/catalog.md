@@ -53,10 +53,10 @@ The map is a starting point tuned by the project answer, not a fixed bundle.
 |---|---|---|
 | A shipping product / app repo, ongoing work | `backlog` (pulls its full closure) | The issue→reviewed-PR loop; brings diagnosis, research, prototype, review-loop, staffing |
 | A source-backed question or investigation | `research` (requires staffing) | Primary-source dossier with facts/observations, traceable inferences, contradictions, and unknowns |
-| A one-off direction that needs sign-off before work | `interview-with-docs` → `to-spec` (review-loop for the gate) | Elicit and crystallise the decisions, then write the spec; the spec's review gate replaced the retired plan stage |
+| A one-off direction that needs sign-off before work | `shape` (review-loop for the gate) | Settle the decisions and write the spec; the spec's review gate is the direction's approval |
 | A design/state question that needs to be tried | `prototype` (pulls review-loop + staffing) | Throwaway artifact that settles one question |
 | A greenfield product to pitch/sell | `maquette` (pulls review-loop) | High-fidelity clickable prototype for a demo |
-| Eliciting the decisions behind an idea or problem | `interview-with-docs` (pulls `interview` + `domain-modeling`) | Batch frontier interview with inline CONTEXT.md/ADR extraction; bare `interview` for a no-writes session; feeds `to-spec` |
+| Eliciting the decisions behind an idea or problem | `shape` (pulls `interview`, `domain-modeling`, `to-spec`, `to-tickets`) | The shaping stage: batch frontier interview, inline model extraction, spec, tickets; bare `interview` for a no-writes session |
 | Turning a decided conversation into a written spec | `to-spec` (review-loop optional) | Synthesize a spec; feeds `to-tickets` |
 | Splitting a spec/plan into backlog tickets | `to-tickets` | Vertical-slice tickets with blocking edges into backlog's convention |
 | Any project that will route work across models | `staffing` — offer **global** | A reusable model roster; the one skill worth installing once for every project |

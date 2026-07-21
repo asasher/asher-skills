@@ -1,13 +1,13 @@
 ---
 name: interview
-description: Interview the user about an idea or problem until shared understanding is real. Use to elicit and settle the strategic decisions behind new work, directly or when a workflow skill needs an intent sharpened before spec or tickets. It asks and classifies; it writes no durable artifacts — compose `interview-with-docs` for that.
+description: Interview the user about an idea or problem until shared understanding is real. Use to elicit and settle the strategic decisions behind new work, directly or when a composing skill needs decisions settled. It asks and classifies; it writes nothing durable.
 argument-hint: "<idea, problem, or reference to intake material>"
 user-invocable: true
 metadata:
   invocation: model
   execution: orchestrator
   requires: []
-  optional: [prototype, research, staffing]
+  optional: []
 ---
 
 # Interview
@@ -18,28 +18,28 @@ prerequisites are already settled.
 
 ## Intake first
 
-Before asking anything, read what already exists: named files (a PDF, a brief, a doc), the repo, and the
-durable context — `PRODUCT.md`, `DESIGN.md`, `CONTEXT.md`, ADRs, prior specs — the instruction file's
-`## Context documents` index is the map when one exists. **Provided artifacts are read, not asked about.** Intake seeds the tree with what is already settled
-and what the evidence leaves open.
+Before asking anything, read what was handed to this session — named files, pasted material, whatever
+intake the caller provides. **Provided artifacts are read, not asked about.** Intake seeds the tree with
+what is already settled and what the evidence leaves open.
 
 ## Facts are yours; decisions are the user's
 
-- A **fact** lives in the environment — the filesystem, the code, a tool, an external source. Look it up:
-  directly for the repo, through the `research` skill (by name) for external sources. Never ask the user for
-  anything you could find.
-- A running lookup is an unsettled prerequisite: only the questions downstream of it wait — ask the rest of
-  the frontier now.
+- A **fact** lives in the environment. Look it up directly when this session can reach it; when it can't —
+  an external source, a staffed lookup — classify the question **needs-lookup** and defer only what depends
+  on it. Never ask the user for anything that can be found.
 - A **decision** is the user's. Put each one to them and wait.
+- A question paper cannot settle — a state model or presentation direction that needs something concrete to
+  react to — is classified **needs-probe** and deferred the same way.
+- Classified questions are the composer's to resolve between rounds; standalone, present them to the user
+  as open threads.
 - An interface's non-obvious presentation choices — the visual hierarchy, which actions are overt, what each
   journey step shows — are decisions, not taste calls: settle them here; implementation never invents them.
-- A question paper cannot settle — a state model or form direction that needs something concrete to react
-  to — goes to the `prototype` skill (by name) as a probe, not to another round of prose.
 
 ## Rounds
 
 Ask the whole frontier in one numbered round. If a round balloons past comfortable answering, split it by
-dependency cluster and say so — a cap is manners, not a rule. Each question carries:
+dependency cluster and say so — splitting is a courtesy to the reader, not a fixed limit. Each question
+carries:
 
 - the **evidence already in hand** (from intake or earlier answers);
 - what the answer **unlocks** downstream;
@@ -47,8 +47,8 @@ dependency cluster and say so — a cap is manners, not a rule. Each question ca
 - cheap affordances: **accept / modify / defer / unknown** — agreeing costs a word, disagreeing a sentence.
 
 One topic per question; never a compound either-or. When the evidence already points one way,
-**assert-then-confirm** ("this reads as X — confirm?") beats a menu. Questions whose answers depend on
-another question still open in this round belong to a later round.
+**assert-then-confirm** ("this reads as X — confirm?") beats a menu. A question depending on another in the
+same round isn't frontier yet — push it to a later round.
 
 After every round: **play back the delta** — what settled, what it unlocked, and any contradiction with
 earlier answers or intake evidence — then recompute the frontier.
@@ -70,17 +70,10 @@ Then present the full playback and ask for confirmation of shared understanding.
 
 State, in one confirmable line each:
 
-- the classification of **every open thread**: *settled*, *delegated* (the executor may choose, boundary
+- the classification of **every thread**: *settled*, *delegated* (the executor may choose, boundary
   named), *deferred* (parked, with a home), or *blocking* (cannot proceed);
 - the **depth call** — implement now, slice to tickets, or spec first — as a recommendation the user
   confirms or overrides.
 
-This skill records nothing durable. When settled terms and decisions should outlive the conversation — a
-glossary term, an ADR, spec input — run `interview-with-docs`.
-
-## Dependency surface
-
-- **Bundled:** none — this file is the whole contract.
-- **Siblings (optional, by name):** `research` for external facts, `prototype` for paper-unsettleable
-  questions, `staffing` when a lookup needs a staffed worker. Absent a sibling, state the gap and continue
-  with direct lookups; never silently skip a fact.
+This skill records nothing durable. Durable capture — glossary terms, decisions, spec input — belongs to
+whatever composed the interview.
