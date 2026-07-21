@@ -1,14 +1,15 @@
 # To Thread
 
-Dispatch adapter for interactive work: spawns named, harness-native background sessions the user attends
-(Claude Code `claude --bg` background agents; Codex threads via `codex exec` plus app-server naming), each
-seeded with a standalone prompt and reported back to the user as attach instructions. Detached by design —
-nothing flows back to the spawning session; status on request via the harness's own listing commands.
+Dispatch adapter for interactive work: spawns one named, harness-native background session the user
+attends (a Claude Code `claude --bg` background agent; a Codex thread via `codex exec` plus app-server
+naming), seeded with a standalone prompt and reported back to the user as attach instructions. Detached
+by design — nothing flows back to the spawning session; status on request via the harness's own listing
+commands. One call spawns one thread; how many threads a piece of work needs is the caller's decision.
 
 ## When to use
 
-- A dispatcher fans units of work out into sessions the user will drive (one shaping thread per ticket,
-  one build thread per ready ticket).
+- A unit of work should continue in a session of its own that the user drives (a shaping thread for a
+  ticket, a build thread for a ready ticket).
 - Any conversation should continue as its own attachable session instead of inside this one.
 
 ## Dependency surface

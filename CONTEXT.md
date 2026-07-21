@@ -8,7 +8,7 @@ vocabulary stay in `AGENTS.md` § Vocabulary.
 The bottom of the composition axis, and **sealed**: it names no other skill and never addresses
 "the caller" — its text reads complete to an agent that knows nothing about what composed it. It
 reads what is handed to it plus the environment (repo playbooks are environment, not caller), and
-classifies what it cannot settle instead of naming who settles it. Example: `interview`.
+classifies what it cannot settle instead of naming who settles it. Example: `domain-modeling`.
 _Avoid_: a primitive that names a sibling, an upper layer, or "whoever composed this" — all three
 break the seal.
 
@@ -17,6 +17,8 @@ Composes named lower-layer skills by plain-language reference, declares them in 
 surface, and degrades explicitly when one is absent. All composition knowledge lives here: the
 composite knows its parts' contracts, the parts know nothing back. Example: `shape` (composes
 `interview` and `domain-modeling`, dispatching `research` and `prototype` through `to-subagent`).
+Even a thin edge makes a composite: `interview` names only `to-subagent` for fact lookups, and that
+one edge moves it off the primitive rung.
 
 **Orchestrator skill**:
 Runs a loop over many units of work, owning dispatch, liveness, and lifecycle state. A

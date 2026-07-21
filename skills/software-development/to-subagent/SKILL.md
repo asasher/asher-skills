@@ -1,6 +1,6 @@
 ---
 name: to-subagent
-description: Dispatch a unit of non-interactive work to a subagent — staffed from the roster, isolated when it edits files, with a wake path. Use whenever work should run outside this session without the user attending it.
+description: Dispatch a unit of non-interactive work to a subagent — staffed from the roster, with a wake path. Use whenever work should run outside this session without the user attending it.
 argument-hint: "<the unit of work to dispatch>"
 user-invocable: true
 metadata:
@@ -12,8 +12,7 @@ metadata:
 
 # To Subagent
 
-Dispatch a unit of work to a non-interactive agent and relay its result. This is the one place staffing
-and dispatch mechanics live — other skills say "via `to-subagent`" and stop there.
+Dispatch one unit of work to one non-interactive agent and relay its result.
 
 ## Staffing
 
@@ -26,11 +25,6 @@ Absent the roster, run the subagent on this session's own model and effort; neve
 Self-contained — the subagent sees nothing of this conversation. State the goal, the inputs by path or
 id, what done looks like, and that its final message is the deliverable itself: the data asked for, not a
 status note. When the result must be structured, state the exact shape.
-
-## Isolation
-
-Work that edits files this session or a parallel subagent may also touch gets its own worktree. Read-only
-work runs in place.
 
 ## Wake path
 

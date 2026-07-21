@@ -7,70 +7,31 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: []
-  optional: []
+  optional: [to-subagent]
 ---
 
 # Interview
 
-Elicit the decisions behind a piece of work by walking its **decision tree**: every decision branches into
-the decisions that hang off it. Work the tree in **rounds** over the **frontier** — every decision whose
-prerequisites are already settled.
+Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**:
+every decision branches into the decisions that hang off it.
 
-## Intake first
+Read what was handed to this session before the first round — provided artifacts are read, not asked
+about.
 
-Before asking anything, read what was handed to this session — named files, pasted material, anything the
-opening message points at. **Provided artifacts are read, not asked about.** Intake seeds the tree with
-what is already settled and what the evidence leaves open.
+Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled —
+the questions you can ask now without guessing at answers you haven't heard yet. Ask the whole frontier in
+one round: number each question and give your recommended answer. Then wait for the user's answers before
+the next round.
 
-## Facts are yours; decisions are the user's
+Each round the user answers reshapes the tree — settled decisions push the frontier outward and unblock
+questions that depended on them. Recompute the frontier and ask the next round. A question whose answer
+depends on another question still open in this round belongs to a later round, not this one.
 
-- A **fact** lives in the environment. Look it up directly when this session can reach it; when it can't —
-  an external source, a staffed lookup — classify the question **needs-lookup** and defer only what depends
-  on it. Never ask the user for anything that can be found.
-- A **decision** is the user's. Put each one to them and wait.
-- A question paper cannot settle — a state model or presentation direction that needs something concrete to
-  react to — is classified **needs-probe** and deferred the same way.
-- A classified question is an open thread: present it alongside the round it came from, and defer only
-  what depends on it.
-- An interface's non-obvious presentation choices — the visual hierarchy, which actions are overt, what each
-  journey step shows — are decisions, not taste calls: settle them here; implementation never invents them.
+Finding **facts** is your job, never the user's. When a frontier question needs a fact from the
+environment (filesystem, tools, docs), dispatch a lookup via the `to-subagent` skill (absent it, look it
+up in-session) — don't ask the user for anything you could look up yourself. Don't block on it: a running
+lookup is an unsettled prerequisite, so only the questions downstream of it wait for the subagent to
+report — ask the rest of the frontier now. The **decisions** are the user's — put each to them and wait.
 
-## Rounds
-
-Ask the whole frontier in one numbered round. If a round balloons past comfortable answering, split it by
-dependency cluster and say so — splitting is a courtesy to the reader, not a fixed limit. Each question
-carries:
-
-- the **evidence already in hand** (from intake or earlier answers);
-- what the answer **unlocks** downstream;
-- a **recommended hypothesis with its trade-off** — labelled provisional, never a nudged default;
-- cheap affordances: **accept / modify / defer / unknown** — agreeing costs a word, disagreeing a sentence.
-
-One topic per question; never a compound either-or. When the evidence already points one way,
-**assert-then-confirm** ("this reads as X — confirm?") beats a menu. A question depending on another in the
-same round isn't frontier yet — push it to a later round.
-
-After every round: **play back the delta** — what settled, what it unlocked, and any contradiction with
-earlier answers or intake evidence — then recompute the frontier.
-
-## Stopping
-
-Two tests, both required:
-
-1. **The frontier is empty** — no decision is askable that hasn't been asked.
-2. **Coverage holds** — sweep the families relevant to this surface and risk profile: problem and current
-   process; actors and permissions; desired outcomes; scenarios and failure states; data and privacy;
-   non-functional qualities; rollout and migration; operations; UX register and design direction; testing
-   and evidence; dependencies; non-goals. A family with a material unasked question reopens the frontier.
-   "We feel aligned" is the sign-off, never the test.
-
-Then present the full playback and ask for confirmation of shared understanding.
-
-## Exit
-
-State, in one confirmable line each:
-
-- the classification of **every thread**: *settled*, *delegated* (the executor may choose, boundary
-  named), *deferred* (parked, with a home), or *blocking* (cannot proceed);
-- the **depth call** — implement now, slice to tickets, or spec first — as a recommendation the user
-  confirms or overrides.
+The session is done when the frontier is empty: every branch of the design tree visited, nothing left
+silently assumed. Do not act on it until the user confirms you have reached a shared understanding.

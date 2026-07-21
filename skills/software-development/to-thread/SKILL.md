@@ -1,7 +1,7 @@
 ---
 name: to-thread
-description: Spawn named, interactive, harness-native background sessions seeded with a standalone prompt, and tell the user how to attach. Use when a unit of work should continue in its own session that the user attends.
-argument-hint: "<one line per thread: name — initial prompt>"
+description: Spawn a named, interactive, harness-native background session seeded with a standalone prompt, and tell the user how to attach. Use when a unit of work should continue in its own session that the user attends.
+argument-hint: "<name — initial prompt>"
 user-invocable: true
 metadata:
   invocation: model
@@ -12,9 +12,9 @@ metadata:
 
 # To Thread
 
-Spawn one background session per unit of work, detached: the spawn returns immediately and the session
-runs under the harness's own supervisor, not under this one. Nothing flows back — the user attends each
-thread. Report status only when asked, via the harness's listing commands.
+Spawn one background session for one unit of work, detached: the spawn returns immediately and the
+session runs under the harness's own supervisor, not under this one. Nothing flows back — the user
+attends the thread. Report status only when asked, via the harness's listing commands.
 
 ## The spec of a thread
 

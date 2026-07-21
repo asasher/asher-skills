@@ -1,8 +1,8 @@
 # Watch Until
 
-Waits on external state for cheap: a target, a mechanically-decidable condition, a relay instruction, and
-a deadline, satisfied by the cheapest mechanism available — harness-tracked wake first, native watch
-facilities second, a floor-model watcher subagent third, self-polling last.
+Waits on external state for cheap: a target, a condition the watcher can decide (mechanical or a
+judgment), a relay instruction, and a deadline, satisfied by the cheapest mechanism available —
+harness-tracked wake first, native watch facilities second, a watcher subagent third, self-polling last.
 
 ## When to use
 

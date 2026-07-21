@@ -33,6 +33,10 @@ it before building. The invoking thread keeps framing and interpretation; dispat
    record.
 4. **Cleaned.** Delete the artifact or deliberately absorb only its validated core into real work.
 
+An interface's non-obvious presentation choices — the visual hierarchy, which actions are overt, what
+each journey step shows — are decisions, not taste calls: a variants prototype settles them;
+implementation never invents them.
+
 Failure to expose a falsifiable observation — or, for variants, real alternatives a human can react to —
 returns to gate 1. Missing `review-loop` degrades to local open;
 missing `staffing` is reported.

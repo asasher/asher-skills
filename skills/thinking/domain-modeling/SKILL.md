@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: Sharpen the project's domain model as decisions land. Use when pinning down domain terminology, recording an architectural decision, or when another skill or workflow (`shape`, a backlog grooming pass, a spec session) needs the model maintained while it works. Not for merely reading CONTEXT.md — that is a one-line habit any skill can do.
+description: Sharpen the project's domain model as decisions land. Use when pinning down domain terminology, recording an architectural decision, or maintaining the model while a design conversation works. Not for merely reading CONTEXT.md — that is a one-line habit any skill can do.
 argument-hint: "[term, decision, or nothing — runs alongside a conversation]"
 user-invocable: true
 metadata:
@@ -59,5 +59,4 @@ Any gate failing → no ADR.
 ## Dependency surface
 
 - **Bundled:** [context-format](reference/context-format.md), [adr-format](reference/adr-format.md).
-- **Siblings:** none required. Callers compose this skill by name; absent it, they state the gap rather than
-  writing glossary entries ad hoc.
+- **Siblings:** none — a sealed primitive.
