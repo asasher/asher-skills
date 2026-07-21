@@ -57,12 +57,9 @@ class CatalogTests(unittest.TestCase):
         temp = tempfile.TemporaryDirectory()
         return temp, Path(temp.name)
 
-    def test_live_migration_map_and_root_catalog_match_sources(self) -> None:
+    def test_root_catalog_matches_readme_roster(self) -> None:
         root = Path(__file__).parents[4]
         graph = catalog.discover(root)
-        migration = json.loads((root / "skills/source-migration.json").read_text())["moves"]
-        self.assertEqual(set(migration.values()), {skill.source for skill in graph.values()})
-        self.assertEqual(set(migration), {f"skills/{name}" for name in graph})
         readme = (root / "README.md").read_text()
         for skill in graph.values():
             execution = skill.execution + (" (internal provenance hold)" if skill.internal else "")
@@ -71,7 +68,7 @@ class CatalogTests(unittest.TestCase):
 
     def test_no_stale_flat_source_paths_in_authoritative_surfaces(self) -> None:
         root = Path(__file__).parents[4]
-        old_paths = json.loads((root / "skills/source-migration.json").read_text())["moves"]
+        old_paths = {f"skills/{name}" for name in catalog.discover(root)}
         stale = []
         for path in root.rglob("*"):
             relative = path.relative_to(root)
@@ -81,7 +78,6 @@ class CatalogTests(unittest.TestCase):
                 or {".git", ".agents", ".claude"} & set(path.parts)
                 or top in {"plans", "evidence"}
                 or top.endswith("-workspace")
-                or path.name == "source-migration.json"
             ):
                 continue
             try:

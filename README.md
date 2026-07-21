@@ -68,8 +68,7 @@ including one marked `user`.
 The install/setup graph is compiled on demand from each skill's frontmatter
 (`python3 skills/system/setup-asher-skills/scripts/catalog.py compile`);
 the separate runtime composition view is in
-[`reference/catalog.md`](skills/system/setup-asher-skills/reference/catalog.md#runtime-composition);
-[`skills/source-migration.json`](skills/source-migration.json) records the flat-to-category move.
+[`reference/catalog.md`](skills/system/setup-asher-skills/reference/catalog.md#runtime-composition).
 
 ## Skills I Like
 
