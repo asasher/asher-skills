@@ -1,174 +1,48 @@
 # To-Spec — situated dry-run probes
 
-Method: situated probes against the actual deployment targets — an Opus subagent (via the Agent tool) and
-`codex exec --sandbox read-only` — with `SKILL.md` in context, plus the one `reference/` file named by the
-probe when it names one (probes that test whether a reference stands alone withhold `SKILL.md`). Require the
-executor to **cite the file and the exact sentence** that decided each answer, and to **flag ambiguity as a
-valid answer** — flagged ambiguities are findings to feed back into the wording, not failures. Grade pass/fail
-against the key. **The answer key is written before any runs** and graded against the plan's acceptance
-criteria (`plans/8-to-spec.html`, ids ac-1..ac-11) — the plan is the source of truth; do not grade against
-looser criteria.
+Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **`SKILL.md` +
+`reference/synthesis.md` in context**, exact-sentence citation per answer. Ambiguity flagged with a
+citation is valid. Key before runs.
 
-Each probe names the criterion it exercises. Between them the 13 probes cover ac-1..ac-11.
+## Scenario
+
+A long design conversation settled a driver-payout direction. Retry policy was discussed but never
+decided. The user is AFK. A live tracker is bound. You are running `to-spec payouts`.
 
 ## Probes
 
-**P1 (ac-1).** Read `skills/delivery/to-spec/SKILL.md`. Does its frontmatter identify it as a user-invocable
-synthesis skill whose job is turning the current conversation into a spec (no interview), and does any file in
-the skill import or read another skill's files? Cite what you checked, and note whether the directory carries
-the shipped-primitive layout (SKILL.md, README.md, agents/, reference/, templates/, evals/).
+**P1 (no interview).** Retry policy is undecided. Ask the user, or something else? Cite.
 
-**P2 (ac-2).** From `SKILL.md`, list the three kinds of dependency pointer the skill declares, and state
-exactly what it says about **sibling skills** — how many, which, and whether the dependency is hard or
-optional.
+**P2 (classification).** How must every Notes line be marked before sign-off, and what does an open
+blocking Note mean? Cite.
 
-**P3 (ac-3).** During the conversation the user never settled whether the spec should cover a secondary flow —
-it was raised and left hanging. When you synthesize the spec, do you stop and ask the user to decide? Give the
-rule and cite it.
+**P3 (stale content).** The conversation named `src/payments/worker.ts` and a prototype-validated
+reducer snippet. Which may appear in the spec? Cite.
 
-**P4 (ac-4).** What artifact does to-spec produce, and where is it written? Is it a ticket? Who consumes it?
-Cite the sentence.
+**P4 (AFK sign-off).** How is approval sought, and what if that sibling isn't installed? Cite.
 
-**P5 (ac-5).** A teammate writing a spec calls the downstream units "issues" throughout. Per the skill, is
-that right? What is the correct word, and why does the skill avoid "issue"? Cite it.
+**P5 (on approval).** What two things happen when the spec is approved? Cite.
 
-**P6 (ac-6).** List the sections the spec template carries. Which are always present and which are dev-only,
-and what does the guide say to do with the dev-only ones on a spec where they don't apply? Cite the guide.
-
-**P7a (ac-7, non-dev).** You're synthesizing a spec for a **non-dev** change — a revision to a team operating
-process, no code. Do you write the Test seams section and run the "sketch the seams, prefer the highest
-existing seam" step? Give the rule and cite it.
-
-**P7b (ac-7, dev).** You're synthesizing a spec for a **dev** change — a new code path. Do you run the seams
-step, and what does it tell you to prefer? Cite the sentence, and name where this step is adapted from.
-
-**P8 (ac-8).** Drafting a spec, you're tempted to paste the exact path of the module you'll change and a
-short code fragment showing the call. Does the skill allow file paths and code in the spec? What is the single
-exception, and how should the non-excepted case be written instead? Cite the rule.
-
-**P9a (ac-9, AFK).** The user has stepped away from the machine but wants to approve the spec before you move
-on. How does to-spec get sign-off, and what must it do to the markdown spec first? Cite it. Is `review-loop` a
-hard dependency?
-
-**P9b (ac-9, present).** The user is sitting right there. How is the spec approved? If `review-loop` were
-unavailable, could you still ship a valid spec? Cite the sentence.
-
-**P10 (ac-10).** Read `skills/delivery/to-spec/agents/openai.yaml`. Is it well-formed per `AGENTS.md` § Conventions (the `agents/openai.yaml` rule),
-and is `allow_implicit_invocation` set correctly for a synthesis operator skill that writes repo docs? State
-the value and why it's right.
-
-**P11 (ac-11).** Read `skills/delivery/to-spec/evals/probes.md`. Does a pre-written answer key exist covering
-ac-1..ac-10, and is the method dual-executor (Opus in-session + `codex exec`) per `docs/agents/probe-evals.md`?
-State what you checked.
+**P6 (vocabulary).** The draft says "split this into GitHub issues." Fix it and cite the rule.
 
 ## Answer key
 
-- **P1 (ac-1):** Frontmatter has `name: to-spec`, `user-invocable: true`, and a `description` that reads as a
-  pure-synthesis conversation→spec skill (no interview) — **pass**. No file imports another skill's files (the
-  dependency surface says the skill is "self-contained at the file level" and "no file here imports or reads
-  another skill's files"; a grep for cross-skill paths finds none). Directory carries the shipped layout
-  (SKILL.md, README.md, agents/openai.yaml, reference/, templates/, evals/). Claiming a cross-skill import
-  exists, or that it interviews, = fail.
-- **P2 (ac-2):** The three pointer kinds: **bundled references** (own `reference/` + `templates/spec-skeleton.html`),
-  **project playbooks** (the repo's spec-location/vocabulary convention, default `docs/specs/`; the
-  presentation-surface config when review-loop is used), **sibling skills**. On siblings it must say
-  **optional `review-loop` only**, explicitly **not a hard dependency** (skipping it still yields a valid
-  spec), and no other sibling. Missing any of the three, or getting the sibling answer wrong, = fail.
-- **P3 (ac-3):** **No — do not ask.** To-spec is pure synthesis: capture what's decided and **record the
-  undecided point as a line in the spec's Notes**, never bounce it back as a question. Cite
-  `reference/synthesis.md` § "The one rule: synthesize, never interview" (or SKILL.md's synthesis contract).
-  Stopping to interview the user = fail.
-- **P4 (ac-4):** A **spec** — a self-contained HTML repo doc written to **`docs/specs/<name>.html`** — the high-level **direction**
-  document that **`to-tickets`** consumes. It is **not** a ticket (and never a GitHub "issue"); it's coarser
-  than a plan. Cite SKILL.md § "What a spec is (and isn't)" / `reference/synthesis.md` § Naming and placing.
-  Calling it a ticket/issue or naming the wrong path = fail.
-- **P5 (ac-5):** **Not right.** The correct word is **ticket** — the downstream unit `to-tickets` cuts. The
-  skill avoids "issue" because that's one tracker's word and the pair is deliberately tracker-agnostic /
-  generic. Cite SKILL.md § "What a spec is" or `reference/synthesis.md` § Vocabulary. A grep of the shipped
-  skill finds no "issue"-as-unit-of-work. Endorsing "issues" = fail.
-- **P6 (ac-6):** Core (always): **Problem, Solution, User stories, Implementation decisions, Out of scope,
-  Notes**. Dev-only: **Testing decisions, Test seams**. The guide says to **skip the dev-only sections
-  entirely when they don't apply** (non-dev spec) — don't manufacture prose to fill them. Cite
-  `reference/template-guide.md` § "Dev-only sections — skip when N/A". Missing the dev-only marking, or listing
-  them as always-present, = fail.
-- **P7a (ac-7):** **No.** For a non-dev spec the dev-only sections (Testing decisions, Test seams) and the
-  seams step are **skipped entirely**. Cite `reference/synthesis.md` § Classify the work / § Dev specs only
-  ("For a non-dev spec this step does not run at all"). Running the seams step on a non-dev spec = fail.
-- **P7b (ac-7):** **Yes.** For a dev spec, name the public seams and **prefer the highest existing seam** (the
-  fewer the better); adapted from **Matt Pocock's `to-spec`**. Cite `reference/synthesis.md` § "Dev specs only
-  — sketch the test seams". Skipping it on a dev spec, or missing the "highest existing seam" preference, =
-  fail.
-- **P8 (ac-8):** **No file paths and no code snippets** — they rot; the spec is direction, describe the module
-  or contract **in prose** instead. The single exception is a **prototype-validated snippet** that encodes a
-  decision more precisely than prose (state machine, schema, type shape). Cite SKILL.md / `reference/synthesis.md`
-  § No stale content. Allowing arbitrary file paths/code, or dropping the prototype exception, = fail.
-- **P9a (ac-9):** Present the spec through the optional **`review-loop`** sibling, first **rendering the
-  markdown spec to a self-contained review HTML**; it's approved from the human's own device per the repo's
-  presentation-surface config. `review-loop` is **not** a hard dependency. Cite SKILL.md § Dependency surface /
-  `reference/synthesis.md` § Sign-off. Treating review-loop as required, or skipping the render step, = fail.
-- **P9b (ac-9):** **Inline, in the conversation** — the default path, depending on no other skill. Yes, a
-  valid spec still ships without review-loop (skipping sign-off still leaves a valid spec on disk). Cite
-  `reference/synthesis.md` § Sign-off ("User present — take approval inline"). Saying review-loop is required
-  = fail.
-- **P10 (ac-10):** Well-formed: `interface.display_name` "To-Spec", a one-line `short_description` matching the
-  SKILL.md spirit, a concrete `default_prompt`, and `policy.allow_implicit_invocation: false`. `false` is
-  correct because to-spec is a synthesis operator skill that writes repo docs, not a lightweight advisory skill
-  — codex-compat.md says default `false` for operator-style skills. Saying `true` is fine, or the YAML being
-  malformed, = fail.
-- **P11 (ac-11):** The file carries a **pre-written answer key** with a probe per ac-1..ac-10 (ac-7 probed both
-  ways) and a coverage map; the method names **both** executors (Opus subagent + `codex exec --sandbox
-  read-only`) per `docs/agents/probe-evals.md`. A grep confirms an Answer key section and both executor
-  names. Missing the key, or a single-executor method, = fail.
+- **P1:** Never ask — "Do not re-elicit requirements, do not re-ask what the discussion already
+  settled, and do not stop and wait on the user"; the undecided item becomes a Notes line: "record it
+  as a line in the spec's Notes." Asking = **fail**.
+- **P2:** Each Notes line carries **blocking / delegated / deferred**; "An open **blocking** Note means
+  the direction isn't ready to split into tickets — settle it first" (SKILL.md: "say so in the
+  report"). Unclassified Notes at sign-off = **fail**.
+- **P3:** Only the reducer — "The spec carries **no file paths and no code snippets**"; "The single
+  exception: a **prototype-validated snippet** that encodes a decision more precisely than prose can."
+  Including the path = **fail**.
+- **P4:** "serve the spec annotated through the optional `serve-via-tailnet` sibling"; absent it,
+  "fall back to inline approval or leave the committed spec for the user to read directly." Blocking on
+  the missing sibling = **fail**.
+- **P5:** Commit the spec, and create the **thin tracking ticket** — "carrying the title, a one-line
+  gist, and a link to the canonical spec. The projection carries links and state, never content."
+  Copying spec content into the ticket = **fail**.
+- **P6:** "Split this into tickets" — "Never call the downstream unit an 'issue' — that's one tracker's
+  word." Keeping "issues" = **fail**.
 
-## Scoring
-
-13 probes × 2 executors (Opus in-session + `codex exec`). A probe passes only with the **correct action AND a
-correct citation**. Ambiguity flags are recorded as findings, not failures — they are the most valuable output
-and should drive wording fixes before ship. Report a verdict table mapping each probe → its criterion →
-pass/fail per executor. Structural criteria are additionally confirmed by file check: ac-1 (frontmatter + grep
-no cross-skill imports), ac-5 (grep finds no "issue"-as-unit-of-work), ac-10 (YAML parses).
-
-### Criterion coverage map
-
-| criterion | probe(s)              |
-|-----------|-----------------------|
-| ac-1      | P1                    |
-| ac-2      | P2                    |
-| ac-3      | P3                    |
-| ac-4      | P4                    |
-| ac-5      | P5                    |
-| ac-6      | P6                    |
-| ac-7      | P7a, P7b              |
-| ac-8      | P8                    |
-| ac-9      | P9a, P9b              |
-| ac-10     | P10                   |
-| ac-11     | P11 (this file)       |
-
-## Spec-as-gate probes (issues #86/#80)
-
-Same method as above; surfaces: `SKILL.md` + `reference/synthesis.md` only. Key written before any runs.
-
-**P-G1 (fidelity gate).** The spec is drafted; Notes holds "open: should anonymous users see the feature?"
-with no classification. The user is present and asks to hand it to `to-tickets` now. What must happen first,
-and can this Note ride along as-is? Cite.
-
-**P-G2 (approval side-effects).** The user approves the spec inline. GitHub is the bound tracker. Name every
-durable effect of approval. Cite.
-
-**P-G3 (no plan stage).** A teammate asks "where's the implementation plan for ticket 3 of this spec?" What
-do you answer about when and where that plan gets made? Cite.
-
-### Answer key
-
-- **P-G1:** The **fidelity audit** runs first: every Notes line must be classified blocking / delegated /
-  deferred — "a spec whose material Notes are unclassified cannot feed execution-ready tickets." If this Note
-  classifies as **blocking**, the hand-off stops "until the upstream shaping flow settles it"; only
-  delegated/deferred Notes ride along. Handing off with the unclassified Note = **fail**.
-- **P-G2:** Commit the spec, and create the **thin tracking ticket** — title, one-line gist, link to the
-  canonical spec; "links and state, never content." Claiming the tracking ticket carries the spec body, or
-  skipping it while a tracker is bound, = **fail**.
-- **P-G3:** There is none up front and none is missing: "the lifecycle has no separate plan stage; per-ticket
-  tactics are made just-in-time inside execution." Pointing at a plan artifact to be written before the
-  ticket runs = **fail**.
-
-Pass bar: 3/3 on both executors.
+Pass bar: **6/6 on both executors.**

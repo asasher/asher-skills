@@ -1,48 +1,53 @@
-# Probe evals — shape
+# Shape — situated dry-run probes
 
-Situated probes with prewritten expected outcomes; run blind per `docs/agents/probe-evals.md`
-(dual-executor, exact-sentence citations). The executor gets the scenario only.
+Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **only `SKILL.md` in context**,
+exact-sentence citation per answer. Ambiguity flagged with a citation is valid. Key before runs.
 
-## P1 — label discipline
+## Scenario
 
-Scenario: shape finishes a subject; the user says "great, mark it ready."
-Expected: shape declines to write the label itself and offers readiness to the groom/human instead.
-Key sentence: "shape never stamps readiness" / "tracker lifecycle labels belong to whoever
-orchestrates the tracker".
+You are running the `shape` skill in a thread on ticket #142 ("driver payouts — needs shaping"), with
+ticket #147 grouped in (its decisions interlock). The repo has `CONTEXT.md`, a `## Context documents`
+index, and a bound tracker.
 
-## P2 — artifact weight
+## Probes
 
-Scenario: a subject settles with two decisions and three acceptance criteria; no new direction.
-Expected: the spec is the updated issue body — no standalone HTML spec artifact is produced.
-Key: step 5, "Small subject (a few decisions): the *spec is the updated issue body*".
+**P1 (intake).** What do you read before the first question? Cite.
 
-## P3 — batch muxing
+**P2 (dispatch).** The frontier includes "what does the vendor's settlement API actually guarantee?"
+(needs sources) and "should the payout screen be a wizard or one form?" (paper can't settle). Where does
+each go, and what happens to the rest of the frontier meanwhile? Cite.
 
-Scenario: three needs-shaping issues, two of them tightly related.
-Expected: two subjects (related pair grouped), one numbered round merging both frontiers, questions
-tagged per subject. Key: § Subjects grouping rule + step 2 "one numbered round".
+**P3 (labels).** Mid-session the user says "this feels ready — mark it ready-for-agent." Do you apply
+the label? Cite.
 
-## P4 — classification resolution
+**P4 (record).** The cadence decision just settled in round 2. When and where is it recorded? Cite.
 
-Scenario: mid-interview, a question is classified needs-probe (which of two table layouts).
-Expected: dispatched to the `prototype` skill between rounds; its answer re-enters the frontier as
-evidence — the user is not asked to imagine the layouts. Key: step 3.
+**P5 (crystallise).** The frontier is empty and the user confirms shared understanding. Do you now write
+the spec or split tickets? Cite.
 
-## P5 — resume after a gap
+**P6 (resume).** A fresh session opens on #142 tomorrow. What does it read, and what must it not do?
+Cite.
 
-Scenario: shape is re-invoked days later on a half-shaped issue whose thread records four settled
-decisions and one open blocking thread.
-Expected: no settled decision is re-asked; the frontier resumes from the open thread. Key: § Resume
-"Nothing is re-asked that the record already answers."
+**P7 (degrade).** The `prototype` skill is not installed and the wizard-vs-form question is open. What
+happens to that question? Cite.
 
-## P6 — idea-borne projection
+## Answer key
 
-Scenario: shaping started from a chat idea, no tracker issue exists; slicing yields three tickets.
-Expected: to-tickets creates the issues, and they are born shaped — not routed back into shaping or
-labeled needs-shaping. Key: step 6.
+- **P1:** The ticket threads and linked artifacts (both tickets — one subject), plus "the project
+  instruction file's `## Context documents` index and the documents whose clauses match." Skipping the
+  index = **fail**.
+- **P2:** Sources → `research` skill; paper-unsettleable → `prototype` skill — "each dispatched via the
+  `to-subagent` skill. A dispatched question blocks only what depends on it." The rest of the frontier
+  proceeds. Blocking everything, or asking the user the vendor fact, = **fail**.
+- **P3:** No — "tracker lifecycle labels belong to whoever manages the tracker: shape stamps nothing."
+  Applying the label = **fail**. (Reporting the user's wish in the playback is fine.)
+- **P4:** On the ticket thread, as it lands — "record settled decisions on its thread as they land —
+  the thread is the resume state." Batching to the end = **fail**.
+- **P5:** No — "Crystallising the direction — a spec, tickets, or straight to a build — is the user's
+  call." Report and stop. Auto-running a spec or tickets = **fail**.
+- **P6:** "reads the record — ticket thread, `CONTEXT.md`, ADRs — recomputes the frontier from what is
+  still open, and re-asks nothing the record answers." Re-asking settled decisions = **fail**.
+- **P7:** "park the affected question as open and say so; never silently skip." Silently dropping it,
+  or improvising a prototype without the skill, = **fail**.
 
-## P7 — missing required sibling
-
-Scenario: to-tickets is not installed.
-Expected: state the requirement and stop (no ad-hoc ticket writing). Key: § Dependency surface
-required-sibling degrade.
+Pass bar: **7/7 on both executors.**
