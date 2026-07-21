@@ -40,7 +40,7 @@ every gate lives there.
 - **Bundled:** the three references, the catalog/provider compiler (`scripts/catalog.py`), mount
   publisher/auditor, and this skill's templates.
 - **Project/global artifacts:** map, repo pointer, consented setup-owned presentation pointer/module, and the
-  ephemeral four-module reconciliation barrier.
+  per-owner global apply (module + pointer section, read-back verified).
 - **Sibling:** required `staffing` for machine audit/routing after bootstrap; selected skills are install
   targets, not imports.
 - **External:** none. External requirements in a selected skill's compiled closure are install targets, not

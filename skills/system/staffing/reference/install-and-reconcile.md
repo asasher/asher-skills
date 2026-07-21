@@ -29,16 +29,16 @@ installed package. Directory presence is evidence, not authority: setup confirms
 
 ## Module-first owner reconciliation
 
-Staffing owns only its pointer, module, and roster; never presentation policy. Setup starts a fresh barrier,
-then both owners atomically stage and read back all four Codex/Claude modules. No pointer applies until all
-four verify. Setup preflights both globals and applies both Presentation sections; staffing refuses to apply
-until those match, then applies both Staffing sections without changing other bytes. Setup verifies all four
-final sections and removes the barrier. Never use an eager import.
+Staffing owns only its pointer, module, and roster; never presentation policy. Each owner applies its own
+module and pointer section independently through its `render-global.py apply`: the audited module is written
+atomically and read back, then the owner's `## Staffing` (or `## Presentation`) section is reconciled into
+the global file with every foreign byte preserved. Module-first: the deferred module lands before the pointer
+that names it, within the same apply. Never use an eager import.
 
-A module/preflight failure changes neither global. Missing, unreadable, or changed staffing modules fail
-closed: report the gap and do not dispatch. Do not rewrite unchanged modules. A second successful reconcile
-leaves durable module, global, delta, and lock bytes unchanged. Migration is proposed, never automatic;
-retain recovery bytes until the new policy passes its probes.
+An apply failure changes nothing: the read-back check fails closed. Missing, unreadable, or changed staffing
+modules fail closed: report the gap and do not dispatch. Do not rewrite unchanged modules. A second
+successful reconcile leaves durable module, global, delta, and lock bytes unchanged. Migration is proposed,
+never automatic; retain recovery bytes until the new policy passes its probes.
 
 ## Reconciliation has no version stamp
 

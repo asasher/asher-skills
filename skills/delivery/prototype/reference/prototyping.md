@@ -14,7 +14,7 @@ The question decides the shape:
 
 - **"Does this logic / model / flow feel right?"** → the **behavior shape**: something you push through the
   cases that are hard to reason about on paper, one action at a time, watching what the model does.
-- **"What should this look like / how should this be structured?"** → the **form shape**: several radically
+- **"What should this look like / how should this be structured?"** → the **variants shape**: several radically
   different variations of one surface, flipped between so a human can react to real alternatives.
 
 If the question is ambiguous, default to whichever matches the surrounding work (a state machine or backend
@@ -78,7 +78,7 @@ mock or seam that bypasses the claimed runtime path is not evidence.
 
 ## Present the answer for feedback — compose `review-loop`
 
-A form-shape prototype, and any behavior-shape prototype whose answer is a document a human should mark up,
+A variants-shape prototype, and any behavior-shape prototype whose answer is a document a human should mark up,
 is presented through the **`review-loop`** skill (by name — do not fork a review UI): serve the rendered
 artifact / variant sheet, and end the pause with its URL and the hub URL. A live interactive prototype (a
 terminal behavior app, a running page) is driven directly, but its URL is still announced on the presentation
@@ -94,7 +94,7 @@ with taste weight (a UI variant, a rendered document) to a taste-ranked model.
 ## Capture and cleanup
 
 - **Capture the answer** — which option won and why — into the consuming plan when planning invoked this;
-  standalone, into the issue or a commit message the playbook names. For form-shape prototypes, capture each
+  standalone, into the issue or a commit message the playbook names. For variants-shape prototypes, capture each
   variant (a screenshot of a UI, the rendered sheet of a document) and embed them with the winner marked.
   The prototype itself is never the record.
 - **Then delete.** Losing variants and the switcher go; a winning variant is rebuilt properly (it was written

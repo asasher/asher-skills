@@ -26,6 +26,14 @@ Styling-only verification captures may be reused only when their HEAD is the fin
 Reviewer records **“no product-code change; no recapture”**; product-code, fixture, environment, or HEAD drift
 forces fresh final-HEAD evidence.
 
+## Obligation scales with absence
+
+- **Unattended (AFK) run** — nobody watched, so the PR owes the full package above: every artifact at the
+  final reviewed HEAD, each mapped to the acceptance criterion it proves.
+- **Interactive work the human witnessed live** — the obligation may degrade to the PR body's verification
+  grades (each criterion marked with its grade); note that the human observed the behavior directly. Capture
+  full artifacts anyway when the change is risky or the reviewer isn't the person who watched.
+
 ## Format and storage
 
 - Static states: PNG or JPEG screenshots.

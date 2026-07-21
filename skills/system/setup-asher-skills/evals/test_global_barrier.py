@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cross-owner barrier and whole-tree staffing-variant integration checks."""
+"""Per-owner global apply and whole-tree staffing-variant integration checks."""
 
 from __future__ import annotations
 
@@ -36,42 +36,12 @@ def materialize(provider: str, output: Path) -> Path:
     return output
 
 
-def stage_all(root: Path, compiled: dict[str, Path], barrier: Path) -> None:
-    run(PRESENTATION, "begin", "--barrier", barrier)
-    for provider in ("codex", "claude"):
-        run(
-            PRESENTATION, "stage", "--provider", provider,
-            "--module", root / "modules" / "presentation" / provider / "module.md",
-            "--barrier", barrier,
-        )
-        run(
-            compiled[provider] / "scripts" / "render-global.py", "stage",
-            "--module", root / "modules" / "staffing" / provider / "module.md",
-            "--barrier", barrier,
-        )
+def apply_owner(script: Path, module: Path, global_file: Path, *extra: object, **kw):
+    return run(script, "apply", "--module", module, "--global-file", global_file, *extra, **kw)
 
 
-def preflight_all(globals_: dict[str, Path], barrier: Path) -> None:
-    for provider in ("codex", "claude"):
-        run(
-            PRESENTATION, "preflight", "--provider", provider,
-            "--global-file", globals_[provider], "--barrier", barrier,
-        )
-
-
-def apply_all(compiled: dict[str, Path], globals_: dict[str, Path], barrier: Path) -> None:
-    preflight_all(globals_, barrier)
-    for provider in ("codex", "claude"):
-        run(
-            PRESENTATION, "apply", "--provider", provider,
-            "--global-file", globals_[provider], "--barrier", barrier,
-        )
-    for provider in ("codex", "claude"):
-        run(
-            compiled[provider] / "scripts" / "render-global.py", "apply",
-            "--global-file", globals_[provider], "--barrier", barrier,
-        )
-    run(PRESENTATION, "finalize", "--barrier", barrier)
+def apply_presentation(provider: str, module: Path, global_file: Path, *extra: object, **kw):
+    return apply_owner(PRESENTATION, module, global_file, "--provider", provider, *extra, **kw)
 
 
 def section(data: bytes, heading: str) -> bytes:
@@ -84,7 +54,7 @@ def section(data: bytes, heading: str) -> bytes:
     return text[match.start():end].encode()
 
 
-class GlobalBarrierTests(unittest.TestCase):
+class GlobalApplyTests(unittest.TestCase):
     def test_materialized_provider_tree_has_only_its_runtime_overlay(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
@@ -132,14 +102,13 @@ class GlobalBarrierTests(unittest.TestCase):
                     )
                     self.assertLessEqual(loaded, BASELINE_BYTES * 0.8)
 
-    def test_all_four_modules_precede_cross_owner_pointer_application(self) -> None:
+    def test_apply_preserves_foreign_sections_and_is_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
             compiled = {
                 provider: materialize(provider, root / f"staffing-{provider}")
                 for provider in ("codex", "claude")
             }
-            barrier = root / "barrier.json"
             globals_ = {
                 provider: root / f"{provider}-global.md" for provider in ("codex", "claude")
             }
@@ -151,78 +120,62 @@ class GlobalBarrierTests(unittest.TestCase):
                     f"## Presentation\nold-presentation-{provider}\n\n"
                     f"## Tail\nkeep-tail-{provider}\n"
                 )
-            original = {provider: path.read_bytes() for provider, path in globals_.items()}
-            modules = {
-                (owner, provider): root / "modules" / owner / provider / "module.md"
-                for owner in ("presentation", "staffing") for provider in ("codex", "claude")
-            }
 
-            # A prior completed transaction must not satisfy a later partial one.
-            stage_all(root, compiled, barrier)
-            run(PRESENTATION, "begin", "--barrier", barrier)
-            for provider in ("codex", "claude"):
-                run(
-                    PRESENTATION, "stage", "--provider", provider,
-                    "--module", modules[("presentation", provider)], "--barrier", barrier,
-                )
-            run(
-                compiled["codex"] / "scripts" / "render-global.py", "stage",
-                "--module", modules[("staffing", "codex")], "--barrier", barrier,
-            )
+            # Injected failure before any write leaves the global untouched.
             env = dict(os.environ)
             env["ASHER_SKILLS_FAIL_MODULE"] = "staffing:claude"
-            failed = run(
-                compiled["claude"] / "scripts" / "render-global.py", "stage",
-                "--module", modules[("staffing", "claude")], "--barrier", barrier,
-                ok=False, env=env,
+            before = globals_["claude"].read_bytes()
+            failed = apply_owner(
+                compiled["claude"] / "scripts" / "render-global.py",
+                root / "modules" / "staffing" / "claude" / "module.md",
+                globals_["claude"], ok=False, env=env,
             )
-            self.assertIn("injected module staging failure", failed.stderr)
-            denied = run(
-                PRESENTATION, "apply", "--provider", "codex",
-                "--global-file", globals_["codex"], "--barrier", barrier, ok=False,
-            )
-            self.assertIn("all four deferred modules", denied.stderr)
+            self.assertIn("injected module apply failure", failed.stderr)
+            self.assertEqual(globals_["claude"].read_bytes(), before)
+
+            for provider in ("codex", "claude"):
+                old_user = section(globals_[provider].read_bytes(), "User")
+                old_staffing = section(globals_[provider].read_bytes(), "Staffing")
+                apply_presentation(
+                    provider, root / "modules" / "presentation" / provider / "module.md",
+                    globals_[provider],
+                )
+                data = globals_[provider].read_bytes()
+                self.assertEqual(section(data, "User"), old_user)
+                self.assertEqual(section(data, "Staffing"), old_staffing)
+                self.assertEqual(section(data, "Tail"), f"## Tail\nkeep-tail-{provider}\n".encode())
+
+                presentation = section(globals_[provider].read_bytes(), "Presentation")
+                apply_owner(
+                    compiled[provider] / "scripts" / "render-global.py",
+                    root / "modules" / "staffing" / provider / "module.md",
+                    globals_[provider],
+                )
+                data = globals_[provider].read_bytes()
+                self.assertEqual(section(data, "Presentation"), presentation)
+                self.assertEqual(section(data, "User"), old_user)
+
+            # Idempotent rerun: bytes and module inodes stable.
+            first = {provider: path.read_bytes() for provider, path in globals_.items()}
+            module_inodes = {
+                path: path.stat().st_ino for path in (root / "modules").rglob("module.md")
+            }
+            for provider in ("codex", "claude"):
+                apply_presentation(
+                    provider, root / "modules" / "presentation" / provider / "module.md",
+                    globals_[provider],
+                )
+                apply_owner(
+                    compiled[provider] / "scripts" / "render-global.py",
+                    root / "modules" / "staffing" / provider / "module.md",
+                    globals_[provider],
+                )
             self.assertEqual(
-                {provider: path.read_bytes() for provider, path in globals_.items()}, original
+                {provider: path.read_bytes() for provider, path in globals_.items()}, first
             )
-
-            run(
-                compiled["claude"] / "scripts" / "render-global.py", "stage",
-                "--module", modules[("staffing", "claude")], "--barrier", barrier,
+            self.assertEqual(
+                {path: path.stat().st_ino for path in module_inodes}, module_inodes
             )
-            preflight_all(globals_, barrier)
-            old_staffing = {
-                provider: section(path.read_bytes(), "Staffing")
-                for provider, path in globals_.items()
-            }
-            old_user = {
-                provider: section(path.read_bytes(), "User")
-                for provider, path in globals_.items()
-            }
-            for provider in ("codex", "claude"):
-                run(
-                    PRESENTATION, "apply", "--provider", provider,
-                    "--global-file", globals_[provider], "--barrier", barrier,
-                )
-                self.assertEqual(section(globals_[provider].read_bytes(), "Staffing"), old_staffing[provider])
-                self.assertEqual(section(globals_[provider].read_bytes(), "User"), old_user[provider])
-
-            presentation = {
-                provider: section(path.read_bytes(), "Presentation")
-                for provider, path in globals_.items()
-            }
-            for provider in ("codex", "claude"):
-                run(
-                    compiled[provider] / "scripts" / "render-global.py", "apply",
-                    "--global-file", globals_[provider], "--barrier", barrier,
-                )
-                self.assertEqual(
-                    section(globals_[provider].read_bytes(), "Presentation"), presentation[provider]
-                )
-                self.assertEqual(section(globals_[provider].read_bytes(), "User"), old_user[provider])
-
-            run(PRESENTATION, "finalize", "--barrier", barrier)
-            self.assertFalse(barrier.exists())
 
     def test_legacy_seeded_conventions_migrate_to_exact_compact_globals(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
@@ -231,7 +184,6 @@ class GlobalBarrierTests(unittest.TestCase):
                 provider: materialize(provider, root / f"staffing-{provider}")
                 for provider in ("codex", "claude")
             }
-            barrier = root / "barrier.json"
             globals_ = {
                 provider: root / f"{provider}-global.md" for provider in ("codex", "claude")
             }
@@ -244,15 +196,15 @@ class GlobalBarrierTests(unittest.TestCase):
                     "## Conventions\n\n### Presenting HTML to the human\nlegacy presentation\n\n"
                     "## Staffing\nlegacy staffing\n"
                 )
-
-            stage_all(root, compiled, barrier)
-            apply_all(compiled, globals_, barrier)
-            first = {provider: path.read_bytes() for provider, path in globals_.items()}
-            module_inodes = {
-                path: path.stat().st_ino
-                for path in (root / "modules").rglob("module.md")
-            }
-            self.assertFalse(barrier.exists())
+                apply_presentation(
+                    provider, root / "modules" / "presentation" / provider / "module.md",
+                    global_file,
+                )
+                apply_owner(
+                    compiled[provider] / "scripts" / "render-global.py",
+                    root / "modules" / "staffing" / provider / "module.md",
+                    global_file,
+                )
 
             for provider, global_file in globals_.items():
                 with self.subTest(provider=provider):
@@ -267,16 +219,6 @@ class GlobalBarrierTests(unittest.TestCase):
                     self.assertEqual(global_file.read_text(), expected)
                     self.assertNotIn("## Conventions", global_file.read_text())
 
-            stage_all(root, compiled, barrier)
-            apply_all(compiled, globals_, barrier)
-            self.assertEqual(
-                {provider: path.read_bytes() for provider, path in globals_.items()}, first
-            )
-            self.assertEqual(
-                {path: path.stat().st_ino for path in module_inodes}, module_inodes
-            )
-            self.assertFalse(barrier.exists())
-
     def test_unowned_conventions_refuse_migration_and_empty_order_is_stable(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
@@ -284,57 +226,53 @@ class GlobalBarrierTests(unittest.TestCase):
                 provider: materialize(provider, root / f"staffing-{provider}")
                 for provider in ("codex", "claude")
             }
-            barrier = root / "barrier.json"
-            stage_all(root, compiled, barrier)
-
-            globals_ = {
-                "codex": root / "unowned.md",
-                "claude": root / "claude.md",
-            }
-            globals_["codex"].write_text("# Personal rules\n\n## Conventions\nkeep me\n")
-            globals_["claude"].write_text("# Global CLAUDE.md\n")
-            before = globals_["codex"].read_bytes()
-            staffing_denied = run(
-                compiled["codex"] / "scripts" / "render-global.py", "apply",
-                "--global-file", globals_["codex"], "--barrier", barrier, ok=False,
-            )
-            self.assertIn("Presentation preflight", staffing_denied.stderr)
-            denied = run(
-                PRESENTATION, "preflight", "--provider", "codex",
-                "--global-file", globals_["codex"], "--barrier", barrier, ok=False,
+            unowned = root / "unowned.md"
+            unowned.write_text("# Personal rules\n\n## Conventions\nkeep me\n")
+            before = unowned.read_bytes()
+            denied = apply_presentation(
+                "codex", root / "modules" / "presentation" / "codex" / "module.md",
+                unowned, ok=False,
             )
             self.assertIn("unrecognized ## Conventions owner", denied.stderr)
-            self.assertEqual(globals_["codex"].read_bytes(), before)
+            self.assertEqual(unowned.read_bytes(), before)
 
-            empty_globals = {
-                "codex": root / "empty-codex.md",
-                "claude": root / "empty-claude.md",
-            }
-            stage_all(root, compiled, barrier)
-            preflight_all(empty_globals, barrier)
-            empty_before = {provider: path.read_bytes() if path.exists() else b"" for provider, path in empty_globals.items()}
-            denied = run(
-                compiled["codex"] / "scripts" / "render-global.py", "apply",
-                "--global-file", empty_globals["codex"], "--barrier", barrier, ok=False,
+            # Empty file: whichever owner applies first, Presentation lands before Staffing.
+            empty = root / "empty-codex.md"
+            apply_owner(
+                compiled["codex"] / "scripts" / "render-global.py",
+                root / "modules" / "staffing" / "codex" / "module.md", empty,
             )
-            self.assertIn("Presentation must apply before Staffing", denied.stderr)
-            self.assertEqual(
-                {provider: path.read_bytes() if path.exists() else b"" for provider, path in empty_globals.items()},
-                empty_before,
+            apply_presentation(
+                "codex", root / "modules" / "presentation" / "codex" / "module.md", empty,
             )
-            for provider in ("codex", "claude"):
-                run(
-                    PRESENTATION, "apply", "--provider", provider,
-                    "--global-file", empty_globals[provider], "--barrier", barrier,
-                )
-            for provider in ("codex", "claude"):
-                run(
-                    compiled[provider] / "scripts" / "render-global.py", "apply",
-                    "--global-file", empty_globals[provider], "--barrier", barrier,
-                )
-            run(PRESENTATION, "finalize", "--barrier", barrier)
-            text = empty_globals["codex"].read_text()
+            text = empty.read_text()
             self.assertLess(text.index("## Presentation"), text.index("## Staffing"))
+
+    def test_audited_module_content_lands_byte_for_byte(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            seed_module = root / "seed.md"
+            seed_pointer = root / "pointer.md"
+            run(PRESENTATION, "render", "--provider", "claude",
+                "--module", seed_module, "--pointer", seed_pointer)
+            audited = root / "audited.md"
+            audited.write_bytes(
+                seed_module.read_bytes()
+                .replace(b"<owner>", b"Tester")
+                .replace(b"<tailnet-root>", b"https://example.test")
+            )
+            global_file = root / "global.md"
+            apply_presentation(
+                "claude", root / "module-dest.md", global_file, "--audited", audited,
+            )
+            self.assertEqual((root / "module-dest.md").read_bytes(), audited.read_bytes())
+            run(PRESENTATION, "check", "--provider", "claude",
+                "--module", root / "module-dest.md", "--pointer", seed_pointer,
+                "--audited", audited)
+            drift = run(PRESENTATION, "check", "--provider", "claude",
+                        "--module", root / "module-dest.md", "--pointer", seed_pointer,
+                        ok=False)
+            self.assertIn("mismatch: module", drift.stderr)
 
 
 if __name__ == "__main__":

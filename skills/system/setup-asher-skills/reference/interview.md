@@ -25,7 +25,7 @@ the single project question in (3).
    isn't reachable, state that the machine audit needs it rather than inventing a roster. Also check the
    harness's **global memory file** (`~/.claude/CLAUDE.md` or equivalent) for the current
    `## Presentation` section or setup's legacy seeded `## Conventions` block; phase 4 reconciles that owned
-   policy only after the cross-owner barrier passes.
+   policy in phase 4 step 6.
 3. **The user/project.** Ask **one** question: *what is this project for?* — a shipping web product, a
    research effort, an ops/infra repo, a greenfield pitch, a content project, a library. The answer keys the
    recommendation in [catalog](catalog.md); everything else in this phase is read silently.
@@ -189,7 +189,7 @@ Execute the approved plan:
    writes its own playbook suite. **setup-asher-skills never reads, copies, or interprets another skill's
    setup reference.** When both global Presentation and Staffing sections are consented, defer staffing's
    global module/pointer substep to step 6; the ordinary roster and project-delta setup may complete here,
-   but no global pointer may apply before the cross-owner barrier is ready.
+   but no global pointer may apply before step 6 runs the owner applies.
 
    Before each invocation, atomically record the owner and status in
    `.agents/setup-asher-skills/setup-state.json`; after success, record the owned writes. A failure stops every
@@ -209,26 +209,20 @@ Execute the approved plan:
    model obeying and costs a read every session.
 5. **Write the repo pointer.** From `templates/repo-pointer.md`, record that Asher-authored skills come from
    `https://github.com/asasher/asher-skills` and that updates/reconciliation run by re-invoking this skill.
-6. **Reconcile global owner policy (consent-gated, barriered).** For each confirmed harness, offer the
+6. **Reconcile global owner policy (consent-gated, per owner).** For each confirmed harness, offer the
    absolute pointer from `templates/global/presentation-pointer.<provider>.md` and the deferred module from
    `templates/global/presentation.common.md` — a seed whose `<owner>`/`<tailnet-root>` placeholders setup
-   fills from this machine's facts before staging; never stage the placeholders verbatim. Use
-   `scripts/render-global.py render`/`check` for previews and
-   `begin` to reset one fresh transaction barrier, then `stage` (with `--audited <filled-module>`) to
-   atomically write/read back both Presentation modules into it. Invoke the public
-   `staffing setup` owner so its two compiled provider renderers stage/read back both Staffing modules into
-   that same barrier. Apply no pointer until the barrier verifies all four current module paths and hashes;
-   any staging failure leaves both global files byte-for-byte untouched. Then run Presentation `preflight`
-   against both global files; either failure stops before any pointer write. After both pass, setup applies
-   `## Presentation` to both files first, staffing applies `## Staffing` to both second, and both preserve
-   user and sibling-owner bytes. Staffing refuses to apply until both Presentation sections match the
-   preflight. Finally setup runs `finalize`, verifies all four final pointer sections, and removes the
-   transaction barrier. Never use an eager import. If a module is
+   fills from this machine's facts; never install the placeholders verbatim. Use
+   `scripts/render-global.py render`/`check` for previews, then
+   `apply --audited <filled-module>` per harness: one command writes the deferred module atomically
+   (read-back verified) and reconciles the `## Presentation` pointer section into that global file,
+   preserving every user and sibling-owner byte. Invoke the public `staffing setup` owner to apply its own
+   module and `## Staffing` section the same way. Never use an eager import. If a module is
    unreadable, preserve local opening, block publish/dispatch as its pointer specifies, and do not change a
    global file. A legacy `## Conventions` block is replaced only when its seeded setup-asher-skills marker is
    present; an unowned block stops for review. The migration also replaces setup's legacy seeded header with
-   the compact native header. Staging does not rewrite an unchanged module; after finalize, a second full
-   reconcile leaves module/global bytes and inodes unchanged and again leaves no barrier. These
+   the compact native header. Apply does not rewrite an unchanged module; a second full
+   reconcile leaves module/global bytes and inodes unchanged. These
    home-directory writes require explicit consent; projects may override surface details or roster fields in
    `docs/agents/`.
 

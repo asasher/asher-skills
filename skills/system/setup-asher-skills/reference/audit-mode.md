@@ -88,7 +88,7 @@ the installed build product; those hashes prove provider bytes/provenance, not s
      writing the block, then continue the same one-fix-at-a-time audit discipline.
    - **Global owner drift** — setup audits only its Presentation pointer/module and leaves Staffing bytes
      untouched. A missing module blocks publishing but preserves local opening. Pointer migration is proposed
-     through the shared four-module barrier ([interview](interview.md) Phase 4 step 6).
+     through the per-owner global apply ([interview](interview.md) Phase 4 step 6).
    - **Cross-harness wrapper drift** — a sibling CLI invoked directly, an unbounded or interactive command, a
      wrapper that synthesizes/judges, a label missing external model/task, or absent wrapper-model evidence.
      If spawn cannot select or report the assigned native model, observability may pass but cheapest-floor
