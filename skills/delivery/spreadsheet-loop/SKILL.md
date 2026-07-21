@@ -5,7 +5,7 @@ disable-model-invocation: true
 metadata:
   invocation: user
   execution: orchestrator
-  requires: [review-loop, staffing]
+  requires: [serve-via-tailnet, staffing]
   optional: []
 ---
 
@@ -82,7 +82,7 @@ without re-deciding the look, and restyle the layout without touching the logic.
 ## Pipeline
 
 Run the phases in order. Each phase names the reference to load when you enter it. Phases 1 and 2 end in
-explicit human sign-off through the `review-loop` skill (see [sign-off](reference/sign-off.md)); do not build
+explicit human sign-off through the `serve-via-tailnet` skill (see [sign-off](reference/sign-off.md)); do not build
 past an unapproved gate — everything downstream is expensive to redo. Build-out is staffed through the
 `staffing` skill.
 
@@ -91,13 +91,13 @@ past an unapproved gate — everything downstream is expensive to redo. Build-ou
 A short interview, **one question at a time**: what workbook, for whom, greenfield or existing, the numbers
 and formulas that matter, the look, and the authoritative-file constraints. For an existing workbook, scan
 features before promising a round trip. Output: `SPEC.md` with a capability table and proposed lane.
-**Gate:** present `SPEC.md` for sign-off through `review-loop`; proceed only on an approving verdict.
+**Gate:** present `SPEC.md` for sign-off through `serve-via-tailnet`; proceed only on an approving verdict.
 
 ### 2. Model, layout & components — load [model-vs-layout](reference/model-vs-layout.md)
 
 Write `MODEL.md`, `LAYOUT.md`, and `COMPONENTS.md`. For lane 2, include the merge boundary and preserve-only
 features. **Gate:** render the documents as a self-contained HTML review artifact and present them through
-`review-loop`; proceed only on approval. Paper is cheap to change; a built workbook is not.
+`serve-via-tailnet`; proceed only on approval. Paper is cheap to change; a built workbook is not.
 
 ### 3. Scaffold — load [univer-surface](reference/univer-surface.md)
 
@@ -129,8 +129,8 @@ which.
 
 ## How it composes
 
-- **`review-loop`** presents `SPEC.md`, `MODEL.md`, `LAYOUT.md`, and `COMPONENTS.md` for sign-off — rendered to review HTML,
-  served with annotation chrome, gated on a batched verdict. The **live Univer surface** is not a review-loop
+- **`serve-via-tailnet`** presents `SPEC.md`, `MODEL.md`, `LAYOUT.md`, and `COMPONENTS.md` for sign-off — rendered to review HTML,
+  served with annotation chrome, gated on a batched verdict. The **live Univer surface** is not a serve-via-tailnet
   artifact; it is a live interactive surface, served on the presentation surface and driven directly (the
   same distinction the `prototype` skill draws between a rendered artifact and a live prototype). Invoked by
   name; this skill never forks a review UI.
@@ -152,7 +152,7 @@ which.
   the verify harness, and `SPEC.md`/`MODEL.md`/`LAYOUT.md`/`COMPONENTS.md` skeletons). They import no other
   skill's files.
 - **Project playbook** — the repo-specific **surface config** under `docs/agents/` (the tailnet root, the
-  publish/proxy commands) that `review-loop` and the live-surface serving read. Absent one, both degrade to
+  publish/proxy commands) that `serve-via-tailnet` and the live-surface serving read. Absent one, both degrade to
   a local open rather than improvising a tunnel.
-- **Sibling skills** — **`review-loop`** (sign-off) and **`staffing`** (build routing), composed by name, no
+- **Sibling skills** — **`serve-via-tailnet`** (sign-off) and **`staffing`** (build routing), composed by name, no
   imports. `spreadsheet-loop` is a composer: these two are load-bearing dependencies.

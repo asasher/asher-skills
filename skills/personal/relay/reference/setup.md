@@ -19,7 +19,7 @@ Setup studies the consumer repository, confirms its choices, and materializes on
    audience and interest manifests; a stale derivative stops selection.
 
 Evidence providers are project data. A binding may name a stable path, command, connector, or optional sibling
-skill. `review-loop` is the only required sibling. Do not make `manage-tasks`, `manage-opportunities`, a mailbox,
+skill. `serve-via-tailnet` is the only required sibling. Do not make `manage-tasks`, `manage-opportunities`, a mailbox,
 or any particular repository layout universal.
 
 ## Credentials and capability

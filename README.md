@@ -27,17 +27,9 @@ including one marked `user`.
 
 | Category | Skill | Invocation | Execution |
 |---|---|---|---|
-| system | `review-loop` | user | orchestrator |
-| system | `setup-asher-skills` | user | thread |
 | system | `skill-loop` | user | orchestrator |
 | system | `staffing` | model | thread |
-| delivery | `backlog` | user | orchestrator |
-| delivery | `diagnosing-bugs` | model | thread |
-| delivery | `merge-changes` | user | orchestrator |
-| delivery | `prototype` | model | orchestrator |
 | delivery | `spreadsheet-loop` | user | orchestrator |
-| delivery | `to-spec` | user | thread |
-| delivery | `to-tickets` | user | thread |
 | creative | `bare-minimum-ux` | model | thread |
 | creative | `codex-imagegen` | model | thread |
 | creative | `maquette` | model | thread |
@@ -46,12 +38,27 @@ including one marked `user`.
 | thinking | `bayes` | user | thread |
 | thinking | `constraints` | user | thread |
 | thinking | `dissolve` | user | orchestrator |
-| thinking | `domain-modeling` | model | orchestrator |
-| thinking | `interview` | model | orchestrator |
-| thinking | `shape` | model | orchestrator |
-| thinking | `research` | model | orchestrator |
-| software-development | `to-thread` | model | orchestrator |
+| software-development | `adversarial-review` | model | orchestrator |
+| software-development | `backlog` | user | orchestrator |
+| software-development | `build` | model | orchestrator |
+| software-development | `code-review` | model | orchestrator |
+| software-development | `diagnosing-bugs` | model | thread |
+| software-development | `domain-modeling` | model | orchestrator |
+| software-development | `handoff` | user | thread |
+| software-development | `implement` | model | thread |
+| software-development | `interview` | model | orchestrator |
+| software-development | `merge-changes` | user | orchestrator |
+| software-development | `prototype` | model | orchestrator |
+| software-development | `prove-your-work` | model | thread |
+| software-development | `research` | model | orchestrator |
+| software-development | `serve-via-tailnet` | model | orchestrator |
+| software-development | `shape` | model | orchestrator |
+| software-development | `tdd` | model | thread |
+| software-development | `to-spec` | user | thread |
 | software-development | `to-subagent` | model | orchestrator |
+| software-development | `to-thread` | model | orchestrator |
+| software-development | `to-tickets` | user | thread |
+| software-development | `verify-your-work` | model | thread |
 | software-development | `watch-until` | model | orchestrator |
 | personal | `capture-to-inbox` | model | thread |
 | personal | `control-plane` | user | orchestrator |
@@ -69,9 +76,7 @@ including one marked `user`.
 | personal | `until-zero` | model | thread |
 
 The install/setup graph is compiled on demand from each skill's frontmatter
-(`python3 skills/system/setup-asher-skills/scripts/catalog.py compile`);
-the separate runtime composition view is in
-[`reference/catalog.md`](skills/system/setup-asher-skills/reference/catalog.md#runtime-composition).
+(`python3 tools/catalog.py compile`).
 
 ## Skills I Like
 

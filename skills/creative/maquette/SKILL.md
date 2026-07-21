@@ -6,7 +6,7 @@ user-invocable: true
 metadata:
   invocation: model
   execution: thread
-  requires: [review-loop]
+  requires: [serve-via-tailnet]
   optional: []
 ---
 
@@ -43,13 +43,13 @@ in the handoff notes instead of silently dropping the other two.
   implementation needs. The handoff doc is generated from these.
 - **Demo-first prioritization.** The intake identifies the beats that close the deal; those get the fidelity
   budget. Everything else can be shallower — but still clickable.
-- **Human sign-off goes through `review-loop`.** Render the deliverable, serve it, await the verdict, and
+- **Human sign-off goes through `serve-via-tailnet`.** Render the deliverable, serve it, await the verdict, and
   ledger any revision; maquette carries no review server of its own. See [sign-off](references/sign-off.md).
 
 ## Pipeline
 
 Run the phases in order. Each phase names the reference to load — load it when you enter the phase, not
-before. Phases 1 and 3 end in explicit user sign-off gates through the `review-loop` skill; see
+before. Phases 1 and 3 end in explicit user sign-off gates through the `serve-via-tailnet` skill; see
 [sign-off](references/sign-off.md). Do not build past an unapproved gate, because everything downstream is
 expensive to redo.
 
@@ -58,7 +58,7 @@ expensive to redo.
 A back-and-forth interview, **one question at a time**, until you and the user reach shared understanding:
 what is being built, for whom, the deal context, the journeys, the look and feel, reference products, brand
 guidelines, the agent (MCP) surface, and the research mandate. The intake does the heavy lifting for the
-whole pipeline. Output: `BRIEF.md`. **Gate:** present `BRIEF.md` for sign-off through the `review-loop`
+whole pipeline. Output: `BRIEF.md`. **Gate:** present `BRIEF.md` for sign-off through the `serve-via-tailnet`
 skill (see [sign-off](references/sign-off.md)); proceed only on an approving verdict.
 
 ### 2. Research (per the mandate from intake)
@@ -83,7 +83,7 @@ From the brief, produce `JOURNEYS.md`:
   progressive disclosure, action/consequence co-location).
 - The demo beats: the 3-or-so scripted moments that close the deal, and which screens carry them.
 
-**Gate:** present `JOURNEYS.md` for sign-off through the `review-loop` skill (see
+**Gate:** present `JOURNEYS.md` for sign-off through the `serve-via-tailnet` skill (see
 [sign-off](references/sign-off.md)); proceed only on an approving verdict. A journey map is cheap to
 change; built screens are not.
 
@@ -121,6 +121,6 @@ the real product from the repo + that one file.
   acceptance criteria into user-facing copy ([ux-rules](references/ux-rules.md)).
 - Small scope is fine. A maquette can be four screens. Depth of believability beats breadth of surface.
 - If the user arrives mid-pipeline (has a brief, has journeys), enter at the matching phase — but confirm
-  the earlier gates' outputs exist and have review-loop approval events before building.
+  the earlier gates' outputs exist and have serve-via-tailnet approval events before building.
 - Keep `BRIEF.md`, `JOURNEYS.md`, and `HANDOFF.md` in the repo root of the prototype. They are deliverables,
   not scratch.

@@ -16,6 +16,8 @@ Skills Asher made or likes, kept in one repo so they can be installed elsewhere 
 - `site/` — the repo's documentation app (eventually skills.ashanjum.com): a static, framework-free viewer
   that renders skill sources live with dependency edges parsed from frontmatter. Maintained per
   `site/MAINTENANCE.md`; `site/check.py` gates manifest drift. Not part of any install.
+- `tools/` — repo plumbing: the skill-catalog compiler (`catalog.py` + tests) and the machine
+  global-module renderer under `tools/global-modules/`; not part of any install.
 - `.agents/skills/` — primary mounts for skills installed *into* this repo; `.claude/skills/` may hold alias
   mounts. Install provenance is tracked in `skills-lock.json`. See § Vocabulary.
 
@@ -51,7 +53,7 @@ Where a skill lives — three distinct places, three terms:
 How skills and instructions relate:
 
 - **Sibling skill** — another skill in this repo that a skill relies on by name (§ Conventions:
-  compose-by-name), e.g. `to-spec` presents through the `review-loop` sibling. A plain-language runtime
+  compose-by-name), e.g. `to-spec` presents through the `serve-via-tailnet` sibling. A plain-language runtime
   pointer resolved by the installed skill set — never a file import.
 - **External requirement** — a skill or Codex plugin relied on by a selected skill whose canonical source
   lives outside this repo and is declared in that skill source's `metadata.external`. It is not a sibling and
@@ -83,7 +85,7 @@ Durable documents carrying this repo's domain and direction — read the one who
 - **Skills are self-contained at the file level.** A skill's files live in its own directory — it never
   imports another skill's files or a shared library. Installing one skill copies one directory.
 - **Skills compose by name, not by file.** A skill may lean on a sibling skill by referring to it in plain
-  language ("present it via the `review-loop` skill") — a runtime pointer resolved by the installed skill
+  language ("present it via the `serve-via-tailnet` skill") — a runtime pointer resolved by the installed skill
   set, not a file dependency. Every skill declares its **dependency surface** as three kinds of pointer:
   *bundled references* (its own contract, shipped in-directory), *project playbooks* (repo-specific
   instructions installed under `docs/agents/`), *sibling skills* (other Asher-authored skills invoked by
@@ -91,7 +93,7 @@ Durable documents carrying this repo's domain and direction — read the one who
   provider after consent).
 - **Copy a technique; extract a primitive.** A small, local technique is reused by copying its canonical
   files from the skill that has them and noting the source in the copy's header (e.g. `Adapted from
-  skills/system/review-loop/scripts/review-server.py`) — improvements flow back to the canonical version
+  skills/software-development/serve-via-tailnet/scripts/review-server.py`) — improvements flow back to the canonical version
   deliberately, not automatically. A capability that several skills genuinely share — the review surface,
   model staffing — is instead extracted into its own skill and referenced by name, never forked into every
   caller.
@@ -99,9 +101,9 @@ Durable documents carrying this repo's domain and direction — read the one who
   text — never carries external attribution; each skill's `README.md` (plus `THIRD_PARTY_LICENSES.md` where
   the license requires it) is the single home for source credits. Internal `Adapted from skills/...` pointers
   in copied script headers (previous bullet) are provenance plumbing, not credits, and stay.
-- **Composers declare and degrade.** A skill that references siblings names them in its `SKILL.md`; the
-  `setup-asher-skills` installer guarantees a project has the siblings a skill needs. Absent a sibling, a
-  skill states the requirement rather than failing silently.
+- **Composers declare and degrade.** A skill that references siblings names them in its `SKILL.md`; an
+  install carries a skill's sibling closure. Absent a sibling, a skill states the requirement rather than
+  failing silently.
 - Scripts are stdlib-only Python 3.
 - Skills that must present well in Codex ship `agents/openai.yaml` (valid YAML naming the skill's
   interface, with `allow_implicit_invocation` set to match how the skill should trigger).
@@ -110,33 +112,50 @@ Durable documents carrying this repo's domain and direction — read the one who
 ## Agent skills
 
 These skills are installed for this project — self-hosted from this repo's categorized `skills/` sources,
-so `skills-lock.json` records a local source. Re-run `setup-asher-skills` (audit mode)
-to reconcile them against the repo.
+so `skills-lock.json` records a local source. The installed mounts predate the v2 family restructure;
+refresh with the atomic install command below.
 
 | Skill | What it does here | Scope |
 |-------|-------------------|-------|
-| backlog | Runs admitted issues through groom → build → review to a review-ready PR (merging is the explicit `merge-changes` workflow) | project |
-| diagnosing-bugs | Runs the reusable six-phase defect diagnosis discipline | project |
-| merge-changes | Merges explicitly authorized, review-ready changes after rechecking order and CI | project |
-| prototype | Answers one design question with a throwaway artifact — keep the answer, delete the artifact | project |
-| research | Establishes primary-source findings with traceable claims, contradictions, and unknowns | project |
-| review-loop | Serves a rendered artifact for human sign-off and blocks until the verdict | project |
-| staffing | Owns the model roster; each harness loads its deferred global module plus this repo's sparse deltas | project |
-| setup-asher-skills | The installer/auditor for this skill set — sets a project up, adds skills with their sibling closure, audits for drift | project |
+| backlog | Dispatcher: fans needs-shaping tickets into shaping threads, ready tickets into build threads | project |
+| shape | Settles one subject's strategic decisions in an interactive thread | project |
+| build | Runs one ticket to a review-ready change request | project |
+| adversarial-review | Converges a change request to LGTM via reviewer and fixer subagents | project |
+| code-review | Two-axis diff review — Standards (smell baseline) and Spec | project |
+| implement | Routes one ticket: defect → diagnosing-bugs, new behavior → tdd | project |
+| tdd | Red → green loop with pre-agreed seams and the anti-pattern list | project |
+| diagnosing-bugs | Six-phase defect diagnosis behind a red-capable feedback loop | project |
+| verify-your-work | Fresh-eyes verification of built changes — findings, never fixes | project |
+| prove-your-work | Evidence package posted on the change request | project |
+| merge-changes | Merges explicitly authorized changes; closes tickets, cleans worktrees and stacks | project |
+| to-spec | Synthesizes the conversation into a spec deliverable | project |
+| to-tickets | Splits a direction into tracer-bullet tickets with blocking edges | project |
+| interview | Frontier-round interview until shared understanding | project |
+| domain-modeling | CONTEXT.md glossary and ADRs, written as decisions land | project |
+| research | Primary-source dossiers with traceable claims | project |
+| prototype | Throwaway artifact answering one design question | project |
+| to-thread | Spawns named, attachable, harness-native background sessions | project |
+| to-subagent | Staffed non-interactive dispatch with a wake path | project |
+| watch-until | Watches a target until a condition holds, then relays | project |
+| serve-via-tailnet | Serves HTML artifacts on the tailnet, optionally annotated with verdicts | project |
+| handoff | Compacts the conversation into a handoff document | project |
+| staffing | Owns the model roster; each harness loads its global module plus this repo's deltas | project |
 | skill-loop | Iterates a skill through eval → revise cycles | project |
 | writing-great-skills | Authoring guidance for writing skills (from mattpocock/skills) | project |
 
-**How they fit together:** `backlog` requires `diagnosing-bugs`, `prototype`, `research`, `review-loop`,
-and `staffing` — enhancements arrive with strategic decisions settled upstream (groom's route judgment; the
-`needs-shaping` handback returns work that isn't), so the run loop holds no planning approval gate. `research` requires `staffing`; `prototype` requires `review-loop` and `staffing`; the shaping entry is
-`shape` (composing `interview`, `domain-modeling`, `to-spec`, `to-tickets`) feeding `to-spec`, whose review-loop gate
-replaced the retired `plan` stage. `merge-changes` remains a separate, explicit human authorization gate
-after Backlog produces a review-ready PR.
+**How they fit together:** `backlog` is a dispatcher. `backlog groom` fans `needs-shaping` tickets into
+interactive shaping threads via `to-thread`; each runs `shape` — composing `interview` and
+`domain-modeling`, dispatching `research` and `prototype` through `to-subagent` — and crystallising via
+`to-spec` / `to-tickets` is the user's call inside the thread. `backlog build` fans ready tickets into
+worktree-isolated build threads; each runs `build`: `implement` (defect → `diagnosing-bugs`, new behavior
+→ `tdd`) → `verify-your-work` (the thread fixes) → change request → `adversarial-review` (`code-review`
+plus `watch-until` convergence) → `prove-your-work`. `merge-changes` remains the explicit human
+authorization gate after a review-ready change request. `to-subagent` is the single staffing-aware
+dispatch route; `serve-via-tailnet` plus `watch-until` replaced the retired `review-loop`.
 
-**Source & updates:** installed from this repo itself. To add a skill, change scope, or check for drift,
-re-invoke `setup-asher-skills`; to refresh sources, install the complete desired local set in one atomic
-`npx skills add <path-to-this-repo> --skill <names...> -y` command—sequential single-skill adds can replace
-earlier selections. **Never `npx skills remove` here:** with the
+**Source & updates:** installed from this repo itself. To refresh sources, install the complete desired
+local set in one atomic `npx skills add <path-to-this-repo> --skill <names...> -y` command — sequential
+single-skill adds can replace earlier selections. **Never `npx skills remove` here:** with the
 lockfile's local source path it deletes the skill *source* under `skills/`, not just the installed copy —
 uninstall by hand instead (remove the `.agents/skills/<name>` dir, the `.claude/skills/<name>` symlink,
 and the lockfile entry).

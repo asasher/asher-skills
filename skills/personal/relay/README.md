@@ -1,7 +1,7 @@
 # Relay
 
 Builds attributable project updates and internal digests, binds their exact content and recipients to a
-`review-loop` verdict, then uses one deterministic AgentMail draft for direct delivery. Setup materializes
+`serve-via-tailnet` verdict, then uses one deterministic AgentMail draft for direct delivery. Setup materializes
 consumer-owned policy, bindings, templates, runs, and append-only lifecycle state only under `relay/` at the
 consumer repository root, with `docs/agents/relay.md` as the project playbook.
 

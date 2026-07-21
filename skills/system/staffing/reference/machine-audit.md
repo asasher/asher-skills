@@ -63,7 +63,7 @@ The following is **one machine's audit result**, shown so you know the shape to 
 | mechanical / bulk | gpt-5.6-sol  |
 
 # Floor: sonnet-5 (Claude-side) / gpt-5.6-terra (Codex-side). Watcher/cron duty runs at the Floor per
-# harness — a Floor assignment, not a pin (review-loop reads the Floor directly for its watcher).
+# harness — a Floor assignment, not a pin (watch-until's watcher runs at the Floor via to-subagent).
 
 # Wake paths — cheapest verified wake first; a model watcher only where nothing is tracked
 | harness | tracked wake (no model) | watcher fallback |

@@ -53,7 +53,7 @@ Track these as a checklist; order them by whatever the conversation makes natura
 ## Exit gate
 
 Write `BRIEF.md` covering every domain above, in the user's vocabulary, including the scope fence and the
-demo beats. Present it for sign-off through the `review-loop` skill (see [sign-off](sign-off.md)): render
+demo beats. Present it for sign-off through the `serve-via-tailnet` skill (see [sign-off](sign-off.md)): render
 it to HTML with stable ids, serve it, and await the verdict. The intake ends only on an approving verdict.
 A request_changes verdict loops the annotations back into questions/revisions: revise the brief, write a
 ledger disposition per note, and re-serve. Do not start research or design on an unapproved brief.

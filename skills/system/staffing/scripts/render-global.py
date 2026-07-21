@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render, byte-check, or apply the staffing-owned global module and pointer.
 
-Adapted from skills/system/setup-asher-skills/scripts/render-global.py.
+Adapted from tools/global-modules/scripts/render-global.py.
 
 apply writes the deferred module atomically (read-back verified), then reconciles the
 `## Staffing` pointer section into the global file, preserving every foreign byte.

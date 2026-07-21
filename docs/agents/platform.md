@@ -44,8 +44,8 @@
 - Binding: **Claude Code** — the loop runs from Claude Code; the model roster per harness is in `environment.md` § Model staffing.
 - Create an issue coordinator with the route `run` selected before worktree/child creation: native Claude uses the Agent tool (`isolation: 'worktree'` when needed); Claude→Codex uses bounded `codex exec --cd <dir>` through its tracked wrapper; Codex→Claude uses bounded `claude -p --model <model> '<self-contained prompt>' </dev/null` and **never `--bare`**. Each command receives the worktree, coordinator assignment, and upward successor; completion is accepted only after its durable return/effect is verified.
 - Reachability is directional: a failed Codex→Claude invocation removes only that route and applies the successor in `environment.md` § Model staffing; Claude→Codex remains available. No Anthropic-policy or credit monitor gates dispatch.
-- Can a spawned thread read this skill's bundled references from disk? Yes — at `.claude/skills/delivery/backlog/reference/` and `docs/agents/` in the checkout.
-- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; the review loop awaits the `review-loop` skill's `review-await.py` (self-host path `skills/system/review-loop/scripts/review-await.py`). The watch is **held on a dedicated staffing-resolved watcher subagent that loops-until-verdict**, not the orchestrator inline — contract in `skills/system/review-loop/reference/watch.md` (applies to both the approval gate and the PR-merge watch).
+- Can a spawned thread read a skill's bundled references from disk? Yes — under `.claude/skills/<name>/` and `docs/agents/` in the checkout.
+- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; a verdict wait blocks on the `serve-via-tailnet` skill's `review-await.py` (self-host path `skills/software-development/serve-via-tailnet/scripts/review-await.py`). Longer watches run per the `watch-until` skill's ladder — a watcher subagent, never the orchestrator inline (applies to both the approval gate and the PR-merge watch).
 
 ## The local binding — tracker contract
 

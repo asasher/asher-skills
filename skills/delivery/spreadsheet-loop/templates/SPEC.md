@@ -1,4 +1,4 @@
-<!-- SPEC.md skeleton — approved direction and lane decision. Render through review-loop. -->
+<!-- SPEC.md skeleton — approved direction and lane decision. Render through serve-via-tailnet. -->
 
 # <Workbook name> — Specification
 

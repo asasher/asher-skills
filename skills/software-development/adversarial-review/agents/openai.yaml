@@ -1,0 +1,7 @@
+interface:
+  display_name: "Adversarial Review"
+  short_description: "Converge a change request to LGTM via independent reviewer and fixer agents sharing only the change request"
+  default_prompt: "Use $adversarial-review to converge this change request."
+
+policy:
+  allow_implicit_invocation: true

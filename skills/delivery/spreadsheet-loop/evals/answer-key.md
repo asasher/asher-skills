@@ -28,13 +28,13 @@ executors get the probes (and the skill files) only; this file is read when grad
   it. Diagnose whether it's a converter bug (fix the mapper + add a test + recompile) or an out-of-scope
   feature; fix the snapshot through the loop or fix the converter, then recompile (verify.md "Reporting a
   gap"; converter.md "never hand-edit the .xlsx"). Patching the xlsx = fail.
-- **P7:** Render `SPEC.md` to self-contained HTML with stable ids and present it through the `review-loop`
+- **P7:** Render `SPEC.md` to self-contained HTML with stable ids and present it through the `serve-via-tailnet`
   skill: serve, await, branch on the verdict. Proceed only on approve; request_changes means revise, ledger
   every annotation, and re-serve (SKILL.md phase-1 gate; sign-off.md). Reading it back in chat or inventing
   approval = fail.
 - **P8:** Start with capability preflight on the authoritative `.xlsm`, not a blind import. Classify VBA,
   links, charts, pivots, images, names, and unknown extensions; propose a lane and component scope in
-  `SPEC.md`; present it through `review-loop`. Only after approval import an isolated working copy/component
+  `SPEC.md`; present it through `serve-via-tailnet`. Only after approval import an isolated working copy/component
   and sanity-check it on the surface (intake.md; lanes-and-merge.md; univer-surface.md). Treating a successful
   render as permission to replace the source = fail.
 - **P9:** Partly. A pivot is a **declared object**: the values are always faithful, but the *default* compiles
@@ -45,8 +45,8 @@ executors get the probes (and the skill files) only; this file is read when grad
   fields are a `MODEL.md` decision). Saying "fully supported, draggable, free" with no caveat = fail; saying
   "not supported at all" = fail (the numbers always compile).
 - **P10:** No. The live surface is a live interactive surface, driven directly on the presentation surface;
-  only the paper artifacts (`SPEC.md`, `MODEL.md`, `LAYOUT.md`, `COMPONENTS.md`) go through `review-loop` sign-off gates
-  (SKILL.md "How it composes"; the-loop.md "Serve it"). Treating the live surface as a gated review-loop
+  only the paper artifacts (`SPEC.md`, `MODEL.md`, `LAYOUT.md`, `COMPONENTS.md`) go through `serve-via-tailnet` sign-off gates
+  (SKILL.md "How it composes"; the-loop.md "Serve it"). Treating the live surface as a gated serve-via-tailnet
   artifact = fail.
 - **P11:** For lane 1, at minimum verify layer 1 (headless recompute), layer 2 (read-back diff), and declared
   objects; open in Excel where available. For lane 2, also prove changeset scope and preserve-only package
