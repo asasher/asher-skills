@@ -1,11 +1,10 @@
 ---
 name: to-spec
-description: Turn the current conversation into a spec — the direction document a design discussion earned but never wrote down. Pure synthesis, no interview; writes a self-contained HTML deliverable at docs/specs/<name>.html.
-argument-hint: "[<name for the spec>]"
+description: Turn a settled conversation or shaping record into a spec on the subject's ticket — body canonical, opening with a diagram; creates the ticket when none exists. Pure synthesis, no interview. Falls back to a repo doc when no tracker is bound.
+argument-hint: "[<ticket id, or a name for the spec>]"
 user-invocable: true
-disable-model-invocation: true
 metadata:
-  invocation: user
+  invocation: model
   execution: thread
   requires: []
   optional: [serve-via-tailnet]
@@ -24,8 +23,10 @@ question asked.
 
 ## Command surface
 
-- **`to-spec [<name>]`** — synthesize the current conversation into a spec and write it to
-  `docs/specs/<name>.html`. With no name, derive a short kebab-case one from the decided direction.
+- **`to-spec [<ticket id, or name>]`** — synthesize the current conversation into a spec and land it on
+  the subject's ticket: given a ticket id, that ticket's body; given none, create the ticket to carry it
+  (deriving a short kebab-case name from the decided direction). With no tracker bound, fall back to a
+  repo doc at `docs/specs/<name>.html`.
 
 Load [synthesis](reference/synthesis.md) for the method (what to mine, the no-interview rule, dev-vs-non-dev
 gating, the no-stale-content rule, sign-off) and [template-guide](reference/template-guide.md) for what goes
@@ -44,23 +45,29 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
    uses only the core sections.
 3. **For dev specs only — sketch the test seams.** Name the public seams the work would be tested at and
    **prefer the highest existing seam**.
-4. **Write the spec** from the skeleton into `docs/specs/<name>.html`, in generic vocabulary — a
-   self-contained HTML deliverable with stable element ids, same house style as a plan.
+4. **Write the spec onto the ticket** — the ticket body is canonical, **opening with a diagram** of the
+   moving parts (flow, sequence, or state — whichever fits) before any prose, then the template's
+   sections in generic vocabulary. Rewrite the body in place and post a short comment noting what
+   changed; the comments are the revision trail. No ticket yet: create it. No tracker bound: fall back
+   to `docs/specs/<name>.html` from the skeleton (synthesis § Where the spec lives).
 5. **Audit fidelity, then classify the Notes.** Before sign-off: every material decision from the
    conversation appears in the spec, and every Notes line is classified **blocking** (must be settled
    upstream before tickets), **delegated** (the executor may choose; boundary named), or **deferred**
    (parked, with a home). A spec with an unclassified material Note is not done; an open
-   blocking Note means the direction isn't ready to build on — say so in the report.
-6. **Sign-off — the direction's approval gate.** User present: approve inline. AFK: serve annotated via
-   the optional `serve-via-tailnet` sibling. On approval: commit and project the thin tracking ticket
-   (synthesis § Sign-off).
+   blocking Note means the direction isn't ready to build on — say so in the report. A direction too
+   big for one build ends the spec with a **recommended split** — a proposal only; splitting is the
+   user's call.
+6. **Sign-off — the direction's approval gate.** User present: approve inline. AFK: the spec sits on the
+   ticket where comments reach it — the user's LGTM is the approval (synthesis § Sign-off). Readiness
+   labels are not to-spec's to apply.
 
 ## What a spec is (and isn't)
 
-- **Generic vocabulary.** A spec describes direction that later splits into **tickets**. Say "spec" and
-  "ticket" — never GitHub-specific "issue." The unit of downstream work is a ticket.
-- **The artifact is a repo doc** at `docs/specs/<name>.html` — a self-contained HTML deliverable (stable
-  element ids, no external fetches), servable for review as-is.
+- **Generic vocabulary.** A spec describes direction that may later split into **tickets**. Say "spec"
+  and "ticket" — never GitHub-specific "issue." The unit of downstream work is a ticket.
+- **The artifact lives on the ticket** — body canonical, diagram first, comments as the revision trail.
+  The repo doc at `docs/specs/<name>.html` (self-contained HTML, stable element ids) is the fallback
+  home when no tracker is bound.
 - **No file paths or code snippets** — sole exception the prototype-validated snippet (synthesis § No stale
   content).
 - **Adaptable to non-dev work.** The dev-only sections are optional; a spec for a process, a piece of content,
@@ -72,7 +79,9 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
   and [template-guide](reference/template-guide.md), plus the fillable scaffold
   [templates/spec-skeleton.html](templates/spec-skeleton.html). These are the authority; they import no
   other skill's files.
-- **Project playbooks** — the repo's **spec conventions**: where specs live and the spec→ticket vocabulary.
-  Defaults to `docs/specs/`; a repo may record a different location or naming rule in its `docs/agents/`.
-- **Sibling skills** — **optional `serve-via-tailnet` only**, for AFK sign-off from another device.
-  Not a hard dependency: skipping it still produces a valid, committed spec.
+- **Project playbooks** — the **tracker binding** in `docs/agents/platform.md` (how a ticket body is
+  read, rewritten, and commented), and the repo's spec conventions for the no-tracker fallback
+  (defaults to `docs/specs/`; a repo may record a different location or naming rule in its
+  `docs/agents/`).
+- **Sibling skills** — **optional `serve-via-tailnet` only**, for AFK sign-off on a fallback repo-doc
+  spec. Not a hard dependency: skipping it still produces a valid spec.

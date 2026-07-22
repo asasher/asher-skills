@@ -143,11 +143,14 @@ refresh with the atomic install command below.
 | skill-loop | Iterates a skill through eval → revise cycles | project |
 | writing-great-skills | Authoring guidance for writing skills (from mattpocock/skills) | project |
 
-**How they fit together:** `backlog` is a dispatcher. `backlog groom` fans `needs-shaping` tickets into
-interactive shaping threads via `to-thread`; each runs `shape` — composing `interview` and
-`domain-modeling`, dispatching `research` and `prototype` through `to-subagent` — and crystallising via
-`to-spec` / `to-tickets` is the user's call inside the thread, which then watches the published tickets
-for AFK comments until the user blesses readiness. `backlog build` fans ready tickets into
+**How they fit together:** `backlog` is a dispatcher. `backlog groom` sweeps unlabeled and
+`needs-shaping` tickets into user-confirmed batches, then fans one interactive shaping thread per batch
+via `to-thread` (a single batch runs in the groom session itself); each runs `shape` — one engine per
+subject, composing `interview` and `domain-modeling`, dispatching `research` and `prototype` through
+`to-subagent` — and a settled subject crystallises automatically via `to-spec` (the spec on its ticket,
+diagram first), the thread watching the spec'd tickets for AFK comments until the user blesses
+readiness; `to-tickets` supersedes a spec'd ticket with born-shaped children only on the user's
+approval. `backlog build` fans ready tickets into
 worktree-isolated subagents it babysits — building is autonomous, so outcomes flow back; each runs
 `build`: `implement` (defect → `diagnosing-bugs`, new behavior
 → `tdd`) → `verify-your-work` (the thread fixes) → change request → `adversarial-review` (`code-review`

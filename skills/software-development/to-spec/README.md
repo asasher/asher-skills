@@ -2,9 +2,11 @@
 
 Turns a conversation that already reached a decision into the **spec** it earned: the high-level direction
 document a long design discussion produced but never wrote down. To-spec reads the current conversation and
-the codebase/project understanding built up in it, captures what was **decided**, and writes a self-contained
-HTML deliverable at `docs/specs/<name>.html` that `to-tickets` later splits into pickup-able tickets. Root of
-the spec→tickets pair.
+the codebase/project understanding built up in it, captures what was **decided**, and lands the spec **on
+the subject's ticket** — body canonical, opening with a diagram, revisions as comments — creating the
+ticket when none exists. Shaping's exit: every settled subject ends here; `to-tickets` splits a spec'd
+ticket only when the user approves a recommended split. With no tracker bound, falls back to a
+self-contained HTML deliverable at `docs/specs/<name>.html`.
 
 ## When to use
 
@@ -30,15 +32,16 @@ Not for eliciting requirements. To-spec captures decisions already made — it n
 
 ## Layout
 
-`SKILL.md` is the command surface (`to-spec [<name>]`) and points into `reference/`:
-`synthesis.md` (the no-interview method, gating, seams step, no-stale-content rule, sign-off) and
-`template-guide.md` (what each section holds). `templates/spec-skeleton.html` is the fillable scaffold —
-review-ready HTML in the plan skeleton's house style.
+`SKILL.md` is the command surface (`to-spec [<ticket id, or name>]`) and points into `reference/`:
+`synthesis.md` (the no-interview method, the diagram-first rule, where the spec lives, gating, seams
+step, no-stale-content rule, split recommendation, sign-off) and
+`template-guide.md` (what each section holds). `templates/spec-skeleton.html` is the fillable scaffold
+for the no-tracker fallback — review-ready HTML in the plan skeleton's house style.
 `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
 
 Self-contained at the file level; composes by name. **Sibling dependency: optional `serve-via-tailnet`
-only** — used to present the spec for AFK sign-off, and never a hard dependency (skipping it still yields
-a valid spec). To-spec depends on no other skill.
+only** — used to present a fallback repo-doc spec for AFK sign-off, and never a hard dependency
+(skipping it still yields a valid spec). To-spec depends on no other skill.
 
 ## Install
 

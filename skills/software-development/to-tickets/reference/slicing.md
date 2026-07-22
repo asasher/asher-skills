@@ -5,19 +5,23 @@ user until the split is approved, then publishing in dependency order. This file
 
 ## Read the direction — three inputs, one treatment
 
-To-tickets splits a direction someone already decided. The input comes in one of three forms; all are read the
-same way — mine the decided direction, the actors, and the full surface:
+To-tickets splits a direction someone already decided — and only on the user's explicit call: a spec may
+*recommend* a split, but nothing splits until the user approves it. The input comes in one of these
+forms; all are read the same way — mine the decided direction, the actors, and the full surface:
 
-- **A spec** (the primary input) — `to-spec`'s output at `docs/specs/<name>.html` (a self-contained HTML deliverable; an older `.md` spec reads the same way), given as the command argument.
-  This is the contract path; a repo may record a different specs location in its `docs/agents/`, honor it when
-  present.
+- **A spec'd ticket** (the primary input) — a ticket whose body carries `to-spec`'s output, diagram
+  first, given by id as the command argument. Read the body and the comment trail (later comments may
+  refine the body's direction — the body is canonical).
+- **A spec document** — the no-tracker fallback at `docs/specs/<name>.html` (a self-contained HTML
+  deliverable; an older `.md` spec reads the same way). A repo may record a different specs location in
+  its `docs/agents/`, honor it when present.
 - **A plan document** — a per-ticket design doc. Read it as direction for a single slice's worth of work,
   or a small cluster.
 - **The raw current conversation** — when no spec or plan was written, mine the conversation and the
   codebase/project understanding built up in it.
 
-**Never modify the source.** To-tickets reads the spec, plan, or parent issue; it never edits it. The source of
-truth is preserved.
+**Never modify the spec text.** To-tickets reads the spec, plan, or parent ticket; it never edits the
+direction itself. Superseding a split parent (below) changes tracker state, not spec content.
 
 ## Draft vertical slices — the default shape
 
@@ -98,6 +102,16 @@ ticket when one exists. On
 this repo that binding is GitHub via `gh` (`gh issue create --title '...' --body '...'`), and a ticket is a
 GitHub issue. Publish the body from [templates/ticket.md](../templates/ticket.md), carrying the
 dependency edges in the playbook's recorded form.
+
+## Supersede the parent
+
+When the input was a spec'd ticket, the children now carry the work — finish by **superseding the
+parent**: mark it per the tracker's superseded/excluded label role (recorded in
+`docs/agents/backlog-policy.md`) and post a comment linking every child, so anyone landing on the parent
+is routed forward. Each child links back to the parent in turn (§ Audit — inherited context links): the
+parent's spec remains the direction record the slices inherit from. The parent's spec text is never
+edited, and a parent that was *not* a ticket (a spec document, a plan, the conversation) has nothing to
+supersede — skip this step.
 
 ## Readiness — leave it unset
 

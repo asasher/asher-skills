@@ -25,7 +25,7 @@ Runs a loop over many units of work, owning dispatch, liveness, and lifecycle st
 **dispatcher** is the thin case: it only fans units out and supervises. Human-in-the-loop work goes
 to threads the user attends (`to-thread` — no result flows back); autonomous work goes to subagents
 the dispatcher babysits (`to-subagent` — completion wakes it, outcomes are relayed). Examples:
-`backlog groom` (a shaping thread per `needs-shaping` subject), `backlog build` (a worktree-isolated
+`backlog groom` (a shaping thread per user-confirmed batch), `backlog build` (a worktree-isolated
 build subagent per ready ticket).
 
 **Dispatch adapter**:
@@ -69,10 +69,18 @@ each on its side: never script a judgment call, never leave failure-prone mechan
 **Shaping**:
 The stage between raw intent and execution-ready work: interviewing the decisions, researching
 facts, prototyping unsettleable questions, maintaining the domain model as terms land. Owned by the
-`shape` skill, run in interactive threads the user attends; crystallising the settled direction
-(`to-spec`, `to-tickets`) is the user's call inside the thread, not a shape step — after which the
-thread watches the published tickets for AFK comments until the user blesses readiness. `backlog
-groom` dispatches `needs-shaping` work into these threads.
+`shape` skill, run in interactive threads the user attends — one engine per subject, interview
+rounds combined across the batch. The spec is shaping's exit: a settled subject crystallises via
+`to-spec` automatically, the spec landing on its ticket (body canonical, diagram first); the thread
+then watches the spec'd tickets for AFK comments until the user blesses readiness. Splitting a
+spec'd ticket (`to-tickets` superseding it with born-shaped children) happens only on the user's
+explicit approval. `backlog groom` dispatches shaping work into these threads.
+
+**Subject / batch**:
+The two grooming units. A **subject** is the decision unit: one ticket, or tickets whose decisions
+interlock — it gets one shaping engine, never two. A **batch** is the attention unit: related
+subjects sized to one thread — `backlog groom` proposes the batches and spawns nothing until the
+user confirms the plan; a single batch runs in the grooming session itself.
 
 **needs-shaping**:
 The tracker label role marking work whose strategic decisions are unsettled — cleared when shaping

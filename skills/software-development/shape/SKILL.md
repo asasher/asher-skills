@@ -1,27 +1,37 @@
 ---
 name: shape
-description: Shape one subject — an idea or a ticket — until its strategic decisions are settled. Interviews the decisions, models the terms, researches what needs sources, prototypes what paper can't settle. Use when work needs shaping before anything builds on it.
+description: Shape a batch of subjects — ideas or tickets — until each carries a blessed spec. Interviews the decisions, models the terms, researches what needs sources, prototypes what paper can't settle; a settled subject crystallises into a spec on its ticket automatically. Use when work needs shaping before anything builds on it.
 argument-hint: "<idea or ticket id(s)>"
 user-invocable: true
 metadata:
   invocation: model
   execution: orchestrator
-  requires: [domain-modeling, interview]
-  optional: [prototype, research, to-subagent, watch-until]
+  requires: [domain-modeling, interview, to-spec]
+  optional: [prototype, research, to-subagent, to-tickets, watch-until]
 ---
 
 # Shape
 
-Settle one subject's strategic decisions. A **stateful composite**: everything it settles lands in
-durable artifacts — the ticket thread, `CONTEXT.md` terms, ADRs — and a resumed session reads those
-artifacts, never chat memory.
+Settle a batch of subjects' strategic decisions, ending each in a spec on its ticket. A **stateful
+composite**: everything it settles lands in durable artifacts — the ticket thread, `CONTEXT.md` terms,
+ADRs, the spec itself — and a resumed session reads those artifacts, never chat memory.
 
 ## Intake
 
-Read the subject: the ticket thread and linked artifacts when it's a ticket (several tickets grouped into
-one subject read together), the handed material when it's an idea, plus the project instruction file's
-`## Context documents` index and the documents whose clauses match. Seed the decision tree with what is
-settled and what is open.
+Read each subject: the ticket thread and linked artifacts when it's a ticket (tickets whose decisions
+interlock are one subject, read together), the handed material when it's an idea, plus the project
+instruction file's `## Context documents` index and the documents whose clauses match. Seed each
+subject's decision tree with what is settled and what is open.
+
+## One engine per subject
+
+A single subject runs inline. A batch of several runs one engine per subject — merely-related subjects
+never share one, interlocked tickets always do — each dispatched via the `to-subagent` skill. Engines
+are non-interactive, so an interview round is a dispatch cycle: each engine reads its subject's record,
+computes its question frontier, and returns it; this session combines the frontiers into **one round
+for the user**, questions tagged by subject, then routes the answers back and re-dispatches each engine
+with its own. An engine whose frontier comes back empty crystallises (below) while its siblings still
+ask.
 
 ## The loop
 
@@ -35,17 +45,25 @@ settled and what is open.
 - When the subject is a ticket, record settled decisions on its thread as they land — the thread is the
   resume state.
 
+## Crystallise — the spec is the exit
+
+When a subject's frontier is empty, run the `to-spec` skill on it — automatically, not on request: the
+spec lands on the subject's ticket, opening with a diagram (to-spec creates the ticket when the subject
+was only an idea). Posting a spec is a proposal, not a state change — readiness still waits for the
+user's blessing. A spec may end by recommending a split; executing one — the `to-tickets` skill
+superseding the ticket with born-shaped children — happens only on the user's explicit approval, in a
+comment or here in the thread.
+
 ## Done
 
-The interview's stopping rule holds: frontier empty, and the user confirms shared understanding. Report
-what settled and what remains open. Crystallising the direction — a spec, tickets, or straight to a
-build — is the user's call. Lifecycle labels are never shape's judgment: shape stamps nothing on its
-own — it only executes the user's explicit readiness call when one arrives (below).
+Every subject in the batch carries a spec on its ticket, blessed by the user. Report what settled and
+what remains open. Lifecycle labels are never shape's judgment: shape stamps nothing on its own — it
+only executes the user's explicit calls: the readiness signal (below) and an approved split.
 
-## After crystallisation — the comment watch
+## After the spec — the comment watch
 
-When the user has crystallised — a spec committed, tickets published — and gone AFK, the thread is not
-done. Run the `watch-until` skill on the published tickets (and the spec's tracking ticket) —
+Once specs (and any approved split's tickets) are published and the user has gone AFK, the thread is not
+done. Run the `watch-until` skill on the spec'd tickets —
 condition: a new comment from the user, or an explicit readiness signal ("LGTM", "ready for agent"),
 in a comment or here in the thread. On a comment: apply the requested tweak to the ticket or spec,
 reply with what changed, resume watching. On the readiness signal: apply the readiness role per the
@@ -60,9 +78,11 @@ the frontier from what is still open, and re-asks nothing the record answers.
 ## Dependency surface
 
 - **Siblings (required, by name):** `interview` (the questioning method), `domain-modeling` (terms and
-  ADRs). Absent one, state the requirement and stop.
+  ADRs), `to-spec` (the crystalliser — the spec is shaping's exit). Absent one, state the requirement
+  and stop.
 - **Siblings (optional, by name):** `research` (source-backed questions), `prototype` (probes),
-  `to-subagent` (their dispatch), `watch-until` (the post-crystallisation comment watch — absent it,
+  `to-subagent` (their dispatch, and the batch's engines — absent it, shape the batch's subjects one at
+  a time inline), `to-tickets` (the approved split), `watch-until` (the comment watch — absent it,
   say comments need an explicit ping). Absent one, park the affected work as open and say so; never
   silently skip.
 - **Project surface:** the instruction file's `## Context documents` index; the tracker binding in

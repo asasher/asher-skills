@@ -1,13 +1,14 @@
 # Shape
 
-Settles one subject's strategic decisions — an idea, or one or more tickets grouped as a subject — in an
-interactive session: the interview runs in frontier rounds, the domain model is written as terms land,
-and questions the conversation can't settle are dispatched out (research for sources, prototype for
-artifacts). Stateful: the record lives in the ticket thread, `CONTEXT.md`, and ADRs, and a resumed
-session re-asks nothing the record answers. Crystallising the settled direction — a spec, tickets, or
-straight to a build — is the user's call. After crystallising, the thread watches the published
-tickets for AFK comments — tweaks applied and replied to — until the user's explicit readiness signal,
-which it executes; shape stamps nothing of its own judgment.
+Settles a batch of subjects' strategic decisions — ideas, or tickets grouped into subjects where their
+decisions interlock — in an interactive session: one engine per subject (parallel sub-agents for a
+batch), interview rounds combined across subjects and relayed to the user, the domain model written as
+terms land, and questions the conversation can't settle dispatched out (research for sources, prototype
+for artifacts). Stateful: the record lives in the ticket thread, `CONTEXT.md`, and ADRs, and a resumed
+session re-asks nothing the record answers. A settled subject crystallises automatically: to-spec lands
+the spec on its ticket, diagram first. The thread then watches the spec'd tickets for AFK comments —
+tweaks applied and replied to — until the user's explicit readiness signal, which it executes; a
+recommended split runs to-tickets only on the user's approval. Shape stamps nothing of its own judgment.
 
 ## When to use
 
@@ -16,9 +17,9 @@ which it executes; shape stamps nothing of its own judgment.
 ## Dependency surface
 
 - **Bundled:** `SKILL.md` only.
-- **Siblings (required, by name):** `interview`, `domain-modeling`.
-- **Siblings (optional, by name):** `research`, `prototype`, `to-subagent` (their dispatch),
-  `watch-until` (the comment watch).
+- **Siblings (required, by name):** `interview`, `domain-modeling`, `to-spec`.
+- **Siblings (optional, by name):** `research`, `prototype`, `to-subagent` (their dispatch and the
+  batch's engines), `to-tickets` (the approved split), `watch-until` (the comment watch).
 - **Project surface:** the instruction file's `## Context documents` index; the tracker binding in
   `docs/agents/platform.md` when the subject is a ticket.
 

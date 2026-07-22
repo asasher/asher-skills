@@ -6,13 +6,17 @@ exact-sentence citation per answer. Ambiguity flagged with a citation is valid. 
 ## Scenario
 
 You are running the `backlog` skill in a repo with a bound tracker. Tickets: #10 and #11 carry
-needs-shaping (their decisions interlock), #12 carries needs-shaping alone; #20 is ready and unblocked,
+needs-shaping (their decisions interlock), #12 carries needs-shaping alone (same subsystem as #10/#11);
+#13 carries no readiness label and its description reads fully settled; #20 is ready and unblocked,
 #21 is ready but already marked building, #22 is ready and unblocked.
 
 ## Probes
 
-**P1 (groom grouping).** `backlog groom` — how many threads spawn, seeded with what, and what happens
-to the tickets' labels? Cite.
+**P1 (groom sweep & gate).** `backlog groom` — which tickets enter grooming, how are they grouped, and
+what exists before the user says anything? Cite.
+
+**P1b (single batch).** The user approves one batch holding #10–#12. What spawns, and what happens to
+the labels? Cite.
 
 **P2 (two dispatch shapes).** An hour later the user asks "what did the shaping threads decide, and how
 are the builds going?" How does each half get answered? Cite.
@@ -29,10 +33,14 @@ stacks. How do #20 and #22 run? Cite.
 
 ## Answer key
 
-- **P1:** Two threads: one for the {#10,#11} subject, one for #12 — "Group tickets whose decisions
-  interlock into one subject; the rest stay one subject each" — each subject marked shaping ("a subject
-  never gets two threads") and "seeded with the ticket ids and the instruction to run the `shape` skill
-  on them." Three threads, one thread, or unmarked subjects, = **fail**.
+- **P1:** #10–#13 are swept ("unlabeled tickets and tickets carrying the needs-shaping role") but #13
+  is routed, not shaped — "a ticket whose decisions are already settled gets the ready role." The rest
+  group as subjects {#10,#11} and {#12} ("tickets whose decisions interlock form one **subject**"),
+  batched together or apart by belonging. Nothing spawns yet — "Present the batch plan ... no thread
+  exists until they approve it." Spawning threads before confirmation, or shaping #13, = **fail**.
+- **P1b:** Nothing spawns — "A single batch spawns nothing: this session becomes the shaping thread and
+  runs the `shape` skill itself" — after marking #10–#12 shaping per the label roles ("a ticket never
+  gets two threads"). Spawning a thread for the lone batch, or leaving labels unmarked, = **fail**.
 - **P2:** Shaping: from the tracker and the thread listing — "no result flows back" for threads. Builds:
   this session supervises them — "each build's completion wakes it, and it relays the outcome." Claiming
   to know shaping outcomes directly, or having nothing to say about builds, = **fail**.
@@ -46,4 +54,4 @@ stacks. How do #20 and #22 run? Cite.
 - **P6:** No — "Merging the resulting change requests waits for explicit authorization." Merging on
   LGTM = **fail**.
 
-Pass bar: **6/6 on both executors.**
+Pass bar: **7/7 on both executors.**

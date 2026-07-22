@@ -1,7 +1,7 @@
 interface:
   display_name: "To-Tickets"
-  short_description: "Split a spec (or plan, or conversation) into backlog-ready tickets with dependency blocking edges; quiz first, publish blockers-first"
-  default_prompt: "Use $to-tickets to split this spec into backlog-ready tickets with blocking edges."
+  short_description: "Split a spec'd ticket (or spec, plan, conversation) into backlog-ready tickets with blocking edges; quiz first, publish blockers-first, supersede the parent"
+  default_prompt: "Use $to-tickets to split this spec'd ticket into backlog-ready tickets with blocking edges."
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

@@ -1,7 +1,7 @@
 interface:
   display_name: "To-Spec"
-  short_description: "Synthesize the current conversation into a spec — the direction doc to-tickets splits; no interview"
-  default_prompt: "Use $to-spec to synthesize this conversation into a spec under docs/specs/."
+  short_description: "Synthesize a settled direction into a spec on the subject's ticket — body canonical, diagram first; no interview"
+  default_prompt: "Use $to-spec to land this conversation's settled direction as a spec on its ticket."
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

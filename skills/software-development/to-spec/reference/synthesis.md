@@ -61,34 +61,50 @@ decision-rich fragment and note it came from a prototype. Absent that exception,
 Speak generically. A **spec** is the direction document, split downstream into **tickets**. Never call
 the downstream unit an "issue" — that's one tracker's word, and the pair is deliberately tracker-agnostic.
 
-## Naming and placing the spec
+## The diagram comes first
 
-Write the spec to `docs/specs/<name>.html`, where `<name>` is a short kebab-case slug for the decided
-direction (given as the command argument, or derived from the solution when omitted). That path is where
-downstream consumers look. The spec is a **self-contained HTML deliverable** — start from
-`templates/spec-skeleton.html`; keep its stable element ids (sections, `story-N`, `dec-N`, …), inline
-everything, fetch nothing. A repo may record a different specs location or naming rule in its `docs/agents/`
-conventions; honor it when present, default to `docs/specs/` otherwise.
+Every spec **opens with a diagram** of the moving parts — before any prose. Pick the form that fits the
+direction: a flow of the pieces, a sequence of the actors, a state machine of the lifecycle. On a
+tracker that renders it, a fenced `mermaid` block; in the HTML fallback, an inline diagram. The diagram
+is the review affordance — a reader should grasp the shape of the direction before reading a sentence.
+A direction too small to diagram is the only exception; say so in a line where the diagram would be.
+
+## Where the spec lives
+
+**The ticket body is canonical.** Given a ticket id, rewrite that ticket's body: the diagram, then the
+template's sections. Given no ticket but a bound tracker (`docs/agents/platform.md`), **create the
+ticket** — titled from a short kebab-case slug for the decided direction (the command argument, or
+derived from the solution when omitted) — and write the spec as its body. Every revision rewrites the
+body in place and posts a **short comment noting what changed** — the body stays the one current spec;
+the comments are the revision trail and the notification.
+
+**No tracker bound** — fall back to a repo doc at `docs/specs/<name>.html`: a **self-contained HTML
+deliverable** started from `templates/spec-skeleton.html`; keep its stable element ids (sections,
+`story-N`, `dec-N`, …), inline everything, fetch nothing. A repo may record a different specs location
+or naming rule in its `docs/agents/` conventions; honor it when present. The first fallback spec also
+registers the specs location in the project instruction file's `## Context documents` index (path, what
+it is, when to read — create the section if absent).
+
+## Recommend the split, never perform it
+
+When the decided direction is clearly bigger than one build, end the spec with a **Recommended split**
+section: the proposed slices in a sentence each, and which edges would block which. It is a proposal
+only — splitting is the user's call, and executing it belongs to a different move (superseding the
+ticket with born-shaped children). A spec that fits one build carries no such section.
 
 ## Sign-off
 
 The spec's approval is the **direction's gate.** Before presenting: run the **fidelity audit** — every
 material decision from the conversation appears in the spec, and every Notes line carries its
 blocking / delegated / deferred classification. An open **blocking** Note means the direction isn't
-ready to split into tickets — settle it first.
+ready to build on — settle it first.
 
 - **User present** — take approval inline, in the conversation. This is the default path and depends on no
   other skill.
-- **User AFK** — serve the spec annotated through the optional `serve-via-tailnet` sibling: it is
-  already self-contained HTML with stable element ids, so it serves as-is — no render step — and the
-  verdict arrives from the human's own device.
-
-`serve-via-tailnet` is optional and never a hard dependency — if it's unavailable, fall back to inline
-approval or leave the committed spec for the user to read directly. Skipping sign-off still leaves a
-valid spec on disk.
-
-**On approval:** commit the spec, and — when a live tracker is bound (`docs/agents/platform.md`) — create a
-**thin tracking ticket** carrying the title, a one-line gist, and a link to the canonical spec. The
-projection carries links and state, never content — one source of truth, no drift. The first spec also registers the specs location in the project
-instruction file's `## Context documents` index (path, what it is, when to read — create the section if
-absent).
+- **User AFK, spec on a ticket** — the spec already sits where the user's comments reach it; their
+  LGTM on the ticket (or in the conversation) is the approval. To-spec applies no readiness label —
+  that decision travels by the tracker's label roles and belongs to whoever executes the user's call.
+- **User AFK, fallback repo doc** — serve the spec annotated through the optional `serve-via-tailnet`
+  sibling: it is already self-contained HTML with stable element ids, so it serves as-is — no render
+  step — and the verdict arrives from the human's own device. If unavailable, leave the committed spec
+  for the user to read directly. Skipping sign-off still leaves a valid spec in place.

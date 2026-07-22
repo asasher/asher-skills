@@ -54,10 +54,10 @@ including one marked `user`.
 | software-development | `serve-via-tailnet` | model | orchestrator |
 | software-development | `shape` | model | orchestrator |
 | software-development | `tdd` | model | thread |
-| software-development | `to-spec` | user | thread |
+| software-development | `to-spec` | model | thread |
 | software-development | `to-subagent` | model | orchestrator |
 | software-development | `to-thread` | model | orchestrator |
-| software-development | `to-tickets` | user | thread |
+| software-development | `to-tickets` | model | thread |
 | software-development | `verify-your-work` | model | thread |
 | software-development | `watch-until` | model | orchestrator |
 | personal | `capture-to-inbox` | model | thread |
