@@ -1,7 +1,7 @@
 {
   "id": "sdlc",
   "title": "The SDLC skill family",
-  "subtitle": "Groom fans shaping threads; the user crystallises spec \u2192 tickets; build fans worktree subagents to review-ready change requests; a human merges \u2014 every node renders its real files, live from this repo.",
+  "subtitle": "Groom batches shaping threads you confirm; settled subjects auto-spec onto tickets you bless; build fans worktree subagents to review-ready change requests; a human merges — every node renders its real files, live from this repo.",
   "lanes": [
     {
       "id": "dispatch",
@@ -16,12 +16,12 @@
     {
       "id": "crystallise",
       "title": "Crystallise",
-      "blurb": "The user's call after shaping: write the spec, split it into tracker-native tickets."
+      "blurb": "Shaping's exit: a settled subject auto-specs onto its ticket; your LGTM blesses it, an approved split supersedes it."
     },
     {
       "id": "build",
       "title": "Build",
-      "blurb": "One ready ticket through implement \u2192 verify to a review-ready change request."
+      "blurb": "One ready ticket through implement → verify to a review-ready change request."
     },
     {
       "id": "review",
@@ -39,7 +39,7 @@
       "id": "backlog",
       "lane": "dispatch",
       "title": "backlog",
-      "blurb": "The dispatcher: groom fans needs-shaping tickets into shaping threads, build fans ready tickets into supervised build subagents \u2014 no result flows back",
+      "blurb": "The dispatcher: groom sweeps unlabeled + needs-shaping tickets into user-confirmed batches of shaping threads, build fans ready tickets into supervised build subagents — no result flows back",
       "source": "skills/software-development/backlog",
       "files": [
         {
@@ -102,7 +102,7 @@
       "bindings": [
         {
           "port": "platform",
-          "expects": "tracker, change-request, git, harness verbs \u2014 each verified live at setup",
+          "expects": "tracker, change-request, git, harness verbs — each verified live at setup",
           "default": "skills/software-development/backlog/templates/common/platform.md"
         },
         {
@@ -151,7 +151,7 @@
       "id": "to-subagent",
       "lane": "dispatch",
       "title": "to-subagent",
-      "blurb": "Staffed non-interactive subagent with a wake path \u2014 the only skill that reads the roster",
+      "blurb": "Staffed non-interactive subagent with a wake path — the only skill that reads the roster",
       "source": "skills/software-development/to-subagent",
       "files": [
         {
@@ -176,7 +176,7 @@
       "id": "watch-until",
       "lane": "dispatch",
       "title": "watch-until",
-      "blurb": "Watches a target \u2014 file, URL, thread, CI run, review surface \u2014 until a condition holds, then relays",
+      "blurb": "Watches a target — file, URL, thread, CI run, review surface — until a condition holds, then relays",
       "source": "skills/software-development/watch-until",
       "files": [
         {
@@ -201,7 +201,7 @@
       "id": "shape",
       "lane": "shaping",
       "title": "shape",
-      "blurb": "Settles one subject's strategic decisions: interviews, models the terms, researches and prototypes what paper can't settle",
+      "blurb": "Settles a batch of subjects — one engine each, combined interview rounds; models the terms, researches and prototypes what paper can't settle; settled subjects auto-crystallise via to-spec",
       "source": "skills/software-development/shape",
       "files": [
         {
@@ -342,7 +342,7 @@
       "id": "prototype",
       "lane": "shaping",
       "title": "prototype",
-      "blurb": "One design question, one throwaway artifact \u2014 keep the answer, delete the scaffolding",
+      "blurb": "One design question, one throwaway artifact — keep the answer, delete the scaffolding",
       "source": "skills/software-development/prototype",
       "files": [
         {
@@ -380,7 +380,7 @@
       "id": "to-spec",
       "lane": "crystallise",
       "title": "to-spec",
-      "blurb": "Conversation \u2192 self-contained HTML spec at docs/specs/; pure synthesis, no interview",
+      "blurb": "Settled direction → spec on the subject's ticket: body canonical, diagram first, revisions as comments; creates the ticket when absent; recommends splits, never performs them",
       "source": "skills/software-development/to-spec",
       "files": [
         {
@@ -421,7 +421,7 @@
         },
         {
           "port": "backlog-policy",
-          "expects": "spec\u2192ticket vocabulary and label roles the tracking ticket uses",
+          "expects": "spec→ticket vocabulary and label roles the tracking ticket uses",
           "default": "skills/software-development/backlog/templates/common/backlog-policy.md"
         }
       ]
@@ -430,7 +430,7 @@
       "id": "to-tickets",
       "lane": "crystallise",
       "title": "to-tickets",
-      "blurb": "Direction \u2192 tracer-bullet tickets with native blocking edges; quizzes granularity before publishing",
+      "blurb": "Approved split → tracer-bullet tickets with native blocking edges; quizzes granularity before publishing; supersedes the spec'd parent",
       "source": "skills/software-development/to-tickets",
       "files": [
         {
@@ -490,7 +490,7 @@
       "id": "build",
       "lane": "build",
       "title": "build",
-      "blurb": "One ready ticket \u2192 review-ready change request: implement \u00b7 verify & fix \u00b7 review \u00b7 evidence",
+      "blurb": "One ready ticket → review-ready change request: implement · verify & fix · review · evidence",
       "source": "skills/software-development/build",
       "files": [
         {
@@ -549,7 +549,7 @@
       "id": "tdd",
       "lane": "build",
       "title": "tdd",
-      "blurb": "Red\u2013green test-first construction (sealed primitive)",
+      "blurb": "Red–green test-first construction (sealed primitive)",
       "source": "skills/software-development/tdd",
       "files": [
         {
@@ -643,7 +643,7 @@
       "id": "verify-your-work",
       "lane": "build",
       "title": "verify-your-work",
-      "blurb": "Fresh-eyes proof the change does what it claims \u2014 findings, never fixes (sealed)",
+      "blurb": "Fresh-eyes proof the change does what it claims — findings, never fixes (sealed)",
       "source": "skills/software-development/verify-your-work",
       "files": [
         {
@@ -668,7 +668,7 @@
       "id": "adversarial-review",
       "lane": "review",
       "title": "adversarial-review",
-      "blurb": "Reviewer \u21c6 fixer subagents converge a change request to LGTM without a human in the loop",
+      "blurb": "Reviewer ⇆ fixer subagents converge a change request to LGTM without a human in the loop",
       "source": "skills/software-development/adversarial-review",
       "files": [
         {
@@ -736,7 +736,7 @@
       "id": "prove-your-work",
       "lane": "review",
       "title": "prove-your-work",
-      "blurb": "The evidence package \u2014 claims, proofs, what wasn't verified \u2014 posted where the merge decision happens (sealed)",
+      "blurb": "The evidence package — claims, proofs, what wasn't verified — posted where the merge decision happens (sealed)",
       "source": "skills/software-development/prove-your-work",
       "files": [
         {
@@ -810,7 +810,7 @@
       "id": "serve-via-tailnet",
       "lane": "services",
       "title": "serve-via-tailnet",
-      "blurb": "Serves an HTML artifact on the tailnet \u2014 plain, or annotated with comments and a verdict",
+      "blurb": "Serves an HTML artifact on the tailnet — plain, or annotated with comments and a verdict",
       "source": "skills/software-development/serve-via-tailnet",
       "files": [
         {
@@ -940,11 +940,11 @@
         },
         {
           "port": "project deltas",
-          "expects": "sparse overrides in the consumer project's agent instruction files (\u00a7 Staffing)"
+          "expects": "sparse overrides in the consumer project's agent instruction files (§ Staffing)"
         },
         {
           "port": "roster",
-          "expects": "docs/agents/environment.md \u00a7 Model roster",
+          "expects": "docs/agents/environment.md § Model roster",
           "default": "skills/software-development/backlog/templates/common/environment.md"
         }
       ]

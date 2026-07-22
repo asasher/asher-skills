@@ -2,33 +2,33 @@
   "id": "backlog",
   "type": "graph",
   "title": "Inside backlog",
-  "subtitle": "The dispatcher exploded \u2014 two fan-outs and a setup, the siblings it composes by name, the playbooks that bind its nouns. Click to read.",
+  "subtitle": "The dispatcher exploded — two fan-outs and a setup, the siblings it composes by name, the playbooks that bind its nouns. Click to read.",
   "skill_source": "skills/software-development/backlog",
   "lanes": [
     {
       "id": "surface",
       "title": "Command surface",
-      "blurb": "A thin head: fan tickets into threads, report how to attach \u2014 no result flows back."
+      "blurb": "A thin head: fan tickets into threads, report how to attach — no result flows back."
     },
     {
       "id": "groom",
       "title": "groom = shaping fan-out",
-      "blurb": "Sweep needs-shaping tickets, group interlocking ones into subjects, spawn one shaping thread each."
+      "blurb": "Sweep unlabeled + needs-shaping tickets, route the settled and parked, group into subjects and batches, confirm the plan with the user — then one thread per batch."
     },
     {
       "id": "buildout",
       "title": "build = build fan-out",
-      "blurb": "Sweep ready tickets with clear edges, mark in-flight, dispatch one worktree-isolated build subagent each and supervise it."
+      "blurb": "Sweep ready tickets with clear edges, mark building, dispatch one worktree-isolated build subagent each and supervise it."
     },
     {
       "id": "siblings",
       "title": "Composed siblings (by name)",
-      "blurb": "Named runtime pointers, never file imports \u2014 jump to the family view."
+      "blurb": "Named runtime pointers, never file imports — jump to the family view."
     },
     {
       "id": "playbooks",
       "title": "This repo's playbooks",
-      "blurb": "docs/agents/* \u2014 the bindings that make ticket, label, and change request real nouns here."
+      "blurb": "docs/agents/* — the bindings that make ticket, label, and change request real nouns here."
     },
     {
       "id": "setup",
@@ -41,7 +41,7 @@
       "id": "b-skill",
       "lane": "surface",
       "title": "SKILL.md",
-      "blurb": "commands: groom \u00b7 build \u00b7 setup",
+      "blurb": "commands: groom · build · setup",
       "open": {
         "file": "skills/software-development/backlog/SKILL.md"
       }
@@ -50,7 +50,7 @@
       "id": "b-groom",
       "lane": "groom",
       "title": "groom",
-      "blurb": "needs-shaping \u2192 subjects \u2192 threads",
+      "blurb": "unlabeled + needs-shaping → subjects → batches → your OK → threads",
       "open": {
         "file": "skills/software-development/backlog/SKILL.md"
       }
@@ -69,7 +69,7 @@
       "id": "b-build",
       "lane": "buildout",
       "title": "build",
-      "blurb": "ready + clear edges \u2192 in-flight \u2192 supervised subagents",
+      "blurb": "ready + clear edges → building → supervised subagents",
       "open": {
         "file": "skills/software-development/backlog/SKILL.md"
       }
@@ -138,7 +138,7 @@
       "id": "b-pb-platform",
       "lane": "playbooks",
       "title": "platform",
-      "blurb": "tracker \u00b7 change request \u00b7 git \u00b7 harness verbs",
+      "blurb": "tracker · change request · git · harness verbs",
       "open": {
         "file": "docs/agents/platform.md"
       }
@@ -147,7 +147,7 @@
       "id": "b-pb-policy",
       "lane": "playbooks",
       "title": "backlog-policy",
-      "blurb": "label roles \u00b7 dependency edges \u00b7 readiness",
+      "blurb": "label roles · dependency edges · readiness",
       "open": {
         "file": "docs/agents/backlog-policy.md"
       }
@@ -156,7 +156,7 @@
       "id": "b-pb-env",
       "lane": "playbooks",
       "title": "environment",
-      "blurb": "run \u00b7 seed \u00b7 check",
+      "blurb": "run · seed · check",
       "open": {
         "file": "docs/agents/environment.md"
       }
@@ -174,7 +174,7 @@
       "id": "b-setup",
       "lane": "setup",
       "title": "setup",
-      "blurb": "install/reconcile playbooks \u00b7 verify label roles",
+      "blurb": "install/reconcile playbooks · verify label roles",
       "open": {
         "file": "skills/software-development/backlog/SKILL.md"
       }
@@ -183,7 +183,7 @@
       "id": "b-tmpl-common",
       "lane": "setup",
       "title": "templates/common",
-      "blurb": "platform \u00b7 backlog-policy \u00b7 environment",
+      "blurb": "platform · backlog-policy · environment",
       "open": {
         "file": "skills/software-development/backlog/templates/common/platform.md"
       }
@@ -218,7 +218,7 @@
       "from": "b-groom",
       "to": "b-groom-seed",
       "style": "flow",
-      "label": "one thread per subject"
+      "label": "one thread per confirmed batch"
     },
     {
       "from": "b-build",
@@ -264,7 +264,7 @@
       "from": "b-build",
       "to": "b-pb-policy",
       "style": "optional",
-      "label": "ready \u00b7 in-flight roles"
+      "label": "ready · in-flight roles"
     },
     {
       "from": "b-groom",

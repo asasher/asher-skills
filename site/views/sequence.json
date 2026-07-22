@@ -1,12 +1,12 @@
 {
   "id": "sequence",
   "title": "Sequence",
-  "subtitle": "The end-to-end conversation over time: who talks to whom \u2014 the user, the dispatcher, attachable shaping threads, supervised build subagents, their nested workers, and the tracker.",
+  "subtitle": "The end-to-end conversation over time: who talks to whom — the user, the dispatcher, attachable shaping threads, supervised build subagents, their nested workers, and the tracker.",
   "type": "sequence",
   "actors": [
     {
       "id": "user",
-      "title": "User \u270b",
+      "title": "User ✋",
       "blurb": "asks, attends, decides",
       "kind": "you"
     },
@@ -19,31 +19,31 @@
     {
       "id": "thread",
       "title": "Shaping thread",
-      "blurb": "to-thread \u00b7 shape",
+      "blurb": "to-thread · shape — one per confirmed batch",
       "kind": "thread"
     },
     {
       "id": "builder",
       "title": "Build subagent",
-      "blurb": "to-subagent \u00b7 build \u00b7 worktree",
+      "blurb": "to-subagent · build · worktree",
       "kind": "sub"
     },
     {
       "id": "workers",
       "title": "Nested workers",
-      "blurb": "implement \u00b7 verify \u00b7 review \u00b7 evidence",
+      "blurb": "shape engines · implement · verify · review",
       "kind": "sub"
     },
     {
       "id": "tracker",
       "title": "Tracker & repo",
-      "blurb": "tickets \u00b7 labels \u00b7 change requests",
+      "blurb": "tickets · labels · change requests",
       "kind": "repo"
     }
   ],
   "messages": [
     {
-      "phase": "Groom \u2014 interactive, nothing flows back"
+      "phase": "Groom — interactive, nothing flows back"
     },
     {
       "from": "user",
@@ -54,13 +54,31 @@
     {
       "from": "backlog",
       "to": "tracker",
-      "label": "sweep needs-shaping \u00b7 mark shaping",
+      "label": "sweep unlabeled + needs-shaping · route settled/parked",
+      "style": "flow"
+    },
+    {
+      "from": "backlog",
+      "to": "user",
+      "label": "batch plan: subjects grouped, batches proposed",
+      "style": "return"
+    },
+    {
+      "from": "user",
+      "to": "backlog",
+      "label": "confirm the batches ✋",
+      "style": "flow"
+    },
+    {
+      "from": "backlog",
+      "to": "tracker",
+      "label": "mark shaping",
       "style": "flow"
     },
     {
       "from": "backlog",
       "to": "thread",
-      "label": "spawn via to-thread \u2014 named, seeded",
+      "label": "one thread per batch via to-thread (single batch: stays here)",
       "style": "flow"
     },
     {
@@ -70,67 +88,67 @@
       "style": "return"
     },
     {
-      "from": "user",
-      "to": "thread",
-      "label": "attend: interview rounds",
-      "style": "bidir"
-    },
-    {
       "from": "thread",
       "to": "workers",
-      "label": "research \u00b7 prototype via to-subagent",
-      "style": "flow"
-    },
-    {
-      "from": "workers",
-      "to": "thread",
-      "label": "findings wake the thread",
-      "style": "return"
-    },
-    {
-      "from": "thread",
-      "to": "tracker",
-      "label": "decisions on the ticket \u00b7 CONTEXT.md \u00b7 ADRs",
-      "style": "flow"
-    },
-    {
-      "from": "user",
-      "to": "thread",
-      "label": "your call: to-spec / to-tickets",
-      "style": "flow"
-    },
-    {
-      "from": "thread",
-      "to": "tracker",
-      "label": "to-spec / to-tickets: spec + born-shaped tickets published",
-      "style": "flow"
-    },
-    {
-      "from": "user",
-      "to": "tracker",
-      "label": "AFK: comments on the published tickets",
-      "style": "flow"
-    },
-    {
-      "from": "thread",
-      "to": "tracker",
-      "label": "watch-until: apply tweaks \u00b7 reply \u21bb",
+      "label": "one engine per subject — frontiers ↻ · research · prototype",
       "style": "bidir"
     },
     {
       "from": "user",
       "to": "thread",
-      "label": "LGTM \u2014 ready for agent",
+      "label": "attend: one combined round, questions tagged by subject ↻",
+      "style": "bidir"
+    },
+    {
+      "from": "thread",
+      "to": "tracker",
+      "label": "decisions on the ticket · CONTEXT.md · ADRs",
       "style": "flow"
     },
     {
       "from": "thread",
       "to": "tracker",
-      "label": "readiness applied \u2014 the user's call, executed",
+      "label": "frontier empty → to-spec: spec onto the ticket body, diagram first",
       "style": "flow"
     },
     {
-      "phase": "Build \u2014 autonomous, supervised"
+      "from": "user",
+      "to": "tracker",
+      "label": "AFK: comments on the spec'd tickets",
+      "style": "flow"
+    },
+    {
+      "from": "thread",
+      "to": "tracker",
+      "label": "watch-until: apply tweaks · reply ↻",
+      "style": "bidir"
+    },
+    {
+      "from": "user",
+      "to": "thread",
+      "label": "approve the recommended split (when one is)",
+      "style": "flow"
+    },
+    {
+      "from": "thread",
+      "to": "tracker",
+      "label": "to-tickets: supersede parent → born-shaped children",
+      "style": "flow"
+    },
+    {
+      "from": "user",
+      "to": "thread",
+      "label": "LGTM — ready for agent",
+      "style": "flow"
+    },
+    {
+      "from": "thread",
+      "to": "tracker",
+      "label": "readiness applied — the user's call, executed",
+      "style": "flow"
+    },
+    {
+      "phase": "Build — autonomous, supervised"
     },
     {
       "from": "user",
@@ -141,13 +159,13 @@
     {
       "from": "backlog",
       "to": "tracker",
-      "label": "sweep ready + unblocked \u00b7 mark building",
+      "label": "sweep ready + unblocked · mark building",
       "style": "flow"
     },
     {
       "from": "backlog",
       "to": "builder",
-      "label": "dispatch via to-subagent \u2014 own worktree",
+      "label": "dispatch via to-subagent — own worktree",
       "style": "flow"
     },
     {
@@ -159,19 +177,19 @@
     {
       "from": "builder",
       "to": "workers",
-      "label": "verify-your-work \u2014 findings back, builder fixes \u21bb",
+      "label": "verify-your-work — findings back, builder fixes ↻",
       "style": "bidir"
     },
     {
       "from": "builder",
       "to": "tracker",
-      "label": "open change request \u2014 Closes #N",
+      "label": "open change request — Closes #N",
       "style": "flow"
     },
     {
       "from": "builder",
       "to": "workers",
-      "label": "adversarial review: reviewer \u21c6 fixer until LGTM",
+      "label": "adversarial review: reviewer ⇆ fixer until LGTM",
       "style": "bidir"
     },
     {
@@ -193,12 +211,12 @@
       "style": "return"
     },
     {
-      "phase": "Merge \u2014 explicit human authorization"
+      "phase": "Merge — explicit human authorization"
     },
     {
       "from": "user",
       "to": "tracker",
-      "label": "authorize merge (merge-changes) \u2192 ticket closes",
+      "label": "authorize merge (merge-changes) → ticket closes",
       "style": "flow"
     }
   ]

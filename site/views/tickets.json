@@ -1,7 +1,7 @@
 {
   "id": "tickets",
   "title": "Ticket states",
-  "subtitle": "The ticket lifecycle: label roles from backlog-policy.md \u2014 needs-shaping \u2192 shaping \u2192 ready-for-agent \u2192 building \u2192 closed by merge, with parked states and the repo-bound staging override.",
+  "subtitle": "The ticket lifecycle: label roles from backlog-policy.md — needs-shaping → shaping → ready-for-agent → building → closed by merge, with parked states and the repo-bound staging override.",
   "type": "swimlane",
   "lanes": [
     {
@@ -12,7 +12,7 @@
     {
       "id": "override",
       "title": "Repo overrides",
-      "blurb": "bound per repo in backlog-policy.md \u2014 not shipped"
+      "blurb": "bound per repo in backlog-policy.md — not shipped"
     },
     {
       "id": "parked",
@@ -48,28 +48,28 @@
       "lane": "default",
       "phase": "triage",
       "title": "(no readiness label)",
-      "blurb": "not yet groomed \u2014 a target for backlog groom"
+      "blurb": "unlabeled — swept and routed by backlog groom"
     },
     {
       "id": "t-needs",
       "lane": "default",
       "phase": "triage",
       "title": "needs-shaping",
-      "blurb": "strategic decisions unsettled \u2014 groom's route judgment, or a build handback"
+      "blurb": "strategic decisions unsettled — groom's route judgment, or a build handback"
     },
     {
       "id": "t-shaping",
       "lane": "default",
       "phase": "shape",
       "title": "shaping",
-      "blurb": "a shaping thread is attending it \u2014 set by groom at dispatch"
+      "blurb": "a shaping thread is attending it — set by groom at dispatch, after the batch plan is confirmed"
     },
     {
       "id": "t-born",
       "lane": "default",
       "phase": "shape",
       "title": "born shaped",
-      "blurb": "created by an approved to-tickets split \u2014 tweaked via the thread's comment watch, never re-shaped",
+      "blurb": "created by an approved to-tickets split — tweaked via the thread's comment watch, never re-shaped",
       "dashed": true
     },
     {
@@ -77,21 +77,21 @@
       "lane": "default",
       "phase": "ready",
       "title": "ready-for-agent",
-      "blurb": "blessed for pickup \u2014 a human readiness decision; work-type + dispatch metadata required"
+      "blurb": "blessed for pickup — a human readiness decision; work-type + dispatch metadata required"
     },
     {
       "id": "t-building",
       "lane": "default",
       "phase": "build",
       "title": "building",
-      "blurb": "a build subagent owns it \u2014 set by backlog build, replacing ready-for-agent"
+      "blurb": "a build subagent owns it — set by backlog build, replacing ready-for-agent"
     },
     {
       "id": "t-closed",
       "lane": "default",
       "phase": "done",
       "title": "closed",
-      "blurb": "tracker-native \u2014 the change request's Closes #N lands on merge; no label"
+      "blurb": "tracker-native — the change request's Closes #N lands on merge; no label"
     },
     {
       "id": "t-built",
@@ -120,7 +120,7 @@
       "lane": "parked",
       "phase": "done",
       "title": "excluded",
-      "blurb": "wontfix \u00b7 duplicate \u00b7 superseded \u00b7 invalid"
+      "blurb": "wontfix · duplicate · superseded · invalid"
     }
   ],
   "edges": [
@@ -128,7 +128,7 @@
       "from": "t-new",
       "to": "t-needs",
       "style": "flow",
-      "label": "route judgment"
+      "label": "groom routes"
     },
     {
       "from": "t-new",
@@ -147,7 +147,7 @@
       "from": "t-shaping",
       "to": "t-ready",
       "style": "flow",
-      "label": "crystallised \u00b7 blessed"
+      "label": "spec blessed — LGTM"
     },
     {
       "from": "t-shaping",
@@ -160,7 +160,7 @@
       "from": "t-born",
       "to": "t-ready",
       "style": "flow",
-      "label": "comment watch \u2192 readiness blessed"
+      "label": "comment watch → readiness blessed"
     },
     {
       "from": "t-ready",
@@ -172,7 +172,7 @@
       "from": "t-building",
       "to": "t-closed",
       "style": "flow",
-      "label": "merged \u2014 Closes #N"
+      "label": "merged — Closes #N"
     },
     {
       "from": "t-building",
@@ -213,6 +213,13 @@
       "style": "optional",
       "label": "blocker handback",
       "labelAt": 0.6
+    },
+    {
+      "from": "t-shaping",
+      "to": "t-excl",
+      "style": "optional",
+      "label": "split approved — superseded",
+      "labelAt": 0.35
     }
   ],
   "gapX": 150

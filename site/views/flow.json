@@ -2,17 +2,17 @@
   "id": "flow",
   "type": "swimlane",
   "title": "Lifecycle flow",
-  "subtitle": "The fullest journey \u2014 groomed shaping threads, the user's crystallise call, parallel build threads, one human merge gate. Click any box to read the contract behind it.",
+  "subtitle": "The fullest journey — batch-confirmed shaping threads, auto-spec'd tickets you bless, parallel build subagents, one human merge gate. Click any box to read the contract behind it.",
   "lanes": [
     {
       "id": "you",
-      "title": "You \u270b",
+      "title": "You ✋",
       "blurb": "Every human touch point"
     },
     {
       "id": "disp",
       "title": "Dispatcher",
-      "blurb": "backlog \u2014 fans out, no result flows back"
+      "blurb": "backlog — fans out, no result flows back"
     },
     {
       "id": "thread",
@@ -22,7 +22,7 @@
     {
       "id": "sub",
       "title": "Subagents & watchers",
-      "blurb": "to-subagent \u00b7 watch-until \u2014 staffed, non-interactive"
+      "blurb": "to-subagent · watch-until — staffed, non-interactive"
     },
     {
       "id": "repo",
@@ -37,7 +37,7 @@
     },
     {
       "id": "shape",
-      "title": "Shape \u21bb"
+      "title": "Shape ↻"
     },
     {
       "id": "crystallise",
@@ -45,7 +45,7 @@
     },
     {
       "id": "build",
-      "title": "Build \u2225"
+      "title": "Build ∥"
     },
     {
       "id": "review",
@@ -61,8 +61,8 @@
       "id": "f-ask",
       "lane": "you",
       "phase": "groom",
-      "title": "Ask for a groom \u270b",
-      "blurb": "backlog groom \u2014 or hand it ticket ids",
+      "title": "Ask for a groom ✋",
+      "blurb": "backlog groom — or hand it ticket ids",
       "open": {
         "node": "backlog"
       }
@@ -71,8 +71,8 @@
       "id": "f-groom",
       "lane": "disp",
       "phase": "groom",
-      "title": "Groom: fan out",
-      "blurb": "interlocking tickets grouped into subjects",
+      "title": "Groom: batch & confirm",
+      "blurb": "sweep unlabeled + needs-shaping · subjects · batches — spawn only on your OK",
       "open": {
         "node": "backlog"
       }
@@ -82,7 +82,7 @@
       "lane": "thread",
       "phase": "groom",
       "title": "Shaping threads spawned",
-      "blurb": "one per subject, named, attachable",
+      "blurb": "one per confirmed batch, named, attachable",
       "open": {
         "node": "to-thread"
       }
@@ -91,7 +91,7 @@
       "id": "f-needs",
       "lane": "repo",
       "phase": "groom",
-      "title": "needs-shaping tickets",
+      "title": "unlabeled · needs-shaping",
       "blurb": "label roles per backlog-policy",
       "open": {
         "file": "docs/agents/backlog-policy.md"
@@ -101,8 +101,8 @@
       "id": "f-attend",
       "lane": "you",
       "phase": "shape",
-      "title": "Attend \u00b7 decide \u270b",
-      "blurb": "answer the interview rounds \u21bb",
+      "title": "Attend · decide ✋",
+      "blurb": "answer the combined interview rounds ↻ · confirm the batch plan",
       "open": {
         "node": "interview"
       }
@@ -112,7 +112,7 @@
       "lane": "thread",
       "phase": "shape",
       "title": "shape: settle decisions",
-      "blurb": "interview \u00b7 model \u00b7 probe until settled",
+      "blurb": "one engine per subject; combined rounds ↻",
       "open": {
         "node": "shape"
       }
@@ -122,7 +122,7 @@
       "lane": "sub",
       "phase": "shape",
       "title": "Probes",
-      "blurb": "research \u00b7 prototype \u00b7 lookups via to-subagent",
+      "blurb": "research · prototype · lookups via to-subagent",
       "open": {
         "node": "to-subagent"
       }
@@ -131,7 +131,7 @@
       "id": "f-model",
       "lane": "repo",
       "phase": "shape",
-      "title": "CONTEXT.md \u00b7 ADRs",
+      "title": "CONTEXT.md · ADRs",
       "blurb": "written the moment they crystallise",
       "open": {
         "node": "domain-modeling"
@@ -141,8 +141,8 @@
       "id": "f-call",
       "lane": "you",
       "phase": "crystallise",
-      "title": "Your call \u270b",
-      "blurb": "spec? tickets? or leave it settled",
+      "title": "Bless ✋",
+      "blurb": "LGTM on each spec · approve a recommended split",
       "open": {
         "node": "to-spec"
       }
@@ -151,8 +151,8 @@
       "id": "f-spec",
       "lane": "thread",
       "phase": "crystallise",
-      "title": "to-spec \u2192 to-tickets",
-      "blurb": "spec HTML, then tracer-bullet tickets",
+      "title": "auto to-spec · approved to-tickets",
+      "blurb": "spec onto the ticket, diagram first; an approved split supersedes it with born-shaped children",
       "open": {
         "node": "to-tickets"
       }
@@ -162,7 +162,7 @@
       "lane": "sub",
       "phase": "crystallise",
       "title": "AFK sign-off & comment watch",
-      "blurb": "serve-via-tailnet verdicts; watch-until on published tickets \u2014 tweaks until readiness",
+      "blurb": "watch-until on the spec'd tickets — tweaks applied and replied to until readiness",
       "open": {
         "node": "serve-via-tailnet"
       }
@@ -171,8 +171,8 @@
       "id": "f-tickets",
       "lane": "repo",
       "phase": "crystallise",
-      "title": "Tickets published",
-      "blurb": "native blocking edges, dependency order",
+      "title": "Specs & tickets on the tracker",
+      "blurb": "body-canonical specs; born-shaped children with blocking edges",
       "open": {
         "file": "skills/software-development/to-tickets/reference/slicing.md"
       }
@@ -181,8 +181,8 @@
       "id": "f-askbuild",
       "lane": "you",
       "phase": "build",
-      "title": "Ask for a build \u270b",
-      "blurb": "backlog build \u2014 ready, unblocked tickets",
+      "title": "Ask for a build ✋",
+      "blurb": "backlog build — ready, unblocked tickets",
       "open": {
         "node": "backlog"
       }
@@ -191,8 +191,8 @@
       "id": "f-build",
       "lane": "disp",
       "phase": "build",
-      "title": "Build: fan out \u2225",
-      "blurb": "mark in-flight, one worktree subagent per ticket",
+      "title": "Build: fan out ∥",
+      "blurb": "mark building, one worktree subagent per ticket",
       "open": {
         "node": "backlog"
       }
@@ -201,8 +201,8 @@
       "id": "f-loop",
       "lane": "sub",
       "phase": "build",
-      "title": "build subagent \u00d7 N",
-      "blurb": "implement \u2192 verify & fix \u2192 change request",
+      "title": "build subagent × N",
+      "blurb": "implement → verify & fix → change request",
       "open": {
         "node": "build"
       }
@@ -211,8 +211,8 @@
       "id": "f-workers",
       "lane": "sub",
       "phase": "build",
-      "title": "Nested: implement \u00b7 verify",
-      "blurb": "the build subagent's own dispatches \u2014 roster-staffed, wake paths back",
+      "title": "Nested: implement · verify",
+      "blurb": "the build subagent's own dispatches — roster-staffed, wake paths back",
       "open": {
         "node": "to-subagent"
       }
@@ -232,7 +232,7 @@
       "lane": "sub",
       "phase": "review",
       "title": "Adversarial review",
-      "blurb": "reviewer \u21c6 fixer until LGTM",
+      "blurb": "reviewer ⇆ fixer until LGTM",
       "open": {
         "node": "adversarial-review"
       }
@@ -241,7 +241,7 @@
       "id": "f-rev",
       "lane": "sub",
       "phase": "review",
-      "title": "Reviewer \u00b7 fixer \u00b7 watcher",
+      "title": "Reviewer · fixer · watcher",
       "blurb": "code-review two-axis; watch-until relays",
       "open": {
         "node": "code-review"
@@ -261,7 +261,7 @@
       "id": "f-merge",
       "lane": "you",
       "phase": "merge",
-      "title": "Authorize the merge \u270b",
+      "title": "Authorize the merge ✋",
       "blurb": "merge-changes: the explicit gate",
       "open": {
         "node": "merge-changes"
@@ -271,7 +271,7 @@
       "id": "f-done",
       "lane": "repo",
       "phase": "merge",
-      "title": "Merged \u00b7 closed \u00b7 cleaned",
+      "title": "Merged · closed · cleaned",
       "blurb": "tickets closed, worktrees and stacks cleaned",
       "open": {
         "node": "merge-changes"
@@ -305,7 +305,7 @@
       "from": "f-shape",
       "to": "f-attend",
       "bidir": true,
-      "label": "\u21bb until the frontier is empty",
+      "label": "↻ until the frontier is empty",
       "labelAt": 0.15
     },
     {
@@ -322,22 +322,21 @@
     },
     {
       "from": "f-shape",
-      "to": "f-call",
+      "to": "f-spec",
       "style": "flow",
-      "label": "decisions settled",
-      "labelAt": 0.85
+      "label": "frontier empty — auto"
     },
     {
       "from": "f-call",
       "to": "f-spec",
       "style": "flow",
-      "label": "user's call"
+      "label": "LGTM · split approval"
     },
     {
       "from": "f-spec",
       "to": "f-gate",
       "style": "optional",
-      "label": "AFK verdict"
+      "label": "AFK comments"
     },
     {
       "from": "f-spec",
@@ -359,7 +358,7 @@
       "from": "f-build",
       "to": "f-loop",
       "style": "flow",
-      "label": "to-subagent \u00b7 worktree",
+      "label": "to-subagent · worktree",
       "labelAt": 0.3
     },
     {
