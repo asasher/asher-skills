@@ -1,226 +1,138 @@
 {
   "id": "tickets",
   "title": "Ticket states",
-  "subtitle": "The ticket lifecycle: label roles from backlog-policy.md — needs-shaping → shaping → ready-for-agent → building → closed by merge, with parked states and the repo-bound staging override.",
-  "type": "swimlane",
-  "lanes": [
-    {
-      "id": "default",
-      "title": "Shipped default",
-      "blurb": "four label roles plus tracker-native closure"
-    },
-    {
-      "id": "override",
-      "title": "Repo overrides",
-      "blurb": "bound per repo in backlog-policy.md — not shipped"
-    },
-    {
-      "id": "parked",
-      "title": "Parked & excluded",
-      "blurb": "outside the pickup loop"
-    }
-  ],
-  "phases": [
-    {
-      "id": "triage",
-      "title": "Triage"
-    },
-    {
-      "id": "shape",
-      "title": "Shape"
-    },
-    {
-      "id": "ready",
-      "title": "Ready"
-    },
-    {
-      "id": "build",
-      "title": "Build"
-    },
-    {
-      "id": "done",
-      "title": "Done"
-    }
-  ],
+  "subtitle": "The ticket lifecycle as a state machine — label roles from backlog-policy.md. Solid ring = final; dashed = repo override / born shaped; rose = parked. Click any state for the governing prose.",
+  "type": "statemachine",
   "nodes": [
     {
+      "id": "t-start",
+      "kind": "initial",
+      "col": 0,
+      "row": 1
+    },
+    {
       "id": "t-new",
-      "lane": "default",
-      "phase": "triage",
       "title": "(no readiness label)",
-      "blurb": "unlabeled — swept and routed by backlog groom"
+      "blurb": "filed — swept by backlog groom",
+      "tone": "none",
+      "col": 1,
+      "row": 1,
+      "open": { "file": "skills/software-development/backlog/templates/common/backlog-policy.md" }
     },
     {
       "id": "t-needs",
-      "lane": "default",
-      "phase": "triage",
       "title": "needs-shaping",
-      "blurb": "strategic decisions unsettled — groom's route judgment, or a build handback"
+      "blurb": "strategic decisions unsettled",
+      "tone": "needs-shaping",
+      "col": 2,
+      "row": 1,
+      "open": { "file": "skills/software-development/backlog/templates/common/backlog-policy.md" }
     },
     {
       "id": "t-shaping",
-      "lane": "default",
-      "phase": "shape",
       "title": "shaping",
-      "blurb": "a shaping thread is attending it — set by groom at dispatch, after the batch plan is confirmed"
+      "blurb": "a shaping thread attends it",
+      "tone": "shaping",
+      "col": 3,
+      "row": 1,
+      "open": { "file": "skills/software-development/backlog/templates/common/backlog-policy.md" }
     },
     {
       "id": "t-born",
-      "lane": "default",
-      "phase": "shape",
       "title": "born shaped",
-      "blurb": "created by an approved to-tickets split — tweaked via the thread's comment watch, never re-shaped",
-      "dashed": true
+      "blurb": "child of an approved split",
+      "tone": "shaping",
+      "dashed": true,
+      "col": 4,
+      "row": 0,
+      "open": { "file": "skills/software-development/to-tickets/reference/slicing.md" }
     },
     {
       "id": "t-ready",
-      "lane": "default",
-      "phase": "ready",
       "title": "ready-for-agent",
-      "blurb": "blessed for pickup — a human readiness decision; work-type + dispatch metadata required"
+      "blurb": "blessed for pickup",
+      "tone": "ready",
+      "col": 4,
+      "row": 1,
+      "open": { "file": "skills/software-development/backlog/templates/common/backlog-policy.md" }
     },
     {
       "id": "t-building",
-      "lane": "default",
-      "phase": "build",
       "title": "building",
-      "blurb": "a build subagent owns it — set by backlog build, replacing ready-for-agent"
+      "blurb": "a build subagent owns it",
+      "tone": "building",
+      "col": 5,
+      "row": 1,
+      "open": { "file": "skills/software-development/backlog/templates/common/backlog-policy.md" }
     },
     {
       "id": "t-closed",
-      "lane": "default",
-      "phase": "done",
       "title": "closed",
-      "blurb": "tracker-native — the change request's Closes #N lands on merge; no label"
+      "blurb": "tracker-native — no label",
+      "tone": "closed",
+      "kind": "final",
+      "col": 6,
+      "row": 1,
+      "open": { "file": "skills/software-development/backlog/templates/common/backlog-policy.md" }
     },
     {
       "id": "t-built",
-      "lane": "override",
-      "phase": "done",
-      "title": "built (example)",
-      "blurb": "merged to staging; closure deferred to the promotion merge",
-      "dashed": true
+      "title": "built (override)",
+      "blurb": "staged; closure deferred",
+      "tone": "building",
+      "dashed": true,
+      "col": 6,
+      "row": 0,
+      "open": { "file": "skills/software-development/backlog/templates/common/backlog-policy.md" }
     },
     {
       "id": "t-info",
-      "lane": "parked",
-      "phase": "triage",
       "title": "needs-info",
-      "blurb": "the reporter owes facts"
-    },
-    {
-      "id": "t-human",
-      "lane": "parked",
-      "phase": "ready",
-      "title": "ready-for-human",
-      "blurb": "human-only; also the abort target for blockers"
+      "blurb": "the reporter owes facts",
+      "tone": "parked",
+      "col": 1,
+      "row": 2,
+      "open": { "file": "skills/software-development/backlog/templates/common/backlog-policy.md" }
     },
     {
       "id": "t-excl",
-      "lane": "parked",
-      "phase": "done",
       "title": "excluded",
-      "blurb": "wontfix · duplicate · superseded · invalid"
+      "blurb": "wontfix · duplicate · superseded · invalid",
+      "tone": "closed",
+      "kind": "final",
+      "col": 2,
+      "row": 2,
+      "open": { "file": "skills/software-development/backlog/templates/common/backlog-policy.md" }
+    },
+    {
+      "id": "t-human",
+      "title": "ready-for-human",
+      "blurb": "human-only; abort target",
+      "tone": "parked",
+      "col": 5,
+      "row": 2,
+      "open": { "file": "skills/software-development/backlog/templates/common/backlog-policy.md" }
     }
   ],
   "edges": [
-    {
-      "from": "t-new",
-      "to": "t-needs",
-      "style": "flow",
-      "label": "groom routes"
-    },
-    {
-      "from": "t-new",
-      "to": "t-ready",
-      "style": "flow",
-      "label": "already settled",
-      "labelAt": 0.6
-    },
-    {
-      "from": "t-needs",
-      "to": "t-shaping",
-      "style": "flow",
-      "label": "groom dispatches a thread"
-    },
-    {
-      "from": "t-shaping",
-      "to": "t-ready",
-      "style": "flow",
-      "label": "spec blessed — LGTM"
-    },
-    {
-      "from": "t-shaping",
-      "to": "t-needs",
-      "style": "optional",
-      "label": "thread abandoned",
-      "labelAt": 0.5
-    },
-    {
-      "from": "t-born",
-      "to": "t-ready",
-      "style": "flow",
-      "label": "comment watch → readiness blessed"
-    },
-    {
-      "from": "t-ready",
-      "to": "t-building",
-      "style": "flow",
-      "label": "build dispatches (edges clear)"
-    },
-    {
-      "from": "t-building",
-      "to": "t-closed",
-      "style": "flow",
-      "label": "merged — Closes #N"
-    },
-    {
-      "from": "t-building",
-      "to": "t-needs",
-      "style": "optional",
-      "label": "handback: strategic gap",
-      "labelAt": 0.2
-    },
-    {
-      "from": "t-building",
-      "to": "t-ready",
-      "style": "optional",
-      "label": "abort / orphan sweep",
-      "labelAt": 0.5
-    },
-    {
-      "from": "t-building",
-      "to": "t-built",
-      "style": "external",
-      "label": "repo override: staged"
-    },
-    {
-      "from": "t-built",
-      "to": "t-closed",
-      "style": "external",
-      "label": "promotion merge"
-    },
-    {
-      "from": "t-new",
-      "to": "t-info",
-      "style": "optional",
-      "label": "waiting on reporter",
-      "labelAt": 0.7
-    },
-    {
-      "from": "t-building",
-      "to": "t-human",
-      "style": "optional",
-      "label": "blocker handback",
-      "labelAt": 0.6
-    },
-    {
-      "from": "t-shaping",
-      "to": "t-excl",
-      "style": "optional",
-      "label": "split approved — superseded",
-      "labelAt": 0.35
-    }
-  ],
-  "gapX": 150
+    { "from": "t-start", "to": "t-new", "style": "flow" },
+    { "from": "t-new", "to": "t-needs", "style": "flow", "label": "groom routes" },
+    { "from": "t-new", "to": "t-ready", "style": "flow", "label": "already settled", "labelAt": 0.5 },
+    { "from": "t-new", "to": "t-info", "style": "optional", "label": "waiting on reporter", "labelAt": 0.6 },
+    { "from": "t-info", "to": "t-new", "style": "optional", "label": "facts arrive", "labelAt": 0.4 },
+    { "from": "t-new", "to": "t-excl", "style": "optional", "label": "wontfix · duplicate", "labelAt": 0.55 },
+    { "from": "t-needs", "to": "t-shaping", "style": "flow", "label": "batch confirmed — thread" },
+    { "from": "t-shaping", "to": "t-needs", "style": "optional", "label": "thread abandoned", "labelAt": 0.5 },
+    { "from": "t-shaping", "to": "t-ready", "style": "flow", "label": "spec blessed — LGTM" },
+    { "from": "t-shaping", "to": "t-born", "style": "external", "label": "split approved: children", "labelAt": 0.4 },
+    { "from": "t-shaping", "to": "t-excl", "style": "external", "label": "superseded by the split", "labelAt": 0.5 },
+    { "from": "t-born", "to": "t-ready", "style": "flow", "label": "comment watch → LGTM", "labelAt": 0.55 },
+    { "from": "t-ready", "to": "t-building", "style": "flow", "label": "build dispatches — edges clear" },
+    { "from": "t-building", "to": "t-closed", "style": "flow", "label": "merged — Closes #N" },
+    { "from": "t-building", "to": "t-ready", "style": "optional", "label": "abort / orphan sweep", "labelAt": 0.5 },
+    { "from": "t-building", "to": "t-needs", "style": "optional", "label": "handback: strategic gap", "labelAt": 0.25 },
+    { "from": "t-building", "to": "t-human", "style": "optional", "label": "blocker handback", "labelAt": 0.55 },
+    { "from": "t-building", "to": "t-built", "style": "external", "label": "override: staged", "labelAt": 0.45 },
+    { "from": "t-built", "to": "t-closed", "style": "external", "label": "promotion merge", "labelAt": 0.5 }
+  ]
 }

@@ -35,19 +35,6 @@ def load_views() -> dict[str, dict]:
 
 
 def check_view(name: str, view: dict, all_views: dict[str, dict]) -> tuple[list[str], list[str]]:
-    if view.get("type") == "simulation":
-        errors: list[str] = []
-        root = VIEWS.parents[1]
-        for sc in view.get("scenarios", []):
-            if not sc.get("steps"):
-                errors.append(f"scenario {sc.get('id', '?')!r} has no steps")
-            for i, step in enumerate(sc.get("steps", [])):
-                if not step.get("caption"):
-                    errors.append(f"scenario {sc.get('id', '?')!r} step {i + 1} missing caption")
-                cite = step.get("cite")
-                if cite and not (root / cite).exists():
-                    errors.append(f"scenario {sc.get('id', '?')!r} step {i + 1} cites missing file {cite}")
-        return errors, []
     if view.get("type") == "sequence":
         errors: list[str] = []
         actor_ids = {a["id"] for a in view.get("actors", [])}
@@ -64,10 +51,14 @@ def check_view(name: str, view: dict, all_views: dict[str, dict]) -> tuple[list[
     phase_ids = {p["id"] for p in view.get("phases", [])}
     node_ids = {n["id"] for n in view["nodes"]}
     swim = view.get("type") == "swimlane"
+    machine = view.get("type") == "statemachine"
 
     for node in view["nodes"]:
         nid = node["id"]
-        if node["lane"] not in lane_ids:
+        if machine:
+            if "col" not in node or "row" not in node:
+                errors.append(f"{nid}: statemachine node missing col/row")
+        elif node["lane"] not in lane_ids:
             errors.append(f"{nid}: unknown lane {node['lane']!r}")
         if swim and node.get("phase") not in phase_ids:
             errors.append(f"{nid}: unknown phase {node.get('phase')!r}")

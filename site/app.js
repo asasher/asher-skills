@@ -5,7 +5,7 @@
 (() => {
   const params = new URLSearchParams(location.search);
   const BASE = (params.get('base') || '..').replace(/\/$/, '');
-  const VIEW_IDS = ['sdlc', 'flow', 'sequence', 'tickets', 'backlog', 'simulation'];
+  const VIEW_IDS = ['sdlc', 'flow', 'sequence', 'tickets', 'backlog'];
   const md = window.markdownit({ html: false, linkify: true });
 
   const state = { views: {}, fm: {}, current: 'sdlc', active: null };
@@ -138,7 +138,7 @@
       html(cell) {
         const d = cell.getData() || {};
         const div = document.createElement('div');
-        div.className = d.ports ? 'x-node has-ports' : 'x-node';
+        div.className = 'x-node' + (d.ports ? ' has-ports' : '') + (d.center ? ' center' : '');
         div.innerHTML = `<b>${esc(d.title)}</b><span>${esc(d.blurb)}</span>`
           + (d.ports ? `<em class="pb">${d.ports} port${d.ports > 1 ? 's' : ''}</em>` : '');
         return div;
@@ -210,14 +210,17 @@
     }
     for (const n of built.nodes) {
       const gate = n.id === 'merge-changes';
-      const [fv, sv] = gate ? ['--gate', '--gate-line'] : n.external ? ['--artifact', '--artifact-line'] : kindVars(n.lane);
+      const [fv, sv] = gate ? ['--gate', '--gate-line']
+        : n.tone ? [`--tone-${n.tone}`, `--tone-${n.tone}-line`]
+        : n.external ? ['--artifact', '--artifact-line'] : kindVars(n.lane);
       const stroke = cssVar(sv);
+      const r = n.pill ? NH / 2 : 8;
       graph.addNode({
         id: n.id, shape: 'skill-node', x: n.cx - NW / 2, y: n.cy - NH / 2, width: NW, height: NH, zIndex: 20,
         data: { title: n.title, blurb: n.blurb, stroke, item: true, external: n.external || null, view: viewId,
-          ports: (n.bindings || []).length },
+          center: !!n.center, ports: (n.bindings || []).length },
         attrs: { body: {
-          fill: cssVar(fv), stroke, strokeWidth: 1.5, rx: 8, ry: 8,
+          fill: cssVar(fv), stroke, strokeWidth: 1.5, rx: r, ry: r,
           ...(n.external || n.dashed ? { strokeDasharray: '5 3' } : {}),
         } },
       });
@@ -360,69 +363,32 @@
     });
   }
 
-  /* Simulation: scenario walkthroughs as step-through state snapshots — pure DOM, no canvas.
-   * Each step cites the prose that governs it; check.py fails when a cited file disappears. */
-  const simPos = {};
-  function renderSimulation(view) {
-    const pos = simPos[view.id] = simPos[view.id] || { sc: 0, step: 0 };
-    const scenario = view.scenarios[pos.sc];
-    const step = scenario.steps[Math.min(pos.step, scenario.steps.length - 1)];
-    pos.step = Math.min(pos.step, scenario.steps.length - 1);
-
-    const root = el('div', { class: 'sim' });
-    const tabs = el('div', { class: 'sim-tabs' });
-    view.scenarios.forEach((sc, i) => tabs.append(el('button', {
-      class: i === pos.sc ? 'active' : '',
-      onclick: () => { pos.sc = i; pos.step = 0; renderSimulation(view); },
-    }, sc.title)));
-    root.append(tabs, el('p', { class: 'sim-blurb' }, scenario.blurb));
-
-    const ctl = el('div', { class: 'sim-ctl' });
-    const prev = el('button', { onclick: () => { pos.step = Math.max(0, pos.step - 1); renderSimulation(view); } }, '◀');
-    const next = el('button', { onclick: () => { pos.step = Math.min(scenario.steps.length - 1, pos.step + 1); renderSimulation(view); } }, '▶');
-    prev.disabled = pos.step === 0;
-    next.disabled = pos.step === scenario.steps.length - 1;
-    ctl.append(prev, next, el('span', { class: 'pos' }, `step ${pos.step + 1} / ${scenario.steps.length}`));
-    root.append(ctl);
-
-    const cap = el('div', { class: 'sim-caption' }, step.caption);
-    if (step.cite) cap.append(el('span', { class: 'cite' }, `per ${step.cite}`));
-    root.append(cap);
-
-    const board = el('div', { class: 'sim-board' });
-    const col = (title, items, chipOf) => {
-      const c = el('div', { class: 'sim-col' }, el('h3', {}, title));
-      for (const it of items || []) {
-        const card = el('div', { class: 'sim-card' });
-        const b = el('b', {}, it.t);
-        const chip = chipOf(it);
-        if (chip) b.append(el('span', { class: `sim-chip ${chip[0]}` }, chip[1]));
-        card.append(b);
-        if (it.note) card.append(el('span', { class: 'note' }, it.note));
-        c.append(card);
-      }
-      if (!(items || []).length) c.append(el('div', { class: 'sim-card' }, el('span', { class: 'note' }, '—')));
-      return c;
-    };
-    board.append(
-      col('Tracker', step.tracker, it => it.label ? [`l-${it.label}`, it.label] : null),
-      col('Dispatcher · agents', step.agents, it => it.s ? [`s-${it.s}`, it.s] : null),
-      col('Repo · worktrees · CRs', step.repo, it => it.s ? [`s-${it.s}`, it.s] : null),
-    );
-    root.append(board);
-    $('#cy').innerHTML = '';
-    $('#cy').append(root);
-  }
-  document.addEventListener('keydown', (e) => {
-    const view = state.views && state.views[state.current];
-    if (!view || view.type !== 'simulation' || document.body.classList.contains('sheet-open')) return;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-      const pos = simPos[view.id]; if (!pos) return;
-      const max = view.scenarios[pos.sc].steps.length - 1;
-      pos.step = e.key === 'ArrowRight' ? Math.min(max, pos.step + 1) : Math.max(0, pos.step - 1);
-      renderSimulation(view);
+  /* State machine: label-role states as pills on a manifest grid — an initial dot, double-ring
+   * final states, tone fills matching the label colors, transitions routed like every other view. */
+  function drawStateMachine(view) {
+    const GX = 104, GY = 92, PAD = 30;
+    const px = NW + GX, py = NH + GY;
+    const cx = (n) => PAD + n.col * px + NW / 2, cy = (n) => PAD + n.row * py + NH / 2;
+    for (const n of view.nodes.filter(n => n.kind === 'initial')) {
+      graph.addNode({
+        id: n.id, shape: 'circle', x: cx(n) - 8, y: cy(n) - 8, width: 16, height: 16, zIndex: 20,
+        attrs: { body: { fill: cssVar('--ink'), stroke: 'none' } },
+      });
     }
-  });
+    const nodes = view.nodes.filter(n => n.kind !== 'initial').map(n => ({
+      ...n, tone: n.tone || 'none', pill: true, center: true, cx: cx(n), cy: cy(n),
+    }));
+    for (const n of nodes.filter(n => n.kind === 'final')) {
+      graph.addNode({
+        shape: 'rect', x: n.cx - NW / 2 - 5, y: n.cy - NH / 2 - 5, width: NW + 10, height: NH + 10,
+        zIndex: 19, attrs: { body: {
+          fill: 'none', stroke: cssVar(`--tone-${n.tone}-line`), strokeWidth: 1.5,
+          rx: NH / 2 + 5, ry: NH / 2 + 5,
+        } },
+      });
+    }
+    drawCells({ lanes: [], phases: [], nodes, edges: (view.edges || []).map(e => ({ ...e, style: e.style || '' })) }, view.id);
+  }
 
   function renderView() {
     const view = state.views[state.current];
@@ -431,8 +397,6 @@
     registerShapes();
     if (graph) { graph.dispose(); graph = null; activeCell = null; }
     $('#cy').innerHTML = '';
-    document.body.classList.toggle('sim-view', view.type === 'simulation');
-    if (view.type === 'simulation') { renderSimulation(view); return; }
     graph = new X6.Graph({
       container: $('#cy'), autoResize: true, interacting: false,
       panning: { enabled: true },
@@ -441,6 +405,8 @@
     });
     if (view.type === 'sequence') {
       drawSequence(view);
+    } else if (view.type === 'statemachine') {
+      drawStateMachine(view);
     } else {
       const built = view.type === 'swimlane' ? buildSwimElements(view) : buildGraphElements(view);
       drawCells(built, view.id);

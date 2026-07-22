@@ -16,14 +16,14 @@ cannot fetch.
   (Esc/× pops one, clicking a peeking lower sheet returns to it, backdrop closes all). Reference
   detection lives in `wireRefs()`; bare well-known names (`CONTEXT.md`, playbook filenames) resolve via
   its `BARE` map.
-- **Layer 2 (can drift, gated):** `views/*.json` — six views today: `sdlc` (family dependency graph;
+- **Layer 2 (can drift, gated):** `views/*.json` — five views today: `sdlc` (family dependency graph;
   edges from frontmatter), `flow` (the user/dispatcher/threads/subagents/tracker swim-lane; every box opens
   the contract behind it), `sequence` (the same journey over time: actors, lifelines, messages — type
-  `sequence`, rendered by `drawSequence`), `tickets` (the ticket-lifecycle state machine: label roles from
-  `backlog-policy.md` as a swim-lane), `backlog` (the dispatcher exploded: fan-outs, playbooks, composed
-  siblings), `simulation` (step-through scenario walkthroughs — type `simulation`, pure DOM via
-  `renderSimulation`; every step cites its governing prose file and `check.py` fails when a cite
-  disappears — the deliberate peg against drift).
+  `sequence`, rendered by `drawSequence`), `tickets` (the ticket lifecycle as a proper state machine —
+  type `statemachine`, rendered by `drawStateMachine`: label-role states as tone-colored pills on a
+  manifest `col`/`row` grid, an initial dot, double-ring final states; every state's `open.file` points
+  at the governing prose), `backlog` (the dispatcher exploded: fan-outs, playbooks, composed
+  siblings).
   Rosters, lanes/phases, blurbs, file lists, open targets, and each skill node's `bindings` table (its
   ports: what the skill expects a consumer project to bind, and the shipped template default) live here.
   The site documents the shipped skills — never this repo's own installation of them, which is a separate
