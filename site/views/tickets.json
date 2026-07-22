@@ -69,7 +69,7 @@
       "lane": "default",
       "phase": "shape",
       "title": "born shaped",
-      "blurb": "created by an approved to-tickets split \u2014 never enters shaping",
+      "blurb": "created by an approved to-tickets split \u2014 tweaked via the thread's comment watch, never re-shaped",
       "dashed": true
     },
     {
@@ -160,7 +160,7 @@
       "from": "t-born",
       "to": "t-ready",
       "style": "flow",
-      "label": "readiness blessed"
+      "label": "comment watch \u2192 readiness blessed"
     },
     {
       "from": "t-ready",

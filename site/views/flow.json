@@ -161,8 +161,8 @@
       "id": "f-gate",
       "lane": "sub",
       "phase": "crystallise",
-      "title": "AFK sign-off",
-      "blurb": "serve-via-tailnet: annotations + verdict",
+      "title": "AFK sign-off & comment watch",
+      "blurb": "serve-via-tailnet verdicts; watch-until on published tickets \u2014 tweaks until readiness",
       "open": {
         "node": "serve-via-tailnet"
       }

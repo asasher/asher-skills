@@ -70,8 +70,9 @@ each on its side: never script a judgment call, never leave failure-prone mechan
 The stage between raw intent and execution-ready work: interviewing the decisions, researching
 facts, prototyping unsettleable questions, maintaining the domain model as terms land. Owned by the
 `shape` skill, run in interactive threads the user attends; crystallising the settled direction
-(`to-spec`, `to-tickets`) is the user's call inside the thread, not a shape step. `backlog groom`
-dispatches `needs-shaping` work into these threads.
+(`to-spec`, `to-tickets`) is the user's call inside the thread, not a shape step — after which the
+thread watches the published tickets for AFK comments until the user blesses readiness. `backlog
+groom` dispatches `needs-shaping` work into these threads.
 
 **needs-shaping**:
 The tracker label role marking work whose strategic decisions are unsettled — cleared when shaping

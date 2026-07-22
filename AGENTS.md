@@ -146,7 +146,8 @@ refresh with the atomic install command below.
 **How they fit together:** `backlog` is a dispatcher. `backlog groom` fans `needs-shaping` tickets into
 interactive shaping threads via `to-thread`; each runs `shape` — composing `interview` and
 `domain-modeling`, dispatching `research` and `prototype` through `to-subagent` — and crystallising via
-`to-spec` / `to-tickets` is the user's call inside the thread. `backlog build` fans ready tickets into
+`to-spec` / `to-tickets` is the user's call inside the thread, which then watches the published tickets
+for AFK comments until the user blesses readiness. `backlog build` fans ready tickets into
 worktree-isolated subagents it babysits — building is autonomous, so outcomes flow back; each runs
 `build`: `implement` (defect → `diagnosing-bugs`, new behavior
 → `tdd`) → `verify-your-work` (the thread fixes) → change request → `adversarial-review` (`code-review`
