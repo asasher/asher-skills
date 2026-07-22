@@ -86,6 +86,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [
@@ -133,6 +137,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -153,6 +161,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -173,6 +185,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -193,6 +209,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [],
@@ -220,6 +240,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -250,6 +274,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -285,6 +313,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [
@@ -319,6 +351,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [
@@ -357,6 +393,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [
@@ -412,6 +452,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [
@@ -447,6 +491,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [
@@ -476,6 +524,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -506,6 +558,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -546,6 +602,14 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
+        },
+        {
+          "label": "answer key",
+          "path": "evals/answer-key.md"
         }
       ],
       "playbooks": [
@@ -575,6 +639,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -599,6 +667,10 @@
         {
           "label": "conduct",
           "path": "reference/conduct.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -624,6 +696,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [
@@ -653,6 +729,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [
@@ -688,6 +768,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [
@@ -732,6 +816,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -752,6 +840,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": []
@@ -807,6 +899,10 @@
           "group": "Provenance",
           "label": "README",
           "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md"
         }
       ],
       "playbooks": [
