@@ -32,7 +32,7 @@
 
 - Binding: _<git | jj (colocated or native) | custom>_.
 - Verbs:
-  - Create an isolated working copy off the base branch: _<e.g. `git worktree add <path> -b <branch> <base>`; jj: `jj workspace add`>_.
+  - Create an isolated working copy off the base branch: _<e.g. `git worktree add <path> -b <branch> <base>`; jj: `jj workspace add`>_. The recorded command must create branch and working copy in one step — the primary checkout stays on the base branch and is never switched.
   - Name a line of work: _<git: branch, per `environment.md` § Branching; jj: bookmark>_.
   - Sync the base before forking: _<e.g. `git fetch && git update-ref` / pull; local-only repo: none — the tracker commit below is the fork point>_.
   - Publish a line of work: _<e.g. `git push -u origin <branch>`; local-only repo: none — the branch is already visible; jj: `jj git push` or none>_.

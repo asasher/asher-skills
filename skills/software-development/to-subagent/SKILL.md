@@ -28,8 +28,11 @@ status note. When the result must be structured, state the exact shape.
 
 ## Isolation
 
-Work that edits files this session or a parallel agent may also touch gets its own worktree. Read-only
-work runs in place.
+Work that edits files this session or a parallel agent may also touch gets its own worktree, created —
+branch and directory in one step — off the base ref (`git worktree add <path> -b <branch> <base>`, or
+the platform binding's equivalent). The primary checkout is never switched: it stays on the user's
+branch throughout, so never create or check out the work branch there first. Read-only work runs in
+place.
 
 ## Wake path
 

@@ -8,7 +8,8 @@
 ## Branching & deploys
 
 - Base branch: _<e.g. main, or staging>_ — create worktrees and work branches from it, and target
-  change requests at it. Sync it per `platform.md` § Version control before branching.
+  change requests at it. Sync it per `platform.md` § Version control before branching. The primary
+  checkout stays on this branch — work branches are born inside their worktrees, never checked out here.
 - Branch naming: _<e.g. `<ticket-number>-<slug>`>_.
 - What a change request produces: _<e.g. a preview deployment per PR, or nothing>_.
 - What a merge produces: _<e.g. merge to staging → staging deployment; promotion path to production>_.
