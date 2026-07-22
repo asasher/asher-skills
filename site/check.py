@@ -35,6 +35,16 @@ def load_views() -> dict[str, dict]:
 
 
 def check_view(name: str, view: dict, all_views: dict[str, dict]) -> tuple[list[str], list[str]]:
+    if view.get("type") == "sequence":
+        errors: list[str] = []
+        actor_ids = {a["id"] for a in view.get("actors", [])}
+        for msg in view.get("messages", []):
+            if "phase" in msg:
+                continue
+            for end in ("from", "to"):
+                if msg.get(end) not in actor_ids:
+                    errors.append(f"sequence message {msg.get('label', '?')!r}: unknown actor {msg.get(end)!r}")
+        return errors, []
     errors: list[str] = []
     warnings: list[str] = []
     lane_ids = {l["id"] for l in view.get("lanes", [])}

@@ -89,7 +89,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [
@@ -140,7 +141,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -164,7 +166,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -188,7 +191,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -212,7 +216,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [],
@@ -243,7 +248,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -277,7 +283,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -316,7 +323,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [
@@ -354,7 +362,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [
@@ -396,7 +405,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [
@@ -455,7 +465,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [
@@ -494,7 +505,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [
@@ -527,7 +539,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -561,7 +574,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -605,11 +619,13 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         },
         {
           "label": "answer key",
-          "path": "evals/answer-key.md"
+          "path": "evals/answer-key.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [
@@ -642,7 +658,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -670,7 +687,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -699,7 +717,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [
@@ -732,7 +751,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [
@@ -771,7 +791,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [
@@ -819,7 +840,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -843,7 +865,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": []
@@ -902,7 +925,8 @@
         },
         {
           "label": "probes",
-          "path": "evals/probes.md"
+          "path": "evals/probes.md",
+          "group": "Evals"
         }
       ],
       "playbooks": [

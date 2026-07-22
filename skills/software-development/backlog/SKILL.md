@@ -24,8 +24,8 @@ by `docs/agents/backlog-policy.md`. Missing playbooks: run `backlog setup` first
 ## groom
 
 Sweep the tracker for tickets carrying the needs-shaping role, or take the ids given. Group tickets whose
-decisions interlock into one subject; the rest stay one subject each. For each subject, spawn a thread
-via the `to-thread` skill — named for the subject, seeded with the ticket ids and the instruction to run
+decisions interlock into one subject; the rest stay one subject each. For each subject, mark it shaping
+per the label roles — a subject never gets two threads — then spawn a thread via the `to-thread` skill — named for the subject, seeded with the ticket ids and the instruction to run
 the `shape` skill on them. Report each thread and how to attach; status on request comes from the
 tracker and the harness's thread listing. What happens inside the thread — and whether a spec or tickets
 come out of it — is the user's call there, not this dispatcher's.
@@ -33,7 +33,7 @@ come out of it — is the user's call there, not this dispatcher's.
 ## build
 
 Sweep for tickets carrying the ready role whose dependency edges are clear, or take the ids given. For
-each: mark it in-flight per the label roles — a dispatched ticket must never dispatch twice — then
+each: mark it building per the label roles — a dispatched ticket must never dispatch twice — then
 dispatch the `build` skill on it via the `to-subagent` skill, in its own worktree. Isolation and
 concurrency follow the environment playbook's verdicts (`docs/agents/environment.md` § Worktree
 isolation, § Parallelism): a repo that can't isolate builds one ticket at a time in the main checkout.

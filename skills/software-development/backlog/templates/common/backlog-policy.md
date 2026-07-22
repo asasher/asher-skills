@@ -1,6 +1,6 @@
 # Playbook: Backlog Policy
 
-> Project playbook for this repo. Read by `groom` (to triage the backlog), `run` (to select ready work), and the build loop (to route on work-type). The skill reasons in **roles**; map this tracker's actual label names to each role below so the wording can differ per repo. On the local tracker binding (`platform.md`) the mapping is the identity — roles are the frontmatter values verbatim.
+> Project playbook for this repo. Read by `backlog groom` (to triage and dispatch shaping), `backlog build` (to select and dispatch ready work), and build sessions (to route on work-type). The skill reasons in **roles**; map this tracker's actual label names to each role below so the wording can differ per repo. On the local tracker binding (`platform.md`) the mapping is the identity — roles are the frontmatter values verbatim.
 
 ## Work domain
 
@@ -16,11 +16,14 @@ Two independent axes, plus exclusions. Readiness decides *whether and who* picks
 **Readiness / ownership** — map each to this repo's label:
 
 - `ready-for-agent` — groomed and released: the agent may work it. Requires a work-type and complete dispatch metadata (§ Dispatch metadata). Default label `ready-for-agent` — _<your label>_.
-- `in-flight` — dispatched: an issue thread owns it, so `run` never selects it. Set by `run` at dispatch, replacing `ready-for-agent`; records what's flying (branch name and dispatch date — local: frontmatter; GitHub: a comment alongside the label). Cleared by the run thread on abort, superseded by closure when the change merges, or reset by `groom`'s human-confirmed orphan sweep (§ In-flight hygiene). Default `in-flight` — _<your label>_.
+- `building` — dispatched: a build subagent owns it, so `backlog build` never selects it again. Set by `backlog build` at dispatch, replacing `ready-for-agent`; records what's flying (branch name and dispatch date — local: frontmatter; GitHub: a comment alongside the label). Cleared on abort, superseded by closure when the change merges, or reset by `groom`'s human-confirmed orphan sweep (§ Building hygiene). Default `building` — _<your label>_.
 - `ready-for-human` — only a human; the agent skips it entirely. Also the abort target for verify caps and environment blockers: the agent hands the issue back with the blocker commented, since a human must look before it can be re-released. Default `ready-for-human` — _<your label>_.
 - `needs-info` — parked, waiting on the reporter. Default `needs-info` — _<your label>_.
-- `needs-shaping` — parked for strategic shaping: the issue carries product/design/scope decisions that are neither settled nor delegated, or execution invalidated an approved decision. Set by `groom`'s route judgment or by an issue thread's handback; cleared when shaping (the `shape` skill, swept by groom or run standalone) delivers execution-ready work. Boundary with `needs-info`: there the reporter owes facts; here the product owner owes shaping. Never selectable by `run`. Default `needs-shaping` — _<your label>_.
-- *(no readiness label)* — not yet groomed; a target for `backlog groom`, not for `run`.
+- `needs-shaping` — parked for strategic shaping: the issue carries product/design/scope decisions that are neither settled nor delegated, or execution invalidated an approved decision. Set by `groom`'s route judgment or by an issue thread's handback; cleared when shaping delivers execution-ready work. Boundary with `needs-info`: there the reporter owes facts; here the product owner owes shaping. Never selectable by `backlog build`. Default `needs-shaping` — _<your label>_.
+- `shaping` — a shaping thread is attending it. Set by `backlog groom` at dispatch, replacing `needs-shaping`, so a subject never gets two threads; the human in the thread moves it on — forward to `ready-for-agent` when readiness is blessed, back to `needs-shaping` if the thread is abandoned. Default `shaping` — _<your label>_.
+- *(no readiness label)* — not yet groomed; a target for `backlog groom`, not for `backlog build`.
+
+**Closure** — the change request's closing reference (`Closes #N`) closes the ticket on merge; there is no post-build label by default. A repo whose merges land on a staging branch first may bind an extra label (e.g. `built`) meaning *merged, closure deferred to the promotion merge*: _<label, or "none — direct closure">_.
 
 Two further lifecycle values appear only where the tracker has no native equivalent (the local binding's `state:` field), written by the loop, never by grooming: `in-review` (a PR is open for it — set on the work branch at PR-open) and `closed` (set on the work branch once review converges; the merge carries it to main). On trackers with native state (GitHub), an open PR and native closure express these.
 
@@ -38,7 +41,7 @@ Two further lifecycle values appear only where the tracker has no native equival
 
 ## Dispatch metadata
 
-Groom records the facts `run` passes to `staffing` **before** it creates a worktree or child:
+Groom records the facts `backlog build` passes to dispatch **before** it spawns a subagent:
 
 - **Surface** — `backend`, `ui`, `mixed`, or `non-code`; include any required capability.
 - **Coordination class** — `routine` when the issue is settled enough for a normal issue coordinator;
@@ -51,7 +54,7 @@ Groom records the facts `run` passes to `staffing` **before** it creates a workt
 
 Tracker encoding: _<GitHub: a stable `Dispatch:` block in the body or grooming comment; local: `surface`,
 `coordination`, and `coordination-reason` frontmatter; custom: name the fields here>_. Missing metadata is a
-grooming gap: `run` skips the issue rather than inferring it or defaulting to the orchestrator.
+grooming gap: `backlog build` skips the ticket rather than inferring it or defaulting to the orchestrator.
 
 **Exclusion** — terminal; removed from grooming and from the run queue:
 
@@ -63,15 +66,15 @@ grooming gap: `run` skips the issue rather than inferring it or defaulting to th
 
 ## Dependencies
 
-- How this repo records that one issue is blocked by another, so `run` can skip blocked work: _<prefer the tracker's exercised native relation (GitHub `blocked_by`, Jira `is blocked by`, Linear `blocked-by`) via `platform.md`; local uses `deps:` frontmatter; a tracker without an exercisable native relation names its explicit fallback here>_.
-- `run` treats an issue with any unresolved (open/incomplete) blocker as blocked and skips it. Duplicate/supersede links: _<the convention — a `duplicate of #N` / `superseded by #N` body line plus the exclusion label, or the tracker's native link>_.
+- How this repo records that one issue is blocked by another, so `backlog build` can skip blocked work: _<prefer the tracker's exercised native relation (GitHub `blocked_by`, Jira `is blocked by`, Linear `blocked-by`) via `platform.md`; local uses `deps:` frontmatter; a tracker without an exercisable native relation names its explicit fallback here>_.
+- `backlog build` treats an issue with any unresolved (open/incomplete) blocker as blocked and skips it. Duplicate/supersede links: _<the convention — a `duplicate of #N` / `superseded by #N` body line plus the exclusion label, or the tracker's native link>_.
 
 ## Readiness decision
 
 - The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. The agent may apply `ready-for-human`, `needs-info`, `needs-shaping`, and exclusion roles on its own.
 - Adjust this rule if this team wants more or less agent autonomy (e.g. let the agent auto-bless low-risk bugs).
 
-## In-flight hygiene
+## Building hygiene
 
-- Concurrent runners are possible (two machines, two humans, one tracker); `in-flight` is the claim marker, applied optimistically — the loop accepts the rare duplicate pickup in the window between queue build and marking rather than carrying a lock.
-- **Orphan sweep** — an `in-flight` issue whose recorded branch no longer exists, or has gone quiet past _<horizon, e.g. 7 days>_, is a corpse: `groom` surfaces it to the human as a candidate reset to `ready-for-agent` (or `needs-info`). Never silently reset — the branch may hold unmerged work.
+- Concurrent runners are possible (two machines, two humans, one tracker); `building` is the claim marker, applied optimistically — the loop accepts the rare duplicate pickup in the window between queue build and marking rather than carrying a lock.
+- **Orphan sweep** — a `building` ticket whose recorded branch no longer exists, or has gone quiet past _<horizon, e.g. 7 days>_, is a corpse: `groom` surfaces it to the human as a candidate reset to `ready-for-agent` (or `needs-info`). Never silently reset — the branch may hold unmerged work.

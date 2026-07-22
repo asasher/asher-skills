@@ -1,0 +1,40 @@
+{
+  "id": "sequence",
+  "title": "Sequence",
+  "subtitle": "The end-to-end conversation over time: who talks to whom — the user, the dispatcher, attachable shaping threads, supervised build subagents, their nested workers, and the tracker.",
+  "type": "sequence",
+  "actors": [
+    { "id": "user", "title": "User ✋", "blurb": "asks, attends, decides", "kind": "you" },
+    { "id": "backlog", "title": "backlog", "blurb": "dispatcher", "kind": "disp" },
+    { "id": "thread", "title": "Shaping thread", "blurb": "to-thread · shape", "kind": "thread" },
+    { "id": "builder", "title": "Build subagent", "blurb": "to-subagent · build · worktree", "kind": "sub" },
+    { "id": "workers", "title": "Nested workers", "blurb": "implement · verify · review · evidence", "kind": "sub" },
+    { "id": "tracker", "title": "Tracker & repo", "blurb": "tickets · labels · change requests", "kind": "repo" }
+  ],
+  "messages": [
+    { "phase": "Groom — interactive, nothing flows back" },
+    { "from": "user", "to": "backlog", "label": "backlog groom", "style": "flow" },
+    { "from": "backlog", "to": "tracker", "label": "sweep needs-shaping · mark shaping", "style": "flow" },
+    { "from": "backlog", "to": "thread", "label": "spawn via to-thread — named, seeded", "style": "flow" },
+    { "from": "backlog", "to": "user", "label": "attach instructions", "style": "return" },
+    { "from": "user", "to": "thread", "label": "attend: interview rounds", "style": "bidir" },
+    { "from": "thread", "to": "workers", "label": "research · prototype via to-subagent", "style": "flow" },
+    { "from": "workers", "to": "thread", "label": "findings wake the thread", "style": "return" },
+    { "from": "thread", "to": "tracker", "label": "decisions on the ticket · CONTEXT.md · ADRs", "style": "flow" },
+    { "from": "user", "to": "thread", "label": "your call: to-spec / to-tickets", "style": "flow" },
+    { "from": "thread", "to": "tracker", "label": "spec + born-shaped tickets · readiness blessed", "style": "flow" },
+    { "phase": "Build — autonomous, supervised" },
+    { "from": "user", "to": "backlog", "label": "backlog build", "style": "flow" },
+    { "from": "backlog", "to": "tracker", "label": "sweep ready + unblocked · mark building", "style": "flow" },
+    { "from": "backlog", "to": "builder", "label": "dispatch via to-subagent — own worktree", "style": "flow" },
+    { "from": "builder", "to": "workers", "label": "implement (tdd / diagnosing-bugs)", "style": "flow" },
+    { "from": "builder", "to": "workers", "label": "verify-your-work — findings back, builder fixes ↻", "style": "bidir" },
+    { "from": "builder", "to": "tracker", "label": "open change request — Closes #N", "style": "flow" },
+    { "from": "builder", "to": "workers", "label": "adversarial review: reviewer ⇆ fixer until LGTM", "style": "bidir" },
+    { "from": "builder", "to": "tracker", "label": "evidence posted (prove-your-work)", "style": "flow" },
+    { "from": "builder", "to": "backlog", "label": "wake: review-ready change request", "style": "return" },
+    { "from": "backlog", "to": "user", "label": "outcomes relayed", "style": "return" },
+    { "phase": "Merge — explicit human authorization" },
+    { "from": "user", "to": "tracker", "label": "authorize merge (merge-changes) → ticket closes", "style": "flow" }
+  ]
+}

@@ -5,7 +5,7 @@
 (() => {
   const params = new URLSearchParams(location.search);
   const BASE = (params.get('base') || '..').replace(/\/$/, '');
-  const VIEW_IDS = ['sdlc', 'flow', 'backlog'];
+  const VIEW_IDS = ['sdlc', 'flow', 'sequence', 'tickets', 'backlog'];
   const md = window.markdownit({ html: false, linkify: true });
 
   const state = { views: {}, fm: {}, current: 'sdlc', active: null };
@@ -309,6 +309,57 @@
     }
   }
 
+  /* Sequence diagrams: actor heads over dashed lifelines, messages as straight point-to-point
+   * arrows in time order — same canvas, no router (nothing to route around on a fixed y). */
+  function drawSequence(view) {
+    const muted = cssVar('--muted'), accent = cssVar('--accent'), line = cssVar('--line'), bg = cssVar('--bg');
+    const GAP = 96, TOP = 16, ROW = 46, LPAD = 40;
+    const ax = {};
+    view.actors.forEach((a, i) => { ax[a.id] = LPAD + i * (NW + GAP) + NW / 2; });
+    const startY = TOP + NH + 34;
+    const endY = startY + view.messages.length * ROW + 10;
+    const totalW = LPAD * 2 + view.actors.length * NW + (view.actors.length - 1) * GAP;
+    for (const a of view.actors) {
+      graph.addEdge({
+        source: { x: ax[a.id], y: TOP + NH }, target: { x: ax[a.id], y: endY }, zIndex: 1,
+        attrs: { line: { stroke: line, strokeWidth: 1.5, strokeDasharray: '4 4', targetMarker: null } },
+      });
+    }
+    for (const a of view.actors) {
+      const [fv, sv] = kindVars(a.kind);
+      graph.addNode({
+        id: `actor:${a.id}`, shape: 'skill-node', x: ax[a.id] - NW / 2, y: TOP, width: NW, height: NH,
+        zIndex: 20, data: { title: a.title, blurb: a.blurb, stroke: cssVar(sv) },
+        attrs: { body: { fill: cssVar(fv), stroke: cssVar(sv), strokeWidth: 1.5, rx: 8, ry: 8 } },
+      });
+    }
+    view.messages.forEach((m, i) => {
+      const y = startY + i * ROW;
+      if (m.phase) {
+        graph.addNode({
+          id: `seq-phase:${i}`, shape: 'phase-head', x: totalW / 2 - NW, y: y - 13, width: NW * 2, height: 26,
+          zIndex: 2, data: { title: `— ${m.phase} —` },
+          attrs: { body: { fill: 'transparent', stroke: 'none' } },
+        });
+        return;
+      }
+      const ret = m.style === 'return';
+      const marker = { name: 'block', width: 8, height: 6 };
+      graph.addEdge({
+        source: { x: ax[m.from], y }, target: { x: ax[m.to], y }, zIndex: 10,
+        attrs: { line: {
+          stroke: ret ? muted : accent, strokeWidth: ret ? 1.5 : 2, opacity: ret ? .6 : .85,
+          targetMarker: marker, ...(m.style === 'bidir' ? { sourceMarker: marker } : {}),
+          ...(ret ? { strokeDasharray: '5 3' } : {}),
+        } },
+        labels: [{ position: 0.5, attrs: {
+          label: { text: m.label, fontSize: 9.5, fill: muted },
+          body: { fill: bg, stroke: line, strokeWidth: 1, rx: 4, ry: 4, refWidth2: 10, refHeight2: 6, refX: -5, refY: -3 },
+        } }],
+      });
+    });
+  }
+
   function renderView() {
     const view = state.views[state.current];
     $('#view-subtitle').textContent = view.subtitle;
@@ -322,8 +373,12 @@
       // default wheel factor is 1.2× per event — a trackpad flick fires dozens and compounds wildly
       mousewheel: { enabled: true, minScale: .25, maxScale: 2.75, factor: 1.04 },
     });
-    const built = view.type === 'swimlane' ? buildSwimElements(view) : buildGraphElements(view);
-    drawCells(built, view.id);
+    if (view.type === 'sequence') {
+      drawSequence(view);
+    } else {
+      const built = view.type === 'swimlane' ? buildSwimElements(view) : buildGraphElements(view);
+      drawCells(built, view.id);
+    }
     hoverId = null;
     graph.zoomToFit({ padding: 28, maxScale: 1 });
     if (state.active) setActiveCell(state.active);

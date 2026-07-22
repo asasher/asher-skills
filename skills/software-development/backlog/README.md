@@ -2,9 +2,10 @@
 
 Dispatcher for the tracker, with two dispatch shapes. `groom` fans tickets carrying the needs-shaping
 role into interactive shaping threads — one per subject, interlocked tickets grouped — each seeded to
-run the `shape` skill; threads are harness-native sessions the user attends, and nothing reports back.
+run the `shape` skill, its tickets marked shaping; threads are harness-native sessions the user attends,
+and nothing reports back.
 `build` fans ready, unblocked tickets into worktree-isolated **subagents**, each running the `build`
-skill, marked in-flight so nothing dispatches twice — building is autonomous, so the dispatcher
+skill, marked building so nothing dispatches twice — building is autonomous, so the dispatcher
 babysits: completion wakes it and it relays each outcome.
 
 Platform-bound, not bound-to-GitHub: *ticket*, *label*, and *change request* are roles, bound per repo by
