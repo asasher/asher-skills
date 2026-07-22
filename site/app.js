@@ -5,7 +5,7 @@
 (() => {
   const params = new URLSearchParams(location.search);
   const BASE = (params.get('base') || '..').replace(/\/$/, '');
-  const VIEW_IDS = ['sdlc', 'flow', 'sequence', 'tickets', 'backlog'];
+  const VIEW_IDS = ['sdlc', 'sequence', 'tickets', 'backlog'];
   const md = window.markdownit({ html: false, linkify: true });
 
   const state = { views: {}, fm: {}, current: 'sdlc', active: null };
@@ -245,15 +245,71 @@
     }
   }
 
+  /* The router avoids nodes but knows nothing about labels. After a view renders, slide each
+   * edge label along its own path — starting from the authored position — until it overlaps no
+   * node and no already-placed label. labelAt in the manifests is a preference, not a fix. */
+  let labelCtx = null;
+  function labelWidth(text) {
+    if (!labelCtx) {
+      labelCtx = document.createElement('canvas').getContext('2d');
+      labelCtx.font = '9.5px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    }
+    return labelCtx.measureText(text).width;
+  }
+  const rectsOverlap = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+  function deconflictLabels() {
+    const obstacles = graph.getNodes()
+      .filter(n => n.shape === 'skill-node')
+      .map(n => { const b = n.getBBox(); return { x: b.x - 2, y: b.y - 2, w: b.width + 4, h: b.height + 4 }; });
+    const placed = [];
+    for (const edge of graph.getEdges()) {
+      const labels = edge.getLabels();
+      const text = labels.length && labels[0].attrs && labels[0].attrs.label && labels[0].attrs.label.text;
+      if (!text) continue;
+      const view = graph.findViewByCell(edge);
+      const pathEl = view && view.container.querySelector('path');
+      if (!pathEl) continue;
+      let total = 0;
+      try { total = pathEl.getTotalLength(); } catch { /* not rendered */ }
+      if (!total) continue;
+      const w = labelWidth(text) + 16, h = 19;
+      const rectAt = (d) => {
+        const p = pathEl.getPointAtLength(d * total);
+        return { x: p.x - w / 2, y: p.y - h / 2, w, h };
+      };
+      const pref = typeof labels[0].position === 'number' ? labels[0].position
+        : (labels[0].position && labels[0].position.distance) || 0.5;
+      const candidates = [];
+      for (let d = 0.08; d <= 0.921; d += 0.02) candidates.push(d);
+      candidates.sort((a, b) => Math.abs(a - pref) - Math.abs(b - pref));
+      let pick = null, fallback = null, fallbackHits = Infinity;
+      for (const d of candidates) {
+        const r = rectAt(d);
+        let hits = 0;
+        for (const o of obstacles) if (rectsOverlap(r, o)) hits++;
+        for (const o of placed) if (rectsOverlap(r, o)) hits++;
+        if (!hits) { pick = { d, r }; break; }
+        if (hits < fallbackHits) { fallbackHits = hits; fallback = { d, r }; }
+      }
+      pick = pick || fallback;
+      placed.push(pick.r);
+      if (Math.abs(pick.d - pref) > 0.001) edge.setLabelAt(0, { ...labels[0], position: pick.d });
+    }
+  }
+
   /* Hover + click are driven by plain DOM delegation on the container (bubbling mouseover/click
    * against the data-cell-id the engine stamps on every cell <g>) — no dependency on X6's
    * synthetic delegated-mouseenter events. */
   let hoverId = null, downAt = null;
-  function cellFromEvent(ev) {
+  function cellFromEvent(ev, allowOpen) {
     const g = ev.target.closest && ev.target.closest('g[data-cell-id]');
     if (!g || !graph) return null;
     const cell = graph.getCellById(g.getAttribute('data-cell-id'));
-    return cell && cell.isNode() && (cell.getData() || {}).item ? cell : null;
+    if (!cell) return null;
+    const d = cell.getData() || {};
+    if (cell.isNode() && (d.item || (allowOpen && d.open))) return cell;
+    if (allowOpen && cell.isEdge() && d.open) return cell;
+    return null;
   }
   function wireCanvasEvents() {
     const pane = $('#cy');
@@ -268,9 +324,12 @@
     pane.addEventListener('mousedown', (ev) => { downAt = [ev.clientX, ev.clientY]; });
     pane.addEventListener('click', (ev) => {
       if (downAt && Math.hypot(ev.clientX - downAt[0], ev.clientY - downAt[1]) > 6) return; // a pan, not a click
-      const cell = cellFromEvent(ev);
+      const cell = cellFromEvent(ev, true);
       if (!cell) return;
+      const d = cell.getData() || {};
       const v = state.views[state.current];
+      // sequence actors/messages (and any edge) carry their open target in cell data
+      if (cell.isEdge() || !v.nodes) { if (d.open) openTarget(d.open); return; }
       const vn = v.nodes.find(n => n.id === cell.id);
       if (!vn) { // synthesized external node
         const owner = v.nodes.map(n => (state.fm[n.id] || {}).external || []).flat().find(x => x && x.name === cell.id);
@@ -332,8 +391,9 @@
       const [fv, sv] = kindVars(a.kind);
       graph.addNode({
         id: `actor:${a.id}`, shape: 'skill-node', x: ax[a.id] - NW / 2, y: TOP, width: NW, height: NH,
-        zIndex: 20, data: { title: a.title, blurb: a.blurb, stroke: cssVar(sv) },
-        attrs: { body: { fill: cssVar(fv), stroke: cssVar(sv), strokeWidth: 1.5, rx: 8, ry: 8 } },
+        zIndex: 20, data: { title: a.title, blurb: a.blurb, stroke: cssVar(sv), open: a.open || null },
+        attrs: { body: { fill: cssVar(fv), stroke: cssVar(sv), strokeWidth: 1.5, rx: 8, ry: 8,
+          ...(a.open ? { cursor: 'pointer' } : {}) } },
       });
     }
     view.messages.forEach((m, i) => {
@@ -348,16 +408,18 @@
       }
       const ret = m.style === 'return';
       const marker = { name: 'block', width: 8, height: 6 };
+      const ptr = m.open ? { cursor: 'pointer' } : {};
       graph.addEdge({
         source: { x: ax[m.from], y }, target: { x: ax[m.to], y }, zIndex: 10,
+        data: { open: m.open || null },
         attrs: { line: {
           stroke: ret ? muted : accent, strokeWidth: ret ? 1.5 : 2, opacity: ret ? .6 : .85,
           targetMarker: marker, ...(m.style === 'bidir' ? { sourceMarker: marker } : {}),
           ...(ret ? { strokeDasharray: '5 3' } : {}),
         } },
         labels: [{ position: 0.5, attrs: {
-          label: { text: m.label, fontSize: 9.5, fill: muted },
-          body: { fill: bg, stroke: line, strokeWidth: 1, rx: 4, ry: 4, refWidth2: 10, refHeight2: 6, refX: -5, refY: -3 },
+          label: { text: m.label, fontSize: 9.5, fill: m.open ? cssVar('--accent-ink') : muted, ...ptr },
+          body: { fill: bg, stroke: line, strokeWidth: 1, rx: 4, ry: 4, refWidth2: 10, refHeight2: 6, refX: -5, refY: -3, ...ptr },
         } }],
       });
     });
@@ -411,6 +473,7 @@
       const built = view.type === 'swimlane' ? buildSwimElements(view) : buildGraphElements(view);
       drawCells(built, view.id);
     }
+    if (view.type !== 'sequence') { try { deconflictLabels(); } catch { /* cosmetic pass only */ } }
     hoverId = null;
     graph.zoomToFit({ padding: 28, maxScale: 1 });
     if (state.active) setActiveCell(state.active);
@@ -635,6 +698,18 @@
   function jumpTo(viewId, nodeId) {
     if (state.current !== viewId) { state.current = viewId; renderView(); }
     openNode(viewId, nodeId);
+  }
+
+  /* Open a manifest `open` target from a cell that isn't a roster node (sequence actors and
+   * messages): a fresh sheet stack on the named skill or file. */
+  function openTarget(open) {
+    if (open.jump) { jumpTo(open.jump, open.node); return; }
+    if (open.node) {
+      const t = state.views.sdlc.nodes.find(n => n.id === open.node);
+      if (t) { closeAllSheets(); skillSheet(t); }
+      return;
+    }
+    if (open.file) { closeAllSheets(); fileSheet(open.file); }
   }
 
   async function openNode(viewId, nodeId, filePath) {

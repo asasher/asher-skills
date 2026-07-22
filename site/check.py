@@ -38,12 +38,25 @@ def check_view(name: str, view: dict, all_views: dict[str, dict]) -> tuple[list[
     if view.get("type") == "sequence":
         errors: list[str] = []
         actor_ids = {a["id"] for a in view.get("actors", [])}
+        sdlc_ids = {n["id"] for n in all_views.get("sdlc", {"nodes": []})["nodes"]}
+
+        def check_open(open_t: dict | None, ctx: str) -> None:
+            if not open_t:
+                return
+            if "node" in open_t and open_t["node"] not in sdlc_ids:
+                errors.append(f"{ctx}: open.node {open_t['node']!r} not in the sdlc view")
+            if "file" in open_t and not (ROOT / open_t["file"]).exists():
+                errors.append(f"{ctx}: open.file missing: {open_t['file']}")
+
+        for actor in view.get("actors", []):
+            check_open(actor.get("open"), f"sequence actor {actor['id']}")
         for msg in view.get("messages", []):
             if "phase" in msg:
                 continue
             for end in ("from", "to"):
                 if msg.get(end) not in actor_ids:
                     errors.append(f"sequence message {msg.get('label', '?')!r}: unknown actor {msg.get(end)!r}")
+            check_open(msg.get("open"), f"sequence message {msg.get('label', '?')!r}")
         return errors, []
     errors: list[str] = []
     warnings: list[str] = []

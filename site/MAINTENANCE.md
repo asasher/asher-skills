@@ -16,10 +16,10 @@ cannot fetch.
   (Esc/× pops one, clicking a peeking lower sheet returns to it, backdrop closes all). Reference
   detection lives in `wireRefs()`; bare well-known names (`CONTEXT.md`, playbook filenames) resolve via
   its `BARE` map.
-- **Layer 2 (can drift, gated):** `views/*.json` — five views today: `sdlc` (family dependency graph;
-  edges from frontmatter), `flow` (the user/dispatcher/threads/subagents/tracker swim-lane; every box opens
-  the contract behind it), `sequence` (the same journey over time: actors, lifelines, messages — type
-  `sequence`, rendered by `drawSequence`), `tickets` (the ticket lifecycle as a proper state machine —
+- **Layer 2 (can drift, gated):** `views/*.json` — four views today: `sdlc` (family dependency graph;
+  edges from frontmatter), `sequence` (the lifecycle over time: actors, lifelines, messages — type
+  `sequence`, rendered by `drawSequence`; actors and messages carry `open` targets, so every step is
+  clickable and opens the skill or prose behind it), `tickets` (the ticket lifecycle as a proper state machine —
   type `statemachine`, rendered by `drawStateMachine`: label-role states as tone-colored pills on a
   manifest `col`/`row` grid, an initial dot, double-ring final states; every state's `open.file` points
   at the governing prose), `backlog` (the dispatcher exploded: fan-outs, playbooks, composed
@@ -53,6 +53,10 @@ cannot fetch.
   placement is a deterministic grid computed in `app.js` and only edge routing is delegated to the
   engine — the architecture the swimlane-layout literature converges on
   (see `research/site-diagram-stack/findings.md` for the evaluation that chose X6).
+- The router avoids nodes but not labels, so every canvas view (except sequence, whose rows can't
+  collide) gets a post-render `deconflictLabels()` pass: each edge label slides along its own path —
+  starting from the manifest's `labelAt`, which is a preference, not a guarantee — until it overlaps
+  no node and no already-placed label.
 - To upgrade any of them: replace the file from the pinned npm dist, update the version here, and reload
   all three views to eyeball parity (edge routing and lane-header alignment are the regressions to watch).
 
