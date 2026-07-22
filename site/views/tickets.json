@@ -1,47 +1,219 @@
 {
   "id": "tickets",
   "title": "Ticket states",
-  "subtitle": "The ticket lifecycle: label roles from backlog-policy.md — needs-shaping → shaping → ready-for-agent → building → closed by merge, with parked states and the repo-bound staging override.",
+  "subtitle": "The ticket lifecycle: label roles from backlog-policy.md \u2014 needs-shaping \u2192 shaping \u2192 ready-for-agent \u2192 building \u2192 closed by merge, with parked states and the repo-bound staging override.",
   "type": "swimlane",
   "lanes": [
-    { "id": "default", "title": "Shipped default", "blurb": "four label roles plus tracker-native closure" },
-    { "id": "override", "title": "Repo overrides", "blurb": "bound per repo in backlog-policy.md — not shipped" },
-    { "id": "parked", "title": "Parked & excluded", "blurb": "outside the pickup loop" }
+    {
+      "id": "default",
+      "title": "Shipped default",
+      "blurb": "four label roles plus tracker-native closure"
+    },
+    {
+      "id": "override",
+      "title": "Repo overrides",
+      "blurb": "bound per repo in backlog-policy.md \u2014 not shipped"
+    },
+    {
+      "id": "parked",
+      "title": "Parked & excluded",
+      "blurb": "outside the pickup loop"
+    }
   ],
   "phases": [
-    { "id": "triage", "title": "Triage" },
-    { "id": "shape", "title": "Shape" },
-    { "id": "ready", "title": "Ready" },
-    { "id": "build", "title": "Build" },
-    { "id": "done", "title": "Done" }
+    {
+      "id": "triage",
+      "title": "Triage"
+    },
+    {
+      "id": "shape",
+      "title": "Shape"
+    },
+    {
+      "id": "ready",
+      "title": "Ready"
+    },
+    {
+      "id": "build",
+      "title": "Build"
+    },
+    {
+      "id": "done",
+      "title": "Done"
+    }
   ],
   "nodes": [
-    { "id": "t-new", "lane": "default", "phase": "triage", "title": "(no readiness label)", "blurb": "not yet groomed — a target for backlog groom" },
-    { "id": "t-needs", "lane": "default", "phase": "triage", "title": "needs-shaping", "blurb": "strategic decisions unsettled — groom's route judgment, or a build handback" },
-    { "id": "t-shaping", "lane": "default", "phase": "shape", "title": "shaping", "blurb": "a shaping thread is attending it — set by groom at dispatch" },
-    { "id": "t-born", "lane": "default", "phase": "shape", "title": "born shaped", "blurb": "created by an approved to-tickets split — never enters shaping", "dashed": true },
-    { "id": "t-ready", "lane": "default", "phase": "ready", "title": "ready-for-agent", "blurb": "blessed for pickup — a human readiness decision; work-type + dispatch metadata required" },
-    { "id": "t-building", "lane": "default", "phase": "build", "title": "building", "blurb": "a build subagent owns it — set by backlog build, replacing ready-for-agent" },
-    { "id": "t-closed", "lane": "default", "phase": "done", "title": "closed", "blurb": "tracker-native — the change request's Closes #N lands on merge; no label" },
-    { "id": "t-built", "lane": "override", "phase": "done", "title": "built (example)", "blurb": "merged to staging; closure deferred to the promotion merge", "dashed": true },
-    { "id": "t-info", "lane": "parked", "phase": "triage", "title": "needs-info", "blurb": "the reporter owes facts" },
-    { "id": "t-human", "lane": "parked", "phase": "ready", "title": "ready-for-human", "blurb": "human-only; also the abort target for blockers" },
-    { "id": "t-excl", "lane": "parked", "phase": "done", "title": "excluded", "blurb": "wontfix · duplicate · superseded · invalid" }
+    {
+      "id": "t-new",
+      "lane": "default",
+      "phase": "triage",
+      "title": "(no readiness label)",
+      "blurb": "not yet groomed \u2014 a target for backlog groom"
+    },
+    {
+      "id": "t-needs",
+      "lane": "default",
+      "phase": "triage",
+      "title": "needs-shaping",
+      "blurb": "strategic decisions unsettled \u2014 groom's route judgment, or a build handback"
+    },
+    {
+      "id": "t-shaping",
+      "lane": "default",
+      "phase": "shape",
+      "title": "shaping",
+      "blurb": "a shaping thread is attending it \u2014 set by groom at dispatch"
+    },
+    {
+      "id": "t-born",
+      "lane": "default",
+      "phase": "shape",
+      "title": "born shaped",
+      "blurb": "created by an approved to-tickets split \u2014 never enters shaping",
+      "dashed": true
+    },
+    {
+      "id": "t-ready",
+      "lane": "default",
+      "phase": "ready",
+      "title": "ready-for-agent",
+      "blurb": "blessed for pickup \u2014 a human readiness decision; work-type + dispatch metadata required"
+    },
+    {
+      "id": "t-building",
+      "lane": "default",
+      "phase": "build",
+      "title": "building",
+      "blurb": "a build subagent owns it \u2014 set by backlog build, replacing ready-for-agent"
+    },
+    {
+      "id": "t-closed",
+      "lane": "default",
+      "phase": "done",
+      "title": "closed",
+      "blurb": "tracker-native \u2014 the change request's Closes #N lands on merge; no label"
+    },
+    {
+      "id": "t-built",
+      "lane": "override",
+      "phase": "done",
+      "title": "built (example)",
+      "blurb": "merged to staging; closure deferred to the promotion merge",
+      "dashed": true
+    },
+    {
+      "id": "t-info",
+      "lane": "parked",
+      "phase": "triage",
+      "title": "needs-info",
+      "blurb": "the reporter owes facts"
+    },
+    {
+      "id": "t-human",
+      "lane": "parked",
+      "phase": "ready",
+      "title": "ready-for-human",
+      "blurb": "human-only; also the abort target for blockers"
+    },
+    {
+      "id": "t-excl",
+      "lane": "parked",
+      "phase": "done",
+      "title": "excluded",
+      "blurb": "wontfix \u00b7 duplicate \u00b7 superseded \u00b7 invalid"
+    }
   ],
   "edges": [
-    { "from": "t-new", "to": "t-needs", "style": "flow", "label": "groom: route judgment" },
-    { "from": "t-new", "to": "t-ready", "style": "flow", "label": "groom: settled or delegated", "labelAt": 0.75 },
-    { "from": "t-needs", "to": "t-shaping", "style": "flow", "label": "backlog groom dispatches a thread" },
-    { "from": "t-shaping", "to": "t-ready", "style": "flow", "label": "user crystallises · blesses readiness" },
-    { "from": "t-shaping", "to": "t-needs", "style": "optional", "label": "thread abandoned", "labelAt": 0.3 },
-    { "from": "t-born", "to": "t-ready", "style": "flow", "label": "readiness blessed" },
-    { "from": "t-ready", "to": "t-building", "style": "flow", "label": "backlog build dispatches — edges clear" },
-    { "from": "t-building", "to": "t-closed", "style": "flow", "label": "change request merges — Closes #N" },
-    { "from": "t-building", "to": "t-needs", "style": "optional", "label": "handback: strategic gap", "labelAt": 0.2 },
-    { "from": "t-building", "to": "t-ready", "style": "optional", "label": "abort / orphan sweep", "labelAt": 0.35 },
-    { "from": "t-building", "to": "t-built", "style": "external", "label": "repo override: staged" },
-    { "from": "t-built", "to": "t-closed", "style": "external", "label": "promotion merge" },
-    { "from": "t-new", "to": "t-info", "style": "optional", "label": "waiting on reporter", "labelAt": 0.7 },
-    { "from": "t-building", "to": "t-human", "style": "optional", "label": "blocker handback", "labelAt": 0.6 }
-  ]
+    {
+      "from": "t-new",
+      "to": "t-needs",
+      "style": "flow",
+      "label": "route judgment"
+    },
+    {
+      "from": "t-new",
+      "to": "t-ready",
+      "style": "flow",
+      "label": "already settled",
+      "labelAt": 0.6
+    },
+    {
+      "from": "t-needs",
+      "to": "t-shaping",
+      "style": "flow",
+      "label": "groom dispatches a thread"
+    },
+    {
+      "from": "t-shaping",
+      "to": "t-ready",
+      "style": "flow",
+      "label": "crystallised \u00b7 blessed"
+    },
+    {
+      "from": "t-shaping",
+      "to": "t-needs",
+      "style": "optional",
+      "label": "thread abandoned",
+      "labelAt": 0.5
+    },
+    {
+      "from": "t-born",
+      "to": "t-ready",
+      "style": "flow",
+      "label": "readiness blessed"
+    },
+    {
+      "from": "t-ready",
+      "to": "t-building",
+      "style": "flow",
+      "label": "build dispatches (edges clear)"
+    },
+    {
+      "from": "t-building",
+      "to": "t-closed",
+      "style": "flow",
+      "label": "merged \u2014 Closes #N"
+    },
+    {
+      "from": "t-building",
+      "to": "t-needs",
+      "style": "optional",
+      "label": "handback: strategic gap",
+      "labelAt": 0.2
+    },
+    {
+      "from": "t-building",
+      "to": "t-ready",
+      "style": "optional",
+      "label": "abort / orphan sweep",
+      "labelAt": 0.5
+    },
+    {
+      "from": "t-building",
+      "to": "t-built",
+      "style": "external",
+      "label": "repo override: staged"
+    },
+    {
+      "from": "t-built",
+      "to": "t-closed",
+      "style": "external",
+      "label": "promotion merge"
+    },
+    {
+      "from": "t-new",
+      "to": "t-info",
+      "style": "optional",
+      "label": "waiting on reporter",
+      "labelAt": 0.7
+    },
+    {
+      "from": "t-building",
+      "to": "t-human",
+      "style": "optional",
+      "label": "blocker handback",
+      "labelAt": 0.6
+    }
+  ],
+  "gapX": 150
 }

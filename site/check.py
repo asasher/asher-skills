@@ -35,6 +35,19 @@ def load_views() -> dict[str, dict]:
 
 
 def check_view(name: str, view: dict, all_views: dict[str, dict]) -> tuple[list[str], list[str]]:
+    if view.get("type") == "simulation":
+        errors: list[str] = []
+        root = VIEWS.parents[1]
+        for sc in view.get("scenarios", []):
+            if not sc.get("steps"):
+                errors.append(f"scenario {sc.get('id', '?')!r} has no steps")
+            for i, step in enumerate(sc.get("steps", [])):
+                if not step.get("caption"):
+                    errors.append(f"scenario {sc.get('id', '?')!r} step {i + 1} missing caption")
+                cite = step.get("cite")
+                if cite and not (root / cite).exists():
+                    errors.append(f"scenario {sc.get('id', '?')!r} step {i + 1} cites missing file {cite}")
+        return errors, []
     if view.get("type") == "sequence":
         errors: list[str] = []
         actor_ids = {a["id"] for a in view.get("actors", [])}

@@ -5,7 +5,7 @@
 (() => {
   const params = new URLSearchParams(location.search);
   const BASE = (params.get('base') || '..').replace(/\/$/, '');
-  const VIEW_IDS = ['sdlc', 'flow', 'sequence', 'tickets', 'backlog'];
+  const VIEW_IDS = ['sdlc', 'flow', 'sequence', 'tickets', 'backlog', 'simulation'];
   const md = window.markdownit({ html: false, linkify: true });
 
   const state = { views: {}, fm: {}, current: 'sdlc', active: null };
@@ -104,7 +104,7 @@
   }
 
   function buildSwimElements(view) {
-    const GX = 40, GY = 26, LPAD = 42, LGAP = 46, PHEAD = 46;
+    const GX = view.gapX || 40, GY = view.gapY || 26, LPAD = 42, LGAP = view.laneGap || 46, PHEAD = 46;
     const cell = {};
     for (const n of view.nodes) ((cell[n.lane] = cell[n.lane] || {})[n.phase] = cell[n.lane][n.phase] || []).push(n);
     const colX = {}; let x = 0;
@@ -360,6 +360,70 @@
     });
   }
 
+  /* Simulation: scenario walkthroughs as step-through state snapshots — pure DOM, no canvas.
+   * Each step cites the prose that governs it; check.py fails when a cited file disappears. */
+  const simPos = {};
+  function renderSimulation(view) {
+    const pos = simPos[view.id] = simPos[view.id] || { sc: 0, step: 0 };
+    const scenario = view.scenarios[pos.sc];
+    const step = scenario.steps[Math.min(pos.step, scenario.steps.length - 1)];
+    pos.step = Math.min(pos.step, scenario.steps.length - 1);
+
+    const root = el('div', { class: 'sim' });
+    const tabs = el('div', { class: 'sim-tabs' });
+    view.scenarios.forEach((sc, i) => tabs.append(el('button', {
+      class: i === pos.sc ? 'active' : '',
+      onclick: () => { pos.sc = i; pos.step = 0; renderSimulation(view); },
+    }, sc.title)));
+    root.append(tabs, el('p', { class: 'sim-blurb' }, scenario.blurb));
+
+    const ctl = el('div', { class: 'sim-ctl' });
+    const prev = el('button', { onclick: () => { pos.step = Math.max(0, pos.step - 1); renderSimulation(view); } }, '◀');
+    const next = el('button', { onclick: () => { pos.step = Math.min(scenario.steps.length - 1, pos.step + 1); renderSimulation(view); } }, '▶');
+    prev.disabled = pos.step === 0;
+    next.disabled = pos.step === scenario.steps.length - 1;
+    ctl.append(prev, next, el('span', { class: 'pos' }, `step ${pos.step + 1} / ${scenario.steps.length}`));
+    root.append(ctl);
+
+    const cap = el('div', { class: 'sim-caption' }, step.caption);
+    if (step.cite) cap.append(el('span', { class: 'cite' }, `per ${step.cite}`));
+    root.append(cap);
+
+    const board = el('div', { class: 'sim-board' });
+    const col = (title, items, chipOf) => {
+      const c = el('div', { class: 'sim-col' }, el('h3', {}, title));
+      for (const it of items || []) {
+        const card = el('div', { class: 'sim-card' });
+        const b = el('b', {}, it.t);
+        const chip = chipOf(it);
+        if (chip) b.append(el('span', { class: `sim-chip ${chip[0]}` }, chip[1]));
+        card.append(b);
+        if (it.note) card.append(el('span', { class: 'note' }, it.note));
+        c.append(card);
+      }
+      if (!(items || []).length) c.append(el('div', { class: 'sim-card' }, el('span', { class: 'note' }, '—')));
+      return c;
+    };
+    board.append(
+      col('Tracker', step.tracker, it => it.label ? [`l-${it.label}`, it.label] : null),
+      col('Dispatcher · agents', step.agents, it => it.s ? [`s-${it.s}`, it.s] : null),
+      col('Repo · worktrees · CRs', step.repo, it => it.s ? [`s-${it.s}`, it.s] : null),
+    );
+    root.append(board);
+    $('#cy').innerHTML = '';
+    $('#cy').append(root);
+  }
+  document.addEventListener('keydown', (e) => {
+    const view = state.views && state.views[state.current];
+    if (!view || view.type !== 'simulation' || document.body.classList.contains('sheet-open')) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      const pos = simPos[view.id]; if (!pos) return;
+      const max = view.scenarios[pos.sc].steps.length - 1;
+      pos.step = e.key === 'ArrowRight' ? Math.min(max, pos.step + 1) : Math.max(0, pos.step - 1);
+      renderSimulation(view);
+    }
+  });
+
   function renderView() {
     const view = state.views[state.current];
     $('#view-subtitle').textContent = view.subtitle;
@@ -367,6 +431,8 @@
     registerShapes();
     if (graph) { graph.dispose(); graph = null; activeCell = null; }
     $('#cy').innerHTML = '';
+    document.body.classList.toggle('sim-view', view.type === 'simulation');
+    if (view.type === 'simulation') { renderSimulation(view); return; }
     graph = new X6.Graph({
       container: $('#cy'), autoResize: true, interacting: false,
       panning: { enabled: true },

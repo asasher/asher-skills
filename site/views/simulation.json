@@ -1,0 +1,303 @@
+{
+  "id": "simulation",
+  "title": "Simulation",
+  "subtitle": "Scenario walkthroughs: step through time and watch tickets, agents, and worktrees move through the lifecycle. Each step cites the prose that governs it — check.py fails if a cited file disappears.",
+  "type": "simulation",
+  "scenarios": [
+    {
+      "id": "serialized",
+      "title": "Parallel builds, serialized verification",
+      "blurb": "Worktree isolation is available, but one shared Postgres means the parallelism verdict is serialize-verification: builds run in parallel, the app stack is a single lane.",
+      "steps": [
+        {
+          "caption": "Two tickets are ready and unblocked. The user asks for a build.",
+          "cite": "skills/software-development/backlog/SKILL.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "ready-for-agent", "note": "work-type + dispatch metadata recorded" },
+            { "t": "#22 export CSV", "label": "ready-for-agent" }
+          ],
+          "agents": [ { "t": "backlog build", "s": "running", "note": "sweeping ready, unblocked tickets" } ],
+          "repo": [ { "t": "main", "s": "idle", "note": "clean" } ]
+        },
+        {
+          "caption": "The dispatcher marks both tickets building, then dispatches two build subagents via to-subagent — each in its own worktree. The environment records isolated worktrees but a shared Postgres: verification must serialize.",
+          "cite": "skills/software-development/backlog/templates/common/environment.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "building", "note": "branch 20-payout recorded on the ticket" },
+            { "t": "#22 export CSV", "label": "building", "note": "branch 22-export recorded" }
+          ],
+          "agents": [
+            { "t": "backlog build", "s": "running", "note": "supervising — completion wakes it" },
+            { "t": "build #20", "s": "running", "note": "implement: tdd at the ticket's seams" },
+            { "t": "build #22", "s": "running", "note": "implement: tdd at the ticket's seams" }
+          ],
+          "repo": [
+            { "t": "wt/20-payout", "s": "running", "note": "worktree, own checkout" },
+            { "t": "wt/22-export", "s": "running", "note": "worktree, own checkout" }
+          ]
+        },
+        {
+          "caption": "Both implement in parallel — the worktrees keep their edits apart. #20 finishes first and takes the shared stack for verification; #22 must wait for the single lane.",
+          "cite": "skills/software-development/backlog/templates/common/environment.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "building" },
+            { "t": "#22 export CSV", "label": "building" }
+          ],
+          "agents": [
+            { "t": "backlog build", "s": "running" },
+            { "t": "build #20", "s": "running", "note": "dispatched verify-your-work — fresh eyes" },
+            { "t": "verifier #20", "s": "running", "note": "seeded stack, scripted browser checks" },
+            { "t": "build #22", "s": "waiting", "note": "shared stack busy — serialized verification" }
+          ],
+          "repo": [
+            { "t": "wt/20-payout", "s": "running", "note": "holds the shared Postgres lane" },
+            { "t": "wt/22-export", "s": "idle", "note": "commits done, awaiting the lane" }
+          ]
+        },
+        {
+          "caption": "#20's verifier reports a failing claim — it never fixes. The builder fixes and re-dispatches verification. #22 still waits: the singleton is exactly the bottleneck the policy predicted.",
+          "cite": "skills/software-development/verify-your-work/SKILL.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "building" },
+            { "t": "#22 export CSV", "label": "building" }
+          ],
+          "agents": [
+            { "t": "backlog build", "s": "running" },
+            { "t": "build #20", "s": "running", "note": "fixing the reported claim, then re-verify" },
+            { "t": "build #22", "s": "waiting" }
+          ],
+          "repo": [
+            { "t": "wt/20-payout", "s": "running" },
+            { "t": "wt/22-export", "s": "idle" }
+          ]
+        },
+        {
+          "caption": "#20 verification comes back clean → change request opened with Closes #20. The shared stack frees; #22 begins its verification.",
+          "cite": "skills/software-development/build/SKILL.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "building", "note": "CR !20 open" },
+            { "t": "#22 export CSV", "label": "building" }
+          ],
+          "agents": [
+            { "t": "backlog build", "s": "running" },
+            { "t": "build #20", "s": "running", "note": "adversarial review starting on CR !20" },
+            { "t": "build #22", "s": "running", "note": "verify-your-work on the freed stack" }
+          ],
+          "repo": [
+            { "t": "CR !20 — Closes #20", "s": "running", "note": "reviewer ⇆ fixer converging" },
+            { "t": "wt/22-export", "s": "running", "note": "now holds the shared lane" }
+          ]
+        },
+        {
+          "caption": "#20's reviewer and fixer converge on the CR — LGTM — and the evidence package lands as a comment. #22's verification passes; its CR opens.",
+          "cite": "skills/software-development/adversarial-review/reference/conduct.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "building", "note": "CR !20 — LGTM + evidence" },
+            { "t": "#22 export CSV", "label": "building", "note": "CR !22 open" }
+          ],
+          "agents": [
+            { "t": "backlog build", "s": "running" },
+            { "t": "build #20", "s": "done", "note": "wake sent — review-ready" },
+            { "t": "build #22", "s": "running", "note": "adversarial review on CR !22" }
+          ],
+          "repo": [
+            { "t": "CR !20 — Closes #20", "s": "done", "note": "review-ready" },
+            { "t": "CR !22 — Closes #22", "s": "running" }
+          ]
+        },
+        {
+          "caption": "Both builds complete. Their completions woke the dispatcher, which relays the outcomes: two review-ready change requests. Nothing merges — that authorization is the user's alone.",
+          "cite": "skills/software-development/backlog/SKILL.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "building", "note": "CR !20 review-ready" },
+            { "t": "#22 export CSV", "label": "building", "note": "CR !22 review-ready" }
+          ],
+          "agents": [
+            { "t": "backlog build", "s": "running", "note": "relaying both outcomes to the user" },
+            { "t": "build #20", "s": "done" },
+            { "t": "build #22", "s": "done" }
+          ],
+          "repo": [
+            { "t": "CR !20 — Closes #20", "s": "done", "note": "LGTM + evidence" },
+            { "t": "CR !22 — Closes #22", "s": "done", "note": "LGTM + evidence" }
+          ]
+        },
+        {
+          "caption": "The user authorizes merge-changes: bases before dependents, required checks re-queried per merge at merge time. Merging closes the tickets via Closes #N; worktrees and the per-change stacks are torn down.",
+          "cite": "skills/software-development/merge-changes/SKILL.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "closed", "note": "closed by CR !20's merge" },
+            { "t": "#22 export CSV", "label": "closed", "note": "closed by CR !22's merge" }
+          ],
+          "agents": [ { "t": "merge-changes", "s": "done", "note": "merged in order, cleanup complete" } ],
+          "repo": [ { "t": "main", "s": "idle", "note": "both merged; worktrees removed, stacks torn down" } ]
+        }
+      ]
+    },
+    {
+      "id": "parallel",
+      "title": "Fully parallel — isolated stacks",
+      "blurb": "The environment can derive a full dev stack per worktree: the parallelism verdict is parallel-safe, and verification never queues.",
+      "steps": [
+        {
+          "caption": "Same two ready tickets — but this repo's environment derives a seeded stack per worktree. Verdict: parallel-safe.",
+          "cite": "skills/software-development/backlog/templates/common/environment.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "ready-for-agent" },
+            { "t": "#22 export CSV", "label": "ready-for-agent" }
+          ],
+          "agents": [ { "t": "backlog build", "s": "running", "note": "sweeping" } ],
+          "repo": [ { "t": "main", "s": "idle" } ]
+        },
+        {
+          "caption": "Both marked building, both dispatched — each subagent gets a worktree and its own seeded stack. No shared lane exists.",
+          "cite": "skills/software-development/backlog/SKILL.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "building" },
+            { "t": "#22 export CSV", "label": "building" }
+          ],
+          "agents": [
+            { "t": "backlog build", "s": "running", "note": "supervising" },
+            { "t": "build #20", "s": "running", "note": "implementing" },
+            { "t": "build #22", "s": "running", "note": "implementing" }
+          ],
+          "repo": [
+            { "t": "wt/20-payout + stack", "s": "running", "note": "own Postgres, own ports" },
+            { "t": "wt/22-export + stack", "s": "running", "note": "own Postgres, own ports" }
+          ]
+        },
+        {
+          "caption": "Both verify simultaneously — each verifier drives its own seeded stack with scripted browser checks. No waiting state exists anywhere in this scenario.",
+          "cite": "skills/software-development/verify-your-work/SKILL.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "building" },
+            { "t": "#22 export CSV", "label": "building" }
+          ],
+          "agents": [
+            { "t": "backlog build", "s": "running" },
+            { "t": "build #20", "s": "running", "note": "verify → fix → re-verify" },
+            { "t": "build #22", "s": "running", "note": "verify → fix → re-verify" }
+          ],
+          "repo": [
+            { "t": "wt/20-payout + stack", "s": "running" },
+            { "t": "wt/22-export + stack", "s": "running" }
+          ]
+        },
+        {
+          "caption": "Both change requests open with closing references; adversarial review converges on each independently; evidence lands on both.",
+          "cite": "skills/software-development/build/SKILL.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "building", "note": "CR !20 — LGTM + evidence" },
+            { "t": "#22 export CSV", "label": "building", "note": "CR !22 — LGTM + evidence" }
+          ],
+          "agents": [
+            { "t": "backlog build", "s": "running", "note": "both wakes received, outcomes relayed" },
+            { "t": "build #20", "s": "done" },
+            { "t": "build #22", "s": "done" }
+          ],
+          "repo": [
+            { "t": "CR !20 — Closes #20", "s": "done" },
+            { "t": "CR !22 — Closes #22", "s": "done" }
+          ]
+        },
+        {
+          "caption": "User authorizes the merges; tickets close on merge; worktrees and both stacks are torn down. Same destination as the serialized scenario — the verdict only changed who waited, never the gates.",
+          "cite": "skills/software-development/merge-changes/SKILL.md",
+          "tracker": [
+            { "t": "#20 payout summary", "label": "closed" },
+            { "t": "#22 export CSV", "label": "closed" }
+          ],
+          "agents": [ { "t": "merge-changes", "s": "done" } ],
+          "repo": [ { "t": "main", "s": "idle", "note": "clean — nothing left behind" } ]
+        }
+      ]
+    },
+    {
+      "id": "interrupted",
+      "title": "Interrupted & resumed",
+      "blurb": "Quota runs out, the machine closes, a reviewer dies mid-loop. Everything that matters survives in durable state — the ticket, the branch, the change request — and the lifecycle resumes from the record, never from memory.",
+      "steps": [
+        {
+          "caption": "#20 is building; the subagent is mid-implement with commits on its branch — when the machine closes (or the API credits run out).",
+          "cite": "skills/software-development/backlog/SKILL.md",
+          "tracker": [ { "t": "#20 payout summary", "label": "building", "note": "branch 20-payout + dispatch date recorded" } ],
+          "agents": [
+            { "t": "backlog build", "s": "dead", "note": "machine closed" },
+            { "t": "build #20", "s": "dead", "note": "mid-implement" }
+          ],
+          "repo": [ { "t": "wt/20-payout", "s": "idle", "note": "3 commits on the branch — durable" } ]
+        },
+        {
+          "caption": "Nothing is running, and nothing is lost: the building label and recorded branch live on the ticket, the commits live on the branch. No chat memory was ever load-bearing.",
+          "cite": "skills/software-development/backlog/templates/common/backlog-policy.md",
+          "tracker": [ { "t": "#20 payout summary", "label": "building", "note": "claim marker still set — now a corpse" } ],
+          "agents": [],
+          "repo": [ { "t": "wt/20-payout", "s": "idle", "note": "branch intact" } ]
+        },
+        {
+          "caption": "Days later, a groom pass runs its orphan sweep: a building ticket whose work has gone quiet past the horizon is surfaced to the human as a candidate reset — never silently reset, because the branch may hold unmerged work.",
+          "cite": "skills/software-development/backlog/templates/common/backlog-policy.md",
+          "tracker": [ { "t": "#20 payout summary", "label": "building", "note": "orphan sweep: reset candidate, human asked" } ],
+          "agents": [ { "t": "backlog groom", "s": "running", "note": "surfacing the corpse" } ],
+          "repo": [ { "t": "wt/20-payout", "s": "idle" } ]
+        },
+        {
+          "caption": "The human confirms: reset to ready-for-agent. The branch stays where it is.",
+          "cite": "skills/software-development/backlog/templates/common/backlog-policy.md",
+          "tracker": [ { "t": "#20 payout summary", "label": "ready-for-agent", "note": "branch 20-payout still recorded" } ],
+          "agents": [ { "t": "backlog groom", "s": "done" } ],
+          "repo": [ { "t": "wt/20-payout", "s": "idle", "note": "3 commits waiting" } ]
+        },
+        {
+          "caption": "The next backlog build re-dispatches #20: marked building again, a fresh subagent in the same worktree. It reads the ticket and the branch — the surviving commits are its starting point, not a surprise.",
+          "cite": "skills/software-development/backlog/SKILL.md",
+          "tracker": [ { "t": "#20 payout summary", "label": "building", "note": "re-dispatched" } ],
+          "agents": [
+            { "t": "backlog build", "s": "running", "note": "supervising" },
+            { "t": "build #20 (2nd)", "s": "running", "note": "continues on top of the 3 commits" }
+          ],
+          "repo": [ { "t": "wt/20-payout", "s": "running" } ]
+        },
+        {
+          "caption": "Implement completes, verification passes, CR !20 opens. Adversarial review begins: the reviewer posts two findings, the fixer addresses one… and then the reviewer dies — quota again.",
+          "cite": "skills/software-development/adversarial-review/SKILL.md",
+          "tracker": [ { "t": "#20 payout summary", "label": "building", "note": "CR !20 open, review in flight" } ],
+          "agents": [
+            { "t": "build #20 (2nd)", "s": "running" },
+            { "t": "reviewer", "s": "dead", "note": "died after iteration 1" },
+            { "t": "fixer", "s": "waiting", "note": "1 finding fixed, watching for re-review" }
+          ],
+          "repo": [ { "t": "CR !20 — Closes #20", "s": "running", "note": "iteration 1 state persisted as comments" } ]
+        },
+        {
+          "caption": "The change request is the only shared state — role, iteration count, last-seen SHA, next expected actor were persisted as comments every iteration. A respawned reviewer continues from that record alone.",
+          "cite": "skills/software-development/adversarial-review/reference/conduct.md",
+          "tracker": [ { "t": "#20 payout summary", "label": "building" } ],
+          "agents": [
+            { "t": "build #20 (2nd)", "s": "running", "note": "respawns the reviewer" },
+            { "t": "reviewer (2nd)", "s": "running", "note": "reads the CR record: iteration 1, head SHA, open findings" },
+            { "t": "fixer", "s": "waiting" }
+          ],
+          "repo": [ { "t": "CR !20 — Closes #20", "s": "running" } ]
+        },
+        {
+          "caption": "The respawned reviewer re-reviews from the recorded head: prior findings addressed, the pass is clean → LGTM. Evidence lands; the build's completion wakes the dispatcher; the outcome is relayed.",
+          "cite": "skills/software-development/adversarial-review/reference/conduct.md",
+          "tracker": [ { "t": "#20 payout summary", "label": "building", "note": "CR !20 — LGTM + evidence" } ],
+          "agents": [
+            { "t": "backlog build", "s": "running", "note": "outcome relayed to the user" },
+            { "t": "build #20 (2nd)", "s": "done" }
+          ],
+          "repo": [ { "t": "CR !20 — Closes #20", "s": "done", "note": "review-ready" } ]
+        },
+        {
+          "caption": "The user authorizes the merge. The ticket closes via its closing reference; the worktree and stack are cleaned up. Two interruptions, zero lost work — because every hand-off lived in durable state.",
+          "cite": "skills/software-development/merge-changes/SKILL.md",
+          "tracker": [ { "t": "#20 payout summary", "label": "closed" } ],
+          "agents": [ { "t": "merge-changes", "s": "done" } ],
+          "repo": [ { "t": "main", "s": "idle", "note": "merged and clean" } ]
+        }
+      ]
+    }
+  ]
+}
