@@ -261,39 +261,64 @@
     const obstacles = graph.getNodes()
       .filter(n => n.shape === 'skill-node')
       .map(n => { const b = n.getBBox(); return { x: b.x - 2, y: b.y - 2, w: b.width + 4, h: b.height + 4 }; });
-    const placed = [];
+    // sample every edge's rendered path so labels can dodge foreign lines
+    // (bidirectional pairs are colinear — the reverse line would strike through an on-line label)
+    const paths = {}, samples = [];
     for (const edge of graph.getEdges()) {
-      const labels = edge.getLabels();
-      const text = labels.length && labels[0].attrs && labels[0].attrs.label && labels[0].attrs.label.text;
-      if (!text) continue;
       const view = graph.findViewByCell(edge);
       const pathEl = view && view.container.querySelector('path');
       if (!pathEl) continue;
       let total = 0;
       try { total = pathEl.getTotalLength(); } catch { /* not rendered */ }
       if (!total) continue;
+      paths[edge.id] = { pathEl, total };
+      for (let s = 0; s <= total; s += 12) {
+        const p = pathEl.getPointAtLength(s);
+        samples.push({ x: p.x, y: p.y, id: edge.id });
+      }
+    }
+    const placed = [];
+    for (const edge of graph.getEdges()) {
+      const labels = edge.getLabels();
+      const text = labels.length && labels[0].attrs && labels[0].attrs.label && labels[0].attrs.label.text;
+      if (!text) continue;
+      if (!paths[edge.id]) continue;
+      const { pathEl, total } = paths[edge.id];
       const w = labelWidth(text) + 16, h = 19;
-      const rectAt = (d) => {
+      const rectAt = (d, o) => {
         const p = pathEl.getPointAtLength(d * total);
-        return { x: p.x - w / 2, y: p.y - h / 2, w, h };
+        if (!o) return { x: p.x - w / 2, y: p.y - h / 2, w, h };
+        const a = pathEl.getPointAtLength(Math.max(0, d - 0.04) * total);
+        const b = pathEl.getPointAtLength(Math.min(1, d + 0.04) * total);
+        const vl = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+        const nx = -(b.y - a.y) / vl, ny = (b.x - a.x) / vl;
+        return { x: p.x + nx * o - w / 2, y: p.y + ny * o - h / 2, w, h };
       };
       const pref = typeof labels[0].position === 'number' ? labels[0].position
         : (labels[0].position && labels[0].position.distance) || 0.5;
-      const candidates = [];
-      for (let d = 0.08; d <= 0.921; d += 0.02) candidates.push(d);
-      candidates.sort((a, b) => Math.abs(a - pref) - Math.abs(b - pref));
+      const dists = [];
+      for (let d = 0.08; d <= 0.921; d += 0.02) dists.push(d);
+      dists.sort((a, b) => Math.abs(a - pref) - Math.abs(b - pref));
       let pick = null, fallback = null, fallbackHits = Infinity;
-      for (const d of candidates) {
-        const r = rectAt(d);
-        let hits = 0;
-        for (const o of obstacles) if (rectsOverlap(r, o)) hits++;
-        for (const o of placed) if (rectsOverlap(r, o)) hits++;
-        if (!hits) { pick = { d, r }; break; }
-        if (hits < fallbackHits) { fallbackHits = hits; fallback = { d, r }; }
+      // prefer a spot on the line; step perpendicular off it only when the line has no room
+      search: for (const o of [0, 24, -24, 44, -44]) {
+        for (const d of dists) {
+          const r = rectAt(d, o);
+          let hits = 0;
+          for (const ob of obstacles) if (rectsOverlap(r, ob)) hits++;
+          for (const ob of placed) if (rectsOverlap(r, ob)) hits++;
+          for (const s of samples) {
+            if (s.id !== edge.id && s.x > r.x + 2 && s.x < r.x + r.w - 2 && s.y > r.y + 2 && s.y < r.y + r.h - 2) { hits++; break; }
+          }
+          if (!hits) { pick = { d, o, r }; break search; }
+          if (hits < fallbackHits) { fallbackHits = hits; fallback = { d, o, r }; }
+        }
       }
       pick = pick || fallback;
       placed.push(pick.r);
-      if (Math.abs(pick.d - pref) > 0.001) edge.setLabelAt(0, { ...labels[0], position: pick.d });
+      if (Math.abs(pick.d - pref) > 0.001 || pick.o) {
+        edge.setLabelAt(0, { ...labels[0], position: pick.o ? { distance: pick.d, offset: pick.o } : pick.d });
+      }
     }
   }
 
@@ -428,7 +453,7 @@
   /* State machine: label-role states as pills on a manifest grid — an initial dot, double-ring
    * final states, tone fills matching the label colors, transitions routed like every other view. */
   function drawStateMachine(view) {
-    const GX = 104, GY = 92, PAD = 30;
+    const GX = 176, GY = 96, PAD = 30;
     const px = NW + GX, py = NH + GY;
     const cx = (n) => PAD + n.col * px + NW / 2, cy = (n) => PAD + n.row * py + NH / 2;
     for (const n of view.nodes.filter(n => n.kind === 'initial')) {
@@ -473,7 +498,13 @@
       const built = view.type === 'swimlane' ? buildSwimElements(view) : buildGraphElements(view);
       drawCells(built, view.id);
     }
-    if (view.type !== 'sequence') { try { deconflictLabels(); } catch { /* cosmetic pass only */ } }
+    if (view.type !== 'sequence') {
+      const g = graph; // edge views materialize after this frame; skip if the view changed meanwhile
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (graph !== g) return;
+        try { deconflictLabels(); } catch { /* cosmetic pass only */ }
+      }));
+    }
     hoverId = null;
     graph.zoomToFit({ padding: 28, maxScale: 1 });
     if (state.active) setActiveCell(state.active);

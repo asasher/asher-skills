@@ -264,7 +264,7 @@
       "from": "b-build",
       "to": "b-pb-policy",
       "style": "optional",
-      "label": "ready · in-flight roles"
+      "label": "ready · building roles"
     },
     {
       "from": "b-groom",
