@@ -230,7 +230,9 @@
       const stroke = flow ? accent : ext ? artifact : muted;
       const marker = { name: 'block', width: 8, height: 6 };
       graph.addEdge({
-        source: { cell: e.from }, target: { cell: e.to }, zIndex: 10,
+        source: { cell: e.from, ...(e.sa ? { anchor: { name: 'center', args: e.sa } } : {}) },
+        target: { cell: e.to, ...(e.ta ? { anchor: { name: 'center', args: e.ta } } : {}) },
+        zIndex: 10,
         router: ROUTER, connector: { name: 'rounded', args: { radius: 10 } },
         attrs: { line: {
           stroke, strokeWidth: flow ? 2.2 : 1.5, opacity: flow || ext ? .85 : .5,
@@ -474,7 +476,18 @@
         } },
       });
     }
-    drawCells({ lanes: [], phases: [], nodes, edges: (view.edges || []).map(e => ({ ...e, style: e.style || '' })) }, view.id);
+    // opposite transitions between the same two states are colinear by default — anchor each
+    // side of the pair off-center so the two arrows render as distinct parallel lines
+    const edges = (view.edges || []).map(e => ({ ...e, style: e.style || '' }));
+    const keys = new Set(edges.map(e => `${e.from}>${e.to}`));
+    const byId = Object.fromEntries(view.nodes.map(n => [n.id, n]));
+    for (const e of edges) {
+      if (!keys.has(`${e.to}>${e.from}`)) continue;
+      const a = byId[e.from], b = byId[e.to];
+      const s = e.from < e.to ? -9 : 9;
+      e.sa = e.ta = (a && b && a.row === b.row) ? { dy: s } : { dx: s };
+    }
+    drawCells({ lanes: [], phases: [], nodes, edges }, view.id);
   }
 
   function renderView() {
