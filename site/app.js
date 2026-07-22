@@ -450,37 +450,75 @@
     if (state.active) setActiveCell(state.active);
   }
 
-  /* ---------- sheet ---------- */
-  function closeSheet() {
-    document.body.classList.remove('sheet-open');
-    state.active = null;
-    setActiveCell(null);
-    setHash();
+  /* ---------- sheets (stackable: named references open on top; Esc/× pops one,
+   * clicking a peeking lower sheet returns to it, backdrop closes all) ---------- */
+  const sheetStack = [];
+  const topKey = () => sheetStack.length ? sheetStack[sheetStack.length - 1].key : null;
+  function restack() {
+    sheetStack.forEach((s, i) => {
+      const above = sheetStack.length - 1 - i;
+      s.root.style.setProperty('--shift', `${-above * 34}px`);
+      s.root.style.zIndex = 50 + i;
+      s.root.classList.toggle('under', above > 0);
+    });
+    document.body.classList.toggle('sheet-open', sheetStack.length > 0);
   }
-  $('#backdrop').addEventListener('click', closeSheet);
-  $('#sheet-close').addEventListener('click', closeSheet);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.body.classList.contains('sheet-open')) closeSheet(); });
+  function pushSheet(key) {
+    const sheet = { key };
+    sheet.root = el('aside', { class: 'sheet', role: 'dialog', 'aria-modal': 'true',
+      // under-sheets make their children pointer-inert, so a direct root hit means
+      // "bring this sheet back" — pop everything stacked above it
+      onclick: (ev) => { if (ev.target === sheet.root) popAbove(sheet); } });
+    sheet.head = el('div', { class: 'sheet-head' });
+    sheet.tabs = el('div', { class: 'sheet-tabs' });
+    sheet.body = el('div', { class: 'sheet-body' });
+    sheet.root.append(
+      el('button', { class: 'sheet-close', title: 'Close (Esc)', onclick: (ev) => { ev.stopPropagation(); popAbove(sheet); popSheet(); } }, '×'),
+      sheet.head, sheet.tabs, sheet.body);
+    document.body.append(sheet.root);
+    sheetStack.push(sheet);
+    requestAnimationFrame(() => sheet.root.classList.add('open'));
+    restack();
+    return sheet;
+  }
+  function popSheet() {
+    const s = sheetStack.pop();
+    if (!s) return;
+    s.root.classList.remove('open');
+    setTimeout(() => s.root.remove(), 240);
+    restack();
+    if (!sheetStack.length) { state.active = null; setActiveCell(null); setHash(); }
+  }
+  function popAbove(sheet) {
+    while (sheetStack.length && sheetStack[sheetStack.length - 1] !== sheet) popSheet();
+  }
+  function closeAllSheets() { while (sheetStack.length) popSheet(); }
+  $('#backdrop').addEventListener('click', closeAllSheets);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && sheetStack.length) popSheet(); });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.file-menu')) document.querySelectorAll('.file-menu[open]').forEach(d => d.removeAttribute('open'));
+  });
 
   function markActive(nodeId) {
     state.active = nodeId;
     setActiveCell(nodeId);
   }
 
-  function sheetChrome(title, desc, fm, bindings) {
-    const head = $('#sheet-head'); head.innerHTML = '';
-    head.append(el('div', { class: 'node-head' }, el('h2', {}, title), el('p', { class: 'desc' }, desc || '')));
+  function sheetChrome(sheet, title, desc, fm, bindings) {
+    sheet.head.innerHTML = '';
+    sheet.head.append(el('div', { class: 'node-head' }, el('h2', {}, title), el('p', { class: 'desc' }, desc || '')));
     if (fm) {
       const chips = el('div', { class: 'chips' });
       if (fm.invocation) chips.append(el('span', { class: 'chip' }, `invocation: ${fm.invocation}`));
       if (fm.execution) chips.append(el('span', { class: 'chip' }, `execution: ${fm.execution}`));
-      for (const r of fm.requires || []) chips.append(el('span', { class: 'chip dep', onclick: () => jumpTo('sdlc', r) }, `requires ${r}`));
-      for (const o of fm.optional || []) chips.append(el('span', { class: 'chip dep opt', onclick: () => jumpTo('sdlc', o) }, `optional ${o}`));
+      for (const r of fm.requires || []) chips.append(el('span', { class: 'chip dep', title: 'opens on top', onclick: () => pushSkill(r) }, `requires ${r}`));
+      for (const o of fm.optional || []) chips.append(el('span', { class: 'chip dep opt', title: 'opens on top', onclick: () => pushSkill(o) }, `optional ${o}`));
       for (const e of (Array.isArray(fm.external) ? fm.external : [])) if (e.name) chips.append(el('span', { class: 'chip dep ext', onclick: () => window.open(e.source, '_blank') }, `external ${e.name}`));
-      head.querySelector('.node-head').append(chips);
+      sheet.head.querySelector('.node-head').append(chips);
     }
     if (bindings && bindings.length) {
       const fileLink = (path) => el('a', {
-        href: '#', onclick: (ev) => { ev.preventDefault(); renderFile(path, '  (shipped default)'); },
+        href: '#', onclick: (ev) => { ev.preventDefault(); fileSheet(path); },
       }, path.includes('templates/') ? path.slice(path.indexOf('templates/')) : path);
       const tbl = el('table', { class: 'ports-table' },
         el('thead', {}, el('tr', {},
@@ -489,38 +527,91 @@
           el('td', {}, el('code', {}, b.port)),
           el('td', {}, b.expects || ''),
           el('td', {}, b.default ? fileLink(b.default) : '—')))));
-      head.querySelector('.node-head').append(
+      sheet.head.querySelector('.node-head').append(
         el('details', { class: 'ports' }, el('summary', {}, `Ports & bindings (${bindings.length})`), tbl));
     }
   }
 
-  async function renderFile(path, noteExtra = '') {
-    const body = $('#sheet-body'); body.innerHTML = '';
-    body.append(el('p', { class: 'filepath' }, path + noteExtra));
-    const target = el('div', { id: 'md' }, 'Loading…'); body.append(target);
+  /* Resolve a reference found in prose: repo-rooted prefixes stay, everything else is relative
+   * to the current file's directory. */
+  function repoPath(t, dir) {
+    if (/^(docs|skills|site|tools)\//.test(t)) return t;
+    return new URL(t, `http://x/${dir}/`).pathname.slice(1);
+  }
+
+  /* Make named references clickable: markdown links, sibling-skill names in backticks, and
+   * file paths in backticks — each opens a stacked sheet on top of this one. */
+  function wireRefs(div, path) {
+    const dir = path.split('/').slice(0, -1).join('/');
+    div.querySelectorAll('a[href]').forEach(a => {
+      const href = a.getAttribute('href');
+      if (/^https?:/.test(href)) { a.target = '_blank'; return; }
+      a.addEventListener('click', (ev) => { ev.preventDefault(); fileSheet(repoPath(href.split('#')[0], dir)); });
+    });
+    const skills = new Set(state.views.sdlc.nodes.map(n => n.id));
+    const BARE = {
+      'CONTEXT.md': 'CONTEXT.md', 'AGENTS.md': 'AGENTS.md',
+      'platform.md': 'docs/agents/platform.md', 'backlog-policy.md': 'docs/agents/backlog-policy.md',
+      'environment.md': 'docs/agents/environment.md', 'evidence.md': 'docs/agents/evidence.md',
+    };
+    div.querySelectorAll('code').forEach(c => {
+      if (c.closest('pre') || c.closest('a')) return;
+      const t = c.textContent.trim();
+      const fileRef = BARE[t]
+        || (t.includes('/') && !t.includes(' ') && /^[\w./-]+\.(md|py|html|yaml|yml|json|txt)$/.test(t) ? repoPath(t, dir) : null);
+      if (skills.has(t)) {
+        c.classList.add('ref'); c.title = `open the ${t} skill on top`;
+        c.addEventListener('click', () => pushSkill(t));
+      } else if (fileRef) {
+        c.classList.add('ref'); c.title = 'open this file on top';
+        c.addEventListener('click', () => fileSheet(fileRef));
+      }
+    });
+  }
+
+  /* Wrap each `## section` of the rendered markdown in an open <details> card so a long file
+   * reads (and collapses) in parts. */
+  function sectionize(container) {
+    const kids = [...container.childNodes];
+    const out = []; let cur = null;
+    for (const k of kids) {
+      if (k.nodeName === 'H2') {
+        cur = el('details', { class: 'sec', open: '' }, el('summary', {}, ...[...k.childNodes]));
+        out.push(cur);
+      } else if (cur) cur.append(k);
+      else out.push(k);
+    }
+    container.innerHTML = '';
+    container.append(...out);
+  }
+
+  async function renderFile(sheet, path) {
+    const body = sheet.body; body.innerHTML = '';
+    const bar = el('p', { class: 'filebar' },
+      el('a', { class: 'filepath', href: `${BASE}/${path}`, target: '_blank', title: 'open raw in a new tab' }, path));
+    body.append(bar);
+    const target = el('div', { class: 'md' }, 'Loading…'); body.append(target);
     try {
       const text = await fetchText(path);
-      const { fm, body: mdBody } = parseFrontmatter(text);
       target.innerHTML = '';
-      if (Object.keys(fm).length) {
-        const card = el('dl', { class: 'fm-card' });
-        for (const [k, v] of Object.entries(fm)) { card.append(el('dt', {}, k)); card.append(el('dd', {}, typeof v === 'string' ? v : JSON.stringify(v))); }
-        target.append(card);
-      }
-      const div = el('div'); div.innerHTML = md.render(mdBody);
-      div.querySelectorAll('a[href]').forEach(a => {
-        const href = a.getAttribute('href');
-        if (/^https?:/.test(href)) { a.target = '_blank'; return; }
-        if (href.includes('.md')) {
-          a.addEventListener('click', (ev) => {
-            ev.preventDefault();
-            const dir = path.split('/').slice(0, -1).join('/');
-            const resolved = new URL(href.split('#')[0], `http://x/${dir}/`).pathname.slice(1);
-            renderFile(resolved, '  (followed link)');
-          });
+      if (!/\.(md|markdown)$/i.test(path)) {
+        target.append(el('pre', { class: 'raw' }, text));
+      } else {
+        const { fm, body: mdBody } = parseFrontmatter(text);
+        if (Object.keys(fm).length) {
+          const card = el('dl', { class: 'fm-card' });
+          for (const [k, v] of Object.entries(fm)) { card.append(el('dt', {}, k)); card.append(el('dd', {}, typeof v === 'string' ? v : JSON.stringify(v))); }
+          target.append(el('details', { class: 'fm' }, el('summary', {}, 'frontmatter'), card));
         }
-      });
-      target.append(div);
+        const div = el('div'); div.innerHTML = md.render(mdBody);
+        wireRefs(div, path);
+        sectionize(div);
+        target.append(div);
+        const secs = div.querySelectorAll('details.sec');
+        if (secs.length > 1) bar.append(el('span', { class: 'sec-ctl' },
+          el('button', { onclick: () => secs.forEach(s => s.setAttribute('open', '')) }, 'expand all'),
+          el('button', { onclick: () => secs.forEach(s => s.removeAttribute('open')) }, 'collapse all')));
+      }
       body.scrollTop = 0;
     } catch (e) {
       target.innerHTML = '';
@@ -528,20 +619,51 @@
     }
   }
 
-  function skillTabs(node, activeFull) {
-    const files = node.files.map(f => ({ ...f, full: `${node.source}/${f.path}` }));
-    for (const p of node.playbooks || []) files.push({ group: 'Playbooks (this repo)', label: p.split('/').pop().replace('.md', ''), path: p, full: p });
-    const tabs = $('#sheet-tabs'); tabs.innerHTML = '';
-    const bar = el('div', { class: 'tabs' });
+  function fileMenu(sheet, files, activeFull, onPick) {
+    sheet.tabs.innerHTML = '';
+    const cur = files.find(f => f.full === activeFull) || files[0];
+    const det = el('details', { class: 'file-menu' });
+    const menu = el('div', { class: 'menu' });
     let lastGroup = null;
     for (const f of files) {
-      if (f.group !== lastGroup) { bar.append(el('span', { class: 'grp' }, f.group)); lastGroup = f.group; }
-      const b = el('button', { onclick: () => openSkillSheet(node, f.full, state.current, state.active) }, f.label);
-      if (f.full === activeFull) b.classList.add('active');
-      bar.append(b);
+      if (f.group !== lastGroup) { menu.append(el('div', { class: 'mgrp' }, f.group || 'files')); lastGroup = f.group; }
+      const b = el('button', { onclick: () => { det.removeAttribute('open'); onPick(f); } }, f.label);
+      if (f.full === cur.full) b.classList.add('active');
+      menu.append(b);
     }
-    tabs.append(bar);
-    return files;
+    det.append(el('summary', {},
+      el('span', { class: 'grp' }, cur.group || 'file'), el('b', {}, cur.label), el('span', { class: 'car' }, '▾')), menu);
+    sheet.tabs.append(det,
+      el('span', { class: 'file-count' }, `${files.length} files · named references open stacked`));
+  }
+
+  function skillSheet(node, filePath) {
+    const key = `skill:${node.id}`;
+    if (topKey() === key) return;
+    const fm = state.fm[node.id] || {};
+    const sheet = pushSheet(key);
+    sheetChrome(sheet, node.title, fm.description || node.blurb, fm, node.bindings);
+    const files = node.files.map(f => ({ ...f, full: `${node.source}/${f.path}` }));
+    for (const p of node.playbooks || []) files.push({ group: 'Playbooks (this repo)', label: p.split('/').pop().replace('.md', ''), path: p, full: p });
+    const pick = (f) => {
+      fileMenu(sheet, files, f.full, pick);
+      renderFile(sheet, f.full);
+      if (sheet === sheetStack[0]) setHash(state.current, state.active, f.full);
+    };
+    pick(files.find(f => f.full === filePath) || files[0]);
+  }
+
+  function pushSkill(name) {
+    const node = state.views.sdlc.nodes.find(n => n.id === name);
+    if (node) skillSheet(node);
+  }
+
+  function fileSheet(path) {
+    const key = `file:${path}`;
+    if (topKey() === key) return;
+    const sheet = pushSheet(key);
+    sheetChrome(sheet, path.split('/').pop(), path, null);
+    renderFile(sheet, path);
   }
 
   function jumpTo(viewId, nodeId) {
@@ -555,30 +677,23 @@
     if (!node) return;
     if (node.open) {
       if (node.open.jump) { jumpTo(node.open.jump, node.open.node); return; }
-      if (node.open.node) { openSkillSheet(state.views.sdlc.nodes.find(n => n.id === node.open.node), undefined, viewId, nodeId); return; }
+      if (node.open.node) {
+        const target = state.views.sdlc.nodes.find(n => n.id === node.open.node);
+        if (!target) return;
+        closeAllSheets(); markActive(nodeId); setHash(viewId, nodeId);
+        skillSheet(target, filePath);
+        return;
+      }
       if (node.open.file) {
-        markActive(nodeId);
-        sheetChrome(node.title, node.blurb, null);
-        $('#sheet-tabs').innerHTML = '';
-        document.body.classList.add('sheet-open');
-        setHash(viewId, nodeId);
-        renderFile(node.open.file);
+        closeAllSheets(); markActive(nodeId); setHash(viewId, nodeId);
+        const sheet = pushSheet(`file:${node.open.file}`);
+        sheetChrome(sheet, node.title, node.blurb, null);
+        renderFile(sheet, node.open.file);
         return;
       }
     }
-    openSkillSheet(node, filePath, viewId, nodeId);
-  }
-
-  function openSkillSheet(node, filePath, viewId, activeNodeId) {
-    if (!node) return;
-    markActive(activeNodeId || node.id);
-    const fm = state.fm[node.id] || {};
-    sheetChrome(node.title, fm.description || node.blurb, fm, node.bindings);
-    const files = skillTabs(node, filePath || `${node.source}/${node.files[0].path}`);
-    const file = files.find(f => f.full === filePath) || files[0];
-    document.body.classList.add('sheet-open');
-    setHash(viewId || 'sdlc', state.active, file.full);
-    renderFile(file.full);
+    closeAllSheets(); markActive(nodeId);
+    skillSheet(node, filePath);
   }
 
   /* ---------- shell ---------- */
@@ -591,7 +706,7 @@
 
   function switchView(id) {
     state.current = id; state.active = null;
-    document.body.classList.remove('sheet-open');
+    closeAllSheets();
     renderView(); setHash(id);
   }
 

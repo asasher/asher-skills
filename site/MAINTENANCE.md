@@ -9,7 +9,13 @@ cannot fetch.
 
 - **Layer 1 (cannot drift):** everything a reader reads. Skill content is fetched from the real files at
   view time; the dependency edges and header chips are parsed from each `SKILL.md`'s frontmatter — the same
-  bytes rendered in the panel. Nothing is copied into the app.
+  bytes rendered in the panel. Nothing is copied into the app. The reading surface is a **stack of
+  sheets**: a skill sheet carries one compact grouped file picker (no tab bar), frontmatter collapsed,
+  and each `##` section as a collapsible card; named references — sibling-skill names and file paths in
+  backticks, markdown links, dependency chips, shipped binding defaults — open a **new sheet on top**
+  (Esc/× pops one, clicking a peeking lower sheet returns to it, backdrop closes all). Reference
+  detection lives in `wireRefs()`; bare well-known names (`CONTEXT.md`, playbook filenames) resolve via
+  its `BARE` map.
 - **Layer 2 (can drift, gated):** `views/*.json` — six views today: `sdlc` (family dependency graph;
   edges from frontmatter), `flow` (the user/dispatcher/threads/subagents/tracker swim-lane; every box opens
   the contract behind it), `sequence` (the same journey over time: actors, lifelines, messages — type
