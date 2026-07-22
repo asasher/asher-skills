@@ -25,7 +25,7 @@ role slot with this machine's default binding; setup probes the default and asks
 
 | need | reachable route (default binding) | fallback / hard edge |
 |---|---|---|
-| browser-use | isolated browser driver — default machine `agent-browser` (isolated or headless profile) | explicit Codex app handoff to ChatGPT-in-Chrome **only** when the test case needs the user's own signed-in session, with per-use explicit consent; unattended `codex exec` cannot supply it. A failed driver launch is a tool failure to surface, never a license to switch surfaces |
+| browser-use | scripted **Playwright driving Chrome** — verification is a script with artifacts, headed or headless (on this machine headless Chrome launches only outside the command sandbox) | machine `agent-browser` and harness-native web bindings have proven unreliable — never the default, only for interactive exploration a script cannot serve; explicit Codex app handoff to ChatGPT-in-Chrome **only** when the test case needs the user's own signed-in session, with per-use explicit consent; unattended `codex exec` cannot supply it. A failed driver launch is a tool failure to surface, never a license to switch surfaces |
 | computer-use | none in Claude Code | explicit Codex Computer Use handoff **only** behind its gate: a concrete use case recorded in the project's `environment.md` **and** explicit user approval for the engagement; otherwise a hard capability gap — never fall back to the user's browser or desktop |
 | imagegen | image-generation route — default the installed repo `codex-imagegen` skill through bounded Codex CLI | explicit Codex app handoff to the system `imagegen` skill/tool |
 

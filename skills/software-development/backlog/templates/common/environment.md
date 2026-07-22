@@ -74,11 +74,14 @@
 > reproducible, and the scripts accumulate into this repo's end-to-end suite.
 
 - Form factor(s): _<CLI | web | mobile | desktop — list every surface tickets touch>_.
-- Web driver: **Playwright** — scripts live in _<e.g. `e2e/`>_ and run with _<e.g. `npx playwright
+- Web driver: **Playwright driving Chrome** — the default for every browser-based verification; scripts
+  live in _<e.g. `e2e/`>_ and run with _<e.g. `npx playwright
   test`>_. New checks are written as specs there, named for the ticket, and left in the tree: today's
   verification is tomorrow's regression suite. Evidence comes from Playwright's own artifacts — traces,
-  screenshots, video — captured per run into _<artifact dir>_. Setup verifies the bundled browser
+  screenshots, video — captured per run into _<artifact dir>_. Setup verifies the browser
   actually launches headless on this machine; if it cannot, record headed mode here as the fallback.
+  Harness-native browser tools and `agent-browser` are not verification routes — they have proven
+  unreliable; a browser check is a Playwright script or it is a recorded gap.
 - Other surfaces: _<defaults: shell + the CLI entrypoint; a simulator + driver for mobile; desktop only
   behind a recorded use case AND explicit user approval — absent either, record the surface as a hard
   verification gap. A driver failure surfaces as a blocker; it never falls back to a less-isolated

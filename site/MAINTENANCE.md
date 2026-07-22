@@ -40,6 +40,10 @@ cannot fetch.
   one-line orientation labels only.
 - The verify step for changes under `skills/` in this family includes `site/check.py` (see
   `docs/agents/verifying.md` § Checks).
+- **Visual verification** of layout changes: render with Chrome — a Playwright script by preference, or a
+  raw `--headless=new --screenshot` invocation — and read the screenshot before shipping. On this machine
+  the browser only launches **outside the command sandbox**; harness-native browser tools are not the
+  verification route.
 
 ## Vendored dependencies
 

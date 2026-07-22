@@ -53,7 +53,7 @@ The following is **one machine's audit result**, shown so you know the shape to 
 # Capability providers — effect-probed harness/tool routes, never model traits
 | need | primary provider | fallback | eligible executor |
 |------|------------------|----------|-------------------|
-| browser-use | isolated browser CLI (`agent-browser`) | user-session carve-out (chrome provider, per-use consent) | active harness route |
+| browser-use | scripted Playwright driving Chrome | `agent-browser` (unreliable — interactive exploration only) · user-session carve-out (chrome provider, per-use consent) | active harness route |
 | computer-use | gated: recorded project use case + explicit user approval, then computer-use provider | none — unmet gate is a hard gap | active Codex route |
 | imagegen | native imagegen provider | repo headless skill | active Codex route |
 

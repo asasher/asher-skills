@@ -66,10 +66,12 @@ set and continues below; it never means cheapest-first.
 
 ### Browser example
 
-Resolve `browser-use` to its named primary provider — on this machine an isolated-profile `agent-browser`,
-never the user's own browser session. If that provider's effect probe fails, that is a tool failure to
-surface; the only recorded fallback is the user-session carve-out (ChatGPT-in-Chrome with per-use explicit
-consent, for test cases that need the user's real signed-in session). Computer Use is not a browser fallback:
+Resolve `browser-use` to its named primary provider — on this machine scripted Playwright driving Chrome,
+never the user's own browser session (`agent-browser` and harness-native web bindings have proven
+unreliable: interactive-exploration fallback only, never the default). If the primary's effect probe fails,
+that is a tool failure to
+surface; the only recorded further fallback is the user-session carve-out (ChatGPT-in-Chrome with per-use
+explicit consent, for test cases that need the user's real signed-in session). Computer Use is not a browser fallback:
 it is gated behind a recorded project use case plus explicit user approval, and an unmet gate is a hard
 capability gap. Then form the eligible executor set and rank it. A smarter model that cannot operate either
 provider never enters the survivor set.

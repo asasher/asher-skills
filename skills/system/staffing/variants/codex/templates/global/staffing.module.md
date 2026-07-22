@@ -24,7 +24,7 @@ about gaps.
 
 | need | primary provider (default binding) | fallback / hard edge |
 |---|---|---|
-| browser-use | isolated browser driver — default machine `agent-browser` (isolated or headless profile), staffed by terra | ChatGPT-in-Chrome (the Codex chrome-control tool) **only** when the test case needs the user's own signed-in session, with per-use explicit consent; a failed driver launch is a tool failure to surface, never a license to switch surfaces |
+| browser-use | scripted **Playwright driving Chrome**, staffed by terra — verification is a script with artifacts, headed or headless | machine `agent-browser` and harness-native web bindings have proven unreliable — never the default, only for interactive exploration a script cannot serve; ChatGPT-in-Chrome (the Codex chrome-control tool) **only** when the test case needs the user's own signed-in session, with per-use explicit consent; a failed driver launch is a tool failure to surface, never a license to switch surfaces |
 | computer-use | **gated**: requires a concrete use case recorded in the project's `environment.md` **and** explicit user approval for the engagement; then the Codex computer-use tool, staffed by terra | none — an unmet gate is a hard capability gap; never fall back to the user's browser or desktop |
 | imagegen | image-generation route — default the Codex system `imagegen` skill/tool | repo `codex-imagegen` skill through bounded Codex CLI |
 
@@ -33,7 +33,7 @@ Capabilities belong to harness/tool providers, never model rows. Resolve need �
 ## Resolve
 
 - Issue dispatch requires groomed work type, surface/capabilities, coordination class/reason, and known uncertainty. Missing data stops dispatch. Record the route and upward successor before child/worktree creation.
-- Pins short-circuit ranking: mechanical/bulk → sol; browser-use → the isolated browser driver/terra, ChatGPT-in-Chrome only via the recorded user-session carve-out; computer-use → only through its approval gate. Imagegen selects its provider without pretending image access is a model trait.
+- Pins short-circuit ranking: mechanical/bulk → sol; browser-use → Playwright-driving-Chrome scripts/terra (`agent-browser` only for interactive exploration), ChatGPT-in-Chrome only via the recorded user-session carve-out; computer-use → only through its approval gate. Imagegen selects its provider without pretending image access is a model trait.
 - Otherwise apply required provider and taste ≥ 7 gates, then rank eligible reachable workers by intelligence, taste, cheaper cost. Opus is the verified taste-qualified Codex→Claude worker; a sibling-route failure removes that direction only and reruns resolution.
 - Effort: dispatch at the model row's effort value; pure wait/relay and cron duty runs at low regardless of model. Effort never substitutes for a failed taste or capability gate.
 - General/mechanical succession: sol → opus → sonnet → terra. UI/review: opus. Watcher/cron: terra → sol, wait/relay only. A missing capability provider reports a hard gap; do not relabel another tool or model as capable.
