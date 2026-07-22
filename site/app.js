@@ -89,11 +89,11 @@
     }
     const have = new Set(nodes.map(n => n.id));
     const edges = [];
-    const addEdge = (from, to, cls, label) => {
-      if (have.has(from) && have.has(to)) edges.push({ from, to, style: cls, label });
+    const addEdge = (from, to, cls, label, labelAt) => {
+      if (have.has(from) && have.has(to)) edges.push({ from, to, style: cls, label, labelAt });
     };
-    for (const f of view.flow || []) addEdge(f.from, f.to, 'flow', f.label);
-    for (const e of view.edges || []) addEdge(e.from, e.to, e.style || '', e.label);
+    for (const f of view.flow || []) addEdge(f.from, f.to, 'flow', f.label, f.labelAt);
+    for (const e of view.edges || []) addEdge(e.from, e.to, e.style || '', e.label, e.labelAt);
     if (view.id === 'sdlc') for (const n of view.nodes) {
       const fm = state.fm[n.id] || {};
       for (const r of fm.requires || []) addEdge(n.id, r, '');
@@ -124,7 +124,7 @@
       }
       y += laneH + LGAP;
     }
-    const edges = (view.edges || []).map(e => ({ from: e.from, to: e.to, style: e.style || '', label: e.label, bidir: e.bidir }));
+    const edges = (view.edges || []).map(e => ({ from: e.from, to: e.to, style: e.style || '', label: e.label, labelAt: e.labelAt, bidir: e.bidir }));
     return { lanes, phases, nodes, edges };
   }
 
@@ -234,7 +234,7 @@
           targetMarker: marker, ...(e.bidir ? { sourceMarker: marker } : {}),
           ...(opt || ext ? { strokeDasharray: '5 3' } : {}),
         } },
-        ...(e.label ? { labels: [{ position: 0.5, attrs: {
+        ...(e.label ? { labels: [{ position: e.labelAt ?? 0.5, attrs: {
           label: { text: e.label, fontSize: 9.5, fill: muted },
           body: { fill: bg, stroke: line, strokeWidth: 1, rx: 4, ry: 4, refWidth2: 10, refHeight2: 6, refX: -5, refY: -3 },
         } }] } : {}),

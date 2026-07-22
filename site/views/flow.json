@@ -2,72 +2,401 @@
   "id": "flow",
   "type": "swimlane",
   "title": "Lifecycle flow",
-  "subtitle": "The fullest journey — groomed shaping threads, the user's crystallise call, parallel build threads, one human merge gate. Click any box to read the contract behind it.",
+  "subtitle": "The fullest journey \u2014 groomed shaping threads, the user's crystallise call, parallel build threads, one human merge gate. Click any box to read the contract behind it.",
   "lanes": [
-    { "id": "you", "title": "You ✋", "blurb": "Every human touch point" },
-    { "id": "disp", "title": "Dispatcher", "blurb": "backlog — fans out, no result flows back" },
-    { "id": "thread", "title": "Attachable threads", "blurb": "to-thread: named, harness-native background sessions" },
-    { "id": "sub", "title": "Subagents & watchers", "blurb": "to-subagent · watch-until — staffed, non-interactive" },
-    { "id": "repo", "title": "Tracker & repo", "blurb": "Durable state" }
+    {
+      "id": "you",
+      "title": "You \u270b",
+      "blurb": "Every human touch point"
+    },
+    {
+      "id": "disp",
+      "title": "Dispatcher",
+      "blurb": "backlog \u2014 fans out, no result flows back"
+    },
+    {
+      "id": "thread",
+      "title": "Attachable threads",
+      "blurb": "to-thread: named, harness-native background sessions"
+    },
+    {
+      "id": "sub",
+      "title": "Subagents & watchers",
+      "blurb": "to-subagent \u00b7 watch-until \u2014 staffed, non-interactive"
+    },
+    {
+      "id": "repo",
+      "title": "Tracker & repo",
+      "blurb": "Durable state"
+    }
   ],
   "phases": [
-    { "id": "groom", "title": "Groom" },
-    { "id": "shape", "title": "Shape ↻" },
-    { "id": "crystallise", "title": "Crystallise" },
-    { "id": "build", "title": "Build ∥" },
-    { "id": "review", "title": "Review" },
-    { "id": "merge", "title": "Merge" }
+    {
+      "id": "groom",
+      "title": "Groom"
+    },
+    {
+      "id": "shape",
+      "title": "Shape \u21bb"
+    },
+    {
+      "id": "crystallise",
+      "title": "Crystallise"
+    },
+    {
+      "id": "build",
+      "title": "Build \u2225"
+    },
+    {
+      "id": "review",
+      "title": "Review"
+    },
+    {
+      "id": "merge",
+      "title": "Merge"
+    }
   ],
   "nodes": [
-    { "id": "f-ask", "lane": "you", "phase": "groom", "title": "Ask for a groom ✋", "blurb": "backlog groom — or hand it ticket ids", "open": { "node": "backlog" } },
-    { "id": "f-groom", "lane": "disp", "phase": "groom", "title": "Groom: fan out", "blurb": "interlocking tickets grouped into subjects", "open": { "node": "backlog" } },
-    { "id": "f-spawned", "lane": "thread", "phase": "groom", "title": "Shaping threads spawned", "blurb": "one per subject, named, attachable", "open": { "node": "to-thread" } },
-    { "id": "f-needs", "lane": "repo", "phase": "groom", "title": "needs-shaping tickets", "blurb": "label roles per backlog-policy", "open": { "file": "docs/agents/backlog-policy.md" } },
-
-    { "id": "f-attend", "lane": "you", "phase": "shape", "title": "Attend · decide ✋", "blurb": "answer the interview rounds ↻", "open": { "node": "interview" } },
-    { "id": "f-shape", "lane": "thread", "phase": "shape", "title": "shape: settle decisions", "blurb": "interview · model · probe until settled", "open": { "node": "shape" } },
-    { "id": "f-probes", "lane": "sub", "phase": "shape", "title": "Probes", "blurb": "research · prototype · lookups via to-subagent", "open": { "node": "to-subagent" } },
-    { "id": "f-model", "lane": "repo", "phase": "shape", "title": "CONTEXT.md · ADRs", "blurb": "written the moment they crystallise", "open": { "node": "domain-modeling" } },
-
-    { "id": "f-call", "lane": "you", "phase": "crystallise", "title": "Your call ✋", "blurb": "spec? tickets? or leave it settled", "open": { "node": "to-spec" } },
-    { "id": "f-spec", "lane": "thread", "phase": "crystallise", "title": "to-spec → to-tickets", "blurb": "spec HTML, then tracer-bullet tickets", "open": { "node": "to-tickets" } },
-    { "id": "f-gate", "lane": "sub", "phase": "crystallise", "title": "AFK sign-off", "blurb": "serve-via-tailnet: annotations + verdict", "open": { "node": "serve-via-tailnet" } },
-    { "id": "f-tickets", "lane": "repo", "phase": "crystallise", "title": "Tickets published", "blurb": "native blocking edges, dependency order", "open": { "file": "skills/software-development/to-tickets/reference/slicing.md" } },
-
-    { "id": "f-askbuild", "lane": "you", "phase": "build", "title": "Ask for a build ✋", "blurb": "backlog build — ready, unblocked tickets", "open": { "node": "backlog" } },
-    { "id": "f-build", "lane": "disp", "phase": "build", "title": "Build: fan out ∥", "blurb": "mark in-flight, one worktree thread per ticket", "open": { "node": "backlog" } },
-    { "id": "f-loop", "lane": "thread", "phase": "build", "title": "build thread × N", "blurb": "implement → verify & fix → change request", "open": { "node": "build" } },
-    { "id": "f-workers", "lane": "sub", "phase": "build", "title": "Staffed subagents", "blurb": "roster-staffed, wake paths back", "open": { "node": "to-subagent" } },
-    { "id": "f-cr", "lane": "repo", "phase": "build", "title": "Change requests opened", "blurb": "branch + worktree per ticket", "open": { "node": "build" } },
-
-    { "id": "f-adv", "lane": "thread", "phase": "review", "title": "Adversarial review", "blurb": "reviewer ⇆ fixer until LGTM", "open": { "node": "adversarial-review" } },
-    { "id": "f-rev", "lane": "sub", "phase": "review", "title": "Reviewer · fixer · watcher", "blurb": "code-review two-axis; watch-until relays", "open": { "node": "code-review" } },
-    { "id": "f-evid", "lane": "repo", "phase": "review", "title": "Evidence posted", "blurb": "prove-your-work on the change request", "open": { "node": "prove-your-work" } },
-
-    { "id": "f-merge", "lane": "you", "phase": "merge", "title": "Authorize the merge ✋", "blurb": "merge-changes: the explicit gate", "open": { "node": "merge-changes" } },
-    { "id": "f-done", "lane": "repo", "phase": "merge", "title": "Merged · closed · cleaned", "blurb": "tickets closed, worktrees and stacks cleaned", "open": { "node": "merge-changes" } }
+    {
+      "id": "f-ask",
+      "lane": "you",
+      "phase": "groom",
+      "title": "Ask for a groom \u270b",
+      "blurb": "backlog groom \u2014 or hand it ticket ids",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "id": "f-groom",
+      "lane": "disp",
+      "phase": "groom",
+      "title": "Groom: fan out",
+      "blurb": "interlocking tickets grouped into subjects",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "id": "f-spawned",
+      "lane": "thread",
+      "phase": "groom",
+      "title": "Shaping threads spawned",
+      "blurb": "one per subject, named, attachable",
+      "open": {
+        "node": "to-thread"
+      }
+    },
+    {
+      "id": "f-needs",
+      "lane": "repo",
+      "phase": "groom",
+      "title": "needs-shaping tickets",
+      "blurb": "label roles per backlog-policy",
+      "open": {
+        "file": "docs/agents/backlog-policy.md"
+      }
+    },
+    {
+      "id": "f-attend",
+      "lane": "you",
+      "phase": "shape",
+      "title": "Attend \u00b7 decide \u270b",
+      "blurb": "answer the interview rounds \u21bb",
+      "open": {
+        "node": "interview"
+      }
+    },
+    {
+      "id": "f-shape",
+      "lane": "thread",
+      "phase": "shape",
+      "title": "shape: settle decisions",
+      "blurb": "interview \u00b7 model \u00b7 probe until settled",
+      "open": {
+        "node": "shape"
+      }
+    },
+    {
+      "id": "f-probes",
+      "lane": "sub",
+      "phase": "shape",
+      "title": "Probes",
+      "blurb": "research \u00b7 prototype \u00b7 lookups via to-subagent",
+      "open": {
+        "node": "to-subagent"
+      }
+    },
+    {
+      "id": "f-model",
+      "lane": "repo",
+      "phase": "shape",
+      "title": "CONTEXT.md \u00b7 ADRs",
+      "blurb": "written the moment they crystallise",
+      "open": {
+        "node": "domain-modeling"
+      }
+    },
+    {
+      "id": "f-call",
+      "lane": "you",
+      "phase": "crystallise",
+      "title": "Your call \u270b",
+      "blurb": "spec? tickets? or leave it settled",
+      "open": {
+        "node": "to-spec"
+      }
+    },
+    {
+      "id": "f-spec",
+      "lane": "thread",
+      "phase": "crystallise",
+      "title": "to-spec \u2192 to-tickets",
+      "blurb": "spec HTML, then tracer-bullet tickets",
+      "open": {
+        "node": "to-tickets"
+      }
+    },
+    {
+      "id": "f-gate",
+      "lane": "sub",
+      "phase": "crystallise",
+      "title": "AFK sign-off",
+      "blurb": "serve-via-tailnet: annotations + verdict",
+      "open": {
+        "node": "serve-via-tailnet"
+      }
+    },
+    {
+      "id": "f-tickets",
+      "lane": "repo",
+      "phase": "crystallise",
+      "title": "Tickets published",
+      "blurb": "native blocking edges, dependency order",
+      "open": {
+        "file": "skills/software-development/to-tickets/reference/slicing.md"
+      }
+    },
+    {
+      "id": "f-askbuild",
+      "lane": "you",
+      "phase": "build",
+      "title": "Ask for a build \u270b",
+      "blurb": "backlog build \u2014 ready, unblocked tickets",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "id": "f-build",
+      "lane": "disp",
+      "phase": "build",
+      "title": "Build: fan out \u2225",
+      "blurb": "mark in-flight, one worktree thread per ticket",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "id": "f-loop",
+      "lane": "thread",
+      "phase": "build",
+      "title": "build thread \u00d7 N",
+      "blurb": "implement \u2192 verify & fix \u2192 change request",
+      "open": {
+        "node": "build"
+      }
+    },
+    {
+      "id": "f-workers",
+      "lane": "sub",
+      "phase": "build",
+      "title": "Staffed subagents",
+      "blurb": "roster-staffed, wake paths back",
+      "open": {
+        "node": "to-subagent"
+      }
+    },
+    {
+      "id": "f-cr",
+      "lane": "repo",
+      "phase": "build",
+      "title": "Change requests opened",
+      "blurb": "branch + worktree per ticket",
+      "open": {
+        "node": "build"
+      }
+    },
+    {
+      "id": "f-adv",
+      "lane": "thread",
+      "phase": "review",
+      "title": "Adversarial review",
+      "blurb": "reviewer \u21c6 fixer until LGTM",
+      "open": {
+        "node": "adversarial-review"
+      }
+    },
+    {
+      "id": "f-rev",
+      "lane": "sub",
+      "phase": "review",
+      "title": "Reviewer \u00b7 fixer \u00b7 watcher",
+      "blurb": "code-review two-axis; watch-until relays",
+      "open": {
+        "node": "code-review"
+      }
+    },
+    {
+      "id": "f-evid",
+      "lane": "repo",
+      "phase": "review",
+      "title": "Evidence posted",
+      "blurb": "prove-your-work on the change request",
+      "open": {
+        "node": "prove-your-work"
+      }
+    },
+    {
+      "id": "f-merge",
+      "lane": "you",
+      "phase": "merge",
+      "title": "Authorize the merge \u270b",
+      "blurb": "merge-changes: the explicit gate",
+      "open": {
+        "node": "merge-changes"
+      }
+    },
+    {
+      "id": "f-done",
+      "lane": "repo",
+      "phase": "merge",
+      "title": "Merged \u00b7 closed \u00b7 cleaned",
+      "blurb": "tickets closed, worktrees and stacks cleaned",
+      "open": {
+        "node": "merge-changes"
+      }
+    }
   ],
   "edges": [
-    { "from": "f-ask", "to": "f-groom", "style": "flow" },
-    { "from": "f-needs", "to": "f-groom", "style": "optional", "label": "sweep" },
-    { "from": "f-groom", "to": "f-spawned", "style": "flow", "label": "to-thread" },
-    { "from": "f-spawned", "to": "f-shape", "style": "flow" },
-    { "from": "f-shape", "to": "f-attend", "bidir": true, "label": "↻ until the frontier is empty" },
-    { "from": "f-shape", "to": "f-probes", "style": "optional" },
-    { "from": "f-shape", "to": "f-model", "style": "optional", "label": "inline extraction" },
-    { "from": "f-shape", "to": "f-call", "style": "flow", "label": "decisions settled" },
-    { "from": "f-call", "to": "f-spec", "style": "flow", "label": "user's call" },
-    { "from": "f-spec", "to": "f-gate", "style": "optional", "label": "AFK verdict" },
-    { "from": "f-spec", "to": "f-tickets" },
-    { "from": "f-tickets", "to": "f-askbuild", "style": "flow", "label": "ready, unblocked" },
-    { "from": "f-askbuild", "to": "f-build", "style": "flow" },
-    { "from": "f-build", "to": "f-loop", "style": "flow", "label": "to-thread, worktree-isolated" },
-    { "from": "f-loop", "to": "f-workers", "style": "optional" },
-    { "from": "f-loop", "to": "f-cr" },
-    { "from": "f-loop", "to": "f-adv", "style": "flow", "label": "change request" },
-    { "from": "f-adv", "to": "f-rev", "style": "optional" },
-    { "from": "f-adv", "to": "f-evid", "style": "flow", "label": "LGTM" },
-    { "from": "f-evid", "to": "f-merge", "style": "flow", "label": "review-ready" },
-    { "from": "f-merge", "to": "f-done" }
+    {
+      "from": "f-ask",
+      "to": "f-groom",
+      "style": "flow"
+    },
+    {
+      "from": "f-needs",
+      "to": "f-groom",
+      "style": "optional",
+      "label": "sweep"
+    },
+    {
+      "from": "f-groom",
+      "to": "f-spawned",
+      "style": "flow",
+      "label": "to-thread"
+    },
+    {
+      "from": "f-spawned",
+      "to": "f-shape",
+      "style": "flow"
+    },
+    {
+      "from": "f-shape",
+      "to": "f-attend",
+      "bidir": true,
+      "label": "\u21bb until the frontier is empty",
+      "labelAt": 0.15
+    },
+    {
+      "from": "f-shape",
+      "to": "f-probes",
+      "style": "optional"
+    },
+    {
+      "from": "f-shape",
+      "to": "f-model",
+      "style": "optional",
+      "label": "inline extraction",
+      "labelAt": 0.75
+    },
+    {
+      "from": "f-shape",
+      "to": "f-call",
+      "style": "flow",
+      "label": "decisions settled",
+      "labelAt": 0.85
+    },
+    {
+      "from": "f-call",
+      "to": "f-spec",
+      "style": "flow",
+      "label": "user's call"
+    },
+    {
+      "from": "f-spec",
+      "to": "f-gate",
+      "style": "optional",
+      "label": "AFK verdict"
+    },
+    {
+      "from": "f-spec",
+      "to": "f-tickets"
+    },
+    {
+      "from": "f-tickets",
+      "to": "f-askbuild",
+      "style": "flow",
+      "label": "ready, unblocked",
+      "labelAt": 0.85
+    },
+    {
+      "from": "f-askbuild",
+      "to": "f-build",
+      "style": "flow"
+    },
+    {
+      "from": "f-build",
+      "to": "f-loop",
+      "style": "flow",
+      "label": "to-thread \u00b7 worktree",
+      "labelAt": 0.3
+    },
+    {
+      "from": "f-loop",
+      "to": "f-workers",
+      "style": "optional"
+    },
+    {
+      "from": "f-loop",
+      "to": "f-cr"
+    },
+    {
+      "from": "f-loop",
+      "to": "f-adv",
+      "style": "flow",
+      "label": "change request"
+    },
+    {
+      "from": "f-adv",
+      "to": "f-rev",
+      "style": "optional"
+    },
+    {
+      "from": "f-adv",
+      "to": "f-evid",
+      "style": "flow",
+      "label": "LGTM"
+    },
+    {
+      "from": "f-evid",
+      "to": "f-merge",
+      "style": "flow",
+      "label": "review-ready"
+    },
+    {
+      "from": "f-merge",
+      "to": "f-done"
+    }
   ]
 }
