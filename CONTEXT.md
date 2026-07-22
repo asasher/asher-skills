@@ -22,9 +22,11 @@ one edge moves it off the primitive rung.
 
 **Orchestrator skill**:
 Runs a loop over many units of work, owning dispatch, liveness, and lifecycle state. A
-**dispatcher** is the thin case: it only fans units out (via `to-thread` or `to-subagent`) and
-reports status on request — no result flows back. Examples: `backlog build` (dispatches a build
-thread per ready ticket), `backlog groom` (dispatches a shaping thread per `needs-shaping` ticket).
+**dispatcher** is the thin case: it only fans units out and supervises. Human-in-the-loop work goes
+to threads the user attends (`to-thread` — no result flows back); autonomous work goes to subagents
+the dispatcher babysits (`to-subagent` — completion wakes it, outcomes are relayed). Examples:
+`backlog groom` (a shaping thread per `needs-shaping` subject), `backlog build` (a worktree-isolated
+build subagent per ready ticket).
 
 **Dispatch adapter**:
 A primitive owning *how* work is dispatched, not what the work is: `to-thread` spawns named,

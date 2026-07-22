@@ -13,18 +13,18 @@ needs-shaping (their decisions interlock), #12 carries needs-shaping alone; #20 
 
 **P1 (groom grouping).** `backlog groom` — how many threads spawn, seeded with what? Cite.
 
-**P2 (no report back).** An hour later the user asks "what did the shaping threads decide?" How do you
-answer? Cite.
+**P2 (two dispatch shapes).** An hour later the user asks "what did the shaping threads decide, and how
+are the builds going?" How does each half get answered? Cite.
 
-**P3 (double dispatch).** `backlog build` — does #21 get a thread? What happens before #20's thread
-spawns? Cite.
+**P3 (double dispatch).** `backlog build` — is #21 dispatched? What happens before #20's subagent
+spawns, and via which skill does the dispatch go? Cite.
 
 **P4 (isolation verdict).** The environment playbook records that this repo cannot isolate worktree
 stacks. How do #20 and #22 run? Cite.
 
 **P5 (missing playbook).** There is no `docs/agents/platform.md`. What happens on `backlog build`? Cite.
 
-**P6 (merge boundary).** Both build threads produced change requests with LGTM. Do you merge them? Cite.
+**P6 (merge boundary).** Both builds produced change requests with LGTM. Do you merge them? Cite.
 
 ## Answer key
 
@@ -32,11 +32,13 @@ stacks. How do #20 and #22 run? Cite.
   interlock into one subject; the rest stay one subject each" — each named for its subject and "seeded
   with the ticket ids and the instruction to run the `shape` skill on them." Three threads, or one, =
   **fail**.
-- **P2:** From the tracker and the thread listing — "No result flows back — status on request comes from
-  the tracker and the harness's thread listing." Claiming to know outcomes directly = **fail**.
+- **P2:** Shaping: from the tracker and the thread listing — "no result flows back" for threads. Builds:
+  this session supervises them — "each build's completion wakes it, and it relays the outcome." Claiming
+  to know shaping outcomes directly, or having nothing to say about builds, = **fail**.
 - **P3:** #21 is skipped — "a dispatched ticket must never dispatch twice." #20 is marked in-flight per
-  the label roles **before** its thread spawns. Dispatching #21, or spawning before marking, = **fail**.
-- **P4:** One at a time in the main checkout — "a repo that can't isolate runs one thread at a time in
+  the label roles first, then "dispatch the `build` skill on it via the `to-subagent` skill, in its own
+  worktree." Dispatching #21, spawning before marking, or spawning a thread instead, = **fail**.
+- **P4:** One at a time in the main checkout — "a repo that can't isolate builds one ticket at a time in
   the main checkout." Spawning both in parallel worktrees = **fail**.
 - **P5:** Stop and run setup — "Missing playbooks: run `backlog setup` first — don't improvise them."
   Guessing tracker commands = **fail**.

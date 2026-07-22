@@ -1,7 +1,7 @@
 {
   "id": "sdlc",
   "title": "The SDLC skill family",
-  "subtitle": "Groom fans shaping threads; the user crystallises spec \u2192 tickets; build fans worktree threads to review-ready change requests; a human merges \u2014 every node renders its real files, live from this repo.",
+  "subtitle": "Groom fans shaping threads; the user crystallises spec \u2192 tickets; build fans worktree subagents to review-ready change requests; a human merges \u2014 every node renders its real files, live from this repo.",
   "lanes": [
     {
       "id": "dispatch",
@@ -39,7 +39,7 @@
       "id": "backlog",
       "lane": "dispatch",
       "title": "backlog",
-      "blurb": "The dispatcher: groom fans needs-shaping tickets into shaping threads, build fans ready tickets into build threads \u2014 no result flows back",
+      "blurb": "The dispatcher: groom fans needs-shaping tickets into shaping threads, build fans ready tickets into supervised build subagents \u2014 no result flows back",
       "source": "skills/software-development/backlog",
       "files": [
         {
@@ -950,7 +950,7 @@
     {
       "from": "backlog",
       "to": "build",
-      "label": "build: worktree threads via to-thread"
+      "label": "build: worktree subagents via to-subagent"
     },
     {
       "from": "implement",

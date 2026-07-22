@@ -192,16 +192,16 @@
       "lane": "disp",
       "phase": "build",
       "title": "Build: fan out \u2225",
-      "blurb": "mark in-flight, one worktree thread per ticket",
+      "blurb": "mark in-flight, one worktree subagent per ticket",
       "open": {
         "node": "backlog"
       }
     },
     {
       "id": "f-loop",
-      "lane": "thread",
+      "lane": "sub",
       "phase": "build",
-      "title": "build thread \u00d7 N",
+      "title": "build subagent \u00d7 N",
       "blurb": "implement \u2192 verify & fix \u2192 change request",
       "open": {
         "node": "build"
@@ -211,8 +211,8 @@
       "id": "f-workers",
       "lane": "sub",
       "phase": "build",
-      "title": "Staffed subagents",
-      "blurb": "roster-staffed, wake paths back",
+      "title": "Nested: implement \u00b7 verify",
+      "blurb": "the build subagent's own dispatches \u2014 roster-staffed, wake paths back",
       "open": {
         "node": "to-subagent"
       }
@@ -229,7 +229,7 @@
     },
     {
       "id": "f-adv",
-      "lane": "thread",
+      "lane": "sub",
       "phase": "review",
       "title": "Adversarial review",
       "blurb": "reviewer \u21c6 fixer until LGTM",
@@ -359,7 +359,7 @@
       "from": "f-build",
       "to": "f-loop",
       "style": "flow",
-      "label": "to-thread \u00b7 worktree",
+      "label": "to-subagent \u00b7 worktree",
       "labelAt": 0.3
     },
     {

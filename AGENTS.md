@@ -117,7 +117,7 @@ refresh with the atomic install command below.
 
 | Skill | What it does here | Scope |
 |-------|-------------------|-------|
-| backlog | Dispatcher: fans needs-shaping tickets into shaping threads, ready tickets into build threads | project |
+| backlog | Dispatcher: fans needs-shaping tickets into shaping threads, ready tickets into supervised build subagents | project |
 | shape | Settles one subject's strategic decisions in an interactive thread | project |
 | build | Runs one ticket to a review-ready change request | project |
 | adversarial-review | Converges a change request to LGTM via reviewer and fixer subagents | project |
@@ -147,7 +147,8 @@ refresh with the atomic install command below.
 interactive shaping threads via `to-thread`; each runs `shape` — composing `interview` and
 `domain-modeling`, dispatching `research` and `prototype` through `to-subagent` — and crystallising via
 `to-spec` / `to-tickets` is the user's call inside the thread. `backlog build` fans ready tickets into
-worktree-isolated build threads; each runs `build`: `implement` (defect → `diagnosing-bugs`, new behavior
+worktree-isolated subagents it babysits — building is autonomous, so outcomes flow back; each runs
+`build`: `implement` (defect → `diagnosing-bugs`, new behavior
 → `tdd`) → `verify-your-work` (the thread fixes) → change request → `adversarial-review` (`code-review`
 plus `watch-until` convergence) → `prove-your-work`. `merge-changes` remains the explicit human
 authorization gate after a review-ready change request. `to-subagent` is the single staffing-aware

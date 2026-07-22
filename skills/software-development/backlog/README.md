@@ -1,10 +1,11 @@
 # Backlog
 
-Dispatcher for the tracker. `groom` fans tickets carrying the needs-shaping role into interactive shaping
-threads — one per subject, interlocked tickets grouped — each seeded to run the `shape` skill. `build`
-fans ready, unblocked tickets into worktree-isolated build threads, each seeded to run the `build` skill,
-marking tickets in-flight so nothing dispatches twice. Threads are harness-native sessions the user
-attends; nothing reports back — status on request comes from the tracker and the thread listing.
+Dispatcher for the tracker, with two dispatch shapes. `groom` fans tickets carrying the needs-shaping
+role into interactive shaping threads — one per subject, interlocked tickets grouped — each seeded to
+run the `shape` skill; threads are harness-native sessions the user attends, and nothing reports back.
+`build` fans ready, unblocked tickets into worktree-isolated **subagents**, each running the `build`
+skill, marked in-flight so nothing dispatches twice — building is autonomous, so the dispatcher
+babysits: completion wakes it and it relays each outcome.
 
 Platform-bound, not bound-to-GitHub: *ticket*, *label*, and *change request* are roles, bound per repo by
 `docs/agents/platform.md` and `backlog-policy.md`.
@@ -14,12 +15,12 @@ Platform-bound, not bound-to-GitHub: *ticket*, *label*, and *change request* are
 ```bash
 backlog groom            # sweep needs-shaping tickets into shaping threads
 backlog groom 42 51      # just these tickets, grouped if their decisions interlock
-backlog build            # sweep ready, unblocked tickets into build threads
+backlog build            # sweep ready, unblocked tickets into supervised build subagents
 backlog build 42         # just this ticket
 backlog setup            # install or reconcile the project playbooks
 ```
 
-Merging the change requests that build threads produce stays a separate, explicit human authorization —
+Merging the change requests that builds produce stays a separate, explicit human authorization —
 the `merge-changes` skill.
 
 ## Dependency surface
@@ -30,5 +31,5 @@ the `merge-changes` skill.
   `backlog-policy.md` (label roles, dependency edges, readiness), `environment.md` (run/seed/check),
   `evidence.md` (the evidence bar) — owned by the repo once written; `setup` reconciles, never blindly
   overwrites.
-- **Siblings (required, by name):** `to-thread` (thread spawning), `shape` (what a grooming thread runs),
-  `build` (what a build thread runs).
+- **Siblings (required, by name):** `to-thread` (grooming threads), `to-subagent` (build dispatch),
+  `shape` (what a grooming thread runs), `build` (what a build subagent runs).

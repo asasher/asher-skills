@@ -1,20 +1,21 @@
 ---
 name: backlog
-description: Dispatch the backlog — groom fans needs-shaping tickets into shaping threads the user attends; build fans ready, unblocked tickets into build threads. Setup installs the playbooks.
+description: Dispatch the backlog — groom fans needs-shaping tickets into shaping threads the user attends; build fans ready, unblocked tickets into worktree-isolated subagents it supervises. Setup installs the playbooks.
 argument-hint: "[groom | build | setup] [ticket ids]"
 user-invocable: true
 disable-model-invocation: true
 metadata:
   invocation: user
   execution: orchestrator
-  requires: [build, shape, to-thread]
+  requires: [build, shape, to-subagent, to-thread]
   optional: []
 ---
 
 # Backlog
 
-A dispatcher: it fans tickets out into harness-native threads and reports how to attach. No result flows
-back — status on request comes from the tracker and the harness's thread listing.
+A dispatcher with two dispatch shapes. Grooming is interactive — human-in-the-loop work fans out as
+threads the user attends, and no result flows back. Building is autonomous — it fans out as subagents
+this session supervises to completion.
 
 Nouns are roles: *ticket*, *label*, *change request* are bound to this repo's real tracker, review
 surface, and version control by `docs/agents/platform.md`; label roles, dependency edges, and readiness
@@ -25,18 +26,21 @@ by `docs/agents/backlog-policy.md`. Missing playbooks: run `backlog setup` first
 Sweep the tracker for tickets carrying the needs-shaping role, or take the ids given. Group tickets whose
 decisions interlock into one subject; the rest stay one subject each. For each subject, spawn a thread
 via the `to-thread` skill — named for the subject, seeded with the ticket ids and the instruction to run
-the `shape` skill on them. Report each thread and how to attach. What happens inside the thread — and
-whether a spec or tickets come out of it — is the user's call there, not this dispatcher's.
+the `shape` skill on them. Report each thread and how to attach; status on request comes from the
+tracker and the harness's thread listing. What happens inside the thread — and whether a spec or tickets
+come out of it — is the user's call there, not this dispatcher's.
 
 ## build
 
 Sweep for tickets carrying the ready role whose dependency edges are clear, or take the ids given. For
-each: mark it in-flight per the label roles — a dispatched ticket must never dispatch twice — then spawn
-a worktree-isolated thread via the `to-thread` skill, named for the ticket, seeded to run the `build`
-skill on it. Isolation and concurrency follow the environment playbook's verdicts
-(`docs/agents/environment.md` § Worktree isolation, § Parallelism): a repo that can't isolate runs one
-thread at a time in the main checkout. Report each thread and how to attach. Merging the resulting change requests waits for
-explicit authorization.
+each: mark it in-flight per the label roles — a dispatched ticket must never dispatch twice — then
+dispatch the `build` skill on it via the `to-subagent` skill, in its own worktree. Isolation and
+concurrency follow the environment playbook's verdicts (`docs/agents/environment.md` § Worktree
+isolation, § Parallelism): a repo that can't isolate builds one ticket at a time in the main checkout.
+
+This session babysits the fleet: each build's completion wakes it, and it relays the outcome — the
+review-ready change request, or the failure, with a died-silent build reported, never dropped. Merging
+the resulting change requests waits for explicit authorization.
 
 ## setup
 

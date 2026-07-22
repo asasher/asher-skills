@@ -26,6 +26,11 @@ Self-contained — the subagent sees nothing of this conversation. State the goa
 id, what done looks like, and that its final message is the deliverable itself: the data asked for, not a
 status note. When the result must be structured, state the exact shape.
 
+## Isolation
+
+Work that edits files this session or a parallel agent may also touch gets its own worktree. Read-only
+work runs in place.
+
 ## Wake path
 
 Prefer the harness-tracked child: its completion wakes the dispatcher, so never poll it. Work the harness

@@ -5,7 +5,7 @@ exact-sentence citation per answer. Ambiguity flagged with a citation is valid. 
 
 ## Scenario
 
-You are running the `build` skill on ticket #142 in a worktree thread. Implementation landed;
+You are running the `build` skill on ticket #142 in your own worktree. Implementation landed;
 verification just reported two failing claims.
 
 ## Probes

@@ -2,7 +2,8 @@
 
 Dispatch adapter for non-interactive work: staffs the subagent from the roster (degrading to the parent's
 model when no roster is installed), requires a self-contained prompt whose final message is the
-deliverable, and wires a wake path so the dispatcher learns of completion without polling. One call
+deliverable, isolates file-editing work in a worktree, and wires a wake path so the dispatcher learns of
+completion without polling. One call
 dispatches one subagent; how many a piece of work needs is the caller's decision.
 
 ## When to use
