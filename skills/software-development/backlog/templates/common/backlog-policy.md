@@ -5,7 +5,7 @@
 ## Work domain
 
 - Domain: _<software | skill-authoring | writing | research | ops | general>_.
-- Chosen at `backlog setup`, this is the kind of work this repo's backlog tracks. Playbooks resolve per the skill's `reference/setup.md` § Resolved scaffold set.
+- Chosen at `backlog setup`, this is the kind of work this repo's backlog tracks; setup resolves which template pack fills each playbook.
 - Absent this section (an install from before domain packs existed), the domain is `software`.
 - When the chosen domain's pack was not yet shipped at install time, or a shipped pack omitted a required step, those step playbooks are `software` baselines standing in, each flagged in its own header as a code-flavored stand-in to tailor.
 
@@ -25,7 +25,7 @@ Two independent axes, plus exclusions. Readiness decides *whether and who* picks
 
 **Closure** — the change request's closing reference (`Closes #N`) closes the ticket on merge; there is no post-build label by default. A repo whose merges land on a staging branch first may bind an extra label (e.g. `built`) meaning *merged, closure deferred to the promotion merge*: _<label, or "none — direct closure">_.
 
-Two further lifecycle values appear only where the tracker has no native equivalent (the local binding's `state:` field), written by the loop, never by grooming: `in-review` (a PR is open for it — set on the work branch at PR-open) and `closed` (set on the work branch once review converges; the merge carries it to main). On trackers with native state (GitHub), an open PR and native closure express these.
+Two further lifecycle values appear only where the tracker has no native equivalent (the local binding's `state:` field), written on the build side's work branches, never by grooming: `in-review` (a PR is open for it — set on the work branch at PR-open) and `closed` (set on the work branch once review converges; the merge carries it to main). On trackers with native state (GitHub), an open PR and native closure express these.
 
 **Work-type** — required for `ready-for-agent`; decides the branch:
 
@@ -62,7 +62,7 @@ grooming gap: `backlog build` skips the ticket rather than inferring it or defau
 
 **Neutral** — every other label; ignored for selection and routing. On an inherited tracker this is *most* labels (priority, area/component, size, team, release). The default is **neutral**: a label maps to a role only when `setup` explicitly bound it: _<list the role→label mappings here; leave everything else neutral>_.
 
-**Aliases** — when several existing labels fill one role, one is canonical and the loop treats the others as that role too: _<e.g. `type:bug` and `defect` both → `bug`; or "none">_. Setup reuses existing labels rather than minting duplicates.
+**Aliases** — when several existing labels fill one role, one is canonical and every reader treats the others as that role too: _<e.g. `type:bug` and `defect` both → `bug`; or "none">_. Setup reuses existing labels rather than minting duplicates.
 
 ## Dependencies
 
@@ -76,5 +76,5 @@ grooming gap: `backlog build` skips the ticket rather than inferring it or defau
 
 ## Building hygiene
 
-- Concurrent runners are possible (two machines, two humans, one tracker); `building` is the claim marker, applied optimistically — the loop accepts the rare duplicate pickup in the window between queue build and marking rather than carrying a lock.
+- Concurrent runners are possible (two machines, two humans, one tracker); `building` is the claim marker, applied optimistically — the build dispatcher accepts the rare duplicate pickup in the window between queue build and marking rather than carrying a lock.
 - **Orphan sweep** — a `building` ticket whose recorded branch no longer exists, or has gone quiet past _<horizon, e.g. 7 days>_, is a corpse: `groom` surfaces it to the human as a candidate reset to `ready-for-agent` (or `needs-info`). Never silently reset — the branch may hold unmerged work.

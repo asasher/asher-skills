@@ -76,8 +76,7 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
 ## Dependency surface
 
 - **Bundled references** — this skill's own contract, shipped in-directory: [synthesis](reference/synthesis.md)
-  and [template-guide](reference/template-guide.md). These are the authority; they import no
-  other skill's files.
+  and [template-guide](reference/template-guide.md). These are the authority.
 - **Project playbooks** — the **tracker binding** in `docs/agents/platform.md` (how a ticket body is
   read, rewritten, and commented), and the repo's spec conventions for the no-tracker fallback
   (defaults to `docs/specs/`; a repo may record a different location or naming rule in its

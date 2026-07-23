@@ -58,8 +58,8 @@ The full method is in [slicing](reference/slicing.md); the shape:
    roles and link it to its children (slicing § Supersede the parent) — a tracker state change plus a
    pointer comment; the spec text stays untouched.
 7. **Readback.** Verify against the live tracker: every approved draft maps to exactly one created ticket, and
-   every emitted `depends on #N` marker points at a real, earlier ticket id. Fix any miss before reporting the
-   split done.
+   every wired dependency edge — native relation or recorded marker — resolves to a real, earlier ticket
+   id. Fix any miss before reporting the split done.
 
 ## What a ticket is (and isn't)
 

@@ -22,10 +22,10 @@ Not for eliciting requirements. To-spec captures decisions already made — it n
 - **Pure synthesis, no interview.** To-spec mines what's already on the table; it does not re-ask what the
   conversation settled and does not stall on the user. Undecided points are **flagged in the spec's Notes**,
   not turned into questions.
-- **Vendored local method.** The credits below identify its upstream adaptation; installation never pulls an external skill.
+- **Vendored local method.** The credits below identify its upstream adaptation.
 - **Dev / non-dev gating.** The skill classifies the work. A **dev spec** keeps the dev-only sections
-  (Testing decisions, Test seams) and runs Matt's "sketch the test seams, prefer the highest existing seam"
-  step; a **non-dev spec** skips both. One template serves process, content, and decision specs too.
+  (Testing decisions, Test seams) and runs the upstream "sketch the test seams, prefer the highest
+  existing seam" step (see Credits); a **non-dev spec** skips both. One template serves process, content, and decision specs too.
 - **Generic vocabulary.** "spec" and "ticket," never GitHub-specific "issue." The downstream unit is a ticket.
 - **No stale content.** The spec carries no file paths or code snippets (they rot) — direction in prose. The
   one exception is a prototype-validated snippet that encodes a decision more precisely than prose can.

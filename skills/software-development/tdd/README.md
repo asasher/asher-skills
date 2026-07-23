@@ -13,7 +13,7 @@ excluded from the cycle).
 
 - **Bundled:** `reference/tests.md` (good/bad test examples), `reference/mocking.md` (mock only at system
   boundaries).
-- **Siblings:** none — a sealed primitive.
+- **Siblings:** none.
 
 ## Provenance
 

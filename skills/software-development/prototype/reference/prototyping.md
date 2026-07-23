@@ -87,15 +87,16 @@ mock or seam that bypasses the claimed runtime path is not evidence.
 ## Present the answer for feedback
 
 A variants-shape prototype, and any behavior-shape prototype whose answer is a rendered document, is
-presented by opening the rendered artifact / variant sheet and ending the pause with its location.
-Feedback arrives in conversation. A live interactive prototype (an HTML demo, a running page, a
+presented by opening the rendered artifact / variant sheet and stating its location, so the human can
+react. Feedback arrives in conversation. A live interactive prototype (an HTML demo, a running page, a
 terminal app) is driven directly.
 
-## Staff the build — compose `staffing`
+## Staff the build
 
-Building the artifact — the reducer and shell, the variants, the draft sheets — is dispatched to the builder
-the **`staffing`** skill resolves (by name): mechanical build-out to the pinned mechanical model, anything
-with taste weight (a UI variant, a rendered document) to a taste-ranked model.
+Building the artifact — the reducer and shell, the variants, the draft sheets — may be dispatched via
+the `to-subagent` skill, naming the work's nature in the dispatch (mechanical build-out vs work with
+taste weight — a UI variant, a rendered document) so the right builder is resolved. Absent it, build
+in-session.
 
 ## Capture and cleanup
 

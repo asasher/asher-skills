@@ -1,7 +1,5 @@
 # Synthesis — the method
 
-The method. It imports no other skill's files.
-
 ## The one rule: synthesize, never interview
 
 To-spec is **pure synthesis.** Everything it writes comes from what's already on the table — the current
@@ -98,8 +96,7 @@ material decision from the conversation appears in the spec, and every Notes lin
 blocking / delegated / deferred classification. An open **blocking** Note means the direction isn't
 ready to build on — settle it first.
 
-- **User present** — take approval inline, in the conversation. This is the default path and depends on no
-  other skill.
+- **User present** — take approval inline, in the conversation. This is the default path.
 - **User AFK, spec on a ticket** — the spec already sits where the user's comments reach it; their
   LGTM on the ticket (or in the conversation) is the approval. To-spec applies no readiness label —
   that decision travels by the tracker's label roles and belongs to whoever executes the user's call.

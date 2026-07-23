@@ -283,6 +283,28 @@ class CatalogTests(unittest.TestCase):
             catalog.discover(root)
 
     def test_rejects_cross_harness_invocation_mismatch(self) -> None:
+        # A user-only skill must not allow implicit Codex invocation. The reverse
+        # (a model-invocable skill with implicit invocation off) is legal: some
+        # skills are invoked by name on the user's call, never self-triggered.
+        temp, root = self.fixture()
+        self.addCleanup(temp.cleanup)
+        write_skill(root, "alpha")
+        skill_md = root / "skills/alpha/SKILL.md"
+        skill_md.write_text(
+            skill_md.read_text(encoding="utf-8")
+            .replace("  invocation: model\n", "  invocation: user\n")
+            .replace("---\nname:", "---\ndisable-model-invocation: true\nname:", 1),
+            encoding="utf-8",
+        )
+        agents = root / "skills/alpha/agents"
+        agents.mkdir()
+        (agents / "openai.yaml").write_text(
+            "policy:\n  allow_implicit_invocation: true\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(catalog.CatalogError, "agents/openai.yaml"):
+            catalog.discover(root)
+
+    def test_model_invocable_skill_may_disable_implicit_invocation(self) -> None:
         temp, root = self.fixture()
         self.addCleanup(temp.cleanup)
         write_skill(root, "alpha")
@@ -291,8 +313,7 @@ class CatalogTests(unittest.TestCase):
         (agents / "openai.yaml").write_text(
             "policy:\n  allow_implicit_invocation: false\n", encoding="utf-8"
         )
-        with self.assertRaisesRegex(catalog.CatalogError, "agents/openai.yaml"):
-            catalog.discover(root)
+        catalog.discover(root)
 
     def test_internal_skill_is_cataloged_but_not_selectable(self) -> None:
         temp, root = self.fixture()

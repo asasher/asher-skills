@@ -32,7 +32,8 @@ stop.
 2. **Order.** Determine dependency and stacking relationships (stacked branches, `Depends on` links,
    overlapping surfaces) and compute the merge order: bases before dependents.
 3. **Gate on CI, per merge, at merge time.** Immediately before each merge, re-query the required checks on
-   the current head — local green, an earlier run's green, or another PR's duration is never a proxy. A
+   the current head — only its own completed checks count; a local run, an earlier head's green, or
+   timing inferred from another change never stands in for them. A
    pending or failing required check stops that merge (and its dependents) until resolved.
 4. **Merge in order,** using the platform's recorded merge mechanics (squash policy, branch cleanup).
 5. **Reconcile after each merge.** Update or rebase dependent branches as needed; resolve conflicts only when
@@ -45,7 +46,7 @@ stop.
    left unmerged with its reason. Apply the tracker's post-merge lifecycle (labels, issue closure) where the
    platform binding records it. Then clean up: delete merged branches per platform policy, remove their
    worktrees, and tear down any per-change environment resources (containers, seeded stores) the
-   environment playbook names.
+   repo's environment playbook (`docs/agents/environment.md`, when it has one) names.
 
 ## Boundaries
 

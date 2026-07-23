@@ -30,15 +30,15 @@ status note. When the result must be structured, state the exact shape.
 
 Work that edits files this session or a parallel agent may also touch gets its own worktree, created —
 branch and directory in one step — off the base ref (`git worktree add <path> -b <branch> <base>`, or
-the platform binding's equivalent). The primary checkout is never switched: it stays on the user's
+the equivalent one-step command the repo's VCS provides). The primary checkout is never switched: it stays on the user's
 branch throughout, so never create or check out the work branch there first. Read-only work runs in
 place.
 
 ## Wake path
 
 Prefer the harness-tracked child: its completion wakes the dispatcher, so never poll it. Work the harness
-cannot track (an external process, another harness) follows the roster's wake-path ladder — a floor-model
-watcher at low effort. With neither, poll at the cadence the work actually changes.
+cannot track (an external process, another harness) follows the roster's wake-path ladder — a watcher
+on the cheapest model the roster allows, at low effort. With neither, poll at the cadence the work actually changes.
 
 ## Relay
 

@@ -1,6 +1,6 @@
 # Playbook: Evidence
 
-> Project playbook for a skill-authoring repo. The backlog `evidence` step reads this file for what to
+> Project playbook for a skill-authoring repo. The `prove-your-work` skill reads this file for what to
 > capture, storage, and presentation. How to run executor-harness probes and direct script checks is in
 > `environment.md`.
 

@@ -18,5 +18,4 @@ Typecheck and touched tests regularly, full suite once at the end, commit to the
 - **Source:** route structure inspired by Matt Pocock's MIT-licensed
   [`implement`](https://github.com/mattpocock/skills/tree/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/implement).
   License in `THIRD_PARTY_LICENSES.md`.
-- **Local changes:** explicit bug/enhancement routing; the refactor route deliberately dropped; no
-  closing review step — review is separate work downstream.
+- **Local changes:** explicit bug/enhancement routing; review is separate work downstream.

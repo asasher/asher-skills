@@ -5,7 +5,7 @@
 
 ## This repo
 
-- Regression seam: a failing situated probe or confirmed misbehaving transcript, run through both an in-session executor and an independent CLI executor; bundled scripts use a direct failing invocation.
+- Regression seam: a failing check the repo's eval discipline can rerun — _<bind to this repo's discipline; e.g. a failing probe scenario run through the repo's recorded executor commands, or a direct failing invocation for bundled scripts>_.
 - Probe location and invocation: _<path to the changed skill's eval scenarios, answer key, and verified executor commands>_.
 - Script checks or debug entry points: _<verified commands, or “none”>_.
 - Known model-dependent surfaces: preserve cited transcripts; nondeterministic runs follow the bundled flaky-bug rule.

@@ -61,5 +61,4 @@ report the assigned one, keep agent-tree observability but record the staffing g
 floor/cost compliance.
 
 Reachability state is per direction: **effect-verified**, **intentionally disabled**, or **unavailable** with
-a captured failure class and successor. One failed direction never disables the healthy direction. Do not
-poll vendor policy or credits as a dispatch precondition.
+a captured failure class and successor. One failed direction never disables the healthy direction.

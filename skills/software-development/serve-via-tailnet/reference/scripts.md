@@ -15,7 +15,7 @@ to the document hash, and maintains the hub independently of the issuing exec se
 | `--doc` | — | HTML document under review. Required unless `--sweep`. |
 | `--title` | — | title shown in the chrome and the hub row. Required unless `--sweep`. |
 | `--issue` | `?` | free-form scope tag — issue, ticket, or any grouping key. Forms the registry entry id (`<issue>-<doc-stem>`) and the hub row's `#` field. |
-| `--kind` | `plan` | free-form artifact kind label (plan / prototype / maquette / doc / …); rendered dynamically by the chrome. A non-plan/prototype value is **not** rejected. |
+| `--kind` | `plan` | free-form artifact kind label (plan / prototype / maquette / doc / …); rendered dynamically by the chrome. |
 | `--state` | `state` | durable review dir: events/ledger/cursor plus `server.json` and `server.log`. |
 | `--surface` | `surface` | repo-scoped surface dir holding `registry.json` and the generated `index.html` (the hub). |
 | `--port` | `0` | loopback port; `0` picks a free one (read the printed `port`). |

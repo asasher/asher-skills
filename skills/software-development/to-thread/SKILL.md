@@ -23,7 +23,7 @@ attends the thread. Report status only when asked, via the harness's listing com
 - **Prompt** — standalone. The thread sees nothing of this conversation: state the goal, reference
   material by path or ticket id, say what done looks like, and name any skill the thread should run.
 - **Directory** — the project the work belongs to; the spawn directory is the session's permanent home.
-- **Model and effort** — this session's own, passed explicitly, unless told otherwise.
+- **Model, effort, and permission mode** — this session's own, passed explicitly, unless told otherwise.
 - **Isolation** — a thread that will edit a repo this session or another live thread is also editing gets
   its own worktree.
 

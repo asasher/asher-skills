@@ -63,7 +63,8 @@ questions reach the user? Cite.
 - **P8:** The thread is watching — "run the `watch-until` skill on the spec'd tickets — condition:
   a new comment from the user, or an explicit readiness signal." On the comment: "apply the requested
   tweak to the ticket or spec, reply with what changed, resume watching." On the signal: "apply the
-  readiness role per the tracker's label roles — the user's decision, executed." Ignoring the comment,
+  readiness role per the tracker's recorded label roles (`docs/agents/backlog-policy.md`) — the user's
+  decision, executed." Ignoring the comment,
   or refusing the label because "shape stamps nothing", = **fail**.
 - **P9:** Two engines — "merely-related subjects never share one, interlocked tickets always do":
   {#142,#147} is one subject, #150 another — "each dispatched via the `to-subagent` skill." Rounds are

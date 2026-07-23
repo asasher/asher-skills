@@ -72,8 +72,8 @@ every blocker must be **created before its dependents.** Topologically sort the 
 
 Wire each dependency **exactly as the repo's dependency playbook records it** (`docs/agents/backlog-policy.md`
 § Dependencies), so downstream scheduling reads it and skips blocked work. Where the playbook records the tracker's
-**native blocking relation** (this repo: GitHub `blocked_by`, written via the verified verbs in
-`docs/agents/platform.md`), write the native edge — it renders the frontier in the tracker's own UI. Where it
+**native blocking relation** (e.g. GitHub `blocked_by`, written via the verbs in
+`docs/agents/platform.md`), write the native edge — it renders the blocking structure in the tracker's own UI. Where it
 records a body-line marker (`- [ ] depends on #N`) or `deps:` frontmatter instead, copy the playbook's
 literal form — don't restyle it. The convention is the **project playbook's**: to-tickets emits *into* it,
 so the playbook's wording is the authority.
@@ -99,9 +99,7 @@ Create the tickets through the **tracker binding** recorded in `docs/agents/plat
 **never as local ticket files while a live tracker is bound**; on-disk tickets exist only when the recorded
 binding itself is local. No recorded binding at all: state the gap and ask the user how to proceed — a
 backlog needs a tracker, so publishing waits on that decision. Link each ticket to the spec's tracking
-ticket when one exists. On
-this repo that binding is GitHub via `gh` (`gh issue create --title '...' --body '...'`), and a ticket is a
-GitHub issue. Publish each body per template-guide § A single ticket, wiring the
+ticket when one exists. Publish each body per template-guide § A single ticket, wiring the
 dependency edges in the playbook's recorded form.
 
 ## Supersede the parent
@@ -133,5 +131,4 @@ decision-rich fragment and note it came from a prototype. Absent that exception,
 ## Vocabulary
 
 Speak generically. A **ticket** is the unit of pickup-able work — exactly the tracker's "issue" role, in a
-tracker-agnostic word. Never assume GitHub's "issue" in the skill's own text; the pair is deliberately
-tracker-agnostic.
+tracker-agnostic word. Say "ticket" in everything to-tickets writes, whatever the bound tracker calls it.

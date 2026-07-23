@@ -68,7 +68,7 @@ done. Run the `watch-until` skill on the spec'd tickets —
 condition: a new comment from the user, or an explicit readiness signal ("LGTM", "ready for agent"),
 in a comment or here in the thread. On a comment: apply the requested tweak to the ticket or spec,
 reply with what changed, resume watching. On the readiness signal: apply the readiness role per the
-tracker's label roles — the user's decision, executed. The watch carries a timeout; when it reports
+tracker's recorded label roles (`docs/agents/backlog-policy.md`) — the user's decision, executed. The watch carries a timeout; when it reports
 timed out, surface the open state and stop.
 
 ## Resume
@@ -89,4 +89,4 @@ recomputes the frontier from what is still open, and re-asks nothing the record 
 - **Project surface:** the repo context files (`CONTEXT.md`, plus `PRODUCT.md`/`DESIGN.md` where they
   exist); the instruction file's `## Context documents` index; the tracker binding in
   `docs/agents/platform.md` when the subject is a ticket. Absent a tracker, idea shaping still works —
-  the record lives in `CONTEXT.md`, ADRs, and the playback.
+  the record lives in `CONTEXT.md`, ADRs, and the conversation.

@@ -64,11 +64,11 @@ set and continues below; it never means cheapest-first.
    rerun the same order. If no model remains reachable, use the current model in a subagent and report the
    staffing gap; never skip the stage.
 
-### Browser example
+### Browser example (illustrative — one machine's audited bindings, not shipped policy)
 
-Resolve `browser-use` to its named primary provider — on this machine scripted Playwright driving Chrome,
-never the user's own browser session (`agent-browser` and harness-native web bindings have proven
-unreliable: interactive-exploration fallback only, never the default). If the primary's effect probe fails,
+Resolve `browser-use` to its named primary provider — in this example scripted Playwright driving
+Chrome, with the machine's `agent-browser` and harness-native web bindings recorded as
+interactive-exploration fallback only, never the default. If the primary's effect probe fails,
 that is a tool failure to
 surface; the only recorded further fallback is the user-session carve-out (ChatGPT-in-Chrome with per-use
 explicit consent, for test cases that need the user's real signed-in session). Computer Use is not a browser fallback:

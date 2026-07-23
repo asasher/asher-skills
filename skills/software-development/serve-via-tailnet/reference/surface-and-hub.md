@@ -3,7 +3,7 @@
 Where a reviewed artifact reaches the human, and the repo-scoped inbox that lists everything awaiting them.
 The surface is chosen by where the human is, not where the agent runs. Its repo-specific config — the root
 URL, the surface directory, the publish/proxy commands, the keep-awake choice — lives in a `docs/agents/`
-surface-config playbook (on this repo, `environment.md` § Presenting to the human). This doc is the
+surface-config playbook (e.g. `environment.md` § Presenting to the human). This doc is the
 artifact-agnostic contract those settings implement.
 
 ## The surface contract

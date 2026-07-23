@@ -34,7 +34,7 @@ Not for writing the direction itself — that's `to-spec`. To-tickets consumes a
 - **Generic vocabulary; no stale content; spec text untouched.** "Ticket" throughout (ticket == the
   tracker's issue role); no file paths or code in tickets (prototype-validated-snippet exception); the
   direction itself is never rewritten — superseding is tracker state plus a pointer comment.
-- **Vendored local method.** The credits below identify its upstream adaptation; installation never pulls an external skill.
+- **Vendored local method.** The credits below identify its upstream adaptation.
 
 ## Layout
 

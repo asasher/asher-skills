@@ -28,5 +28,5 @@ pollutes the other, and are reported side by side, never merged or reranked.
   (the structural bar: ambition directive, presumptive blockers, remedies, weighting, clean-pass
   criteria). Licenses in `THIRD_PARTY_LICENSES.md`.
 - **Local changes:** dispatch through `to-subagent` with an in-session degrade; fixed point defaults to
-  the change request base or merge-base with the default branch; spec discovery reads this family's
-  `platform.md` binding and `docs/specs/` convention.
+  the change request base or merge-base with the default branch; spec discovery reads the repo's
+  `docs/agents/platform.md` binding and `docs/specs/` convention.

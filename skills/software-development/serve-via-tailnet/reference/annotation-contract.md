@@ -9,8 +9,8 @@ drives it is in [scripts](scripts.md); the surface it serves over and the hub ar
 ## Durable serve
 
 The serve command returns only after a detached worker answers its authenticated health check; mechanics and
-teardown in [scripts](scripts.md). The watcher only delivers an event after submission; it never owns the
-server that must receive that event.
+teardown in [scripts](scripts.md). The watcher only delivers an event after submission; serve and await
+are separate processes, so ending an await leaves the server (and any landed verdict) intact.
 
 ## Serve-time chrome
 
@@ -73,9 +73,11 @@ state dir and gets an already-landed verdict back immediately from the cursor; a
 never loses a verdict, and a verdict landing seconds after its awaiting thread exits is consumed by whoever
 resumes next, not re-requested from the human.
 
-Durable state lives in **one canonical place per review**: `~/.backlog/reviews/<repo>/<scope>/state` (never
-a session scratchpad, never an ad-hoc `review-state/` sibling). When the owning workflow keeps a durable run
-root (backlog's `<git-common-dir>/backlog/runs/<run-id>/`), copy `events.jsonl` and `ledger.json` into it
+Durable state lives in **one canonical place per review**, outside any worktree or session scratch —
+pass `--state` a path that survives teardown; this skill's convention is
+`~/.backlog/reviews/<repo>/<scope>/state`, where `<scope>` is the issue number or artifact slug. When
+the owning workflow keeps a durable run
+root of its own, copy `events.jsonl` and `ledger.json` into it
 before `--stop` — the raw event stream is part of the run's provenance and must survive review cleanup.
 
 Each feedback event records **client evidence** (remote address, user agent, referer, server start time).
@@ -87,4 +89,4 @@ published are grounds to void and re-present. These checks are the guard.
 
 The approve event — verdict, content hash, timestamp, appended to `events.jsonl` — is the durable approval
 record: a stronger provenance artifact than a chat "lgtm." Reconciliation is LLM audit over this event log
-and the ledger; there are no version stamps. A caller that records posterity cites this event.
+and the ledger. A caller that records posterity cites this event.

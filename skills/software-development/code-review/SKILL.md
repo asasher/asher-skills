@@ -1,7 +1,7 @@
 ---
 name: code-review
 description: Review the changes since a fixed point (commit, branch, tag, or change request base) along two axes — Standards (does the code follow this repo's documented standards?) and Spec (does the code match what the originating ticket or spec asked for?). Use to review a branch, a change request, or work-in-progress changes.
-argument-hint: "<fixed point, change request, or nothing for the current branch>"
+argument-hint: "<fixed point, change request, or spec path; nothing for the current branch>"
 user-invocable: true
 metadata:
   invocation: model

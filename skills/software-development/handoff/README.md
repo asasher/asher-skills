@@ -12,7 +12,7 @@ durable artifacts, and sensitive information redacted.
 ## Dependency surface
 
 - **Bundled:** `SKILL.md` only.
-- **Siblings:** none — a sealed primitive.
+- **Siblings:** none.
 
 ## Provenance
 

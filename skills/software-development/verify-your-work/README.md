@@ -13,9 +13,9 @@ belongs to whoever owns the changes.
 ## Dependency surface
 
 - **Bundled:** `SKILL.md` only.
-- **Project:** `docs/agents/environment.md` when present — run/seed/auth and the recorded browser
-  driver per surface.
-- **Siblings:** none — a sealed primitive.
+- **Project:** `docs/agents/environment.md` when present — run/seed/auth and the recorded driver per
+  surface.
+- **Siblings:** none.
 
 ## Provenance
 

@@ -28,8 +28,9 @@ Create files lazily — only when there is something to write. No `CONTEXT.md`? 
 resolves. No `docs/adr/`? Create it when the first ADR is needed.
 
 **Register on create.** The first time `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` comes into existence,
-add its line to the project instruction file's `## Context documents` index (`AGENTS.md`; `CLAUDE.md` reaches
-it via its `@AGENTS.md` import — create the section if absent): path, what it is, when to read it, one line
+add its line to the project instruction file's `## Context documents` index — the instruction file the
+repo's harnesses actually load (`AGENTS.md` where the harness reads it or another file imports it;
+otherwise `CLAUDE.md` itself); create the section if absent: path, what it is, when to read it, one line
 each. The index is how a session running no skill still finds the model.
 
 ## During the session

@@ -12,9 +12,9 @@ absence: witnessed-live work compresses, AFK work carries the full package.
 ## Dependency surface
 
 - **Bundled:** `SKILL.md` only.
-- **Project:** platform verbs in `docs/agents/platform.md`; format and bar from `docs/agents/evidence.md`
-  when the repo has one.
-- **Siblings:** none — a sealed primitive.
+- **Project:** platform verbs in `docs/agents/platform.md`; format and bar from `docs/agents/evidence.md`;
+  the capture contract from `docs/agents/environment.md` — each when the repo has one.
+- **Siblings:** none.
 
 ## Provenance
 

@@ -253,7 +253,7 @@ def _parse(path: Path, root: Path, category: str | None) -> Skill:
             openai.read_text(encoding="utf-8"),
             re.MULTILINE,
         )
-        if not match or (invocation == "model") != (match.group(1) == "true"):
+        if not match or (invocation == "user" and match.group(1) == "true"):
             raise CatalogError(f"{path}: invocation disagrees with agents/openai.yaml")
     requires = _names(metadata["requires"], "requires", path)
     optional = _names(metadata["optional"], "optional", path)

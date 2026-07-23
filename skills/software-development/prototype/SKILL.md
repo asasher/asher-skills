@@ -29,7 +29,7 @@ here; build-out may be dispatched via the `to-subagent` skill.
 2. **Built and exposed.** Provide one command or URL and visible state. Open rendered answer sheets
    locally; drive live interactive artifacts directly. Iterate only to settle the named question.
 3. **Answer captured.** Write the decision, why, and relevant variant captures into the record of the work
-   that raised the question — the ticket thread or the conversation playback.
+   that raised the question — the ticket thread, or the conversation that asked.
 4. **Cleaned.** Absorb only the validated core into real work; the artifact leaves the mainline —
    parked on a throwaway branch pointed to from the record, or deleted.
 

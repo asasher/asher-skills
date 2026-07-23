@@ -24,9 +24,9 @@ verb the platform binding records (`backlog-policy.md` § Dependencies): the tra
 relation** where it has one, else the playbook's recorded form (a local binding's `deps:` frontmatter, a
 body-line marker). The body describes the work; the tracker carries the graph.
 
-Keep every field at the altitude of **direction**: a ticket is pickup-able work, coarser than a plan (the
-retired per-ticket plan stage). If a field drifts into file-by-file implementation detail, pull it
-back up — the implementing agent (or the plan step) carries that detail.
+Keep every field at the altitude of **direction**: a ticket is pickup-able work, not a design
+document. If a field drifts into file-by-file implementation detail, pull it
+back up — the implementing agent carries that detail.
 
 ## The split draft
 

@@ -4,4 +4,4 @@ interface:
   default_prompt: "Use $to-tickets to split this spec'd ticket into backlog-ready tickets with blocking edges."
 
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

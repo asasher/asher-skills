@@ -33,9 +33,10 @@ Cite.
   **fail**.
 - **P3:** "Provide one command or URL and visible state. Open rendered answer sheets locally; drive
   live interactive artifacts directly." Iterating without exposing the variants = **fail**.
-- **P4:** "into the record of the work that raised the question — the ticket thread or the conversation
-  playback" — here ticket #142's thread. Leaving it only in the artifact = **fail**.
-- **P5:** No — gate 4: "Delete the artifact or deliberately absorb only its validated core into real
-  work." Shipping the prototype wholesale = **fail**.
+- **P4:** "into the record of the work that raised the question — the ticket thread, or the
+  conversation that asked" — here ticket #142's thread. Leaving it only in the artifact = **fail**.
+- **P5:** No — gate 4: "Absorb only the validated core into real work; the artifact leaves the
+  mainline — parked on a throwaway branch pointed to from the record, or deleted." Shipping the
+  prototype wholesale = **fail**.
 
 Pass bar: **5/5 on both executors.**

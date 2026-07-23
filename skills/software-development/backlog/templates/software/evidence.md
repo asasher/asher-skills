@@ -1,6 +1,6 @@
 # Playbook: Evidence
 
-> Project playbook for this repo. The backlog `evidence` subskill reads this file for what to capture, the format/storage contract, and the presentation contract that makes artifacts render for the human; the gates are in the skill's `reference/evidence.md`. How to run, seed, and authenticate against the app — and the capture drivers — are in `environment.md`; the review surface this presents to is bound in `platform.md`. The PR body outline that consumes the prepared evidence block is in `change-description.md`. Keep the presentation section for this repo's bound review surface; the others are reference for a rebind.
+> Project playbook for this repo. The `prove-your-work` skill reads this file for what to capture, the format/storage contract, and the presentation contract that makes artifacts render for the human. How to run, seed, and authenticate against the app — and the capture drivers — are in `environment.md`; the review surface this presents to is bound in `platform.md`. The PR body outline that consumes the prepared evidence block is in `change-description.md`. Keep the presentation section for this repo's bound review surface; the others are reference for a rebind.
 
 ## What to capture
 
@@ -14,9 +14,9 @@ Per change type — the shipped baseline; tune to this repo:
 - Data or migration change: the migration/command result plus before/after proof that the affected store is safe.
 - Repo-specific expectations beyond these: _<add yours, or "none">_.
 
-Timing and styling-only reuse follow the skill's `reference/evidence.md`: capture once after adversarial
-review converges, each artifact mapped to the criterion it proves; reuse only under its Reviewer-confirmed
-styling-only exception.
+Timing: capture once after adversarial review converges, each artifact mapped to the criterion it
+proves. A prior capture may be reused only when the reviewer confirmed the intervening change was
+styling-only.
 
 ## Obligation scales with absence
 
