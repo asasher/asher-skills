@@ -24,7 +24,9 @@ session and what it dispatches.
 
 ## 1. Implement
 
-Read the ticket; dispatch the `implement` skill with it. The work lands as commits on this checkout's
+Read the ticket through the platform verbs, from this worktree — proving the read works where the work
+runs. A read that fails here is a blocker to report, never a cue to build from the dispatch prompt's
+paraphrase. Then dispatch the `implement` skill with it; the work lands as commits on this checkout's
 current branch.
 
 ## 2. Verify, then fix

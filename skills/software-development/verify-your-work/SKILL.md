@@ -53,11 +53,15 @@ A check that cannot fail is not proof. "It compiles" verifies nothing about beha
 
 ## Run and capture
 
-Run each check and capture the exact command and its output. A check whose output is a visual artifact —
+Run each check and capture the exact command, its output, and its own exit status — read directly, not
+through a pipeline whose tail masks it. A check whose output is a visual artifact —
 a screenshot, an export, a rendered document — is judged by **looking at it**: the content the claim
 names, legible, at sane dimensions, without clipping. A file existing at nonzero bytes proves nothing.
 A check you couldn't run (missing environment, no browser, absent fixture) is reported as *not
-verified*, with the reason — never silently skipped, never guessed at.
+verified*, with the reason — never silently skipped, never guessed at. An environment seam that keeps
+failing — auth, seeding, a launcher — earns a bounded number of attempts (three, unless the recorded
+contract says otherwise), then its claims go to *not verified* with the reason: a stuck seam converts
+to a partial report, not a longer loop.
 
 ## Report
 

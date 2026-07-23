@@ -13,7 +13,9 @@ metadata:
 # Implement
 
 Implement the work described in the ticket or spec handed to this session, in the current checkout, on
-the current branch.
+the current branch. Before editing, read `docs/agents/codebase.md` where it exists — naming, placement,
+harness seams, and check commands live there, and reading them first is what keeps them out of
+mid-build discovery.
 
 ## Route by the nature of the work
 

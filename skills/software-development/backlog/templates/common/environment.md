@@ -50,6 +50,11 @@
   | _<e.g. host port 3000>_ | _<second stack fails to bind>_ | _<yes — derived port>_ |
   | _<e.g. one managed deployment / auth tenant>_ | _<one backend behind every worktree>_ | _<no — cloud singleton>_ |
 
+  One row is standing in every multi-worktree repo: the parent `.git` itself. Concurrent git
+  operations from parallel worktrees can collide on its locks (`index.lock`, ref locks) — a lock error
+  is contention, so wait and retry briefly; a lock that outlives the retry with no live git process
+  behind it is a crashed operation's leftover, and only then safe to remove.
+
 ## Seed data
 
 - Seed regime: _<real seed command | load-from-dataset | none — drive the app>_.
@@ -77,6 +82,9 @@
   criterion classes where each is/is not valid>_.
 - Lifetime/cleanup: provision before verification, retain through final evidence, then remove only this
   ticket's fixtures. Never share a mutable scratch entity across tickets.
+- **Per-ticket-disposable stores** — the stores a single ticket may reset, drop, or wipe wholesale
+  (e.g. its own worktree's database): _<list them; everything else is shared, and destructive verbs
+  stop at this line>_.
 
 ## Driving the app & capturing evidence
 

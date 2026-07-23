@@ -71,11 +71,11 @@ grooming gap: `backlog build` skips the ticket rather than inferring it or defau
 
 ## Readiness decision
 
-- The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. The agent may apply `ready-for-human`, `needs-info`, `needs-shaping`, and exclusion roles on its own.
+- The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. `ready-for-human`, `needs-info`, `needs-shaping`, and exclusion roles need no per-issue confirmation — they ride the groom plan's blanket approval, since every tracker mutation waits for that gate.
 - Adjust this rule if this team wants more or less agent autonomy (e.g. let the agent auto-bless low-risk bugs).
 
 ## Building hygiene
 
 - Concurrent runners are possible (two machines, two humans, one tracker); `building` is the claim marker, applied optimistically — the build dispatcher accepts the rare duplicate pickup in the window between queue build and marking rather than carrying a lock.
 - **Claims are attributed.** The claim comment is posted by the runner's own tracker actor and names the branch, so any later reader can tell whose claim it is. A resuming dispatcher owns exactly the claims that match its actor and branches; a claim by another actor is another runner's live build — leave it and its ticket alone.
-- **Orphan sweep** — a `building` ticket whose recorded branch no longer exists, or has gone quiet past _<horizon, e.g. 7 days>_, is a corpse: `groom` surfaces it to the human as a candidate reset to `ready-for-agent` (or `needs-info`). Never silently reset — the branch may hold unmerged work.
+- **Orphan sweep** — a `building` ticket whose recorded branch no longer exists, or has gone quiet past the **quiet horizon** (_<e.g. 7 days>_), is a corpse: `groom` surfaces it to the human as a candidate reset to `ready-for-agent` (or `needs-info`). Never silently reset — the branch may hold unmerged work.

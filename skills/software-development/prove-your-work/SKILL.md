@@ -17,7 +17,8 @@ having watched the work happen: the package must let them decide from the eviden
 
 ## What the package carries
 
-- **What changed and why** — one paragraph, in the ticket's terms.
+- **What changed and why** — one paragraph, in the ticket's terms, naming the head SHA the evidence
+  was captured at — that's how a decider checks the artifacts still describe the code being merged.
 - **The proof per claim** — each thing the change claims to do, keyed to the ticket's acceptance-criterion
   ids where they exist, with the check that demonstrated it: the exact command and its trimmed output, or
   for UI work the artifacts of whatever drives that surface — a browser driver's trace, screenshots,
@@ -32,6 +33,11 @@ having watched the work happen: the package must let them decide from the eviden
 
 A defect discovered while assembling the proof stops the package: report it to whoever owns the
 changes — the package resumes after the fix lands and re-enters review.
+
+A capture surface that can't be reached — an auth-gated preview, a vanished fixture — steps down one
+rung: capture the same claim on the local stack, labeled as such; failing that too, the claim lands in
+the not-verified section with the reason. The ladder is capture mechanics; the honest-gap rule above
+already covers the reporting.
 
 ## Where it goes
 

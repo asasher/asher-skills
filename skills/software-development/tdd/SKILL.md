@@ -17,7 +17,9 @@ keeping: what a good test is, where tests go, the anti-patterns, and the rules o
 applies on every cycle — consult them before and during the loop, not after.
 
 When exploring the codebase, read `CONTEXT.md` (if it exists) so test names and interface vocabulary
-match the project's domain language, and respect ADRs in the area you're touching.
+match the project's domain language, and respect ADRs in the area you're touching. Read
+`docs/agents/codebase.md` where it exists before writing the first test — test placement, harness
+seams, and mock policy live there.
 
 ## What a good test is
 

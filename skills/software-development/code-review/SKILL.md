@@ -59,7 +59,8 @@ violations distinguished from judgement calls. Under 400 words.
 
 **Spec brief** — the diff command and commit list; the spec's path or fetched content; report (a)
 requirements missing or partial, (b) behavior nobody asked for (scope creep), (c) requirements
-implemented but wrong — quoting the spec line for each. Under 400 words.
+implemented but wrong — quoting the spec line for each, keyed to its acceptance-criterion id (`AC-N`)
+where the spec carries them. Under 400 words.
 
 ## 5. Aggregate
 

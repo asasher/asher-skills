@@ -58,9 +58,9 @@ spawn is not busy-retried.
 
 This session babysits the fleet: each build's completion wakes it, and it relays the outcome — the
 review-ready change request, or the failure, with a died-silent build reported, never dropped. Each
-dispatch also gets a deadline (the policy's quiet horizon, or tighter): a build past it with no
-completion is checked — worktree, branch tip, process — and respawned or reported, so a wedged build
-surfaces instead of sitting silent. **The tracker is the run ledger**: the claim comment and the
+dispatch also gets a deadline (the policy's quiet horizon, § Building hygiene, or tighter): a build
+past it with no completion is checked — worktree, branch tip, process — and respawned or reported, so
+a wedged build surfaces instead of sitting silent. **The tracker is the run ledger**: the claim comment and the
 outcome comment are its events, so a dispatcher that dies or compacts mid-fleet reconstructs from
 there — on resume, reconcile the claims this runner owns against live worktrees and branch tips before
 dispatching anything new. Merging the resulting change requests waits for explicit authorization.
