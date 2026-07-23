@@ -3,7 +3,7 @@
   "delivery": {
     "provider": "agentmail",
     "draft_first": true,
-    "review_gate": "review-loop-exact-hash",
+    "review_gate": "serve-via-tailnet-exact-hash",
     "operator_cc_default": true,
     "operator_address": "operator@fixture.invalid",
     "ambiguous_outcome": "block-and-reconcile",

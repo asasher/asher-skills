@@ -1,6 +1,6 @@
 # Playbook: Change Reviewer Criteria
 
-> Project playbook for this repo. The backlog `adversarial-review` Reviewer subagent reads this file for what to scrutinize, how to comment, and the approval bar; the loop mechanics are in the skill's `reference/adversarial-review.md`. The quality bar below is the shipped default (adapted from Cursor's thermo-nuclear code-quality review; smell baseline from Matt Pocock's `code-review` skill, MIT) — tune it to what matters in this codebase.
+> Project playbook for this repo. The backlog `adversarial-review` Reviewer subagent reads this file for what to scrutinize, how to comment, and the approval bar; the loop mechanics are in the skill's `reference/adversarial-review.md`. The quality bar below is the shipped default — tune it to what matters in this codebase.
 
 ## Correctness first
 
@@ -42,6 +42,11 @@ Match the diff against this fixed baseline of code smells (Fowler, *Refactoring*
 
 - Open every test, fixture, document, or probe cited as criterion coverage; confirm it exists and exercises
   the claimed runtime seam before accepting it.
+- **Authoring-context leakage** in shipped audience-facing text (skill prose, templates, UI copy, docs): a
+  sentence that presupposes the authoring conversation — change-log framing ("now", "no longer",
+  "replaces"), decision justifications addressed to the collaborator, provenance asides — is a blocker.
+  Quote the sentence, name the recipient it was actually written for, and require deletion or a
+  recipient-designed rewrite; history belongs in the commit message.
 - Testability and test coverage of the change, held to `implementing.md` § Tests worth keeping.
 - Duplication and naming; legibility of the surrounding code after the change.
 - Behavior risk beyond the issue's scope.

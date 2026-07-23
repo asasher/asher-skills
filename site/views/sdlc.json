@@ -1,0 +1,1001 @@
+{
+  "id": "sdlc",
+  "title": "The SDLC skill family",
+  "subtitle": "Groom batches shaping threads you confirm; settled subjects auto-spec onto tickets you bless; build fans worktree subagents to review-ready change requests; a human merges — every node renders its real files, live from this repo.",
+  "lanes": [
+    {
+      "id": "dispatch",
+      "title": "Dispatch",
+      "blurb": "The dispatcher and the machinery it fans out with: attachable threads, staffed subagents, watchers."
+    },
+    {
+      "id": "shaping",
+      "title": "Shaping",
+      "blurb": "Settle one subject's strategic decisions in an interactive thread; probe when paper can't settle it."
+    },
+    {
+      "id": "crystallise",
+      "title": "Crystallise",
+      "blurb": "Shaping's exit: a settled subject auto-specs onto its ticket; your LGTM blesses it, an approved split supersedes it."
+    },
+    {
+      "id": "build",
+      "title": "Build",
+      "blurb": "One ready ticket through implement → verify to a review-ready change request."
+    },
+    {
+      "id": "review",
+      "title": "Review & ship",
+      "blurb": "Adversarial review converges to LGTM, evidence lands on the change request, a human authorizes the merge."
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "blurb": "Cross-cutting: the tailnet review surface, session handoff, and the model roster."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "backlog",
+      "lane": "dispatch",
+      "title": "backlog",
+      "blurb": "The dispatcher: groom sweeps unlabeled + needs-shaping tickets into user-confirmed batches of shaping threads, build fans ready tickets into supervised build subagents — no result flows back",
+      "source": "skills/software-development/backlog",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Templates",
+          "label": "platform",
+          "path": "templates/common/platform.md"
+        },
+        {
+          "group": "Templates",
+          "label": "backlog-policy",
+          "path": "templates/common/backlog-policy.md"
+        },
+        {
+          "group": "Templates",
+          "label": "environment",
+          "path": "templates/common/environment.md"
+        },
+        {
+          "group": "Templates",
+          "label": "change-description",
+          "path": "templates/common/change-description.md"
+        },
+        {
+          "group": "Templates (software pack)",
+          "label": "codebase",
+          "path": "templates/software/codebase.md"
+        },
+        {
+          "group": "Templates (software pack)",
+          "label": "evidence",
+          "path": "templates/software/evidence.md"
+        },
+        {
+          "group": "Templates (skill-authoring pack)",
+          "label": "environment",
+          "path": "templates/skill-authoring/environment.md"
+        },
+        {
+          "group": "Templates (skill-authoring pack)",
+          "label": "evidence",
+          "path": "templates/skill-authoring/evidence.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/platform.md",
+        "docs/agents/backlog-policy.md",
+        "docs/agents/environment.md",
+        "docs/agents/codebase.md",
+        "docs/agents/evidence.md"
+      ],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "tracker, change-request, git, harness verbs — each verified live at setup",
+          "default": "skills/software-development/backlog/templates/common/platform.md"
+        },
+        {
+          "port": "backlog-policy",
+          "expects": "label roles (needs-shaping, ready, in-flight), dependency edges, readiness decision",
+          "default": "skills/software-development/backlog/templates/common/backlog-policy.md"
+        },
+        {
+          "port": "environment",
+          "expects": "run/seed/check commands, worktree isolation, parallelism",
+          "default": "skills/software-development/backlog/templates/common/environment.md"
+        },
+        {
+          "port": "evidence",
+          "expects": "the evidence bar the repo holds change requests to",
+          "default": "skills/software-development/backlog/templates/software/evidence.md"
+        }
+      ]
+    },
+    {
+      "id": "to-thread",
+      "lane": "dispatch",
+      "title": "to-thread",
+      "blurb": "Spawns one named, attachable, harness-native background session seeded with a standalone prompt",
+      "source": "skills/software-development/to-thread",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "to-subagent",
+      "lane": "dispatch",
+      "title": "to-subagent",
+      "blurb": "Staffed non-interactive subagent with a wake path — the only skill that reads the roster",
+      "source": "skills/software-development/to-subagent",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "watch-until",
+      "lane": "dispatch",
+      "title": "watch-until",
+      "blurb": "Watches a target — file, URL, thread, CI run, review surface — until a condition holds or its timeout expires, then relays the outcome",
+      "source": "skills/software-development/watch-until",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "shape",
+      "lane": "shaping",
+      "title": "shape",
+      "blurb": "Settles a batch of subjects — one engine each, combined interview rounds; models the terms, researches and prototypes what paper can't settle; settled subjects auto-crystallise via to-spec",
+      "source": "skills/software-development/shape",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "tracker read/update verbs when the subject is a ticket",
+          "default": "skills/software-development/backlog/templates/common/platform.md"
+        }
+      ]
+    },
+    {
+      "id": "interview",
+      "lane": "shaping",
+      "title": "interview",
+      "blurb": "Frontier rounds until shared understanding is real; facts looked up, decisions asked",
+      "source": "skills/software-development/interview",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "domain-modeling",
+      "lane": "shaping",
+      "title": "domain-modeling",
+      "blurb": "CONTEXT.md terms and three-gate ADRs, written the moment decisions land (sealed primitive)",
+      "source": "skills/software-development/domain-modeling",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "context-format",
+          "path": "reference/context-format.md"
+        },
+        {
+          "group": "Reference",
+          "label": "adr-format",
+          "path": "reference/adr-format.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "research",
+      "lane": "shaping",
+      "title": "research",
+      "blurb": "Primary-source dossiers with traceable claims, contradictions, and unknowns",
+      "source": "skills/software-development/research",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "research-contract",
+          "path": "reference/research-contract.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Templates",
+          "label": "researching",
+          "path": "templates/researching.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/researching.md"
+      ],
+      "bindings": [
+        {
+          "port": "researching",
+          "expects": "where dossiers live, citation norms, source policy",
+          "default": "skills/software-development/research/templates/researching.md"
+        }
+      ]
+    },
+    {
+      "id": "prototype",
+      "lane": "shaping",
+      "title": "prototype",
+      "blurb": "One design question, one throwaway artifact — keep the answer, delete the scaffolding",
+      "source": "skills/software-development/prototype",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "prototyping",
+          "path": "reference/prototyping.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/prototyping.md"
+      ],
+      "bindings": [
+        {
+          "port": "prototyping",
+          "expects": "optional: project-specific artifact placement only"
+        }
+      ]
+    },
+    {
+      "id": "to-spec",
+      "lane": "crystallise",
+      "title": "to-spec",
+      "blurb": "Settled direction → spec on the subject's ticket: body canonical, diagram first, revisions as comments; creates the ticket when absent; recommends splits, never performs them",
+      "source": "skills/software-development/to-spec",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "synthesis",
+          "path": "reference/synthesis.md"
+        },
+        {
+          "group": "Reference",
+          "label": "template-guide",
+          "path": "reference/template-guide.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/platform.md",
+        "docs/agents/backlog-policy.md"
+      ],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "tracker verbs for the thin tracking ticket (when a live tracker is bound)",
+          "default": "skills/software-development/backlog/templates/common/platform.md"
+        },
+        {
+          "port": "backlog-policy",
+          "expects": "spec→ticket vocabulary and label roles the tracking ticket uses",
+          "default": "skills/software-development/backlog/templates/common/backlog-policy.md"
+        }
+      ]
+    },
+    {
+      "id": "to-tickets",
+      "lane": "crystallise",
+      "title": "to-tickets",
+      "blurb": "Approved split → tracer-bullet tickets with native blocking edges; quizzes granularity before publishing; supersedes the spec'd parent",
+      "source": "skills/software-development/to-tickets",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "slicing",
+          "path": "reference/slicing.md"
+        },
+        {
+          "group": "Reference",
+          "label": "template-guide",
+          "path": "reference/template-guide.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/platform.md",
+        "docs/agents/backlog-policy.md"
+      ],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "tracker verbs: create tickets, native blocking edges, labels",
+          "default": "skills/software-development/backlog/templates/common/platform.md"
+        },
+        {
+          "port": "backlog-policy",
+          "expects": "how a blocking edge is recorded; readiness left to admission",
+          "default": "skills/software-development/backlog/templates/common/backlog-policy.md"
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "lane": "build",
+      "title": "build",
+      "blurb": "One ready ticket → review-ready change request: implement · verify & fix · review · evidence",
+      "source": "skills/software-development/build",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/platform.md"
+      ],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "change-request verbs: open the change request from the ticket's branch",
+          "default": "skills/software-development/backlog/templates/common/platform.md"
+        }
+      ]
+    },
+    {
+      "id": "implement",
+      "lane": "build",
+      "title": "implement",
+      "blurb": "Routes defects to diagnosis and new behavior to test-first construction; commits to the current branch",
+      "source": "skills/software-development/implement",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "tdd",
+      "lane": "build",
+      "title": "tdd",
+      "blurb": "Red–green test-first construction (sealed primitive)",
+      "source": "skills/software-development/tdd",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "tests",
+          "path": "reference/tests.md"
+        },
+        {
+          "group": "Reference",
+          "label": "mocking",
+          "path": "reference/mocking.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "diagnosing-bugs",
+      "lane": "build",
+      "title": "diagnosing-bugs",
+      "blurb": "The six-phase red-capable defect diagnosis discipline (sealed primitive)",
+      "source": "skills/software-development/diagnosing-bugs",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "diagnosis",
+          "path": "reference/diagnosis.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Templates",
+          "label": "diagnosing-bugs",
+          "path": "templates/diagnosing-bugs.md"
+        },
+        {
+          "group": "Templates",
+          "label": "diagnosing-bugs (skill-authoring)",
+          "path": "templates/skill-authoring/diagnosing-bugs.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        },
+        {
+          "label": "answer key",
+          "path": "evals/answer-key.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/diagnosing-bugs.md"
+      ],
+      "bindings": [
+        {
+          "port": "diagnosing-bugs",
+          "expects": "repro commands, log locations, observability for the six phases",
+          "default": "skills/software-development/diagnosing-bugs/templates/diagnosing-bugs.md"
+        }
+      ]
+    },
+    {
+      "id": "verify-your-work",
+      "lane": "build",
+      "title": "verify-your-work",
+      "blurb": "Fresh-eyes proof the change does what it claims — findings, never fixes (sealed)",
+      "source": "skills/software-development/verify-your-work",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "adversarial-review",
+      "lane": "review",
+      "title": "adversarial-review",
+      "blurb": "Reviewer ⇆ fixer subagents converge a change request to LGTM without a human in the loop",
+      "source": "skills/software-development/adversarial-review",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "conduct",
+          "path": "reference/conduct.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "code-review",
+      "lane": "review",
+      "title": "code-review",
+      "blurb": "Two-axis review from a fixed point: Standards (repo's documented rules) and Spec (what the ticket asked)",
+      "source": "skills/software-development/code-review",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "smells",
+          "path": "reference/smells.md"
+        },
+        {
+          "group": "Reference",
+          "label": "structure",
+          "path": "reference/structure.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/platform.md"
+      ],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "change-request read verbs when reviewing a change request base",
+          "default": "skills/software-development/backlog/templates/common/platform.md"
+        }
+      ]
+    },
+    {
+      "id": "prove-your-work",
+      "lane": "review",
+      "title": "prove-your-work",
+      "blurb": "The evidence package — claims, proofs, what wasn't verified — posted where the merge decision happens (sealed)",
+      "source": "skills/software-development/prove-your-work",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/platform.md",
+        "docs/agents/evidence.md"
+      ],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "where and how evidence is posted on the change request",
+          "default": "skills/software-development/backlog/templates/common/platform.md"
+        },
+        {
+          "port": "evidence",
+          "expects": "the repo's evidence format and bar",
+          "default": "skills/software-development/backlog/templates/software/evidence.md"
+        }
+      ]
+    },
+    {
+      "id": "merge-changes",
+      "lane": "review",
+      "title": "merge-changes",
+      "blurb": "The explicit human authorization gate: merges, closes tickets, cleans worktrees and stacks",
+      "source": "skills/software-development/merge-changes",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/platform.md"
+      ],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "merge, checks-read, change-request-read, branch verbs",
+          "default": "skills/software-development/backlog/templates/common/platform.md"
+        }
+      ]
+    },
+    {
+      "id": "serve-via-tailnet",
+      "lane": "services",
+      "title": "serve-via-tailnet",
+      "blurb": "Serves an HTML artifact on the tailnet — plain, or annotated with comments and a verdict",
+      "source": "skills/software-development/serve-via-tailnet",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "scripts",
+          "path": "reference/scripts.md"
+        },
+        {
+          "group": "Reference",
+          "label": "surface-and-hub",
+          "path": "reference/surface-and-hub.md"
+        },
+        {
+          "group": "Reference",
+          "label": "annotation-contract",
+          "path": "reference/annotation-contract.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "handoff",
+      "lane": "services",
+      "title": "handoff",
+      "blurb": "Compacts the current conversation into a handoff document for another agent to pick up",
+      "source": "skills/software-development/handoff",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": []
+    },
+    {
+      "id": "staffing",
+      "lane": "services",
+      "title": "staffing",
+      "blurb": "Who runs every task: the machine roster, roles, routing, and fallback ladders",
+      "source": "skills/system/staffing",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Reference",
+          "label": "roles-and-fallback",
+          "path": "reference/roles-and-fallback.md"
+        },
+        {
+          "group": "Reference",
+          "label": "rankings-and-routing",
+          "path": "reference/rankings-and-routing.md"
+        },
+        {
+          "group": "Reference",
+          "label": "machine-audit",
+          "path": "reference/machine-audit.md"
+        },
+        {
+          "group": "Reference",
+          "label": "harness",
+          "path": "reference/harness.md"
+        },
+        {
+          "group": "Reference",
+          "label": "install-and-reconcile",
+          "path": "reference/install-and-reconcile.md"
+        },
+        {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
+          "group": "Templates",
+          "label": "staffing.common (global module)",
+          "path": "templates/global/staffing.common.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/environment.md"
+      ],
+      "bindings": [
+        {
+          "port": "global module",
+          "expects": "~/.claude/asher-skills/staffing.md + the ~/.codex twin (machine-level, consented; outside this repo)",
+          "default": "skills/system/staffing/templates/global/staffing.common.md"
+        },
+        {
+          "port": "project deltas",
+          "expects": "sparse overrides in the consumer project's agent instruction files (§ Staffing)"
+        },
+        {
+          "port": "roster",
+          "expects": "docs/agents/environment.md § Model roster",
+          "default": "skills/software-development/backlog/templates/common/environment.md"
+        }
+      ]
+    }
+  ],
+  "flow": [
+    {
+      "from": "backlog",
+      "to": "shape",
+      "label": "groom: shaping threads via to-thread"
+    },
+    {
+      "from": "shape",
+      "to": "to-spec",
+      "label": "user's call: crystallise the record"
+    },
+    {
+      "from": "to-spec",
+      "to": "to-tickets",
+      "label": "user's call: split into tickets"
+    },
+    {
+      "from": "to-tickets",
+      "to": "backlog",
+      "label": "published tickets, blocking edges"
+    },
+    {
+      "from": "backlog",
+      "to": "build",
+      "label": "build: worktree subagents via to-subagent"
+    },
+    {
+      "from": "implement",
+      "to": "verify-your-work",
+      "label": "committed change"
+    },
+    {
+      "from": "verify-your-work",
+      "to": "adversarial-review",
+      "label": "change request opened"
+    },
+    {
+      "from": "adversarial-review",
+      "to": "prove-your-work",
+      "label": "LGTM"
+    },
+    {
+      "from": "prove-your-work",
+      "to": "merge-changes",
+      "label": "evidenced, review-ready change request"
+    }
+  ]
+}

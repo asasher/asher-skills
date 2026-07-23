@@ -1,7 +1,0 @@
-interface:
-  display_name: "Setup asher-skills"
-  short_description: "Install and audit canonical asher-skills, strict mounts, and consented declared external requirements"
-  default_prompt: "Use $setup-asher-skills to set this project up with the right asher-skills: audit repo, machine, primary/alias mounts, project and global lock provenance, and project purpose; confirm the sibling closure and any declared external requirements one decision at a time; install Asher-authored skills only from asasher/asher-skills; disclose and separately consent any declared external source/version/scope/hooks, install it with its provider, verify capability, record external-dependencies.lock.json; then write the ## Agent skills map. Never auto-install an undeclared external request. Re-invoke to audit drift."
-
-policy:
-  allow_implicit_invocation: false

@@ -64,12 +64,14 @@ set and continues below; it never means cheapest-first.
    rerun the same order. If no model remains reachable, use the current model in a subagent and report the
    staffing gap; never skip the stage.
 
-### Browser example
+### Browser example (illustrative — one machine's audited bindings, not shipped policy)
 
-Resolve `browser-use` to its named primary provider — on this machine an isolated-profile `agent-browser`,
-never the user's own browser session. If that provider's effect probe fails, that is a tool failure to
-surface; the only recorded fallback is the user-session carve-out (ChatGPT-in-Chrome with per-use explicit
-consent, for test cases that need the user's real signed-in session). Computer Use is not a browser fallback:
+Resolve `browser-use` to its named primary provider — in this example scripted Playwright driving
+Chrome, with the machine's `agent-browser` and harness-native web bindings recorded as
+interactive-exploration fallback only, never the default. If the primary's effect probe fails,
+that is a tool failure to
+surface; the only recorded further fallback is the user-session carve-out (ChatGPT-in-Chrome with per-use
+explicit consent, for test cases that need the user's real signed-in session). Computer Use is not a browser fallback:
 it is gated behind a recorded project use case plus explicit user approval, and an unmet gate is a hard
 capability gap. Then form the eligible executor set and rank it. A smarter model that cannot operate either
 provider never enters the survivor set.
@@ -79,11 +81,13 @@ provider never enters the survivor set.
 A matching mechanical/bulk task pin selects its recorded worker route at step 1. This is a pin, not a ranking
 derivation.
 
+## Effort
+
+Where the harness exposes per-dispatch effort, dispatch at the model row's effort value from the rankings
+table. One exception: pure wait/relay and cron duty runs at **low** regardless of model. Effort never
+substitutes for a failed taste or capability gate.
+
 ## Defaults, not quality waivers
 
-- Cost is the final tie-break only. Escalate to a more capable reachable route without asking when cheaper
-  output misses the bar.
-- Taste ≥ 7 remains a hard gate for user-facing work.
-- Orchestration, design, and hard diagnosis go to the most capable reachable model.
+- Escalate to a more capable reachable route without asking when cheaper output misses the bar.
 - Reviews favor high taste/intelligence and may add an independent second model.
-- Never staff below the floor and never attribute a provider's effect to its current model operator.

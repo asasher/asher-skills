@@ -65,7 +65,7 @@ success does not authorize a full re-export of a lane-2 source.
 ## Serving on the presentation surface
 
 Present the running dev server on the repo's presentation surface (the tailnet root in
-`docs/agents/environment.md`) so the human can open it remotely — the same surface `review-loop` uses, but
+`docs/agents/environment.md`) so the human can open it remotely — the same surface `serve-via-tailnet` uses, but
 here the app is driven live, not gated. End any hand-back turn with the surface URL. Absent surface config,
 fall back to a local open and say remote access is unavailable.
 

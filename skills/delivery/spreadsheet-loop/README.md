@@ -40,12 +40,12 @@ A gated pipeline: **intake + capability preflight → SPEC** (HTML sign-off) · 
 (HTML sign-off) · **scaffold** the focused Vite/Univer workbench · **the loop** · **compile / merge / Excel
 handoff** · **verify**
 (headless recompute + read-back diff + real-app open). Sign-off on the paper artifacts runs through the
-`review-loop` skill; build-out is staffed through the `staffing` skill. The live spreadsheet surface is driven
+`serve-via-tailnet` skill; build-out is staffed through the `staffing` skill. The live spreadsheet surface is driven
 directly, not gated.
 
 ## Layout
 
-`SKILL.md` is the pipeline, how it composes review-loop + staffing, and the dependency surface.
+`SKILL.md` is the pipeline, how it composes serve-via-tailnet + staffing, and the dependency surface.
 `reference/` holds the contract: `model-vs-layout.md` (the separation doctrine), `lanes-and-merge.md`, `intake.md`,
 `univer-surface.md` (scaffold recipe), `snapshot-model.md` (the `IWorkbookData` shape + `objects.json`),
 `converter.md` (the `openpyxl` mapping, declared objects + fidelity table), `the-loop.md` (edit protocol),
@@ -55,7 +55,7 @@ snapshot persistence, and the verify harness); `templates/SPEC.md`, `templates/M
 `templates/LAYOUT.md`, and `templates/COMPONENTS.md` are the doc skeletons. `agents/openai.yaml` is the Codex
 manifest. `evals/` is the pre-deployment probe eval.
 
-Self-contained at the file level; composes by name. **Sibling dependencies: `review-loop` + `staffing` —
+Self-contained at the file level; composes by name. **Sibling dependencies: `serve-via-tailnet` + `staffing` —
 `spreadsheet-loop` is a composer, not a root primitive** (it depends on those two by name and imports none of
 their files).
 
@@ -69,5 +69,5 @@ scaffold copied into user projects and declares its dependencies in its own mani
 `package.json` — while `converter/validate_objects.py` stays deliberately stdlib so the compile gate runs
 anywhere.)
 Presenting an artifact for sign-off and serving the live surface use the repo's presentation surface config
-(`docs/agents/environment.md`); absent it, both degrade to a local open. Sign-off needs the `review-loop`
+(`docs/agents/environment.md`); absent it, both degrade to a local open. Sign-off needs the `serve-via-tailnet`
 skill installed; staffing the build needs the `staffing` skill installed.

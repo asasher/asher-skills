@@ -23,5 +23,21 @@ Run narrowest-first, then broaden by touched surface. `setup` **discovers these 
 
 ## Acceptance criteria
 
-- Where criteria come from: the issue, and for an enhancement the approved plan's definition of done. The verifier writes them as explicit pass/fail checks against a running app.
+- Where criteria come from — by entryway, since the dev tail is invariant but its inputs are not:
+  - a ticketed run: the ticket's acceptance block (inheriting its spec's per-slice acceptance);
+  - a spec without tickets: the spec's acceptance for the slice being built;
+  - interactive chat-and-build: the criteria the build loop wrote into the PR body at its start — verify
+    always has a target, even without a ticket.
+  The verifier writes them as explicit pass/fail checks against a running app.
+- Evidence obligation scales with absence (`evidence.md`): an AFK run owes the full evidence package —
+  nobody watched; interactive work may degrade to the PR body's verification grades where the playbook
+  allows — the human witnessed the behavior live.
 - Repo-specific expectations every change must satisfy beyond the issue text: _<add yours, or "none">_.
+
+## UI surfaces
+
+- Exercise every state the change touches: happy, empty, loading, error, disabled, responsive breakpoints;
+  check accessibility basics (focus visibility, contrast, reduced-motion) per the `bare-minimum-ux` overlay.
+- When the project's `external-dependencies.lock.json` records the consented `impeccable` external, run its
+  `critique`/`audit` as scored gates on the touched surface and route P0/P1 findings back into the fix loop
+  before the PR is called review-ready.

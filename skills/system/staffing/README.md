@@ -25,14 +25,14 @@ workflow skill, an ad-hoc session, and any harness — not just one dev loop.
 - **One resolution order.** After any issue-coordination pre-gate: pin → provider/fallback → eligible
   executor → taste gate → `intelligence > taste > cost`. Routine coordination is never cheapest-first.
 - **Directional sibling harness dispatch.** The active harness's effect-verified sibling route is tracked
-  independently; a failed direction falls back asymmetrically and no vendor-policy monitor gates it.
+  independently; a failed direction falls back asymmetrically.
   Each external CLI runs inside a cheap, named, watched native relay; provider compilation keeps only the
   active harness mechanics in the installed tree.
 - **Scope is the human's choice.** Project-only (one project playbook, no global write) or
   global-with-overrides: a harness-coupled global base filtered to the routes that harness can reach, plus
   sparse project overrides in `docs/agents/` that carry
   only deltas. A resolver reads base, then applies deltas.
-- **Reconcile by LLM audit, no version stamps** — the shared posture across this repo's operator skills.
+- **Reconcile by LLM audit** — the shared posture across this repo's operator skills.
 - **Global writes are consent-gated** via a scope-decision flow.
 
 ## Layout
@@ -43,8 +43,8 @@ the setup branch; the other references hold the reusable audit and routing rules
 Declared `variants/{codex,claude}` overlays supply one active-harness `reference/harness.md` without
 duplicating the public identity, dependencies, invocation policy, or setup owner.
 `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
-`scripts/render-global.py` renders/checks previews, stages provider modules into the shared four-module
-barrier, and applies only after both preflighted Presentation sections are present.
+`scripts/render-global.py` renders and preflight-checks the global modules for both providers, then
+applies them together — the script enforces the exact gates.
 
 Self-contained at the file level; composes by name. **Sibling dependency: none — staffing is a root
 primitive** (invoked by siblings, depends on none).

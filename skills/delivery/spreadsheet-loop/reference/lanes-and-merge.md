@@ -66,7 +66,7 @@ component needs a dependency, expose the narrow output range or named-range inte
 ## 4. Review artifact
 
 Render `SPEC.md`, `MODEL.md`, `LAYOUT.md`, and `COMPONENTS.md` to self-contained HTML with stable section ids.
-Present through `review-loop`. The review must make these decisions visible:
+Present through `serve-via-tailnet`. The review must make these decisions visible:
 
 - authoritative file and chosen lane;
 - browser-safe, preserve-only, and Excel-native feature table;

@@ -1,11 +1,11 @@
 # Backlog
 
-Groom the backlog with the human, then run each ready-for-agent issue through the issue loop to a reviewed PR. Subcommands also run standalone. Platform-bound, not platform-bound-to-GitHub: the tracker, review surface, version control, and harness are roles the skill reasons in, bound per repo by `backlog setup` — GitHub and a local on-disk tracker ship as defaults; anything else is derived at setup.
+Groom the backlog with the human, then run each ready-for-agent issue through the build loop to a reviewed PR. Subcommands also run standalone. Platform-bound, not platform-bound-to-GitHub: the tracker, review surface, version control, and harness are roles the skill reasons in, bound per repo by `backlog setup` — GitHub and a local on-disk tracker ship as defaults; anything else is derived at setup.
 
 ## File locations
 
 - **Bundled reference** (`reference/`, `templates/`) ships with the skill; `templates/` is shared `common/` plus per-domain packs, with `software/` the shipped default. It is not looked for in the target repo. References hold only orchestration — targets, gates, handoffs — resolving staffing, review, planning, and prototyping against sibling skills by name.
-- **Sibling skills** — `backlog` composes `diagnosing-bugs` (bug method), `research` (primary-source investigation), `staffing` (roster/roles/fallback), `review-loop` (presentation + interactive review), `plan` (planning + approval gate), and `prototype` (throwaway design questions) **by plain name**; setup ensures their required closure.
+- **Sibling skills** — `backlog` composes `diagnosing-bugs` (bug method), `research` (primary-source investigation), `staffing` (roster/roles/fallback), `review-loop` (presentation + interactive review), and `prototype` (throwaway design questions) **by plain name**; setup ensures their required closure.
 - **Project playbook** (`docs/agents/*.md`) lives in the target repo and holds this codebase's conventions and platform bindings. Backlog-owned techniques are shipped inline; sibling-owned techniques are reconciled by that sibling's setup. Override a step by editing its playbook.
 
 ## Use

@@ -1,6 +1,6 @@
 # Playbook: Backlog Policy
 
-> Project playbook for this repo. Read by `groom` (to triage the backlog), `run` (to select ready work), and the issue loop (to route on work-type). The skill reasons in **roles**; map this tracker's actual label names to each role below so the wording can differ per repo. On the local tracker binding (`platform.md`) the mapping is the identity — roles are the frontmatter values verbatim.
+> Project playbook for this repo. Read by `groom` (to triage the backlog), `run` (to select ready work), and the build loop (to route on work-type). The skill reasons in **roles**; map this tracker's actual label names to each role below so the wording can differ per repo. On the local tracker binding (`platform.md`) the mapping is the identity — roles are the frontmatter values verbatim.
 
 ## Work domain
 
@@ -16,6 +16,7 @@ Two independent axes, plus exclusions. Readiness decides *whether and who* picks
 - `in-flight` — dispatched: an issue thread owns it, so `run` never selects it. Set by `run` at dispatch, replacing `ready-for-agent`; records what's flying via a GitHub comment alongside the label (branch name and dispatch date). Cleared by the run thread on abort, superseded by closure when the change merges, or reset by `groom`'s human-confirmed orphan sweep (§ In-flight hygiene). Label: **`in-flight`** (identity).
 - `ready-for-human` — only a human; the agent skips it entirely. Also the abort target for verify caps and environment blockers: the agent hands the issue back with the blocker commented, since a human must look before it can be re-released. Label: **`ready-for-human`** (identity).
 - `needs-info` — parked, waiting on the reporter. Label: **`needs-info`** (identity).
+- `needs-shaping` — parked for strategic shaping: the issue carries product/design/scope decisions that are neither settled nor delegated, or execution invalidated an approved decision. Set by `groom`'s route judgment or by an issue thread's handback; cleared when shaping (the `shape` skill, swept by groom or run standalone) delivers execution-ready work. Boundary with `needs-info`: there the reporter owes facts; here the product owner owes shaping. Never selectable by `run`. Label: **`needs-shaping`** (identity).
 - *(no readiness label)* — not yet groomed; a target for `backlog groom`, not for `run`.
 
 Two further lifecycle values appear only where the tracker has no native equivalent, written by the loop, never by grooming: `in-review` and `closed`. This repo is on GitHub, which expresses both natively — an open PR is `in-review`, native issue closure (via `Closes #<n>` at merge) is `closed`. No extra labels for these.
@@ -23,7 +24,7 @@ Two further lifecycle values appear only where the tracker has no native equival
 **Work-type** — required for `ready-for-agent`; decides the branch:
 
 - `bug` — diagnose branch. Label: **`bug`** (identity).
-- `enhancement` — plan → implement branch. Label: **`enhancement`** (identity).
+- `enhancement` — implement branch: strategic decisions arrive settled or delegated (groom's route judgment), and the issue thread makes only a just-in-time tactical plan within that authority. Label: **`enhancement`** (identity).
 - `refactor` — refactor branch. Label: **`refactor`** (identity).
 - `research` — source-audit branch for epistemic-terminal work. The kept dossier records supported facts, traceable inferences, contradictions, and unknowns under `research/<slug>/`. Label: **`research`** (identity).
 - `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a narrative synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — there is **no mechanical `verify` pass/fail**. The artifact is **kept** (committed and merged): that is the line against `prototype`, which is throwaway — keep the answer, delete the artifact. Label: **`draft`** (identity).
@@ -49,6 +50,8 @@ Every `ready-for-agent` issue carries a stable `Dispatch:` block in its body or 
 - `reason`: one sentence naming why the class applies and any known uncertainty. Routine means the issue is
   settled enough for a normal coordinator; orchestrator-required is reserved for product judgment, design,
   hard diagnosis, or another named uncertainty.
+- `route` (enhancements): `route: direct` plus one line on why the strategic decisions are settled or
+  delegated. A `ready-for-agent` enhancement without it is a grooming gap.
 
 `run` passes these fields to staffing before creating a worktree or child. Missing fields are a grooming gap,
 never permission to infer them or default to the orchestrator.
@@ -59,7 +62,7 @@ never permission to infer them or default to the orchestrator.
 
 ## Readiness decision
 
-- The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. The agent may apply `ready-for-human`, `needs-info`, and exclusion roles on its own.
+- The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. The agent may apply `ready-for-human`, `needs-info`, `needs-shaping`, and exclusion roles on its own.
 - Adjust this rule if this team wants more or less agent autonomy (e.g. let the agent auto-bless low-risk bugs).
 
 ## In-flight hygiene

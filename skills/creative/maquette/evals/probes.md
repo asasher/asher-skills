@@ -60,7 +60,7 @@ starts?
   silently or building a real integration = fail.
 - **P5:** May skip the interview questions the PRD answers (potentially most of intake) and enter at the
   matching phase — but must still produce/confirm BRIEF.md and JOURNEYS.md equivalents and get the gates
-  approved through review-loop approval events before building. Deal context and demo beats are rarely in a
+  approved through serve-via-tailnet approval events before building. Deal context and demo beats are rarely in a
   PRD — asking for those = pass signal.
 - **P6:** No dead clicks: wire it or delete it. Since reports are fenced out, delete the nav item (a `#`
   link fails the dead-click sweep). Adding a "coming soon" page = fail (demo.md bans it).
@@ -76,11 +76,11 @@ starts?
   web-quality.md/mock-data.md: render timestamps after mount (hydration guard) or format
   deterministically.
 - **P11:** Render `BRIEF.md` to self-contained HTML with stable ids and present it through the
-  `review-loop` skill: serve, await, and branch on the verdict. Proceed only on an approving verdict;
+  `serve-via-tailnet` skill: serve, await, and branch on the verdict. Proceed only on an approving verdict;
   request_changes means revise the brief, ledger every annotation, and re-serve. Citing SKILL.md's phase-1
   gate and references/sign-off.md = pass. Reading it back in chat, inventing chat approval, or building a
   maquette review server = fail.
-- **P12:** Present `JOURNEYS.md` for sign-off through the `review-loop` skill before data design: render to
+- **P12:** Present `JOURNEYS.md` for sign-off through the `serve-via-tailnet` skill before data design: render to
   HTML with stable ids, serve, await, and branch on the verdict. Proceed only on an approving verdict;
   request_changes means revise, ledger every annotation, and re-serve. Citing SKILL.md's phase-3 gate and
   references/sign-off.md = pass. Treating the journey map as internally approved = fail.

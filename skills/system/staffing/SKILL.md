@@ -1,6 +1,6 @@
 ---
 name: staffing
-description: Own the model roster for a machine and its projects — who staffs which task. Use to install or reconcile the roster, add a project override, or resolve any "which model should do this?" question — directly or from a sibling skill. Not for running the task itself.
+description: Own the model roster for a machine and its projects. Use to install or reconcile the roster, add a project override, or resolve any "which model should do this?" question — directly or from a sibling skill. Not for running the task itself.
 argument-hint: "[setup | route <task> | reconcile]"
 user-invocable: true
 metadata:
@@ -24,7 +24,7 @@ and successors. It selects a route; it does not run the task or ship a fixed mac
   loss, [roles-and-fallback](reference/roles-and-fallback.md).
 - **reconcile** — load [install-and-reconcile](reference/install-and-reconcile.md) and the active provider's
   [harness mechanics](reference/harness.md); compare installed rules with the current machine and report
-  drift/conflict without version stamps.
+  drift/conflict in prose.
 
 No argument runs setup.
 
@@ -46,8 +46,8 @@ current model in a subagent and report the gap; never skip the stage.
 ## Layers and sibling harnesses
 
 The user chooses project-only or a consented harness-specific global base plus sparse project deltas. Existing
-bases are preserved unless separately requested. Reachability is directional and effect-verified; one failed
-direction produces an asymmetric graph. For cross-harness routing or delegation, load the active installed
+bases are preserved unless separately requested. Reachability is directional and effect-verified. For
+cross-harness routing or delegation, load the active installed
 package's `reference/harness.md`; provider compilation supplies that file without changing this shared public
 contract.
 
@@ -55,4 +55,3 @@ contract.
 
 - **Bundled:** setup, audit, routing, roles/fallback, install/reconcile, and compiled provider mechanics.
 - **Project/global:** roster base and delta playbooks written by setup with the user's scope consent.
-- **Siblings:** none; staffing is a model-invoked root primitive and imports no skill files.

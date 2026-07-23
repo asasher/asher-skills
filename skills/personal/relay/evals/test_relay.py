@@ -166,7 +166,7 @@ class RelayTests(unittest.TestCase):
         paths.extend(path for root in product_roots if root.is_dir() for path in root.rglob("*") if path.is_file() and path.suffix != ".pyc")
         text = "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in paths)
         self.assertIn("name: relay", (SKILL / "SKILL.md").read_text())
-        self.assertIn("requires: [review-loop]", (SKILL / "SKILL.md").read_text())
+        self.assertIn("requires: [serve-via-tailnet]", (SKILL / "SKILL.md").read_text())
         self.assertNotIn("control-plane/communications", text)
         self.assertNotIn("control-plane/relay", text)
         self.assertNotIn("docs/agents/communications", text)

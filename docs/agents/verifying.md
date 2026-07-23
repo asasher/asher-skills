@@ -9,9 +9,19 @@ Run narrowest-first, then broaden by touched surface. This is a skills repo — 
 - Targeted check (skill behavior): run the changed skill's probe scenarios through an executor model per `docs/agents/probe-evals.md` — situated dry-run prompts graded against the skill's answer key. Scenarios live in the skill's `evals/`. Drive them via the executors in `environment.md` § Driving the app (Claude subagent + `codex exec`).
 - Script check: for any changed stdlib-Python script, `python3 -m py_compile <script>` then drive it directly (e.g. `review-server.py --sweep`, `--help`) to confirm it runs on this machine's Python 3.14.
 - Docs/prose check: skills are mostly markdown — re-read the changed reference/SKILL against the skill's own contract; no automated linter.
+- Site drift check: a change touching any SDLC-family skill runs `python3 site/check.py` — the documentation app's manifest must list the family's real files (`site/MAINTENANCE.md`); errors block.
 - Lint / type check / build: **n/a** (no build system; stdlib Python + markdown).
 - Full / aggregate gate (before PR): the changed skill's probe eval passes against its answer key, and any changed script compiles and runs. New or reworked skills must clear a pre-deployment probe eval before first real use (`AGENTS.md` convention).
 - Independent second-opinion verification: delegate a scenario to `codex exec` as a second, differently-modeled executor when a criterion is subjective or benefits from a perspective outside the orchestrator's context; grading against the answer key and running scripts stay local.
+
+## UI surfaces
+
+- Rare in this repo (skills, not product UI), but any change shipping a rendered HTML artifact (plan/spec/review page, a skill's chrome) is exercised in its rendered states: happy, empty/error where they exist, and both color schemes; accessibility basics per the `bare-minimum-ux` sibling where installed (absent, state the gap).
+- When a consumer project's `external-dependencies.lock.json` records the consented `impeccable` external, its `critique`/`audit` run as scored gates on touched UI surfaces and P0/P1 findings route back into the fix loop before the PR is review-ready (shipped default: `templates/software/verifying.md` § UI surfaces).
+
+## Audience-facing prose
+
+- This is a skills repo — most changes *are* audience-facing prose (skill content a future agent reads cold). Any change shipping such text — skill prose, templates, UI copy, docs — gets a **cold-reader check**: a subagent with none of the authoring conversation reads the artifact alone and flags every sentence it cannot ground in the artifact itself. Authoring-context leakage — change-log framing ("now", "no longer", "replaces"), justifications addressed to the collaborator, provenance asides — is fixed or explicitly justified before the PR is review-ready; history belongs in the commit message.
 
 The commands above are the real, verified checks for this repo (probe eval + `py_compile` + drive-the-script) — there is no discovered test/lint/build pipeline to record because this repo has none.
 
@@ -24,7 +34,13 @@ The commands above are the real, verified checks for this repo (probe eval + `py
 
 ## Acceptance criteria
 
-- Where criteria come from: the issue, and for an enhancement the approved plan's definition of done. For a skill, the answer key in its `evals/` is the executable form of the criteria. The verifier writes them as explicit pass/fail checks driven through an executor.
+- Where criteria come from — by entryway, since the dev tail is invariant but its inputs are not: a ticketed
+  run reads the ticket's acceptance block (inheriting its spec's per-slice acceptance); a spec without
+  tickets reads the spec; interactive chat-and-build reads the criteria the build loop recorded in the issue thread at loop
+  start (the PR body carries them from creation). For a skill, the answer key in its `evals/` is the executable form of the criteria. The
+  verifier writes them as explicit pass/fail checks driven through an executor.
+- Evidence obligation scales with absence (`evidence.md`): an AFK run owes the full evidence package;
+  interactive work witnessed live may degrade to the PR body's verification grades.
 - Repo-specific expectations every change must satisfy beyond the issue text:
   - **Self-contained at the file level** — a skill's files stay in its own directory; it never imports another skill's files or a shared library (`AGENTS.md` § Conventions). A change that reaches across skill directories fails.
   - **Compose by name, not by file** — cross-skill reliance is a plain-language runtime pointer, not a file dependency.

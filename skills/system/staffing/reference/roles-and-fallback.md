@@ -1,10 +1,9 @@
 # Roles and the fallback ladder
 
-Roles are defined by **workflow stage** and, within build-out, by **work surface**. The roster — which model
-fills each role — is not written here; it is compiled from the machine audit into the global base and
-specialized by any project override (see [machine-audit](machine-audit.md) and
-[install-and-reconcile](install-and-reconcile.md)). This file defines the *roles themselves* and how
-succession works when a role's model is unreachable, generically — no single machine's model names appear.
+Roles are defined by **workflow stage** and, within build-out, by **work surface**. The roster itself is
+compiled by [machine-audit](machine-audit.md) and installed per
+[install-and-reconcile](install-and-reconcile.md); this file defines the roles and succession,
+machine-generically.
 
 One model may fill several roles. **Separation is by thread, not by model:** delegating a role into its own
 thread is what keeps the orchestrator's context coordinative, even when the same model would nominally do
@@ -14,11 +13,10 @@ both jobs.
 
 - **Orchestrator** — the most capable reachable model. Owns judgment, not production: grooming, dispatch,
   planning, prototype decisions, hard diagnosis, and every escalation. Do not spend it on routine build-out.
-- **Issue coordinator** — owns one groomed issue's lifecycle and worker handoffs. Resolve it at dispatch from
-  the issue's work type, surface, coordination class/reason, known uncertainty, and required capabilities.
+- **Issue coordinator** — owns one groomed issue's lifecycle and worker handoffs, resolved at dispatch per
+  [rankings-and-routing](rankings-and-routing.md) § Resolution order.
   The roster's **coordinator-eligible set** contains reachable models at or above the Floor that can own a
-  durable child and dispatch/escalate its worker stages. A `routine` issue resolves over that set by the normal
-  pins, gates, and ranking—never cheapest-first. `orchestrator-required` work uses the orchestrator. Record the
+  durable child and dispatch/escalate its worker stages. Record the
   chosen route and upward successor before creating the worktree or child. Routine work points up to the
   session orchestrator for new judgment/design/hard diagnosis/an invalidated plan; if the coordinator already
   is the orchestrator, record the roster's next orchestrator successor and any required human authority.
@@ -26,7 +24,7 @@ both jobs.
   **surface** the change touches:
   - **backend** — logic, data, APIs, tests. May be an external CLI when the harness can invoke one.
   - **ui** — components, styling, layout, client-only rendering. Takes a model with strong frontend judgment
-    (the rankings call this taste; the routing rules require taste ≥ 7 for user-facing work). The backend
+    that clears the routing rules' taste gate. The backend
     builder never takes ui work unless the roster clears it for it.
   - **mixed** — split by file where practical (backend files to the backend builder, ui files to the ui
     builder); when it cannot be split cleanly, the builder owning the larger or riskier surface takes the
@@ -55,8 +53,7 @@ Reachability degrades gracefully; it never silently drops a step.
 - **A missing roster section degrades, it does not hard-stop.** If the install is incomplete (no staffing
   section found), staff the fallback above and **report a staffing gap** rather than stopping.
 
-Delegation into a separate thread still keeps build-out and the capped loops out of the orchestrator context,
-even mid-fallback. Succession changes *who* fills a role; it never merges the roles back into one thread.
+Succession changes *who* fills a role; it never merges the roles back into one thread.
 
 ## Worked example — the ui builder is unreachable
 

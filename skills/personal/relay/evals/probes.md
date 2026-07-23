@@ -13,12 +13,12 @@ you discover, what may the setup script materialize, which choices must be confi
 ## P2 — scheduled run before approval
 
 A scheduled run has attributable new evidence for one external audience and one internal digest. Both bags
-validate and render, but no `review-loop` verdict exists. State the allowed next actions, provider writes,
+validate and render, but no `serve-via-tailnet` verdict exists. State the allowed next actions, provider writes,
 ledger facts, and watermark behavior.
 
 ## P3 — approved content changed
 
-`review-loop` approved the current self-contained sheet. Afterwards one case changes rendered HTML, another
+`serve-via-tailnet` approved the current self-contained sheet. Afterwards one case changes rendered HTML, another
 changes plain text, a third changes sender, a fourth changes To, and a fifth changes CC. For each case, what is
 the next concrete action and may AgentMail be invoked?
 

@@ -8,7 +8,7 @@ In lane 2 it is a workbench that must emit a bounded changeset; the original Exc
 
 Start the scaffolded app (see [univer-surface](univer-surface.md)) and present it on the repo's presentation
 surface (the tailnet root from `docs/agents/environment.md`), so the human can open it from wherever they
-are. The live surface is **not** a `review-loop` artifact — it is a live interactive surface, driven
+are. The live surface is **not** a `serve-via-tailnet` artifact — it is a live interactive surface, driven
 directly. Sign-off gates are for the paper artifacts (`SPEC.md`, `MODEL.md`, `LAYOUT.md`), not for the loop.
 
 ## Turn-based: one pen at a time

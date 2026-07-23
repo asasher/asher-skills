@@ -1,0 +1,312 @@
+{
+  "id": "backlog",
+  "type": "graph",
+  "title": "Inside backlog",
+  "subtitle": "The dispatcher exploded — two fan-outs and a setup, the siblings it composes by name, the playbooks that bind its nouns. Click to read.",
+  "skill_source": "skills/software-development/backlog",
+  "lanes": [
+    {
+      "id": "surface",
+      "title": "Command surface",
+      "blurb": "A thin head: fan tickets into threads, report how to attach — no result flows back."
+    },
+    {
+      "id": "groom",
+      "title": "groom = shaping fan-out",
+      "blurb": "Sweep unlabeled + needs-shaping tickets, route the settled and parked, group into subjects and batches, confirm the plan with the user — then one thread per batch."
+    },
+    {
+      "id": "buildout",
+      "title": "build = build fan-out",
+      "blurb": "Sweep ready tickets with clear edges, mark building, dispatch one worktree-isolated build subagent each and supervise it."
+    },
+    {
+      "id": "siblings",
+      "title": "Composed siblings (by name)",
+      "blurb": "Named runtime pointers, never file imports — jump to the family view."
+    },
+    {
+      "id": "playbooks",
+      "title": "This repo's playbooks",
+      "blurb": "docs/agents/* — the bindings that make ticket, label, and change request real nouns here."
+    },
+    {
+      "id": "setup",
+      "title": "Setup & shipped templates",
+      "blurb": "backlog setup writes and reconciles the playbooks from these baselines."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "b-skill",
+      "lane": "surface",
+      "title": "SKILL.md",
+      "blurb": "commands: groom · build · setup",
+      "open": {
+        "file": "skills/software-development/backlog/SKILL.md"
+      }
+    },
+    {
+      "id": "b-groom",
+      "lane": "groom",
+      "title": "groom",
+      "blurb": "unlabeled + needs-shaping → subjects → batches → your OK → threads",
+      "open": {
+        "file": "skills/software-development/backlog/SKILL.md"
+      }
+    },
+    {
+      "id": "b-groom-seed",
+      "lane": "groom",
+      "title": "thread seed",
+      "blurb": "ticket ids + \"run shape on them\"",
+      "open": {
+        "jump": "sdlc",
+        "node": "shape"
+      }
+    },
+    {
+      "id": "b-build",
+      "lane": "buildout",
+      "title": "build",
+      "blurb": "ready + clear edges → building → supervised subagents",
+      "open": {
+        "file": "skills/software-development/backlog/SKILL.md"
+      }
+    },
+    {
+      "id": "b-build-seed",
+      "lane": "buildout",
+      "title": "subagent brief",
+      "blurb": "one ticket + \"run build on it\"",
+      "open": {
+        "jump": "sdlc",
+        "node": "build"
+      }
+    },
+    {
+      "id": "b-sib-thread",
+      "lane": "siblings",
+      "title": "to-thread",
+      "blurb": "named, attachable background sessions",
+      "open": {
+        "jump": "sdlc",
+        "node": "to-thread"
+      }
+    },
+    {
+      "id": "b-sib-subagent",
+      "lane": "siblings",
+      "title": "to-subagent",
+      "blurb": "staffed, worktree-isolated, wake path back",
+      "open": {
+        "jump": "sdlc",
+        "node": "to-subagent"
+      }
+    },
+    {
+      "id": "b-sib-shape",
+      "lane": "siblings",
+      "title": "shape",
+      "blurb": "what runs inside a shaping thread",
+      "open": {
+        "jump": "sdlc",
+        "node": "shape"
+      }
+    },
+    {
+      "id": "b-sib-build",
+      "lane": "siblings",
+      "title": "build",
+      "blurb": "what runs inside a build subagent",
+      "open": {
+        "jump": "sdlc",
+        "node": "build"
+      }
+    },
+    {
+      "id": "b-sib-merge",
+      "lane": "siblings",
+      "title": "merge-changes",
+      "blurb": "merging waits for explicit authorization",
+      "open": {
+        "jump": "sdlc",
+        "node": "merge-changes"
+      }
+    },
+    {
+      "id": "b-pb-platform",
+      "lane": "playbooks",
+      "title": "platform",
+      "blurb": "tracker · change request · git · harness verbs",
+      "open": {
+        "file": "docs/agents/platform.md"
+      }
+    },
+    {
+      "id": "b-pb-policy",
+      "lane": "playbooks",
+      "title": "backlog-policy",
+      "blurb": "label roles · dependency edges · readiness",
+      "open": {
+        "file": "docs/agents/backlog-policy.md"
+      }
+    },
+    {
+      "id": "b-pb-env",
+      "lane": "playbooks",
+      "title": "environment",
+      "blurb": "run · seed · check",
+      "open": {
+        "file": "docs/agents/environment.md"
+      }
+    },
+    {
+      "id": "b-pb-evid",
+      "lane": "playbooks",
+      "title": "evidence",
+      "blurb": "the evidence bar",
+      "open": {
+        "file": "docs/agents/evidence.md"
+      }
+    },
+    {
+      "id": "b-setup",
+      "lane": "setup",
+      "title": "setup",
+      "blurb": "install/reconcile playbooks · verify label roles",
+      "open": {
+        "file": "skills/software-development/backlog/SKILL.md"
+      }
+    },
+    {
+      "id": "b-tmpl-common",
+      "lane": "setup",
+      "title": "templates/common",
+      "blurb": "platform · backlog-policy · environment",
+      "open": {
+        "file": "skills/software-development/backlog/templates/common/platform.md"
+      }
+    },
+    {
+      "id": "b-tmpl-sw",
+      "lane": "setup",
+      "title": "templates/software",
+      "blurb": "evidence and the work-typed pack",
+      "open": {
+        "file": "skills/software-development/backlog/templates/software/evidence.md"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "b-skill",
+      "to": "b-groom",
+      "style": "flow"
+    },
+    {
+      "from": "b-skill",
+      "to": "b-build",
+      "style": "flow"
+    },
+    {
+      "from": "b-skill",
+      "to": "b-setup",
+      "style": "optional"
+    },
+    {
+      "from": "b-groom",
+      "to": "b-groom-seed",
+      "style": "flow",
+      "label": "one thread per confirmed batch"
+    },
+    {
+      "from": "b-build",
+      "to": "b-build-seed",
+      "style": "flow",
+      "label": "one subagent per ticket"
+    },
+    {
+      "from": "b-groom-seed",
+      "to": "b-sib-thread",
+      "style": "external",
+      "label": "spawned via"
+    },
+    {
+      "from": "b-build-seed",
+      "to": "b-sib-subagent",
+      "style": "external",
+      "label": "dispatched via, worktree-isolated"
+    },
+    {
+      "from": "b-groom-seed",
+      "to": "b-sib-shape",
+      "style": "external"
+    },
+    {
+      "from": "b-build-seed",
+      "to": "b-sib-build",
+      "style": "external"
+    },
+    {
+      "from": "b-build",
+      "to": "b-sib-merge",
+      "style": "external",
+      "label": "never merges itself"
+    },
+    {
+      "from": "b-groom",
+      "to": "b-pb-policy",
+      "style": "optional",
+      "label": "needs-shaping role"
+    },
+    {
+      "from": "b-build",
+      "to": "b-pb-policy",
+      "style": "optional",
+      "label": "ready · building roles"
+    },
+    {
+      "from": "b-groom",
+      "to": "b-pb-platform",
+      "style": "optional"
+    },
+    {
+      "from": "b-build",
+      "to": "b-pb-platform",
+      "style": "optional"
+    },
+    {
+      "from": "b-setup",
+      "to": "b-pb-platform",
+      "style": "optional",
+      "label": "writes, verbs verified live"
+    },
+    {
+      "from": "b-setup",
+      "to": "b-pb-policy",
+      "style": "optional"
+    },
+    {
+      "from": "b-setup",
+      "to": "b-pb-env",
+      "style": "optional"
+    },
+    {
+      "from": "b-setup",
+      "to": "b-pb-evid",
+      "style": "optional"
+    },
+    {
+      "from": "b-setup",
+      "to": "b-tmpl-common",
+      "style": "optional",
+      "label": "reconciles from"
+    },
+    {
+      "from": "b-setup",
+      "to": "b-tmpl-sw",
+      "style": "optional"
+    }
+  ]
+}

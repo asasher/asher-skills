@@ -26,8 +26,7 @@
       "skills": [
         "./skills/delivery/backlog",
         "./skills/delivery/diagnosing-bugs",
-        "./skills/delivery/plan",
-        "./skills/delivery/prototype",
+          "./skills/delivery/prototype",
         "./skills/delivery/spreadsheet-loop",
         "./skills/delivery/to-spec",
         "./skills/delivery/to-tickets"
@@ -60,8 +59,6 @@
       "description": "Skills that operate and maintain the skill system itself.",
       "category": "system",
       "skills": [
-        "./skills/system/review-loop",
-        "./skills/system/setup-asher-skills",
         "./skills/system/skill-loop",
         "./skills/system/staffing"
       ]

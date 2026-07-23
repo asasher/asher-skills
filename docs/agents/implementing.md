@@ -1,6 +1,6 @@
 # Playbook: Implementing
 
-> Project playbook for this repo. The backlog `implement` subskill reads this file for how to build; the gates are in the skill's `reference/implement.md`. Base branch, branch naming, and running locally are in `environment.md`. The test-first technique below is the shipped default (adapted from Matt Pocock's `tdd` skill, MIT) — replace it with house practice if this team builds differently.
+> Project playbook for this repo. The backlog `implement` subskill reads this file for how to build; the gates are in the skill's `reference/implement.md`. Base branch, branch naming, and running locally are in `environment.md`. The test-first technique below is the shipped default — replace it with house practice if this team builds differently.
 
 ## What deserves a test
 
@@ -31,6 +31,15 @@ For the work that deserves tests, work red → green in vertical slices:
 ## Commits
 
 - Commit style this repo expects: imperative, sentence-case subject line (e.g. "Add backlog skill", "Update skill-loop with reference to patterns") — no Conventional Commits prefix. Under the Claude Code harness, end the message with its `Co-Authored-By: Claude …` trailer (the harness's own convention; repo history carries no other trailers). Commit/push only when Asher asks.
+
+## UI surfaces
+
+- Building UI loads the `bare-minimum-ux` sibling skill where installed (the UX baseline overlay — it wins on conflict); absent, state the gap rather than skipping. When
+  the project's `external-dependencies.lock.json` records the consented `impeccable` external, load it too:
+  `PRODUCT.md`/`DESIGN.md` are ambient context for every UI change (DESIGN.md wins on visual decisions,
+  PRODUCT.md on strategy/voice), and its craft rules govern the build.
+- Ship every interactive state — default, hover, focus, disabled, loading, error, empty — not just the happy
+  path; the verify step inspects them (`verifying.md` § UI surfaces).
 
 ## Code conventions
 

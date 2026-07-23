@@ -1,13 +1,13 @@
 # Diagnose — lifecycle handoff
 
-Target: a bug issue, failing report, or described defect. Runs standalone or as the issue loop's `bug` branch.
+Target: a bug issue, failing report, or described defect. Runs standalone or as the build loop's `bug` branch.
 
 ## Guarded direct fix
 
 Skip diagnosis only when all three facts are recorded: a human report, an observable visual/copy defect, and
 a named, self-evident styling/copy cause. Staff one narrow fix through the builder role, preserve the pre-fix observation,
 then visually check the affected states (both themes for theme-sensitive work) and run the required checks.
-If the observation confirms the named cause, return the fix and visual result to the issue loop and continue
+If the observation confirms the named cause, return the fix and visual result to the build loop and continue
 to its formal verify step; do not invoke the diagnosis sibling.
 The first contradictory observation—unchanged symptom, behavioral scope, or a cause wider than the named
 style/copy seam—ends this lane. Preserve that observation and the attempted diff, pass both into

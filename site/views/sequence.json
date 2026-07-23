@@ -1,0 +1,322 @@
+{
+  "id": "sequence",
+  "title": "Sequence",
+  "subtitle": "The end-to-end conversation over time: who talks to whom — the user, the dispatcher, attachable shaping threads, supervised build subagents, their nested workers, and the tracker.",
+  "type": "sequence",
+  "actors": [
+    {
+      "id": "user",
+      "title": "User ✋",
+      "blurb": "asks, attends, decides",
+      "kind": "you"
+    },
+    {
+      "id": "backlog",
+      "title": "backlog",
+      "blurb": "dispatcher",
+      "kind": "disp",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "id": "thread",
+      "title": "Shaping thread",
+      "blurb": "to-thread · shape — one per confirmed batch",
+      "kind": "thread",
+      "open": {
+        "node": "shape"
+      }
+    },
+    {
+      "id": "builder",
+      "title": "Build subagent",
+      "blurb": "to-subagent · build · worktree",
+      "kind": "sub",
+      "open": {
+        "node": "build"
+      }
+    },
+    {
+      "id": "workers",
+      "title": "Nested workers",
+      "blurb": "shape engines · implement · verify · review",
+      "kind": "sub",
+      "open": {
+        "node": "to-subagent"
+      }
+    },
+    {
+      "id": "tracker",
+      "title": "Tracker & repo",
+      "blurb": "tickets · labels · change requests",
+      "kind": "repo",
+      "open": {
+        "file": "skills/software-development/backlog/templates/common/backlog-policy.md"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "phase": "Groom — interactive, nothing flows back"
+    },
+    {
+      "from": "user",
+      "to": "backlog",
+      "label": "backlog groom",
+      "style": "flow",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "from": "backlog",
+      "to": "tracker",
+      "label": "sweep unlabeled + needs-shaping · route settled/parked",
+      "style": "flow",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "from": "backlog",
+      "to": "user",
+      "label": "batch plan: subjects grouped, batches proposed",
+      "style": "return",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "from": "user",
+      "to": "backlog",
+      "label": "confirm the batches ✋",
+      "style": "flow",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "from": "backlog",
+      "to": "tracker",
+      "label": "mark shaping",
+      "style": "flow",
+      "open": {
+        "file": "skills/software-development/backlog/templates/common/backlog-policy.md"
+      }
+    },
+    {
+      "from": "backlog",
+      "to": "thread",
+      "label": "one thread per batch via to-thread (single batch: stays here)",
+      "style": "flow",
+      "open": {
+        "node": "to-thread"
+      }
+    },
+    {
+      "from": "backlog",
+      "to": "user",
+      "label": "attach instructions",
+      "style": "return",
+      "open": {
+        "node": "to-thread"
+      }
+    },
+    {
+      "from": "thread",
+      "to": "workers",
+      "label": "one engine per subject — frontiers ↻ · research · prototype",
+      "style": "bidir",
+      "open": {
+        "node": "shape"
+      }
+    },
+    {
+      "from": "user",
+      "to": "thread",
+      "label": "attend: one combined round, questions tagged by subject ↻",
+      "style": "bidir",
+      "open": {
+        "node": "interview"
+      }
+    },
+    {
+      "from": "thread",
+      "to": "tracker",
+      "label": "decisions on the ticket · CONTEXT.md · ADRs",
+      "style": "flow",
+      "open": {
+        "node": "domain-modeling"
+      }
+    },
+    {
+      "from": "thread",
+      "to": "tracker",
+      "label": "frontier empty → to-spec: spec onto the ticket body, diagram first",
+      "style": "flow",
+      "open": {
+        "node": "to-spec"
+      }
+    },
+    {
+      "from": "user",
+      "to": "tracker",
+      "label": "AFK: comments on the spec'd tickets",
+      "style": "flow",
+      "open": {
+        "node": "shape"
+      }
+    },
+    {
+      "from": "thread",
+      "to": "tracker",
+      "label": "watch-until: apply tweaks · reply ↻",
+      "style": "bidir",
+      "open": {
+        "node": "watch-until"
+      }
+    },
+    {
+      "from": "user",
+      "to": "thread",
+      "label": "approve the recommended split (when one is)",
+      "style": "flow",
+      "open": {
+        "node": "to-tickets"
+      }
+    },
+    {
+      "from": "thread",
+      "to": "tracker",
+      "label": "to-tickets: supersede parent → born-shaped children",
+      "style": "flow",
+      "open": {
+        "node": "to-tickets"
+      }
+    },
+    {
+      "from": "user",
+      "to": "thread",
+      "label": "LGTM — ready for agent",
+      "style": "flow",
+      "open": {
+        "node": "shape"
+      }
+    },
+    {
+      "from": "thread",
+      "to": "tracker",
+      "label": "readiness applied — the user's call, executed",
+      "style": "flow",
+      "open": {
+        "file": "skills/software-development/backlog/templates/common/backlog-policy.md"
+      }
+    },
+    {
+      "phase": "Build — autonomous, supervised"
+    },
+    {
+      "from": "user",
+      "to": "backlog",
+      "label": "backlog build",
+      "style": "flow",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "from": "backlog",
+      "to": "tracker",
+      "label": "sweep ready + unblocked · mark building",
+      "style": "flow",
+      "open": {
+        "file": "skills/software-development/backlog/templates/common/backlog-policy.md"
+      }
+    },
+    {
+      "from": "backlog",
+      "to": "builder",
+      "label": "dispatch via to-subagent — own worktree",
+      "style": "flow",
+      "open": {
+        "node": "to-subagent"
+      }
+    },
+    {
+      "from": "builder",
+      "to": "workers",
+      "label": "implement (tdd / diagnosing-bugs)",
+      "style": "flow",
+      "open": {
+        "node": "implement"
+      }
+    },
+    {
+      "from": "builder",
+      "to": "workers",
+      "label": "verify-your-work — findings back, builder fixes ↻",
+      "style": "bidir",
+      "open": {
+        "node": "verify-your-work"
+      }
+    },
+    {
+      "from": "builder",
+      "to": "tracker",
+      "label": "open change request — Closes #N",
+      "style": "flow",
+      "open": {
+        "node": "build"
+      }
+    },
+    {
+      "from": "builder",
+      "to": "workers",
+      "label": "adversarial review: reviewer ⇆ fixer until LGTM",
+      "style": "bidir",
+      "open": {
+        "node": "adversarial-review"
+      }
+    },
+    {
+      "from": "builder",
+      "to": "tracker",
+      "label": "evidence posted (prove-your-work)",
+      "style": "flow",
+      "open": {
+        "node": "prove-your-work"
+      }
+    },
+    {
+      "from": "builder",
+      "to": "backlog",
+      "label": "wake: review-ready change request",
+      "style": "return",
+      "open": {
+        "node": "build"
+      }
+    },
+    {
+      "from": "backlog",
+      "to": "user",
+      "label": "outcomes relayed",
+      "style": "return",
+      "open": {
+        "node": "backlog"
+      }
+    },
+    {
+      "phase": "Merge — explicit human authorization"
+    },
+    {
+      "from": "user",
+      "to": "tracker",
+      "label": "authorize merge (merge-changes) → ticket closes",
+      "style": "flow",
+      "open": {
+        "node": "merge-changes"
+      }
+    }
+  ]
+}

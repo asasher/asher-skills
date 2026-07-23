@@ -1,0 +1,7 @@
+interface:
+  display_name: "Interview"
+  short_description: "Batch frontier interview: elicit and settle the strategic decisions behind a piece of work — facts looked up, decisions asked, hypotheses offered"
+  default_prompt: "Use $interview to elicit the decisions behind this idea or problem."
+
+policy:
+  allow_implicit_invocation: true

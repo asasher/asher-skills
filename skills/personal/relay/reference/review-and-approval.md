@@ -5,7 +5,7 @@ After rendering, run `scripts/build_review_sheet.py <repo-root> --run <run-dir>`
 HTML and text, forced light/dark previews, sender, To, CC, evidence summary, template identity, field hashes,
 and the canonical manifest. Give every reviewable block a stable element ID.
 
-Invoke the required `review-loop` sibling by name with `review.html`. It owns serving, annotations, verdict,
+Invoke the required `serve-via-tailnet` sibling by name with `review.html`. It owns serving, annotations, verdict,
 hash-bound event, and awaiting. Relay does not copy its scripts. Only `approve` or `approve_with_nits` for the
 current document hash can authorize delivery. A nit that changes an approved field requires a new render and
 review; do not treat a prior verdict as transferable.

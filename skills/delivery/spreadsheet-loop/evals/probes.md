@@ -34,7 +34,7 @@ and what still has to happen before you iterate?
 **P9.** The user wants a pivot table of revenue by region that they can drag fields around in inside Excel. Is
 that supported, and what do you tell them?
 
-**P10.** Is the live Univer spreadsheet surface presented for sign-off through the `review-loop` skill, the
+**P10.** Is the live Univer spreadsheet surface presented for sign-off through the `serve-via-tailnet` skill, the
 same way `SPEC.md` is? Explain.
 
 **P11.** The compile succeeded and the file opens. What is the minimum you must run before telling the user

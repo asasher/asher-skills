@@ -1,6 +1,6 @@
 # Playbook: Platform Bindings
 
-> Project playbook for this repo. Shared — read by every subcommand that touches the tracker (`groom`, `run`, the issue loop), proposes or edits a PR (the create-PR step, `adversarial-review`, `evidence`), or creates and publishes working copies (`run`, `implement`, the fixer). The skill's references speak in **role nouns** — issue, label, PR, branch, worktree, push — and this file binds each role to this repo's real platform. Bindings are prose contracts, not adapter code: each verb records the working command (or harness tool call) verified by `backlog setup` — live at binding time, end-to-end when the smoke test runs. A recorded command that no longer exists is drift — re-run `backlog setup`.
+> Project playbook for this repo. Shared — read by every subcommand that touches the tracker (`groom`, `run`, the build loop), proposes or edits a PR (the create-PR step, `adversarial-review`, `evidence`), or creates and publishes working copies (`run`, `implement`, the fixer). The skill's references speak in **role nouns** — issue, label, PR, branch, worktree, push — and this file binds each role to this repo's real platform. Bindings are prose contracts, not adapter code: each verb records the working command (or harness tool call) verified by `backlog setup` — live at binding time, end-to-end when the smoke test runs. A recorded command that no longer exists is drift — re-run `backlog setup`.
 
 ## Tracker — where issues live
 
@@ -26,7 +26,7 @@
   - Read review comments since a SHA: `gh pr view <n> --comments`; for inline threads `gh api repos/asasher/asher-skills/pulls/<n>/comments`.
   - Post a review comment / reply: `gh pr comment <n> --body '...'`.
   - Signal approval: an exact `LGTM` comment via `gh pr comment`.
-  - Merge: the human merges on GitHub — the loop never merges.
+  - Merge: the human merges on GitHub, or explicitly authorizes the `merge-changes` skill (`gh pr merge <n> --squash --delete-branch`) — the automated loop itself never merges.
 - Where the review conversation persists: the PR thread on GitHub.
 
 ## Version control — working copies and publication
@@ -44,8 +44,8 @@
 - Binding: **Claude Code** — the loop runs from Claude Code; the model roster per harness is in `environment.md` § Model staffing.
 - Create an issue coordinator with the route `run` selected before worktree/child creation: native Claude uses the Agent tool (`isolation: 'worktree'` when needed); Claude→Codex uses bounded `codex exec --cd <dir>` through its tracked wrapper; Codex→Claude uses bounded `claude -p --model <model> '<self-contained prompt>' </dev/null` and **never `--bare`**. Each command receives the worktree, coordinator assignment, and upward successor; completion is accepted only after its durable return/effect is verified.
 - Reachability is directional: a failed Codex→Claude invocation removes only that route and applies the successor in `environment.md` § Model staffing; Claude→Codex remains available. No Anthropic-policy or credit monitor gates dispatch.
-- Can a spawned thread read this skill's bundled references from disk? Yes — at `.claude/skills/delivery/backlog/reference/` and `docs/agents/` in the checkout.
-- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; the review loop awaits the `review-loop` skill's `review-await.py` (self-host path `skills/system/review-loop/scripts/review-await.py`). The watch is **held on a dedicated staffing-resolved watcher subagent that loops-until-verdict**, not the orchestrator inline — contract in `skills/system/review-loop/reference/watch.md` (applies to both the approval gate and the PR-merge watch).
+- Can a spawned thread read a skill's bundled references from disk? Yes — under `.claude/skills/<name>/` and `docs/agents/` in the checkout.
+- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; a verdict wait blocks on the `serve-via-tailnet` skill's `review-await.py` (self-host path `skills/software-development/serve-via-tailnet/scripts/review-await.py`). Longer watches run per the `watch-until` skill's ladder — a watcher subagent, never the orchestrator inline (applies to both the approval gate and the PR-merge watch).
 
 ## The local binding — tracker contract
 
@@ -55,8 +55,8 @@
 - **No index, no moves** — state changes flip frontmatter; closed issues stay in place. Agents and humans find issues by reading frontmatter, not a derived index. File moves on branches invite rename conflicts.
 - **Three write classes** — every tracker write falls in exactly one:
   1. *Grooming writes* (labels, clarifications, dependencies, dedup) — on the main branch, in the primary checkout, committed before `run` dispatches. Groom never edits an in-flight issue's file — changes for one go through the run thread or wait — with one exception: the human-confirmed orphan reset (`backlog-policy.md` § In-flight hygiene), safe because the claim is dead.
-  2. *PR-bound lifecycle writes* (state → `in-review` at PR-open, → `closed` once review converges — the one post-LGTM commit besides evidence, per `reference/issue-loop.md` step 7; plan and review links) — committed on the issue's own work branch, landing with the merge. A branch edits only its own issue file, so parallel worktrees cannot conflict.
-  3. *Abort writes* (`needs-info` plus its open question, blockers, clearing `in-flight`) — never written from a worktree: the issue thread reports to the run thread, the sole serialized writer to main.
+  2. *PR-bound lifecycle writes* (state → `in-review` at PR-open, → `closed` once review converges — the one post-LGTM commit besides evidence, per `reference/build-loop.md` step 7; plan and review links) — committed on the issue's own work branch, landing with the merge. A branch edits only its own issue file, so parallel worktrees cannot conflict.
+  3. *Abort writes* (`needs-info` plus its open question, `needs-shaping` plus its open strategic decisions, blockers, clearing `in-flight`) — never written from a worktree: the issue thread reports to the run thread, the sole serialized writer to main.
 - **ID allocation** — new issues are created only by the serialized main-branch writers (groom, or the run thread on behalf of an issue thread), so sequential ids never collide.
 - **Commit-before-fork** — `run` commits the groomed tracker state, marks its queue `in-flight`, commits again, and creates every worktree from that commit; each work branch is born carrying its own issue marked `in-flight`.
 

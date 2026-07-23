@@ -8,7 +8,7 @@ each project a sparse delta.
 
 For global-with-overrides, the active harness gets:
 
-- a compact `## Staffing` pointer in its native global memory file;
+- a compact `## Staffing` pointer in its global agent instruction file;
 - a self-contained deferred module at the absolute path named by that pointer; and
 - project deltas under `docs/agents/`, containing only fields that differ.
 
@@ -24,27 +24,26 @@ that raised floor; copying the base table is drift.
 - **No global base exists:** ask project-only versus global-with-overrides. A global choice is explicit
   consent for the described home-directory writes, not blanket permission for later changes.
 
-The active provider's exact memory/module paths and dispatch commands are in `reference/harness.md` in the
+The active provider's exact instruction-file/module paths and dispatch commands are in `reference/harness.md` in the
 installed package. Directory presence is evidence, not authority: setup confirms which harnesses are active.
 
 ## Module-first owner reconciliation
 
-Staffing owns only its pointer, module, and roster; never presentation policy. Setup starts a fresh barrier,
-then both owners atomically stage and read back all four Codex/Claude modules. No pointer applies until all
-four verify. Setup preflights both globals and applies both Presentation sections; staffing refuses to apply
-until those match, then applies both Staffing sections without changing other bytes. Setup verifies all four
-final sections and removes the barrier. Never use an eager import.
+Staffing owns only its pointer, module, and roster — nothing else in the global file. The apply is
+`render-global.py apply`: the audited module is written atomically and read back, then the `## Staffing`
+section is reconciled into the global file with every foreign byte preserved. Module-first: the deferred module lands before the pointer
+that names it, within the same apply. Never use an eager import.
 
-A module/preflight failure changes neither global. Missing, unreadable, or changed staffing modules fail
-closed: report the gap and do not dispatch. Do not rewrite unchanged modules. A second successful reconcile
-leaves durable module, global, delta, and lock bytes unchanged. Migration is proposed, never automatic;
-retain recovery bytes until the new policy passes its probes.
+An apply failure changes nothing: the read-back check fails closed. Missing, unreadable, or changed staffing
+modules fail closed: report the gap and do not dispatch. Do not rewrite unchanged modules. A second
+successful reconcile leaves durable module, global, delta, and lock bytes unchanged. Migration is proposed,
+never automatic; retain recovery bytes until the new policy passes its probes.
 
-## Reconciliation has no version stamp
+## Reconciliation is a prose audit
 
 Read the installed module, pointer, project delta, and current machine audit; report drift or conflict in
 prose. Examples: an unreachable row, a stale directional route, an override that recopies the base, or a pin
-conflict. Do not add a `vNN`, template version, or hash as the judgment mechanism. Provider-package effective
+conflict. That reading is the judgment mechanism. Provider-package effective
 hashes are install provenance, not roster-policy truth.
 
 ## External-worker contract
@@ -61,6 +60,11 @@ the parent, which verifies the requested effect. If native spawn cannot accept t
 report the assigned one, keep agent-tree observability but record the staffing gap and do not claim
 floor/cost compliance.
 
+Where the CLI offers a resumable session id, the wrapper captures and returns it — resume-by-id is the
+continuation after wrapper loss — and tees raw output to a file as it streams, so the result survives a
+lost return path. A resume or adoption first audits the tree, branch tips, and live processes; reality
+outranks the prior narrative. Briefs to an external-harness worker speak in goals and file paths — the
+parent harness's tool idioms stay out.
+
 Reachability state is per direction: **effect-verified**, **intentionally disabled**, or **unavailable** with
-a captured failure class and successor. One failed direction never disables the healthy direction. Do not
-poll vendor policy or credits as a dispatch precondition.
+a captured failure class and successor. One failed direction never disables the healthy direction.

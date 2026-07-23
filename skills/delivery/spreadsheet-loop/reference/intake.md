@@ -46,5 +46,5 @@ Synthesize — don't transcribe the Q&A. `SPEC.md` is direction, not detail:
 - **The look, in brief** — brand or template to match, and the input/output signalling convention.
 - **Open questions** — anything undecided, recorded rather than guessed.
 
-Keep it in the project root. **Gate:** present `SPEC.md` for sign-off through `review-loop`
+Keep it in the project root. **Gate:** present `SPEC.md` for sign-off through `serve-via-tailnet`
 (see [sign-off](sign-off.md)); proceed to model & layout only on an approving verdict.

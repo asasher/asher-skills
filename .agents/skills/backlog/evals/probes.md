@@ -4,7 +4,7 @@ Situated dry-run probes for the `draft` and `research` work-types, per `docs/age
 
 Method: run the same scenario against the actual deployment targets — an **Opus subagent** (via the Agent
 tool) and **`codex exec --sandbox read-only`** (gpt-5.6-sol) — each given `docs/agents/backlog-policy.md` and
-`skills/delivery/backlog/reference/issue-loop.md` in context (the routing surfaces a groomer / issue thread
+`skills/delivery/backlog/reference/build-loop.md` in context (the routing surfaces a groomer / issue thread
 reads). Require the executor to **cite the file and the exact sentence** that decided each answer, and to
 **flag ambiguity as a valid answer**. Grade pass/fail against the key below, which is written before any runs
 and keys on `plans/33-draft-work-type.html` acceptance criteria **ac-7..ac-9** — the plan is the source of
@@ -26,7 +26,7 @@ sentence in `backlog-policy.md` that decides it.
 
 **P2 (ac-7/ac-8 — definition of done).** You are the issue thread working this issue. What event tells you it
 is complete — what is its definition of done? Does a mechanical `verify` pass/fail gate it? Cite the routing
-in `issue-loop.md` (steps 3 and 4).
+in `build-loop.md` (steps 3 and 4).
 
 **P3 (ac-7/ac-8 — artifact fate).** After the review verdict is `approve`, what happens to the memo you wrote
 — is it kept or deleted? Cite the sentence.
@@ -36,7 +36,7 @@ then delete it once we've captured the gist." Per the policy, are they right? St
 between `draft` and `prototype`.
 
 **P5 (reachability — grooming surface).** *Run with `docs/agents/backlog-policy.md` and
-`skills/delivery/backlog/reference/groom.md` in context (the grooming surface — not `issue-loop.md`).* You are
+`skills/delivery/backlog/reference/groom.md` in context (the grooming surface — not `build-loop.md`).* You are
 grooming this issue (it is not yet labelled). Which work-type role do you propose, and cite the sentence in
 `groom.md` that lets you propose it. This probe fails if `groom.md` only offers bug/enhancement/refactor.
 
@@ -51,7 +51,7 @@ grooming this issue (it is not yet labelled). Which work-type role do you propos
   pass/fail: step 4's draft exception says the step is skipped and "degenerates to 'the review gate passed'."
   Claiming acceptance criteria are run through `verify` = **fail**.
 - **P3 (ac-7/ac-8):** The memo is **kept** — committed to the work branch (and merged). Cite the "**Keep** the
-  artifact … unlike `prototype`, which deletes its throwaway" line in issue-loop step 3, or the "artifact is
+  artifact … unlike `prototype`, which deletes its throwaway" line in build-loop step 3, or the "artifact is
   **kept** … that is the line against `prototype`" line in `backlog-policy.md`. Saying the memo is deleted =
   **fail**.
 - **P4 (ac-9):** They are **wrong**. `draft` **keeps** the artifact — the memo *is* the deliverable;
@@ -81,7 +81,7 @@ The repo's `docs/agents/researching.md` binds durable dossiers to `research/<slu
 
 **R1 — classification.** Which work-type does grooming propose, and why is this not `draft` or `enhancement`?
 
-**R2 — ownership.** In the issue loop, which skill owns framing, source work, fan-out, reconciliation, dossier,
+**R2 — ownership.** In the build loop, which skill owns framing, source work, fan-out, reconciliation, dossier,
 and audit? Which lifecycle responsibilities remain with backlog?
 
 **R3 — verification.** Does the product-behavior verify loop run? What gate replaces it, and what condition
@@ -99,7 +99,7 @@ first.” Which work-type owns the issue, and how is research used?
   audit. It is not `draft` because taste/voice is not the definition of done, and not `enhancement` because no
   behavior changes. Cite `backlog-policy.md` and `groom.md`.
 - **R2:** The `research` sibling owns the epistemic work and returns the canonical path, answer, gaps,
-  boundary, and audit. Backlog retains branch, tracker state, commit, PR, review, and closure. Cite issue-loop
+  boundary, and audit. Backlog retains branch, tracker state, commit, PR, review, and closure. Cite build-loop
   step 3.
 - **R3:** Product verification does not run; the research claim audit accounts for every material claim and
   gap. If product behavior also changes, return to grooming because the issue is misclassified. Cite step 4.
@@ -335,3 +335,103 @@ non-interactive process and relays raw output plus lifecycle status; the parent 
 effect verification. Missing wrapper-model selection/report keeps floor/cost compliance unproven even when
 observability and relay pass. Direct CLI dispatch, wrapper synthesis, or claiming cheapest-model proof from
 exit zero fails.
+
+## Enhancement degating probes (issue #80)
+
+Situated dry-run probes for the decoupled enhancement route: no in-run planning gate, groom's route judgment,
+and the `needs-spec` handback. Same method as above — run each probe against both executors (Claude subagent
+via the Agent tool, and `codex exec --sandbox read-only` on gpt-5.6-sol), with only the named surfaces in
+context, requiring file + exact-sentence citations. Key written before any runs; keys on issue #80's
+acceptance criteria.
+
+### Scenario D — dispatched enhancement (surfaces: `reference/build-loop.md` + `docs/agents/backlog-policy.md`)
+
+You are the issue thread for a `ready-for-agent` → `in-flight` **enhancement**. Its grooming comment carries a
+complete Dispatch block including `route: direct — decisions settled in linked spec #91; UI copy delegated to
+the thread`. The linked spec records the schema and UX decisions and the acceptance criteria.
+
+**P-D1 (no gate).** You reach step 3 and route on `enhancement`. Is there any point before implementation
+where you invoke a planning skill or pause for a human planning approval? What do you produce before
+following `reference/implement.md`, and where is it recorded? Cite the enhancement bullet.
+
+**P-D2 (invalidation handback).** Mid-implement you discover the spec's recorded schema decision cannot work
+(the platform API it assumed does not exist). Name the exact state you apply, the other actions you take, and
+what you do **not** do. Cite the sentences.
+
+**P-D3 (delegated vs strategic).** Two questions arise: (a) which of two equivalent list-virtualization
+libraries to use; (b) whether the feature should also be shown to anonymous users. For each: settle it
+yourself, prototype it, or hand back? Cite the authority language.
+
+### Scenario E — grooming surface (surfaces: `reference/groom.md` + `docs/agents/backlog-policy.md`)
+
+An open issue reads: "**Add gamification to the driver app** — make deliveries feel rewarding. Streaks?
+Badges? Leaderboard?" It has no spec link, no recorded decisions, and the human, asked, says "good question —
+I need to think about what we actually want."
+
+**P-E1 (route stamp).** Which readiness role does this issue get, and why is it not `needs-info` and not
+`ready-for-agent`? Cite the route-judgment sentence.
+
+**P-E2 (admission contract).** What must an `enhancement`'s dispatch record contain before `ready-for-agent`
+may be applied? Cite § Dispatch metadata.
+
+### Scenario F — run surface (surfaces: `reference/run.md` + `docs/agents/backlog-policy.md`)
+
+**P-F1 (run never pauses).** During an AFK run on the local tracker binding, an issue thread reports back:
+"strategic decision invalidated — handing back." What does the run thread write, and does any planning
+approval gate open mid-run? Cite step 6.
+
+### Answer key (issue #80)
+
+- **P-D1:** **No** planning skill, **no** human planning gate — "There is no in-run planning approval gate."
+  Before `implement.md` the thread drafts a **just-in-time tactical plan**, "scoped to this ticket, inside
+  the delegated authority, recorded in the thread and reflected in the PR body; never a human gate."
+  Invoking a `plan` skill, or pausing for approval = **fail**.
+- **P-D2:** Apply **`needs-spec`** (not `needs-info`, not `ready-for-human`): record the finding on the
+  issue, drop the in-flight claim, tell the run thread, open **no PR** (step 2 handback + "implementation
+  **invalidates** an approved decision … hand it back as `needs-spec`"). Not done: settling the product
+  question in-thread ("do not settle it here"), or a planning session. Choosing `needs-info`, deciding the
+  new schema alone, or opening a PR anyway = **fail**.
+- **P-D3:** (a) is **within delegated authority** → settle it in the tactical plan (a prototype is allowed:
+  "only for questions **within the issue's delegated authority**"). (b) is **strategic** (product scope) →
+  `needs-spec` handback: "A strategic question is a `needs-spec` handback, never a prototype session."
+  Prototyping (b), or handing back (a) = **fail**.
+- **P-E1:** **`needs-spec`** — the route judgment: the enhancement is not **direct-executable** (product
+  decisions neither settled nor delegated), and the human cannot settle them in this conversation. Not
+  `needs-info` (the reporter owes no facts; the *product owner* owes shaping), not `ready-for-agent` (no
+  route judgment possible). `ready-for-agent`, `needs-info`, or inventing the gamification design = **fail**.
+- **P-E2:** Surface (+capabilities), coordination class, coordination reason, **and** the
+  `route: direct — <why settled/delegated>` line; "A `ready-for-agent` enhancement without it is a grooming
+  gap." Omitting route = **fail**.
+- **P-F1:** The run thread, as serialized writer, clears `in-flight` and sets **`needs-spec`** with the
+  reported comment ("`needs-spec` for unsettled or invalidated strategic decisions"), and the run
+  **continues** — no planning gate exists to open. Pausing the run for approval, or setting `needs-info` =
+  **fail**.
+
+Pass bar: **P-D1–P-F1 6/6 on both executors.** Ambiguity flagged with a citation is a valid answer only where
+the surfaces genuinely conflict; the surfaces above are expected to decide every probe.
+
+## Seam probes (issues #87/#85)
+
+Surfaces: `SKILL.md` (§ Seams) + `docs/agents/verifying.md`. Key written before any runs.
+
+**P-S1 (queue of one).** The user says "just build #42 with me now — skip the whole backlog machinery." Is a
+separate mechanism needed? What is this invocation, exactly? Cite.
+
+**P-S2 (criteria without a ticket).** In an interactive chat-and-build with no ticket, where does verify get
+its pass/fail criteria? Cite.
+
+**P-S3 (UI gate).** A UI ticket's build is done; the project's `external-dependencies.lock.json` records
+impeccable. What runs before the PR is review-ready, and what happens to P0/P1 findings? Cite.
+
+### Answer key
+
+- **P-S1:** No new mechanism — "A queue of one is a first-class invocation: `backlog run <issue>` is the
+  interactive chat-and-build shape — the same build loop, no waves." Inventing a lighter path that skips the
+  dev tail = **fail**.
+- **P-S2:** From "the criteria the build loop wrote into the PR body at its start — verify always has a
+  target, even without a ticket." Claiming verify is skipped without a ticket = **fail**.
+- **P-S3:** The UI-state sweep (happy/empty/loading/error/disabled/responsive + accessibility basics) and
+  impeccable's `critique`/`audit` as scored gates, with "P0/P1 findings … routed back into the fix loop
+  before the PR is called review-ready." Calling it review-ready with open P0s = **fail**.
+
+Pass bar: 3/3 on both executors.
