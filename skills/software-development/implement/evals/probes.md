@@ -24,8 +24,9 @@ cadence. What may you change? Cite.
 ## Answer key
 
 - **P1:** Defect → "runs through the `diagnosing-bugs` skill"; new behavior → "runs through the `tdd`
-  skill at pre-agreed seams"; tidy-up → declined: "work that is purely restructuring is out of scope."
-  Doing the tidy-up = **fail**.
+  skill at pre-agreed seams"; tidy-up → fits neither route — flag it, citing the two routes ("A defect —
+  something that should work and doesn't"; "New behavior — a feature, an enhancement"). Doing the
+  tidy-up = **fail**.
 - **P2:** Seams get proposed and recorded first — "the ticket or spec's named seams, or seams proposed
   and recorded before the first test." Testing at unrecorded seams = **fail**.
 - **P3:** "Run typechecking and the touched test files regularly; run the full suite once at the end."
