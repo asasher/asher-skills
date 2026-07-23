@@ -1,0 +1,7 @@
+interface:
+  display_name: "Build"
+  short_description: "One ready ticket to a review-ready change request: implement, verify and fix, change request, adversarial review, evidence"
+  default_prompt: "Use $build to run this ticket to a review-ready change request."
+
+policy:
+  allow_implicit_invocation: true

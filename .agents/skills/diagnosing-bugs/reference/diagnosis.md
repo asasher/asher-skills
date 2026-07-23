@@ -30,7 +30,9 @@ or timing. Then remove inputs, callers, configuration, data, and steps one at a 
 
 Write 3–5 hypotheses before testing any. Rank them. Each names a prediction: “If X is the cause, changing Y
 will make the symptom disappear or changing Z will make it worse.” Discard or sharpen any claim without a
-prediction. Put the ranked list in the durable work record and show it to the user when available; their domain
+prediction. Put the ranked list in the **durable work record** — the ticket, change request, or other
+artifact the invoking context treats as this work's record; absent one, a note committed beside the
+work — and show it to the user when available; their domain
 knowledge may re-rank it, but do not block an unattended run.
 
 **Gate:** every candidate is ranked and falsifiable.
@@ -59,7 +61,7 @@ the bug. The no-seam finding is valid proof only alongside the original loop goi
 
 - Rerun the original loop and the project's required checks.
 - Remove every tagged debug statement and delete throwaway harnesses.
-- Record the confirmed hypothesis/root cause in the durable change record.
+- Record the confirmed hypothesis/root cause in the durable work record.
 - Report the regression test, or the no-seam gap and its consequence.
 
 **Done:** the reported symptom is green, proof is durable, no debug residue remains, and required checks have

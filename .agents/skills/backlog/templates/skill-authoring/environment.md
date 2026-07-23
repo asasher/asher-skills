@@ -46,7 +46,9 @@
 
 ## Presenting to the human
 
-> Owned by the `review-loop` skill. Its setup records this repo's surface configuration here.
+> Owned by the **`serve-via-tailnet`** skill (composed by name): how rendered artifacts reach a human who
+> may not be at the machine. Its setup records this repo's surface config here (root path, surface dir,
+> publish/proxy commands); this playbook does not install the surface.
 
 ## Model staffing
 

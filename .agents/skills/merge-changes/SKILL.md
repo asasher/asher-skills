@@ -1,6 +1,6 @@
 ---
 name: merge-changes
-description: Merge reviewed, review-ready changes on the user's explicit request — verify readiness, order dependent PRs, merge, reconcile, and report. Invoking this skill is the merge approval gate; backlog and every implementation loop stop at review-ready PRs and never merge. Not for reviewing changes or building them.
+description: Merge review-ready changes on the user's explicit request — the human authorization gate at the end of every change.
 argument-hint: "<PRs, branches, or 'everything review-ready'>"
 user-invocable: true
 disable-model-invocation: true
@@ -8,7 +8,7 @@ metadata:
   invocation: user
   execution: orchestrator
   requires: []
-  optional: [staffing]
+  optional: [watch-until]
 ---
 
 # Merge Changes
@@ -27,12 +27,16 @@ stop.
 
 1. **Resolve scope.** Enumerate the exact PRs/changes in the request. For each, verify it is still open and
    review-ready: review converged (approval/`LGTM` per the project's convention), no unresolved blocking
-   comments, branch not superseded. Anything failing this is reported and dropped from scope — never merged
-   "while we're here".
+   comments, branch not superseded — and the approval covers the head being merged: where the LGTM names
+   the SHA it reviewed, compare it to the current head; an approval naming no head covers the head
+   current when it was posted. Either way, commits landed since the approval send the change back
+   through review rather than into the merge. Anything failing this is reported and dropped from scope —
+   never merged "while we're here".
 2. **Order.** Determine dependency and stacking relationships (stacked branches, `Depends on` links,
    overlapping surfaces) and compute the merge order: bases before dependents.
 3. **Gate on CI, per merge, at merge time.** Immediately before each merge, re-query the required checks on
-   the current head — local green, an earlier run's green, or another PR's duration is never a proxy. A
+   the current head — only its own completed checks count; a local run, an earlier head's green, or
+   timing inferred from another change never stands in for them. A
    pending or failing required check stops that merge (and its dependents) until resolved.
 4. **Merge in order,** using the platform's recorded merge mechanics (squash policy, branch cleanup).
 5. **Reconcile after each merge.** Update or rebase dependent branches as needed; resolve conflicts only when
@@ -43,12 +47,13 @@ stop.
    queue is left unmerged and reported.
 7. **Report.** Merged PRs with resulting commit SHAs, the order used, reconciliations performed, and anything
    left unmerged with its reason. Apply the tracker's post-merge lifecycle (labels, issue closure) where the
-   platform binding records it.
+   platform binding records it. Then clean up: delete merged branches per platform policy, remove their
+   worktrees, and tear down any per-change environment resources (containers, seeded stores) the
+   repo's environment playbook (`docs/agents/environment.md`, when it has one) names.
 
 ## Boundaries
 
-- Never merge outside the request's scope; never interpret lifecycle labels, green checks, or reviewer
-  approval as a merge request.
+- Never merge outside the request's scope.
 - Never force-push over, close, or delete someone else's branch to make a merge work.
-- Staffing (optional sibling, by name): the whole flow is judgment-light coordination — it stays with the
-  invoking session; delegate nothing but mechanical check-watching.
+- The whole flow is judgment-light coordination — it stays with this session; delegate nothing but
+  mechanical check-watching (via the `watch-until` sibling when installed).

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Verify Your Work"
+  short_description: "Verify a named set of changes: pick the proof that would catch each claim failing, run it, report findings with evidence — never fix"
+  default_prompt: "Use $verify-your-work to verify these changes and report findings."
+
+policy:
+  allow_implicit_invocation: true
