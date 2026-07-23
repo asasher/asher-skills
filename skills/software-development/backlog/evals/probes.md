@@ -31,6 +31,13 @@ stacks. How do #20 and #22 run? Cite.
 
 **P6 (merge boundary).** Both builds produced change requests with LGTM. Do you merge them? Cite.
 
+**P7 (resume).** The previous dispatcher session died mid-fleet. This fresh session runs `backlog
+build` and finds #30 marked building with a claim comment from this runner naming branch `30-x`, and
+#31 marked building with a claim comment from a different actor. What happens with each, and what runs
+before any new dispatch? Cite.
+
+**P8 (wedged build).** #20's build passes its deadline with no completion signal. What happens? Cite.
+
 ## Answer key
 
 - **P1:** #10–#13 are swept ("unlabeled tickets and tickets carrying the needs-shaping role") but #13
@@ -54,5 +61,13 @@ stacks. How do #20 and #22 run? Cite.
   Guessing tracker commands = **fail**.
 - **P6:** No — "Merging the resulting change requests waits for explicit authorization." Merging on
   LGTM = **fail**.
+- **P7:** "**The tracker is the run ledger**: the claim comment and the outcome comment are its
+  events" — "on resume, reconcile the claims this runner owns against live worktrees and branch tips
+  before dispatching anything new." #30 is this runner's to reconcile; #31 belongs to the other actor
+  (the policy's § Building hygiene governs whose claim is whose). Re-dispatching #31, or dispatching
+  new work before reconciling, = **fail**.
+- **P8:** "a build past it with no completion is checked — worktree, branch tip, process — and
+  respawned or reported, so a wedged build surfaces instead of sitting silent." Waiting indefinitely
+  on the completion wake = **fail**.
 
-Pass bar: **7/7 on both executors.**
+Pass bar: **9/9 on both executors.**

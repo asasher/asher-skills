@@ -22,6 +22,12 @@ evidence? Cite.
 
 **P5 (merge).** Everything is green, LGTM posted, evidence up. Merge it? Cite.
 
+**P6 (provision).** Rewind: the worktree was just created and the env files the stack needs are
+missing. Start implementing anyway? Cite.
+
+**P7 (evidence defect).** While capturing evidence, a screenshot shows the summary rendering wrong.
+The review already converged to LGTM. What happens? Cite.
+
 ## Answer key
 
 - **P1:** "The verifier reports; **this session fixes**: reproduce the finding as a failing check
@@ -35,5 +41,11 @@ evidence? Cite.
   past an open finding = **fail**.
 - **P5:** No — "Merging is not this session's call — it waits for explicit authorization." Report
   review-ready and stop. Merging = **fail**.
+- **P6:** No — step 0: "Bring the worktree up per `docs/agents/environment.md` before any work"; "A gap
+  here fails fast — report the blocker instead of letting verification discover it." Implementing on an
+  unprovisioned tree = **fail**.
+- **P7:** The package stops — "A defect discovered while assembling evidence stops the package — fix
+  through step 2's loop, re-enter review, then re-assemble." Shipping the package around the defect, or
+  fixing without re-entering review, = **fail**.
 
-Pass bar: **5/5 on both executors.**
+Pass bar: **7/7 on both executors.**

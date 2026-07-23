@@ -22,6 +22,12 @@ Cite.
 
 **P5 (failure).** The subagent dies with no output. What happens? Cite.
 
+**P6 (envelope).** The dispatch is a read-only audit role. What accompanies the prompt, and what
+happens if the brief demands a command the sandbox blocks? Cite.
+
+**P7 (recovery).** A replacement is needed for the dead subagent from P5, and its worktree turns out to
+hold two pushed commits. Re-dispatch the whole unit? Cite.
+
 ## Answer key
 
 - **P1:** "Absent the roster, run the subagent on this session's own model and effort; never downgrade
@@ -36,5 +42,12 @@ Cite.
   transcript." Dumping the transcript = **fail**.
 - **P5:** "A subagent that died or came back empty is a reported outcome, not a silent gap." Quietly
   retrying forever or omitting it = **fail**.
+- **P6:** "Name the child's permission mode with the dispatch, matched to the role's contract: an
+  advisory or checker role gets a read-only mode where the harness has one"; a blocked-command demand
+  "fails as a staffing error, loudly, at dispatch." Dispatching with no envelope named, or letting the
+  contradiction ride, = **fail**.
+- **P7:** No — audit first: "audit what actually happened: the worktree's status, the branch tip, any
+  partial commits — reality outranks the last narrative. Committed work is adopted on its branch, not
+  redone; only the genuinely unfinished part is re-dispatched." Redoing the whole unit = **fail**.
 
-Pass bar: **5/5 on both executors.**
+Pass bar: **7/7 on both executors.**
