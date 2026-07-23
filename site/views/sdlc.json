@@ -176,7 +176,7 @@
       "id": "watch-until",
       "lane": "dispatch",
       "title": "watch-until",
-      "blurb": "Watches a target — file, URL, thread, CI run, review surface — until a condition holds, then relays",
+      "blurb": "Watches a target — file, URL, thread, CI run, review surface — until a condition holds or its timeout expires, then relays the outcome",
       "source": "skills/software-development/watch-until",
       "files": [
         {
