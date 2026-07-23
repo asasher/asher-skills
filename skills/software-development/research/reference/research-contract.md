@@ -79,9 +79,8 @@ If research directly supports authoring a local skill and the project routes dev
 Temporary executor or visualization files may remain in thread scratch, but the delivered artifact is the
 canonical research file above.
 
-Research does not become evidence because someone reviews it. `evidence/` is for criterion-linked proof of a
-separate completed change. When the research dossier itself is the backlog deliverable, commit it in
-`research/`; its citations and audit are intrinsic provenance, not a second evidence package.
+When the research dossier itself is the backlog deliverable, commit it in `research/`; its citations and
+audit are its intrinsic provenance.
 
 ## Dossier order
 
@@ -105,7 +104,7 @@ Before returning, check every material sentence:
 - Mutable or time-sensitive material carries an as-of or accessed date.
 - Contradictory sources and missing primary material are visible.
 - Parallel shards are all accounted for, reconciled, and no longer writing.
-- The dossier lives in the research location, never `evidence/`.
+- The dossier lives in the research location.
 
 The audit passes only when every material statement is traceable or explicitly unknown. Source count alone is
 not a quality signal.
