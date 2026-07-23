@@ -151,9 +151,9 @@ module is unreadable?
   "never automatically"). Cite it. Writing the global base without asking = fail.
 - **P12 (ac-9):** `reconcile` is an **LLM audit**: read the installed base + overrides, compare to the
   skill's definition, and **report the drift/conflict in prose** — here, both the unreachable-model staleness
-  and the override's full-table re-copy. It relies on **no `vNN` version stamp** (a deliberate departure from
-  backlog's stamp approach; "Staffing introduces no such stamp or marker"). A grep for `vNN`/version markers
-  finds none. Answering "compare version numbers" or proposing to add a stamp = fail.
+  and the override's full-table re-copy. "That reading is the judgment mechanism"
+  (install-and-reconcile.md § Reconciliation is a prose audit). Answering "compare version numbers" or
+  proposing to add a stamp = fail.
 - **P13 (ac-10):** Well-formed: `interface.display_name` "Staffing", a one-line `short_description` matching
   the SKILL.md spirit, a concrete `default_prompt`, and `policy.allow_implicit_invocation: true`. `true`
   matches `metadata.invocation: model`: a thread may reach for staffing when it encounters a routing choice,

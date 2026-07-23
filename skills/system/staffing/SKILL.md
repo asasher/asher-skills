@@ -24,7 +24,7 @@ and successors. It selects a route; it does not run the task or ship a fixed mac
   loss, [roles-and-fallback](reference/roles-and-fallback.md).
 - **reconcile** — load [install-and-reconcile](reference/install-and-reconcile.md) and the active provider's
   [harness mechanics](reference/harness.md); compare installed rules with the current machine and report
-  drift/conflict without version stamps.
+  drift/conflict in prose.
 
 No argument runs setup.
 

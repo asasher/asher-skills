@@ -39,11 +39,11 @@ modules fail closed: report the gap and do not dispatch. Do not rewrite unchange
 successful reconcile leaves durable module, global, delta, and lock bytes unchanged. Migration is proposed,
 never automatic; retain recovery bytes until the new policy passes its probes.
 
-## Reconciliation has no version stamp
+## Reconciliation is a prose audit
 
 Read the installed module, pointer, project delta, and current machine audit; report drift or conflict in
 prose. Examples: an unreachable row, a stale directional route, an override that recopies the base, or a pin
-conflict. Do not add a `vNN`, template version, or hash as the judgment mechanism. Provider-package effective
+conflict. That reading is the judgment mechanism. Provider-package effective
 hashes are install provenance, not roster-policy truth.
 
 ## External-worker contract

@@ -32,7 +32,7 @@ workflow skill, an ad-hoc session, and any harness — not just one dev loop.
   global-with-overrides: a harness-coupled global base filtered to the routes that harness can reach, plus
   sparse project overrides in `docs/agents/` that carry
   only deltas. A resolver reads base, then applies deltas.
-- **Reconcile by LLM audit, no version stamps** — the shared posture across this repo's operator skills.
+- **Reconcile by LLM audit** — the shared posture across this repo's operator skills.
 - **Global writes are consent-gated** via a scope-decision flow.
 
 ## Layout
