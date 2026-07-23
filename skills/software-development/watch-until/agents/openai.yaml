@@ -1,6 +1,6 @@
 interface:
   display_name: "Watch Until"
-  short_description: "Watch a target — file, URL, tracker thread, CI run, review surface — until a condition holds, then relay what changed"
+  short_description: "Watch a target — file, URL, tracker thread, CI run, review surface — until a condition holds or its timeout expires, then relay the outcome"
   default_prompt: "Use $watch-until to wait on this condition and relay the trigger."
 
 policy:

@@ -3,7 +3,7 @@
 Converges a change request to LGTM with two concurrent subagents that share nothing but the change
 request itself: a reviewer (code-review per pass, findings as anchored comments, re-review on new
 commits, LGTM when a pass is clean and priors are addressed) and a fixer (fix or argue each finding,
-reply per comment, stop on LGTM) — both bounded by a deadline and an iteration cap.
+reply per comment, stop on LGTM) — both bounded by a timeout and an iteration cap.
 
 ## When to use
 

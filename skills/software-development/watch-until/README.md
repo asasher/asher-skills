@@ -1,8 +1,9 @@
 # Watch Until
 
 Waits on external state for cheap: a target, a condition the watcher can decide (mechanical or a
-judgment), a relay instruction, and a deadline, satisfied by the cheapest mechanism available —
+judgment), a relay instruction, and a timeout, satisfied by the cheapest mechanism available —
 harness-tracked wake first, native watch facilities second, a watcher subagent third, self-polling last.
+A watch ends with one of two reports: triggered, or timed out with the condition unmet.
 
 ## When to use
 

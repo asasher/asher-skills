@@ -20,7 +20,7 @@ judgment? Cite.
 **P4 (cadence).** The CI run is external (not tracked) and `to-subagent` is absent. Describe the
 polling. Cite.
 
-**P5 (trigger and deadline).** LGTM lands — what do you relay, and what happens if the deadline had
+**P5 (trigger and timeout).** LGTM lands — what do you relay, and what happens if the timeout had
 expired first? Cite.
 
 ## Answer key
@@ -36,7 +36,8 @@ expired first? Cite.
   deserves one check near minute eight, not eight one-minute checks." Minute-by-minute polling =
   **fail**.
 - **P5:** "Quote the triggering observation" and stop — "the watch observes and relays, it never acts on
-  the content." On expiry: "report the last observed state; no watch runs forever." Acting on the
-  content, or watching past the deadline, = **fail**.
+  the content." On expiry: "the watch ends and reports **timed out** to the caller — the condition
+  unmet, plus the last observed state." Acting on the content, relaying a timeout as a trigger, or
+  watching past the timeout, = **fail**.
 
 Pass bar: **5/5 on both executors.**

@@ -1,7 +1,7 @@
 ---
 name: watch-until
-description: Watch a target — file, URL, tracker thread, CI run, review surface — until a condition holds, then relay what changed. Use to wait on external state without burning the session's attention on polling.
-argument-hint: "<target, condition, and what to relay on trigger>"
+description: Watch a target — file, URL, tracker thread, CI run, review surface — until a condition holds or its timeout expires, then relay the outcome. Use to wait on external state without burning the session's attention on polling.
+argument-hint: "<target, condition, timeout, and what to relay on trigger>"
 user-invocable: true
 metadata:
   invocation: model
@@ -12,7 +12,7 @@ metadata:
 
 # Watch Until
 
-Watch a target until a condition holds, relay what changed, stop.
+Watch a target until a condition holds or the timeout expires, relay the outcome, stop.
 
 ## The spec of a watch
 
@@ -23,7 +23,9 @@ Watch a target until a condition holds, relay what changed, stop.
   decide it from what it observes.
 - **Relay** — what to report on trigger. Quote the triggering observation; the watch observes and relays,
   it never acts on the content.
-- **Deadline** — every watch has one. On expiry, report the last observed state; no watch runs forever.
+- **Timeout** — every watch takes one. On expiry the watch ends and reports **timed out** to the
+  caller — the condition unmet, plus the last observed state — and the caller decides what happens
+  next. No watch runs forever.
 
 ## How to watch — cheapest that works
 
