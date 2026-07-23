@@ -76,6 +76,12 @@ then watches the spec'd tickets for AFK comments until the user blesses readines
 spec'd ticket (`to-tickets` superseding it with born-shaped children) happens only on the user's
 explicit approval. `backlog groom` dispatches shaping work into these threads.
 
+**Repo context files**:
+The repo-owned strategic context a shaping session reads at intake: `CONTEXT.md` (the domain
+glossary), plus `PRODUCT.md` and `DESIGN.md` where they exist. They carry domain and direction;
+playbooks under `docs/agents/` carry operational bindings — a shaping decision consults the former,
+a build step the latter.
+
 **Subject / batch**:
 The two grooming units. A **subject** is the decision unit: one ticket, or tickets whose decisions
 interlock — it gets one shaping engine, never two. A **batch** is the attention unit: related
