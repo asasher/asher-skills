@@ -60,17 +60,11 @@ the parent, which verifies the requested effect. If native spawn cannot accept t
 report the assigned one, keep agent-tree observability but record the staffing gap and do not claim
 floor/cost compliance.
 
-Two capture duties make wrapper loss recoverable. Where the external CLI offers a resumable session
-identifier (a pre-assigned session id, or an output mode that reports one), the wrapper captures it and
-returns it with the result — resuming that session by id is the sanctioned continuation after a wrapper
-dies, keeping one external context across passes. And the wrapper tees the child's raw output to a file
-as it streams, so the result survives even when the wrapper's own return path is lost. Any resume or
-adoption starts with a state audit: the working tree, branch tips, and live processes as they actually
-are, before trusting what the prior narrative claimed.
-
-The prompt handed to an external-harness worker speaks in goals and file paths — the vocabulary of the
-work. The parent's own harness idioms (its patch-tool names, its config paths) mean nothing on the other
-side, so they stay out of the brief.
+Where the CLI offers a resumable session id, the wrapper captures and returns it — resume-by-id is the
+continuation after wrapper loss — and tees raw output to a file as it streams, so the result survives a
+lost return path. A resume or adoption first audits the tree, branch tips, and live processes; reality
+outranks the prior narrative. Briefs to an external-harness worker speak in goals and file paths — the
+parent harness's tool idioms stay out.
 
 Reachability state is per direction: **effect-verified**, **intentionally disabled**, or **unavailable** with
 a captured failure class and successor. One failed direction never disables the healthy direction.
