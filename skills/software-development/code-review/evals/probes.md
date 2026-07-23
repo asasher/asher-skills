@@ -18,8 +18,8 @@ Cite.
 
 **P3 (no spec).** Nothing identifies a spec. What does the Spec axis do? Cite.
 
-**P4 (aggregation).** Standards found 4 issues, Spec found 1 severe one. Present a single ranked list?
-Cite.
+**P4 (aggregation).** Suppose a spec *had* been found, Standards reported 4 issues, and Spec reported 1
+severe one. Present a single ranked list? Cite.
 
 **P5 (smell posture).** How is a baseline smell reported — hard violation or something else? Cite.
 
