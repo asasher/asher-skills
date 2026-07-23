@@ -18,9 +18,12 @@ work stops being a verifier, and the fix belongs to whoever owns the changes.
 
 ## Establish the claims
 
-Read what the change says it does — the ticket, the commit messages, the diff itself. Each claim is a
-thing that must be demonstrably true, including the implicit ones: nothing that worked before broke, and
-the change behaves at its edges, not just its happy path.
+Read what the change says it does — the ticket, the commit messages, the diff itself. When the ticket
+carries acceptance criteria (`AC-1`, `AC-2`, …), each criterion is a claim and the report keys its
+verdict to the id. Each claim is a thing that must be demonstrably true, including the implicit ones:
+nothing that worked before broke, and the change behaves at its edges, not just its happy path. A
+change that performs a destructive data operation — a migration, a cast, a backfill — implicitly
+claims no existing data is lost or mangled; that claim needs evidence like any other.
 
 ## Read the environment contract
 
@@ -28,6 +31,10 @@ the change behaves at its edges, not just its happy path.
 feature, authenticate, and which driver exercises each surface.
 Honor it — a verifier that improvises around the recorded contract produces evidence nobody can
 reproduce. Absent the playbook, say so and verify what the repo's own commands reach.
+
+The contract also bounds what state is yours: create and seed what a check needs per the playbook's
+fixture rules, and point destructive verbs (reset, drop, wipe) only at resources the playbook marks
+per-ticket-disposable — a shared store is never yours to reset.
 
 ## Pick the proof that could fail
 
@@ -46,12 +53,17 @@ A check that cannot fail is not proof. "It compiles" verifies nothing about beha
 
 ## Run and capture
 
-Run each check and capture the exact command and its output. A check you couldn't run (missing
-environment, no browser, absent fixture) is reported as *not verified*, with the reason — never silently
-skipped, never guessed at.
+Run each check and capture the exact command and its output. A check whose output is a visual artifact —
+a screenshot, an export, a rendered document — is judged by **looking at it**: the content the claim
+names, legible, at sane dimensions, without clipping. A file existing at nonzero bytes proves nothing.
+A check you couldn't run (missing environment, no browser, absent fixture) is reported as *not
+verified*, with the reason — never silently skipped, never guessed at.
 
 ## Report
 
-Per claim: what was checked, the command, pass or fail, and for failures the evidence quoted — the
-failing output, the wrong screen, the broken state. End with the one-line verdict: which claims stand,
-which fell, which went unverified.
+Per claim — keyed to its criterion id where the ticket has them: what was checked, the command, pass or
+fail, and for failures the evidence quoted — the failing output, the wrong screen, the broken state. A
+failure also present before the change, proven by the same check against the base commit, is reported
+as **pre-existing** — a distinct verdict from a failure the change caused. Log any deviation from the
+recorded environment contract alongside the checks it touched. End with the one-line verdict: which
+claims stand, which fell, which went unverified.

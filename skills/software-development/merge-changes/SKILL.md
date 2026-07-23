@@ -27,8 +27,10 @@ stop.
 
 1. **Resolve scope.** Enumerate the exact PRs/changes in the request. For each, verify it is still open and
    review-ready: review converged (approval/`LGTM` per the project's convention), no unresolved blocking
-   comments, branch not superseded. Anything failing this is reported and dropped from scope — never merged
-   "while we're here".
+   comments, branch not superseded — and the approval covers the head being merged: where the LGTM names
+   the SHA it reviewed, compare it to the current head, and commits landed since send the change back
+   through review rather than into the merge. Anything failing this is reported and dropped from scope —
+   never merged "while we're here".
 2. **Order.** Determine dependency and stacking relationships (stacked branches, `Depends on` links,
    overlapping surfaces) and compute the merge order: bases before dependents.
 3. **Gate on CI, per merge, at merge time.** Immediately before each merge, re-query the required checks on

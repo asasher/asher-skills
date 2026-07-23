@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [code-review, to-subagent, watch-until]
-  optional: []
+  optional: [diagnosing-bugs]
 ---
 
 # Adversarial Review
@@ -35,7 +35,10 @@ When `LGTM` lands, stop.
 
 ## Bounds
 
-Both sides carry the same timeout — named by whoever dispatched the review — and an iteration cap
-(default: three full review passes). On either
-bound, stop and report the open findings as unresolved — a stuck convergence is a reported outcome, not
-an endless loop.
+Both sides carry the same timeout — named by whoever dispatched the review, defaulting to one hour —
+and an iteration cap (default: three full review passes). On either bound, stop and report the open
+findings as unresolved — a stuck convergence is a reported outcome, not an endless loop.
+
+The session running this skill owns the loop's health: a side that goes quiet past its timeout is
+respawned from the change request's persisted state (conduct § Shared rules), picking up at the next
+expected action.

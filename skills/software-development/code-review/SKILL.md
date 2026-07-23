@@ -68,6 +68,10 @@ merge or rerank findings across axes. End with a one-line summary: total finding
 issue within each. Don't pick a single winner across axes — that reranking is what the separation
 exists to prevent.
 
+One collision is surfaced instead of reported twice: a spec requirement that contradicts a documented
+repo standard. Neither axis outranks the other there — present it as a single open question ("the spec
+asks X; the repo's standard says Y") for whoever owns the review to rule on.
+
 ## Why two axes
 
 Code that follows every standard but implements the wrong thing → Standards pass, Spec fail. Code that

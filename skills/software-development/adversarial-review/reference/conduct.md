@@ -24,6 +24,10 @@ what make that enough.
 - **The LGTM bar:** a full pass yields no new findings **and** every prior finding is fixed or answered.
   Nothing else lowers the bar — not effort spent, not iteration fatigue, not the cap approaching. A cap
   reached with findings open is reported as unresolved, never converted to approval.
+- **The verdict names its head:** LGTM states the SHA the pass reviewed — the approval covers that head
+  and nothing after it. The platform's required checks are part of the pass: their status at verdict
+  time is stated, and a failing required check holds the LGTM back; a pending one is named so the
+  merge gate knows what it's waiting on.
 - **Product-semantics ruling:** when a finding reveals a real product question — what the behavior
   *should* be, not whether the code does it — stop without resolving it and surface the question plus
   evidence on the change request for a human ruling. Only an explicit ruling goes onward. Neither role
@@ -33,5 +37,8 @@ what make that enough.
 
 - Watches for reviewer comments; each iteration addresses every actionable finding: a fix commit, or an
   explicit non-fix reply with the reason it's wrong. Disagreement is addressed; silence is not.
+- A behavior finding is reproduced as a failing check before the fix commit — red first, on the surface
+  where the reviewer saw it. A finding reproducible only at runtime routes through the
+  `diagnosing-bugs` skill rather than a patch argued from the diff.
 - Push, reply to each comment with what was done, prompt re-review, resume watching.
 - Done when `LGTM` lands.

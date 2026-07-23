@@ -18,14 +18,20 @@ having watched the work happen: the package must let them decide from the eviden
 ## What the package carries
 
 - **What changed and why** — one paragraph, in the ticket's terms.
-- **The proof per claim** — each thing the change claims to do, with the check that demonstrated it: the
-  exact command and its trimmed output, or for UI work the artifacts of whatever drives that surface —
-  a browser driver's trace, screenshots, recording; an emulator or app driver's equivalent for mobile —
-  from the scripted check, captured per the environment playbook
-  (`docs/agents/environment.md`) when the repo has one. Proof is reproducible: a reader must be able to
-  run the same command and see the same result.
+- **The proof per claim** — each thing the change claims to do, keyed to the ticket's acceptance-criterion
+  ids where they exist, with the check that demonstrated it: the exact command and its trimmed output, or
+  for UI work the artifacts of whatever drives that surface — a browser driver's trace, screenshots,
+  recording; an emulator or app driver's equivalent for mobile — from the scripted check, captured per
+  the environment playbook (`docs/agents/environment.md`) when the repo has one. A visual artifact goes
+  into the package **looked at**: it shows the content the claim names, legibly and without clipping —
+  existence is not proof. A destructive data operation (migration, cast, backfill) carries its
+  data-safety argument and the evidence behind it. Proof is reproducible: a reader must be able to run
+  the same command and see the same result.
 - **What was not verified, and why** — named plainly. An honest gap outranks a padded package; hiding an
   unverified claim is the one unforgivable move here.
+
+A defect discovered while assembling the proof stops the package: report it to whoever owns the
+changes — the package resumes after the fix lands and re-enters review.
 
 ## Where it goes
 
