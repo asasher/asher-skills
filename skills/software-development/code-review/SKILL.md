@@ -41,7 +41,8 @@ skips and the report says "no spec available".
 
 Anything in the repo documenting how code should be written (`CODING_STANDARDS.md`, `CONTRIBUTING.md`,
 lint configs' prose). On top of whatever the repo documents, the Standards axis always carries the
-**smell baseline** in [smells](reference/smells.md). Two rules bind it:
+**smell baseline** in [smells](reference/smells.md) and the **structural bar** in
+[structure](reference/structure.md). Two rules bind both:
 
 - **The repo overrides.** A documented repo standard always wins; where it endorses something the
   baseline would flag, suppress the smell.
@@ -51,9 +52,10 @@ lint configs' prose). On top of whatever the repo documents, the Standards axis 
 ## 4. Dispatch both axes
 
 **Standards brief** — the diff command and commit list; the standards files found; the smell baseline
-pasted in full (the subagent has no other access to it); report every documented-standard violation
-(cite the standard) and every baseline smell (name it, quote the hunk), hard violations distinguished
-from judgement calls. Under 400 words.
+and the structural bar pasted in full (the subagent has no other access to them); report every
+documented-standard violation (cite the standard), every baseline smell (name it, quote the hunk), and
+every structural finding (name the blocker, quote the hunk, sketch the simpler reframing), hard
+violations distinguished from judgement calls. Under 400 words.
 
 **Spec brief** — the diff command and commit list; the spec's path or fetched content; report (a)
 requirements missing or partial, (b) behavior nobody asked for (scope creep), (c) requirements

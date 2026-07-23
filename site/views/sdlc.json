@@ -701,6 +701,11 @@
           "path": "reference/smells.md"
         },
         {
+          "group": "Reference",
+          "label": "structure",
+          "path": "reference/structure.md"
+        },
+        {
           "group": "Provenance",
           "label": "README",
           "path": "README.md"

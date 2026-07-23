@@ -1,8 +1,8 @@
 # Code Review — situated dry-run probes
 
 Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **`SKILL.md` +
-`reference/smells.md` in context**, exact-sentence citation per answer. Ambiguity flagged with a
-citation is valid. Key before runs.
+`reference/smells.md` + `reference/structure.md` in context**, exact-sentence citation per answer.
+Ambiguity flagged with a citation is valid. Key before runs.
 
 ## Scenario
 
@@ -25,6 +25,9 @@ Cite.
 
 **P6 (degrade).** `to-subagent` is not installed. How do the axes run? Cite.
 
+**P7 (structural ambition).** The diff adds a fourth boolean flag to an already busy function; each
+flag works correctly and no documented standard forbids flags. Clean Standards pass? Cite.
+
 ## Answer key
 
 - **P1:** "Confirm the ref resolves (`git rev-parse`) and the diff is non-empty before dispatching
@@ -40,5 +43,9 @@ Cite.
   like any standard here, skip anything tooling already enforces." Hard-violation framing = **fail**.
 - **P6:** "absent it, run them yourself, Standards first, in one pass each." Refusing to review =
   **fail**.
+- **P7:** No — a presumptive blocker: "Ad-hoc conditionals, one-off flags, or scattered special cases
+  bolted into unrelated flows — a design problem, not a stylistic nit," and "Correct behavior alone is
+  not a clean Standards pass." The finding sketches the simpler reframing. Passing it because it works
+  and no documented standard forbids it = **fail**.
 
-Pass bar: **6/6 on both executors.**
+Pass bar: **7/7 on both executors.**
