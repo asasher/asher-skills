@@ -24,8 +24,9 @@ evidence? Cite.
 
 ## Answer key
 
-- **P1:** "The verifier reports; **this session fixes**. Re-dispatch verification after fixing; loop
-  until the report is clean." The verifier fixing, or fixes going unre-verified, = **fail**.
+- **P1:** "The verifier reports; **this session fixes**: reproduce the finding as a failing check
+  first, on the same surface the verifier saw it fail"; then "Re-dispatch verification after fixing;
+  loop until the report is clean." The verifier fixing, or fixes going unre-verified, = **fail**.
 - **P2:** "fresh eyes, so the builder's assumptions don't verify themselves." Verifying in-session =
   **fail**.
 - **P3:** "the ticket's closing reference (the platform's `Closes #N` form) so merging closes the

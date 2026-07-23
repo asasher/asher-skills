@@ -57,7 +57,9 @@ Ask: "What's the public interface, and which seams should we test?"
 ## Rules of the loop
 
 - **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate
-  future tests or add speculative features.
+  future tests or add speculative features. When the test is written after code already exists — a fix,
+  a regression proof — earn the red by reversion: stash the change and watch the test fail against the
+  pre-change code, then restore and watch it pass.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
 - **Refactoring is not part of the loop.** The red → green cycle builds behavior; restructuring what
   already passes is separate work, done deliberately or not at all.

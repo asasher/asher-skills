@@ -29,7 +29,8 @@ cadence. What may you change? Cite.
   tidy-up = **fail**.
 - **P2:** Seams get proposed and recorded first — "the ticket or spec's named seams, or seams proposed
   and recorded before the first test." Testing at unrecorded seams = **fail**.
-- **P3:** "Run typechecking and the touched test files regularly; run the full suite once at the end."
+- **P3:** "Run typechecking and the touched test files regularly; run the full suite once at the end —
+  and let each run finish before starting another in the same tree."
   Skipping the final full suite = **fail**.
 - **P4:** Batch size only — "what it settles is settled; what it delegates is yours to decide and worth
   a line in the commit message." Changing cadence = **fail**.
