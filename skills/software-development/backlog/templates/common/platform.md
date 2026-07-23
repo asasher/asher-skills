@@ -7,7 +7,7 @@
 - Binding: _<github | local | gitlab | custom>_.
 - Verbs — record the verified command for each:
   - List open issues with their labels: _<e.g. `gh issue list --state open --json number,title,labels`; local: read the frontmatter of `.backlog/issues/*.md`>_.
-  - Read one issue — title, body, comments, labels: _<e.g. `gh issue view <n> --comments`; local: read the issue file>_.
+  - Read one issue — title, body, comments, labels: _<e.g. `gh issue view <n> --json title,body,comments,labels`; local: read the issue file>_.
   - Comment: _<e.g. `gh issue comment <n> --body ...`; local: append a `## <date> — <author>` section>_.
   - Set / clear a role label: _<e.g. `gh issue edit <n> --add-label/--remove-label`; local: edit the `state:`/`work-type:` frontmatter>_.
   - Create an issue: _<e.g. `gh issue create`; local: new file per the shape below — created only by a serialized main-branch writer>_.
@@ -45,6 +45,7 @@
 - Create an issue coordinator with a prompt, working directory, and the route `run` already selected: _<record each effect-verified native or sibling-harness verb. Every sibling-harness CLI runs inside a named watched native wrapper staffed by the cheapest native model allowed by the floor; the label names the external model and task. The wrapper only supervises the bounded process and relays raw output/lifecycle status; the parent owns prompt, judgment, and effect verification. Examples: native agent tool with `isolation: worktree`; Claude→Codex bounded `codex exec --cd <worktree> ...`; Codex→Claude bounded `claude -p` with closed stdin and **no `--bare`**>_.
 - Wrapper staffing evidence: _<the native spawn request or returned child metadata that proves the wrapper model. If the harness can neither select nor report it, record floor/cost compliance as unproven while retaining the observable wrapper>_.
 - Directional reachability and fallback: _<record each direction independently plus its successor; a failure removes only that route and may leave an asymmetric graph>_.
+- Route trust: a routine dispatch trusts the recorded effect-verified verb — verification happens at setup, at re-verification, and when a route misbehaves, so dispatch needs no fresh probe session. A route that fails or hangs in use is drift: record the failure class, take the successor, re-verify that direction. Verification probe artifacts are cleaned up as part of the check.
 - Can a spawned thread read this skill's bundled references from disk? _<yes at <path>; if no, the dispatcher pastes the reference into the prompt>_.
 - Durable monitor / wakeup for review round-trips: _<the harness mechanism `adversarial-review` may use, or "polling only">_.
 

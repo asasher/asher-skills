@@ -24,7 +24,16 @@ Absent the roster, run the subagent on this session's own model and effort; neve
 
 Self-contained — the subagent sees nothing of this conversation. State the goal, the inputs by path or
 id, what done looks like, and that its final message is the deliverable itself: the data asked for, not a
-status note. When the result must be structured, state the exact shape.
+status note. When the result must be structured, state the exact shape. Before sending, check the brief
+survived assembly — it ends where you meant it to end; and a subagent handed an evidently truncated or
+garbled brief halts and reports it rather than working from the fragment.
+
+## Permission envelope
+
+Name the child's permission mode with the dispatch, matched to the role's contract: an advisory or
+checker role gets a read-only mode where the harness has one, and a role whose contract requires
+commands the envelope would block gets the envelope that allows them — a brief demanding what the
+sandbox forbids fails as a staffing error, loudly, at dispatch.
 
 ## Isolation
 
@@ -44,3 +53,9 @@ on the cheapest model the roster allows, at low effort. With neither, poll at th
 
 Report the result in this session's own words at the altitude the next decision needs — never a pasted
 transcript. A subagent that died or came back empty is a reported outcome, not a silent gap.
+
+## Recovery
+
+Before resuming or replacing a dead child, audit what actually happened: the worktree's status, the
+branch tip, any partial commits — reality outranks the last narrative. Committed work is adopted on its
+branch, not redone; only the genuinely unfinished part is re-dispatched.

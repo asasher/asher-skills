@@ -12,7 +12,8 @@ authorization.
 ## Dependency surface
 
 - **Bundled:** `SKILL.md` only.
-- **Project:** platform verbs in `docs/agents/platform.md`.
+- **Project:** platform verbs in `docs/agents/platform.md`; provisioning and stack facts in
+  `docs/agents/environment.md`.
 - **Siblings (required, by name):** `implement`, `verify-your-work`, `prove-your-work`,
   `adversarial-review`, `to-subagent`.
 

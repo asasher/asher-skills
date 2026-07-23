@@ -4,6 +4,9 @@
 > builds, runs, or proves the app: build threads, `verify-your-work`, `prove-your-work`,
 > `merge-changes` (cleanup), and `backlog build` (isolation and parallelism verdicts). Tailor every
 > section to this codebase; `setup` fills the isolation, seed, and parallelism sections from its audit.
+> A session that earns a fact this playbook should have carried — a start recipe, an auth path, an
+> admin bootstrap, a deploy constraint — writes it back into the matching section as part of its change,
+> so the next session reads it instead of re-deriving it.
 
 ## Branching & deploys
 
@@ -13,12 +16,20 @@
 - Branch naming: _<e.g. `<ticket-number>-<slug>`>_.
 - What a change request produces: _<e.g. a preview deployment per PR, or nothing>_.
 - What a merge produces: _<e.g. merge to staging → staging deployment; promotion path to production>_.
+- Deploy-target constraints: _<the hosted-runtime facts otherwise learned by a failed deploy — runtime
+  and version, packaging semantics, bundle/asset limits; accrete each as discovered>_.
+- Credential preflight: _<each deploy/CI credential a gate depends on, and the cheap read that proves
+  it is live — run before work that will hit that gate>_.
 
 ## Running locally
 
 - Start the full dev stack: _<command>_.
 - Services that come up: _<e.g. web, API, Postgres, redis, object store>_.
 - Ports / URLs / hostnames: _<add yours; note if a shared proxy with `*.localhost` hostnames is used>_.
+- The commands above serve non-interactive agents: each start command runs detached with output to a
+  log, stop/restart is recorded, and teardown is audited (ports free, processes gone) — a TUI-only
+  launcher gets its detached wrapper recorded here. Setup verifies this headlessly, not just in a
+  terminal.
 
 ## Worktree isolation
 
@@ -111,3 +122,10 @@
 - If serialized, why: _<either "user preference — sequential by choice", or name the un-isolated rows
   that force it>_.
 - Serialized exception lane: _<ticket classes that must serialize even when parallel-safe; or "none">_.
+- **Lane mechanics** — under `serialize-verification`, parallel builds share the singleton through a
+  lock: _<path, e.g. `.backlog-lane.lock` beside the primary checkout>_. Acquire by atomic directory
+  create, writing ticket id and timestamp inside; hold only while the singleton is in use; release by
+  removing the lock **after cleanup proof** — the singleton's ports free, env files restored, processes
+  gone. Contenders wait on the lock, at the cadence the singleton actually turns over. A lock older
+  than _<stale horizon, e.g. 30 min>_ with no activity on its holder's branch may be broken — the
+  taker notes the takeover on the holder's ticket.

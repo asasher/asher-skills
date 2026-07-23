@@ -32,7 +32,7 @@ the `merge-changes` skill.
   packs; `software/` is the shipped default).
 - **Project playbooks:** `docs/agents/platform.md` (platform bindings, verbs verified live),
   `backlog-policy.md` (label roles, dependency edges, readiness), `environment.md` (run/seed/check),
-  `evidence.md` (the evidence bar) — owned by the repo once written; `setup` reconciles, never blindly
-  overwrites.
+  `codebase.md` (how the code is written and checked), `evidence.md` (the evidence bar) — owned by the
+  repo once written; `setup` reconciles, never blindly overwrites.
 - **Siblings (required, by name):** `to-thread` (grooming threads), `to-subagent` (build dispatch),
   `shape` (what a grooming thread runs), `build` (what a build subagent runs).

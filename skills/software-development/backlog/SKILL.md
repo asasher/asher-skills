@@ -45,21 +45,32 @@ ready — that endgame belongs to the `shape` skill, not this dispatcher.
 
 ## build
 
-Sweep for tickets carrying the ready role whose dependency edges are clear, or take the ids given. For
-each: mark it building per the label roles — a dispatched ticket must never dispatch twice — then
-dispatch the `build` skill on it via the `to-subagent` skill, in its own worktree. Isolation and
-concurrency follow the environment playbook's verdicts (`docs/agents/environment.md` § Worktree
-isolation, § Parallelism): a repo that can't isolate builds one ticket at a time in the main checkout.
+Sweep for tickets carrying the ready role whose dependency edges are clear, or take the ids given.
+Preflight once per run: the platform verbs and credentials the builds will lean on answer a cheap live
+read — a dead one is drift, fixed by re-running `backlog setup` before any dispatch spends a build
+discovering it. For each ticket: mark it building per the label roles — a dispatched ticket must never
+dispatch twice, and the claim comment carries this runner's identity per the policy's § Building
+hygiene — then dispatch the `build` skill on it via the `to-subagent` skill, in its own worktree.
+Isolation and concurrency follow the environment playbook's verdicts (`docs/agents/environment.md`
+§ Worktree isolation, § Parallelism): a repo that can't isolate builds one ticket at a time in the main
+checkout. A spawn the harness refuses queues its ticket for the next freed slot — the claim stands, the
+spawn is not busy-retried.
 
 This session babysits the fleet: each build's completion wakes it, and it relays the outcome — the
-review-ready change request, or the failure, with a died-silent build reported, never dropped. Merging
-the resulting change requests waits for explicit authorization.
+review-ready change request, or the failure, with a died-silent build reported, never dropped. Each
+dispatch also gets a deadline (the policy's quiet horizon, or tighter): a build past it with no
+completion is checked — worktree, branch tip, process — and respawned or reported, so a wedged build
+surfaces instead of sitting silent. **The tracker is the run ledger**: the claim comment and the
+outcome comment are its events, so a dispatcher that dies or compacts mid-fleet reconstructs from
+there — on resume, reconcile the claims this runner owns against live worktrees and branch tips before
+dispatching anything new. Merging the resulting change requests waits for explicit authorization.
 
 ## setup
 
 Install or reconcile the project playbooks from `templates/`: `docs/agents/platform.md` (platform
 bindings, with each verb verified live), `backlog-policy.md` (label roles, dependency edges, readiness
-decision), `environment.md` (run/seed/check), `evidence.md` (the evidence bar),
+decision), `environment.md` (run/seed/check), `codebase.md` (how the code is written and checked —
+seeded from the repo's own docs, accreting what sessions learn), `evidence.md` (the evidence bar),
 `change-description.md` (the change-request body outline). Reconcile with what
 exists — a repo-owned playbook is edited, never blindly overwritten. Verify the label roles exist in the
 tracker; create missing ones with the user's consent.

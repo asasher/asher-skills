@@ -11,6 +11,8 @@ Typecheck and touched tests regularly, full suite once at the end, commit to the
 ## Dependency surface
 
 - **Bundled:** `SKILL.md` only.
+- **Project:** `docs/agents/codebase.md` when present — conventions, check commands, generated-artifact
+  recipes.
 - **Siblings (required, by name):** `diagnosing-bugs`, `tdd`.
 
 ## Provenance
