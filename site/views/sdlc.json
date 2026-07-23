@@ -449,16 +449,6 @@
           "path": "reference/template-guide.md"
         },
         {
-          "group": "Templates",
-          "label": "ticket",
-          "path": "templates/ticket.md"
-        },
-        {
-          "group": "Templates",
-          "label": "tickets",
-          "path": "templates/tickets.md"
-        },
-        {
           "group": "Provenance",
           "label": "README",
           "path": "README.md"

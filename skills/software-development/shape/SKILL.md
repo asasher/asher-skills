@@ -19,8 +19,9 @@ ADRs, the spec itself — and a resumed session reads those artifacts, never cha
 ## Intake
 
 Read each subject: the ticket thread and linked artifacts when it's a ticket (tickets whose decisions
-interlock are one subject, read together), the handed material when it's an idea, plus the project
-instruction file's `## Context documents` index and the documents whose clauses match. Seed each
+interlock are one subject, read together), the handed material when it's an idea, plus the **repo
+context files** — `CONTEXT.md`, and `PRODUCT.md`/`DESIGN.md` where they exist — and the project
+instruction file's `## Context documents` index for the documents whose clauses match. Seed each
 subject's decision tree with what is settled and what is open.
 
 ## One engine per subject
@@ -72,8 +73,8 @@ timed out, surface the open state and stop.
 
 ## Resume
 
-A fresh session on the same subject reads the record — ticket thread, `CONTEXT.md`, ADRs — recomputes
-the frontier from what is still open, and re-asks nothing the record answers.
+A fresh session on the same subject reads the record — ticket thread, the repo context files, ADRs —
+recomputes the frontier from what is still open, and re-asks nothing the record answers.
 
 ## Dependency surface
 
@@ -85,6 +86,7 @@ the frontier from what is still open, and re-asks nothing the record answers.
   a time inline), `to-tickets` (the approved split), `watch-until` (the comment watch — absent it,
   say comments need an explicit ping). Absent one, park the affected work as open and say so; never
   silently skip.
-- **Project surface:** the instruction file's `## Context documents` index; the tracker binding in
+- **Project surface:** the repo context files (`CONTEXT.md`, plus `PRODUCT.md`/`DESIGN.md` where they
+  exist); the instruction file's `## Context documents` index; the tracker binding in
   `docs/agents/platform.md` when the subject is a ticket. Absent a tracker, idea shaping still works —
   the record lives in `CONTEXT.md`, ADRs, and the playback.

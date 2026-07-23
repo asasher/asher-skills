@@ -41,8 +41,7 @@ Not for writing the direction itself — that's `to-spec`. To-tickets consumes a
 `SKILL.md` is the command surface (`to-tickets [<spec'd ticket id or spec path>]`) and points into `reference/`:
 `slicing.md` (the split method — inputs, vertical slices, the wide-refactor exception, the quiz, dependency
 ordering and backlog's edge convention, the readiness default, no-stale-content, superseding the parent) and
-`template-guide.md` (what each ticket field holds). `templates/ticket.md` is one ticket; `templates/tickets.md`
-is the whole ordered split drafted before the quiz. `agents/openai.yaml` is the Codex manifest.
+`template-guide.md` (what each ticket carries and the split draft). `agents/openai.yaml` is the Codex manifest.
 `evals/probes.md` is the pre-deployment probe eval.
 
 Self-contained at the file level; composes by name. **Inputs** — consumes `to-spec`'s output, or a legacy plan document, or a

@@ -60,8 +60,9 @@ split, present it and **quiz the user** on the two things only they can settle:
   wide-refactor sequencing right?
 
 **Iterate until approved.** This quiz *is* the human confirmation for the whole operation — **nothing publishes
-before it is approved.** Draft the split into [templates/tickets.md](../templates/tickets.md) so the user has one
-ordered artifact to react to, revise it against their feedback, and re-present until they sign off.
+before it is approved.** Draft the whole split as one ordered document (template-guide § The split
+draft) so the user has one artifact to react to, revise it against their feedback, and re-present until
+they sign off.
 
 ## Order and wire the edges
 
@@ -100,7 +101,7 @@ binding itself is local. No recorded binding at all: state the gap and ask the u
 backlog needs a tracker, so publishing waits on that decision. Link each ticket to the spec's tracking
 ticket when one exists. On
 this repo that binding is GitHub via `gh` (`gh issue create --title '...' --body '...'`), and a ticket is a
-GitHub issue. Publish the body from [templates/ticket.md](../templates/ticket.md), carrying the
+GitHub issue. Publish each body per template-guide § A single ticket, wiring the
 dependency edges in the playbook's recorded form.
 
 ## Supersede the parent

@@ -64,8 +64,8 @@ the downstream unit an "issue" — that's one tracker's word, and the pair is de
 ## The diagram comes first
 
 Every spec **opens with a diagram** of the moving parts — before any prose. Pick the form that fits the
-direction: a flow of the pieces, a sequence of the actors, a state machine of the lifecycle. On a
-tracker that renders it, a fenced `mermaid` block; in the HTML fallback, an inline diagram. The diagram
+direction: a flow of the pieces, a sequence of the actors, a state machine of the lifecycle — written
+as a fenced `mermaid` block. The diagram
 is the review affordance — a reader should grasp the shape of the direction before reading a sentence.
 A direction too small to diagram is the only exception; say so in a line where the diagram would be.
 
@@ -78,9 +78,8 @@ derived from the solution when omitted) — and write the spec as its body. Ever
 body in place and posts a **short comment noting what changed** — the body stays the one current spec;
 the comments are the revision trail and the notification.
 
-**No tracker bound** — fall back to a repo doc at `docs/specs/<name>.html`: a **self-contained HTML
-deliverable** started from `templates/spec-skeleton.html`; keep its stable element ids (sections,
-`story-N`, `dec-N`, …), inline everything, fetch nothing. A repo may record a different specs location
+**No tracker bound** — fall back to a repo doc at `docs/specs/<name>.md`: the same body a ticket would
+carry — the diagram first, then the template's sections. A repo may record a different specs location
 or naming rule in its `docs/agents/` conventions; honor it when present. The first fallback spec also
 registers the specs location in the project instruction file's `## Context documents` index (path, what
 it is, when to read — create the section if absent).
@@ -104,7 +103,5 @@ ready to build on — settle it first.
 - **User AFK, spec on a ticket** — the spec already sits where the user's comments reach it; their
   LGTM on the ticket (or in the conversation) is the approval. To-spec applies no readiness label —
   that decision travels by the tracker's label roles and belongs to whoever executes the user's call.
-- **User AFK, fallback repo doc** — serve the spec annotated through the optional `serve-via-tailnet`
-  sibling: it is already self-contained HTML with stable element ids, so it serves as-is — no render
-  step — and the verdict arrives from the human's own device. If unavailable, leave the committed spec
-  for the user to read directly. Skipping sign-off still leaves a valid spec in place.
+- **User AFK, fallback repo doc** — the committed spec waits in the repo; approval arrives in
+  conversation when the user returns. Skipping sign-off still leaves a valid spec in place.

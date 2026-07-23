@@ -1,7 +1,7 @@
 # Template guide — what each section holds
 
-The scaffold is [templates/spec-skeleton.html](../templates/spec-skeleton.html); this file says what goes in
-each section and which sections are dev-only. Two
+This file is the content contract: what a spec's body contains, wherever it lives — the ticket body or
+the fallback repo doc. Two
 groups: **core** sections appear in every spec; **dev-only** sections are kept for dev specs and **skipped
 when they don't apply** (see [synthesis](synthesis.md) § Classify the work).
 

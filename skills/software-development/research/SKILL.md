@@ -1,6 +1,8 @@
 ---
 name: research
 description: Research decision-relevant questions from primary sources and produce a cited, auditable dossier. Use when the user asks to investigate a topic, establish current facts, or audit a claim. Not for planning what to do, proving completed implementation behavior, or writing prose judged mainly by taste.
+argument-hint: "<the question to research>"
+user-invocable: true
 metadata:
   invocation: model
   execution: orchestrator

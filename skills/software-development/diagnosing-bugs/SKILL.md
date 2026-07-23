@@ -1,6 +1,8 @@
 ---
 name: diagnosing-bugs
 description: Diagnose hard bugs and performance regressions through a tight red-capable feedback loop. Use when a defect is failing, flaky, or slow. Not for speculative cleanup without an observed symptom.
+argument-hint: "<the observed symptom>"
+user-invocable: true
 metadata:
   invocation: model
   execution: thread

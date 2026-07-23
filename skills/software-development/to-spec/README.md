@@ -6,7 +6,7 @@ the codebase/project understanding built up in it, captures what was **decided**
 the subject's ticket** — body canonical, opening with a diagram, revisions as comments — creating the
 ticket when none exists. Shaping's exit: every settled subject ends here; `to-tickets` splits a spec'd
 ticket only when the user approves a recommended split. With no tracker bound, falls back to a
-self-contained HTML deliverable at `docs/specs/<name>.html`.
+repo doc at `docs/specs/<name>.md` carrying the same diagram-first body.
 
 ## When to use
 
@@ -35,13 +35,10 @@ Not for eliciting requirements. To-spec captures decisions already made — it n
 `SKILL.md` is the command surface (`to-spec [<ticket id, or name>]`) and points into `reference/`:
 `synthesis.md` (the no-interview method, the diagram-first rule, where the spec lives, gating, seams
 step, no-stale-content rule, split recommendation, sign-off) and
-`template-guide.md` (what each section holds). `templates/spec-skeleton.html` is the fillable scaffold
-for the no-tracker fallback — review-ready HTML in the plan skeleton's house style.
+`template-guide.md` (what each section holds).
 `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
 
-Self-contained at the file level; composes by name. **Sibling dependency: optional `serve-via-tailnet`
-only** — used to present a fallback repo-doc spec for AFK sign-off, and never a hard dependency
-(skipping it still yields a valid spec). To-spec depends on no other skill.
+Self-contained at the file level; composes by name. To-spec depends on no other skill.
 
 ## Install
 
@@ -53,5 +50,5 @@ synthesize the decided direction into a spec.
 - **Relationship:** adapted.
 - **Source:** Matt Pocock's MIT-licensed [`to-spec`](https://github.com/mattpocock/skills/blob/04fee67571bc52ac58a0e59fc4924a13f61b50a6/skills/engineering/to-spec/SKILL.md).
 - **Borrowed:** conversation synthesis, decision capture, and test-seam sketching.
-- **Local changes:** HTML artifact, dev/non-dev gates, no-interview rule, generic vocabulary, and optional serve-via-tailnet sign-off.
+- **Local changes:** spec-on-ticket artifact, dev/non-dev gates, no-interview rule, and generic vocabulary.
 - **License/notices:** [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).

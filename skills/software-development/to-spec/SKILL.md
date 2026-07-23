@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: thread
   requires: []
-  optional: [serve-via-tailnet]
+  optional: []
 ---
 
 # To-Spec
@@ -26,11 +26,11 @@ question asked.
 - **`to-spec [<ticket id, or name>]`** — synthesize the current conversation into a spec and land it on
   the subject's ticket: given a ticket id, that ticket's body; given none, create the ticket to carry it
   (deriving a short kebab-case name from the decided direction). With no tracker bound, fall back to a
-  repo doc at `docs/specs/<name>.html`.
+  repo doc at `docs/specs/<name>.md`.
 
 Load [synthesis](reference/synthesis.md) for the method (what to mine, the no-interview rule, dev-vs-non-dev
 gating, the no-stale-content rule, sign-off) and [template-guide](reference/template-guide.md) for what goes
-in each section. The fillable scaffold is [templates/spec-skeleton.html](templates/spec-skeleton.html).
+in each section.
 
 ## How a spec gets written
 
@@ -49,7 +49,7 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
    moving parts (flow, sequence, or state — whichever fits) before any prose, then the template's
    sections in generic vocabulary. Rewrite the body in place and post a short comment noting what
    changed; the comments are the revision trail. No ticket yet: create it. No tracker bound: fall back
-   to `docs/specs/<name>.html` from the skeleton (synthesis § Where the spec lives).
+   to `docs/specs/<name>.md` (synthesis § Where the spec lives).
 5. **Audit fidelity, then classify the Notes.** Before sign-off: every material decision from the
    conversation appears in the spec, and every Notes line is classified **blocking** (must be settled
    upstream before tickets), **delegated** (the executor may choose; boundary named), or **deferred**
@@ -66,7 +66,7 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
 - **Generic vocabulary.** A spec describes direction that may later split into **tickets**. Say "spec"
   and "ticket" — never GitHub-specific "issue." The unit of downstream work is a ticket.
 - **The artifact lives on the ticket** — body canonical, diagram first, comments as the revision trail.
-  The repo doc at `docs/specs/<name>.html` (self-contained HTML, stable element ids) is the fallback
+  The repo doc at `docs/specs/<name>.md` — the same diagram-first body — is the fallback
   home when no tracker is bound.
 - **No file paths or code snippets** — sole exception the prototype-validated snippet (synthesis § No stale
   content).
@@ -76,12 +76,9 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
 ## Dependency surface
 
 - **Bundled references** — this skill's own contract, shipped in-directory: [synthesis](reference/synthesis.md)
-  and [template-guide](reference/template-guide.md), plus the fillable scaffold
-  [templates/spec-skeleton.html](templates/spec-skeleton.html). These are the authority; they import no
+  and [template-guide](reference/template-guide.md). These are the authority; they import no
   other skill's files.
 - **Project playbooks** — the **tracker binding** in `docs/agents/platform.md` (how a ticket body is
   read, rewritten, and commented), and the repo's spec conventions for the no-tracker fallback
   (defaults to `docs/specs/`; a repo may record a different location or naming rule in its
   `docs/agents/`).
-- **Sibling skills** — **optional `serve-via-tailnet` only**, for AFK sign-off on a fallback repo-doc
-  spec. Not a hard dependency: skipping it still produces a valid spec.

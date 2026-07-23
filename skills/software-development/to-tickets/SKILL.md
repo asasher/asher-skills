@@ -33,8 +33,7 @@ high-blast-radius changes — both defined under § What a ticket is.
 Load [slicing](reference/slicing.md) for the method (what to read, the vertical-slice default, the wide-refactor
 exception, the quiz, dependency ordering and backlog's edge convention, the readiness default, the
 no-stale-content rule, superseding the parent) and [template-guide](reference/template-guide.md) for what each
-ticket field holds. The fillable scaffolds are [templates/ticket.md](templates/ticket.md) (one ticket) and
-[templates/tickets.md](templates/tickets.md) (the whole ordered split, drafted before publishing).
+ticket carries and what the pre-publish split draft shows the user.
 
 ## How a split happens
 
@@ -78,7 +77,7 @@ The full method is in [slicing](reference/slicing.md); the shape:
 ## Dependency surface
 
 - **Bundled references** — this skill's own contract, shipped in-directory: [slicing](reference/slicing.md)
-  and [template-guide](reference/template-guide.md), plus the fillable scaffolds under `templates/`.
+  and [template-guide](reference/template-guide.md).
   These are the authority; they import no other skill's files.
 - **Project playbooks** — the repo's conventions, read from `docs/agents/`: the **dependency convention**
   (`backlog-policy.md` § Dependencies — how a blocking edge is recorded)
