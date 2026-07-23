@@ -3,25 +3,25 @@
 The module templates ship **seed defaults** (model rows, provider bindings, wake paths). The audit's job is
 to verify each default against the current machine: prune rows the machine cannot reach, surface unsupported
 provider bindings to the owner and ask what to bind instead, add reachable models the seed omits, and hand
-the judgment numbers to the owner to tune. Never install a default this machine failed to verify. The audit
-is performed by the agent directly; no audit script is bundled.
+the judgment numbers to the owner to tune. Never install a default this machine failed to verify.
 
 ## The audit procedure
 
-Run these probes and record the results:
+Read [install-and-reconcile](install-and-reconcile.md) once before probing — the external-worker
+contract and the scope-decision flow there govern how steps (1), (2), and (4) are judged. Then run
+these probes and record the results:
 
 1. **Which routes work from this harness?** Enumerate native models, then probe the sibling-harness route
    defined by the compiled `reference/harness.md`. Record command shape, timestamp, return/failure class,
    native wrapper label/model evidence, and fallback successor. A failure removes this direction only. Real
-   invocation behavior is the operational signal
-   ([install-and-reconcile](install-and-reconcile.md) § External-worker contract).
+   invocation behavior is the operational signal.
 2. **Which sibling harness CLIs are installed?** Probe `codex --version` and `claude --version`, then retain
    only the routes step 1 actually exercised. Presence alone is not reachability. The result decides which
-   mechanics the base includes (see [install-and-reconcile](install-and-reconcile.md) § External-worker contract).
+   mechanics the base includes.
 3. **Which harness memory layer exists?** Use the exact global pointer and deferred-module paths in the
    compiled `reference/harness.md`. This also feeds the scope-decision flow.
 4. **Do global staffing rules already exist?** Read the detected memory layer for an existing staffing
-   roster. Its presence or absence chooses the scope-decision branch (see install-and-reconcile).
+   roster. Its presence or absence chooses the scope-decision branch.
 5. **Which waits does each harness track?** Probe the wake mechanisms — background-task completion, subagent
    completion, monitors, cron — and record which ones re-invoke the session, effect-verified. These become
    the Wake-paths rows.
