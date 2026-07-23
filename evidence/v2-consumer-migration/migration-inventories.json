@@ -1,0 +1,1525 @@
+[
+ {
+  "repo": "metis",
+  "mounts": [
+   {
+    "name": "backlog",
+    "class": "v1-family",
+    "note": "skills-lock.json: asasher/asher-skills skills/delivery/backlog (github). Real dir in .agents/skills; .claude/skills/backlog is a symlink. Ships scripts/run-state.py + evals/test_run_state.py, templates/, reference/ that the playbooks and .git/backlog/runs state depend on."
+   },
+   {
+    "name": "plan",
+    "class": "v1-family",
+    "note": "asasher/asher-skills skills/delivery/plan. Symlinked into .claude/skills. planning.md references its templates/plan-skeleton.html and reference/plan-contract.md."
+   },
+   {
+    "name": "review-loop",
+    "class": "v1-family",
+    "note": "asasher/asher-skills skills/system/review-loop. Ships scripts/review-server.py and scripts/review-await.py that environment.md invokes by literal path (.agents/skills/review-loop/scripts/...) \u2014 live review machinery, not just docs."
+   },
+   {
+    "name": "diagnosing-bugs",
+    "class": "v1-family",
+    "note": "asasher/asher-skills skills/delivery/diagnosing-bugs; symlink alias in .claude/skills."
+   },
+   {
+    "name": "prototype",
+    "class": "v1-family",
+    "note": "asasher/asher-skills skills/delivery/prototype; symlink alias."
+   },
+   {
+    "name": "research",
+    "class": "v1-family",
+    "note": "asasher/asher-skills skills/thinking/research; symlink alias."
+   },
+   {
+    "name": "setup-asher-skills",
+    "class": "v1-family",
+    "note": "asasher/asher-skills skills/system/setup-asher-skills; ships install.py/catalog.py/render-global.py \u2014 the v1 installer itself."
+   },
+   {
+    "name": "staffing",
+    "class": "v1-family",
+    "note": "Declared provider variant: .agents/skills/staffing (codex compiled tree) + .claude/skills/staffing (real dir, claude compiled tree), recorded in .agents/asher-skills/variant-lock.json \u2014 the only entry there. NOT a symlink; a naive 'symlink .claude to .agents' cleanup breaks the variant."
+   },
+   {
+    "name": "tdd",
+    "class": "v1-family",
+    "note": "From mattpocock/skills (third-party origin) but installed as part of the old family and referenced by refactoring.md/implementing.md; superseded by v2 tdd. Symlink alias."
+   },
+   {
+    "name": "clerk-backend-api",
+    "class": "third-party/domain",
+    "note": "clerk/skills github; symlink alias; untouched."
+   },
+   {
+    "name": "clerk-cli",
+    "class": "third-party/domain",
+    "note": "clerk/skills github; symlink alias; untouched."
+   },
+   {
+    "name": "cloudflare",
+    "class": "third-party/domain",
+    "note": "cloudflare/skills github; symlink alias; untouched."
+   },
+   {
+    "name": "use-railway",
+    "class": "third-party/domain",
+    "note": "railwayapp/railway-skills; ships its own python scripts (analyze-*.py, dal.py); untouched."
+   },
+   {
+    "name": "vercel-cli",
+    "class": "third-party/domain",
+    "note": "vercel/vercel github; symlink alias; untouched."
+   },
+   {
+    "name": "yjs",
+    "class": "third-party/domain",
+    "note": "epicenterhq/epicenter; lockfile entry has no skillPath (oddity); SKILL.md only."
+   },
+   {
+    "name": "impeccable",
+    "class": "third-party/domain",
+    "note": "NOT in skills-lock.json (provenance gap). Two REAL divergent copies: .claude/skills/impeccable and .agents/skills/impeccable differ file-by-file (SKILL.md, reference/*), .agents copy has an extra agents/ dir \u2014 an undeclared independent copy, invalid per current vocabulary but possibly deliberate; do not dedupe blindly."
+   },
+   {
+    "name": "migration",
+    "class": "third-party/domain",
+    "note": "NOT in skills-lock.json. license: Internal \u2014 a Metis-authored domain skill for authoring/validating Metis data migrations. Repo-owned content, not part of any family; must survive migration."
+   },
+   {
+    "name": "web-design-guidelines",
+    "class": "third-party/domain",
+    "note": "NOT in skills-lock.json; authored by vercel per frontmatter; SKILL.md only; symlink alias."
+   },
+   {
+    "name": "vercel-composition-patterns",
+    "class": "third-party/domain",
+    "note": "NOT in skills-lock.json; has AGENTS.md + rules/; symlink alias; untouched."
+   }
+  ],
+  "playbooks": [
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/backlog-policy.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Readiness labels bound: ready-for-agent, in-flight, staging, ready-for-human, needs-info; no label = ungroomed (groom target, never run target)",
+     "Do NOT substitute 'ready for planning' / 'ready for implementation' for ready-for-agent \u2014 those are the pre-existing HUMAN workflow stage labels and stay neutral",
+     "in-flight is set by run at dispatch replacing ready-for-agent; records branch name + dispatch date in a comment; cleared on abort, replaced by 'staging' on merge to staging, or reset only via groom's human-confirmed orphan sweep",
+     "'staging' label = merged into staging branch but issue stays open pending staging\u2192main promotion; native issue closure supersedes it when promotion lands on main",
+     "in-review has no label on GitHub \u2014 an open PR expresses it",
+     "Work-type labels: bug, enhancement (plan-then-implement unless small), refactor, research (dossier under research/<slug>/), draft (judgment-terminal, human review verdict is done, artifact kept; label provisioned 2026-07-10)",
+     "Routing rule: terminal question about sources \u2192 research; sources feeding voice/persuasion prose \u2192 draft; behavior changes keep code work-type with research as substage",
+     "Dispatch metadata required before ready-for-agent: Surface (backend/ui/mixed/non-code + capability), Coordination class (routine | orchestrator-required), Coordination reason \u2014 in a stable 'Dispatch:' block; missing metadata \u2192 run skips, never infers",
+     "Exclusion labels: wontfix, duplicate, invalid, superseded; neutral: documentation, good first issue, help wanted, question, ready for planning, ready for implementation, implementation in progress, planning in progress, blocker",
+     "blocker label is priority metadata, NOT a dependency edge",
+     "Dependencies: GitHub native issue dependencies (commands in platform.md) + legacy body lines 'Blocked by #123'/'Depends on #123' both checked; read the dependency LIST not the summary counters (counters can lag)",
+     "Label aliases: none \u2014 role labels map 1:1",
+     "ready-for-agent applied only to issues the human confirms in the shortlist; agent may self-apply ready-for-human/needs-info/exclusions on clear evidence",
+     "Concurrent runners possible; in-flight is an optimistic claim marker \u2014 run re-reads each issue immediately before marking and skips changed ones",
+     "Orphan sweep: in-flight issue whose recorded branch is gone or quiet >7 days is a corpse \u2014 groom surfaces to human for reset; NEVER silently reset (branch may hold unmerged work)"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/environment.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Base branch is STAGING for issue work and feature PRs; main is production; fork from origin/staging remote-tracking ref without checking out through a dirty primary checkout",
+     "Branch naming: codex/<issue-number>-<slug>",
+     "PR gives GitHub CI lint/format/typecheck; Vercel previews may exist but no workflow guarantees one; squash-merge into staging; push to staging deploys PartyServer staging, push to main deploys PartyServer production",
+     "pnpm dev starts: Next web app, server-side client, PartyKit, React Email preview, Postgres, QStash dev server, Redis, serverless Redis HTTP",
+     "URLs via portless: http://app.metis.localhost, http://party.metis.localhost, http://emails.metis.localhost",
+     "Fixed ports: Postgres 5302, Redis 6379, QStash 8081, serverless Redis HTTP 8079, server-side client 3001, PartyKit 1999",
+     "Worktree regime: cloud-singleton for full app verification \u2014 stack depends on shared Clerk tenant, Google Drive service account, Upstash/ngrok, PostHog, fixed portless hostnames",
+     "pnpm setup:worktree (scripts/setup_worktree.sh) copies .env* files, installs deps, runs pnpm check + pnpm build \u2014 but does NOT remap ports, compose projects, container names, hostnames, datastore URLs, or cloud creds",
+     "Full 16-row shared-singleton collision table: metis-postgres container name, port 5302, default Compose project + postgres_data volume, copied DATABASE_URL, ports 8081/6379/8079/3001/1999, portless hosts, Clerk tenant, Google Drive account, AgentMail inbox, PostHog project, hosted QStash/Upstash/ngrok/Resend, staging PartyKit/Railway/Vercel \u2014 each marked locally-isolatable or not",
+     "Worktree audit 2026-07-14: setup manual, no remapping; treat a worktree unready until its env files (incl apps/cli/.env) are present",
+     "Seed regime: none \u2014 drive the app; CLI can load JSONL snapshots: pnpm -C apps/cli dev:cli -- load cases|persons|tasks <path>",
+     "Auth for testing: sign in via browser as AgentMail inbox in repo global .env (AGENT_EMAIL), trigger Clerk email code/magic link, read code via AGENTMAIL_API_KEY; same inbox serves OTP and invitation flows; never hardcode/print secrets",
+     "Per-issue fixture naming: VERIFY-<issue>-<purpose>; provision before criteria loop, retain through final evidence, issue coordinator removes only its own fixtures; never share mutable scratch entities across issues",
+     "Scale-sensitive criteria are BLOCKED until a plan records the real limit or an approved synthetic substitute",
+     "Drivers: shell + pnpm -C apps/cli dev:cli for CLI; no Playwright/Cypress found; browser via machine agent-browser with isolated profile; ChatGPT-in-Chrome only with per-use explicit consent; Computer Use gated on recorded use case + explicit approval",
+     "Independent runtime verification: delegate to codex exec with self-contained prompt for real UI interaction/screenshots/second opinion",
+     "Deferred (unverified) checks: Clerk login, AgentMail retrieval, browser driving, screenshots, recording \u2014 do not claim UI verification until effect observed; ffmpeg and screencapture installed but screen-recording permission unverified",
+     "Review surface: tailnet, Funnel off, effect-verified 2026-07-14; root https://ashers-macbook-pro.tail045dd5.ts.net/review",
+     "Run tailscale status before publishing; tailscale up only because a review is being published; on failure use local fallback; never Funnel or a public tunnel",
+     "LaunchAgent com.asher.backlog-surface serves ~/.backlog/surface on loopback port 8377; persistent proxy: tailscale serve --bg --set-path /review http://localhost:8377",
+     "Static publish: ln -sfn <absolute-file> ~/.backlog/surface/metis/<issue>/<name>.html",
+     "Interactive review: python3 .agents/skills/review-loop/scripts/review-server.py --doc <file> --title --issue --kind --state <state-dir> --surface ~/.backlog/surface/metis --port 0 --public-url https://ashers-macbook-pro.tail045dd5.ts.net/metis/<issue>/review --hub-url .../review/metis/ --surface-label metis; then tailscale serve --bg --set-path /metis/<issue>/review http://localhost:<port>",
+     "Await verdict in Floor-class watcher: review-await.py --state <state-dir> --timeout <s>; exit 124 re-arms; 0/3/10 deliver verdict",
+     "Stop/reap: review-server.py --stop --state <dir>; tailscale serve --set-path /metis/<issue>/review off; hub sweep: review-server.py --sweep --surface ~/.backlog/surface/metis",
+     "Live prototype path: tailscale serve --bg --set-path /metis/<issue>/proto http://localhost:<port>",
+     "Keep-awake: none \u2014 surface available only while the Mac is awake",
+     "Staffing: no project floor/ranking/provider/succession override; metis adds only worktree isolation for parallel Claude\u2192Codex edits",
+     "Parallelism verdict: serialize-verification \u2014 worktrees may implement in parallel but only ONE thread may bring up or exercise the full stack at a time; no exception lane",
+     "Tools: authenticated gh CLI; agent-browser; pnpm (commands from .intent/config.json and package.json); Codex subagents for delegated issue/review loops"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/platform.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Tracker binding: github dunnharland/metis via authenticated gh CLI",
+     "Blocker read: gh api repos/dunnharland/metis/issues/<n>/dependencies/blocked_by (list, effect-verified 2026-07-14); use list not .issue_dependencies_summary counters (they lag); also parse legacy 'Blocked by #N'/'Depends on #N' body lines",
+     "Blocker write: blocker_id=$(gh api repos/dunnharland/metis/issues/<blocker> --jq .id); gh api --method POST repos/dunnharland/metis/issues/<blocked>/dependencies/blocked_by -F issue_id=\"$blocker_id\"; DELETE .../blocked_by/$blocker_id to remove \u2014 effect-verified on throwaway issues 2026-07-14",
+     "Close-on-merge: feature PRs target staging so they reference issues WITHOUT closing; run thread applies staging label after merge; the staging\u2192main promotion PR must list Closes #<n> for every staged issue",
+     "PR: gh pr create --base staging --title <t> --body-file <path> \u2014 ready-for-review, never draft; approval signal is an exact 'LGTM' comment; a HUMAN merges (squash into staging), the loop never merges",
+     "Worktree creation: git worktree add <path> -b codex/<issue>-<slug> origin/staging; pnpm setup:worktree for env/deps but no remapping",
+     "Pinned-SHA semantics: squash-merge rewrites history \u2014 plans/evidence pinned to pre-merge branch SHAs are orphaned after merge; re-pin to the merged staging commit (or branch-name ref for evidence)",
+     "Harness: Claude Code native Agent thread with isolation: worktree; Codex native agent thread naming the worktree; cross-harness worker routes: codex exec --cd <worktree> -m gpt-5.6-sol '<prompt>' from Claude; claude -p --model opus '<prompt>' </dev/null (no --bare) from Codex \u2014 worker routes only, never coordinator-eligible",
+     "Spawned threads read bundled references at .agents/skills/backlog/reference/ (Claude via .claude/skills/backlog symlink)",
+     "Durable wakeup: Claude Code Monitor mechanism; Codex dedicated native watcher thread; no webhook wired"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/implementing.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Test frameworks: vitest in @metis/webapp (pnpm --filter @metis/webapp test); Node tsx --test in server-side packages via their package test scripts; root aggregate pnpm test; pass a file path to run a single test file",
+     "Tests colocated with source (foo.test.ts / foo.test.tsx beside the module)",
+     "Commit style: Conventional Commits; PRE-PUSH HOOK may auto-commit lint/format fixes as 'chore: auto-fix lint and format issues' (hook lives in .git/hooks/pre-push, runs pnpm lint:fix + format:fix and commits)",
+     "No sign-off requirement",
+     "Conventions: prefer pnpm commands, snake_case filenames for NEW files, respect existing package/module boundaries, defer to AGENTS.md + docs/ + linters; UI work follows docs/UI.md and verifies responsive behavior in browser",
+     "(rest is the shipped tdd-derived test-first doctrine \u2014 template, replaceable)"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/verifying.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Check commands (prefer .intent/config.json): pnpm --filter @metis/webapp test -- <path>; pnpm --filter @metis/server-side-client test; pnpm --filter @metis/yjs-persistence test; pnpm test; pnpm format; pnpm lint; pnpm lint:ws; pnpm typecheck; pnpm build (effect-verified 2026-07-14 pass)",
+     "Aggregate pre-PR gate: pnpm check = format+lint+typecheck+test+workspace lint; effect-verified 2026-07-14 with one existing non-failing lint warning and one workspace-lint warning as baseline",
+     "CI workflow .github/workflows/ci.yml jobs: lint, format, typecheck, build-boot \u2014 runs on every PR branch and merge queue",
+     "CI does NOT run test suites \u2014 pnpm test is local-gate-only, green CI does not prove tests pass; build-boot builds production bundles and boots server-side client (local gate does not)",
+     "CI-green is procedural, not host-enforced: protection/rulesets API returned 403 on 2026-07-14 (private repo lacks required GitHub plan) \u2014 human merger must wait for the four checks manually",
+     "Acceptance criteria from the issue + (enhancements) the approved plan's definition of done, written as pass/fail checks against a running app",
+     "Repo-wide expectations every change must satisfy: Clerk auth boundaries, Yjs document persistence, migration behavior, Google Drive integrations, background job side effects, responsive/accessibility for UI",
+     "Evidence bars: logic/backend = green targeted tests + broader check output; UI = desktop AND mobile width screenshots/recordings + a11y notes; data/migration = before/after data evidence or focused persistence test",
+     "Second-opinion verification delegates to codex exec when a criterion needs real UI interaction/screenshots"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/evidence.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Evidence = real check output + artifacts driven through the actual app; probes/dry-run transcripts are NOT evidence in this repo (runnable surface exists)",
+     "Committed under evidence/<slug>/, never MP4; files named c<criterion>-<what-it-shows>.png",
+     "GIF recipe: ffmpeg -i in.mp4 -filter_complex \"fps=12,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse\" out.gif \u2014 \u2264~10s, well under 10 MB",
+     "GitHub inline-render rule: use github.com blob URLs with ?raw=1 (not camo-proxied, work on private repos); raw.githubusercontent.com and /raw/<sha>/ 404 on private repos; no API path to the drag-drop CDN",
+     "Embed form: [![<criterion>](https://github.com/<owner>/<repo>/blob/<sha>/evidence/<slug>/<file>.png?raw=1)](same URL without ?raw=1)",
+     "Mechanical verification (agent can't see the render): gh api repos/<o>/<r>/commits/<sha> (404 = unpushed/orphaned); git cat-file -e <sha>:evidence/<slug>/<file>; extension PNG/JPEG/GIF never MP4",
+     "Squash-merge orphans pinned SHAs \u2014 re-pin or use branch-name ref, never 'fix' by switching to plain links",
+     "Styling-only capture reuse only when HEAD is still the final reviewed HEAD and Reviewer records exactly 'no product-code change; no recapture'; any drift forces fresh final-HEAD evidence",
+     "Captured once after adversarial review converges, each artifact mapped to the criterion it proves; evidence step posts nothing itself \u2014 hands the block back"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/planning.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Plan threshold: more than one subsystem/public interface, OR new data models/migrations/external deps, OR risky/hard to reverse/> ~1 day",
+     "Plans are self-contained HTML committed at plans/<issue-number>-<slug>.html; inline styles + pre-rendered inline SVG (mmdc for Mermaid), no rendering libraries, no external fetches",
+     "Stable anchors: acceptance criteria are <li id=\"ac-N\" data-criterion> rows; review annotations and verify/evidence key on these ids",
+     "Approval = hash-bound approve event on the review-loop surface; thread/tracker comments are NOT approval",
+     "On request-changes: ledger disposition for every annotation \u2014 changed/kept/orphaned \u2014 before re-awaiting",
+     "Approved plan committed to the WORK branch before implementation dispatch",
+     "Posterity: after approval, comment a compact markdown digest (headings, ACs, Mermaid) on the issue plus repo link to the HTML"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/change-reviewer.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Repo-specific scrutiny list: Clerk auth boundaries, Yjs persistence and migrations, Google Drive/service-account access, background jobs and email side effects, API compatibility, accessibility, responsive UI, accidental use of staging/production credentials in local/test flows",
+     "Presumptive blockers: file growing past ~1000 lines (ask decomposition first), ad-hoc conditionals/one-off flags in unrelated flows, feature logic leaking into shared paths, thin wrappers/any-churn, avoidably sequential orchestration",
+     "Open every test/fixture/document cited as criterion coverage and confirm it exercises the claimed runtime seam",
+     "Product-semantics questions are ruling requests to the issue coordinator \u2014 stop and wait, never invent behavior",
+     "Approval is exactly the comment 'LGTM'; styling-only evidence reuse verdict is exactly 'no product-code change; no recapture' only when HEAD is still final",
+     "(smell baseline + ambition section are the shipped Fowler/Cursor template)"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/change-description.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "PR title = Conventional Commits subject, because squash-merge into staging makes the PR title the commit subject",
+     "Body order: Closes-linkage + work-type, Summary (incl scope discovery), Changes (design reasoning not file list), Plan (SHA-pinned link), Checks run (each command from verifying.md + result), CI status (disclosed red/pending, never omitted), Verification (per-criterion outcomes + caveats, environment gaps vs product issues), Evidence placeholder 'Captured after review converges' (research work-type: Research dossier section instead)"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/change-fixer.md",
+    "boilerplate_vs_earned": "mostly-template",
+    "earned_content": [
+     "Reviewer's structural pushes are in scope by default; address every actionable comment unless it changes product behavior beyond issue scope",
+     "Reply to each addressed comment with what changed + commit SHA; intentional non-fix gets reason + risk; re-prompt Reviewer once the iteration is handled"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/diagnosing-bugs.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Seams: Vitest in @metis/webapp, tsx --test in server-side packages; one web regression: pnpm --filter @metis/webapp test -- <path>; aggregate: pnpm test",
+     "Log inspection commands: pnpm --filter @metis/server-side-client logs:workflows; pnpm --filter @metis/server-side-client logs:redis; pnpm --filter @metis/webapp logs:db",
+     "pnpm dev for full-stack reproduction; no flaky surfaces recorded; no house-practice substitutions"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/prototyping.md",
+    "boilerplate_vs_earned": "mostly-template",
+    "earned_content": [
+     "Register prototype scripts in the owning package's package.json (web: apps/web, @metis/webapp) \u2014 pnpm scripts + Turbo",
+     "Routing: Next.js app in apps/web; UI conventions per docs/UI.md; snake_case filenames for new files",
+     "UI variants gated by ?variant= URL param hosted in the real page; screenshot each variant via the environment.md driver and embed in the plan"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/refactoring.md",
+    "boilerplate_vs_earned": "mostly-template",
+    "earned_content": [
+     "Test commands: vitest via pnpm --filter @metis/webapp test; tsx --test in server-side packages; root pnpm test",
+     "Repo cares about: snake_case filenames, monorepo package boundaries, existing store and migration patterns, TypeScript/linting/style docs under docs/"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/metis/docs/agents/researching.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Durable research root: research/<slug>/; scratch shards in system temp, not committed; research stays out of evidence/ unless it proves a change criterion",
+     "Primary local sources: repo code, git history, tests, migrations, docs/; external: official provider docs/APIs via authenticated connectors or browser sessions",
+     "Cite stable file/line, commit, URL, page, or record locators; preserve customer data and credentials",
+     "Serialize shared database or provider mutations; present findings as repo-local Markdown/HTML via global Presentation policy"
+    ]
+   }
+  ],
+  "tracker": {
+   "labels": [
+    "ready-for-agent (agent readiness; 0 open issues currently carry it)",
+    "in-flight (2 open: #236, #234)",
+    "staging (merged to staging, awaiting promotion; ~24 open issues carry it)",
+    "ready-for-human (1 open: #179)",
+    "needs-info (1 open: #227)",
+    "draft (judgment-terminal work-type, provisioned 2026-07-10)",
+    "research (work-type)",
+    "refactor (work-type)",
+    "superseded (exclusion)",
+    "bug / enhancement (work-type)",
+    "wontfix / duplicate / invalid (exclusions)",
+    "blocker (priority metadata only, not a dependency edge)",
+    "Neutral human-workflow labels kept distinct: 'ready for planning', 'ready for implementation', 'implementation in progress', 'planning in progress', documentation, good first issue, help wanted, question"
+   ],
+   "inflight_tickets": [
+    "#236 Custom financial sections with array-backed SUM totals \u2014 in-flight (worktree issue-236 has UNCOMMITTED modified files; run 20260723-236-plan at 198 events, adversarial review LGTM at f81be065, evidence gate pending)",
+    "#234 Cases with active case-review tasks missing from Pending Review \u2014 in-flight (worktree issue-234, branch codex/234-pending-review-case-tasks pushed, fix committed)",
+    "#233 (run 20260723-233-235 shows plan-approval-round-2 watcher dispatched for issue 233; issue itself now unlabeled in list \u2014 worktree issue-233 and issue-235 hold uncommitted plan HTML files)",
+    "#227 needs-info; #179 ready-for-human",
+    "~24 issues labeled staging awaiting the staging\u2192main promotion PR that must carry Closes #<n> for each (e.g. #70 #166 #173 #174 #177 #180-183 #185-190 #194-197 #200 #202 #207 #221 #223 #225 #226)"
+   ],
+   "notes": "GitHub remote dunnharland/metis, gh authenticated. The staging label semantics (open-until-promotion) mean issue closure state is NOT recoverable from labels alone if labels are wiped. Native GitHub issue-dependency edges (effect-verified) also live server-side."
+  },
+  "inflight": [
+   "Run-state dirs .git/backlog/runs/{20260715-221-formulas, 20260720-223-226, 20260720-225, 20260722-70-export-cases, 20260723-233-235, 20260723-236-plan} \u2014 each with board.md, events, handoff.md, status.json, plus review/review-plan/verification/pr-body subdirs; 20260723-236-plan (198 events, updated 2026-07-24 01:22, evidence gate pending) and 20260723-233-235 (plan-approval-round-2) are LIVE runs",
+   "Worktrees /Users/asher/Projects/metis-worktrees/issue-{70,223,225,226,233,234,235,236}; issue-236 has uncommitted product-code modifications (custom-financial-sections.tsx, its test, property-editor.tsx); issue-233 and issue-235 each hold an untracked plans/*.html plan file",
+   "Six additional Claude-managed worktrees under /Users/asher/.claude/worktrees/metis/agent-* on branches codex/183-drive-reconcile, codex/173-phase-g, codex/180-hotfix-external-jsdom, codex/177-flags-proxy-308, codex/181-tool-discovery, codex/182-admin-version-surface",
+   "plans/ \u2014 20 committed plan artifacts (143..221, .md and .html) that evidence/verify key on by ac-N anchors",
+   "evidence/ \u2014 23 committed per-issue evidence dirs (143..221 plus slug-named)",
+   "Review-server state: ~/.backlog/surface/metis/ holds live issue dirs 181, 182, 183 plus index.html and registry.json; LaunchAgent com.asher.backlog-surface is loaded and serving port 8377; tailscale serve path handlers may still be registered for /metis/<issue>/review",
+   "Local branches with unmerged work vs origin/staging include zippy-wren (yjs forced-reconnection + sync-status tests, no remote), codex/234-pending-review-case-tasks, codex/236-custom-financial-sections-sum, codex/173-phase-g, codex/177-flags-proxy-308, codex/180-hotfix-external-jsdom, codex/181-tool-discovery, codex/182-admin-version-surface, codex/183-drive-reconcile, and older codex/* branches; also codex/reconcile-asher-skills and codex/worktree-teardown-tooling on origin",
+   "research/ and datasets/ dirs at repo root (research work-type artifacts route to research/<slug>/)"
+  ],
+  "scripts": [
+   "/Users/asher/Projects/metis/.agents/skills/backlog/scripts/run-state.py (writes/reads .git/backlog/runs state; evals/test_run_state.py beside it)",
+   "/Users/asher/Projects/metis/.agents/skills/review-loop/scripts/review-server.py (invoked by literal path from environment.md; owns ~/.backlog/surface/metis registry, --stop/--sweep lifecycle)",
+   "/Users/asher/Projects/metis/.agents/skills/review-loop/scripts/review-await.py (Floor-class verdict watcher, exit-code contract 124/0/3/10)",
+   "/Users/asher/Projects/metis/.agents/skills/setup-asher-skills/scripts/install.py, catalog.py, render-global.py (the v1 installer)",
+   "/Users/asher/Projects/metis/.agents/skills/staffing/scripts/render-global.py",
+   "/Users/asher/Projects/metis/scripts/setup_worktree.sh (repo-owned, pnpm setup:worktree \u2014 copies .env*, installs, runs check+build; keep)",
+   "/Users/asher/Projects/metis/.git/hooks/pre-push (repo-side hook: runs pnpm lint:fix + format:fix and auto-commits 'chore: auto-fix lint and format issues' before push; not part of any skill install but referenced by implementing.md)",
+   "LaunchAgent com.asher.backlog-surface (loaded, serves ~/.backlog/surface on port 8377; paired with 'tailscale serve --bg --set-path /review http://localhost:8377')"
+  ],
+  "hazards": [
+   "Uncommitted work: worktree issue-236 has modified product code + tests not committed; issue-233/issue-235 hold untracked plan HTML \u2014 any worktree prune/teardown loses them",
+   "Live runs mid-flight: issue #236 is past LGTM but pre-evidence, #233 is awaiting a round-2 plan verdict \u2014 deleting .git/backlog/runs/* destroys the only checkpoint/handoff state those threads resume from (it lives inside .git/, so it survives clean/reset but not a naive 'rm -rf .git/backlog')",
+   "environment.md hardcodes literal script paths (.agents/skills/review-loop/scripts/review-server.py, .agents/skills/backlog/reference/) \u2014 reinstalling v2 removes those files and breaks the recorded review commands and any still-running review-await watcher; the v2 equivalents must be re-bound in the playbooks, not just installed",
+   "~/.backlog/surface/metis registry.json + issue dirs 181/182/183 and the com.asher.backlog-surface LaunchAgent + tailscale serve path handlers are live review-server state outside the repo; stop/reap via review-server.py BEFORE deleting the review-loop mount, or orphaned handlers/registry rows remain with no tool to sweep them",
+   "Playbooks are repo-owned and mostly earned content (label bindings, effect-verified gh dependency commands, the 16-row singleton table, check commands with baseline warnings, CI-divergence facts, GIF/embed recipes, serialize-verification verdict) \u2014 'delete old playbooks and re-run setup' throws away effect-verified facts v2 setup cannot cheaply re-derive (some verifications required throwaway issues and a live stack)",
+   "Three mounts absent from skills-lock.json: 'migration' is an INTERNAL Metis-authored domain skill (only copy lives in .agents/skills \u2014 deleting the mounts directory deletes the skill itself); impeccable exists as two divergent real copies (.claude vs .agents) and web-design-guidelines/vercel-composition-patterns have no provenance record \u2014 a lockfile-driven reinstall/cleanup would drop all of them",
+   "staffing is a declared provider variant (variant-lock.json): .claude/skills/staffing is a real compiled directory, not a symlink \u2014 a cleanup that assumes 'all .claude entries are symlinks' or deletes .agents/asher-skills breaks the variant contract",
+   "Label semantics: ~24 open issues rely on the 'staging' label to encode merged-but-unpromoted state, and the promotion PR must carry Closes #<n> for each; wiping or renaming labels during migration loses which issues are staged vs untriaged, and #236/#234 in-flight claims (branch+date comments) would orphan",
+   "Unmerged local-only branch zippy-wren (yjs reconnection work, no remote) and the six /Users/asher/.claude/worktrees/metis/agent-* worktrees would be destroyed by a blanket worktree/branch cleanup",
+   "Pre-push hook in .git/hooks/pre-push is unmanaged by any installer \u2014 a fresh clone or hook reset silently drops the auto-fix behavior implementing.md documents",
+   "plans/ and evidence/ are committed and safe in git, but their ac-N anchor and SHA-pinning contracts are consumed by in-flight runs \u2014 rewriting history (rebase of staging) orphans pinned evidence SHAs per platform.md"
+  ]
+ },
+ {
+  "repo": "asher-skills",
+  "mounts": [
+   {
+    "name": "backlog",
+    "class": "v1-family",
+    "note": "Primary mount .agents/skills/backlog (real dir, git-tracked), .claude/skills/backlog symlink alias. skills-lock: local source this repo. STALE v1 monolith: mount still carries reference/, scripts/run-state.py, evals/test_run_state.py, evals/liveness-probes.md, THIRD_PARTY_LICENSES.md and extra templates (software/change-fixer.md, change-reviewer.md, implementing.md, refactoring.md, verifying.md; skill-authoring/verifying.md) that the v2 source skills/software-development/backlog no longer ships; SKILL.md/README/openai.yaml/templates all differ from source."
+   },
+   {
+    "name": "diagnosing-bugs",
+    "class": "v1-family",
+    "note": "Real dir + .claude symlink; local source; small drift from v2 source skills/software-development/diagnosing-bugs (5 diff lines)."
+   },
+   {
+    "name": "merge-changes",
+    "class": "v1-family",
+    "note": "Real dir + .claude symlink; local source; drifted from v2 source (2 files differ)."
+   },
+   {
+    "name": "prototype",
+    "class": "v1-family",
+    "note": "Real dir + .claude symlink; local source; drifted from v2 source (6 diff lines)."
+   },
+   {
+    "name": "research",
+    "class": "v1-family",
+    "note": "Real dir + .claude symlink; local source; drifted from v2 source (7 diff lines)."
+   },
+   {
+    "name": "staffing",
+    "class": "v1-family",
+    "note": "Old copy of skills/system/staffing (14 diff lines). PROVENANCE ODDITY: .agents/asher-skills/variant-lock.json declares two provider variants (claude mount .claude/skills/staffing, codex mount .agents/skills/staffing, different effective_hash values), but .claude/skills/staffing is actually a symlink to .agents/skills/staffing \u2014 the declared Claude variant cannot physically differ. Mount ships scripts/render-global.py and eval suites."
+   },
+   {
+    "name": "skill-loop",
+    "class": "unknown",
+    "note": "Asher-authored system skill (skills/system/skill-loop), not part of the SDLC family and not obviously superseded by v2; mount is byte-identical to source. Likely keep, but decide explicitly."
+   },
+   {
+    "name": "writing-great-skills",
+    "class": "third-party/domain",
+    "note": "Authoring guidance from mattpocock/skills. PROVENANCE ODDITY: skills-lock.json records a local source in this repo, but NO source directory exists under skills/ \u2014 the mount at .agents/skills/writing-great-skills is the only copy in the working tree (git-tracked, so recoverable from history). A lockfile-driven reinstall of it would fail."
+   }
+  ],
+  "playbooks": [
+   {
+    "file": "docs/agents/backlog-policy.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Work domain: software \u2014 step playbooks scaffolded from templates/software/; recorded 2026-07-11 (issue #32)",
+     "Readiness label bindings are ALL identity mappings: ready-for-agent, in-flight, ready-for-human, needs-info, needs-shaping \u2014 no aliases; setup reused existing labels",
+     "in-flight records what's flying via a GitHub comment alongside the label (branch name and dispatch date)",
+     "GitHub expresses in-review/closed natively \u2014 open PR is in-review, closure via 'Closes #<n>' at merge; no extra labels",
+     "Work-type labels (identity): bug \u2192 diagnose branch; enhancement \u2192 implement branch; refactor \u2192 refactor branch; research \u2192 source-audit branch (dossier kept under research/<slug>/); draft \u2192 produce-and-review branch, judgment-terminal, done at human review verdict, no mechanical verify pass/fail, artifact is KEPT (vs prototype = throwaway)",
+     "Routing rule: terminal question about sources \u2192 research; sources feeding voice/persuasion prose \u2192 draft; behavior change \u2192 code work-type with research as substage",
+     "Exclusion labels: wontfix, duplicate, superseded, invalid; neutral: documentation, question, good first issue, help wanted",
+     "Dispatch metadata block required on every ready-for-agent issue: surface (backend/ui/mixed/non-code + capability), coordination (routine/orchestrator-required), reason, and route: direct for enhancements; missing fields are a grooming gap, never permission to infer",
+     "Dependencies: GitHub native blocked_by relation (verbs in platform.md); duplicate/supersede = 'duplicate of #N'/'superseded by #N' body line plus exclusion label",
+     "Readiness: agent applies ready-for-agent only to human-confirmed shortlist; may apply ready-for-human/needs-info/needs-shaping/exclusions on its own",
+     "Orphan sweep: in-flight issue whose recorded branch is gone or quiet past 7 days is a corpse \u2014 groom surfaces to human as candidate reset; never silently reset (branch may hold unmerged work)",
+     "Concurrency: in-flight is an optimistic claim marker; run re-reads each issue immediately before marking and skips any that changed"
+    ]
+   },
+   {
+    "file": "docs/agents/environment.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Base branch main; branch naming <issue-number>-<slug> (e.g. 6-slim-backlog-composer)",
+     "No CI, no preview deploy, no deploy on merge \u2014 skills consumed via npx skills add; merge just updates main",
+     "This is a skills repository, not a running product: no dev stack, no services, no ports; 'running the app' = driving a probe scenario through an executor",
+     "Worktree regime: local-isolatable \u2014 git worktree add <path> -b <branch> main is the complete isolated stack",
+     "Shared singletons: GitHub tracker (serialized main-branch writes) and tailnet presentation surface (one review published at a time); neither forces serialized code verification",
+     "Seed regime: none \u2014 the state a skill needs is a probe scenario (prompt + answer key) in the skill's evals/",
+     "Auth: gh CLI authed as asasher (keyring); Codex CLI authed to its own subscription (codex --version \u2192 0.144.1), billed separately; credentials in gh keyring and ~/.codex/, never hardcode or echo",
+     "Verification fixtures: VERIFY-<issue>-<purpose> under temp dir or owning <skill>-workspace/; never share a mutable fixture across issue runs; synthetic prompt fixtures OK for skill decisions but not for live GitHub API behavior or script lifecycle checks",
+     "Drivers: in-session Claude subagent reading SKILL.md (primary); independent executor codex exec -s read-only --skip-git-repo-check (or -s workspace-write); stdlib scripts driven directly with python3",
+     "Evidence per surface: eval transcript + pass/fail verdict table against answer key; screenshots for visual artifacts; terminal transcripts for scripts",
+     "Presenting: tailnet surface, Funnel off, private to MacBook + iphone-14-pro-max; ALWAYS open published URL locally with open <url> \u2014 standing instruction from Asher, every presentation, no need to ask",
+     "Root URL https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills (tailscale 1.98.8); surface dir ~/.backlog/surface/asher-skills holding registry.json + generated index.html + per-issue docs",
+     "Tailnet bring-up: check tailscale status first (non-zero + 'Logged out.'/'Tailscale is stopped.' when down); run tailscale up only when down AND publishing now; never down/up to reset a healthy connection; auth URL/failure \u2192 surface to Asher, fall back to open <file>, never Funnel or public tunnel",
+     "Document server: sandboxed macOS tailscale app cannot serve file paths \u2014 python3 -m http.server 8390 --directory ~/.backlog/surface/asher-skills then tailscale serve --bg --set-path /asher-skills http://localhost:8390; port 8377 is already held by a prior /review handler",
+     "Publish a doc: mkdir -p ~/.backlog/surface/asher-skills/<issue> && ln -sfn <abs path> ~/.backlog/surface/asher-skills/<issue>/<name>.html",
+     "Review server (self-host path): python3 skills/software-development/serve-via-tailnet/scripts/review-server.py --doc <file> --title \u2026 --issue <n> --kind plan --state <run state dir> --surface ~/.backlog/surface/asher-skills --port <p> --public-url <root>/<n>/review; proxy via tailscale serve --bg --set-path /asher-skills/<n>/review http://localhost:<p>",
+     "Verdict wait: python3 \u2026/review-await.py --state <dir> --timeout <secs> \u2014 exit 0 approve / 3 nits / 10 changes / 124 timeout",
+     "Hub sweep: review-server.py --sweep --surface ~/.backlog/surface/asher-skills",
+     "Reap rule: remove issue symlinks and tailscale serve --set-path /asher-skills/<n>/review off (and /proto off); tailscale serve status lists live handlers; known stale pre-existing handler /review \u2192 http://localhost:8377 \u2014 reap if dead (tailscale serve --set-path /review off)",
+     "Keep-awake: none (setup choice) \u2014 no LaunchAgent, no caffeinate; AFK reviews outlasting a run may find the machine asleep",
+     "Staffing deltas: skill design is orchestration-grade; probe evals use the dual-executor contract; no project floor/capability-provider/succession override",
+     "Parallelism verdict: serialize-verification \u2014 a genuine POLICY choice (user chose sequential at setup), not a hard constraint; flip to parallel-safe by re-running backlog setup"
+    ]
+   },
+   {
+    "file": "docs/agents/platform.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Tracker binding: github, repo asasher/asher-skills, gh CLI authed as asasher, https protocol",
+     "Verified verbs: gh issue list --state open --json number,title,labels,body; gh issue view <n> --comments; gh issue comment; gh issue edit --add-label/--remove-label; gh issue create --label <work-type>,<readiness>; gh issue close",
+     "Read blockers: gh api repos/asasher/asher-skills/issues/<n> --jq '.issue_dependencies_summary' \u2014 .blocked_by > 0 defers the issue (verified against native dependency summary)",
+     "Write a blocker link: resolve numeric id via gh api repos/asasher/asher-skills/issues/<blocker> --jq '.id', then gh api -X POST repos/asasher/asher-skills/issues/<blocked>/dependencies/blocked_by -F issue_id=<numeric-id> \u2014 verified live; do not substitute task-list prose",
+     "Close-on-merge: 'Closes #<n>' in PR body is the loop's default; direct gh issue close only for issues no PR carries",
+     "PR verbs: gh pr create --title \u2026 --body-file; gh pr edit --body-file; gh pr view --comments; inline threads via gh api repos/asasher/asher-skills/pulls/<n>/comments; approval = exact 'LGTM' comment; merge = human on GitHub or explicitly authorized merge-changes (gh pr merge <n> --squash --delete-branch) \u2014 the automated loop never merges",
+     "Version control: worktrees optional under sequential verdict; sync base via git fetch origin && git checkout main && git pull --ff-only; publish via git push -u origin <branch>",
+     "Pinned-SHA semantics: force-pushes after evidence capture orphan pinned blob URLs \u2014 re-pin per evidence.md",
+     "Harness: Claude Code; native spawn via Agent tool (isolation: 'worktree' when needed); Claude\u2192Codex via bounded codex exec --cd <dir> through its tracked wrapper; Codex\u2192Claude via bounded claude -p --model <model> '<prompt>' </dev/null and NEVER --bare",
+     "Reachability is directional: a failed Codex\u2192Claude invocation removes only that route; Claude\u2192Codex remains; no vendor-policy or credit monitor gates dispatch",
+     "Spawned threads read skill references under .claude/skills/<name>/ and docs/agents/ in the checkout",
+     "Wakeups: ScheduleWakeup/Monitor for polling; verdict waits block on serve-via-tailnet's review-await.py; longer watches via watch-until ladder \u2014 a watcher subagent, never the orchestrator inline"
+    ]
+   },
+   {
+    "file": "docs/agents/codebase.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Skill prose is the product; no history, no unnecessary negations \u2014 a prohibition earns its place only against demonstrated drift (CONTEXT.md redundant-negation rule)",
+     "Catalog gate: PATH=/usr/bin:$PATH python3 tools/test_catalog.py (17 tests)",
+     "Site manifest gate: PATH=/usr/bin:$PATH python3 site/check.py \u2014 its exit code is the verdict; don't pipe through tail in a && chain or the failure is masked",
+     "Staffing eval suites run from skills/system/staffing/evals/: test_global_apply.py, test_global_templates.py, test_provider_pilot.py; compiled per-provider staffing load has a hard byte budget (BASELINE_BYTES * 0.8 in test_global_apply.py) \u2014 prose added to install-and-reconcile.md or harness.md must fit inside it",
+     "Runner trap: bare == in a zsh command line (e.g. echo ===) breaks the whole command \u2014 quote or avoid",
+     "Probe answer keys cite exact sentences from the skill's files \u2014 editing a cited sentence means re-citing the key in the same change",
+     "Python tests are stdlib unittest, one file per tool, run directly",
+     "Mounts are build products of npx skills add \u2014 edit source and reinstall; never npx skills remove (local source path deletes the source itself)",
+     "Staffing provider trees under .agents/ are compiled by staffing's apply step \u2014 regenerate, don't hand-edit",
+     "Commits: imperative, sentence-case subject, no Conventional Commits prefix; Claude Code Co-Authored-By trailer; commit/push only when Asher asks"
+    ]
+   },
+   {
+    "file": "docs/agents/evidence.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "This repo is the no-running-app case: honest proof is the probe-eval transcript (plus rendered-HTML screenshots for skills that emit one); on a repo with an app, probe transcripts are NOT a substitute",
+     "Research dossiers stay under research/ (or <skill>-workspace/research/) \u2014 never copied into evidence/; citations are intrinsic provenance",
+     "Per change type: skill behavior \u2192 probe-eval transcript + pass/fail table, with before/after verdict shift for reworks; script \u2192 py_compile transcript + driven path (e.g. review-server.py --sweep output); visual artifact \u2192 before/after screenshots or short GIF; pure prose \u2192 nothing beyond the diff",
+     "A green 'it renders' screenshot alone is not enough when the change is about what the skill decides",
+     "Styling-only captures reusable only when HEAD is final reviewed HEAD and Reviewer records 'no product-code change; no recapture'",
+     "AFK run owes the full evidence package; interactively witnessed work may degrade to PR-body verification grades",
+     "GIF recipe: ffmpeg -i in.mp4 -filter_complex \"fps=12,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse\" out.gif; keep under 10 MB (GitHub inline ceiling); commit PNG/JPEG/GIF under evidence/<slug>/, never MP4; name c<criterion>-<what-it-shows>.png",
+     "GitHub embeds: same-origin blob URLs with ?raw=1 render on private repos; raw.githubusercontent.com and /raw/<sha>/ are camo-proxied and 404 on private repos; no API/CLI path to the drag-and-drop CDN",
+     "Embed form: [![<criterion>](https://github.com/<o>/<r>/blob/<sha>/evidence/<slug>/<f>.png?raw=1)](same URL without ?raw=1)",
+     "Verify mechanically, not by eye: gh api repos/<o>/<r>/commits/<sha> (404 = unpushed/orphaned); git cat-file -e <sha>:evidence/<slug>/<file>; extension PNG/JPEG/GIF never MP4; broken embed is almost always an orphaned SHA \u2014 re-pin, don't switch to plain links",
+     "Local binding: repo-relative embeds ../../evidence/<slug>/<file>.png; publish the review file WITH its evidence/ tree (directory root, not lone file) or skip the publish"
+    ]
+   },
+   {
+    "file": "docs/agents/implementing.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "No unit-test framework: 'tests' are probe scenarios driven through an executor; test-first here = write/adjust the probe scenario and answer key first, confirm the current skill fails it, then change and re-run",
+     "Tests live in each skill's own evals/ directory (skills are self-contained)",
+     "Commit style: imperative sentence-case subject, no Conventional Commits prefix; Claude Code Co-Authored-By trailer; commit/push only when Asher asks",
+     "UI: load bare-minimum-ux sibling where installed (wins on conflict); when external-dependencies.lock.json records consented impeccable, PRODUCT.md/DESIGN.md are ambient context (DESIGN.md wins visual, PRODUCT.md strategy/voice)",
+     "Repo conventions reviewers expect: self-contained skill dirs, compose-by-name, stdlib-only Python 3, passing probe eval for new/reworked skills"
+    ]
+   },
+   {
+    "file": "docs/agents/probe-evals.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Two tiers: Tier 1 situated probes (comprehension), Tier 2 scripted dry-run (tool mechanics, no model in loop)",
+     "Method validated 2026-07-04 (triage skill, 20/20); reused for bayes (20/20 before ship) and maquette",
+     "Situated probes not quiz questions: 'you are at step X, criterion 3 fails \u2014 next concrete action?'",
+     "Context fidelity: separate sessions per deployment context \u2014 command-surface (SKILL.md in context) vs dispatched-thread (dispatch prompt only, no SKILL.md) \u2014 tests that disclosed references stand alone",
+     "Require citations: 'cite the file and exact sentence that decided it'",
+     "Answer key written BEFORE any runs; writing it after seeing output invalidates the eval",
+     "Executors are the deployment targets: from Claude Code, in-session Claude subagent + codex exec --sandbox read-only; from Codex, claude -p (never --bare) + native Codex agent",
+     "Ambiguity is a valid answer \u2014 flagged ambiguities are routinely the most valuable findings",
+     "Canonical Tier 1 example: skills/creative/maquette/evals/probes.md; canonical Tier 2: skills/personal/fair-deal/eval/protocol-dryrun.sh (35 checks, mktemp sandbox, bare local repo as remote)",
+     "Ship eval assets in the skill's own evals/ so reworks re-run them",
+     "Probe the failure branches and resumes, not just the happy path",
+     "Instances: triage (origin), bayes, maquette (Tier 1); fair-deal (Tier 2); shadixfy (evals/evals.json harness); skill-loop consumes these as eval input"
+    ]
+   },
+   {
+    "file": "docs/agents/verifying.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Checks narrowest-first: probe eval per probe-evals.md; script check python3 -m py_compile then drive directly (confirm runs on this machine's Python 3.14); no npm/lint/typecheck/build pipeline exists",
+     "Site drift check: any change touching an SDLC-family skill runs python3 site/check.py (manifest must list the family's real files per site/MAINTENANCE.md); errors block",
+     "Aggregate gate before PR: changed skill's probe eval passes against answer key + changed scripts compile and run; new/reworked skills clear a pre-deployment probe eval before first real use",
+     "Second-opinion: delegate a scenario to codex exec as a differently-modeled executor for subjective criteria; grading and script-running stay local",
+     "Cold-reader check: a subagent with none of the authoring conversation reads the artifact alone and flags every ungroundable sentence; authoring-context leakage ('now', 'no longer', 'replaces', collaborator-addressed justifications) fixed before review-ready",
+     "CI merge gate: none \u2014 merge readiness is green probe eval + review LGTM, not a status check",
+     "Acceptance criteria by entryway: ticketed run reads ticket's acceptance block; spec without tickets reads the spec; interactive reads loop-recorded criteria in the issue thread; a skill's answer key is the executable form of its criteria",
+     "Every change must satisfy: file-level self-containment, compose-by-name, stdlib-only Python 3 scripts, probe eval for new/reworked skills, agents/openai.yaml where a skill must present well in Codex",
+     "Rendered HTML artifacts exercised in happy/empty/error states and both color schemes; bare-minimum-ux accessibility basics where installed"
+    ]
+   },
+   {
+    "file": "docs/agents/change-reviewer.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Repo-specific review concerns: self-containment (no cross-skill file imports), stdlib-only Python 3 scripts, agents/openai.yaml presence where Codex presentation matters, passing probe eval for new/reworked skills; Reviewer also judges rendered plan/prototype HTML for taste",
+     "Authoring-context leakage in shipped audience-facing text is a BLOCKER: quote the sentence, name the real recipient, require deletion or recipient-designed rewrite",
+     "Open every cited test/fixture/probe and confirm it exercises the claimed runtime seam before accepting it",
+     "Product-semantics questions are ruling requests to the issue coordinator, not review edits \u2014 wait for explicit ruling, then review the new HEAD",
+     "Approval = exact 'LGTM' comment when no actionable improvement remains",
+     "Styling-only evidence reuse verdict must be exactly 'no product-code change; no recapture' and only when HEAD is still final",
+     "~1000-line file growth is a presumptive blocker (shipped default, retained here)"
+    ]
+   },
+   {
+    "file": "docs/agents/change-fixer.md",
+    "boilerplate_vs_earned": "mostly-template",
+    "earned_content": [
+     "Reviewer's structural pushes are in scope by default; reply per comment with commit SHA; intentional non-fixes reply with reason and risk; re-prompt the Reviewer once the iteration is handled (all shipped-default text, no repo-specific additions)"
+    ]
+   },
+   {
+    "file": "docs/agents/change-description.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "No PR template \u2014 use the outline; title imperative sentence-case matching commit style",
+     "Include 'Closes #<n>' so the issue closes on merge; under Claude Code the body ends with the '\ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)' line",
+     "CI status line states plainly: no CI \u2014 readiness is green probe eval + LGTM",
+     "For research work-type, replace Evidence with 'Research dossier': link canonical dossier, state as-of boundary and claim-audit result, no duplicate evidence package",
+     "Evidence section is normally a placeholder: 'Captured after review converges.'"
+    ]
+   },
+   {
+    "file": "docs/agents/diagnosing-bugs.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "No unit-test framework: a skill bug is a wrong decision, broken route, or failing script; reproduce with the triggering situated probe through BOTH executors; the reproducing scenario becomes a probe in that skill's evals/",
+     "Script bugs: python3 -m py_compile then drive the failing path",
+     "Known flaky surface: model-dependent skill behavior \u2014 reproduce across at least two executor runs (Claude + codex exec) and rerun the same corpus before calling it fixed",
+     "Probe-eval equivalence is the regression seam for prose skills"
+    ]
+   },
+   {
+    "file": "docs/agents/prototyping.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "No task runner/build system; prototypes are standalone HTML, scratch scenario runs, or stdlib-Python spikes",
+     "Rendered HTML prototypes must be self-contained single files (inline CSS/JS) so they render on the tailnet surface with no external assets",
+     "Keep prototypes OUTSIDE any skill directory \u2014 under the relevant <skill>-workspace/ or the session scratchpad \u2014 throwaway code never ships inside a self-contained skill"
+    ]
+   },
+   {
+    "file": "docs/agents/refactoring.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "The behavior lock is a probe eval: capture affected skill's probe verdicts before the change; behavior-preserving only if identical scenarios produce the same verdicts after, re-run >=2 executors for model variance",
+     "Script refactors: py_compile plus the same driven paths producing the same output",
+     "A refactor must not turn a compose-by-name pointer into a file dependency; honors the copy-a-technique/extract-a-primitive rule"
+    ]
+   },
+   {
+    "file": "docs/agents/researching.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Durable root research/<slug>/; skill-specific investigations may live in the relevant <skill>-workspace/",
+     "Scratch shards go to the system temp dir, not committed; research stays out of evidence/ unless it proves a separate change criterion",
+     "Primary local sources: skill sources, git history, eval artifacts, project playbooks; cite stable file/line, commit, URL, page, or record locators; never publish credentials",
+     "Serialize writes to shared research artifacts; present durable findings as repo-local Markdown/HTML per the global Presentation policy"
+    ]
+   }
+  ],
+  "tracker": {
+   "labels": [
+    "ready-for-agent (1 open: #80)",
+    "in-flight (0 open)",
+    "ready-for-human (0 open)",
+    "needs-info (2 open: #12, #13)",
+    "needs-spec (1 open: #92) \u2014 note: description says 'Parked for strategic shaping', i.e. this label plays the needs-shaping role under a different name than backlog-policy.md's identity binding 'needs-shaping' (no label literally named needs-shaping exists)",
+    "refactor (work-type)",
+    "research (work-type)",
+    "draft (work-type)",
+    "bug (work-type)",
+    "enhancement (work-type)",
+    "superseded (exclusion; 1 open: #72)",
+    "wontfix/duplicate/invalid (exclusions)",
+    "documentation/question/good-first-issue/help-wanted (neutral)"
+   ],
+   "inflight_tickets": [
+    "#80 'Decouple strategic planning and slicing from backlog's AFK execution loop' \u2014 ready-for-agent (the only agent-dispatchable ticket; a run could pick it up mid-migration)",
+    "No open issue currently carries in-flight; open PR #90 (sdlc-lifecycle) is the live in-review work and is the v2 migration branch itself"
+   ],
+   "notes": "Repo asasher/asher-skills via gh (authed asasher). backlog-policy.md claims every role label is an identity mapping including needs-shaping, but the live tracker has needs-spec instead \u2014 either the label was renamed after the playbook was written or the binding drifted; the migration must reconcile this. 23 open issues total; needs-info #12/#13, superseded #72, needs-spec #92."
+  },
+  "inflight": [
+   "Open PR #90 'Implement the SDLC lifecycle end to end' on branch sdlc-lifecycle \u2014 currently checked out in the main working copy; this IS the v2 migration in flight",
+   "Unmerged local branches (git branch --no-merged main): 80-decouple-planning-from-run, 84-interview-domain-modeling, codex/research-skill, sdlc-lifecycle",
+   "Worktrees: /Users/asher/Projects/asher-skills-worktrees/61-harness-specific-skills (branch 61-harness-specific-skills), /Users/asher/Projects/asher-skills-worktrees/goodwork-viz (on main), /Users/asher/Projects/asher-skills-worktrees/manage-runway-skill (codex/until-zero-skill), /Users/asher/Projects/asher-skills-worktrees/reconcile-consumers (DETACHED HEAD 2493ecb \u2014 any uncommitted/unreferenced work there is fragile), /Users/asher/Projects/asher-skills-worktrees/reconcile-installed-skills (codex/reconcile-installed-skills), plus /Users/asher/Projects/asher-skills-research-skill (codex/research-skill)",
+   "plans/ \u2014 22 committed plan HTML files (1-extract-staffing.html \u2026 until-zero-skill-migration.html, relay-agentmail-orchestration.html)",
+   "evidence/ \u2014 per-issue evidence dirs 1\u202684 plus v2-era dirs: evidence/sdlc-lifecycle/probe-eval.md, evidence/v2-probe-runs/ (dual-executor transcripts + verdicts), evidence/v2-fix-verification/ (4 sol transcripts + probe-verdicts.md)",
+   "Run-state (outside repo, referenced by playbooks): ~/.backlog/runs/asher-skills/{32,35}/state/events.jsonl (+32/server.log), ~/.backlog/state/asher-skills/{2-review-loop,8-to-spec}, stray un-namespaced ~/.backlog/state/{1-extract-staffing,10-sprite-sheet-extractor,7-review} and ~/.backlog/runs/6",
+   "Review-server state: ~/.backlog/review-state/asher-skills/until-zero-skill-migration, ~/.backlog/reviews/asher-skills/{44-backlog-decomposition,73-plan,goodwork-viz}",
+   "Presentation surface: ~/.backlog/surface/asher-skills/{registry.json,index.html} (hub currently empty of issue dirs)",
+   "Live tailscale serve handlers for this repo: /asher-skills \u2192 localhost:8390, /asher-skills/44/review \u2192 54984, /asher-skills/until-zero/review \u2192 50072, plus the known-stale /review \u2192 8377 that environment.md says to reap",
+   "~/.backlog/handoffs/metis-backlog-run-2026-07-12.md (other-repo handoff sharing the same state root)"
+  ],
+  "scripts": [
+   "/Users/asher/Projects/asher-skills/.agents/skills/backlog/scripts/run-state.py \u2014 v1 run-state machinery, exists ONLY in the mount (v2 source has no scripts/)",
+   "/Users/asher/Projects/asher-skills/.agents/skills/backlog/evals/test_run_state.py \u2014 its test, mount-only",
+   "/Users/asher/Projects/asher-skills/skills/software-development/serve-via-tailnet/scripts/review-server.py \u2014 canonical, referenced by environment.md via self-host path",
+   "/Users/asher/Projects/asher-skills/skills/software-development/serve-via-tailnet/scripts/review-await.py \u2014 canonical verdict-wait (exit 0/3/10/124), referenced by environment.md and platform.md",
+   "/Users/asher/Projects/asher-skills/.agents/skills/staffing/scripts/render-global.py (+ evals/test_global_templates.py, evals/test_provider_pilot.py) \u2014 staffing compile machinery in the mount",
+   "No hooks: .claude/ contains only skills/ (no settings.json); .claude-plugin/marketplace.json exists at repo root"
+  ],
+  "hazards": [
+   "NEVER run npx skills remove here: skills-lock.json records a local source path, so remove deletes the skill SOURCE under skills/, not just the mount (documented in AGENTS.md and codebase.md). A naive CLI-driven cleanup destroys the canonical v2 sources.",
+   "Reinstall must be one atomic npx skills add with the COMPLETE desired skill set \u2014 sequential single-skill adds replace earlier selections (AGENTS.md \u00a7 Source & updates).",
+   "writing-great-skills has no source under skills/ \u2014 the git-tracked mount .agents/skills/writing-great-skills is its only working-tree copy; a mount wipe + lockfile-driven reinstall cannot restore it (recoverable only from git history / upstream mattpocock/skills).",
+   "The v1 backlog mount holds files absent from the v2 source (scripts/run-state.py, evals/test_run_state.py, evals/liveness-probes.md, reference/, several templates incl. software/change-fixer.md, change-reviewer.md, implementing.md, refactoring.md, verifying.md); deleting the mount loses the working-tree copy of the v1 machinery (git history retains it).",
+   "docs/agents/*.md are repo-owned and dense with earned, live-verified content (gh dependency-API write commands, tailnet serve/reap recipes, catalog/site gate commands, the staffing byte budget, the zsh == trap, evidence embed mechanics). 'Delete old playbooks and re-scaffold' loses all of it \u2014 setups must reconcile, never overwrite.",
+   "Staffing has a declared provider-variant contract in .agents/asher-skills/variant-lock.json, but .claude/skills/staffing is currently a symlink to the codex mount \u2014 a naive reinstall could either clobber the variant contract or silently perpetuate the invalid symlink state; the migration must resolve which is intended.",
+   "The migration branch itself (sdlc-lifecycle, PR #90) is checked out in the main working copy; anything that resets/cleans the checkout risks the in-flight v2 work. Unmerged branches 80-decouple-planning-from-run, 84-interview-domain-modeling, codex/research-skill carry unmerged commits; the reconcile-consumers worktree is on a DETACHED HEAD.",
+   "Issue #80 is ready-for-agent \u2014 an old-family backlog run started mid-migration would dispatch it under v1 semantics.",
+   "~/.backlog/ (runs, state, reviews, review-state, surface, handoffs) is shared across projects (metis, pipelines, integrations-v2) \u2014 cleanup of 'backlog state' must be scoped to asher-skills entries only, and the live tailscale serve handlers (/asher-skills, /asher-skills/44/review, /asher-skills/until-zero/review, stale /review:8377) reference it.",
+   "backlog-policy.md's identity binding for needs-shaping does not match the live tracker (label is needs-spec) \u2014 a migration that trusts the playbook verbatim will bind a nonexistent label; one that re-runs setup blindly may mint a duplicate label instead of reusing needs-spec.",
+   "Mounts are git-tracked: any mount replacement is a working-tree change on the currently checked-out migration branch \u2014 commit hygiene required so v1 mount deletion is reviewable and reversible."
+  ]
+ },
+ {
+  "repo": "integrations-v2",
+  "mounts": [
+   {
+    "name": "backlog",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/delivery/backlog (old v1 path; v2 lives at a restructured path). Primary copy in .agents/skills, .claude symlink. Ships scripts/run-state.py + evals."
+   },
+   {
+    "name": "plan",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/delivery/plan \u2014 superseded by v2 shape/build flow; no same-name v2 skill. Templates include plan-skeleton.html referenced by planning.md."
+   },
+   {
+    "name": "review-loop",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/system/review-loop \u2014 superseded by adversarial-review/serve-via-tailnet in v2. Ships review-server.py and review-await.py that environment.md commands invoke by mount path."
+   },
+   {
+    "name": "setup-asher-skills",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/system/setup-asher-skills \u2014 old install/catalog machinery (catalog.py, install.py, render-global.py)."
+   },
+   {
+    "name": "staffing",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/system/staffing. Only declared provider variant: .claude/skills/staffing is a REAL compiled directory (not a symlink), recorded in .agents/asher-skills/variant-lock.json with claude+codex hashes. v2 has its own staffing skill."
+   },
+   {
+    "name": "diagnosing-bugs",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/delivery/diagnosing-bugs \u2014 old copy of a skill that exists in v2."
+   },
+   {
+    "name": "prototype",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/delivery/prototype \u2014 old copy; v2 ships prototype."
+   },
+   {
+    "name": "research",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/thinking/research \u2014 old copy; v2 ships research."
+   },
+   {
+    "name": "tdd",
+    "class": "v1-family",
+    "note": "lock provenance is THIRD-PARTY mattpocock/skills (no skillPath recorded), but v2 ships its own tdd \u2014 decide replace vs keep during migration."
+   },
+   {
+    "name": "diagnose",
+    "class": "v1-family",
+    "note": "lock provenance mattpocock/skills skills/engineering/diagnose \u2014 third-party original superseded by v2 diagnosing-bugs; environment.md \u00a7 Tools still names it."
+   },
+   {
+    "name": "handoff",
+    "class": "v1-family",
+    "note": "lock provenance mattpocock/skills skills/productivity/handoff \u2014 v2 ships its own handoff; decide replace vs keep."
+   },
+   {
+    "name": "greploop",
+    "class": "v1-family",
+    "note": "lock provenance greptileai/skills \u2014 no v2 successor; if removed it simply disappears, nothing in playbooks depends on it."
+   },
+   {
+    "name": "shadixfy",
+    "class": "third-party/domain",
+    "note": "asher-authored creative skill (asasher/asher-skills skills/creative/shadixfy) \u2014 NOT part of the SDLC family; leave installed or migrate separately, not part of this migration's supersede set."
+   },
+   {
+    "name": "agent-browser",
+    "class": "third-party/domain",
+    "note": "vercel-labs/agent-browser \u2014 bound as the project-pinned primary browser driver in environment.md; must survive migration."
+   },
+   {
+    "name": "agentmail",
+    "class": "third-party/domain",
+    "note": "agentmail-to/agentmail-skills \u2014 bound as the OTP email driver in environment.md; must survive."
+   },
+   {
+    "name": "btca-local",
+    "class": "third-party/domain",
+    "note": "davis7dotsh/better-context; btca.config.jsonc at repo root."
+   },
+   {
+    "name": "convex",
+    "class": "third-party/domain",
+    "note": "PROVENANCE ODDITY: mount exists in .agents/skills but has NO entry in skills-lock.json. Referenced by environment.md \u00a7 Tools."
+   },
+   {
+    "name": "convex-best-practices",
+    "class": "third-party/domain",
+    "note": "waynesutton/convexskills; in lock (no skillPath)."
+   },
+   {
+    "name": "convex-realtime",
+    "class": "third-party/domain",
+    "note": "waynesutton/convexskills; in lock (no skillPath)."
+   },
+   {
+    "name": "humanizer",
+    "class": "third-party/domain",
+    "note": "blader/humanizer; in lock."
+   },
+   {
+    "name": "vercel-composition-patterns",
+    "class": "third-party/domain",
+    "note": "PROVENANCE ODDITY: not in skills-lock.json (Jan 30 vintage)."
+   },
+   {
+    "name": "vercel-react-best-practices",
+    "class": "third-party/domain",
+    "note": "PROVENANCE ODDITY: not in skills-lock.json."
+   },
+   {
+    "name": "web-design-guidelines",
+    "class": "third-party/domain",
+    "note": "PROVENANCE ODDITY: not in skills-lock.json."
+   },
+   {
+    "name": "xlsx",
+    "class": "third-party/domain",
+    "note": "PROVENANCE ODDITY: not in skills-lock.json. Full office scripts tree (pack/unpack/validators)."
+   }
+  ],
+  "playbooks": [
+   {
+    "file": "docs/agents/environment.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Branch naming: codex/<issue-number>-<short-slug>; base main; PR target main",
+     "CI: GitHub Actions runs pnpm install --frozen-lockfile + pnpm check, but main has NO branch protection \u2014 checks do not block merge at platform layer",
+     "Preview deploys: pnpm --filter @workspace/backend deploy:vercel creates per-branch Convex preview, seeded by preview_seed:run",
+     "Pinned pnpm@10.4.1 \u2014 a mismatched major pnpm can try to purge node_modules (nested scripts call pnpm too)",
+     "Bootstrap a new worktree from inside it: node scripts/setup-worktree.mjs (copies missing env files, writes overlay, pnpm install)",
+     "pnpm dev:isolated = per-worktree ports/routes/local Convex + auto local_seed:run; pnpm dev:seed:isolated repeats seed once; pnpm worktree:env regenerates overlay",
+     "Cold-start caveat: first pnpm dev:isolated may exceed its fixed 30s readiness window while per-worktree Convex binary/dashboard downloads; rerun after caches warm",
+     "dotenvx run -- <command> for anything needing root .env values",
+     "Services: apps/web via portless app.onboardings next dev --turbopack; packages/backend convex dev; packages/emails portless email.onboardings; packages/ui Ladle at ui.onboardings",
+     "Local hostnames: app.onboardings.localhost, email.onboardings.localhost, ui.onboardings.localhost",
+     "Isolation regime local-isolatable; generated state: .env.worktree, packages/backend/.env.worktree, .worktree/convex-home (worktree HOME so anonymous Convex deployments don't share SQLite), .worktree/portless",
+     "Shared-singleton audit table (effect-verified 2026-07-14 with two simultaneous worktrees): Convex/ports/env isolatable; Clerk dev instance NOT (serialize auth mutation, suffix-namespaced orgs); AgentMail inbox NOT (serialize OTP, match fresh message); dev:reset targets NOT (exclusive human-approved lane)",
+     "Serialized exception lane: ALL isolated stack startups/seeds serialize (dev:isolated auto-seeds Clerk); after ready+authenticated, non-auth work runs concurrently",
+     "Seeds: pnpm dev:seed (dry-run), pnpm dev:seed -- --apply, pnpm dev:reset-and-seed, pnpm dev:reset -- --apply; reset DELETES all Clerk orgs in the test instance + app-owned Convex dev rows (after a Convex backup) \u2014 never while others use the shared stack",
+     "Seed contents: Dunn Harland, Demo Dealer, Demo System Owner orgs; Asher and AgentMail users; Demo System; one project per workflow stage (12 projects)",
+     "Isolated seed refuses live Clerk keys, never deletes Clerk data, creates orgs named 'Dunn Harland [<suffix>]'; NO verified safe command exists to remove these smoke orgs \u2014 leave them",
+     "Auth: Clerk JWTs trusted by Convex; public routes /sign-in and /invitations only",
+     "Agent auth path: seeded onboardings-dev@agentmail.to mailbox, request fresh OTP, consume programmatically without printing it; do NOT trust the initially-active org \u2014 smoke inherited the other worktree's active organization before switching",
+     "Fixture naming: VERIFY-<issue>-<purpose> for app records, [<worktree-suffix>] for shared-Clerk orgs",
+     "Never run shared reset commands as cleanup; never share a mutable scratch entity across issues",
+     "Browser: agent-browser, one isolated named session per worktree; ChatGPT-in-Chrome only on explicit user request; Computer Use disabled by default, per-task authorization only, never carries forward",
+     "Evidence formats: PNG/JPEG static, short sanitized GIF for flows; delete the full authentication recording; review captures for secrets",
+     "Review surface (v1 review-loop binding): static server rooted at ~/.backlog/surface via LaunchAgent com.asher.backlog-surface port 8377 keep-alive, proxied via tailscale serve --bg --set-path /review http://localhost:8377; root URL https://ashers-macbook-pro.tail045dd5.ts.net/review; Funnel stays off",
+     "Publish static doc: ln -sfn <file> ~/.backlog/surface/integrations-v2/<issue>/<name>.html",
+     "Interactive review: python3 .agents/skills/review-loop/scripts/review-server.py --doc ... --state ~/.backlog/review-state/integrations-v2/<issue>-<artifact> ... then tailscale serve --bg --set-path /review/integrations-v2/<issue>/review http://localhost:<port>",
+     "Verdict await: review-await.py exit codes \u2014 0 approve, 3 approve-with-nits, 10 request-changes, 124 timeout",
+     "Stop/sweep: review-server.py --stop / --sweep; then tailscale serve --set-path ... off; tailscale serve status lists live handlers",
+     "Connectivity preflight: tailscale status before publishing; tailscale up only when node down and review publishing now; never Funnel",
+     "Parallelism verdict: serialize-verification (Clerk + AgentMail shared singletons); orchestrator owns the serialized lane and must not overlap it across issue threads; build/static-analysis/isolated non-auth tests may parallelize",
+     "Known environment gaps: cold Convex download timeout; no targeted Clerk-org cleanup"
+    ]
+   },
+   {
+    "file": "docs/agents/platform.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Tracker binding: github dunnharland/integrations-v2",
+     "gh issue view, gh pr view, gh pr edit ALL FAIL on this repo (exit 1, deprecated Projects-classic GraphQL; verified 2026-07-11) \u2014 use gh api REST verbs instead; gh pr list and gh pr checks work",
+     "Read issue: gh api repos/dunnharland/integrations-v2/issues/<n> (+ /comments)",
+     "Blocker read: gh api repos/dunnharland/integrations-v2/issues/<blocked>/dependencies/blocked_by (exercised end-to-end 2026-07-14); write: resolve numeric id via --jq '.id' then POST/DELETE -F issue_id=<id> to the same endpoint",
+     "Edit PR body: gh api --method PATCH repos/dunnharland/integrations-v2/pulls/<n> --input - with {\"body\": ...}",
+     "Close-on-merge: Closes #<n> in PR body",
+     "Merge policy: human squash-merges (gh pr merge <n> --squash) \u2014 house policy, NOT platform-enforced; --delete-branch fails on local branches while worktree exists \u2014 remove worktrees first",
+     "Stacked-PR reconciliation after base squash-merge: merge origin/main into stacked branch, conflicts are one-sided (keep both additions), run pnpm install + pnpm check before pushing; stacked PR merges strictly after base and PR body must name the order",
+     "Worktree create: git worktree add <path> -b codex/<issue>-<slug> origin/main",
+     "Harness binding: Codex native agent threads; cross-harness only via a named native wrapper subagent (e.g. external_claude_<role>) staffed with the cheapest eligible native model \u2014 babysit/relay only, no judgment; never raw fire-and-forget background shell",
+     "SHA-pinned semantics: rebase/force-push orphans pinned commits \u2014 re-pin branch-head SHA after any history rewrite"
+    ]
+   },
+   {
+    "file": "docs/agents/backlog-policy.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Label bindings: ready-for-agent, in-flight (claim marker set by run, branch+date recorded in a comment since GitHub has no native claim field), ready-for-human (also the abort target for verify caps and environment blockers), needs-info, needs-triage (neutral, not runnable)",
+     "in-review and closed need no labels \u2014 expressed natively by an open PR and issue closure",
+     "Work-type labels: bug \u2192 diagnose branch; enhancement \u2192 plan\u2192implement; refactor; research (dossier under research/<slug>/); draft \u2192 judgment-terminal produce-and-review, done = human review verdict, artifact kept (unlike prototype)",
+     "Tie-break rule: sources-terminal \u2192 research; prose judged by voice/fit \u2192 draft; behavior changes keep code work-type with research as substage",
+     "Dispatch metadata block required in issue body before ready-for-agent: Surface (backend/ui/mixed/non-code), Required capabilities, Coordination (routine | orchestrator-required), Reason, Known uncertainty; missing metadata \u2192 run skips, never infers",
+     "Exclusions: duplicate/invalid/wontfix; 'superseded' role maps to wontfix + linking comment (no separate label exists)",
+     "Neutral labels: codex, design, documentation, good first issue, help wanted, question",
+     "Dependencies use GitHub native blocked_by relation (verbs in platform.md); run skips while any blocker open",
+     "In-flight hygiene: optimistic claim, run re-reads each issue immediately before marking; orphan = recorded branch gone or quiet past 7 days \u2192 groom surfaces to human as candidate reset, NEVER silently reset (branch may hold unmerged work)"
+    ]
+   },
+   {
+    "file": "docs/agents/TYPESCRIPT.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Prefer types over interfaces; strippable TS only (no enums); avoid as-casts unless commented; always T[] / readonly T[]",
+     "Always use attempt/attemptAsync from es-toolkit instead of try-catch",
+     "Early returns over nesting; kebab-case filenames; no non-ASCII punctuation (en dash, curly apostrophe) in output"
+    ]
+   },
+   {
+    "file": "docs/agents/MODULES.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "No barrel files (index.ts re-exports) anywhere \u2014 import directly from the source file"
+    ]
+   },
+   {
+    "file": "docs/agents/I18N.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "next-intl WITHOUT locale URL routing; locale resolved per request in apps/web/i18n/request.ts: locale cookie \u2192 Accept-Language \u2192 English",
+     "Supported locales/default/direction in packages/backend/convex/locales.ts (shared web+Convex); native names + cookie name in apps/web/i18n/config.ts",
+     "User language stored in userPreferences Convex table, mirrored to cookie by apps/web/components/locale-sync.tsx; selector apps/web/components/language-select.tsx; Clerk localized via @clerk/localizations in apps/web/i18n/clerk-localization.ts",
+     "Catalogs at apps/web/messages/<locale>.json; en.json canonical; non-English deep-merged over English at request time so passes can land one namespace at a time",
+     "Namespace per screen/component cluster; no grab-bag common namespace; camelCase keys; ICU syntax; identical placeholders across locales",
+     "apps/web/i18n/messages.test.ts enforces catalog-per-locale, subset keys, no empty values \u2014 run with pnpm --filter web test",
+     "packages/ui stays locale-agnostic \u2014 text via props, no i18n provider in packages/ui",
+     "Never hardcode locale in Intl.*Format; useLocale() client / getLocale() server",
+     "Enumerated remaining hardcoded en-US call sites: invitation-gantt.tsx, migration-form.tsx, project-tasks-workspace.tsx, project-user-stories-workspace.tsx, data-validation-panel.tsx, generate-config-document.ts, schedule-options.tsx (locale prop), packages/backend/convex/projects.ts (en-CA, needs recipient's stored preference)",
+     "RTL: getTextDirection(locale) sets <html dir>; Radix DirectionProvider wraps tree; use logical Tailwind utilities (ms-*, me-*, ps-*, pe-*, start-*, end-*) in i18n-touched code; sidebar mirrors via side prop from orgs/[slug]/layout.tsx",
+     "Adding a locale: SUPPORTED_LOCALES (+RTL_LOCALES) in convex/locales.ts \u2192 LOCALE_NATIVE_NAMES in config.ts \u2192 clerk-localization mapping \u2192 messages/<locale>.json (partial ok)",
+     "Translation-pass backlog: platform/settings, project-wizard, project-tasks, project-user-stories, migration-config, validation, specification-config, project-versions still hardcoded English; verify in one translated locale AND Arabic (RTL) before merging; emails not yet localized \u2014 recipient locale should come from userPreferences"
+    ]
+   },
+   {
+    "file": "docs/agents/verifying.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Targeted tests: pnpm --filter web test <path> and pnpm --filter @workspace/backend test <path> \u2014 do NOT insert '--': it runs the full suite (web 99 files/615 tests, backend 55 files/478 tests)",
+     "Package checks: pnpm --filter web check / @workspace/backend check / @workspace/ui check / @workspace/emails check; pnpm lint (green, 15 warnings), pnpm typecheck, pnpm format, pnpm build, pnpm lint:ws, aggregate pnpm check",
+     "Recorded red baseline (as of 2026-07-14): web check / typecheck / build / pnpm check red on TS2307 missing 'mermaid' module from apps/web/lib/block-document-export/mermaid-image.ts",
+     "CI: .github/workflows/check.yml runs same pnpm check; no required status checks, main not branch-protected; house policy = disclose CI status and get green check before human merge",
+     "Each claimed criterion names the actual runtime seam; open cited tests/fixtures and confirm they cover it",
+     "Auth/org/role/invitation/email/data-export surfaces need explicit permission or side-effect criteria",
+     "Evidence bar per change type: logic/backend fix = green targeted test + pnpm check; UI = screenshot/browser before-after; workflow/auth = app-level walkthrough with account/org, expected, actual; email = rendered/captured preview without secrets; seed/reset/deploy = dry-run or safe-env proof with destructive commands called out"
+    ]
+   },
+   {
+    "file": "docs/agents/implementing.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Targeted test invocation repeated: package-relative path, NO '--' separator (adding -- runs the full package suite)",
+     "Tests live: web under apps/web; backend under packages/backend/convex and packages/backend/mcp; Vitest via Turbo/pnpm filters",
+     "Commit style: concise imperative subject; Conventional Commits NOT enforced",
+     "Never commit .env values, generated backups, .next, .turbo, caches, node_modules",
+     "pnpm/pnpm dlx only; dotenvx run -- for root .env commands",
+     "Convex filenames under packages/backend/convex: only alphanumerics, underscores, periods",
+     "Use nuqs when React screen state should be URL-shareable",
+     "Prefer autosave forms and optimistic Convex updates over explicit save buttons",
+     "Under-specified issue \u2192 stop and move back to needs-info instead of guessing"
+    ]
+   },
+   {
+    "file": "docs/agents/planning.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Plan threshold: multi-subsystem (web UI + Convex), data models/authz/migrations/public API, seeded data/auth flows/email/preview-deploy behavior, high-risk workflow state/permissions/invitations/generated artifacts, or >~1 focused day",
+     "Plan location: .plans/<issue-number>-<short-slug>.html \u2014 self-contained HTML, inline SVG diagrams pre-rendered (mmdc), stable anchors, acceptance criteria as <li id=\"ac-N\" data-criterion>",
+     "Approval happens on the review surface (review-loop), hash-bound to the version seen; request-changes requires a ledger disposition per annotation (changed/kept/orphaned) before re-awaiting",
+     "Approved plan is committed to the work branch BEFORE implementation dispatch; issue gets a markdown digest comment + repo link to the committed HTML"
+    ]
+   },
+   {
+    "file": "docs/agents/evidence.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Evidence must be real app-driven artifacts; probe/dry-run transcripts are not evidence in this repo",
+     "Artifacts committed under evidence/<slug>/, named c<criterion>-<what-it-shows>.png; never commit MP4 (GitHub can't render committed video)",
+     "GIF recipe: ffmpeg two-pass palette (fps=12,scale=960, palettegen/paletteuse), \u2264~10s, well under 10 MB",
+     "GitHub embed form: [![crit](https://github.com/<o>/<r>/blob/<sha>/evidence/<slug>/<f>.png?raw=1)](...plain blob url...) \u2014 blob+?raw=1 is same-origin and works on private repos; raw.githubusercontent.com and /raw/<sha>/ are camo-proxied and 404 on private repos",
+     "Mechanical verification (agent can't view renders): gh api commits/<sha> proves SHA pushed; git cat-file -e <sha>:evidence/<slug>/<file> proves path; extension PNG/JPEG/GIF only",
+     "Broken embed almost always = orphaned SHA after rewrite \u2014 re-pin, never switch to plain links",
+     "Styling-only evidence reuse allowed only when HEAD is the final reviewed HEAD and Reviewer records verbatim 'no product-code change; no recapture'"
+    ]
+   },
+   {
+    "file": "docs/agents/change-description.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "PR body order: Closes #<n> + work-type, Summary (incl. scope discovery), Changes (design reasoning not file list), Plan (SHA-pinned), Checks run, CI status (disclose red/pending AND lack of branch protection \u2014 never describe workflow as platform-enforced), Verification (per-criterion, workarounds framed as environment gaps vs product issues), Evidence placeholder 'Captured after review converges'",
+     "research work-type: Research dossier section instead of Evidence \u2014 link canonical dossier, as-of boundary, claim-audit result",
+     "gh pr edit fails on this repo \u2014 PATCH via gh api repos/<o>/<r>/pulls/<n> --input -"
+    ]
+   },
+   {
+    "file": "docs/agents/change-reviewer.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Repo-specific scrutiny list: authorization and tenant/org isolation (Clerk claims + Convex access checks); data model/schema/validator/generated-API compatibility; collaboration and optimistic-update behavior; email/invitation/webhook/external side effects; frontend a11y/responsive/no overlapping text/design-system conventions/shareable URL state; direct imports, no barrel files, pnpm-only, Convex filename rules, no secret leakage",
+     "~1000-line file growth is a presumptive blocker \u2014 ask for decomposition first",
+     "Product-semantics question = ruling request to the issue coordinator, never a review edit; after Fixer applies ruling, Reviewer re-reviews new HEAD",
+     "Approval = exact 'LGTM' comment; styling-evidence reuse verdict must be verbatim 'no product-code change; no recapture' and only when HEAD still final"
+    ]
+   },
+   {
+    "file": "docs/agents/change-fixer.md",
+    "boilerplate_vs_earned": "mostly-template",
+    "earned_content": [
+     "Run targeted checks then pnpm check for code changes; disclose the recorded pre-existing baseline rather than claiming green; Markdown-only fixes need no pnpm check unless the PR already changed code",
+     "Reviewer evaluates the pushed HEAD \u2014 commit and push before handing back; reply per comment with pushed SHA; escalate product-semantics rulings to the issue coordinator"
+    ]
+   },
+   {
+    "file": "docs/agents/diagnosing-bugs.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Vitest; web tests **/*.test.ts under apps/web (Node env); backend under packages/backend/convex and packages/backend/mcp; targeted run without '--' (with -- runs full suite)",
+     "App-visible bugs: pnpm dev:isolated (auto-seeds worktree-local Convex + suffix-namespaced shared-Clerk orgs), serialize startup/auth, drive printed worktree URL with isolated named agent-browser session; record exact URL, account/org, seed namespace, observed behavior",
+     "Investigation layers for Convex-backed paths: web caller \u2192 generated API usage \u2192 validator/schema \u2192 mutation/query/action logic \u2192 Clerk/Convex auth state; include packages/backend/mcp when failure crosses the MCP surface",
+     "No repo logging/debugger/profiler entry points recorded; no flaky tests recorded; shared Clerk tenant remains the collision hazard",
+     "Done gate: targeted checks + pnpm check green, or isolate and disclose the recorded baseline failure"
+    ]
+   },
+   {
+    "file": "docs/agents/prototyping.md",
+    "boilerplate_vs_earned": "mostly-template",
+    "earned_content": [
+     "Task runner: pnpm scripts + Turbo, register in owning package's package.json (web: apps/web)",
+     "Routing: Next.js App Router under apps/web; shared UI in packages/ui with Ladle preview at ui.onboardings.localhost",
+     "UI variants must use @workspace/ui components and existing design-system conventions; screenshot variants via the agent-browser driver and embed in the plan with winner marked"
+    ]
+   },
+   {
+    "file": "docs/agents/researching.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Durable dossier root: research/<slug>/; scratch shards in system temp, uncommitted; research stays out of evidence/ unless it proves a change criterion",
+     "Primary external sources: official integration-provider documentation and APIs, via authenticated connectors or browser sessions",
+     "Serialize rate-limited or tenant-mutating sources; preserve tenant data and credentials"
+    ]
+   },
+   {
+    "file": "docs/agents/refactoring.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Lock behavior at public seams first; characterization tests per implementing.md standards; if no testable seam, creating one is the first separate minimal refactor",
+     "Preserve public behavior, URL state, authz behavior, generated API contracts, and seed/reset behavior; Convex filename rules and generated-API compatibility; no barrel files",
+     "Never change behavior and structure in the same commit; a locked test that must change = behavior change \u2192 stop for a product ruling",
+     "Same targeted-test and package-check commands as verifying.md; pnpm check before PR unless documented baseline"
+    ]
+   }
+  ],
+  "tracker": {
+   "labels": [
+    "ready-for-agent (3 open: #254 #255 #256)",
+    "in-flight (6 open: #240 #241 #243 #244 #245 #250)",
+    "ready-for-human (1 open: #242)",
+    "needs-info (3 open: #91 #221 #248)",
+    "needs-triage (0 visible)",
+    "draft (backlog role: judgment-terminal produce-and-review)",
+    "research (backlog role: source-audit work-type)",
+    "bug",
+    "enhancement",
+    "refactor",
+    "duplicate",
+    "invalid",
+    "wontfix",
+    "codex (neutral)",
+    "design (neutral)",
+    "documentation",
+    "good first issue",
+    "help wanted",
+    "question"
+   ],
+   "inflight_tickets": [
+    "#250 Allow team invitations when no design workshop is required \u2014 in-flight (PR #262 open; run handoff says req-3 browser flow blocked on missing reachable Clerk test org fixture)",
+    "#245 Input Specs copy-from-item \u2014 in-flight (PR #258 open)",
+    "#244 Optional signed SCD submission \u2014 in-flight (PR #261 open)",
+    "#243 Onboardings MCP contract coverage \u2014 in-flight (PR #260 open)",
+    "#241 Validation artifact history via MCP \u2014 in-flight (PR #259 open, LGTM recorded)",
+    "#240 Agreement/SCD MCP management \u2014 in-flight (PR #257 open, LGTM iteration 2, ready for human squash-merge)",
+    "#242 MCP DOCX/PDF export parity \u2014 ready-for-human (PR #263 open; blocked: obsolete Convex team slug / empty preview CONVEX_DEPLOY_KEY for the hosted Node 20 preview gate)"
+   ],
+   "notes": "Remote github dunnharland/integrations-v2. Seven open PRs (#257-#263) all awaiting human squash-merge or unblock; labels stay in-flight until human merges (Closes #<n> linkage closes issues). gh issue view / gh pr view / gh pr edit fail on this repo \u2014 REST verbs only. Blockers tracked via native blocked_by relation, not labels."
+  },
+  "inflight": [
+   ".plans/ \u2014 29 git-tracked plan files (md + HTML) for issues 162-250, incl. approved plans for the 7 open PRs (237, 238, 239, 240 via worktrees...); SHA-pinned links from PR bodies point at these",
+   "plans/152-real-timeline-dates.html \u2014 older plan location at repo root",
+   "evidence/ \u2014 32 committed per-issue evidence dirs (152 through 233); PR bodies embed them via blob/<sha>?raw=1 URLs, so history rewrites or deletions break rendered evidence",
+   "/Users/asher/Projects/integrations-v2-worktrees/ \u2014 7 live git worktrees (240-mcp-scd-management, 241-mcp-validation-artifacts, 242-mcp-document-exports, 243-mcp-contract-coverage, 244-optional-scd-confirmation, 245-copy-input-spec-values, 250-workshopless-team-invitations), each on a codex/<n>-* branch with an open unmerged PR (#257-#263); all clean and pushed as of audit",
+   ".git/backlog/runs/20260715T195204Z and 20260722T115406Z \u2014 v1 backlog run state: status.json (per-issue checkpoints incl. model routes, review verdicts, cleanup-debt ledgers), board.md, handoff.md (documents the #242 Convex-deploy-key blocker and #250 Clerk-fixture blocker with exact unblock steps and 'rerun backlog audited-resume' protocol), events/*.jsonl (398 events) + locks",
+   "~/.backlog/review-state/integrations-v2/ \u2014 9 review-loop state dirs (237-plan through 250-workshopless-team-invitations); the recorded stop/sweep commands for them invoke .agents/skills/review-loop/scripts/review-server.py",
+   "~/.backlog/surface/integrations-v2/ \u2014 review hub (index.html + registry.json) served by LaunchAgent com.asher.backlog-surface (port 8377) behind tailscale serve --set-path /review",
+   "Unmerged non-worktree branches with real commits: codex/195-tracker-three-axis (16 ahead), codex/186-i18n-infrastructure (8), codex/168-split-validation-stages (8), codex/192-save-validation-files (8), task-assignee-notifications-and-invites (8), codex/resolve-pr-173 (7), sandcastle/issue-90-create-icg-excel-export (7), plus ~20 more codex/* branches 1-6 ahead of main \u2014 ahead-counts inflated by squash-merge history, but each needs a merged-or-orphaned judgment before deletion",
+   "research/ dossier root and backups/convex-prod-with-files-20260616-132914.zip (Convex prod backup at repo root)"
+  ],
+  "scripts": [
+   "/Users/asher/Projects/integrations-v2/.agents/skills/backlog/scripts/run-state.py \u2014 writes/reads .git/backlog/runs (the only reader of the in-flight run state)",
+   "/Users/asher/Projects/integrations-v2/.agents/skills/review-loop/scripts/review-server.py \u2014 serve/stop/sweep commands recorded verbatim in environment.md \u00a7 Presenting; 9 live state dirs under ~/.backlog/review-state/integrations-v2 depend on it",
+   "/Users/asher/Projects/integrations-v2/.agents/skills/review-loop/scripts/review-await.py \u2014 verdict await with exit-code contract (0/3/10/124)",
+   "/Users/asher/Projects/integrations-v2/.agents/skills/setup-asher-skills/scripts/install.py, catalog.py, render-global.py \u2014 v1 install machinery",
+   "/Users/asher/Projects/integrations-v2/.agents/skills/staffing/scripts/render-global.py \u2014 v1 staffing global-module renderer",
+   "/Users/asher/Projects/integrations-v2/.agents/skills/diagnose/scripts/hitl-loop.template.sh \u2014 third-party diagnose template",
+   "~/Library/LaunchAgents/com.asher.backlog-surface.plist \u2014 machine-level LaunchAgent serving ~/.backlog/surface on port 8377 (shared with asher-skills, metis, pipelines review surfaces), mounted via tailscale serve --set-path /review; NOT inside the repo but part of the v1 review-loop machinery",
+   "No git hooks or Claude hooks found (.claude/settings.local.json is permissions-only)"
+  ],
+  "hazards": [
+   "Seven live worktrees under /Users/asher/Projects/integrations-v2-worktrees back seven OPEN PRs (#257-#263). git worktree prune/remove or branch deletion before the human squash-merges destroys the review-ready work; also gh pr merge --delete-branch fails on local branches while their worktree exists.",
+   "Deleting old docs/agents playbooks discards the earned payload above \u2014 especially environment.md (effect-verified singleton audit, Clerk/AgentMail serialization rules, isolated-seed commands, the no-safe-cleanup warning for smoke Clerk orgs) and platform.md (gh view/edit REST workarounds, blocked_by verbs, stacked-squash reconciliation). None of this is regenerable without re-running live audits.",
+   "Reinstalling/removing the backlog mount deletes scripts/run-state.py, the only tool that reads .git/backlog/runs \u2014 the two run dirs (incl. the handoff documenting #242's Convex deploy-key blocker and #250's Clerk-fixture blocker with exact unblock steps) become opaque.",
+   "Reinstalling/removing the review-loop mount breaks the recorded stop/sweep/await commands for 9 live review-state dirs under ~/.backlog/review-state/integrations-v2 and strands the tailnet hub; the LaunchAgent com.asher.backlog-surface and tailscale serve /review mount are machine-level and shared with three other repos \u2014 do not tear down globally for one repo's migration.",
+   "The 6 in-flight + 1 ready-for-human tracker labels are live claims; bulk-relabeling to a new v2 label scheme while PRs are open orphans the claim comments (branch + dispatch date) that groom's orphan sweep depends on.",
+   ".claude/skills/staffing is the only real directory among symlinks \u2014 a declared claude provider variant recorded in .agents/asher-skills/variant-lock.json; a naive symlink-normalizing cleanup would either delete the compiled variant or invalidate the variant lock.",
+   "Five mounts (convex, vercel-composition-patterns, vercel-react-best-practices, web-design-guidelines, xlsx) have no skills-lock.json entry \u2014 a lockfile-driven reinstall that treats the lock as authoritative would drop them; environment.md explicitly binds agent-browser, agentmail, convex* and (old) diagnose/tdd by name.",
+   "PR bodies embed evidence via blob/<commit-sha>?raw=1 \u2014 rewriting history or deleting evidence/ or .plans/ (both git-tracked) 404s every rendered evidence image and SHA-pinned plan link on the open PRs.",
+   "backups/convex-prod-with-files-20260616-132914.zip is a production Convex backup sitting in the repo root \u2014 any cleanup that prunes 'stray' files must not touch it.",
+   "pnpm check has a recorded red baseline (missing 'mermaid' module) \u2014 a migration smoke test that gates on green pnpm check will falsely fail; the baseline is documented in verifying.md and must carry over.",
+   "The isolated-seed suffix-namespaced Clerk organizations ('Dunn Harland [<suffix>]' etc.) in the shared dev instance have NO verified safe cleanup command \u2014 any migration 'cleanup' step that tries to delete them risks unrelated shared-tenant state; pnpm dev:reset deletes ALL Clerk orgs in the test instance."
+  ]
+ },
+ {
+  "repo": "pipelines",
+  "mounts": [
+   {
+    "name": "backlog",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/delivery/backlog; real dir in .agents/skills, symlink in .claude/skills; ships scripts/run-state.py + evals"
+   },
+   {
+    "name": "plan",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/delivery/plan; symlinked alias"
+   },
+   {
+    "name": "review-loop",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/system/review-loop; ships review-server.py/review-await.py; a LIVE review-server process (PID 62436) is currently running FROM this mount"
+   },
+   {
+    "name": "setup-asher-skills",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/system/setup-asher-skills; ships install.py/catalog.py/render-global.py + evals"
+   },
+   {
+    "name": "staffing",
+    "class": "v1-family",
+    "note": "declared provider variant: .claude/skills/staffing is a separately compiled REAL dir (not symlink), tracked in .agents/asher-skills/variant-lock.json with per-provider effective hashes"
+   },
+   {
+    "name": "research",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/thinking/research"
+   },
+   {
+    "name": "prototype",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/delivery/prototype"
+   },
+   {
+    "name": "diagnosing-bugs",
+    "class": "v1-family",
+    "note": "lock: asasher/asher-skills skills/delivery/diagnosing-bugs (old copy; v2 family also ships diagnosing-bugs)"
+   },
+   {
+    "name": "tdd",
+    "class": "v1-family",
+    "note": "old copy superseded by v2 tdd, but provenance is THIRD-PARTY: mattpocock/skills skills/engineering/tdd \u2014 not asher-authored"
+   },
+   {
+    "name": "improve",
+    "class": "v1-family",
+    "note": "NOT in skills-lock.json (orphan mount); SKILL.md metadata says author shadcn, MIT \u2014 provenance oddity"
+   },
+   {
+    "name": "greploop",
+    "class": "v1-family",
+    "note": "named in migration scope, but provenance is third-party: greptileai/skills"
+   },
+   {
+    "name": "uncodixfy",
+    "class": "v1-family",
+    "note": "named in migration scope, but provenance is third-party (cyxzdev/Uncodixfy) AND playbooks implementing.md/prototyping.md require it for frontend work \u2014 removing it breaks playbook references"
+   },
+   {
+    "name": "impeccable",
+    "class": "unknown",
+    "note": "NOT in skills-lock.json; independent REAL directories in BOTH .agents/skills and .claude/skills (no symlink, no variant-lock) \u2014 an undeclared independent copy, invalid per repo vocabulary; provenance unknown"
+   },
+   {
+    "name": "qa-user-journeys",
+    "class": "third-party/domain",
+    "note": "NOT in lock; repo-earned domain skill pointing at docs/qa/journeys \u2014 exists nowhere else, must survive"
+   },
+   {
+    "name": "sentry-cli",
+    "class": "third-party/domain",
+    "note": "NOT in lock; repo-specific Sentry/Railway/PR #194 observability skill \u2014 earned content, exists nowhere else"
+   },
+   {
+    "name": "ask-syncron-parts-planning",
+    "class": "third-party/domain",
+    "note": "dunnharland/skills; mount is UNTRACKED in git and its lock entry is part of the uncommitted skills-lock.json diff"
+   },
+   {
+    "name": "bare-minimum-ux",
+    "class": "third-party/domain",
+    "note": "asher-authored (asasher/asher-skills skills/creative/bare-minimum-ux) but creative family, not SDLC \u2014 untouched by this migration; referenced by implementing.md/prototyping.md"
+   },
+   {
+    "name": "agent-browser",
+    "class": "third-party/domain",
+    "note": "vercel-labs/agent-browser; primary browser QA route per environment.md"
+   },
+   {
+    "name": "agentmail",
+    "class": "third-party/domain",
+    "note": "agentmail-to/agentmail-skills; OTP/invite flows"
+   },
+   {
+    "name": "better-auth-best-practices",
+    "class": "third-party/domain",
+    "note": "better-auth/skills"
+   },
+   {
+    "name": "better-auth-security-best-practices",
+    "class": "third-party/domain",
+    "note": "better-auth/skills"
+   },
+   {
+    "name": "create-auth-skill",
+    "class": "third-party/domain",
+    "note": "better-auth/skills"
+   },
+   {
+    "name": "email-and-password-best-practices",
+    "class": "third-party/domain",
+    "note": "better-auth/skills"
+   },
+   {
+    "name": "organization-best-practices",
+    "class": "third-party/domain",
+    "note": "better-auth/skills"
+   },
+   {
+    "name": "two-factor-authentication-best-practices",
+    "class": "third-party/domain",
+    "note": "better-auth/skills"
+   },
+   {
+    "name": "database-migrations",
+    "class": "third-party/domain",
+    "note": "PROVENANCE ODDITY: lock source is /Users/asher/Projects/pipelines itself (local), computedHash = sha256 of empty string; referenced by implementing.md"
+   },
+   {
+    "name": "db-migrations",
+    "class": "unknown",
+    "note": "GHOST lock entry: present in skills-lock.json (local source, empty-string hash) but NO mount exists on disk"
+   },
+   {
+    "name": "shadcn",
+    "class": "third-party/domain",
+    "note": "PROVENANCE ODDITY: lock source is /Users/asher/Projects/pipelines itself (local) rather than a shadcn upstream; required by implementing.md for shadcn/base-ui work"
+   },
+   {
+    "name": "elysiajs",
+    "class": "third-party/domain",
+    "note": "elysiajs/skills"
+   },
+   {
+    "name": "resend",
+    "class": "third-party/domain",
+    "note": "resend/resend-skills"
+   },
+   {
+    "name": "tanstack-form",
+    "class": "third-party/domain",
+    "note": "tanstack-skills"
+   },
+   {
+    "name": "tanstack-query",
+    "class": "third-party/domain",
+    "note": "tanstack-skills"
+   },
+   {
+    "name": "tanstack-virtual",
+    "class": "third-party/domain",
+    "note": "tanstack-skills"
+   },
+   {
+    "name": "use-railway",
+    "class": "third-party/domain",
+    "note": "railwayapp/railway-skills; ships db-analysis python scripts"
+   },
+   {
+    "name": "vercel-cli",
+    "class": "third-party/domain",
+    "note": "vercel/vercel"
+   }
+  ],
+  "playbooks": [
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/backlog-policy.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Label bindings 1:1, no aliases: ready-for-agent, in-flight, ready-for-human, needs-info (readiness); bug, enhancement, refactor, research, draft (work type); duplicate/invalid/wontfix/superseded (exclusion); documentation/good first issue/help wanted/question/needs-triage/design/observability/rfq/admin are neutral",
+     "in-review and closed are expressed natively on GitHub (open PR / native closure) \u2014 no labels for them",
+     "ready-for-agent must never be present without exactly one of bug/enhancement/refactor/research/draft",
+     "in-flight is set by run at dispatch replacing ready-for-agent; branch name + dispatch date recorded in a comment alongside the label",
+     "ready-for-human doubles as the abort target for verify caps and environment blockers, with the blocker commented",
+     "draft = judgment-terminal produce-and-review work; done = human review verdict, artifact is kept (unlike prototype); research = epistemic-terminal, dossier under research/<slug>/",
+     "Dispatch metadata (Surface: backend/ui/mixed/non-code; Coordination class: routine vs orchestrator-required; reason) stored in a stable 'Dispatch:' block in issue body/grooming comment; missing metadata = run skips the issue",
+     "Dependencies: read blockers via gh api -H \"X-GitHub-Api-Version: 2026-03-10\" repos/dunnharland/pipelines/issues/<n>/dependencies/blocked_by; write by resolving blocker numeric id (gh api ... --jq '.id') then POST {\"issue_id\": <id>}",
+     "GOTCHA (2026-07-14 live probe): .issue_dependencies_summary stayed zero while the list endpoint worked \u2014 never use the summary as the run-queue read path",
+     "Orphan sweep: in-flight issue whose recorded branch is gone or quiet >7 days is a corpse; surface to human for reset, never silently reset (branch may hold unmerged work)",
+     "Keep Syncron inbound batch behavior explicit in issues: ingress path, content date handling, required files, transformation feature state, egress destination, acceptance evidence",
+     "UI-heavy work requires docs/agents/frontend.md plus the local UI skills before implementation",
+     "DB enum/domain-state changes require a type-safety acceptance criterion: bun run check must fail stale callers across database, API, SQL, and frontend surfaces"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/environment.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Base branch main; branch naming codex/<issue-number>-<slug> (codex/<short-slug> without an issue); PR target main; CI = bun install --frozen-lockfile + bun run check; no per-PR preview deploys; Railway deploy documented in docs/deploy/railway.md \u2014 confirm before assuming auto-deploy",
+     "bun install; bun run dev starts Postgres, MinIO, upload-bucket initializer, local SFTP egress, shared portless proxy, and Turbo dev tasks for backend/frontend/sftp-ingress/worker/status page",
+     "URLs: http://frontend.pipelines.localhost:1355, http://backend.pipelines.localhost:1355, http://status.pipelines.localhost:1355",
+     "Stack commands: bun run db:up, bucket:up, sftp-egress:up, reset:db, reset:object-storage, reset:sftp; migration: bun run db:migrate",
+     "Worktree isolation via scripts/worktree-env.ts, with-worktree-env.ts, setup-worktree.sh, reap-worktree-stacks.ts: derives COMPOSE_PROJECT_NAME=pipelines-<suffix>, unique ports 21000-31000 (Postgres/MinIO/SFTP), per-worktree *.localhost:1355 hostnames, per-worktree DATABASE_URL/S3_ENDPOINT/auth origins/webhook URLs",
+     "Cleanup: scripts/cleanup-worktree.sh; bun run reset:worktree-stacks for orphans; bun scripts/reap-worktree-stacks.ts --all; escape hatch PIPELINES_WORKTREE_ISOLATION=off",
+     "portless proxy port 1355 is intentionally shared across worktrees (per-worktree subdomains); Railway, Resend, AgentMail, OpenAI, PostHog, Sentry, customer SFTP are NOT isolatable \u2014 serialize or use noop/mocks",
+     "Seed: explicit QA fixtures only, app never seeds; bun run qa:seed-rfq-comparison (uses QA_ORG_SLUG + AGENT_EMAIL, refuses non-local DB hosts, worktree-aware, applies pending migrations); fixtures via bun run qa:generate-syncron-inbound-batch -- --content-date today; journeys in docs/qa/journeys/",
+     "Auth: Better Auth email OTP; local AUTH_EMAIL_PROVIDER=noop logs OTP/invites in backend console; PLATFORM_ADMIN_EMAILS controls platform admin; agentmail when AGENTMAIL_API_KEY + AGENT_EMAIL set",
+     "Browser policy: agent-browser with one isolated named session per check is primary (plan asher-skills#73); ChatGPT-in-Chrome is a per-use-consent carve-out only; repo-owned Puppeteer (bun run qa:browser:probe) is the authorized fallback (2026-07-22), owns bundled Chrome, never attaches to user profile",
+     "Web baseline: bun run dev, wait for HTTP 200 on frontend + backend /api/health + status page, then drive frontend via agent-browser; missing AGENT_EMAIL or QA_ORG_SLUG is an explicit blocker, not permission to invent an account",
+     "Load fixtures (qa:generate-syncron-inbound-load-batch) only for scale/memory criteria; fixture names include issue number + timestamp; owning issue thread cleans up with reset:* commands",
+     "Review surface: static root https://ashers-macbook-pro.tail045dd5.ts.net/review backed by ~/.backlog/surface (LaunchAgent com.asher.backlog-surface, port 8377); repo hub ~/.backlog/surface/pipelines; publish via ln -sfn <file> ~/.backlog/surface/pipelines/<scope>/<name>.html; Funnel stays off; run tailscale status before publishing",
+     "Interactive review: python3 .agents/skills/review-loop/scripts/review-server.py --doc ... --surface ~/.backlog/surface/pipelines --public-url https://ashers-macbook-pro.tail045dd5.ts.net/pipelines/<scope>/review ...; proxy via tailscale serve --bg --set-path /pipelines/<scope>/review http://localhost:<port>; await via review-await.py (exit 0 approve, 3 approve-with-nits, 10 request-changes, 124 timeout); teardown --stop then tailscale serve --set-path ... off; sweep via --sweep",
+     "Staffing evidence (2026-07-14): codex-cli 0.144.3 reaches gpt-5.6-sol; claude 2.1.207 sonnet/opus aliases effect-verified; versioned aliases fable-5/sonnet-5/opus-4.8 REJECTED by installed Claude CLI; Claude\u2192codex exec unavailable in unattended children \u2014 fall back within harness",
+     "Parallelism verdict: parallel-safe (isolation has regression tests \u2014 15 checks in scripts/worktree-env.test.ts passed 2026-07-14); serialize anything touching shared Railway, real third-party providers, or external SFTP",
+     "Independent second-opinion verification: delegate to codex exec with a self-contained prompt"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/platform.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Tracker binding: github dunnharland/pipelines; verbs verified live at setup: gh issue list --state open --json number,title,labels; gh issue view <n> --comments; gh issue comment; gh issue edit --add/remove-label; gh issue create --label <work-type> (serialized main-branch writer only); gh issue close",
+     "Blocked-by read/write commands duplicated here with API version 2026-03-10 and the stale .issue_dependencies_summary warning",
+     "Close-on-merge: Closes #<n> in PR body",
+     "PR verbs: gh pr create --base main --body-file <file> (ready, not draft); gh pr edit --body-file; inline comments via gh api repos/dunnharland/pipelines/pulls/<n>/comments; approval = exact 'LGTM' comment; a human merges on GitHub \u2014 the loop never merges",
+     "Worktree create: git worktree add <path> -b codex/<issue-number>-<slug> origin/main; fetch+pull main before forking; publish git push -u origin <branch>; teardown git worktree remove then reap derived stack",
+     "Pinned-SHA semantics: rebase/force-push orphans pinned SHAs \u2014 re-pin after any history rewrite",
+     "Spawned threads can read backlog references at .agents/skills/backlog/ (symlinked as .claude/skills/backlog)",
+     "Claude Code spawns issue threads via Agent/Task tool with isolation: worktree; Codex via native collaboration agent threads"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/evidence.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Evidence = real check output + artifacts driven through the actual app; probe/dry-run transcripts are NOT evidence where a runnable surface exists",
+     "Captured once after adversarial review converges, mapped per acceptance criterion; styling-only captures reusable only when HEAD is final reviewed HEAD and Reviewer records exactly 'no product-code change; no recapture'",
+     "Commit PNG/JPEG/GIF under evidence/<slug>/, never MP4 (GitHub can't render committed video); name c<criterion>-<what-it-shows>.png",
+     "GIF recipe: ffmpeg -i in.mp4 -filter_complex \"fps=12,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse\" out.gif, well under 10 MB",
+     "GitHub embed form: [![<criterion>](https://github.com/<owner>/<repo>/blob/<sha>/evidence/<slug>/<file>.png?raw=1)](...) \u2014 blob ?raw=1 URLs are same-origin and NOT camo-proxied so they render on private repos; raw.githubusercontent.com and /raw/<sha>/ ARE camo-proxied and 404 on private repos; no API path to the drag-and-drop CDN",
+     "Mechanical verification (agent can't view the render): check blob/<sha>/...?raw=1 syntax; SHA on remote via gh api repos/<o>/<r>/commits/<sha>; file exists via git cat-file -e <sha>:evidence/<slug>/<file>; extension PNG/JPEG/GIF",
+     "Broken embed is almost always an orphaned SHA \u2014 re-pin (or branch-name ref), never 'fix' by switching to plain links"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/change-description.md",
+    "boilerplate_vs_earned": "mostly-template",
+    "earned_content": [
+     "PR body order: close linkage + work-type, Summary (incl. scope discovery), Changes (design reasoning, not file list), Plan (SHA-pinned link), Checks run, CI status, Verification (per-criterion with caveats), Evidence placeholder 'Captured after review converges'",
+     "research work uses 'Research dossier' section instead of Evidence: link canonical dossier, as-of boundary, claim-audit result",
+     "Title convention: sentence-case imperative summary; include issue number in PR title/body when available"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/change-fixer.md",
+    "boilerplate_vs_earned": "mostly-template",
+    "earned_content": [
+     "Address every actionable comment unless the fix changes product behavior beyond issue scope; behavior-preserving structural improvements requested by Reviewer are in scope by default",
+     "Reply to each addressed comment with what changed and the commit SHA; intentional non-fix gets reason + remaining risk; re-prompt Reviewer once the iteration is handled",
+     "Run relevant checks from verifying.md after changes, then commit and push the iteration"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/change-reviewer.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Behavior-risk surfaces to scrutinize: Syncron inbound ingestion, validation, canonical identity, transform output, object storage, worker orchestration, SFTP egress",
+     "End-to-end type safety for persisted enum values, domain state strings, API contracts, SQL, and frontend call sites; migration safety, generated artifacts, rollback assumptions, stale-caller failures",
+     "Test coverage bar: regression tests for bugs, characterization for refactors, user-journey evidence for workflow changes",
+     "Frontend must follow docs/agents/frontend.md and handle loading/error/empty/disabled states",
+     "Security/ops: no secrets in logs, safe SFTP credentials, bounded database pools, no shared-resource assumptions hidden in tests",
+     "Product-semantics questions are ruling requests to the issue coordinator \u2014 wait for explicit ruling, don't invent behavior",
+     "Approval = exact 'LGTM' comment; styling-only evidence reuse verdict must be exactly 'no product-code change; no recapture' and only while HEAD is final"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/diagnosing-bugs.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Tests live beside source as *.test.ts/*.test.tsx; run bun test <path> or bun run --cwd <package-or-app> test -- <path>",
+     "If a test is impractical, record exact command, fixture files, route, organization, content date, inputs",
+     "Syncron inbound bug triage: identify whether the failing path is manual upload, SFTP ingress, validation, canonical writes, transform, object storage, worker orchestration, or SFTP egress",
+     "Browser bugs routed to gpt-5.6-terra via chatgpt-in-chrome with agent-browser as backup \u2014 NOTE: conflicts with newer environment.md policy (agent-browser primary, 2026-07-22 Puppeteer fallback); reconcile during migration",
+     "Infra logs: bun run db:logs, bun run bucket:logs, bun run sftp-egress:logs",
+     "Worker/batch investigations must preserve the content-date filename path and daily-run assumptions; runner emits structured progress via injected logger wired in apps/worker/src/index.ts",
+     "Sentry init lives in packages/observability/src/server.ts; local observability sink at scripts/dev/observability-sink.ts",
+     "Known hard surface: worker event-loop freezes during analytics (issue #203) \u2014 start with apps/worker/src/freeze-forensics.test.ts, apps/worker/src/supervisor.test.ts, captured worker logs",
+     "Real customer SFTP endpoints and hosted Railway are shared \u2014 reproduce locally unless the issue explicitly authorizes the shared environment"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/frontend.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Fire-and-forget mutations report via sonner toasts through apps/frontend/src/lib/feedback.ts (toastSuccess/toastError), optionally with action link to the affected resource",
+     "Form saves report inline next to the form's actions (account.profile.tsx pattern: success/error banner in form, SubmitButton blockedWhen for validation)",
+     "Query errors never swallowed: tables pass state/errorMessage/onRetry to DataTable; non-table surfaces branch on isError and render error-card + Retry (dashboard rail grammar); never render an empty/'No X yet' state from an errored or pending query",
+     "Settings forms seed drafts only from server data: skeleton while pending, error card with Retry, Save disabled until loaded",
+     "Use @workspace/ui components before adding primitives; keep operational screens dense and direct \u2014 no decorative copy, oversized panels, nested cards",
+     "Never <datalist> for app selectors \u2014 use Popover + Command or Combobox; custom entry stays inside the combobox flow with an explicit 'Use <value>' option",
+     "Add/insert pickers commit immediately on select (no separate Add click unless a real confirmation step exists); options contain only valid choices \u2014 filter already-selected/duplicate/unavailable/invalid instead of silent no-ops",
+     "Put add/insert controls where the item will appear (parent row/header/actions, not a placeholder row); render hierarchical data as collapsible tree, not a flat list; don't flatten composite selector values",
+     "Completion checks: grep touched selector UI for 'datalist' and 'list='; check pickers for select-then-confirm flows and invalid options; run frontend type-check and lint"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/implementing.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Commit style: sentence-case imperative matching recent history, e.g. 'Fix RFQ comparison OOM: stop over-fetching item-supplier analytics'",
+     "Prefer simple in-memory processing for the small batch sizes this repo handles",
+     "Keep type sources narrow and exported: persisted enum values and domain state strings must not widen to string across package/API/SQL/frontend boundaries",
+     "Use the database-migrations playbook/skill before generating or editing migrations",
+     "For frontend work load uncodixfy, bare-minimum-ux, and docs/agents/frontend.md; add shadcn when touching shadcn/base-ui primitives",
+     "If implementation exposes a materially simpler/narrower path, stop and report before expanding scope; record plan deviations in the PR body with reason and verification impact"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/planning.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Plan threshold: >1 subsystem/public interface; DB schema, persisted enums, domain state strings, API contracts, file formats, SFTP behavior, or object storage layout; new dependency/external service/feature flag/background workflow; Syncron inbound run semantics, canonical identity, dedupe, egress delivery, manual upload; risky/hard-to-reverse/> ~1 day",
+     "Plans at plans/<YYYY-MM-DD-HHMM>-<slug>.html \u2014 self-contained HTML (inline styles/scripts, no external fetches), from the plan skill's templates/plan-skeleton.html; diagrams pre-rendered inline SVG (mmdc), never a shipped rendering library",
+     "Stable anchors: every section and reviewable item keeps a stable id across revisions; acceptance criteria are <li id=\"ac-N\" data-criterion> rows; review annotations and verify/evidence key on those ids",
+     "Approval only via the review-loop surface's hash-bound approve event; a thread/tracker comment is NOT approval; on request-changes write a ledger disposition per annotation (changed/kept/orphaned) before re-awaiting",
+     "Local fallback: open the rendered HTML and take the verdict in conversation"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/prototyping.md",
+    "boilerplate_vs_earned": "mostly-template",
+    "earned_content": [
+     "Task runner: bun scripts + Turbo; register in the owning package's package.json; wrap database-backed scripts with bun scripts/with-worktree-env.ts",
+     "Frontend routing under apps/frontend/src; follow docs/agents/frontend.md",
+     "UI variants must use shadcn/base-ui primitives; load shadcn, uncodixfy, and bare-minimum-ux skills for UI work",
+     "UI prototypes host variants in the real page gated by ?variant= URL param with a floating switcher pill; screenshot each variant via the driver in environment.md"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/refactoring.md",
+    "boilerplate_vs_earned": "mixed",
+    "earned_content": [
+     "Lock behavior with characterization tests first; framework Bun test; bun test <path> or bun run --cwd <package-or-app> test -- <path>",
+     "Database-backed behavior runs against the isolated local stack through bun scripts/with-worktree-env.ts",
+     "Refactors must not widen persisted values and exported domain unions to raw string; avoid cross-package reshapes unless they remove real duplication",
+     "No behavior changes in refactor PRs \u2014 a real bug means stop and reclassify; final bun run check before PR handoff"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/researching.md",
+    "boilerplate_vs_earned": "mostly-template",
+    "earned_content": [
+     "Durable root research/<slug>/; scratch shards in system temp, not committed; research stays out of evidence/ unless it proves a change criterion",
+     "Primary external sources: official Syncron and provider documentation/APIs; authenticated connectors or browser sessions when required",
+     "Serialize shared Railway, SFTP, or third-party systems; preserve customer files, credentials, private endpoints"
+    ]
+   },
+   {
+    "file": "/Users/asher/Projects/pipelines/docs/agents/verifying.md",
+    "boilerplate_vs_earned": "mostly-earned",
+    "earned_content": [
+     "Check ladder: bun test <path>; bun scripts/with-worktree-env.ts ... for DB-backed; bun run --cwd <pkg> check; bun run format; bun run lint; bun run type-check; bun run build; full gate bun run check",
+     "bun run check runs sherif, knip --no-config-hints, and turbo run check --concurrency=1",
+     "CI merge gate: .github/workflows/ci.yml runs bun install --frozen-lockfile then bun run check \u2014 identical to the local full gate; PR not mergeable until green; local checks prove the change, CI-green is the merge condition",
+     "Setup audit (2026-07-14): format/lint/type-check/build/check all passed; known non-fatal frontend chunk-size advisory and Turbo warning that worker#build declares no output files",
+     "Second-opinion verification delegates to codex exec when a criterion needs real UI interaction/screenshots outside the current context",
+     "End-to-end type safety expectation: a stale caller should fail bun run check",
+     "Syncron inbound changes: verify ingress path, validation, canonical writes, transform output, object storage artifacts, SFTP egress; evidence = generated manifest path, run detail URL, final run status, egress artifact listing, row-level proof",
+     "Migrations: run against the isolated local stack before relying on app behavior; report migration command result + targeted proof, no secrets/.env values",
+     "UI evidence: browser-observed result or screenshot incl. loading/error/disabled states; SFTP evidence: local destination listing or transcript with credentials omitted"
+    ]
+   }
+  ],
+  "tracker": {
+   "labels": [
+    "ready-for-agent (5 open: #240 #239 #237 #236 #213)",
+    "ready-for-human (7 open: #247 #235 #233 #223 #184 #183 #123)",
+    "needs-info (4 open: #263 #255 #226 #214)",
+    "in-flight (0 open \u2014 clean migration window)",
+    "needs-triage (0 open)",
+    "bug",
+    "enhancement",
+    "refactor",
+    "research",
+    "draft",
+    "duplicate",
+    "invalid",
+    "wontfix",
+    "superseded",
+    "design",
+    "observability",
+    "rfq",
+    "admin",
+    "documentation",
+    "good first issue",
+    "help wanted",
+    "question"
+   ],
+   "inflight_tickets": [],
+   "notes": "GitHub dunnharland/pipelines. No open issue currently carries in-flight \u2014 the last wave (issues #225/#238, PRs #260/#261) merged 2026-07-23 and closed natively. Note there is no needs-shaping/shaping/building label set: v1 policy uses ready-for-agent/in-flight/ready-for-human/needs-info plus five work-type labels; v2's shaping-lane labels will need minting and binding. Native blocked-by relations (API version 2026-03-10) are the run-queue dependency source; the .issue_dependencies_summary field is known-stale. One open PR: #254 (codex/worktree-teardown-hygiene)."
+  },
+  "inflight": [
+   "LIVE interactive review awaiting a verdict: review-server PID 62436 running FROM /Users/asher/Projects/pipelines/.agents/skills/review-loop/scripts/review-server.py serving plans/2026-07-23-0005-licon-preferred-supplier-routing-test.html (issue licon-pss-test, kind plan), state dir ~/.backlog/reviews/pipelines/2026-07-23-0005-licon-preferred-supplier-routing-test, registry state 'revised \u2014 round 2 awaiting review', tailnet path /pipelines/licon-pss-test/review (plans/ dir also lists 2026-07-23-0005-alarkan-test-preferred-supplier-routing-test.html \u2014 same 0005 slot, possibly renamed twin)",
+   "Review surface state: ~/.backlog/surface/pipelines/ (index.html, registry.json with the live entry, .registry.lock) behind LaunchAgent com.asher.backlog-surface on port 8377 and the tailscale /review proxy",
+   "Uncommitted changes in the main checkout: modified .gitignore, AGENTS.md (+35 lines), skills-lock.json (+6 lines = ask-syncron-parts-planning entry); untracked .agents/skills/ask-syncron-parts-planning/ plus, per run-state, 'other untracked SPP/report/script work' \u2014 explicitly listed as preserved_local_changes by the 2026-07-22 run's final checkpoint",
+   "Run-state under .git/backlog/runs/: 20260715-quote-import-wave-1 (root stage 'review', status 'active' for issue #232 \u2014 never closed out), 20260717-163507-rfq (issues 224/229/231, root complete), 20260722-234653-ready-wave (issues 225/238, complete) \u2014 each with events/*.jsonl, board.md, status.json, handoff.md, and 20260722's review/225/plan/ server events.jsonl + server.log + .await-cursor",
+   "Leftover worktrees for already-merged issues (cleanup debt, all clean): /Users/asher/Projects/pipelines-224-quote-level-discounts (branch codex/224-quote-level-discounts), /Users/asher/Projects/pipelines-229-quote-currency-selection, /Users/asher/Projects/pipelines-231-rfq-comparison-excel-export; the #225 checkpoint notes its isolated compose volume was deliberately retained (bun run db:down, no volume deletion)",
+   "Open PR #254 on branch codex/worktree-teardown-hygiene (worktree teardown fix \u2014 ironically the cleanup protocol itself)",
+   "Local branches unmerged into main whose disposition needs judging before deletion: codex/119-moq-default, codex/125-keyboard-navigation-quote-editor, codex/127-split-rfq-detail-queries, codex/api-contract-persistence-cleanup, codex/fix-rfq-demand-large-import, agent/reconcile-asher-skills, backup, advisor/001..010 (paired with plans/001-010 *.md); remote-only diag/worker-freeze-forensics and fix/worker-supervisor-watchdog relate to open hard-surface issue #203 (many codex/* branches merely look unmerged due to squash merges \u2014 verify per branch)",
+   "plans/ directory: ~40 committed plan documents (HTML with stable ac-N anchors consumed by the review loop, plus md plans and archived/) \u2014 the newest (2026-07-22/23) back still-open work",
+   "evidence/ directory: 39 per-issue evidence dirs (criterion-named PNGs/GIFs) whose GitHub embeds are SHA-pinned \u2014 history rewrites orphan them",
+   "research/ and reports/ directories at repo root (durable research dossiers and report output referenced by the researching playbook and run checkpoints)",
+   "Sibling dir /Users/asher/Projects/opportunity-alarkan-pipelines \u2014 related project, NOT a worktree of this repo; do not sweep it when reaping pipelines-* siblings"
+  ],
+  "scripts": [
+   "/Users/asher/Projects/pipelines/.agents/skills/backlog/scripts/run-state.py (writes .git/backlog/runs; evals/test_run_state.py alongside)",
+   "/Users/asher/Projects/pipelines/.agents/skills/review-loop/scripts/review-server.py (currently executing as PID 62436)",
+   "/Users/asher/Projects/pipelines/.agents/skills/review-loop/scripts/review-await.py",
+   "/Users/asher/Projects/pipelines/.agents/skills/setup-asher-skills/scripts/install.py, catalog.py, render-global.py (+ evals/test_install.py, test_catalog.py, test_provider_variants.py, test_global_templates.py, test_global_barrier.py)",
+   "/Users/asher/Projects/pipelines/.agents/skills/staffing/scripts/render-global.py",
+   "/Users/asher/Projects/pipelines/.claude/worktree-setup.sh (global WorktreeCreate hook target; exec ./scripts/setup-worktree.sh)",
+   "/Users/asher/Projects/pipelines/.claude/worktree-teardown.sh (global WorktreeRemove hook target; exec ./scripts/cleanup-worktree.sh)",
+   "/Users/asher/Projects/pipelines/.codex/environments/environment.toml (Codex-side twin of the worktree hooks)",
+   "Repo-owned worktree machinery the hooks depend on (not skill files \u2014 keep): scripts/worktree-env.ts, with-worktree-env.ts, setup-worktree.sh, cleanup-worktree.sh, reap-worktree-stacks.ts, worktree-stacks.ts (+ tests)"
+  ],
+  "hazards": [
+   "A reinstall that replaces/deletes .agents/skills/review-loop while PID 62436 is serving the LICON/alarkan plan review kills a live round-2 review await; stop it first via review-server.py --stop --state ~/.backlog/reviews/pipelines/2026-07-23-0005-licon-preferred-supplier-routing-test and tailscale serve --set-path /pipelines/licon-pss-test/review off, or let the verdict land before migrating",
+   "NEVER npx skills remove here: three lock entries (database-migrations, db-migrations, shadcn) record source = /Users/asher/Projects/pipelines itself (local) \u2014 a remove resolving that source could delete repo content; db-migrations is also a ghost entry with no mount, and two of the three carry the empty-string sha256, so hash checks are meaningless",
+   "Four mounts have NO skills-lock.json entry (impeccable, improve, sentry-cli, qa-user-journeys) \u2014 any lockfile-driven 'reinstall the locked set and delete the rest' cleanup silently destroys them; sentry-cli and qa-user-journeys are repo-earned domain skills that exist nowhere else",
+   "impeccable exists as two independent real directories (.agents/skills/impeccable AND .claude/skills/impeccable, no symlink, no variant-lock entry) \u2014 a naive symlink-normalization pass could delete one copy without checking for divergence",
+   "staffing is a declared provider variant: .claude/skills/staffing is a separately compiled real dir tracked by .agents/asher-skills/variant-lock.json \u2014 replacing it with a plain symlink or deleting variant-lock.json breaks the variant contract",
+   "Main checkout carries uncommitted work (AGENTS.md +35, skills-lock.json +6, .gitignore, untracked ask-syncron-parts-planning mount and other SPP/report/script files) \u2014 any git reset --hard / git clean -fd during migration destroys changes the last run explicitly chose to preserve",
+   "Deleting .git/backlog/ discards all three runs' event logs, boards, handoffs, and checkpoints \u2014 including the only record that run 20260715 (issue #232) was left 'active', and the review/225 server logs",
+   "rm -rf on the pipelines-224/-229/-231 sibling worktrees without git worktree remove leaves stale .git metadata and orphans their checked-out branches; their derived Docker stacks (incl. the deliberately retained #225 compose volume) need scripts/cleanup-worktree.sh / bun run reset:worktree-stacks, and /Users/asher/Projects/opportunity-alarkan-pipelines must not be caught by a pipelines-* glob",
+   "Deleting old docs/agents playbooks before reconciling loses earned content that exists nowhere else: frontend.md conventions, verifying.md check ladder and bun-run-check composition, the blocked_by API commands + stale-summary gotcha, the GitHub ?raw=1 evidence embed rules and ffmpeg recipe, the worker-freeze forensics pointers (issue #203), and the exact 'LGTM' / 'no product-code change; no recapture' verdict strings",
+   "v1 playbooks hardwire absolute paths into machine state: environment.md's review commands point at .agents/skills/review-loop/scripts/*, and ~/.backlog/surface/pipelines + LaunchAgent com.asher.backlog-surface + tailscale serve paths are machine-level state a repo-scoped cleanup won't see but a skills purge would strand",
+   "uncodixfy, bare-minimum-ux, and shadcn are load-bearing for playbook text (implementing.md/prototyping.md name them for all frontend work) \u2014 removing them as 'old family' without rewriting those references leaves silent dead pointers; tdd/greploop/uncodixfy are third-party-sourced despite being in the v1 sweep list, so deleting them is not recoverable from asher-skills",
+   ".claude/worktree-setup.sh/.claude/worktree-teardown.sh are targets of GLOBAL Claude Code Worktree hooks (shared with .codex/environments/environment.toml) \u2014 deleting them breaks worktree creation/cleanup for every future session in this repo",
+   "Deleting or renaming tracker labels (in-flight, ready-for-agent, ready-for-human, needs-info, draft, research) would strand the label bindings recorded in merged history, issue comments, and the v1 policy; the migration should rebind, not purge \u2014 and the current zero-open-in-flight window is the safe moment",
+   "Open PR #254 and the unmerged local/remote branches (advisor/*, codex/119/125/127, api-contract-persistence-cleanup, fix-rfq-demand-large-import, diag/worker-freeze-forensics, fix/worker-supervisor-watchdog) may hold unmerged work \u2014 branch cleanup requires per-branch judgment, not a bulk delete"
+  ]
+ }
+]

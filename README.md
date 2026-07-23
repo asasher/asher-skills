@@ -64,7 +64,6 @@ including one marked `user`.
 | personal | `control-plane` | user | orchestrator |
 | personal | `eloquent` | model | thread |
 | personal | `fair-deal` | user | orchestrator |
-| personal | `goodwork` | model | thread |
 | personal | `learn-anything` | user | thread |
 | personal | `manage-notes` | model | thread |
 | personal | `manage-opportunities` | model | thread |
@@ -74,6 +73,7 @@ including one marked `user`.
 | personal | `review-opportunities` | user | thread |
 | personal | `teamdrive` | user | thread |
 | personal | `until-zero` | model | thread |
+| in-progress | `goodwork` | model | thread |
 
 The install/setup graph is compiled on demand from each skill's frontmatter
 (`python3 tools/catalog.py compile`).

@@ -1,0 +1,1455 @@
+[
+ {
+  "repo": "metis",
+  "actions": [
+   {
+    "artifact": "mount: backlog (v1, .agents/skills/backlog + .claude symlink)",
+    "action": "migrate",
+    "target": "v2 backlog mount, installed atomically with the full v2 roster (backlog, shape, build, adversarial-review, code-review, implement, tdd, diagnosing-bugs, verify-your-work, prove-your-work, merge-changes, to-spec, to-tickets, interview, domain-modeling, research, prototype, to-thread, to-subagent, watch-until, serve-via-tailnet, handoff, staffing) via one `npx skills add` command",
+    "detail": "ORDER MATTERS: reinstall only after live runs 20260723-236-plan and 20260723-233-235 settle (finish or park), because v1 run threads resume through .agents/skills/backlog/reference/ paths and run-state.py, both deleted by the reinstall. v2 ships no reference/ dir \u2014 platform.md's 'spawned threads read bundled references at .agents/skills/backlog/reference/' row must be re-derived by v2 setup against the new mounts."
+   },
+   {
+    "artifact": "mount: plan (v1)",
+    "action": "retire",
+    "target": "Replaced by the v2 shape skill (interactive settling, composing interview/domain-modeling) + to-spec (spec on the ticket, diagram first). Nothing lost: the 20 committed plans/*.html artifacts stay in git and keep their ac-N anchor contract for existing evidence; the plan-approval machinery (hash-bound verdicts) lives on in serve-via-tailnet's annotated mode."
+   },
+   {
+    "artifact": "mount: review-loop (v1, ships review-server.py + review-await.py invoked by literal path)",
+    "action": "retire",
+    "target": "Replaced by serve-via-tailnet's annotated mode \u2014 the SAME review-server.py/review-await.py lineage now ships at .agents/skills/serve-via-tailnet/scripts/ with the same verdict semantics (hash-bound approve/request-changes, hub, --stop/--sweep) and review-await exit-code contract. Nothing lost IF sequenced: (1) deliver or park pending verdicts (#233 round-2), (2) `review-server.py --stop` each live state dir and `--sweep --surface ~/.backlog/surface/metis`, (3) clear tailscale serve path handlers, (4) delete the mount, (5) rewrite environment.md's literal .agents/skills/review-loop/scripts/ paths to .agents/skills/serve-via-tailnet/scripts/."
+   },
+   {
+    "artifact": "mount: diagnosing-bugs (v1)",
+    "action": "migrate",
+    "target": "Refresh to v2 skills/software-development/diagnosing-bugs; its repo playbook retires (see playbook action) with seams moving to codebase.md"
+   },
+   {
+    "artifact": "mount: prototype (v1)",
+    "action": "migrate",
+    "target": "Refresh to v2 skills/software-development/prototype; prototyping.md's repo bindings move to codebase.md \u00a7 Conventions"
+   },
+   {
+    "artifact": "mount: research (v1)",
+    "action": "migrate",
+    "target": "Refresh to v2 skills/software-development/research; researching.md's repo bindings move to backlog-policy.md (research work-type) and environment.md"
+   },
+   {
+    "artifact": "mount: setup-asher-skills (v1 installer: install.py/catalog.py/render-global.py)",
+    "action": "retire",
+    "target": "Replaced by the `npx skills add <repo> --skill <names...> -y` atomic-install flow that the asher-skills repo now standardizes on; skills-lock.json remains the provenance record. Nothing lost: the installer's job (copy sources, write lockfile, mount aliases) is what npx skills does."
+   },
+   {
+    "artifact": "mount: staffing (declared provider variant \u2014 .agents codex tree + .claude REAL compiled claude tree + .agents/asher-skills/variant-lock.json)",
+    "action": "migrate",
+    "target": "Refresh to v2 staffing preserving the variant contract: recompile BOTH provider trees and keep variant-lock.json \u2014 never 'clean up' .claude/skills/staffing into a symlink and never delete .agents/asher-skills",
+    "detail": "v2 staffing also carries the new Playwright-first browser-verification default (commit 5dac012), which interacts with the environment.md driver decision below."
+   },
+   {
+    "artifact": "mount: tdd (mattpocock third-party origin, installed as part of the v1 family)",
+    "action": "retire",
+    "target": "Superseded by the v2 Asher-authored tdd skill (red\u2192green with pre-agreed seams + anti-pattern list) installed in the roster batch. The repo-tuned facts it was referenced through (implementing.md/refactoring.md test commands) migrate to codebase.md, so nothing repo-specific rides on the old mount."
+   },
+   {
+    "artifact": "mount: clerk-backend-api",
+    "action": "keep",
+    "target": "Third-party domain skill, lockfile-tracked, orthogonal to the family swap"
+   },
+   {
+    "artifact": "mount: clerk-cli",
+    "action": "keep",
+    "target": "Third-party domain skill, lockfile-tracked, untouched"
+   },
+   {
+    "artifact": "mount: cloudflare",
+    "action": "keep",
+    "target": "Third-party domain skill, lockfile-tracked, untouched"
+   },
+   {
+    "artifact": "mount: use-railway (ships own python scripts)",
+    "action": "keep",
+    "target": "Third-party domain skill with its own tooling, untouched"
+   },
+   {
+    "artifact": "mount: vercel-cli",
+    "action": "keep",
+    "target": "Third-party domain skill, untouched"
+   },
+   {
+    "artifact": "mount: yjs (lockfile entry missing skillPath)",
+    "action": "keep",
+    "target": "Third-party domain skill; while editing skills-lock.json for the family swap, repair the missing skillPath field so a future lockfile-driven operation doesn't mishandle it"
+   },
+   {
+    "artifact": "mount: impeccable (NOT in lockfile; two divergent real copies .claude vs .agents)",
+    "action": "keep",
+    "target": "Do not dedupe or symlink during migration \u2014 the divergence may be a deliberate undeclared provider variant; leave both real dirs byte-untouched pending the human decision below"
+   },
+   {
+    "artifact": "mount: migration (Metis-authored INTERNAL domain skill; only copy lives in .agents/skills)",
+    "action": "keep",
+    "target": "Repo-owned content that must survive: exclude .agents/skills/migration from any mounts-directory wipe; add a provenance record (lockfile entry with local/internal source, or move canonical source into the repo proper) so the next cleanup can't mistake it for a stale install"
+   },
+   {
+    "artifact": "mount: web-design-guidelines (no lockfile entry)",
+    "action": "keep",
+    "target": "Third-party SKILL.md-only mount; exclude from lockfile-driven cleanup; optionally backfill a lockfile entry"
+   },
+   {
+    "artifact": "mount: vercel-composition-patterns (no lockfile entry)",
+    "action": "keep",
+    "target": "Third-party mount with AGENTS.md + rules/; exclude from lockfile-driven cleanup; optionally backfill a lockfile entry"
+   },
+   {
+    "artifact": "playbook: docs/agents/backlog-policy.md",
+    "action": "migrate",
+    "target": "Reconciled in place against v2 templates/common/backlog-policy.md \u2014 same file, new sections",
+    "detail": "Migrates verbatim: label bindings incl. the 'never substitute the human workflow labels ready for planning/ready for implementation' rule \u2192 \u00a7 Label roles neutral list; staging label semantics \u2192 \u00a7 Closure ('built'-style deferred-closure binding: merged to staging, closed by the promotion PR's Closes #n); work-type set incl. draft (judgment-terminal, provisioned 2026-07-10) and the research/draft/code routing rule \u2192 \u00a7 Label roles work-type + boundary note; Dispatch: block requirement (Surface/Coordination class/reason; missing \u2192 skip, never infer) \u2192 \u00a7 Dispatch metadata; blocker = priority-not-dependency \u2192 \u00a7 Neutral; native dependencies + legacy body lines + read-the-list-not-counters \u2192 \u00a7 Dependencies; human-confirmed shortlist rule \u2192 \u00a7 Readiness decision; optimistic claim marker, re-read-before-mark, 7-day orphan sweep never-silently-reset \u2192 \u00a7 Building hygiene (new: claims must now be actor-attributed per v2). New sections to fill: Work domain = software; needs-shaping/shaping roles (new labels below); in-flight\u2192building rename."
+   },
+   {
+    "artifact": "playbook: docs/agents/environment.md",
+    "action": "migrate",
+    "target": "Reconciled in place against v2 templates/common/environment.md",
+    "detail": "Migrates: staging-as-base + fork-from-origin/staging + codex/<n>-<slug> naming + PR/deploy facts \u2192 \u00a7 Branching & deploys (new rows to fill: deploy-target constraints, credential preflight \u2014 e.g. cheap live reads for Vercel/Railway/PartyKit/QStash creds); pnpm dev service list, portless URLs, fixed ports, log commands (from diagnosing-bugs.md) \u2192 \u00a7 Running locally (NEW headless-stack contract: pnpm dev needs a recorded detached wrapper + teardown audit); cloud-singleton regime, setup:worktree copies-but-does-not-remap fact, full 16-row singleton table \u2192 \u00a7 Worktree isolation (ADD the v2-mandated parent-.git lock row); seed=none/drive-the-app + CLI JSONL load \u2192 \u00a7 Seed data (+ new drive-to-feature paths); AgentMail OTP/magic-link recipe, AGENT_EMAIL/AGENTMAIL_API_KEY, never-print-secrets \u2192 \u00a7 Authenticating (+ new session-reuse storage-state row); VERIFY-<issue>-<purpose> naming, retain-through-evidence, scale-criteria-blocked rule \u2192 \u00a7 Verification data (NEW per-ticket-disposable-stores row to fill); drivers + codex-exec second-opinion + deferred-checks list \u2192 \u00a7 Driving the app (CONFLICT: v2 defaults to Playwright and disqualifies agent-browser \u2014 decision below); tailnet review surface, LaunchAgent com.asher.backlog-surface:8377, tailscale serve recipes, static-publish symlink, keep-awake=none \u2192 \u00a7 Presenting to the human, now owned by serve-via-tailnet setup, with every literal .agents/skills/review-loop/scripts/ path rewritten to .agents/skills/serve-via-tailnet/scripts/; staffing no-override + worktree note \u2192 \u00a7 Staffing delta; serialize-verification verdict + its reasons \u2192 \u00a7 Parallelism verdict (NEW lane-mechanics lock path + stale horizon to choose \u2014 decision below)."
+   },
+   {
+    "artifact": "playbook: docs/agents/platform.md",
+    "action": "migrate",
+    "target": "Reconciled in place against v2 templates/common/platform.md",
+    "detail": "Migrates: dunnharland/metis gh binding \u2192 \u00a7 Tracker; effect-verified blocker read via the dependencies/blocked_by LIST endpoint \u2014 deliberately overriding the v2 template's default counter-based read, because metis proved counters lag (effect-verified 2026-07-14) \u2014 and the POST/DELETE write verbs \u2192 \u00a7 Tracker verbs; staging-PR-does-not-close + promotion-PR-must-carry-Closes \u2192 Close-on-merge linkage; gh pr create --base staging, exact-LGTM approval, human-merges-squash \u2192 \u00a7 Change review; worktree-add-from-origin/staging + squash-merge-orphans-pinned-SHAs re-pin rule \u2192 \u00a7 Version control incl. Pinned-SHA semantics; cross-harness worker routes (codex exec --cd / claude -p no --bare, worker-only never coordinator) \u2192 \u00a7 Harness (new rows: wrapper staffing evidence, directional reachability + successors, route-trust drift handling); Monitor/native-watcher wakeup \u2192 Durable monitor row. Retired: the bundled-references path row (v1 .agents/skills/backlog/reference/ no longer exists) \u2014 re-answered by v2 setup against the new mounts."
+   },
+   {
+    "artifact": "playbook: docs/agents/verifying.md",
+    "action": "migrate",
+    "target": "File retires; content splits: check commands, pnpm check aggregate + its recorded baseline warnings, and the CI facts (ci.yml jobs; CI does NOT run tests; CI-green procedural-not-host-enforced with the 403 rulesets finding) \u2192 docs/agents/codebase.md \u00a7 Checks; per-change-type evidence bars (logic/UI/data) + repo-wide expectations (Clerk boundaries, Yjs persistence, migrations, Drive, background jobs, responsive/a11y) \u2192 docs/agents/evidence.md \u00a7 What to capture repo-specific rows; codex-exec second-opinion delegation \u2192 environment.md \u00a7 Driving the app"
+   },
+   {
+    "artifact": "playbook: docs/agents/implementing.md",
+    "action": "migrate",
+    "target": "File retires; its shipped tdd doctrine is superseded by the v2 tdd skill (drop); earned content: vitest/tsx-test seams + single-file invocation + colocated foo.test.ts naming \u2192 codebase.md \u00a7 Testing patterns; Conventional Commits + the pre-push-hook auto-commit fact + snake_case-new-files + package-boundary + docs/UI.md deference \u2192 codebase.md \u00a7 Conventions"
+   },
+   {
+    "artifact": "playbook: docs/agents/evidence.md",
+    "action": "migrate",
+    "target": "Reconciled in place against v2 templates/software/evidence.md",
+    "detail": "Much of metis's earned content is now upstream template text (GIF two-pass recipe, ?raw=1 blob-URL rule with private-repo camo facts, mechanical-verification checks, MP4 ban, styling-only reuse) \u2014 reconcile rather than duplicate. Keep as repo rows: probes-are-not-evidence stance, evidence/<slug>/ + c<criterion>- naming, squash-merge-orphans-SHAs re-pin rule (also in platform.md), the exact reviewer verdict string 'no product-code change; no recapture', capture-once-after-convergence hands-back-posts-nothing."
+   },
+   {
+    "artifact": "playbook: docs/agents/planning.md",
+    "action": "migrate",
+    "target": "File retires (the plan skill is gone); plan threshold (multi-subsystem / migrations / risky / >1 day) \u2192 backlog-policy.md \u00a7 Dispatch metadata as the route:direct vs orchestrator-required guidance; hash-bound-approval-not-comments + ledger-disposition-per-annotation \u2192 carried natively by serve-via-tailnet's annotated mode (record surface binding in environment.md \u00a7 Presenting); the committed-HTML-plan contract (plans/<n>-<slug>.html, inline SVG via mmdc, ac-N data-criterion anchors, commit-to-work-branch-before-dispatch, posterity digest comment) \u2192 change-description.md \u00a7 This repo (the outline's SHA-pinned Plan row consumes it) \u2014 pending the plan-form decision below; the ac-N anchor contract must stay documented regardless because 20 committed plans and 23 evidence dirs key on it"
+   },
+   {
+    "artifact": "playbook: docs/agents/change-reviewer.md",
+    "action": "migrate",
+    "target": "File retires (v2 code-review skill supersedes the Fowler/Cursor template body); repo scrutiny list (Clerk boundaries, Yjs, Drive, background jobs/email, API compat, a11y, staging/prod credential leakage) + presumptive blockers (~1000-line files, ad-hoc flags, feature logic in shared paths, thin wrappers, sequential orchestration) + open-every-cited-test rule \u2192 codebase.md \u00a7 Conventions / repo-specific patterns (read by code-review); product-semantics-questions-are-ruling-requests \u2192 the v2 adversarial-review contract carries this; exact-LGTM + exact recapture verdict \u2192 platform.md \u00a7 Change review and evidence.md"
+   },
+   {
+    "artifact": "playbook: docs/agents/change-description.md",
+    "action": "migrate",
+    "target": "Reconciled in place against v2 templates/common/change-description.md \u2014 the v2 outline already matches metis's earned order (Closes+work-type, Summary w/ scope discovery, Changes-as-reasoning, SHA-pinned Plan, Checks run, CI disclosed, Verification caveats, Evidence placeholder, research\u2192dossier section); keep as \u00a7 This repo: PR title = Conventional Commits subject because squash-merge makes it the commit subject"
+   },
+   {
+    "artifact": "playbook: docs/agents/change-fixer.md",
+    "action": "retire",
+    "target": "Superseded by the v2 adversarial-review skill's fixer contract, which carries the same discipline (address every actionable comment, reply with change + SHA, reasoned non-fixes, re-prompt reviewer); the file was mostly-template and its earned lines are restatements of that contract \u2014 nothing repo-specific lost"
+   },
+   {
+    "artifact": "playbook: docs/agents/diagnosing-bugs.md",
+    "action": "migrate",
+    "target": "File retires (v2 diagnosing-bugs skill needs no per-skill playbook); seams (vitest/tsx-test, one-file regression command) \u2192 codebase.md \u00a7 Testing patterns; logs:workflows/logs:redis/logs:db commands + pnpm-dev-for-repro \u2192 environment.md \u00a7 Running locally"
+   },
+   {
+    "artifact": "playbook: docs/agents/prototyping.md",
+    "action": "migrate",
+    "target": "File retires; register-prototype-scripts-in-owning-package + apps/web routing + snake_case \u2192 codebase.md \u00a7 Conventions; ?variant= URL-param gating + screenshot-each-variant-via-the-environment-driver \u2192 codebase.md \u00a7 Conventions with the capture route deferring to environment.md \u00a7 Driving"
+   },
+   {
+    "artifact": "playbook: docs/agents/refactoring.md",
+    "action": "retire",
+    "target": "Superseded by v2 tdd/implement; its earned lines (test commands, snake_case, package boundaries, store/migration patterns) are duplicates of content already migrating to codebase.md \u00a7 Checks and \u00a7 Conventions from implementing.md/verifying.md \u2014 nothing unique lost"
+   },
+   {
+    "artifact": "playbook: docs/agents/researching.md",
+    "action": "migrate",
+    "target": "File retires (v2 research skill is self-contained); research/<slug>/ durable root + scratch-in-temp + stays-out-of-evidence/ \u2192 backlog-policy.md research work-type row; serialize-shared-database/provider-mutations \u2192 environment.md \u00a7 Parallelism; cite-stable-locators + preserve-customer-data are v2 research skill invariants (no repo delta lost)"
+   },
+   {
+    "artifact": "playbook target: docs/agents/codebase.md",
+    "action": "migrate",
+    "target": "NEW file created by v2 backlog setup from templates/software/codebase.md \u2014 the landing zone for implementing.md/verifying.md/refactoring.md/change-reviewer.md/prototyping.md earned content as itemized above; also document the unmanaged .git/hooks/pre-push auto-fix behavior under \u00a7 Conventions so it stops living only in a retired playbook"
+   },
+   {
+    "artifact": "label: in-flight (live on #236, #234)",
+    "action": "rename",
+    "target": "in-flight \u2192 building: `gh label edit in-flight --name building --repo dunnharland/metis` \u2014 an in-place rename keeps the label attached to #236/#234 and preserves their branch+date claim comments",
+    "detail": "Sequence after the two live v1 runs settle (or accept that v1 run threads still grepping 'in-flight' must not run post-rename). v2 additionally expects claim comments to name the runner's actor \u2014 backfill on any claim that survives the migration."
+   },
+   {
+    "artifact": "labels: needs-shaping, shaping (v2 additions)",
+    "action": "rename",
+    "target": "Create: `gh label create needs-shaping --repo dunnharland/metis --description \"parked for strategic shaping\"` and `gh label create shaping --repo dunnharland/metis --description \"a shaping thread is attending it\"`; bind in backlog-policy.md \u00a7 Label roles"
+   },
+   {
+    "artifact": "label: staging (~24 open issues carry it)",
+    "action": "keep",
+    "target": "Binds directly to v2 backlog-policy \u00a7 Closure's deferred-closure slot ('merged to staging, closure deferred to the promotion merge'); do not rename or wipe \u2014 it is the ONLY record of which open issues are merged-but-unpromoted, and the promotion PR must still carry Closes #n for each"
+   },
+   {
+    "artifact": "labels: ready-for-agent, ready-for-human, needs-info",
+    "action": "keep",
+    "target": "Identity mapping to the v2 roles of the same names; #227 (needs-info) and #179 (ready-for-human) carry over with no relabeling"
+   },
+   {
+    "artifact": "labels: bug, enhancement, refactor, research, draft (work-types)",
+    "action": "keep",
+    "target": "Map 1:1 to v2 work-type roles \u2014 v2 now natively defines the draft (judgment-terminal) and research (epistemic-terminal) branches metis pioneered, plus the same routing boundary rule"
+   },
+   {
+    "artifact": "labels: wontfix, duplicate, invalid, superseded, blocker, and the neutral human-workflow set",
+    "action": "keep",
+    "target": "Exclusions map 1:1; blocker stays bound as priority-metadata-not-a-dependency-edge; 'ready for planning'/'ready for implementation'/etc. stay neutral and explicitly off-limits as role substitutes, recorded in backlog-policy.md \u00a7 Neutral"
+   },
+   {
+    "artifact": "in-flight ticket #236 (LGTM at f81be065, evidence gate pending; worktree has UNCOMMITTED product code + tests)",
+    "action": "keep",
+    "target": "Finish under the v1 machinery before the family swap: commit the worktree's modified files immediately, run the evidence gate, merge to staging, apply staging label \u2014 its run dir and the review-loop scripts it resumes through must survive until then"
+   },
+   {
+    "artifact": "in-flight ticket #234 (fix committed, branch pushed)",
+    "action": "keep",
+    "target": "Finish: drive to PR/review under whichever family is live at the time (it needs no v1-only machinery beyond the label); on merge it takes the staging label per policy"
+   },
+   {
+    "artifact": "in-flight tickets #233/#235 (plan-approval round-2 awaiting verdict; worktrees hold UNTRACKED plan HTML)",
+    "action": "keep",
+    "target": "Commit the two plans/*.html files in worktrees issue-233/issue-235 NOW (they are the only copies); then per the decision below either finish the round-2 approval on the v1 review surface before sweeping it, or park both tickets to needs-shaping and re-enter via v2 shape"
+   },
+   {
+    "artifact": "~24 staging-labeled open issues (#70 #166 #173 ... #226)",
+    "action": "keep",
+    "target": "No relabeling; the pending staging\u2192main promotion PR carrying Closes #n for each is unchanged by the migration and remains the closure path"
+   },
+   {
+    "artifact": ".git/backlog/runs/* (six run-state dirs incl. two LIVE)",
+    "action": "retire",
+    "target": "Superseded by v2's tracker-as-the-run-ledger (claim + outcome comments; dispatcher resumes by reconciling claims against worktrees/branch tips) \u2014 but only AFTER runs 20260723-236-plan and 20260723-233-235 finish or are parked; then archive the dirs (e.g. tar to a repo-external archive) rather than rm, since board.md/handoff.md/review subdirs are the only record of how those changes were reviewed"
+   },
+   {
+    "artifact": "worktrees /Users/asher/Projects/metis-worktrees/issue-{70,223,225,226}",
+    "action": "retire",
+    "target": "Their issues carry staging (merged); after confirming each branch has no commits ahead of origin/staging and no uncommitted files, tear down via the recorded worktree-remove verb \u2014 v2 merge-changes owns this cleanup going forward"
+   },
+   {
+    "artifact": "worktrees issue-233, issue-235, issue-236 (uncommitted content)",
+    "action": "keep",
+    "target": "Untouchable until their untracked plan HTML (233/235) and modified product code (236) are committed \u2014 any prune loses the only copies; dispose per their tickets' finish/park path"
+   },
+   {
+    "artifact": "six /Users/asher/.claude/worktrees/metis/agent-* worktrees (codex/183, 173, 180, 177, 181, 182)",
+    "action": "keep",
+    "target": "Park pending per-branch audit: their issues carry staging, but the branches are reported ahead of origin/staging \u2014 diff each against origin/staging and only tear down branches proven fully merged; a blanket cleanup would destroy unmerged commits"
+   },
+   {
+    "artifact": "local-only branch zippy-wren (yjs forced-reconnection + sync-status tests, no remote)",
+    "action": "keep",
+    "target": "Push a remote backup (`git push -u origin zippy-wren`) or explicitly park with a note on a tracker issue before any branch hygiene \u2014 it is the only copy of that work"
+   },
+   {
+    "artifact": "plans/ (20 committed artifacts) and evidence/ (23 committed dirs)",
+    "action": "keep",
+    "target": "Git-safe; their consumers' contracts survive via the migrated playbooks \u2014 ac-N anchors documented in change-description.md \u00a7 This repo, SHA re-pin rule in platform.md/evidence.md; never rebase staging (orphans pinned evidence SHAs)"
+   },
+   {
+    "artifact": "research/ and datasets/ dirs",
+    "action": "keep",
+    "target": "research/<slug>/ remains the durable research root under the v2 research work-type binding in backlog-policy.md"
+   },
+   {
+    "artifact": "live review-surface state: ~/.backlog/surface/metis (issue dirs 181/182/183, registry.json), LaunchAgent com.asher.backlog-surface, tailscale serve path handlers",
+    "action": "migrate",
+    "target": "Swept with the v1 tooling, then rebound to serve-via-tailnet: run review-server.py --stop per live state dir and --sweep on the surface BEFORE the review-loop mount is deleted (it is the only tool that knows the registry), clear stale `tailscale serve` path handlers; the LaunchAgent + surface dir + /review proxy carry over unchanged as serve-via-tailnet's surface, recorded by its setup into environment.md \u00a7 Presenting to the human"
+   },
+   {
+    "artifact": "script: .agents/skills/backlog/scripts/run-state.py + evals/test_run_state.py",
+    "action": "retire",
+    "target": "No v2 successor by design \u2014 the tracker is the run ledger; deleted with the v1 backlog mount after live runs settle (their state archived per the .git/backlog/runs action)"
+   },
+   {
+    "artifact": "scripts: .agents/skills/review-loop/scripts/review-server.py + review-await.py",
+    "action": "retire",
+    "target": "Same-lineage scripts ship in the v2 serve-via-tailnet mount (scripts/review-server.py, scripts/review-await.py, same verdict + exit-code contract); every literal invocation recorded in environment.md is rewritten to the new path as part of the environment.md reconcile"
+   },
+   {
+    "artifact": "scripts: .agents/skills/setup-asher-skills/scripts/{install.py,catalog.py,render-global.py}",
+    "action": "retire",
+    "target": "Deleted with the setup-asher-skills mount; npx skills add + skills-lock.json replace install/catalog, and the v2 staffing skill owns global-module rendering"
+   },
+   {
+    "artifact": "script: .agents/skills/staffing/scripts/render-global.py",
+    "action": "migrate",
+    "target": "Carried by the v2 staffing refresh's compiled provider variants \u2014 reinstall recompiles it into both trees per variant-lock.json"
+   },
+   {
+    "artifact": "script: scripts/setup_worktree.sh (repo-owned, pnpm setup:worktree)",
+    "action": "keep",
+    "target": "Repo-owned and referenced by environment.md \u00a7 Worktree isolation, including the earned copies-but-does-not-remap caveat that motivates the cloud-singleton verdict"
+   },
+   {
+    "artifact": ".git/hooks/pre-push (auto-commits lint/format fixes)",
+    "action": "keep",
+    "target": "Unmanaged by any installer; its behavior migrates from implementing.md into codebase.md \u00a7 Conventions so the fact survives, with the commit-it-into-the-repo question left to the decision below"
+   },
+   {
+    "artifact": "LaunchAgent com.asher.backlog-surface (port 8377 \u2192 ~/.backlog/surface)",
+    "action": "keep",
+    "target": "Machine-level plumbing independent of the skill family; becomes the serving substrate serve-via-tailnet's setup records in environment.md \u00a7 Presenting"
+   }
+  ],
+  "decisions_needed": [
+   "Tickets #233/#235: finish the round-2 plan approval on the live v1 review surface before sweeping it, or park both to needs-shaping and re-enter through v2 shape (discarding the pending v1 approval round but keeping the committed plan HTML as shaping input)?",
+   "Plan artifact form going forward: keep metis's committed self-contained HTML plans (plans/<n>-<slug>.html with ac-N anchors, approved via serve-via-tailnet annotated mode) as the repo's spec deliverable, or adopt to-spec's spec-on-the-ticket form? Existing plans/evidence keep the ac-N contract either way.",
+   "Browser verification: v2 environment.md hard-defaults to Playwright driving Chrome and disqualifies agent-browser as a verification route, but metis has no Playwright and its recorded driver IS agent-browser \u2014 adopt Playwright (add e2e/, verify headless launch, accumulate specs as the regression suite) or record browser verification as a hard gap? This decides how the deferred-checks list (Clerk login, screenshots, recording) is re-verified.",
+   "impeccable's two divergent real copies (.claude vs .agents, no lockfile entry): declare a provider variant in variant-lock.json, reconcile to one copy, or leave as-is with provenance noted? Requires knowing whether the divergence was deliberate.",
+   "Lane mechanics for serialize-verification (new v2 requirement): choose the lock path (e.g. /Users/asher/Projects/metis/.backlog-lane.lock beside the primary checkout) and the stale horizon \u2014 metis previously had 'one thread exercises the full stack, no exception lane' with no lock artifact at all.",
+   "Headless stack contract (new v2 requirement): pnpm dev is a multi-service foreground launcher \u2014 a detached wrapper with logs, recorded stop/restart, and audited teardown must be authored and verified; decide the wrapper form before setup can mark the section verified.",
+   "Pre-push hook: commit the auto-fix hook into the repo (managed, survives fresh clones) or leave it as unmanaged .git/hooks state documented in codebase.md?",
+   "Timing of the in-flight \u2192 building rename relative to #236/#234: rename now (label follows the issues, but any still-running v1 thread greps the old name) or after both runs land?"
+  ],
+  "must_not_lose": [
+   "The 16-row shared-singleton collision table + the serialize-verification parallelism verdict + the setup:worktree copies-but-does-not-remap finding \u2014 derived from a live-stack audit (2026-07-14) v2 setup cannot cheaply repeat",
+   "Effect-verified GitHub dependency verbs: read the dependencies/blocked_by LIST (counters lag \u2014 this deliberately overrides the v2 template's counter-based default) and the POST/DELETE write shape, verified on throwaway issues 2026-07-14",
+   "The staging-label closure semantics and the ~24 open staged issues: the label is the only record of merged-but-unpromoted state, and the promotion PR must carry Closes #n for each \u2014 wiping or renaming it makes closure state unrecoverable",
+   "Live-run resume state until #236 and #233/#235 settle: .git/backlog/runs/{20260723-236-plan,20260723-233-235} plus the uncommitted files in worktrees issue-236 (product code + tests) and issue-233/issue-235 (only copies of their plan HTML), and the local-only branch zippy-wren",
+   "The review-machinery handover ordering: stop/sweep live review servers with the v1 review-server.py BEFORE deleting the review-loop mount, and rewrite environment.md's literal script paths to serve-via-tailnet \u2014 otherwise orphaned tailscale handlers and registry rows remain with no tool to reap them, and the recorded review commands dangle",
+   "CI-divergence facts: CI runs lint/format/typecheck/build-boot but NOT tests (pnpm test is local-gate-only), CI-green is procedural not host-enforced (rulesets API 403 on this plan), and the pnpm check baseline of one lint + one workspace-lint warning \u2014 losing these re-teaches them via a bad merge",
+   "The AgentMail auth recipe (AGENT_EMAIL sign-in, OTP/magic-link read via AGENTMAIL_API_KEY, same inbox for invitations) \u2014 the only recorded path for an agent to mint a real session",
+   "The internal 'migration' skill: its only copy lives in .agents/skills/migration and no lockfile entry protects it \u2014 any mounts-directory wipe deletes a Metis-authored skill outright",
+   "The staffing provider-variant structure: .claude/skills/staffing is a real compiled tree recorded in .agents/asher-skills/variant-lock.json \u2014 a symlink-normalizing cleanup silently breaks the variant contract"
+  ]
+ },
+ {
+  "repo": "asher-skills",
+  "actions": [
+   {
+    "artifact": "mount .agents/skills/backlog (v1 monolith) + .claude/skills/backlog symlink",
+    "action": "retire",
+    "target": "Replaced by v2 skills/software-development/backlog via one atomic `npx skills add <repo> --skill <complete set> -y` committed on the sdlc-lifecycle branch. Nothing lost: v1 SKILL/templates/reference are git-tracked (recoverable from history); the run-state machinery is superseded by v2's tracker-as-ledger (claim comment + outcome comment + resume reconciliation, SKILL.md \u00a7 build); the v1 step templates it carried are covered by the migrate actions on docs/agents/*.md below. NEVER `npx skills remove` \u2014 the lockfile's local source path would delete the v2 source itself; delete the mount dir, symlink, and lockfile entry by hand, then reinstall.",
+    "detail": "Mount-only files with no v2 counterpart: scripts/run-state.py, evals/test_run_state.py, evals/liveness-probes.md, reference/, templates software/{change-fixer,change-reviewer,implementing,refactoring,verifying}.md, skill-authoring/verifying.md."
+   },
+   {
+    "artifact": "mount scripts: .agents/skills/backlog/scripts/run-state.py + evals/test_run_state.py + evals/liveness-probes.md",
+    "action": "retire",
+    "target": "v2 backlog has no run-state scripts by design: 'the tracker is the run ledger' \u2014 attributed claim comments, outcome comments, per-dispatch deadlines, and resume-time reconciliation against live worktrees/branch tips replace run-state files and liveness probes. Verdict waits stay with the canonical serve-via-tailnet review-await.py. Git history retains the v1 machinery."
+   },
+   {
+    "artifact": "mount .agents/skills/diagnosing-bugs (5-line drift)",
+    "action": "retire",
+    "target": "Replaced by the refreshed v2 source skills/software-development/diagnosing-bugs in the same atomic install; docs/agents/diagnosing-bugs.md (its repo playbook) is kept and reconciled, so the earned content survives outside the mount."
+   },
+   {
+    "artifact": "mount .agents/skills/merge-changes (2 files drifted)",
+    "action": "retire",
+    "target": "Replaced by v2 source skills/software-development/merge-changes in the atomic install; drift is stale-mount lag, no repo-earned content lives in the mount."
+   },
+   {
+    "artifact": "mount .agents/skills/prototype (6-line drift)",
+    "action": "retire",
+    "target": "Replaced by v2 source skills/software-development/prototype in the atomic install; docs/agents/prototyping.md keeps the repo-earned content and remains a v2 reader target."
+   },
+   {
+    "artifact": "mount .agents/skills/research (7-line drift)",
+    "action": "retire",
+    "target": "Replaced by v2 source skills/software-development/research in the atomic install; docs/agents/researching.md keeps the repo-earned content and remains a v2 reader target."
+   },
+   {
+    "artifact": "mount .agents/skills/staffing (14-line drift) + variant-lock.json oddity",
+    "action": "retire",
+    "target": "Replaced by refreshed skills/system/staffing via staffing's own install-and-reconcile/apply step (provider trees under .agents/ are compiled, never hand-edited \u2014 codebase.md). The apply step must resolve the invalid state: variant-lock.json declares two provider variants with different effective_hash values while .claude/skills/staffing is physically a symlink to the codex mount. Either recompile a real Claude variant directory or drop the variant declaration \u2014 see decisions. render-global.py and eval suites ride along in the refreshed mount; canonical eval suites already run from the source per codebase.md, so nothing is mount-only."
+   },
+   {
+    "artifact": "mount .agents/skills/skill-loop",
+    "action": "keep",
+    "target": "Byte-identical to source skills/system/skill-loop; not part of the SDLC family and not superseded (it consumes probe evals as input). It MUST be named in the atomic `npx skills add` set \u2014 sequential/partial adds replace earlier selections, so omitting it drops it."
+   },
+   {
+    "artifact": "mount .agents/skills/writing-great-skills (third-party, mattpocock/skills)",
+    "action": "keep",
+    "target": "Keep the mount untouched \u2014 it is the ONLY working-tree copy (skills-lock records a local source that does not exist under skills/, so any lockfile-driven reinstall of it fails and a mount wipe loses it from the working tree). Exclude it from the atomic add command and verify afterward the add did not disturb it; fix its provenance record separately (see decisions)."
+   },
+   {
+    "artifact": "docs/agents/backlog-policy.md",
+    "action": "keep",
+    "target": "Reconcile in place against templates/common/backlog-policy.md \u2014 edited, never overwritten. Section map: work-domain 'software' line \u2192 \u00a7 Work domain (recorded choice stands); readiness identity mappings \u2192 \u00a7 Label roles (with the two label fixes below); work-type labels + draft/research routing rule \u2192 \u00a7 Label roles work-type + the boxed boundary note (v2 template now carries the same rule \u2014 dedupe, keep the repo's phrasing where sharper); dispatch metadata block requirement \u2192 \u00a7 Dispatch metadata (matches v2 verbatim in spirit; keep 'missing fields are a grooming gap, never permission to infer'); GitHub-native in-review/closed \u2192 \u00a7 Label roles Closure paragraph; blocked_by native relation + duplicate-of/superseded-by conventions \u2192 \u00a7 Dependencies; readiness confirmation rule (agent applies ready-for-agent only to human-confirmed shortlist) \u2192 \u00a7 Readiness decision; orphan sweep (7-day quiet horizon, never silently reset) and optimistic-claim concurrency \u2192 NEW \u00a7 Building hygiene (v2 adds attributed claims \u2014 record that the claim comment names runner actor + branch + dispatch date, upgrading the v1 'branch name and dispatch date' comment)."
+   },
+   {
+    "artifact": "label in-flight (0 open issues)",
+    "action": "rename",
+    "target": "in-flight \u2192 building: `gh label edit in-flight --name building --repo asasher/asher-skills` (add a description matching the v2 role). Zero open issues carry it, so the rename is clean; update backlog-policy.md's binding line in the same commit. The in-flight comment convention (branch + dispatch date) survives as the v2 attributed claim comment."
+   },
+   {
+    "artifact": "label needs-spec (1 open: #92) vs playbook binding needs-shaping",
+    "action": "rename",
+    "target": "needs-spec \u2192 needs-shaping: `gh label edit needs-spec --name needs-shaping` \u2014 the label's description ('Parked for strategic shaping') already IS the v2 role, and #92 keeps the label through the rename. Alternative is recording needs-shaping \u2192 needs-spec as the bound alias in backlog-policy.md \u00a7 Aliases; either way the playbook and tracker must stop disagreeing (today the playbook binds a label that does not exist). See decisions."
+   },
+   {
+    "artifact": "label shaping (does not exist)",
+    "action": "rename",
+    "target": "create new: `gh label create shaping --repo asasher/asher-skills --description \"A shaping thread is attending it\"` \u2014 v2 groom sets it at thread dispatch, replacing needs-shaping, so a subject never gets two threads. Setup creates it with user consent per SKILL.md \u00a7 setup."
+   },
+   {
+    "artifact": "labels ready-for-agent, ready-for-human, needs-info; work-types bug/enhancement/refactor/research/draft; exclusions wontfix/duplicate/superseded/invalid; neutral documentation/question/good-first-issue/help-wanted",
+    "action": "keep",
+    "target": "All identity mappings to v2 defaults \u2014 v2 setup reuses existing labels rather than minting duplicates; record them explicitly in the reconciled \u00a7 Label roles / \u00a7 Exclusion / \u00a7 Neutral so nothing is re-derived."
+   },
+   {
+    "artifact": "docs/agents/environment.md",
+    "action": "keep",
+    "target": "Reconcile in place against templates/common/environment.md. Existing earned lines land in matching v2 sections: base branch/branch naming \u2192 \u00a7 Branching & deploys; 'no CI, no preview, no deploy on merge \u2014 merge just updates main' \u2192 \u00a7 Branching & deploys (change-request/merge produce nothing); 'skills repo, no dev stack; running the app = driving a probe scenario' \u2192 \u00a7 Running locally; worktree regime local-isolatable + `git worktree add <path> -b <branch> main` \u2192 \u00a7 Worktree isolation; shared singletons (GitHub tracker serialized writes, tailnet surface one-review-at-a-time) \u2192 \u00a7 Worktree isolation singleton table; seed regime none / probe scenario in evals/ \u2192 \u00a7 Seed data; gh-as-asasher + Codex own-subscription auth, never hardcode/echo \u2192 \u00a7 Authenticating for testing; VERIFY-<issue>-<purpose> fixtures, never shared mutable fixtures, synthetic-prompt validity boundary \u2192 \u00a7 Verification data; drivers (Claude subagent, `codex exec -s read-only --skip-git-repo-check`, python3 direct) + evidence-per-surface \u2192 \u00a7 Driving the app & capturing evidence; ALL tailnet content (root URL, surface dir, bring-up rules, http.server 8390 + `tailscale serve --set-path` recipe, publish-a-doc symlink recipe, review-server self-host invocation, review-await exit codes 0/3/10/124, hub sweep, reap rules incl. stale /review:8377, port 8377 held, 'always open <url>') \u2192 \u00a7 Presenting to the human under serve-via-tailnet ownership; keep-awake: none \u2192 note kept beside Presenting; staffing deltas (skill design orchestration-grade, dual-executor, no floor override) \u2192 \u00a7 Staffing delta; serialize-verification-by-choice \u2192 \u00a7 Parallelism verdict.",
+    "detail": "New v2 sections to fill during reconcile: \u00a7 Branching & deploys credential preflight (gh auth status + `codex exec` cheap live read \u2014 this is what backlog build's per-run preflight uses) and deploy facts (n/a \u2014 record 'skills consumed via npx skills add; no deploy target'); \u00a7 Running locally headless contract (record 'no dev stack \u2014 nothing to detach'); \u00a7 Verification data per-ticket-disposable stores (the ticket's own worktree, its VERIFY-* fixtures, its ~/.backlog/surface/asher-skills/<issue>/ entry \u2014 everything else shared); \u00a7 Worktree isolation parent-.git contention row (template-shipped, add verbatim); \u00a7 Parallelism lane mechanics (choose a lock path if serialize-verification stands \u2014 see decisions); \u00a7 Driving the app: record that the Playwright-default web-driver bullet is n/a here (no browser-driven app surface; probe executors are the drivers), keeping the template's rule visible for rendered-HTML artifacts."
+   },
+   {
+    "artifact": "docs/agents/platform.md",
+    "action": "keep",
+    "target": "Reconcile in place against templates/common/platform.md \u2014 every earned verb already fits a v2 section: tracker binding + list/view/comment/edit/create/close verbs \u2192 \u00a7 Tracker; the LIVE-VERIFIED blocked_by read (`--jq '.issue_dependencies_summary'`) and write (resolve numeric id, POST dependencies/blocked_by) \u2192 \u00a7 Tracker blocker verbs (v2 template ships the same commands \u2014 the repo's 'verified live, do not substitute task-list prose' note stays); Closes #<n> default + direct close exception \u2192 \u00a7 Tracker close-on-merge; PR verbs, exact-LGTM approval, human-or-authorized-merge-changes merge, loop-never-merges \u2192 \u00a7 Change review; worktree/sync/push verbs + pinned-SHA force-push orphaning \u2192 \u00a7 Version control; Claude Code harness, Agent tool isolation:'worktree', bounded `codex exec --cd`, bounded `claude -p` NEVER --bare, directional reachability \u2192 \u00a7 Harness; spawned threads read .claude/skills/<name>/ + docs/agents/ \u2192 \u00a7 Harness reference-readability bullet; ScheduleWakeup/Monitor + review-await blocking + watch-until ladder \u2192 \u00a7 Harness durable-monitor bullet.",
+    "detail": "New v2 bullets to fill: wrapper staffing evidence (record what the native spawn reports, or 'unproven' per template) and the route-trust/drift paragraph (template-shipped, adopt as-is)."
+   },
+   {
+    "artifact": "docs/agents/codebase.md",
+    "action": "keep",
+    "target": "Already the v2-shape file (codebase.md is new in v2 and this repo has it, earned). Reconcile against templates/software/codebase.md and make it the landing zone for the retired step playbooks' migrations (below). Existing map: skill-prose-is-product + redundant-negation rule + commit style \u2192 \u00a7 Conventions; catalog gate (PATH=/usr/bin:$PATH python3 tools/test_catalog.py), site/check.py exit-code-masking trap, staffing eval suites + BASELINE_BYTES*0.8 byte budget, zsh `==` runner trap \u2192 \u00a7 Checks; probe answer-key re-cite rule + stdlib unittest one-file-per-tool \u2192 \u00a7 Testing patterns; mounts-are-build-products / never-npx-skills-remove / staffing trees compiled-not-hand-edited \u2192 \u00a7 Generated artifacts."
+   },
+   {
+    "artifact": "docs/agents/evidence.md",
+    "action": "keep",
+    "target": "Reconcile against templates/software/evidence.md \u2014 much of its earned content has been upstreamed into the v2 template, so reconcile = dedupe to template text and keep the repo-specifics. Repo-specific keepers: probe-eval transcript as the honest no-running-app proof (v2 \u00a7 What to capture's greenfield clause, add the repo's 'on a repo with an app this is NOT a substitute' warning); research dossiers stay under research/, never copied into evidence/ \u2192 \u00a7 What to capture repo-specific bullet; per-change-type table (skill behavior/script/visual/prose) and 'green it-renders screenshot is not enough' \u2192 \u00a7 What to capture repo-specific; styling-only reuse only at final reviewed HEAD with the exact reviewer verdict phrase \u2192 \u00a7 What to capture Timing; AFK-vs-witnessed \u2192 v2 \u00a7 Obligation scales with absence (template now carries it \u2014 dedupe). Template-absorbed (verify identical, then defer to template): GIF ffmpeg recipe + 10MB ceiling + never-MP4 + c<criterion>- naming \u2192 \u00a7 Format and storage; ?raw=1 same-origin embeds, camo-proxy 404s, no-CDN-API, embed form, mechanical checks (gh api commits/<sha>, git cat-file -e), orphaned-SHA re-pin \u2192 \u00a7 GitHub binding; repo-relative embeds + publish-directory-root-or-skip \u2192 \u00a7 Local binding."
+   },
+   {
+    "artifact": "docs/agents/change-description.md",
+    "action": "keep",
+    "target": "Reconcile against templates/common/change-description.md: no-PR-template + imperative sentence-case title \u2192 \u00a7 This repo; Closes #<n> and the Claude Code attribution line \u2192 \u00a7 This repo; 'no CI \u2014 readiness is green probe eval + LGTM' \u2192 the CI-status bullet; research-dossier substitution for Evidence \u2192 now template-shipped in the Evidence bullet (dedupe); evidence placeholder wording \u2192 template-shipped."
+   },
+   {
+    "artifact": "docs/agents/probe-evals.md",
+    "action": "keep",
+    "target": "Repo-authored eval discipline, not a backlog-setup product \u2014 referenced 21 times across v2 skill sources. Keep untouched; it is the substrate the v2 family's verification model leans on (two tiers, answer-key-before-runs, dual-executor, context-fidelity split, citation requirement, canonical examples)."
+   },
+   {
+    "artifact": "docs/agents/diagnosing-bugs.md (playbook)",
+    "action": "keep",
+    "target": "Still a first-class v2 consumer surface \u2014 skills/software-development/diagnosing-bugs/SKILL.md, README, setup reference, and answer key all point at it. Reconcile with the v2 diagnosing-bugs setup template; all earned lines stay: skill-bug definition + reproduce-through-both-executors, reproducing scenario becomes a probe in that skill's evals/, py_compile-then-drive for script bugs, model-variance flaky-surface rule, probe-eval equivalence as the prose-skill regression seam."
+   },
+   {
+    "artifact": "docs/agents/prototyping.md",
+    "action": "keep",
+    "target": "Still referenced by the v2 prototype skill (SKILL.md, README, reference/prototyping.md). Reconcile; earned lines stay: no build system, self-contained single-file HTML for tailnet rendering, prototypes live OUTSIDE skill dirs (workspace/scratchpad) so throwaway code never ships in a self-contained skill."
+   },
+   {
+    "artifact": "docs/agents/researching.md",
+    "action": "keep",
+    "target": "Still referenced by the v2 research skill (SKILL.md, README, setup reference). Reconcile; earned lines stay: research/<slug>/ durable root, workspace option, scratch-to-tempdir, research-out-of-evidence/ rule, primary local sources + stable locators, never publish credentials, serialized writes, Presentation policy."
+   },
+   {
+    "artifact": "docs/agents/implementing.md",
+    "action": "migrate",
+    "target": "File retires (no v2 reader \u2014 the implement/tdd skills replace the step playbook); earned lines move to docs/agents/codebase.md: 'no unit-test framework; tests are probe scenarios; test-first = write/adjust probe + answer key first, confirm current skill fails, then change and re-run' \u2192 codebase.md \u00a7 Testing patterns; 'tests live in each skill's own evals/' \u2192 codebase.md \u00a7 Testing patterns (where tests live); repo conventions reviewers expect (self-contained dirs, compose-by-name, stdlib-only Python 3, probe eval for new/reworked skills) \u2192 codebase.md \u00a7 Conventions; bare-minimum-ux sibling wins on UI conflict + impeccable PRODUCT.md/DESIGN.md ambient-context rule \u2192 codebase.md \u00a7 Conventions (repo-specific patterns a newcomer would miss); commit style \u2192 already in codebase.md \u00a7 Conventions (dedupe, drop here)."
+   },
+   {
+    "artifact": "docs/agents/verifying.md",
+    "action": "migrate",
+    "target": "Content splits; the file then retires (or survives only as the optional 'check playbook' change-description.md \u00a7 Checks-run mentions \u2014 see decisions). Line map: checks-narrowest-first (probe eval, py_compile-then-drive on Python 3.14, no npm/lint/build pipeline) \u2192 codebase.md \u00a7 Checks; site-drift rule (any SDLC-family skill change runs python3 site/check.py; errors block) \u2192 codebase.md \u00a7 Checks; aggregate pre-PR gate (probe eval green vs answer key + scripts compile and run; pre-deployment eval for new/reworked skills) \u2192 codebase.md \u00a7 Checks (the full gate line); second-opinion codex-exec executor for subjective criteria \u2192 probe-evals.md dual-executor contract already carries it (dedupe); cold-reader authoring-context-leakage check (subagent with no authoring context flags ungroundable sentences; 'now'/'no longer'/'replaces' fixed before review-ready) \u2192 codebase.md \u00a7 Checks as a named pre-review check; 'no CI merge gate \u2014 readiness is green probe eval + LGTM' \u2192 change-description.md CI-status line (already there, dedupe); acceptance-criteria-by-entryway + answer-key-is-executable-criteria \u2192 the entryway routing is v2 build/verify-your-work skill behavior (superseded); keep the one repo-specific sentence 'a skill's answer key is the executable form of its acceptance criteria' \u2192 codebase.md \u00a7 Testing patterns; every-change-must-satisfy list \u2192 codebase.md \u00a7 Conventions (merge with the same list arriving from implementing.md); rendered-HTML happy/empty/error states + both color schemes + bare-minimum-ux accessibility \u2192 environment.md \u00a7 Driving the app & capturing evidence (the visual-artifact surface entry)."
+   },
+   {
+    "artifact": "docs/agents/refactoring.md",
+    "action": "migrate",
+    "target": "File retires (no v2 reader); earned lines move: behavior lock = probe eval (capture affected skill's verdicts before, identical scenario\u2192verdict after, re-run \u22652 executors for model variance) \u2192 codebase.md \u00a7 Testing patterns (the regression seam, alongside diagnosing-bugs.md's matching rule); script refactors = py_compile + same driven paths same output \u2192 codebase.md \u00a7 Checks; refactor-must-not-turn-compose-by-name-into-file-dependency + copy-a-technique/extract-a-primitive \u2192 codebase.md \u00a7 Conventions (cite AGENTS.md \u00a7 Conventions as canonical, keep the one-line reviewer-facing reminder)."
+   },
+   {
+    "artifact": "docs/agents/change-reviewer.md",
+    "action": "migrate",
+    "target": "File retires \u2014 v2 adversarial-review/code-review own reviewer behavior, and code-review pulls repo standards from codebase.md. Line map: repo-specific review concerns (self-containment, stdlib-only scripts, agents/openai.yaml where Codex presentation matters, passing probe eval, judging rendered plan/prototype HTML for taste) \u2192 codebase.md \u00a7 Conventions; authoring-context-leakage-in-shipped-text is a BLOCKER (quote sentence, name real recipient, require rewrite) \u2192 codebase.md \u00a7 Conventions as a standing review standard; ~1000-line file-growth presumptive blocker \u2192 codebase.md \u00a7 Conventions; exact-'LGTM' approval \u2192 platform.md \u00a7 Change review (already bound, dedupe); styling-only reuse verdict exact phrase 'no product-code change; no recapture' + only-at-final-HEAD \u2192 evidence.md \u00a7 What to capture Timing; open-every-cited-fixture-before-accepting and product-semantics-are-ruling-requests-not-review-edits \u2192 shipped v2 code-review/adversarial-review behavior (superseded, verify the v2 skills state them before dropping)."
+   },
+   {
+    "artifact": "docs/agents/change-fixer.md",
+    "action": "retire",
+    "target": "All shipped-default text with zero repo-specific additions (per audit); the v2 adversarial-review fixer subagent carries the same contract (reply per comment with SHA, reasoned non-fixes, re-prompt reviewer). Nothing to migrate."
+   },
+   {
+    "artifact": "open PR #90 'Implement the SDLC lifecycle end to end' (branch sdlc-lifecycle, checked out)",
+    "action": "keep",
+    "target": "Finish \u2014 this PR IS the v2 migration. All mount replacements, label renames, and playbook reconciles land as commits on this branch so the v1\u2192v2 cutover is reviewable and reversible. Nothing may reset/clean the primary checkout while it is checked out."
+   },
+   {
+    "artifact": "issue #80 ready-for-agent + branch 80-decouple-planning-from-run",
+    "action": "migrate",
+    "target": "Park immediately: remove ready-for-agent (or hold all builds) until the v2 mounts are installed \u2014 a backlog run started mid-migration would dispatch it under v1 semantics. Then re-groom under v2: it is plausibly superseded by PR #90 (which decouples planning from the AFK loop); if so, label superseded + 'superseded by #90' body line and harvest/delete the branch after checking it for unmerged content a human wants. See decisions."
+   },
+   {
+    "artifact": "unmerged branches 84-interview-domain-modeling, codex/research-skill (+ worktree asher-skills-research-skill), codex/reconcile-installed-skills, codex/until-zero-skill (worktree manage-runway-skill)",
+    "action": "migrate",
+    "target": "State, not files \u2014 per-branch disposition after PR #90 merges: diff each against sdlc-lifecycle; content absorbed by the v2 work (research-skill and reconcile-installed-skills are the likely cases) \u2192 close/delete after harvest; content still live (84, until-zero) \u2192 park with a one-line note on its ticket and finish under v2. No branch is deleted before a human sees its unmerged diff. See decisions."
+   },
+   {
+    "artifact": "worktree /Users/asher/Projects/asher-skills-worktrees/reconcile-consumers (DETACHED HEAD 2493ecb)",
+    "action": "migrate",
+    "target": "Rescue first: check for a dirty tree, commit or stash anything found, and pin the head with `git branch rescue/reconcile-consumers 2493ecb` before any cleanup \u2014 a detached head plus worktree removal is the one state where work is unrecoverable. Only then remove the worktree."
+   },
+   {
+    "artifact": "worktrees 61-harness-specific-skills, goodwork-viz (on main), manage-runway-skill",
+    "action": "keep",
+    "target": "Park through the migration: 61 and manage-runway hold live branches (dispositioned with the branch action above); goodwork-viz sits on main \u2014 verify clean, then it is free to remove any time. None block the v2 install; merge-changes cleanup handles them per environment.md teardown once their work closes."
+   },
+   {
+    "artifact": "plans/ (22 plan HTML files) and evidence/ (per-issue dirs 1..84, sdlc-lifecycle, v2-probe-runs, v2-fix-verification)",
+    "action": "keep",
+    "target": "Working-state artifacts of the loop per AGENTS.md \u00a7 Layout, and the v2-era dirs are the migration's own proof. v2 evidence.md keeps evidence/<slug>/ as the storage contract \u2014 no move needed."
+   },
+   {
+    "artifact": "~/.backlog/runs/asher-skills/{32,35} and ~/.backlog/state/asher-skills/{2-review-loop,8-to-spec}",
+    "action": "retire",
+    "target": "v1 run-state for runs that are over; v2 keeps no run-state (tracker is the ledger). Archive or delete these asher-skills-scoped entries only after confirming no live run references them; ~/.backlog is shared with metis/pipelines/integrations-v2, so cleanup never touches sibling namespaces or ~/.backlog/handoffs/metis-*."
+   },
+   {
+    "artifact": "stray un-namespaced ~/.backlog/state/{1-extract-staffing,10-sprite-sheet-extractor,7-review} and ~/.backlog/runs/6",
+    "action": "retire",
+    "target": "Pre-namespacing leftovers \u2014 retire only those provably from this repo's early runs (1-extract-staffing matches plans/1-extract-staffing.html; verify each by contents before deleting); anything not attributable stays, because the state root is shared across projects."
+   },
+   {
+    "artifact": "~/.backlog/review-state/asher-skills/until-zero-skill-migration and ~/.backlog/reviews/asher-skills/{44-backlog-decomposition,73-plan,goodwork-viz}",
+    "action": "retire",
+    "target": "Dead review-server state for settled reviews; the mechanism survives in the canonical serve-via-tailnet scripts. Reap paired tailscale handlers first (below), then delete; keep any whose review is genuinely still awaiting a verdict (until-zero pairs with the parked until-zero branch \u2014 retire only when that work closes)."
+   },
+   {
+    "artifact": "tailscale serve handlers: /asher-skills/44/review\u219254984, /asher-skills/until-zero/review\u219250072, stale /review\u21928377",
+    "action": "retire",
+    "target": "Reap per environment.md's own rule: `tailscale serve --set-path <path> off` for each dead handler (44 is closed; until-zero waits on its branch decision; /review:8377 is the documented stale handler \u2014 check dead, then off). The hub handler /asher-skills\u21928390 and the surface dir ~/.backlog/surface/asher-skills stay \u2014 v2 presenting still runs through serve-via-tailnet on this surface."
+   },
+   {
+    "artifact": "~/.backlog/surface/asher-skills/{registry.json,index.html} and ~/.backlog/handoffs/metis-backlog-run-2026-07-12.md",
+    "action": "keep",
+    "target": "The surface is live v2 infrastructure (hub already empty of issue dirs); the metis handoff belongs to another repo sharing the state root \u2014 out of scope, never touched by this migration."
+   },
+   {
+    "artifact": "skills/software-development/serve-via-tailnet/scripts/review-server.py and review-await.py",
+    "action": "keep",
+    "target": "Canonical v2 machinery \u2014 the retired v1 review-loop's surviving mechanics live here (annotated mode), and the reconciled environment.md \u00a7 Presenting and platform.md wakeups reference them by these paths."
+   },
+   {
+    "artifact": "skills-lock.json",
+    "action": "migrate",
+    "target": "Rewritten by the atomic `npx skills add` for the complete v2 set (backlog, shape, build, adversarial-review, code-review, implement, tdd, diagnosing-bugs, verify-your-work, prove-your-work, merge-changes, to-spec, to-tickets, interview, domain-modeling, research, prototype, to-thread, to-subagent, watch-until, serve-via-tailnet, handoff, staffing, skill-loop) in ONE command; the writing-great-skills entry is hand-corrected (see decisions), never fed to a reinstall."
+   }
+  ],
+  "decisions_needed": [
+   "needs-spec vs needs-shaping: rename the live label to the v2 default (`gh label edit needs-spec --name needs-shaping`, clean \u2014 description already matches, #92 rides along) or keep needs-spec and record it as the bound alias in backlog-policy.md \u00a7 Aliases. Either ends the current playbook/tracker disagreement; pick one.",
+   "Staffing provider variant: variant-lock.json declares distinct Claude and Codex variants (different effective_hash), but .claude/skills/staffing is a symlink to the codex mount \u2014 physically impossible per the declaration. Should the reinstall compile a real separate Claude variant tree, or drop the variant declaration and keep the symlink? Requires knowing whether a Claude-specific staffing variant was ever intended.",
+   "writing-great-skills provenance: adopt a source directory under skills/ (making the lockfile's local-source claim true) vs re-record it in the lockfile/external-dependencies as an upstream mattpocock/skills install. Until decided, it is excluded from any reinstall and its mount is hands-off.",
+   "Issue #80 + branch 80-decouple-planning-from-run: is the decoupling fully delivered by PR #90 (\u2192 superseded, close, harvest branch) or does residual scope survive into a v2-shaped ticket? A human should read the branch diff before closure.",
+   "Parallelism verdict under v2 semantics: the v1 record says 'serialize-verification' but justifies it as 'user chose sequential' \u2014 v2 distinguishes these. If serialize-verification stands, lane mechanics need a lock path chosen (e.g. .backlog-lane.lock beside the primary checkout); if the real preference is sequential, record that instead. Also reconfirm the standing choice of no keep-awake (AFK reviews may find the machine asleep).",
+   "verifying.md afterlife: retire it entirely (contents folded into codebase.md/environment.md per the migrate action) or keep a slim docs/agents/verifying.md as the optional 'check playbook' that v2 change-description.md \u00a7 Checks-run points at. Either preserves content; the choice is about where builders look for the gate.",
+   "Disposition per unmerged branch (84-interview-domain-modeling, codex/research-skill, codex/reconcile-installed-skills, codex/until-zero-skill): finish under v2, or close as absorbed by sdlc-lifecycle \u2014 each needs a human glance at its diff; the plan only guarantees none is deleted unread."
+  ],
+  "must_not_lose": [
+   "The live-verified GitHub dependency verbs in platform.md: read blockers via `gh api .../issues/<n> --jq '.issue_dependencies_summary'` and write via numeric-id resolve + POST .../dependencies/blocked_by \u2014 earned by live verification; losing them regresses to task-list prose that backlog build cannot read.",
+   "The 'never npx skills remove here' hazard and the one-atomic-add rule: with a local source path, remove deletes the canonical skill SOURCE under skills/, and sequential adds replace earlier selections \u2014 a naive CLI cleanup during this very migration would destroy the v2 sources it is installing.",
+   "writing-great-skills' mount is the only working-tree copy (lockfile points at a nonexistent local source) \u2014 any mount wipe or lockfile-driven reinstall loses it.",
+   "The tailnet serving facts in environment.md \u00a7 Presenting: sandboxed macOS tailscale cannot serve file paths (hence http.server 8390 + `tailscale serve --set-path`), port 8377 is held by the stale pre-existing /review handler, the reap recipes, the bring-up/never-cycle-a-healthy-connection rule, and the standing 'always open the published URL locally' instruction \u2014 all earned by failed publishes.",
+   "docs/agents/probe-evals.md wholesale: answer-key-before-runs, dual-executor contract, context-fidelity session split, citation requirement, and the canonical Tier 1/Tier 2 examples \u2014 it is the repo's entire testing substrate and 21 v2 references point at it.",
+   "The staffing compiled-load byte budget (BASELINE_BYTES * 0.8 in test_global_apply.py) and 'provider trees are compiled by apply, never hand-edited' \u2014 losing either invites hand-edits that silently break the budget.",
+   "The GitHub evidence-embed mechanics (same-origin ?raw=1 blobs, camo-proxied 404s on private repos, mechanical SHA/path/extension checks, re-pin-don't-plain-link) \u2014 now also in the v2 template, but the reconcile must not drop them from the repo playbook the skills actually read.",
+   "backlog-policy.md's dispatch-metadata block requirement with 'missing fields are a grooming gap, never permission to infer', the research/draft routing boundary, and the never-silently-reset orphan rule (the branch may hold unmerged work).",
+   "The runner traps: bare `==` in a zsh command line breaks the command; site/check.py's exit code masked if piped through tail in a && chain \u2014 each cost a debugging session.",
+   "Whatever sits at DETACHED HEAD 2493ecb in the reconcile-consumers worktree \u2014 pin a rescue ref and check for a dirty tree before any worktree cleanup."
+  ]
+ },
+ {
+  "repo": "integrations-v2",
+  "actions": [
+   {
+    "artifact": "mount: backlog (v1)",
+    "action": "retire",
+    "target": "Replaced by v2 backlog (skills/software-development/backlog) installed in one atomic `npx skills add` with the rest of the roster; v2's tracker-is-the-run-ledger design replaces run-state.py",
+    "detail": "Before removal, archive a copy of scripts/run-state.py beside .git/backlog/runs so the two run dirs stay readable forever (it is their only reader)."
+   },
+   {
+    "artifact": "mount: plan (v1)",
+    "action": "retire",
+    "target": "Superseded by v2 shape + to-spec + build flow (no same-name v2 skill); plan-skeleton.html dies with it once planning.md's earned content migrates; committed .plans/ history is kept untouched",
+    "detail": "See planning.md migrate action and the plan-convention decision."
+   },
+   {
+    "artifact": "mount: review-loop (v1)",
+    "action": "retire",
+    "target": "Superseded by serve-via-tailnet's annotated-review mode (same review-server lineage, canonical copy now lives in that skill)",
+    "detail": "Drain first: run review-server.py --stop/--sweep on the 9 live state dirs and remove this repo's tailscale serve subpaths BEFORE deleting the mount \u2014 environment.md's recorded commands invoke the mount path. The LaunchAgent and ~/.backlog/surface hub stay (shared, machine-level)."
+   },
+   {
+    "artifact": "mount: setup-asher-skills (v1)",
+    "action": "retire",
+    "target": "Replaced by `npx skills add <repo> --skill <names...>` plus `backlog setup` for playbook install/reconcile; catalog.py/install.py/render-global.py have no consumer-side role in v2"
+   },
+   {
+    "artifact": "mount: staffing (v1, with claude provider variant)",
+    "action": "retire",
+    "target": "Replaced by v2 staffing (harness loads its global module + this repo's deltas)",
+    "detail": "The reinstall must recompile the declared claude provider variant and refresh .agents/asher-skills/variant-lock.json \u2014 .claude/skills/staffing is a real compiled directory, not a symlink; a symlink-normalizing cleanup would destroy the variant or invalidate the lock."
+   },
+   {
+    "artifact": "mount: diagnosing-bugs (v1)",
+    "action": "retire",
+    "target": "Replaced by v2 diagnosing-bugs (refreshed same-name skill)"
+   },
+   {
+    "artifact": "mount: prototype (v1)",
+    "action": "retire",
+    "target": "Replaced by v2 prototype"
+   },
+   {
+    "artifact": "mount: research (v1)",
+    "action": "retire",
+    "target": "Replaced by v2 research"
+   },
+   {
+    "artifact": "mount: tdd (mattpocock third-party)",
+    "action": "retire",
+    "target": "Replaced by v2 tdd \u2014 v2 implement/build compose `tdd` by name, so the third-party copy would shadow the family version (see decision if Asher wants otherwise)"
+   },
+   {
+    "artifact": "mount: diagnose (mattpocock third-party)",
+    "action": "retire",
+    "target": "Superseded by v2 diagnosing-bugs; the environment.md \u00a7 Tools reference to `diagnose` is rewritten during the playbook migration"
+   },
+   {
+    "artifact": "mount: handoff (mattpocock third-party)",
+    "action": "retire",
+    "target": "Replaced by v2 handoff (family version, composed by name in the v2 roster)"
+   },
+   {
+    "artifact": "mount: greploop",
+    "action": "retire",
+    "target": "No v2 successor and nothing in playbooks depends on it \u2014 removing it loses nothing"
+   },
+   {
+    "artifact": "mount: shadixfy",
+    "action": "keep",
+    "target": "Asher-authored creative skill outside the SDLC supersede set; leave installed, refresh separately later against its restructured source path"
+   },
+   {
+    "artifact": "mount: agent-browser",
+    "action": "keep",
+    "target": "Survives as the interactive browsing/diagnosis driver bound in environment.md; whether it remains a *verification* route is the open Playwright decision (v2 template demotes it from verification)"
+   },
+   {
+    "artifact": "mount: agentmail",
+    "action": "keep",
+    "target": "OTP email driver bound in environment.md \u00a7 Authenticating for testing \u2014 carries into the v2 auth section verbatim"
+   },
+   {
+    "artifact": "mount: btca-local",
+    "action": "keep",
+    "target": "Domain tooling with btca.config.jsonc at repo root; untouched by this migration"
+   },
+   {
+    "artifact": "mount: convex",
+    "action": "keep",
+    "target": "Referenced by environment.md \u00a7 Tools; backfill its missing skills-lock.json entry so a future lockfile-driven reinstall cannot drop it"
+   },
+   {
+    "artifact": "mount: convex-best-practices",
+    "action": "keep",
+    "target": "Domain mount, in lock; untouched"
+   },
+   {
+    "artifact": "mount: convex-realtime",
+    "action": "keep",
+    "target": "Domain mount, in lock; untouched"
+   },
+   {
+    "artifact": "mount: humanizer",
+    "action": "keep",
+    "target": "Domain mount, in lock; untouched"
+   },
+   {
+    "artifact": "mount: vercel-composition-patterns",
+    "action": "keep",
+    "target": "Domain mount; backfill missing skills-lock.json entry"
+   },
+   {
+    "artifact": "mount: vercel-react-best-practices",
+    "action": "keep",
+    "target": "Domain mount; backfill missing skills-lock.json entry"
+   },
+   {
+    "artifact": "mount: web-design-guidelines",
+    "action": "keep",
+    "target": "Domain mount; backfill missing skills-lock.json entry"
+   },
+   {
+    "artifact": "mount: xlsx",
+    "action": "keep",
+    "target": "Domain mount (full office scripts tree); backfill missing skills-lock.json entry"
+   },
+   {
+    "artifact": "v2 roster additions (no v1 counterpart)",
+    "action": "migrate",
+    "target": "Install build, shape, adversarial-review, code-review, implement, verify-your-work, prove-your-work, merge-changes, to-spec, to-tickets, interview, domain-modeling, to-thread, to-subagent, watch-until, serve-via-tailnet in the SAME single atomic `npx skills add` as the refreshed backlog/tdd/handoff/diagnosing-bugs/prototype/research/staffing",
+    "detail": "Sequential single-skill adds can replace earlier selections \u2014 one command, complete set."
+   },
+   {
+    "artifact": "environment.md: branch naming / CI / preview-deploy lines",
+    "action": "migrate",
+    "target": "docs/agents/environment.md (v2) \u00a7 Branching & deploys \u2014 branch codex/<issue>-<slug>, base/target main, preview deploy `pnpm --filter @workspace/backend deploy:vercel` + preview_seed:run as 'what a change request produces'",
+    "detail": "#242's empty preview CONVEX_DEPLOY_KEY / obsolete Convex team slug becomes the first Credential-preflight row (new v2 section) \u2014 the cheap live read that proves the deploy credential before work hits that gate. CI-runs-pnpm-check-but-no-branch-protection goes to codebase.md \u00a7 Checks."
+   },
+   {
+    "artifact": "environment.md: local-dev lines (services, hostnames, dotenvx, pinned pnpm)",
+    "action": "migrate",
+    "target": "environment.md (v2) \u00a7 Running locally \u2014 services (portless app/email/ui.onboardings, convex dev, Ladle), *.localhost hostnames, `dotenvx run --`, pinned pnpm@10.4.1 purge hazard",
+    "detail": "v2's new headless-stack contract requires recording detached start + log + audited teardown \u2014 author this at setup; it was implicit in v1."
+   },
+   {
+    "artifact": "environment.md: worktree-isolation lines (setup-worktree.mjs, dev:isolated, singleton audit table)",
+    "action": "migrate",
+    "target": "environment.md (v2) \u00a7 Worktree isolation \u2014 regime local-isolatable; `node scripts/setup-worktree.mjs`; dev:isolated / dev:seed:isolated / worktree:env; cold-start 30s-window caveat; generated state (.env.worktree, .worktree/convex-home, .worktree/portless); the effect-verified 2026-07-14 shared-singleton table (Convex/ports/env isolatable; Clerk dev instance NOT; AgentMail inbox NOT; dev:reset targets exclusive) verbatim",
+    "detail": "v2 adds the standing parent-.git lock row \u2014 append it. This table is the crown jewel: not regenerable without re-running the two-worktree live audit."
+   },
+   {
+    "artifact": "environment.md: seed lines",
+    "action": "migrate",
+    "target": "environment.md (v2) \u00a7 Seed data \u2014 dev:seed dry-run/apply, dev:reset-and-seed, reset-deletes-ALL-Clerk-orgs warning, seed contents (Dunn Harland/Demo Dealer/Demo System Owner, 12 stage projects), isolated seed refuses live keys, NO verified safe cleanup for 'Dunn Harland [<suffix>]' smoke orgs \u2014 leave them",
+    "detail": "v2's new drive-to-feature path is authored here from diagnosing-bugs.md's dev:isolated recipe (printed worktree URL, seeded namespace)."
+   },
+   {
+    "artifact": "environment.md: auth lines",
+    "action": "migrate",
+    "target": "environment.md (v2) \u00a7 Authenticating for testing \u2014 Clerk JWTs trusted by Convex, public routes /sign-in + /invitations, agentmail onboardings-dev@agentmail.to OTP path (consume programmatically, never print), do-NOT-trust-initially-active-org trap",
+    "detail": "v2 adds a session-reuse row (mint once, persist browser storage state) \u2014 author it; v1 re-authenticated per run."
+   },
+   {
+    "artifact": "environment.md: verification-data and fixture-hygiene lines",
+    "action": "migrate",
+    "target": "environment.md (v2) \u00a7 Verification data \u2014 VERIFY-<issue>-<purpose> naming, [<worktree-suffix>] for shared-Clerk orgs, never run shared reset as cleanup, never share mutable scratch across issues",
+    "detail": "v2's new per-ticket-disposable-stores row: worktree-local Convex deployment only; shared Clerk instance, AgentMail inbox, and dev:reset targets sit explicitly OUTSIDE the destructive line."
+   },
+   {
+    "artifact": "environment.md: browser/capture lines (agent-browser sessions, Computer Use, evidence formats)",
+    "action": "migrate",
+    "target": "environment.md (v2) \u00a7 Driving the app & capturing evidence \u2014 per-worktree isolated named sessions, ChatGPT-in-Chrome only on explicit request, Computer Use per-task authorization never carried forward, delete-the-auth-recording + review-captures-for-secrets rules",
+    "detail": "Driver binding itself is the open Playwright-vs-agent-browser decision; whichever wins, these hygiene rules carry."
+   },
+   {
+    "artifact": "environment.md: review-surface lines (LaunchAgent, tailscale serve, publish/stop/sweep/await commands)",
+    "action": "migrate",
+    "target": "environment.md (v2) \u00a7 Presenting to the human, rewritten by serve-via-tailnet setup \u2014 durable facts carry (root https://ashers-macbook-pro.tail045dd5.ts.net/review, surface dir ~/.backlog/surface/integrations-v2, port-8377 LaunchAgent, Funnel-stays-off, `tailscale status` preflight, symlink publish form); the review-loop mount-path commands (review-server.py invocation, review-await exit codes 0/3/10/124, stop/sweep) retire with the mount, replaced by serve-via-tailnet's annotated-mode equivalents"
+   },
+   {
+    "artifact": "environment.md: parallelism lines",
+    "action": "migrate",
+    "target": "environment.md (v2) \u00a7 Parallelism verdict \u2014 serialize-verification, forcing rows named (Clerk + AgentMail), serialized exception lane (ALL isolated startups/seeds serialize because dev:isolated auto-seeds Clerk; concurrent after ready+authenticated)",
+    "detail": "v2 replaces 'orchestrator owns the lane' prose with explicit lane mechanics: author the lock path (e.g. .backlog-lane.lock beside the primary checkout), atomic-mkdir acquire, release-after-cleanup-proof, stale horizon."
+   },
+   {
+    "artifact": "platform.md: tracker lines",
+    "action": "migrate",
+    "target": "platform.md (v2) \u00a7 Tracker \u2014 binding github dunnharland/integrations-v2; gh issue view FAILS (deprecated Projects-classic GraphQL, verified 2026-07-11) so read via `gh api repos/.../issues/<n>` (+/comments); blocked_by read (`.../dependencies/blocked_by`, exercised 2026-07-14) and write (resolve numeric id via --jq '.id', POST/DELETE -F issue_id) verbatim; Closes #<n> close-on-merge"
+   },
+   {
+    "artifact": "platform.md: change-review lines",
+    "action": "migrate",
+    "target": "platform.md (v2) \u00a7 Change review \u2014 gh pr view/edit FAIL, edit via `gh api --method PATCH .../pulls/<n> --input -`; gh pr list/checks work; approval = exact 'LGTM' comment (from change-reviewer.md); merge = human `gh pr merge <n> --squash` (house policy, NOT platform-enforced); --delete-branch fails while a worktree holds the local branch \u2014 remove worktrees first"
+   },
+   {
+    "artifact": "platform.md: version-control lines",
+    "action": "migrate",
+    "target": "platform.md (v2) \u00a7 Version control \u2014 `git worktree add <path> -b codex/<issue>-<slug> origin/main`; pinned-SHA semantics (rebase/force-push orphans pins, re-pin branch-head SHA after any rewrite); stacked-PR post-squash reconciliation recipe (merge origin/main, one-sided conflicts keep both additions, pnpm install + pnpm check before push, stacked merges strictly after base)"
+   },
+   {
+    "artifact": "platform.md: harness lines",
+    "action": "migrate",
+    "target": "platform.md (v2) \u00a7 Harness \u2014 Codex native agent threads; cross-harness only via named native wrapper subagent (external_claude_<role>) staffed at the cheapest eligible native model, babysit/relay only",
+    "detail": "Extend with v2's external-worker contract: wrapper tees raw output to a file and captures the CLI's resumable session id; record directional reachability + successor per direction."
+   },
+   {
+    "artifact": "backlog-policy.md: readiness label bindings",
+    "action": "migrate",
+    "target": "backlog-policy.md (v2) \u00a7 Label roles \u2014 ready-for-agent, ready-for-human (also abort target for verify caps/environment blockers), needs-info bind unchanged; in-flight binds to the `building` role via the label rename; claim comment (branch + date, GitHub has no native claim field) carries into v2's attributed-claims rule (claim posted by the runner's own tracker actor); new shaping/needs-shaping rows bind the created labels"
+   },
+   {
+    "artifact": "backlog-policy.md: work-type labels + tie-break rule",
+    "action": "migrate",
+    "target": "backlog-policy.md (v2) \u00a7 Work-type \u2014 bug\u2192diagnose, enhancement\u2192implement (v1's plan\u2192implement: shaping now happens upstream in groom), refactor, research (dossier under research/<slug>/), draft (judgment-terminal, done = human review verdict, artifact kept); tie-break sources-terminal\u2192research / voice-fit\u2192draft / behavior-change keeps code type matches v2's shipped boundary text \u2014 confirm, don't duplicate"
+   },
+   {
+    "artifact": "backlog-policy.md: dispatch metadata block",
+    "action": "migrate",
+    "target": "backlog-policy.md (v2) \u00a7 Dispatch metadata \u2014 Surface / Required capabilities / Coordination (routine|orchestrator-required) / Reason / Known uncertainty as a stable Dispatch: block; missing metadata \u2192 skip, never infer",
+    "detail": "v2 adds a required `route: direct` field for enhancements (why strategic decisions are settled/delegated) \u2014 grooming gains this field."
+   },
+   {
+    "artifact": "backlog-policy.md: exclusions, neutral labels, dependencies, in-flight hygiene",
+    "action": "migrate",
+    "target": "backlog-policy.md (v2) \u00a7 Exclusion (duplicate/invalid/wontfix; superseded \u2192 wontfix + linking comment), \u00a7 Neutral (codex, design, documentation, good first issue, help wanted, question), \u00a7 Dependencies (native blocked_by via platform.md; skip while any blocker open), \u00a7 Building hygiene (optimistic claim, re-read immediately before marking, orphan = branch gone or quiet past 7 days \u2192 human-confirmed reset only, never silent)"
+   },
+   {
+    "artifact": "TYPESCRIPT.md",
+    "action": "migrate",
+    "target": "codebase.md \u00a7 Conventions (language idioms) \u2014 types over interfaces, strippable TS/no enums, as-casts only with comment, T[]/readonly T[], attempt/attemptAsync from es-toolkit over try-catch, early returns, kebab-case filenames, no non-ASCII punctuation in output; delete the file after fold-in"
+   },
+   {
+    "artifact": "MODULES.md",
+    "action": "migrate",
+    "target": "codebase.md \u00a7 Conventions (import/module rules) \u2014 no barrel files anywhere, import directly from source; delete the file after fold-in"
+   },
+   {
+    "artifact": "I18N.md",
+    "action": "keep",
+    "target": "Kept as a standalone repo-owned doc (too large and load-bearing for one codebase.md bullet); codebase.md \u00a7 Conventions gains the newcomer traps (en.json canonical + request-time deep-merge fallback, namespace-per-screen/no common grab-bag, ICU + identical placeholders, logical Tailwind utilities ms-/me-/ps-/pe- in i18n-touched code, packages/ui stays locale-agnostic, messages.test.ts gate via pnpm --filter web test) plus a pointer to I18N.md",
+    "detail": "The enumerated hardcoded en-US call sites and the translation-pass backlog are work, not conventions \u2014 ticketize them during the first v2 groom."
+   },
+   {
+    "artifact": "verifying.md: check commands + '--' trap + red baseline",
+    "action": "migrate",
+    "target": "codebase.md \u00a7 Checks \u2014 full gate `pnpm check` (same as CI's check.yml; no required status checks, main NOT branch-protected \u2014 house policy is disclose + green before human merge); package filters (web/@workspace/backend/ui/emails check, lint, typecheck, format, build, lint:ws); invocation trap: NEVER insert '--' in `pnpm --filter <pkg> test <path>` \u2014 it runs the full suite (615/478 tests); recorded red baseline as of 2026-07-14: TS2307 missing 'mermaid' from apps/web/lib/block-document-export/mermaid-image.ts",
+    "detail": "Any migration smoke test gating on green pnpm check will falsely fail without the baseline carried. Also file a ticket to actually fix the mermaid baseline."
+   },
+   {
+    "artifact": "verifying.md: evidence-bar and criterion lines",
+    "action": "migrate",
+    "target": "evidence.md (v2) \u00a7 What to capture \u2014 repo tunings beyond the shipped baseline: email change = rendered/captured preview without secrets; seed/reset/deploy = dry-run or safe-env proof with destructive commands called out; auth/org/role/invitation/email/data-export surfaces need explicit permission or side-effect criteria; each claimed criterion names the actual runtime seam and cited tests are opened to confirm coverage"
+   },
+   {
+    "artifact": "implementing.md",
+    "action": "migrate",
+    "target": "Split: test locations (web under apps/web, backend under packages/backend/convex + /mcp, Vitest via Turbo/pnpm filters) \u2192 codebase.md \u00a7 Testing patterns; commit style (concise imperative, Conventional Commits NOT enforced), never-commit list (.env values, backups, .next, .turbo, caches, node_modules), pnpm/pnpm dlx only, Convex filename charset rule, nuqs for URL-shareable state, autosave + optimistic-update idiom \u2192 codebase.md \u00a7 Conventions; under-specified issue \u2192 needs-info (never guess) \u2192 backlog-policy.md \u00a7 Label roles",
+    "detail": "Its generic test-first guidance is superseded by the v2 tdd skill \u2014 drop."
+   },
+   {
+    "artifact": "planning.md",
+    "action": "retire",
+    "target": "Flow superseded by shape \u2192 to-spec (spec on the ticket, diagram first, blessed in the shaping thread before ready-for-agent); the plan-threshold list (multi-subsystem, data model/authz/migration, seeded-data/auth/email/preview behavior, high-risk workflow state, >~1 day) survives as grooming guidance in backlog-policy.md \u00a7 Readiness decision; hash-bound approval + per-annotation ledger dispositions live on in serve-via-tailnet's annotated mode; the 29 committed .plans/ files stay untouched (SHA-pinned from PR bodies)"
+   },
+   {
+    "artifact": "evidence.md (v1 playbook)",
+    "action": "migrate",
+    "target": "evidence.md (v2) \u2014 the shipped template already carries this repo's earned contract verbatim (blob/<sha>?raw=1 embed form, raw.githubusercontent 404s on private repos, mechanical checks via gh api commits + git cat-file -e, PNG/JPEG/GIF never MP4, two-pass-palette GIF recipe, c<criterion>- naming, orphaned-SHA re-pin rule) \u2014 reconcile, don't duplicate; repo-specific carries: probe/dry-run transcripts are NOT evidence here, and the styling-only reuse clause requiring the reviewer's verbatim 'no product-code change; no recapture' at final reviewed HEAD \u2192 \u00a7 What to capture (timing)"
+   },
+   {
+    "artifact": "change-description.md (v1 playbook)",
+    "action": "migrate",
+    "target": "change-description.md (v2) \u00a7 This repo \u2014 work-type on the close line, scope-discovery in Summary, CI status must disclose red/pending AND the lack of branch protection (never describe the workflow as platform-enforced), workarounds framed as environment gaps vs product issues, research work-type swaps Evidence for a Research-dossier section (canonical dossier link, as-of boundary, claim-audit result)",
+    "detail": "The gh-pr-edit-fails PATCH workaround dedupes into platform.md \u00a7 Change review \u2014 change-description points there."
+   },
+   {
+    "artifact": "change-reviewer.md",
+    "action": "migrate",
+    "target": "Repo scrutiny list (Clerk-claims + Convex access checks for authz/tenant isolation; schema/validator/generated-API compatibility; collaboration + optimistic-update behavior; email/invitation/webhook side effects; a11y/responsive/design-system/no-overlap; direct imports, pnpm-only, Convex filename rules, no secret leakage) and the ~1000-line-file presumptive-decomposition blocker \u2192 codebase.md, as a repo-owned \u00a7 Review scrutiny section (setup reconciles, never overwrites); exact-'LGTM' \u2192 platform.md \u00a7 Change review; styling-verdict verbatim clause \u2192 evidence.md",
+    "detail": "The Reviewer/Fixer choreography (ruling requests to the coordinator, re-review new HEAD) is superseded by the v2 adversarial-review skill."
+   },
+   {
+    "artifact": "change-fixer.md",
+    "action": "migrate",
+    "target": "Targeted-checks-then-pnpm-check with disclosed pre-existing baseline, and markdown-only-fixes-need-no-pnpm-check-unless-PR-changed-code \u2192 codebase.md \u00a7 Checks",
+    "detail": "Commit-and-push-before-handback / reply-per-comment-with-SHA / escalate-rulings mechanics are superseded by the v2 adversarial-review fixer role."
+   },
+   {
+    "artifact": "diagnosing-bugs.md (playbook)",
+    "action": "migrate",
+    "target": "Repo seams \u2192 codebase.md \u00a7 Testing patterns: Vitest layout + no-'--' trap (dedupe with \u00a7 Checks), Convex investigation layers (web caller \u2192 generated API \u2192 validator/schema \u2192 mutation/query/action logic \u2192 Clerk/Convex auth state, + packages/backend/mcp when the failure crosses MCP), no recorded logging/debugger/profiler entry points, no recorded flaky tests, shared Clerk tenant as the standing collision hazard; the app-visible-bug recipe (dev:isolated, serialize startup/auth, drive printed worktree URL, record URL/account/namespace/behavior) \u2192 environment.md \u00a7 Seed data drive-to-feature path",
+    "detail": "The six-phase process is superseded by the v2 diagnosing-bugs skill."
+   },
+   {
+    "artifact": "prototyping.md",
+    "action": "migrate",
+    "target": "Repo bindings \u2192 codebase.md \u00a7 Conventions: pnpm scripts + Turbo registration in the owning package's package.json, App Router under apps/web, shared UI in packages/ui with Ladle at ui.onboardings.localhost, UI variants must use @workspace/ui + existing design-system conventions",
+    "detail": "The prototype process (throwaway artifact, winner marked) is superseded by the v2 prototype skill."
+   },
+   {
+    "artifact": "researching.md",
+    "action": "migrate",
+    "target": "Dossier root research/<slug>/ + scratch-in-temp-uncommitted + stays-out-of-evidence/ \u2192 backlog-policy.md \u00a7 Work-type (research row); serialize rate-limited/tenant-mutating sources \u2192 environment.md \u00a7 Parallelism verdict (serialized exception lane); primary sources = official integration-provider docs/APIs via authenticated connectors or browser sessions \u2192 environment.md \u00a7 Driving the app (supporting tools)",
+    "detail": "The dossier discipline itself is the v2 research skill."
+   },
+   {
+    "artifact": "refactoring.md",
+    "action": "migrate",
+    "target": "Preserve-list (public behavior, URL state, authz, generated API contracts, seed/reset behavior), never-mix-behavior-and-structure-in-one-commit, locked-test-must-change = behavior change \u2192 stop for product ruling, no-testable-seam \u2192 seam creation is the first separate minimal refactor \u2192 codebase.md \u00a7 Conventions; Convex generated API (_generated tree, regeneration needs convex dev/codegen against a schema) \u2192 codebase.md \u00a7 Generated artifacts (new v2 section)",
+    "detail": "Characterization-test mechanics are superseded by v2 implement/tdd on the refactor branch."
+   },
+   {
+    "artifact": "label: in-flight (6 open claimed issues)",
+    "action": "rename",
+    "target": "in-flight \u2192 building: `gh api -X PATCH repos/dunnharland/integrations-v2/labels/in-flight -f new_name=building`",
+    "detail": "In-place rename keeps the label attached to #240 #241 #243 #244 #245 #250 and leaves their claim comments (branch + date) intact \u2014 no per-issue relabeling, no orphaned claims for groom's orphan sweep."
+   },
+   {
+    "artifact": "labels: needs-shaping + shaping (new v2 roles)",
+    "action": "rename",
+    "target": "Additions: `gh api -X POST repos/dunnharland/integrations-v2/labels -f name=needs-shaping -f color=<hex> -f description='parked for strategic shaping'` and the same for `shaping` \u2014 created with user consent per backlog setup"
+   },
+   {
+    "artifact": "label: needs-triage",
+    "action": "retire",
+    "target": "Nothing lost: 0 open issues carry it; v2 expresses un-triaged as no-readiness-label (groom target) and strategic parking as needs-shaping \u2014 delete the label or demote it to neutral (minor decision)"
+   },
+   {
+    "artifact": "labels: ready-for-agent, ready-for-human, needs-info; work-type bug/enhancement/refactor/research/draft; exclusions duplicate/invalid/wontfix; neutrals codex/design/documentation/good-first-issue/help-wanted/question",
+    "action": "keep",
+    "target": "Bind as-is in the v2 backlog-policy.md \u2014 names already match v2 defaults; superseded-\u2192-wontfix-plus-linking-comment convention carries; neutrals stay neutral"
+   },
+   {
+    "artifact": "state: 7 open PRs #257-#263 and their 6 in-flight + 1 ready-for-human tickets",
+    "action": "keep",
+    "target": "Disposition: FINISH under current semantics, do not relabel/reset/re-dispatch \u2014 human squash-merges the ready ones (#257 LGTM x2, #259 LGTM), converges the rest, and unblocks #242 (obsolete Convex team slug / empty preview CONVEX_DEPLOY_KEY) and #250 (missing reachable Clerk test-org fixture) per the run handoff's exact steps; Closes #<n> linkage closes the issues at merge; the label rename keeps their claims valid meanwhile"
+   },
+   {
+    "artifact": "state: 7 live worktrees under /Users/asher/Projects/integrations-v2-worktrees",
+    "action": "keep",
+    "target": "Untouched until each backing PR merges \u2014 no git worktree prune/remove, no branch deletion (also: --delete-branch fails while the worktree exists); after merge, v2 merge-changes (or manual) removes worktree before branch"
+   },
+   {
+    "artifact": "state: .git/backlog/runs (2 run dirs, status.json, board.md, handoff.md, 398 events)",
+    "action": "migrate",
+    "target": "The live blocker knowledge in handoff.md \u2014 #242's Convex-deploy-key unblock steps and #250's Clerk-fixture unblock steps \u2014 is posted as comments on those issues (the tracker is v2's run ledger, so this is where a v2 resume looks); then archive the run dirs together with a copy of run-state.py so they stay readable",
+    "detail": "The v1 'rerun backlog audited-resume' protocol becomes moot once the 7 PRs drain; v2 build reconstructs from claim/outcome comments."
+   },
+   {
+    "artifact": "state: ~/.backlog/review-state/integrations-v2 (9 review-loop state dirs)",
+    "action": "migrate",
+    "target": "Drain before the review-loop mount is removed: `review-server.py --sweep` / `--stop` each, `tailscale serve --set-path ... off` per handler; archive the state dirs (their approval ledgers back the committed plans' approvals); future reviews run through serve-via-tailnet's annotated mode"
+   },
+   {
+    "artifact": "state: ~/.backlog/surface hub + LaunchAgent com.asher.backlog-surface + tailscale serve /review",
+    "action": "keep",
+    "target": "Machine-level and shared with asher-skills, metis, and pipelines \u2014 never torn down for one repo's migration; serve-via-tailnet's setup records this repo's surface config (root path, surface dir, publish/proxy commands) into environment.md \u00a7 Presenting"
+   },
+   {
+    "artifact": "state: .plans/ (29 tracked plan files) + plans/152-real-timeline-dates.html",
+    "action": "keep",
+    "target": "SHA-pinned from open and merged PR bodies \u2014 deleting or rewriting history 404s them; kept as history; new work follows whichever plan convention the open decision lands on"
+   },
+   {
+    "artifact": "state: evidence/ (32 committed per-issue dirs)",
+    "action": "keep",
+    "target": "PR bodies embed them via blob/<sha>?raw=1 \u2014 no history rewrite, no pruning, ever; the constraint itself migrates into evidence.md's re-pin rule"
+   },
+   {
+    "artifact": "state: ~27 unmerged non-worktree branches (codex/195-tracker-three-axis 16-ahead, etc.)",
+    "action": "keep",
+    "target": "Disposition: PARK \u2014 ahead-counts are inflated by squash-merge history, but each branch needs an explicit merged-or-orphaned judgment before deletion; file one groom ticket to adjudicate the list; not a migration blocker"
+   },
+   {
+    "artifact": "state: research/ dossier root + backups/convex-prod-with-files-20260616-132914.zip",
+    "action": "keep",
+    "target": "research/ carries over as the v2 research work-type's dossier root; the Convex production backup is never touched by any cleanup step"
+   },
+   {
+    "artifact": "script: .agents/skills/backlog/scripts/run-state.py",
+    "action": "migrate",
+    "target": "Copy out of the mount (e.g. beside .git/backlog/runs or under docs/agents/archive/) before the mount swap \u2014 it is the only reader of the run state; v2 has no successor because the tracker replaces run-state entirely"
+   },
+   {
+    "artifact": "scripts: review-loop review-server.py + review-await.py",
+    "action": "retire",
+    "target": "Replaced by serve-via-tailnet's annotated-review machinery (same lineage \u2014 the canonical review-server now ships with that skill); used one last time to drain/sweep the 9 state dirs before the mount is deleted"
+   },
+   {
+    "artifact": "scripts: setup-asher-skills install.py / catalog.py / render-global.py",
+    "action": "retire",
+    "target": "Replaced by `npx skills add` (install) and `backlog setup` (playbook reconcile); no consumer-side catalog rendering exists in v2"
+   },
+   {
+    "artifact": "script: staffing/scripts/render-global.py",
+    "action": "retire",
+    "target": "v2 staffing owns the global-module render for both harnesses; goes with the staffing mount swap"
+   },
+   {
+    "artifact": "script: diagnose/scripts/hitl-loop.template.sh",
+    "action": "retire",
+    "target": "Goes with the diagnose mount; v2 diagnosing-bugs ships its own red-capable loop"
+   },
+   {
+    "artifact": "machine: ~/Library/LaunchAgents/com.asher.backlog-surface.plist",
+    "action": "keep",
+    "target": "Shared machine infrastructure serving four repos' review surfaces \u2014 reused by serve-via-tailnet, not this repo's to modify"
+   }
+  ],
+  "decisions_needed": [
+   "Verification browser driver: v2's environment template makes Playwright-driving-Chrome the default verification route and explicitly demotes agent-browser ('not a verification route'); this repo has no Playwright e2e suite and every recorded evidence recipe uses agent-browser with per-worktree sessions. Adopt Playwright (seed an e2e/ dir, rewrite \u00a7 Driving the app, keep agent-browser for interactive diagnosis only) or record agent-browser as an explicit named deviation from the v2 default?",
+   "Migration timing: drain-first (wait for the 7 open PRs #257-#263 to merge before swapping the backlog and review-loop mounts \u2014 clean, but gated on the human unblocking #242's Convex deploy key and #250's Clerk fixture) versus swap-now (migrate mounts immediately and finish the open reviews with the archived review-server/run-state copies). Drain-first is safer; swap-now only needs the drain steps for review-loop done first.",
+   "Plan artifact convention going forward: keep committed .plans/<issue>-<slug>.html (self-contained HTML, ac-N anchors, SHA-pinned from PR bodies) for new enhancements, or move to v2's spec-on-ticket via to-spec (diagram first, blessed in the shaping thread)? Affects how change-description.md's 'Plan' section binds. Existing .plans/ files stay either way.",
+   "needs-triage label: delete (0 open issues carry it) or demote to neutral? Trivial, but backlog setup will ask.",
+   "Third-party tdd and handoff mounts: the recommendation is replace-with-v2 (the v2 pipeline composes tdd and handoff by name, so the mattpocock copies would shadow the family versions), but the audit flagged both as decide-replace-vs-keep \u2014 confirm before the atomic install.",
+   "Whether to ticketize the I18N translation-pass backlog (8 screens still hardcoded English, 8 enumerated en-US call sites, unlocalized emails) during the first v2 groom, or leave it inside the kept I18N.md doc."
+  ],
+  "must_not_lose": [
+   "The effect-verified (2026-07-14, two simultaneous worktrees) shared-singleton audit: Clerk dev instance NOT isolatable (serialize auth mutation, suffix-namespaced orgs), AgentMail inbox NOT isolatable (serialize OTP, match fresh message), dev:reset targets exclusive \u2014 plus the serialized-lane rule that ALL isolated startups/seeds serialize because dev:isolated auto-seeds Clerk. Not regenerable without re-running live audits.",
+   "The destructive-command lines: pnpm dev:reset deletes ALL Clerk orgs in the test instance, and there is NO verified safe cleanup for the suffix-namespaced 'Dunn Harland [<suffix>]' smoke orgs \u2014 leave them. Losing these invites a shared-tenant wipe.",
+   "platform.md's verified gh workarounds: gh issue view / gh pr view / gh pr edit all FAIL on this repo (deprecated Projects-classic GraphQL) \u2014 REST verbs via gh api only, including the exercised blocked_by read/write pair and the PATCH-pulls body edit.",
+   "The '--' targeted-test trap (inserting -- flips a filtered run into the full 615/478-test suite) and the recorded red pnpm check baseline (TS2307 missing 'mermaid') \u2014 a v2 setup smoke that gates on green pnpm check falsely fails without it.",
+   ".git/backlog/runs handoff.md's exact unblock steps for #242 (obsolete Convex team slug / empty preview CONVEX_DEPLOY_KEY) and #250 (missing reachable Clerk test-org fixture) \u2014 must land as issue comments before the backlog mount (and run-state.py, the runs' only reader) is swapped.",
+   "The evidence/plan pinning constraint: 32 evidence dirs and 29 .plans files are blob/<sha>?raw=1- and SHA-pinned from PR bodies \u2014 any history rewrite or 'cleanup' deletion 404s every rendered artifact on the 7 open PRs.",
+   "The 7 live worktrees backing open PRs #257-#263: no prune, no branch deletion, no dev:reset in them, until the human squash-merges.",
+   "The staffing claude provider variant: .claude/skills/staffing is a real compiled directory recorded in .agents/asher-skills/variant-lock.json \u2014 the v2 reinstall must recompile the variant, and any symlink-normalizing cleanup destroys it.",
+   "The five lock-less mounts (convex, vercel-composition-patterns, vercel-react-best-practices, web-design-guidelines, xlsx): a lockfile-authoritative reinstall silently drops them; backfill skills-lock.json before any bulk operation.",
+   "The CI-disclosure rule: GitHub Actions runs pnpm check but main has NO branch protection \u2014 PR bodies must disclose CI status and never describe the workflow as platform-enforced."
+  ]
+ },
+ {
+  "repo": "pipelines",
+  "actions": [
+   {
+    "artifact": "mount: backlog (v1)",
+    "action": "retire",
+    "target": "Replaced by v2 backlog (skills/software-development/backlog) via one atomic npx skills add. Run supervision moves to tracker-as-ledger (claim/outcome comments, SKILL.md \u00a7 build), so nothing run-state.py did is needed going forward; historical run records stay in .git/backlog/ untouched.",
+    "detail": "Reinstall only after the live review-loop process is resolved and uncommitted lockfile changes are committed."
+   },
+   {
+    "artifact": "mount: plan (v1)",
+    "action": "retire",
+    "target": "Superseded by v2 to-spec + shape (spec on the ticket, diagram first). Earned planning.md content migrates separately (see planning.md rows); committed plans/*.html stay valid history."
+   },
+   {
+    "artifact": "mount: review-loop (v1)",
+    "action": "retire",
+    "target": "Machinery lives on in serve-via-tailnet's annotated mode (canonical review-server.py per asher-skills copy-a-technique convention) \u2014 approve/nits/request-changes verdicts survive. Retire ONLY after PID 62436's round-2 verdict lands or a deliberate `review-server.py --stop` + `tailscale serve --set-path /pipelines/licon-pss-test/review off`.",
+    "detail": "Deleting the mount while PID 62436 runs from it kills a live awaited review \u2014 hard sequencing constraint."
+   },
+   {
+    "artifact": "mount: setup-asher-skills (v1)",
+    "action": "retire",
+    "target": "Superseded by the v2 install flow (npx skills add from asher-skills). Uninstall BY HAND (rm .agents/skills/setup-asher-skills, the .claude symlink, the lock entry) \u2014 never `npx skills remove` in this repo (local-source lock entries make it destructive)."
+   },
+   {
+    "artifact": "mount: staffing (v1, declared provider variant)",
+    "action": "migrate",
+    "target": "Refreshed v2 staffing, reinstalled preserving the provider-variant contract: recompiled real dir at .claude/skills/staffing plus updated .agents/asher-skills/variant-lock.json \u2014 never flattened to a symlink, never left with a stale variant-lock."
+   },
+   {
+    "artifact": "mount: research (v1)",
+    "action": "retire",
+    "target": "Refreshed v2 research replaces it 1:1; repo-earned researching.md lines migrate to backlog-policy.md and environment.md (see playbook rows)."
+   },
+   {
+    "artifact": "mount: prototype (v1)",
+    "action": "retire",
+    "target": "Refreshed v2 prototype replaces it; prototyping.md's repo patterns migrate to codebase.md \u00a7 Conventions."
+   },
+   {
+    "artifact": "mount: diagnosing-bugs (v1)",
+    "action": "retire",
+    "target": "Refreshed v2 diagnosing-bugs replaces it; the repo playbook's earned diagnosis facts migrate to codebase.md and environment.md (see playbook rows)."
+   },
+   {
+    "artifact": "mount: tdd (v1, mattpocock provenance)",
+    "action": "retire",
+    "target": "v2 asher-authored tdd replaces it. The mattpocock copy is recoverable from git history and its upstream; credits live in the v2 skill's README per repo convention."
+   },
+   {
+    "artifact": "mount: improve (orphan, shadcn/MIT)",
+    "action": "retire",
+    "target": "v2 roster retires it; no playbook references it; no lock entry so hand-delete both mount paths. Recoverable from git history and its upstream \u2014 nothing unique lost."
+   },
+   {
+    "artifact": "mount: greploop (third-party greptileai)",
+    "action": "retire",
+    "target": "Retired in the v2 roster; no playbook references it. Mount is git-tracked, so deletion is recoverable from history plus the greptileai upstream.",
+    "detail": "If Asher still uses it ad hoc, redeclare as an external requirement instead \u2014 flagged in decisions."
+   },
+   {
+    "artifact": "mount: uncodixfy (third-party, load-bearing)",
+    "action": "keep",
+    "target": "Retired from the v2 family but kept in this repo as a declared external requirement (external-dependencies.lock.json entry with provenance) because frontend work depends on it. Its invocation pointer moves from implementing.md/prototyping.md into codebase.md \u00a7 Conventions (frontend work: load uncodixfy, bare-minimum-ux, shadcn, docs/agents/frontend.md).",
+    "detail": "Deleting it without rewriting those references leaves dead pointers; third-party source means deletion is not recoverable from asher-skills."
+   },
+   {
+    "artifact": "mount: impeccable (undeclared, two independent real dirs)",
+    "action": "keep",
+    "target": "Freeze both copies until dispositioned: diff .agents/skills/impeccable against .claude/skills/impeccable; if identical, normalize to primary + symlink and either declare in the lock or delete after a provenance check. No symlink-normalization pass may touch it before the diff.",
+    "detail": "Genuinely open \u2014 see decisions."
+   },
+   {
+    "artifact": "mount: qa-user-journeys (repo-earned, no lock entry)",
+    "action": "keep",
+    "target": "Exists nowhere else; add a provenance/lock record so no lockfile-driven sweep can destroy it. Its docs/qa/journeys content becomes the drive-to-feature path in v2 environment.md \u00a7 Seed data."
+   },
+   {
+    "artifact": "mount: sentry-cli (repo-earned, no lock entry)",
+    "action": "keep",
+    "target": "Repo-specific Sentry/Railway/PR #194 observability skill, exists nowhere else; add a provenance/lock record. Referenced from codebase.md \u00a7 Conventions observability pointers after migration."
+   },
+   {
+    "artifact": "mount: ask-syncron-parts-planning (untracked mount + uncommitted lock entry)",
+    "action": "keep",
+    "target": "Commit the untracked .agents/skills/ask-syncron-parts-planning dir and its skills-lock.json entry BEFORE any migration git operation \u2014 it currently exists only as uncommitted work."
+   },
+   {
+    "artifact": "mount: bare-minimum-ux (creative family)",
+    "action": "keep",
+    "target": "Out of SDLC migration scope; remains a named sibling for frontend work via the rewritten codebase.md \u00a7 Conventions pointer."
+   },
+   {
+    "artifact": "mount: agent-browser",
+    "action": "keep",
+    "target": "Mount stays (exploration/QA), but its 'primary verification route' role is contested: v2 environment.md \u00a7 Driving the app rules agent-browser out as a verification route in favor of Playwright-driving-Chrome. Final role set by the browser-policy decision.",
+    "detail": "See decisions \u2014 do not silently copy either the v2 default or the v1 policy."
+   },
+   {
+    "artifact": "mount: agentmail",
+    "action": "keep",
+    "target": "Feeds v2 environment.md \u00a7 Authenticating for testing (OTP/invite flows, AGENTMAIL_API_KEY + AGENT_EMAIL)."
+   },
+   {
+    "artifact": "mounts: better-auth-best-practices, better-auth-security-best-practices, create-auth-skill, email-and-password-best-practices, organization-best-practices, two-factor-authentication-best-practices",
+    "action": "keep",
+    "target": "Third-party domain skills (better-auth/skills), untouched by the SDLC migration; lock entries already valid."
+   },
+   {
+    "artifact": "mounts: elysiajs, resend, tanstack-form, tanstack-query, tanstack-virtual, use-railway, vercel-cli",
+    "action": "keep",
+    "target": "Third-party domain skills with valid upstream lock entries; untouched by the migration. use-railway's db-analysis scripts stay with the mount."
+   },
+   {
+    "artifact": "mount: database-migrations (local-source lock oddity)",
+    "action": "keep",
+    "target": "Mount stays (implementing.md requires it before migrations; the pointer moves to codebase.md \u00a7 Generated artifacts). Repair the lock entry: source is the repo itself with an empty-string sha256 \u2014 rebind to the true upstream or declare it repo-owned so hash checks mean something and `npx skills remove` can never resolve it to repo content."
+   },
+   {
+    "artifact": "lock entry: db-migrations (ghost \u2014 no mount)",
+    "action": "retire",
+    "target": "Delete the lock line only. No directory exists on disk and the hash is the empty string, so removing the entry loses nothing."
+   },
+   {
+    "artifact": "mount: shadcn (local-source lock oddity)",
+    "action": "keep",
+    "target": "Required for shadcn/base-ui work (pointer moves to codebase.md \u00a7 Conventions). Repair the local-source lock entry the same way as database-migrations."
+   },
+   {
+    "artifact": "playbook backlog-policy.md: label bindings (1:1, no aliases) + neutral list + native in-review/closed",
+    "action": "migrate",
+    "target": "v2 docs/agents/backlog-policy.md \u00a7 Label roles (bind ready-for-agent/ready-for-human/needs-info 1:1; in-flight becomes building; list documentation/good-first-issue/help-wanted/question/needs-triage/design/observability/rfq/admin under \u00a7 Neutral; the native-GitHub in-review/closed note is now template text)."
+   },
+   {
+    "artifact": "playbook backlog-policy.md: ready-for-agent requires exactly one work-type; Dispatch: block (Surface/Coordination/reason); missing metadata = skip",
+    "action": "migrate",
+    "target": "v2 backlog-policy.md \u00a7 Dispatch metadata \u2014 the template now carries the GitHub 'stable Dispatch: block' encoding and skip-on-missing rule; record the repo's exact block format there. Add the v2-new route:direct line requirement for enhancements as a grooming delta."
+   },
+   {
+    "artifact": "playbook backlog-policy.md: in-flight set at dispatch + branch/date comment; ready-for-human as abort target with blocker commented; draft/research semantics + dossier root research/<slug>/",
+    "action": "migrate",
+    "target": "v2 backlog-policy.md \u00a7 Label roles \u2014 the building, ready-for-human, draft, and research rows carry these natively; add research/<slug>/ as the repo's dossier root on the research row."
+   },
+   {
+    "artifact": "playbook backlog-policy.md: blocked_by read via list endpoint with X-GitHub-Api-Version: 2026-03-10, write via numeric id POST, and the 2026-07-14 stale .issue_dependencies_summary GOTCHA",
+    "action": "migrate",
+    "target": "v2 docs/agents/platform.md \u00a7 Tracker (blocked-by verbs) \u2014 REPLACING the v2 template's default read, which is exactly the known-broken `.issue_dependencies_summary` path; backlog-policy.md \u00a7 Dependencies points at platform.md as the single home, collapsing the v1 duplication.",
+    "detail": "Copying the template verbatim would reintroduce a live-probed failure. Crown jewel."
+   },
+   {
+    "artifact": "playbook backlog-policy.md: orphan sweep \u2014 dead/quiet branch = corpse, surface to human, never silently reset",
+    "action": "migrate",
+    "target": "v2 backlog-policy.md \u00a7 Building hygiene \u2014 template carries the mechanism; set the quiet horizon to this repo's earned 7 days."
+   },
+   {
+    "artifact": "playbook backlog-policy.md: Syncron inbound batch explicitness in issues; DB enum/domain-state changes require a bun-run-check type-safety acceptance criterion; UI-heavy work requires frontend.md + local UI skills",
+    "action": "migrate",
+    "target": "v2 backlog-policy.md \u00a7 Readiness decision (Syncron batch fields and the type-safety criterion as repo readiness bars) and \u00a7 Dispatch metadata (surface: ui implies the frontend playbook + UI skill loads, pointer into codebase.md \u00a7 Conventions)."
+   },
+   {
+    "artifact": "playbook environment.md: base branch, codex/<n>-<slug> naming, PR target, CI command, no preview deploys, Railway deploy doc",
+    "action": "migrate",
+    "target": "v2 docs/agents/environment.md \u00a7 Branching & deploys \u2014 plus fill the v2-new deploy-facts and credential-preflight rows (Railway per docs/deploy/railway.md with confirm-before-assuming-auto-deploy; cheap live reads for gh auth and Railway token)."
+   },
+   {
+    "artifact": "playbook environment.md: bun run dev stack composition, *.localhost:1355 URLs, db:up/bucket:up/sftp-egress:up/reset:*/db:migrate commands",
+    "action": "migrate",
+    "target": "v2 environment.md \u00a7 Running locally \u2014 plus satisfy the v2-new headless contract: record the detached-with-log start form of bun run dev and its stop/teardown audit, verified headlessly at setup."
+   },
+   {
+    "artifact": "playbook environment.md: worktree isolation (worktree-env.ts family, COMPOSE_PROJECT_NAME derivation, ports 21000-31000, per-worktree hostnames/env), cleanup/reap commands, PIPELINES_WORKTREE_ISOLATION=off",
+    "action": "migrate",
+    "target": "v2 environment.md \u00a7 Worktree isolation \u2014 regime: local-isolatable; bring-up via scripts/setup-worktree.sh, teardown via scripts/cleanup-worktree.sh + bun run reset:worktree-stacks; add the v2-new parent-.git lock-contention row."
+   },
+   {
+    "artifact": "playbook environment.md: shared port-1355 proxy (intentional) and non-isolatable Railway/Resend/AgentMail/OpenAI/PostHog/Sentry/customer-SFTP",
+    "action": "migrate",
+    "target": "v2 environment.md \u00a7 Worktree isolation shared-singleton table \u2014 one row each, isolatable-yes for the proxy (per-worktree subdomains), isolatable-no for the cloud/SFTP singletons; these rows also justify the serialized exception lane in \u00a7 Parallelism verdict."
+   },
+   {
+    "artifact": "playbook environment.md: explicit-QA-fixtures-only seeding, qa:seed-rfq-comparison guards, qa:generate-syncron-inbound-batch, journeys in docs/qa/journeys/",
+    "action": "migrate",
+    "target": "v2 environment.md \u00a7 Seed data \u2014 including the v2-new drive-to-feature path row, seeded from docs/qa/journeys (the qa-user-journeys skill's content)."
+   },
+   {
+    "artifact": "playbook environment.md: Better Auth email OTP, AUTH_EMAIL_PROVIDER=noop console OTPs, PLATFORM_ADMIN_EMAILS, agentmail path; missing AGENT_EMAIL/QA_ORG_SLUG = explicit blocker, never invent an account",
+    "action": "migrate",
+    "target": "v2 environment.md \u00a7 Authenticating for testing \u2014 fill the v2-new session-reuse row (persisted browser storage state) when the browser-driver decision lands; the blocker-not-invention rule goes on the test-accounts row."
+   },
+   {
+    "artifact": "playbook environment.md: browser policy (agent-browser primary per plan asher-skills#73, ChatGPT-in-Chrome per-use carve-out, repo Puppeteer qa:browser:probe authorized fallback 2026-07-22 owning bundled Chrome) + web baseline health-check recipe",
+    "action": "migrate",
+    "target": "v2 environment.md \u00a7 Driving the app & capturing evidence \u2014 but the v2 template mandates Playwright-driving-Chrome and bars agent-browser as a verification route, so this section is written only after the browser-policy decision; whichever route wins, the earned facts (health-check baseline, Puppeteer owns bundled Chrome, never attaches to user profile, session-per-check) are recorded, not dropped.",
+    "detail": "Genuine conflict \u2014 see decisions."
+   },
+   {
+    "artifact": "playbook environment.md: load fixtures only for scale/memory criteria, fixture names carry issue number + timestamp, owning thread cleans up via reset:*",
+    "action": "migrate",
+    "target": "v2 environment.md \u00a7 Verification data \u2014 scale-affordances and lifetime rows; list the per-worktree Postgres/MinIO/SFTP stores as the v2-new per-ticket-disposable stores (reset:db / reset:object-storage / reset:sftp), everything else shared."
+   },
+   {
+    "artifact": "playbook environment.md: review surface (tailnet root /review, ~/.backlog/surface/pipelines hub, LaunchAgent com.asher.backlog-surface:8377, ln -sfn publish, Funnel off, tailscale status preflight)",
+    "action": "migrate",
+    "target": "v2 environment.md \u00a7 Presenting to the human \u2014 recorded there by serve-via-tailnet setup, which owns the surface; the existing LaunchAgent, surface dir, and proxy paths carry over as this repo's config, not rebuilt."
+   },
+   {
+    "artifact": "playbook environment.md: review-loop interactive commands (review-server.py/--sweep, review-await.py exit codes, tailscale serve proxy/teardown)",
+    "action": "retire",
+    "target": "Replaced by serve-via-tailnet's annotated mode, which carries the same server/await/verdict machinery as canonical sibling scripts; the hardwired .agents/skills/review-loop/scripts/* paths die with the mount. Nothing procedural is lost \u2014 the verdict contract (approve / approve-with-nits / request-changes) survives in the sibling."
+   },
+   {
+    "artifact": "playbook environment.md: staffing evidence (codex-cli 0.144.3\u2192gpt-5.6-sol; claude 2.1.207 aliases effect-verified; versioned aliases REJECTED; Claude\u2192codex exec unavailable in unattended children) + codex-exec second-opinion route + parallel-safe verdict (15 isolation tests, 2026-07-14)",
+    "action": "migrate",
+    "target": "v2 environment.md \u00a7 Staffing delta (alias/rejection evidence, second-opinion route) + \u00a7 Parallelism verdict (verdict: parallel-safe with the test evidence; serialized exception lane: shared Railway / real third-party providers / external SFTP; fill v2-new lane mechanics with a lock path) + platform.md \u00a7 Harness directional-reachability row (Claude\u2192codex unavailable unattended, fall back within harness)."
+   },
+   {
+    "artifact": "playbook platform.md: tracker binding + verified gh verbs (list/view/comment/edit-labels/create-serialized/close) and close-on-merge Closes #<n>",
+    "action": "migrate",
+    "target": "v2 docs/agents/platform.md \u00a7 Tracker \u2014 carry every verified command verbatim, including the serialized main-branch-writer note on create; blocked-by rows come from the backlog-policy migration above (stale-summary override)."
+   },
+   {
+    "artifact": "playbook platform.md: PR verbs (gh pr create --base main --body-file, ready not draft; gh pr edit; inline comments via pulls API; exact 'LGTM' approval; human merges, loop never merges)",
+    "action": "migrate",
+    "target": "v2 platform.md \u00a7 Change review \u2014 verb-for-verb; the exact-'LGTM' string is the approval signal row. Merge row updates to name merge-changes as the explicitly-authorized route with the human as authorizer."
+   },
+   {
+    "artifact": "playbook platform.md: worktree create off origin/main with fetch+pull, push -u publish, worktree remove + stack reap, pinned-SHA orphaned-by-rewrite semantics",
+    "action": "migrate",
+    "target": "v2 platform.md \u00a7 Version control \u2014 including the re-pin-after-rewrite policy the evidence embeds depend on."
+   },
+   {
+    "artifact": "playbook platform.md: spawned threads read .agents/skills/backlog; Claude spawns via Agent/Task tool with isolation: worktree; Codex via native collaboration threads",
+    "action": "migrate",
+    "target": "v2 platform.md \u00a7 Harness \u2014 update the readable-references path to the v2 backlog mount, re-verify both spawn routes at v2 setup, and fill the v2-new wrapper-staffing-evidence and route-trust rows."
+   },
+   {
+    "artifact": "playbook evidence.md: probe-not-evidence rule, capture-after-convergence timing, evidence/<slug>/ + c<criterion>- naming, no-MP4, ffmpeg two-pass GIF recipe, ?raw=1 blob embeds vs camo-proxied raw URLs, mechanical verification checks, orphaned-SHA re-pin rule",
+    "action": "migrate",
+    "target": "v2 docs/agents/evidence.md \u2014 the v2 template has absorbed nearly all of this verbatim (\u00a7 What to capture, \u00a7 Format and storage, \u00a7 GitHub binding), so reconciliation is mostly confirming template text matches; repo-specific residue to keep explicitly: the c<criterion>- naming (template default matches), and the exact styling-only reuse verdict string 'no product-code change; no recapture' recorded beside the template's reuse rule."
+   },
+   {
+    "artifact": "playbook change-description.md: body order, research-dossier section variant, sentence-case imperative title + issue number",
+    "action": "migrate",
+    "target": "v2 docs/agents/change-description.md \u2014 \u00a7 Body outline is now template-carried (including the research dossier variant); the title convention and issue-number rule land in \u00a7 This repo, along with implementing.md's plan-deviations-in-PR-body rule."
+   },
+   {
+    "artifact": "playbook change-fixer.md",
+    "action": "retire",
+    "target": "The v2 adversarial-review skill's fixer role carries the generic protocol (address-all-comments scope rule, reply-with-SHA, re-prompt reviewer). Its one repo pointer \u2014 run checks from verifying.md \u2014 survives as codebase.md \u00a7 Checks, which the fixer reads natively."
+   },
+   {
+    "artifact": "playbook change-reviewer.md: Syncron behavior-risk surfaces, end-to-end type-safety scrutiny, migration/rollback/stale-caller checks, security/ops list (secrets, SFTP creds, bounded pools)",
+    "action": "migrate",
+    "target": "v2 docs/agents/codebase.md \u00a7 Conventions (repo-specific patterns a newcomer would miss: the Syncron pipeline risk surfaces and type-narrowness law) \u2014 read by code-review in the v2 loop; the ruling-request protocol is generic v2 adversarial-review behavior and needs no repo copy."
+   },
+   {
+    "artifact": "playbook change-reviewer.md: test coverage bar (regression for bugs, characterization for refactors, journey evidence for workflows) + frontend loading/error/empty/disabled states requirement",
+    "action": "migrate",
+    "target": "v2 codebase.md \u00a7 Testing patterns (coverage bar) and \u00a7 Conventions (frontend states, via the docs/agents/frontend.md pointer); the exact 'LGTM' and 'no product-code change; no recapture' strings live in platform.md \u00a7 Change review and evidence.md respectively (see those rows)."
+   },
+   {
+    "artifact": "playbook diagnosing-bugs.md: tests beside source as *.test.ts(x), bun test invocations, record-exact-repro-when-no-test, #203 freeze forensics entry points (freeze-forensics.test.ts, supervisor.test.ts, captured logs)",
+    "action": "migrate",
+    "target": "v2 codebase.md \u00a7 Testing patterns \u2014 including the known-hard-surface row for issue #203 with its named test files, which is the only map into that open defect."
+   },
+   {
+    "artifact": "playbook diagnosing-bugs.md: Syncron triage stage enumeration, content-date filename invariants + injected logger wiring (apps/worker/src/index.ts), Sentry init (packages/observability/src/server.ts) + local sink, infra log commands (db:logs/bucket:logs/sftp-egress:logs), reproduce-locally-not-shared rule",
+    "action": "migrate",
+    "target": "v2 codebase.md \u00a7 Conventions (triage stages, worker invariants, observability paths) + environment.md \u00a7 Running locally (log commands) + \u00a7 Worktree isolation singleton table (shared SFTP/Railway reproduce-locally rule). The stale chatgpt-in-chrome-primary browser routing line is dropped in favor of environment.md's newer 2026-07-22 policy \u2014 the reconciliation the inventory flagged, resolved by the browser-policy decision."
+   },
+   {
+    "artifact": "playbook frontend.md (all earned UI conventions: sonner feedback grammar, inline form errors, never-swallow query errors, seed-from-server forms, datalist ban, commit-on-select pickers, valid-options-only, tree-not-flat, completion greps)",
+    "action": "keep",
+    "target": "Stays at docs/agents/frontend.md as a repo-owned auxiliary playbook \u2014 too dense and load-bearing to inline; v2 codebase.md \u00a7 Conventions binds it ('all UI work follows docs/agents/frontend.md') so every v2 builder and reviewer still reaches it.",
+    "detail": "Exists nowhere else; crown jewel."
+   },
+   {
+    "artifact": "playbook implementing.md: commit style, in-memory-processing preference, type-source narrowness, database-migrations-skill-first rule, frontend skill loads, simpler-path stop-and-report",
+    "action": "migrate",
+    "target": "v2 codebase.md \u00a7 Conventions (commit style, in-memory preference, type narrowness, rewritten frontend skill-load pointer) + \u00a7 Generated artifacts (database-migrations skill before generating/editing migrations); simpler-path stop-and-report and plan-deviation recording are generic v2 build/implement behavior plus the change-description.md \u00a7 This repo note. Then retire the file."
+   },
+   {
+    "artifact": "playbook planning.md: plan-threshold list (subsystems, schema/enums/contracts, new deps/flags/workflows, Syncron semantics, risky/>1-day)",
+    "action": "migrate",
+    "target": "v2 backlog-policy.md \u00a7 Label roles needs-shaping row / \u00a7 Readiness decision \u2014 the threshold becomes groom's routing bar for what needs shaping vs routes direct (feeding the v2 route:direct metadata line)."
+   },
+   {
+    "artifact": "playbook planning.md: plans/<ts>-<slug>.html format, inline-SVG diagrams, stable ac-N anchors, hash-bound approval (comment is NOT approval), ledger dispositions on request-changes",
+    "action": "migrate",
+    "target": "Format and skeleton are superseded by v2 to-spec (spec on the ticket, diagram first, presented via serve-via-tailnet); the surviving contract \u2014 stable ac-N anchors that verify/evidence key on, verdict-only approval, per-annotation dispositions \u2014 is serve-via-tailnet annotated-mode behavior, recorded in environment.md \u00a7 Presenting to the human. Committed plans/*.html keep their anchors; nothing rewrites them. Then retire the file."
+   },
+   {
+    "artifact": "playbook prototyping.md: bun/Turbo task registration, with-worktree-env wrapper for DB scripts, frontend routing under apps/frontend/src, ?variant= URL-param switcher pattern with screenshots per variant",
+    "action": "migrate",
+    "target": "v2 codebase.md \u00a7 Conventions (task registration, wrapper, ?variant= prototype pattern \u2014 read by the v2 prototype skill) with the driver reference resolving to environment.md \u00a7 Driving the app. Then retire the file."
+   },
+   {
+    "artifact": "playbook refactoring.md: characterization-tests-first, Bun test commands, DB-backed via with-worktree-env, no-widening + no cross-package reshapes, stop-and-reclassify on real bugs",
+    "action": "migrate",
+    "target": "v2 codebase.md \u00a7 Testing patterns (characterization-first, commands) + \u00a7 Conventions (widening/reshape rules, deduped with the reviewer/implementing copies); no-behavior-change-in-refactor and reclassify-on-bug are generic v2 implement routing. Then retire the file."
+   },
+   {
+    "artifact": "playbook researching.md: research/<slug>/ durable root, scratch-in-temp, research-out-of-evidence, primary sources = official Syncron/provider docs, serialize shared systems + preserve customer files",
+    "action": "migrate",
+    "target": "v2 backlog-policy.md \u00a7 Label roles research row (dossier root, primary-source expectation) + environment.md \u00a7 Verification data / \u00a7 Worktree isolation (customer-data and shared-system rules); the v2 research skill owns the method. Then retire the file."
+   },
+   {
+    "artifact": "playbook verifying.md: check ladder, bun run check composition (sherif + knip --no-config-hints + turbo run check --concurrency=1), CI gate identical to local, known non-fatal warnings, stale-caller-must-fail-check expectation",
+    "action": "migrate",
+    "target": "v2 codebase.md \u00a7 Checks (full gate exactly as CI runs it, per-package ladder, runner traps: chunk-size advisory, worker#build no-output warning) + \u00a7 Conventions (stale-caller expectation) + environment.md \u00a7 Branching & deploys (CI = bun install --frozen-lockfile + bun run check)."
+   },
+   {
+    "artifact": "playbook verifying.md: Syncron inbound verification evidence list (manifest path, run detail URL, final status, egress listing, row-level proof), migration-verification form, UI/SFTP evidence forms, codex-exec second opinion",
+    "action": "migrate",
+    "target": "v2 evidence.md \u00a7 What to capture \u2014 repo-specific expectations rows (Syncron inbound package, migration proof, UI states incl. loading/error/disabled, SFTP listing with credentials omitted); second-opinion delegation \u2192 environment.md \u00a7 Staffing delta. Then retire the file \u2014 its generic role is the v2 verify-your-work skill."
+   },
+   {
+    "artifact": "label: in-flight",
+    "action": "rename",
+    "target": "in-flight \u2192 building: `gh label edit in-flight --name building --repo dunnharland/pipelines` (label follows by id, so historical issues keep it) \u2014 executed now, in the zero-open-in-flight window; backlog-policy.md \u00a7 Label roles records 'formerly in-flight' so old comments still parse.",
+    "detail": "Alternative (zero-mutation): bind the v2 building role to the existing in-flight name \u2014 see decisions."
+   },
+   {
+    "artifact": "label: needs-shaping (new)",
+    "action": "rename",
+    "target": "(none) \u2192 needs-shaping: `gh label create needs-shaping --repo dunnharland/pipelines --description 'Parked for strategic shaping' --color <pick>` \u2014 v2 groom's park target; bound in backlog-policy.md \u00a7 Label roles."
+   },
+   {
+    "artifact": "label: shaping (new)",
+    "action": "rename",
+    "target": "(none) \u2192 shaping: `gh label create shaping --repo dunnharland/pipelines --description 'A shaping thread is attending it' --color <pick>` \u2014 set by groom at thread dispatch so a subject never gets two threads."
+   },
+   {
+    "artifact": "labels: ready-for-agent, ready-for-human, needs-info",
+    "action": "keep",
+    "target": "Names match v2 defaults exactly; bound 1:1 in v2 backlog-policy.md \u00a7 Label roles."
+   },
+   {
+    "artifact": "labels: bug, enhancement, refactor, research, draft (work types)",
+    "action": "keep",
+    "target": "Names match v2 work-type defaults; bound 1:1, still required alongside ready-for-agent."
+   },
+   {
+    "artifact": "labels: duplicate, invalid, wontfix, superseded (exclusions)",
+    "action": "keep",
+    "target": "Bound as v2 exclusion roles verbatim."
+   },
+   {
+    "artifact": "labels: documentation, good first issue, help wanted, question, needs-triage, design, observability, rfq, admin",
+    "action": "keep",
+    "target": "Listed as neutral in v2 backlog-policy.md \u00a7 Neutral \u2014 ignored for selection and routing, exactly as today."
+   },
+   {
+    "artifact": "tickets: #240 #239 #237 #236 #213 (ready-for-agent)",
+    "action": "keep",
+    "target": "Labels carry over unchanged; before the first v2 `backlog build`, audit each for a complete Dispatch: block (Surface / Coordination class / reason, plus the v2-new route:direct line for enhancements) \u2014 v2 skips tickets with missing metadata rather than inferring, so gaps go through one v2 groom pass first."
+   },
+   {
+    "artifact": "tickets: #247 #235 #233 #223 #184 #183 #123 (ready-for-human) and #263 #255 #226 #214 (needs-info)",
+    "action": "keep",
+    "target": "Parked roles are identical in v2; no relabeling, no redispatch."
+   },
+   {
+    "artifact": "state: run 20260715-quote-import-wave-1 left 'active' for issue #232",
+    "action": "migrate",
+    "target": "Close out the run record explicitly (a closing event/handoff note in .git/backlog/runs/20260715\u2026, never deletion) and re-groom #232 under v2 \u2014 it carries no in-flight label, so the run file is the only claim on it.",
+    "detail": "Disposition of #232 itself (ready / needs-shaping / close) is a groom call \u2014 see decisions."
+   },
+   {
+    "artifact": "in-flight: LIVE review-server PID 62436 (LICON/alarkan plan, round 2 awaiting)",
+    "action": "keep",
+    "target": "Untouched until the round-2 verdict lands or Asher chooses a deliberate stop (`review-server.py --stop --state ~/.backlog/reviews/pipelines/2026-07-23-0005-\u2026` + `tailscale serve --set-path /pipelines/licon-pss-test/review off`); only then may the review-loop mount be removed. The possibly-twin alarkan plan file in the same 0005 slot gets checked for divergence before either is archived."
+   },
+   {
+    "artifact": "in-flight: review surface (~/.backlog/surface/pipelines, registry.json, LaunchAgent com.asher.backlog-surface:8377, /review proxy)",
+    "action": "keep",
+    "target": "Machine-level state owned by serve-via-tailnet in v2 \u2014 carried over as this repo's recorded surface config in environment.md \u00a7 Presenting to the human; a repo-scoped skills purge must not strand it, and the migration must not rebuild it."
+   },
+   {
+    "artifact": "in-flight: uncommitted main-checkout changes (.gitignore, AGENTS.md +35, skills-lock.json +6, untracked ask-syncron mount + SPP/report/script files)",
+    "action": "keep",
+    "target": "Committed deliberately (or explicitly triaged with Asher) BEFORE any reinstall or cleanup \u2014 the 2026-07-22 run's checkpoint explicitly preserved them; no git reset --hard / git clean -fd at any migration step."
+   },
+   {
+    "artifact": "in-flight: .git/backlog/runs/ (three runs: events, boards, handoffs, review/225 server logs)",
+    "action": "keep",
+    "target": "Historical archive of the v1 loop \u2014 v2 needs none of it (tracker is the ledger) but it is the only record of the 20260715 active anomaly and the review/225 round; retained in place, never deleted."
+   },
+   {
+    "artifact": "in-flight: leftover worktrees pipelines-224 / -229 / -231 (merged, clean)",
+    "action": "retire",
+    "target": "Nothing lost: branches are merged and trees clean. Remove properly \u2014 `git worktree remove` then scripts/cleanup-worktree.sh / `bun run reset:worktree-stacks` for derived stacks \u2014 ideally after PR #254 (the teardown-hygiene fix) merges; the deliberately retained #225 compose volume is deleted only on Asher's say-so; /Users/asher/Projects/opportunity-alarkan-pipelines is excluded from any pipelines-* glob."
+   },
+   {
+    "artifact": "in-flight: open PR #254 (codex/worktree-teardown-hygiene)",
+    "action": "keep",
+    "target": "Drive to merge through the existing review path (or as the first v2 adversarial-review) \u2014 it fixes the very cleanup protocol the worktree reaping above depends on."
+   },
+   {
+    "artifact": "in-flight: unmerged branches (codex/119, codex/125, codex/127, codex/api-contract-persistence-cleanup, codex/fix-rfq-demand-large-import, agent/reconcile-asher-skills, backup, advisor/001-010; remote diag/worker-freeze-forensics, fix/worker-supervisor-watchdog)",
+    "action": "keep",
+    "target": "Per-branch judgment, never bulk delete: many codex/* only look unmerged due to squash merges (verify each against merged PRs); diag/worker-freeze-forensics and fix/worker-supervisor-watchdog back open issue #203 and must survive; advisor/* pair with committed plans/001-010."
+   },
+   {
+    "artifact": "in-flight: plans/ (~40 committed plan docs with stable ac-N anchors), evidence/ (39 SHA-pinned dirs), research/ + reports/",
+    "action": "keep",
+    "target": "All committed history the v2 loop still leans on: newest plans back open work, evidence embeds are SHA-pinned (so no history rewrites, per platform.md \u00a7 Version control), research/ stays the dossier root bound in backlog-policy.md. v2 to-spec changes how NEW specs are made; it does not touch these."
+   },
+   {
+    "artifact": "script: .agents/skills/backlog/scripts/run-state.py (+ evals)",
+    "action": "retire",
+    "target": "v2 backlog replaces file-based run state with tracker-as-ledger (attributed claim + outcome comments; resume reconciles claims against worktrees/branch tips) \u2014 the capability is fully covered; historical .git/backlog output stays."
+   },
+   {
+    "artifact": "scripts: review-loop review-server.py / review-await.py",
+    "action": "retire",
+    "target": "Canonical copies live with serve-via-tailnet's annotated mode (same server/await/verdict-exit-code machinery); removed only after PID 62436 resolves; environment.md's hardwired .agents/skills/review-loop paths are rewritten to the sibling in \u00a7 Presenting."
+   },
+   {
+    "artifact": "scripts: setup-asher-skills install.py / catalog.py / render-global.py (+ evals) and staffing render-global.py",
+    "action": "retire",
+    "target": "Superseded by the v2 install flow and the refreshed v2 staffing skill, which ships its own current scripts; old copies recoverable from git history."
+   },
+   {
+    "artifact": "scripts: .claude/worktree-setup.sh, .claude/worktree-teardown.sh, .codex/environments/environment.toml",
+    "action": "keep",
+    "target": "Targets of GLOBAL harness worktree hooks \u2014 not skill files; deleting them breaks worktree create/cleanup for every future session. Referenced from v2 environment.md \u00a7 Worktree isolation as the bring-up/teardown bindings."
+   },
+   {
+    "artifact": "scripts: repo-owned worktree machinery (scripts/worktree-env.ts, with-worktree-env.ts, setup-worktree.sh, cleanup-worktree.sh, reap-worktree-stacks.ts, worktree-stacks.ts + tests)",
+    "action": "keep",
+    "target": "Repo product code, not skill material; it IS the isolation regime v2 environment.md \u00a7 Worktree isolation records, with its 15-test suite as the parallel-safe verdict's evidence."
+   }
+  ],
+  "decisions_needed": [
+   "Live review PID 62436 (LICON preferred-supplier-routing plan, round 2): let the verdict land before migrating, or stop deliberately now (--stop + tailscale serve off)? Also: is plans/2026-07-23-0005-alarkan-\u2026-test.html a renamed twin to archive, or separate work?",
+   "Browser verification policy: v2 mandates Playwright-driving-Chrome and bars agent-browser as a verification route; pipelines' earned policy (agent-browser primary per asher-skills#73, repo Puppeteer qa:browser:probe fallback, no Playwright suite). Adopt Playwright and start an e2e/ spec suite, or record the repo Puppeteer probe as this repo's driver deviation in environment.md \u00a7 Driving the app?",
+   "Label mechanics: rename in-flight \u2192 building via gh label edit (mutates the display on historical issues), or keep the existing name and bind the v2 'building' role to label 'in-flight' in backlog-policy.md (zero tracker mutation)? Either works; pick one before setup runs.",
+   "uncodixfy and greploop: both third-party and retired from the v2 family. uncodixfy is load-bearing for frontend playbook text \u2014 keep it as a declared external requirement (recommended) or retire and fold its role into frontend.md? greploop is unreferenced \u2014 retire, or redeclare if still used?",
+   "impeccable: diff the two independent real dirs; if identical, which disposition \u2014 normalize + declare in the lock, or delete (provenance unknown, so someone must vouch for it first)?",
+   "Issue #232 (run 20260715 left 'active', no in-flight label): re-groom to ready-for-agent, park to needs-shaping, or close?",
+   "Lock provenance repair for database-migrations and shadcn (source = the repo itself, empty-string hashes): rebind to their true upstreams, or declare them repo-owned skills with real hashes?",
+   "Per-branch disposition of the unmerged local branches (advisor/001-010, codex/119/125/127, api-contract-persistence-cleanup, fix-rfq-demand-large-import, backup, agent/reconcile-asher-skills) and whether the deliberately retained #225 compose volume can now be deleted."
+  ],
+  "must_not_lose": [
+   "The blocked_by dependency read/write commands with X-GitHub-Api-Version: 2026-03-10 and the 2026-07-14 live-probed GOTCHA that .issue_dependencies_summary stays stale \u2014 the v2 platform.md template's default read is EXACTLY that broken summary path, so a verbatim template copy silently reintroduces a known failure.",
+   "docs/agents/frontend.md in full: the sonner/inline-error feedback grammar, never-swallow-query-errors rule, datalist ban, commit-on-select picker semantics, valid-options-only filtering, tree-not-flat rendering, and the completion greps \u2014 dense earned UI law that exists nowhere else.",
+   "The check contract: bun run check = sherif + knip --no-config-hints + turbo run check --concurrency=1, the per-package ladder, and the fact that CI runs the identical gate \u2014 plus the stale-caller-must-fail-check type-safety expectation across DB/API/SQL/frontend.",
+   "The worktree isolation contract: worktree-env.ts derivation (COMPOSE_PROJECT_NAME, ports 21000-31000, per-worktree *.localhost:1355 subdomains on the intentionally shared 1355 proxy), the non-isolatable singleton list (Railway, Resend, AgentMail, OpenAI, PostHog, Sentry, customer SFTP), and the parallel-safe verdict's test evidence.",
+   "The exact verdict strings the loop keys on: 'LGTM' (approval) and 'no product-code change; no recapture' (styling-only evidence reuse) \u2014 protocol constants, not prose.",
+   "The unlocked repo-earned mounts qa-user-journeys and sentry-cli (plus the untracked ask-syncron-parts-planning mount and its uncommitted lock entry): any lockfile-driven 'reinstall the locked set, delete the rest' sweep destroys content that exists nowhere else.",
+   "The never-npx-skills-remove rule for this repo: three lock entries resolve to the repo itself with empty-string hashes, so a remove can delete repo content.",
+   "Issue #203's diagnosis map: apps/worker/src/freeze-forensics.test.ts, supervisor.test.ts, the remote diag/worker-freeze-forensics and fix/worker-supervisor-watchdog branches, and the content-date/daily-run worker invariants.",
+   ".git/backlog/runs/ event logs \u2014 the only record that run 20260715 (issue #232) was left active, plus the review/225 server logs; archive, never delete.",
+   "The GitHub evidence presentation law (blob ?raw=1 same-origin embeds, camo-proxied raw URLs 404 on private repos, mechanical SHA/file checks, re-pin-never-replain on orphaned SHAs) \u2014 now template-carried in v2 evidence.md, but the repo binding must land verbatim, and platform.md must keep the re-pin-after-rewrite policy that protects the 39 committed evidence dirs.",
+   "Staffing/reachability evidence: versioned model aliases rejected by the installed Claude CLI, and Claude\u2192codex exec unavailable in unattended children \u2014 facts that prevent repeating dead-route dispatches."
+  ]
+ }
+]
