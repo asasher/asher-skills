@@ -69,6 +69,11 @@
         },
         {
           "group": "Templates (software pack)",
+          "label": "codebase",
+          "path": "templates/software/codebase.md"
+        },
+        {
+          "group": "Templates (software pack)",
           "label": "evidence",
           "path": "templates/software/evidence.md"
         },
@@ -97,6 +102,7 @@
         "docs/agents/platform.md",
         "docs/agents/backlog-policy.md",
         "docs/agents/environment.md",
+        "docs/agents/codebase.md",
         "docs/agents/evidence.md"
       ],
       "bindings": [
