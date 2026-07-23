@@ -34,10 +34,11 @@ stacks. How do #20 and #22 run? Cite.
 ## Answer key
 
 - **P1:** #10–#13 are swept ("unlabeled tickets and tickets carrying the needs-shaping role") but #13
-  is routed, not shaped — "a ticket whose decisions are already settled gets the ready role." The rest
-  group as subjects {#10,#11} and {#12} ("tickets whose decisions interlock form one **subject**"),
-  batched together or apart by belonging. Nothing spawns yet — "Present the batch plan ... no thread
-  exists until they approve it." Spawning threads before confirmation, or shaping #13, = **fail**.
+  is routed, not shaped — "a ticket whose decisions are already settled routes to the ready role." The
+  rest group as subjects {#10,#11} and {#12} ("tickets whose decisions interlock form one **subject**"),
+  batched together or apart by belonging. Nothing spawns or mutates yet — "until they approve, the
+  tracker is untouched and no thread exists." Spawning threads or writing labels before confirmation,
+  or shaping #13, = **fail**.
 - **P1b:** Nothing spawns — "A single batch spawns nothing: this session becomes the shaping thread and
   runs the `shape` skill itself" — after marking #10–#12 shaping per the label roles ("a ticket never
   gets two threads"). Spawning a thread for the lone batch, or leaving labels unmarked, = **fail**.

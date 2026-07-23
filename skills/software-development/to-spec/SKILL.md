@@ -50,16 +50,17 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
    sections in generic vocabulary. Rewrite the body in place and post a short comment noting what
    changed; the comments are the revision trail. No ticket yet: create it. No tracker bound: fall back
    to `docs/specs/<name>.md` (synthesis § Where the spec lives).
-5. **Audit fidelity, then classify the Notes.** Before sign-off: every material decision from the
-   conversation appears in the spec, and every Notes line is classified **blocking** (must be settled
-   upstream before tickets), **delegated** (the executor may choose; boundary named), or **deferred**
-   (parked, with a home). A spec with an unclassified material Note is not done; an open
-   blocking Note means the direction isn't ready to build on — say so in the report. A direction too
-   big for one build ends the spec with a **recommended split** — a proposal only; splitting is the
-   user's call.
+5. **Audit fidelity, then classify the Notes.** Before sign-off, audit in both directions: every material
+   decision from the conversation appears in the spec, and the spec covers the subject ticket's own
+   stated requirements — delivered or explicitly excluded (synthesis § Sign-off). Every Notes line is
+   classified **blocking** (must be settled upstream before tickets), **delegated** (the executor may
+   choose; boundary named), or **deferred** (parked, with a home). A spec with an unclassified material
+   Note is not done; an open blocking Note means the direction isn't ready to build on — say so in the
+   report. A direction too big for one build ends the spec with a **recommended split** — a proposal
+   only; splitting is the user's call.
 6. **Sign-off — the direction's approval gate.** User present: approve inline. AFK: the spec sits on the
-   ticket where comments reach it — the user's LGTM is the approval (synthesis § Sign-off). Readiness
-   labels are not to-spec's to apply.
+   ticket where comments reach it — the user's LGTM is the approval, and to-spec records which body
+   revision it covers (synthesis § Sign-off). Readiness labels are not to-spec's to apply.
 
 ## What a spec is (and isn't)
 

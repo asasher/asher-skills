@@ -45,6 +45,14 @@ seam** — test at the outermost interface that already exists rather than reach
 new seam. The fewer seams, the better; note what's deliberately left untested and why. This is direction for
 how the work will be proven, not a test plan — keep it to the seams, in prose.
 
+## Dev specs only — sweep the contract surface
+
+When the direction touches an API, schema, or data contract, its surface carries decisions that hide as
+defaults: input strictness (optional vs required-nullable), nullability, error policy. Enumerate them —
+each lands settled in **Implementation decisions** or flagged in **Notes**. A contract decision the spec
+is silent on gets chosen by the builder and reversed by the reviewer; sweeping the surface here is what
+prevents that round trip.
+
 ## No stale content
 
 The spec carries **no file paths and no code snippets.** They rot the moment the codebase moves, and a spec
@@ -91,10 +99,13 @@ ticket with born-shaped children). A spec that fits one build carries no such se
 
 ## Sign-off
 
-The spec's approval is the **direction's gate.** Before presenting: run the **fidelity audit** — every
-material decision from the conversation appears in the spec, and every Notes line carries its
-blocking / delegated / deferred classification. An open **blocking** Note means the direction isn't
-ready to build on — settle it first.
+The spec's approval is the **direction's gate.** Before presenting: run the **fidelity audit**, in both
+directions. Conversation → spec: every material decision from the conversation appears in the spec, and
+every Notes line carries its blocking / delegated / deferred classification. Spec → source: read the
+subject ticket's own stated requirements back against the finished spec — a requirement the ticket
+states that the spec neither delivers nor explicitly excludes is a fidelity failure, even when the
+conversation never raised it. An open **blocking** Note means the direction isn't ready to build on —
+settle it first.
 
 - **User present** — take approval inline, in the conversation. This is the default path.
 - **User AFK, spec on a ticket** — the spec already sits where the user's comments reach it; their
@@ -102,3 +113,7 @@ ready to build on — settle it first.
   that decision travels by the tracker's label roles and belongs to whoever executes the user's call.
 - **User AFK, fallback repo doc** — the committed spec waits in the repo; approval arrives in
   conversation when the user returns. Skipping sign-off still leaves a valid spec in place.
+
+**Approval binds to a revision.** The user approves the spec they read, so whoever records the LGTM
+notes which body revision it covers — the latest revision comment at approval time; the user just says
+LGTM. A body rewrite after approval reopens sign-off for the changed content.

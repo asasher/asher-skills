@@ -24,17 +24,20 @@ by `docs/agents/backlog-policy.md`. Missing playbooks: run `backlog setup` first
 ## groom
 
 Sweep the tracker for unlabeled tickets and tickets carrying the needs-shaping role, or take the ids
-given. Route first: a ticket whose decisions are already settled gets the ready role, one owing reporter
-facts or human-only work gets its parked role per the label roles — the rest are shaping work. Group
-that rest twice: tickets whose decisions interlock form one **subject**; subjects that belong together
-(same subsystem, same domain area) form one **batch**, sized to what one thread can hold.
+given. Route first — as a plan, not as writes: a ticket whose decisions are already settled routes to
+the ready role, one owing reporter facts or human-only work to its parked role per the label roles, a
+duplicate or dead ticket to closure — the rest are shaping work. Group that rest twice: tickets whose
+decisions interlock form one **subject**; subjects that belong together (same subsystem, same domain
+area) form one **batch**, sized to what one thread can hold.
 
-**Confirm before anything spawns.** Present the batch plan — which tickets, which batches, what each is
-about — and adjust to the user's edits; no thread exists until they approve it. Then, per approved
-batch: mark its tickets shaping per the label roles — a ticket never gets two threads — and spawn one
-thread via the `to-thread` skill, named for the batch, seeded with the ticket ids (subjects marked) and
-the instruction to run the `shape` skill on them. A single batch spawns nothing: this session becomes
-the shaping thread and runs the `shape` skill itself.
+**Confirm before anything changes.** Present the plan — which tickets, which batches, what each is
+about, and every proposed tracker mutation (role labels, closures, new tickets, body rewrites) — and
+adjust to the user's edits. The confirmation is the gate for all of it: until they approve, the tracker
+is untouched and no thread exists. Then execute the approved mutations and, per approved batch: mark
+its tickets shaping per the label roles — a ticket never gets two threads — and spawn one thread via
+the `to-thread` skill, named for the batch, seeded with the ticket ids (subjects marked) and the
+instruction to run the `shape` skill on them. A single batch spawns nothing: this session becomes the
+shaping thread and runs the `shape` skill itself.
 
 Report each thread and how to attach; status on request comes from the tracker and the harness's thread
 listing. Inside the thread, shaping ends with a spec on each ticket and the user's blessing makes it

@@ -18,6 +18,15 @@ when they don't apply** (see [synthesis](synthesis.md) § Classify the work).
   prose (the one exception is a prototype-validated snippet; see [synthesis](synthesis.md) § No stale content).
 - **Out of scope** — what's deliberately excluded, each line saying what it is so a reader's question is
   answered in place.
+- **Acceptance criteria** — a numbered list with stable ids: `AC-1`, `AC-2`, … Each criterion is one
+  observable outcome a checker could grade pass or fail. The ids are the shared handles every downstream
+  role keys its verdicts to — builder, verifier, reviewer, evidence — so they must stay stable across
+  revisions: amend a criterion in place or append new ones; an id, once assigned, keeps its meaning. A
+  spec ending in a **Recommended split** may keep its criteria at direction level — the split gives each
+  child ticket its own numbered list.
+- **Assumptions** — what the direction takes as true of the existing system, one plain line each. These
+  are claims the build leans on, so downstream work verifies a load-bearing one before building on it.
+  Omit the section when there are none.
 - **Notes** — open questions and anything the conversation left undecided, recorded plainly. This is where the
   no-interview rule lands: unresolved points live here instead of being asked back.
 

@@ -14,8 +14,11 @@ title, and label are expressed.
 - **Slice** — what the narrow-but-complete path is: the one real thing this ticket does end to end, and how it
   is demoable on its own. For a wide-refactor ticket, name which phase it is (expand / migrate-batch N /
   contract). No file paths or code (prototype-validated-snippet exception only).
-- **Done** — the checkable outcome that means the slice is delivered: what a demo shows. Direction for
-  acceptance, not a test plan.
+- **Acceptance criteria** — a numbered list with stable ids: `AC-1`, `AC-2`, … Each criterion is one
+  observable outcome a checker could grade pass or fail; together they are what a demo shows. Direction
+  for acceptance, not a test plan. The ids are the handles downstream roles — builder, verifier,
+  reviewer, evidence — key their verdicts to, so they stay stable across revisions: amend a criterion in
+  place or append new ones; an id, once assigned, keeps its meaning. Numbering is per ticket.
 - **Work-type (optional)** — if the tracker's routing wants it (`bug` / `enhancement` / `refactor`), name it so
   grooming has a head start. Left off when unknown — grooming sets it.
 

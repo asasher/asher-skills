@@ -22,7 +22,11 @@ module → behavior; a page, a document, a layout → variants) and state the as
 
 An unfamiliar mechanism claim uses the **falsification shape**: build the smallest runtime-real probe that
 can make the claim fail, state the predicted observation first, and run it before dependent design. A green
-mock or seam that bypasses the claimed runtime path is not evidence.
+mock or seam that bypasses the claimed runtime path is not evidence. The same path discipline governs a red
+result: a failure falsifies the claim only when it occurred **on the claimed runtime path** — a failure in
+the probe's own scaffolding (import resolution, bundling, a shim) is a probe defect to fix, and the verdict
+stays open until the probe fails or survives on the real path. Any environment shim the probe needs is
+named in the record with its scope bounded to the question.
 
 ## Rules for both shapes
 
