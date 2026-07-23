@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OK to send?</title>
+  <style>
+    *{box-sizing:border-box}
+    :root{--paper:#f7f4ee;--card:#fff;--ink:#26251f;--muted:#7a766b;--line:#e8e3d8;
+          --green:#1e6f50;--red:#a63a2e;--amber:#8a5a17;--amber-bg:#f9efdd}
+    body{margin:0;background:var(--paper);color:var(--ink);
+         font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         -webkit-font-smoothing:antialiased}
+    main{max-width:620px;margin:0 auto;padding:22px 18px 40px}
+    .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;
+           padding:20px;box-shadow:0 1px 3px rgba(40,35,20,.06)}
+    h1{font-size:1.3rem;margin:0 0 2px;letter-spacing:-.01em}
+    .what{font-size:1.02rem;font-weight:650;margin:14px 0 2px}
+    .to{color:var(--muted);font-size:.95rem}
+    #editor{display:none;margin-top:14px;background:#fffdf7;border:1px solid #eee7d4;border-radius:10px;
+           padding:16px 18px;font:inherit;font-size:.96rem;line-height:1.55;color:var(--ink);
+           width:100%;min-height:200px;max-height:46dvh;overflow-y:auto;resize:vertical;outline:none}
+    #editor:focus{border-color:#d9c98f}
+    .draft-tools{display:flex;gap:14px;align-items:center;margin-top:8px;min-height:1.6em}
+    .linkish{border:0;background:none;padding:0;font:inherit;font-size:.9rem;font-weight:650;
+             color:var(--red);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+    #edited-note{font-size:.85rem;color:var(--amber);font-weight:650;display:none}
+    .missing{margin-top:14px;background:var(--amber-bg);border-radius:10px;padding:12px 15px;
+           font-size:.92rem;color:var(--amber);font-weight:600}
+    .note{color:var(--muted);font-size:.9rem;margin:14px 0 0}
+    fieldset{border:1px solid var(--line);border-radius:10px;margin:18px 0 0;padding:6px 12px 10px}
+    legend{font-size:.85rem;font-weight:650;color:var(--muted);padding:0 4px}
+    fieldset details{border-top:1px solid #f0ece2;padding:4px 0}
+    fieldset details:first-of-type{border-top:0}
+    summary{display:flex;gap:9px;align-items:center;padding:7px 0;font-size:.95rem;cursor:pointer;list-style:none}
+    summary::after{content:"›";margin-left:auto;color:var(--muted);transform:rotate(90deg)}
+    details[open] summary::after{transform:rotate(-90deg)}
+    input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);flex:0 0 auto}
+    .mini{margin:4px 0 10px 27px;background:#fffdf7;border:1px solid #eee7d4;border-radius:8px;
+          padding:10px 12px;font-size:.9rem;white-space:pre-wrap;overflow-wrap:anywhere;max-height:34dvh;overflow-y:auto}
+    .mini.none{color:var(--amber);background:var(--amber-bg);border-color:#f0e3c6;font-weight:600}
+    .reason-label{display:block;font-size:.9rem;font-weight:650;margin:18px 0 6px}
+    textarea.reason{width:100%;min-height:88px;border:1px solid #d5d0c4;border-radius:10px;
+             padding:11px;font:inherit;background:#fdfcfa}
+    .actions{display:grid;gap:10px;margin-top:18px}
+    button.act{min-height:48px;border:0;border-radius:10px;padding:12px;font:inherit;
+           font-weight:700;cursor:pointer}
+    .approve{background:var(--green);color:#fff}
+    .edit{background:#f0ede6;color:var(--ink);border:1px solid var(--line)}
+    .reject{background:#fff;color:var(--red);border:1.5px solid #e5beb8}
+    #status{margin:14px 0 0;font-size:.95rem;min-height:1.4em}
+    #status.good{color:var(--green);font-weight:650}
+    #status.bad{color:var(--red)}
+  </style>
+</head>
+<body>
+<main>
+  <section class="panel">
+    <h1>OK to send?</h1>
+    <div class="what" id="what"></div>
+    <div class="to" id="to"></div>
+    <div id="draft-slot"></div>
+    <textarea id="editor" spellcheck="true" aria-label="The message text — edit freely"></textarea>
+    <div class="draft-tools">
+      <button class="linkish" id="undo-edit" hidden>Undo my edits</button>
+      <span id="edited-note">You’ve rewritten it — “Send my version” sends your words.</span>
+    </div>
+    <p class="note">This is the exact text that will go out — nothing is sent until you say so,
+       and you can edit it right here first.</p>
+    <fieldset id="batch" hidden><legend>Also waiting — tap to read each one</legend></fieldset>
+    <label class="reason-label" for="reason">Note for your agent <span style="font-weight:400;color:var(--muted)">(needed if you say don’t send)</span></label>
+    <textarea class="reason" id="reason" placeholder="e.g. Warmer opening — or: skip this one, wrong team"></textarea>
+    <div class="actions">
+      <button class="act approve" data-action="approve" id="btn-approve">Send it</button>
+      <button class="act edit" data-action="edit_then_approve">Send with my changes</button>
+      <button class="act reject" data-action="reject">Don’t send</button>
+    </div>
+    <p id="status" role="status"></p>
+  </section>
+</main>
+<script>
+const data = __GOODWORK_BOOTSTRAP__;
+const item = data.item || {};
+const typeFor = {approve:"approval_requested", reject:"rejection_requested", edit_then_approve:"edit_then_approve_requested"};
+const HOW = {gmail:"Email", email:"Email", linkedin:"LinkedIn message", ats:"Online application", browser:"Online application", manual:"Sent by hand"};
+document.getElementById("what").textContent = item.title || "This message";
+const how = HOW[item.channel] || "Message";
+const dest = item.destination && item.destination !== "manual" ? item.destination : "";
+document.getElementById("to").textContent = dest ? `${how} · ${dest}` : how;
+
+/* draft is editable by default */
+const slot = document.getElementById("draft-slot");
+const editor = document.getElementById("editor");
+const undoEdit = document.getElementById("undo-edit");
+const editedNote = document.getElementById("edited-note");
+const original = item.content || null;
+function autosize(){
+  editor.style.height = "auto";
+  editor.style.height = (editor.scrollHeight + 2) + "px";
+}
+if (original){
+  editor.value = original;
+  editor.style.display = "block";
+  requestAnimationFrame(autosize);
+} else {
+  slot.innerHTML = `<div class="missing">The text isn’t attached yet — ask your agent to show it here before approving.</div>`;
+}
+function isEdited(){ return original !== null && editor.value !== original; }
+function refreshEditState(){
+  const on = isEdited();
+  editedNote.style.display = on ? "inline" : "none";
+  undoEdit.hidden = !on;
+  document.getElementById("btn-approve").textContent = on ? "Send my version" : "Send it";
+  batch.querySelectorAll("input[type=checkbox]").forEach(cb => {
+    if (cb.dataset.item !== (item.id || "")){ if (on) cb.checked = false; cb.disabled = on; }
+  });
+  const legend = batch.querySelector("legend");
+  if (legend) legend.textContent = on ? "Sending just this one, since you’ve edited it" : "Also waiting — tap to read each one";
+}
+undoEdit.addEventListener("click", () => {
+  editor.value = original; refreshEditState(); autosize();
+});
+editor.addEventListener("input", () => { refreshEditState(); autosize(); });
+
+/* batch list */
+const batch = document.getElementById("batch");
+const others = (data.items || []);
+if (others.length > 1){
+  batch.hidden = false;
+  others.forEach((it, idx) => {
+    const checked = it.id === item.id ? "checked" : "";
+    const body = it.content
+      ? `<div class="mini">${esc(it.content)}</div>`
+      : `<div class="mini none">No text attached yet — don’t include this one until you’ve read it.</div>`;
+    batch.insertAdjacentHTML("beforeend",
+      `<details ${it.id === item.id ? "open" : ""}>
+         <summary><input type="checkbox" ${checked} data-item="${esc(it.id || "")}" data-hash="${esc(it.content_hash || "")}"> ${esc(it.title || "Untitled")}</summary>
+         ${body}
+       </details>`);
+  });
+  batch.querySelectorAll("input[type=checkbox]").forEach(cb =>
+    cb.addEventListener("click", e => e.stopPropagation()));
+} else if (others.length === 1){
+  batch.insertAdjacentHTML("beforeend",
+    `<label style="display:none"><input type="checkbox" checked data-item="${esc(others[0].id || "")}" data-hash="${esc(others[0].content_hash || "")}"></label>`);
+}
+
+async function submit(action){
+  const status = document.getElementById("status");
+  const reason = document.getElementById("reason").value.trim();
+  const edited = isEdited();
+  if (action === "reject" && !reason){ status.className = "bad"; status.textContent = "Add a quick note so your agent knows why."; return; }
+  if (action === "edit_then_approve" && !edited && !reason){
+    status.className = "bad"; status.textContent = "Edit the text above, or say what you’d like changed."; return;
+  }
+  if (action === "approve" && edited) action = "edit_then_approve";
+  const checked = [...batch.querySelectorAll("input:checked")].filter(el => !el.disabled);
+  const covers = checked.map(el => ({item_id: el.dataset.item, content_hash: el.dataset.hash})).filter(x => x.item_id);
+  const isBatch = covers.length > 1 && action === "approve";
+  const payload = {action, reason: reason || null};
+  if (edited && action === "edit_then_approve") payload.edited_content = editor.value;
+  const event = {
+    token: data.token,
+    type: isBatch ? "batch_approval_requested" : typeFor[action],
+    page: "approval",
+    item_id: isBatch ? null : (item.id || null),
+    content_hash: isBatch ? null : (item.content_hash || null),
+    granularity: isBatch ? "session_batch" : "item",
+    covers,
+    payload,
+    tags: ["approval"]
+  };
+  const res = await fetch("/event", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(event)});
+  if (res.ok){
+    status.className = "good";
+    status.textContent = action === "reject" ? "Got it — it won’t be sent." :
+      payload.edited_content ? "Done — your version will be sent." :
+      action === "edit_then_approve" ? "Got it — your agent will make the changes first." :
+      "Done — your agent will take it from here.";
+  } else {
+    status.className = "bad";
+    status.textContent = "That didn’t go through — try again.";
+  }
+}
+document.querySelectorAll("button.act").forEach(btn => btn.addEventListener("click", () => submit(btn.dataset.action)));
+function esc(s){return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+</script>
+</body>
+</html>
