@@ -22,8 +22,6 @@ the current branch.
 - **New behavior** — a feature, an enhancement — runs through the `tdd` skill at pre-agreed seams: the
   ticket or spec's named seams, or seams proposed and recorded before the first test.
 
-Refactoring is deliberately not a route here: work that is purely restructuring is out of scope.
-
 ## While building
 
 Run typechecking and the touched test files regularly; run the full suite once at the end. Honor the
