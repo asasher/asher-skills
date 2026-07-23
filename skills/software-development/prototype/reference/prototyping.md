@@ -18,7 +18,7 @@ The question decides the shape:
   different variations of one surface, flipped between so a human can react to real alternatives.
 
 If the question is ambiguous, default to whichever matches the surrounding work (a state machine or backend
-module → behavior; a page, a document, a layout → form) and state the assumption at the top of the prototype.
+module → behavior; a page, a document, a layout → variants) and state the assumption at the top of the prototype.
 
 An unfamiliar mechanism claim uses the **falsification shape**: build the smallest runtime-real probe that
 can make the claim fail, state the predicted observation first, and run it before dependent design. A green
@@ -54,7 +54,7 @@ mock or seam that bypasses the claimed runtime path is not evidence.
 - The interesting moments are "wait, that shouldn't be possible" — those are bugs in the *idea*, which is the
   point. Add cases on request.
 
-## Form shape
+## Variants shape
 
 *Answers: which of several genuinely different directions is right?*
 
@@ -63,13 +63,14 @@ mock or seam that bypasses the claimed runtime path is not evidence.
   drafts converge, redo one with an explicit structural constraint.
 - **Code (a UI surface):** host the variants in the real page whenever one plausibly exists, gated by a
   `?variant=` URL param, keeping the page's real data fetching, params, and auth — an empty standalone route
-  hides design problems a populated page exposes. Add a floating switcher pill (bottom-center, visually
+  hides design problems a populated page exposes; only when no host page exists, a throwaway route named
+  obviously as one. Variants are read-only over that real data: stub any mutation rather than firing it. Add a floating switcher pill (bottom-center, visually
   distinct from the design under evaluation): prev/next plus the variant key and name; arrow keys cycle too
   (not while an input is focused); URL updates so variants are shareable and reload-stable; hidden in
   production builds. Hold every variant to the page's real purpose, its real data, and this repo's component
   library.
 - **Non-code (a document, layout, slide, or doc UI):** the variants are **structurally different drafts of
-  the same content** — three ways to organize the same plan, three layouts for the same one-pager — each a
+  the same content** — three ways to organize the same brief, three layouts for the same one-pager — each a
   self-contained rendered artifact (a standalone HTML file, inline styles, no external assets, so it
   renders anywhere). One artifact per variant, or one artifact with a variant
   switcher.
@@ -91,9 +92,12 @@ with taste weight (a UI variant, a rendered document) to a taste-ranked model.
 
 ## Capture and cleanup
 
-- **Capture the answer** — which option won and why — into the consuming plan when planning invoked this;
+- **Capture the answer** — which option won and why — into the record of the work that raised the
+  question: the ticket thread (a spec being shaped there absorbs it), or the conversation that asked;
   standalone, into the issue or a commit message the playbook names. For variants-shape prototypes, capture each
   variant (a screenshot of a UI, the rendered sheet of a document) and embed them with the winner marked.
   The prototype itself is never the record.
-- **Then delete.** Losing variants and the switcher go; a winning variant is rebuilt properly (it was written
-  under prototype constraints), and a validated behavior module is lifted into real code.
+- **Then clear the mainline.** A winning variant is rebuilt properly (it was written under prototype
+  constraints), and a validated behavior module is lifted into real code. In a repo, park the prototype
+  itself on a throwaway branch — a primary source, pointed to from the ticket that captured the
+  answer — so the mainline keeps only the validated decision; outside a repo, delete it.

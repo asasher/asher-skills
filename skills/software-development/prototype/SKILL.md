@@ -23,14 +23,15 @@ here; build-out may be dispatched via the `to-subagent` skill.
 
 ## Gates
 
-1. **Question stated.** Record one question and its shape (behavior, form, or falsification per the
+1. **Question stated.** Record one question and its shape (behavior, variants, or falsification per the
    reference): for behavior/falsification, the claim the artifact can falsify; for variants, the alternatives
    presented and the decision they settle.
 2. **Built and exposed.** Provide one command or URL and visible state. Open rendered answer sheets
    locally; drive live interactive artifacts directly. Iterate only to settle the named question.
 3. **Answer captured.** Write the decision, why, and relevant variant captures into the record of the work
    that raised the question — the ticket thread or the conversation playback.
-4. **Cleaned.** Delete the artifact or deliberately absorb only its validated core into real work.
+4. **Cleaned.** Absorb only the validated core into real work; the artifact leaves the mainline —
+   parked on a throwaway branch pointed to from the record, or deleted.
 
 An interface's non-obvious presentation choices — the visual hierarchy, which actions are overt, what
 each journey step shows — are decisions, not taste calls: a variants prototype settles them;
