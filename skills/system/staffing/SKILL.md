@@ -55,4 +55,3 @@ contract.
 
 - **Bundled:** setup, audit, routing, roles/fallback, install/reconcile, and compiled provider mechanics.
 - **Project/global:** roster base and delta playbooks written by setup with the user's scope consent.
-- **Siblings:** none; staffing is a model-invoked root primitive and imports no skill files.

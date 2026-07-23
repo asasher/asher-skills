@@ -84,5 +84,3 @@ The full method is in [slicing](reference/slicing.md); the shape:
   (`backlog-policy.md` § Dependencies — how a blocking edge is recorded)
   and the **tracker binding** (`platform.md` — how tickets are created and in what format). Absent a
   recorded binding, state the gap and ask the user before publishing anything.
-- **Sibling skills** — none. The input is a document or the conversation, never another skill: given a
-  spec, a plan document, or a raw conversation, to-tickets runs standalone.

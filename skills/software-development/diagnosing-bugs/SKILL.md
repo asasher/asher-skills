@@ -36,4 +36,3 @@ Input is the reporter's exact observed symptom plus the environment needed to dr
   reconciliation; `templates/diagnosing-bugs.md` is the delta-only playbook seed.
 - **Project playbook** — optional `docs/agents/diagnosing-bugs.md`, owned by the repo after setup and preserved
   on reconciliation.
-- **Sibling skills** — none — a sealed primitive.

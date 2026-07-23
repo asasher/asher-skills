@@ -25,7 +25,7 @@ the change behaves at its edges, not just its happy path.
 ## Read the environment contract
 
 `docs/agents/environment.md`, when the repo has one, records how to run the stack, seed data, reach a
-feature, authenticate (including a reusable browser session), and which driver exercises each surface.
+feature, authenticate, and which driver exercises each surface.
 Honor it — a verifier that improvises around the recorded contract produces evidence nobody can
 reproduce. Absent the playbook, say so and verify what the repo's own commands reach.
 

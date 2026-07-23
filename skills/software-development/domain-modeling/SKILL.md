@@ -59,4 +59,3 @@ Any gate failing → no ADR.
 ## Dependency surface
 
 - **Bundled:** [context-format](reference/context-format.md), [adr-format](reference/adr-format.md).
-- **Siblings:** none — a sealed primitive.
