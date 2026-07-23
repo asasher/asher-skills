@@ -8,8 +8,8 @@ name. Maquette carries no review server of its own and imports no serve-via-tail
 At a gate, render the current markdown deliverable — `BRIEF.md` or `JOURNEYS.md` — to a self-contained HTML
 page. Each top-level section becomes a block with a stable `id` derived from a slug of its heading; for
 `JOURNEYS.md`, each journey and each screen entry gets the same treatment. Ids never change across
-revisions. This is the stable-id convention serve-via-tailnet documents in its `templates/plan-skeleton.html`
-and `reference/serve-via-tailnet.md`.
+revisions. This is the stable-id convention serve-via-tailnet documents in its
+`reference/annotation-contract.md`.
 
 Keep the HTML self-contained: inline styles, no external fetches. The render is ephemeral, produced for the
 gate; the markdown remains the canonical deliverable.

@@ -76,14 +76,15 @@ mock or seam that bypasses the claimed runtime path is not evidence.
 - The best feedback is composite — "the header from B with the sidebar from C" is the design the human
   actually wants.
 
-## Present the answer for feedback — compose `review-loop`
+## Present the answer for feedback — compose `serve-via-tailnet`
 
-A variants-shape prototype, and any behavior-shape prototype whose answer is a document a human should mark up,
-is presented through the **`review-loop`** skill (by name — do not fork a review UI): serve the rendered
-artifact / variant sheet, and end the pause with its URL and the hub URL. A live interactive prototype (a
+A variants-shape prototype, and any behavior-shape prototype whose answer is a rendered document, is
+presented through the **`serve-via-tailnet`** skill (by name — do not fork a serving mechanism): plain-serve
+the rendered artifact / variant sheet and end the pause with its URL. Feedback arrives in conversation —
+a prototype answer carries no annotation surface or verdict gate. A live interactive prototype (a
 terminal behavior app, a running page) is driven directly, but its URL is still announced on the presentation
 surface so the human can reach it. Where
-no surface is recorded, `review-loop` degrades to a local open — never improvise a public tunnel.
+no surface is recorded, `serve-via-tailnet` degrades to a local open — never improvise a public tunnel.
 
 ## Staff the build — compose `staffing`
 

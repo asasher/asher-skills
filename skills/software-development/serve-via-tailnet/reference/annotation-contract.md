@@ -21,9 +21,10 @@ injection lands the chrome and a `window.__REVIEW_BOOTSTRAP__` blob just before 
 Annotations anchor to the artifact's **stable element ids**, never to text ranges. The human hovers a block
 that carries an `id`, hits "+ comment", and the note binds to that id. Ids must never change across
 revisions — that is what lets a round-2 tab still resolve a round-1 note. Any reviewable artifact must give
-every reviewable element a stable id; the plan skeleton under `templates/` is one example of that
-convention (sections and items carry ids; acceptance criteria are `<li id="ac-N" data-criterion>`, which the
-approval dialog counts), but the server serves any HTML that follows it, not only plans.
+every reviewable element a stable id; the `to-spec` skill's spec skeleton (`templates/spec-skeleton.html`)
+is one example of that convention (sections and items carry ids; acceptance criteria are
+`<li id="ac-N" data-criterion>`, which the approval dialog counts), but the server serves any HTML that
+follows it, not only specs.
 
 ## Batch feedback, three verdicts
 

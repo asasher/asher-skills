@@ -53,5 +53,5 @@ synthesize the decided direction into a spec.
 - **Relationship:** adapted.
 - **Source:** Matt Pocock's MIT-licensed [`to-spec`](https://github.com/mattpocock/skills/blob/04fee67571bc52ac58a0e59fc4924a13f61b50a6/skills/engineering/to-spec/SKILL.md).
 - **Borrowed:** conversation synthesis, decision capture, and test-seam sketching.
-- **Local changes:** HTML artifact, dev/non-dev gates, no-interview rule, generic vocabulary, and optional review-loop sign-off.
+- **Local changes:** HTML artifact, dev/non-dev gates, no-interview rule, generic vocabulary, and optional serve-via-tailnet sign-off.
 - **License/notices:** [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
