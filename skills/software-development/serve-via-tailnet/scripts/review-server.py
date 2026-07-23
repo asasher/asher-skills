@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Review-loop server; stdlib only. Contract: reference/annotation-contract.md.
+"""Annotated-review server; stdlib only. Contract: reference/annotation-contract.md.
 
 Serves ONE review artifact with the annotation
 chrome injected at serve time — the committed file stays pure. Collects batched

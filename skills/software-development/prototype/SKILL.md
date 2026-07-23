@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: []
-  optional: [serve-via-tailnet, to-subagent]
+  optional: [to-subagent]
 ---
 
 # Prototype
@@ -26,9 +26,8 @@ here; build-out may be dispatched via the `to-subagent` skill.
 1. **Question stated.** Record one question and its shape (behavior, form, or falsification per the
    reference): for behavior/falsification, the claim the artifact can falsify; for variants, the alternatives
    presented and the decision they settle.
-2. **Built and exposed.** Provide one command or URL and visible state. Present rendered answer sheets locally, or via the
-   `serve-via-tailnet` skill when the user isn't at this machine; drive live interactive artifacts
-   directly. Iterate only to settle the named question.
+2. **Built and exposed.** Provide one command or URL and visible state. Open rendered answer sheets
+   locally; drive live interactive artifacts directly. Iterate only to settle the named question.
 3. **Answer captured.** Write the decision, why, and relevant variant captures into the record of the work
    that raised the question — the ticket thread or the conversation playback.
 4. **Cleaned.** Delete the artifact or deliberately absorb only its validated core into real work.
@@ -38,12 +37,10 @@ each journey step shows — are decisions, not taste calls: a variants prototype
 implementation never invents them.
 
 Failure to expose a falsifiable observation — or, for variants, real alternatives a human can react to —
-returns to gate 1. Missing `serve-via-tailnet` degrades to local open; missing
-`to-subagent` builds in-session.
+returns to gate 1. Missing `to-subagent` builds in-session.
 
 ## Dependency surface
 
 - **Bundled:** `reference/prototyping.md`, the technique.
 - **Project:** optional placement delta `docs/agents/prototyping.md`.
-- **Siblings (optional, by name):** `serve-via-tailnet` (remote presentation), `to-subagent`
-  (build-out dispatch).
+- **Siblings (optional, by name):** `to-subagent` (build-out dispatch).

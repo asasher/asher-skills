@@ -30,8 +30,7 @@ direction with real alternatives instead of argument. Keep the answer, delete th
 - **Bundled:** `reference/prototyping.md` — the authoritative technique.
 - **Project:** optional placement delta `docs/agents/prototyping.md` (task runner, routing, where
   throwaway artifacts live); absent it, a self-contained artifact in a scratch dir.
-- **Siblings (optional, by name):** `serve-via-tailnet` (present answer sheets to a user not at this
-  machine; degrades to opening locally), `to-subagent` (build-out dispatch; degrades to building
+- **Siblings (optional, by name):** `to-subagent` (build-out dispatch; degrades to building
   in-session).
 
 ## Credits

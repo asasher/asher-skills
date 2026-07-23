@@ -1,4 +1,4 @@
-# The review loop
+# The annotation contract
 
 The annotate→revise→approve contract. An artifact pausing for a verdict — a plan awaiting approval, a
 prototype's answer sheet, a maquette, any reviewed document — is served through `scripts/review-server.py`,

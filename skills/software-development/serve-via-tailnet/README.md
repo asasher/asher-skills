@@ -18,8 +18,3 @@ stable element ids, batched feedback with hash-bound verdicts, and a per-repo hu
 - **Machine:** the presentation module in the global agent instruction files — tailnet root, ports,
   proxy rules.
 - **Siblings:** none.
-
-## Provenance
-
-The annotation surface is the review-loop skill's serving machinery, carried over whole when review-loop
-retired in favor of this skill plus `watch-until`.

@@ -156,7 +156,7 @@ worktree-isolated subagents it babysits — building is autonomous, so outcomes 
 → `tdd`) → `verify-your-work` (the thread fixes) → change request → `adversarial-review` (`code-review`
 plus `watch-until` convergence) → `prove-your-work`. `merge-changes` remains the explicit human
 authorization gate after a review-ready change request. `to-subagent` is the single staffing-aware
-dispatch route; `serve-via-tailnet` plus `watch-until` replaced the retired `review-loop`.
+dispatch route.
 
 **Source & updates:** installed from this repo itself. To refresh sources, install the complete desired
 local set in one atomic `npx skills add <path-to-this-repo> --skill <names...> -y` command — sequential

@@ -7,7 +7,7 @@ citation is valid. Key before runs.
 ## Scenario
 
 You are running the `prototype` skill on "should the payout flow be a wizard or a single form?" raised
-by ticket #142. The user is at another machine.
+by ticket #142.
 
 ## Probes
 
@@ -17,8 +17,8 @@ Cite.
 **P2 (presentation decisions).** The variants differ in which actions are overt on each step. Is that
 the implementer's taste call later? Cite.
 
-**P3 (exposure).** How does the user see the variants from their other machine, and what if that
-sibling isn't installed? Cite.
+**P3 (exposure).** The three variants are built. What does gate 2 require before iterating on them?
+Cite.
 
 **P4 (capture).** The user picks the wizard. Where does the answer land? Cite.
 
@@ -31,9 +31,8 @@ sibling isn't installed? Cite.
 - **P2:** No — "An interface's non-obvious presentation choices ... are decisions, not taste calls: a
   variants prototype settles them; implementation never invents them." Deferring to the implementer =
   **fail**.
-- **P3:** "Present rendered answer sheets locally, or via the `serve-via-tailnet` skill when the user
-  isn't at this machine"; "Missing `serve-via-tailnet` degrades to local open." Blocking on the missing
-  sibling = **fail**.
+- **P3:** "Provide one command or URL and visible state. Open rendered answer sheets locally; drive
+  live interactive artifacts directly." Iterating without exposing the variants = **fail**.
 - **P4:** "into the record of the work that raised the question — the ticket thread or the conversation
   playback" — here ticket #142's thread. Leaving it only in the artifact = **fail**.
 - **P5:** No — gate 4: "Delete the artifact or deliberately absorb only its validated core into real

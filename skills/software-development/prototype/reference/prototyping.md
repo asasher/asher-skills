@@ -70,21 +70,18 @@ mock or seam that bypasses the claimed runtime path is not evidence.
   library.
 - **Non-code (a document, layout, slide, or doc UI):** the variants are **structurally different drafts of
   the same content** — three ways to organize the same plan, three layouts for the same one-pager — each a
-  self-contained rendered artifact (a standalone HTML file, inline styles, no external assets, so it renders
-  anywhere including the presentation surface). One artifact per variant, or one artifact with a variant
+  self-contained rendered artifact (a standalone HTML file, inline styles, no external assets, so it
+  renders anywhere). One artifact per variant, or one artifact with a variant
   switcher.
 - The best feedback is composite — "the header from B with the sidebar from C" is the design the human
   actually wants.
 
-## Present the answer for feedback — compose `serve-via-tailnet`
+## Present the answer for feedback
 
 A variants-shape prototype, and any behavior-shape prototype whose answer is a rendered document, is
-presented through the **`serve-via-tailnet`** skill (by name — do not fork a serving mechanism): plain-serve
-the rendered artifact / variant sheet and end the pause with its URL. Feedback arrives in conversation —
-a prototype answer carries no annotation surface or verdict gate. A live interactive prototype (a
-terminal behavior app, a running page) is driven directly, but its URL is still announced on the presentation
-surface so the human can reach it. Where
-no surface is recorded, `serve-via-tailnet` degrades to a local open — never improvise a public tunnel.
+presented by opening the rendered artifact / variant sheet and ending the pause with its location.
+Feedback arrives in conversation. A live interactive prototype (a terminal behavior app, a running page)
+is driven directly.
 
 ## Staff the build — compose `staffing`
 
