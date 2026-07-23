@@ -19,8 +19,9 @@ having watched the work happen: the package must let them decide from the eviden
 
 - **What changed and why** — one paragraph, in the ticket's terms.
 - **The proof per claim** — each thing the change claims to do, with the check that demonstrated it: the
-  exact command and its trimmed output, or for UI work the browser driver's own artifacts — trace,
-  screenshots, recording — from the scripted check, captured per the environment playbook
+  exact command and its trimmed output, or for UI work the artifacts of whatever drives that surface —
+  a browser driver's trace, screenshots, recording; an emulator or app driver's equivalent for mobile —
+  from the scripted check, captured per the environment playbook
   (`docs/agents/environment.md`) when the repo has one. Proof is reproducible: a reader must be able to
   run the same command and see the same result.
 - **What was not verified, and why** — named plainly. An honest gap outranks a padded package; hiding an

@@ -37,7 +37,8 @@ For each claim, choose the check that would go red if the claim were false:
 - typecheck and build;
 - the changed surface exercised directly — a CLI invocation, an HTTP call, a script against the real
   entry point;
-- for UI work, a browser check **written as a script** with the repo's recorded browser driver, walking
+- for UI work, a check **written as a script** with the repo's recorded driver for that surface — a
+  browser driver for web, an emulator or app driver for mobile — walking
   the changed journey through the states named in the ticket (empty, loading, error, disabled), not
   just the golden path — and left in the tree where the repo keeps such specs.
 

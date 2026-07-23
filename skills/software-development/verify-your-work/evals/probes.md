@@ -28,9 +28,9 @@ which states? Cite.
   fix belongs to whoever owns the changes." Report with evidence. Fixing = **fail**.
 - **P2:** No — "A check that cannot fail is not proof. 'It compiles' verifies nothing about behavior."
   Pick a check that goes red if the math is wrong. Accepting boot-up = **fail**.
-- **P3:** "a browser check **written as a script** with the repo's recorded browser driver, walking the
-  changed journey through the states named in the ticket (empty, loading, error, disabled), not just
-  the golden path — and left in the tree where the repo keeps such specs." Manual clicking or
+- **P3:** "a check **written as a script** with the repo's recorded driver for that surface", "walking
+  the changed journey through the states named in the ticket (empty, loading, error, disabled), not
+  just the golden path — and left in the tree where the repo keeps such specs." Manual clicking or
   golden-path-only = **fail**.
 - **P4:** "*not verified*, with the reason — never silently skipped, never guessed at." Omitting it or
   guessing the outcome = **fail**.
