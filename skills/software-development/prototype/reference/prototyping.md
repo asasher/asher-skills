@@ -30,8 +30,8 @@ mock or seam that bypasses the claimed runtime path is not evidence.
   casual reader sees it is not production. Follow the surrounding conventions (the repo's task runner, the
   project playbook's placement rule); don't invent new top-level structure. Absent a playbook: a
   self-contained file in a scratch/workspace directory, outside any shipped artifact.
-- **One command to run, or one URL to open.** For code, wire it into the task runner; for a document, it is
-  the file that opens.
+- **Trivial to run.** A page or app starts from one command in the project's task runner; an HTML demo
+  or a document is the file that opens.
 - **No persistence.** State lives in memory unless persistence *is* the question (then a scratch store with a
   clear "PROTOTYPE — wipe me" name).
 - **Skip the polish.** No tests, no error handling beyond runnable, no abstractions.
@@ -43,10 +43,17 @@ mock or seam that bypasses the claimed runtime path is not evidence.
 
 - **Code:** put the logic behind a small **pure, portable module** — a reducer `(state, action) => state`, an
   explicit state machine, or a set of pure functions over a plain type, whichever fits the question (not
-  whichever is easiest to wire up). No I/O inside it: the shell imports the module, never the reverse. When
-  the question is answered, this module is the part worth lifting into real code. Wrap it in the smallest
-  terminal shell that works: clear and re-render one stable frame per action — current state pretty-printed,
-  then the keybindings (`[a] add  [t] tick  [q] quit`). The whole frame fits on one screen.
+  whichever is easiest to wire up). No I/O or DOM inside it: the shell calls the module, never the
+  reverse. When the question is answered, this module is the part worth lifting into real code. Wrap it
+  in a **single self-contained HTML demo** — plain HTML/CSS/JS, the module in one `<script>` block, no
+  framework, no build, no server: a file that opens by double-click and survives being sent to a
+  non-developer. Its layout, top to bottom: the question in one line; a **labelled state panel in domain
+  language** (the business's words, not the reducer's), re-rendered after every click; **free-play
+  buttons**, one per action, always available; and **tabbed guided walkthroughs** — each tab a scenario
+  in plain words (what it sets up, what to watch for) above the ordered buttons to press, resetting to a
+  known initial state so it runs the same way every time. Pick scenarios for the awkward cases. A
+  terminal shell (one stable frame per action: state, then keybindings) fits only when the question is
+  itself about a terminal surface.
 - **Non-code:** the same discipline without a program. A **hand-driven state table** — a document that lists
   the states and, for each, what each event does — walked through the awkward sequences by hand; or a
   **scenario run** where you narrate the model's response to a script of real inputs and record where it
@@ -81,8 +88,8 @@ mock or seam that bypasses the claimed runtime path is not evidence.
 
 A variants-shape prototype, and any behavior-shape prototype whose answer is a rendered document, is
 presented by opening the rendered artifact / variant sheet and ending the pause with its location.
-Feedback arrives in conversation. A live interactive prototype (a terminal behavior app, a running page)
-is driven directly.
+Feedback arrives in conversation. A live interactive prototype (an HTML demo, a running page, a
+terminal app) is driven directly.
 
 ## Staff the build — compose `staffing`
 

@@ -17,7 +17,8 @@ direction with real alternatives instead of argument. Keep the answer, delete th
 ## Shape
 
 - **A throwaway artifact, not only code.** Scaffolding built to reach an answer and torn down after — a
-  reducer with a terminal shell, a page with `?variant=`, a rendered document, a driven scenario.
+  state-model demo in one shareable HTML file, a page with `?variant=`, a rendered document, a driven
+  scenario.
 - **Question-driven shapes.** *Behavior* drives the idea through the awkward cases one action at a time;
   *variants* puts structurally different alternatives side by side; *falsification* exposes the claim an
   artifact can break. An interface's non-obvious presentation choices are decisions a variants prototype
@@ -37,7 +38,7 @@ direction with real alternatives instead of argument. Keep the answer, delete th
 
 - **Relationship:** extracted from this repository's earlier `backlog` skill
   ([`7f8ca23`](https://github.com/asasher/asher-skills/commit/7f8ca23)).
-- **Technique source:** the two core prototype shapes (logic-probe terminal app, UI variants on one
+- **Technique source:** the two core prototype shapes (shareable logic demo, UI variants on one
   route) are adapted from Matt Pocock's MIT-licensed
   [`prototype`](https://github.com/mattpocock/skills/blob/04fee67571bc52ac58a0e59fc4924a13f61b50a6/skills/engineering/prototype/SKILL.md).
 - **License/notices:** [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
