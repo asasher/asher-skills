@@ -18,9 +18,9 @@ these probes and record the results:
 2. **Which sibling harness CLIs are installed?** Probe `codex --version` and `claude --version`, then retain
    only the routes step 1 actually exercised. Presence alone is not reachability. The result decides which
    mechanics the base includes.
-3. **Which harness memory layer exists?** Use the exact global pointer and deferred-module paths in the
-   compiled `reference/harness.md`. This also feeds the scope-decision flow.
-4. **Do global staffing rules already exist?** Read the detected memory layer for an existing staffing
+3. **Which global agent instruction file exists?** Use the exact global pointer and deferred-module paths
+   in the compiled `reference/harness.md`. This also feeds the scope-decision flow.
+4. **Do global staffing rules already exist?** Read the detected instruction file for an existing staffing
    roster. Its presence or absence chooses the scope-decision branch.
 5. **Which waits does each harness track?** Probe the wake mechanisms — background-task completion, subagent
    completion, monitors, cron — and record which ones re-invoke the session, effect-verified. These become

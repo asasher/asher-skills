@@ -8,7 +8,7 @@ each project a sparse delta.
 
 For global-with-overrides, the active harness gets:
 
-- a compact `## Staffing` pointer in its native global memory file;
+- a compact `## Staffing` pointer in its global agent instruction file;
 - a self-contained deferred module at the absolute path named by that pointer; and
 - project deltas under `docs/agents/`, containing only fields that differ.
 
@@ -24,7 +24,7 @@ that raised floor; copying the base table is drift.
 - **No global base exists:** ask project-only versus global-with-overrides. A global choice is explicit
   consent for the described home-directory writes, not blanket permission for later changes.
 
-The active provider's exact memory/module paths and dispatch commands are in `reference/harness.md` in the
+The active provider's exact instruction-file/module paths and dispatch commands are in `reference/harness.md` in the
 installed package. Directory presence is evidence, not authority: setup confirms which harnesses are active.
 
 ## Module-first owner reconciliation

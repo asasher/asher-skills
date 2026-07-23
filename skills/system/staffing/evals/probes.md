@@ -193,7 +193,7 @@ module is unreadable?
   apply before staffing may write; finalize verifies all four sections and removes the barrier. Unreadable
   modules or failed preflight leave both globals untouched; staffing preserves Presentation/user bytes. No eager import.
 - **P21 (provider pilot):** PASS only with the checked-in baseline 10,391 bytes and current results at least
-  20% smaller for both providers, plus no opposite-direction path/global-memory branch in the files loaded by
+  20% smaller for both providers, plus no opposite-direction path/global-instruction-file branch in the files loaded by
   reconcile. Cite `evals/test_provider_pilot.py`.
 - **P22 (situated pointer):** PASS only if the leaf edit does not load the module; all named routing,
   capability, watcher, and fallback triggers load it before acting; readable resolution applies the project
