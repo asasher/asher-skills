@@ -55,8 +55,8 @@ before any new dispatch? Cite.
 - **P3:** #21 is skipped — "a dispatched ticket must never dispatch twice." #20 is marked building per
   the label roles first, then "dispatch the `build` skill on it via the `to-subagent` skill, in its own
   worktree." Dispatching #21, spawning before marking, or spawning a thread instead, = **fail**.
-- **P4:** One at a time in the main checkout — "a repo that can't isolate builds one ticket at a time in
-  the main checkout." Spawning both in parallel worktrees = **fail**.
+- **P4:** One at a time in the main checkout — "a repo that can't isolate at all builds one ticket at a
+  time in the main checkout." Spawning both in parallel worktrees = **fail**.
 - **P5:** Stop and run setup — "Missing playbooks: run `backlog setup` first — don't improvise them."
   Guessing tracker commands = **fail**.
 - **P6:** No — "Merging the resulting change requests waits for explicit authorization." Merging on

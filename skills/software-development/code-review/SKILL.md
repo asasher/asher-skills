@@ -40,7 +40,7 @@ skips and the report says "no spec available".
 ## 3. Identify the standards sources
 
 Anything in the repo documenting how code should be written (`CODING_STANDARDS.md`, `CONTRIBUTING.md`,
-lint configs' prose). On top of whatever the repo documents, the Standards axis always carries the
+`docs/agents/codebase.md`, lint configs' prose). On top of whatever the repo documents, the Standards axis always carries the
 **smell baseline** in [smells](reference/smells.md) and the **structural bar** in
 [structure](reference/structure.md). Two rules bind both:
 

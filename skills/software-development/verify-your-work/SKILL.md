@@ -31,6 +31,8 @@ claims no existing data is lost or mangled; that claim needs evidence like any o
 feature, authenticate, and which driver exercises each surface.
 Honor it — a verifier that improvises around the recorded contract produces evidence nobody can
 reproduce. Absent the playbook, say so and verify what the repo's own commands reach.
+`docs/agents/codebase.md`, where it exists, records the canonical check commands and their invocation
+traps — run the recorded forms.
 
 The contract also bounds what state is yours: create and seed what a check needs per the playbook's
 fixture rules, and point destructive verbs (reset, drop, wipe) only at resources the playbook marks

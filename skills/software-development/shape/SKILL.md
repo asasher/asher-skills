@@ -68,8 +68,9 @@ done. Run the `watch-until` skill on the spec'd tickets —
 condition: a new comment from the user, or an explicit readiness signal ("LGTM", "ready for agent"),
 in a comment or here in the thread. On a comment: apply the requested tweak to the ticket or spec,
 reply with what changed, resume watching. On the readiness signal: apply the readiness role per the
-tracker's recorded label roles (`docs/agents/backlog-policy.md`) — the user's decision, executed. The watch carries a timeout; when it reports
-timed out, surface the open state and stop.
+tracker's recorded label roles (`docs/agents/backlog-policy.md`) — the user's decision, executed — and
+note which spec revision the blessing covers, per to-spec's sign-off contract. The watch carries a
+timeout; when it reports timed out, surface the open state and stop.
 
 ## Resume
 

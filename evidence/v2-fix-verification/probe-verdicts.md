@@ -47,3 +47,24 @@ negation-shaped additions all trace to observed drift.
 foreign-claim handling lives in backlog-policy § Building hygiene, cited by SKILL.md) — a valid
 flagged-ambiguity answer per the probe rules. Sol transcripts alongside this file; Claude executor
 answers in the session transcript.
+
+## 5. Regression re-run, round 2 (fresh agents, post-residue-fix head)
+
+All five theme agents re-ran against head `8711305`+ with the same packets. **Every theme: residue
+none — 113/113 items NOW-SOLVED with citations.** The agents' remaining output was internal-consistency
+seams, each fixed in the follow-up commit:
+
+- shape now notes which spec revision an AFK blessing covers (to-spec's sign-off contract, both actors).
+- to-spec's step list names the contract-surface sweep alongside the seams step.
+- conduct.md's fixer degrades explicitly when `diagnosing-bugs` is absent; build declares the sibling
+  in its frontmatter.
+- merge-changes rules on approvals that name no head (they cover the head current when posted).
+- codebase.md's checker pointer is now two-way: code-review lists it as a standards source,
+  verify-your-work runs its recorded check commands.
+- backlog's isolation sentence names the three-way verdict (lane mechanics for serialize-verification).
+- The per-dispatch deadline is sized in hours, decoupled from the orphan sweep's multi-day quiet horizon.
+- The foreign-claim boundary distinguishes comments (allowed) from claim/label writes (not yours).
+- The lane-takeover note routes through the platform comment verb — via the build dispatcher on the
+  local binding, whose write classes forbid cross-ticket file edits from a worktree.
+
+Gates re-run after the seam fixes: catalog OK, site OK, staffing suites OK.

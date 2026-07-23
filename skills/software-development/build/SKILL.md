@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [adversarial-review, implement, prove-your-work, to-subagent, verify-your-work]
-  optional: []
+  optional: [diagnosing-bugs]
 ---
 
 # Build

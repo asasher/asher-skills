@@ -136,4 +136,5 @@
   removing the lock **after cleanup proof** — the singleton's ports free, env files restored, processes
   gone. Contenders wait on the lock, at the cadence the singleton actually turns over. A lock older
   than _<stale horizon, e.g. 30 min>_ with no activity on its holder's branch may be broken — the
-  taker notes the takeover on the holder's ticket.
+  taker notes the takeover on the holder's ticket through the platform's comment verb; on a binding
+  that serializes cross-ticket writes (the local binding), the note goes through the build dispatcher.

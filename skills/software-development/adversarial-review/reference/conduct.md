@@ -39,6 +39,7 @@ what make that enough.
   explicit non-fix reply with the reason it's wrong. Disagreement is addressed; silence is not.
 - A behavior finding is reproduced as a failing check before the fix commit — red first, on the surface
   where the reviewer saw it. A finding reproducible only at runtime routes through the
-  `diagnosing-bugs` skill rather than a patch argued from the diff.
+  `diagnosing-bugs` skill rather than a patch argued from the diff; absent that sibling, say so and
+  apply the same discipline in place — reproduce live before fixing.
 - Push, reply to each comment with what was done, prompt re-review, resume watching.
 - Done when `LGTM` lands.

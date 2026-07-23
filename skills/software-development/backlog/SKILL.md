@@ -52,15 +52,16 @@ discovering it. For each ticket: mark it building per the label roles — a disp
 dispatch twice, and the claim comment carries this runner's identity per the policy's § Building
 hygiene — then dispatch the `build` skill on it via the `to-subagent` skill, in its own worktree.
 Isolation and concurrency follow the environment playbook's verdicts (`docs/agents/environment.md`
-§ Worktree isolation, § Parallelism): a repo that can't isolate builds one ticket at a time in the main
-checkout. A spawn the harness refuses queues its ticket for the next freed slot — the claim stands, the
+§ Worktree isolation, § Parallelism): under `serialize-verification`, parallel builds share the
+serialized singleton through the playbook's lane mechanics; a repo that can't isolate at all builds
+one ticket at a time in the main checkout. A spawn the harness refuses queues its ticket for the next freed slot — the claim stands, the
 spawn is not busy-retried.
 
 This session babysits the fleet: each build's completion wakes it, and it relays the outcome — the
 review-ready change request, or the failure, with a died-silent build reported, never dropped. Each
-dispatch also gets a deadline (the policy's quiet horizon, § Building hygiene, or tighter): a build
-past it with no completion is checked — worktree, branch tip, process — and respawned or reported, so
-a wedged build surfaces instead of sitting silent. **The tracker is the run ledger**: the claim comment and the
+dispatch also gets a deadline sized to the expected build — hours, far tighter than the multi-day
+quiet horizon the orphan sweep uses: a build past it with no completion is checked — worktree, branch
+tip, process — and respawned or reported, so a wedged build surfaces instead of sitting silent. **The tracker is the run ledger**: the claim comment and the
 outcome comment are its events, so a dispatcher that dies or compacts mid-fleet reconstructs from
 there — on resume, reconcile the claims this runner owns against live worktrees and branch tips before
 dispatching anything new. Merging the resulting change requests waits for explicit authorization.

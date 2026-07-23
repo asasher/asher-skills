@@ -43,8 +43,9 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
 2. **Classify the work — dev or non-dev.** Our work isn't all software. A **dev spec** keeps the dev-only
    sections (Testing decisions, Test seams) and runs the seams step below; a **non-dev spec** skips both and
    uses only the core sections.
-3. **For dev specs only — sketch the test seams.** Name the public seams the work would be tested at and
-   **prefer the highest existing seam**.
+3. **For dev specs only — sketch the test seams and sweep the contract surface.** Name the public seams
+   the work would be tested at, **prefer the highest existing seam**, and enumerate the contract
+   decisions hiding as defaults (synthesis § Sweep the contract surface).
 4. **Write the spec onto the ticket** — the ticket body is canonical, **opening with a diagram** of the
    moving parts (flow, sequence, or state — whichever fits) before any prose, then the template's
    sections in generic vocabulary. Rewrite the body in place and post a short comment noting what
