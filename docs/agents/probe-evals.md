@@ -1,8 +1,8 @@
 # Playbook: Pre-deployment probe evals
 
-> Project playbook for this repo — the check discipline for skill changes, read by `verify` (it is the
-> recorded check command in `verifying.md`), `evidence` (the transcript + verdict-table contract), and
-> anyone shipping a new or reworked skill. Formerly the `docs/patterns/` probe-evals pattern doc; promoted
+> Project playbook for this repo — the check discipline for skill changes, read by `verify-your-work` (it
+> is the recorded check command in `codebase.md` § Checks), `prove-your-work` (the transcript +
+> verdict-table contract), and anyone shipping a new or reworked skill. Formerly the `docs/patterns/` probe-evals pattern doc; promoted
 > to a playbook when that directory was retired.
 
 ## Problem
