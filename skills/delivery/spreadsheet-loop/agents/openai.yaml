@@ -1,7 +1,0 @@
-interface:
-  display_name: "Spreadsheet Loop"
-  short_description: "Build and safely merge browser-native workbook changes"
-  default_prompt: "Use $spreadsheet-loop to preflight this workbook, decompose it into components, and choose a safe build or merge lane."
-
-policy:
-  allow_implicit_invocation: false

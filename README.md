@@ -29,7 +29,6 @@ including one marked `user`.
 |---|---|---|---|
 | system | `skill-loop` | user | orchestrator |
 | system | `staffing` | model | thread |
-| delivery | `spreadsheet-loop` | user | orchestrator |
 | creative | `bare-minimum-ux` | model | thread |
 | creative | `codex-imagegen` | model | thread |
 | creative | `maquette` | model | thread |
