@@ -47,9 +47,12 @@ stop.
    queue is left unmerged and reported.
 7. **Report.** Merged PRs with resulting commit SHAs, the order used, reconciliations performed, and anything
    left unmerged with its reason. Apply the tracker's post-merge lifecycle (labels, issue closure) where the
-   platform binding records it. Then clean up: delete merged branches per platform policy, remove their
-   worktrees, and tear down any per-change environment resources (containers, seeded stores) the
-   repo's environment playbook (`docs/agents/environment.md`, when it has one) names.
+   platform binding records it. Then clean up, **environment before working copy**: tear down any
+   per-change environment resources (containers, volumes, seeded stores) the repo's environment playbook
+   (`docs/agents/environment.md`, when it has one) names, running its teardown command from *inside* the
+   working copy — such commands typically resolve their target from the working directory, so one run
+   after the working copy is gone, or from the main checkout, reaps the wrong stack or the main one. Only
+   then remove the working copy and delete merged branches per platform policy.
 
 ## Boundaries
 

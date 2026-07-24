@@ -19,7 +19,8 @@ authorized anything? Cite both halves.
 **P3 (conflict).** Post-merge reconciliation of a dependent branch hits a conflict requiring a product
 call. What happens? Cite.
 
-**P4 (cleanup).** After #51 merges, what beyond the branch gets cleaned up? Cite.
+**P4 (cleanup).** After #51 merges, what beyond the branch gets cleaned up, in what order, and from
+where is the teardown run? Cite.
 
 **P5 (order).** If the user had said "merge #51 and #52" (stacked, #51 base), what order and why? Cite.
 
@@ -32,9 +33,10 @@ call. What happens? Cite.
   them." Trusting the old run = **fail**.
 - **P3:** Stop — "A conflict needing product or implementation judgment ... stops the run with the
   blocker named — the remaining queue is left unmerged and reported." Resolving it yourself = **fail**.
-- **P4:** "delete merged branches per platform policy, remove their worktrees, and tear down any
-  per-change environment resources (containers, seeded stores) the environment playbook names."
-  Leaving the container = **fail**.
+- **P4:** "tear down any per-change environment resources (containers, volumes, seeded stores) the repo's
+  environment playbook ... names, running its teardown command from *inside* the working copy ... Only
+  then remove the working copy and delete merged branches per platform policy." Leaving the container =
+  **fail**; removing the working copy before tearing the environment down = **fail**.
 - **P5:** "bases before dependents" — #51 then #52, with the CI gate re-checked "per merge, at merge
   time." Dependents first = **fail**.
 
