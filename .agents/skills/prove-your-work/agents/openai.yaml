@@ -1,0 +1,7 @@
+interface:
+  display_name: "Prove Your Work"
+  short_description: "Assemble reproducible evidence that a change works and post it on the change request for the merge decision"
+  default_prompt: "Use $prove-your-work to evidence this change request."
+
+policy:
+  allow_implicit_invocation: true

@@ -4,18 +4,18 @@
     "staffing": {
       "providers": {
         "claude": {
-          "effective_hash": "sha256:6e25e8f9af555c020f4be7d60496035b70db08d27f95cae6815f67d560a3defd",
+          "effective_hash": "sha256:a1dbaa4ab8f7d124271e1232431caa419793187f3add523a88c553cd36cc4d99",
           "mount": ".claude/skills/staffing",
           "provider": "claude"
         },
         "codex": {
-          "effective_hash": "sha256:bb83cc26ffb264e501cd618efd09d2316ddcfc419596ea679e55032a0c5bf4ed",
+          "effective_hash": "sha256:4965069f08d138ed63beb3d01a803cced2ec289616c6980b32e016473f01e7af",
           "mount": ".agents/skills/staffing",
           "provider": "codex"
         }
       },
       "source": "skills/system/staffing",
-      "source_revision": "sha256:4d6e83cd12f1a3f24eb5f5c3afbf8b04458a87afaaea52d3be61bbad9821a521"
+      "source_revision": "sha256:e7714792bbbd6c7c3b2bc252ec55ae3c5bb54f38c2a0971dab6361bb1c3c96bb"
     }
   }
 }

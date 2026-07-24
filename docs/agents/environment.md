@@ -1,6 +1,6 @@
 # Playbook: Environment
 
-> Project playbook for this repo. Shared — read by any backlog subskill that builds a branch, runs, or tests the app (`implement`, `verify`, `evidence`, `diagnose`, the PR step, the review fixer) and by `run` for the parallelism verdict. Tailor every section to this codebase. `setup` fills the isolation, seed, and parallelism sections from its audit.
+> Project playbook for this repo. Shared — read by any stage that builds a branch, runs, or tests the app (`implement`, `verify-your-work`, `prove-your-work`, `diagnosing-bugs`, the change-request step, the `adversarial-review` fixer) and by `backlog build` for the parallelism verdict. Tailor every section to this codebase. `backlog setup` fills the isolation, seed, and parallelism sections from its audit.
 
 ## Branching & deploys
 
@@ -8,6 +8,8 @@
 - Branch naming: `<issue-number>-<slug>` (e.g. `6-slim-backlog-composer`).
 - What a PR produces: nothing automated — no CI, no preview deploy. Review is human + `adversarial-review`.
 - What a merge produces: nothing automated. Skills are consumed elsewhere via `npx skills add <repo-url> --skill <name>`; a merge just updates `main`. No deploy step, no promotion path.
+- Deploy-target constraints: **n/a** — skills are consumed via `npx skills add`; there is no deploy target.
+- Credential preflight (run before work that will hit either gate): `gh auth status` proves the tracker/PR credential is live; a cheap `codex exec -s read-only --skip-git-repo-check "reply OK"` proves the second-executor route. This is what `backlog build`'s per-run preflight uses.
 
 ## Running locally
 
@@ -17,6 +19,7 @@
 - To exercise a skill (the equivalent of "running the app"): invoke it in a harness against a scenario. From Claude Code, the `Skill` tool or a subagent that reads the skill's `SKILL.md`; from Codex, per the skill's `agents/openai.yaml`. A "run" is a probe scenario driven through an executor model — see § Driving the app.
 - Scripts the skills ship (e.g. `scripts/review-server.py`) are stdlib-only Python 3 — run directly with `python3`, no install.
 - Services / ports / URLs: **none**, except the presentation surface (§ Presenting) and any transient review-server port.
+- Headless contract: **no dev stack — nothing to detach.** The only long-lived processes are review servers, which already run detached with logs and a recorded stop (`--stop --state <dir>`); teardown is audited via `tailscale serve status` plus the reap rule in § Presenting.
 
 ## Worktree isolation
 
@@ -32,6 +35,8 @@
   | Tailnet presentation surface | one URL root | no — one review published at a time |
 
   Neither collides with two worktrees editing skill files, so they do not force serialized *verification* of the code.
+
+  One row is standing in every multi-worktree repo: the parent `.git` itself. Concurrent git operations from parallel worktrees can collide on its locks (`index.lock`, ref locks) — a lock error is contention, so wait and retry briefly; a lock that outlives the retry with no live git process behind it is a crashed operation's leftover, and only then safe to remove.
 
 ## Seed data
 
@@ -59,12 +64,17 @@
   no product runtime; they do not substitute for live GitHub API behavior or script lifecycle/process checks.
 - Lifetime/cleanup: the owning test retains fixtures through its final assertion/evidence capture, then
   removes only its own temporary root.
+- **Per-ticket-disposable stores** — what a single ticket may reset or wipe wholesale: the ticket's own
+  worktree, its `VERIFY-<issue>-*` fixtures and temporary roots, and its own
+  `~/.backlog/surface/asher-skills/<issue>/` entry. Everything else is shared, and destructive verbs stop
+  at this line.
 
 ## Driving the app & capturing evidence
 
-> Set by `setup`'s app-access audit; read by `verify` (to exercise the app) and `evidence` (to capture proof). One entry per surface the loop verifies.
+> Set by `backlog setup`'s app-access audit; read by `verify-your-work` (to exercise the app) and `prove-your-work` (to capture proof). One entry per surface the loop verifies.
 
 - Form factor(s): **skill** — a Claude Code / Codex skill (SKILL.md + references/scripts). Not CLI/web/mobile/desktop. The thing under test is a prompt-driven procedure, so "driving the app" means running the skill against a scenario and judging the transcript.
+- Web driver: the v2 **Playwright-driving-Chrome** default is **n/a here** — there is no browser-driven app surface; probe executors are the drivers. The rule stays visible for the one browser-shaped case this repo has: judging **rendered HTML artifacts** (plans, prototypes, maquettes) covers happy/empty/error states in both color schemes, with screenshots as evidence; harness-native browser tools and `agent-browser` remain non-verification routes.
 - Driver per surface:
   - **In-session executor (Claude):** spawn a subagent (Agent tool, `subagent_type: claude` or `general-purpose`) that reads the target skill's `SKILL.md` and works a probe scenario. This is the primary driver — Opus/Fable in-session.
   - **Independent executor (gpt-5.6-sol):** `codex exec -s read-only --skip-git-repo-check` (or `-s workspace-write` when the run must edit) with a self-contained prompt that points at the skill and scenario. A second, differently-modeled executor per `docs/agents/probe-evals.md`.
@@ -90,7 +100,7 @@
 - Review server (annotated review with a recorded verdict — optional: spec sign-off lives on the ticket and prototype feedback arrives in chat, so this serves only artifacts that need one; contract: serve-via-tailnet `reference/annotation-contract.md`; scripts ship with the `serve-via-tailnet` skill — self-host path `skills/software-development/serve-via-tailnet/scripts/`): `python3 skills/software-development/serve-via-tailnet/scripts/review-server.py --doc <file> --title "…" --issue <n> --kind plan --state <run state dir> --surface ~/.backlog/surface/asher-skills --port <p> --public-url https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills/<n>/review`, with the port proxied once — `tailscale serve --bg --set-path /asher-skills/<n>/review http://localhost:<p>`. The agent blocks on `python3 skills/software-development/serve-via-tailnet/scripts/review-await.py --state <run state dir> --timeout <secs>` (exit 0 approve / 3 nits / 10 changes / 124 timeout).
 - Hub: `https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills/` serves the generated `index.html` beside `registry.json`; swept by `python3 skills/software-development/serve-via-tailnet/scripts/review-server.py --sweep --surface ~/.backlog/surface/asher-skills`.
 - Expose a live prototype: `tailscale serve --bg --set-path /asher-skills/<n>/proto http://localhost:<port>`.
-- Reap rule: on teardown, remove the issue's symlinks under `~/.backlog/surface/asher-skills/<n>/` and turn off its proxies — `tailscale serve --set-path /asher-skills/<n>/review off` (and `.../proto off`); `tailscale serve status` lists live handlers for the orphan sweep. **Note:** setup found a pre-existing `/review → http://localhost:8377` handler from an earlier session — reap it if dead (`tailscale serve --set-path /review off`).
+- Reap rule: on teardown, remove the issue's symlinks under `~/.backlog/surface/asher-skills/<n>/` and turn off its proxies — `tailscale serve --set-path /asher-skills/<n>/review off` (and `.../proto off`); `tailscale serve status` lists live handlers for the orphan sweep. **Note:** the pre-existing `/review → http://localhost:8377` handler (the v1 multi-repo hub) was reaped 2026-07-24 during the v2 migration; the LaunchAgent `com.asher.backlog-surface` still serves `~/.backlog/surface` on 8377 locally, and port 8377 remains taken.
 - Keep-awake: **none** (setup choice) — the surface is up when the machine is awake; harnesses hold sleep assertions during active runs. No LaunchAgent, no `caffeinate`. AFK reviews that outlast an active run may find the machine asleep; revisit if that bites.
 
 ## Model staffing
@@ -101,8 +111,8 @@ in `docs/agents/probe-evals.md`. There is no project floor, capability-provider,
 
 ## Parallelism verdict
 
-> Read by `run` before dispatch.
+> Read by `backlog build` before dispatch.
 
-- Verdict: **serialize-verification** — user chose sequential at setup. `run` dispatches one issue thread at a time.
-- If serialized, the singletons that force it: **none at the code level** — the shared-singleton list above holds no code-level collision, so here serialize-verification is a genuine **policy choice**, not the hard constraint a real app's shared DB/build-cache would impose. Flip to `parallel-safe` by re-running `backlog setup` and choosing parallel; the tracker and review surface are handled by serialization of their own writes, not of code verification.
-- Serialized exception lane: **n/a** — already fully serialized.
+- Verdict: **parallel-safe** — re-derived 2026-07-24 under v2 semantics (asher-skills#95): the v1 record said `serialize-verification` but justified it as "user chose sequential", and the shared-singleton audit above shows **no code-level collision** — nothing environmental forces serialization. v2 distinguishes constraint from preference, so the honest verdict is parallel-safe.
+- Standing dispatch preference: **sequential** — Asher's recorded working preference is one issue thread at a time; `backlog build` defaults to that unless he asks for fan-out. This is policy, not environment: no lane lock, no exception lane, and the preference can change per-run without re-auditing.
+- The tracker and review surface handle concurrency by serializing their own writes, never by serializing code verification. (Keep-awake stays **none** — reconfirmed 2026-07-24; the note lives beside § Presenting.)

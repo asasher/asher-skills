@@ -115,8 +115,12 @@ Durable documents carrying this repo's domain and direction — read the one who
 ## Agent skills
 
 These skills are installed for this project — self-hosted from this repo's categorized `skills/` sources,
-so `skills-lock.json` records a local source. The installed mounts predate the v2 family restructure;
-refresh with the atomic install command below.
+so `skills-lock.json` records a local source. The mounts carry the v2 family (refreshed 2026-07-24,
+asher-skills#95). Two install gotchas: the skills CLI's discovery skips directories named `build`, so the
+`build` skill is installed by hand (copy the source dir, symlink `.claude/skills/build`, write its lock
+entry); and a local self-install drops stray `skills/<name>` symlinks at the repo root — delete them
+(sources live only under `skills/<category>/`). `writing-great-skills` is an external
+(mattpocock/skills), recorded in `external-dependencies.lock.json`, excluded from reinstalls.
 
 | Skill | What it does here | Scope |
 |-------|-------------------|-------|
@@ -144,7 +148,7 @@ refresh with the atomic install command below.
 | handoff | Compacts the conversation into a handoff document | project |
 | staffing | Owns the model roster; each harness loads its global module plus this repo's deltas | project |
 | skill-loop | Iterates a skill through eval → revise cycles | project |
-| writing-great-skills | Authoring guidance for writing skills (from mattpocock/skills) | project |
+| writing-great-skills | Authoring guidance for writing skills (external: mattpocock/skills, see `external-dependencies.lock.json`) | project |
 
 **How they fit together:** `backlog` is a dispatcher. `backlog groom` sweeps unlabeled and
 `needs-shaping` tickets into user-confirmed batches, then fans one interactive shaping thread per batch

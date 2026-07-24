@@ -1,6 +1,8 @@
 ---
 name: diagnosing-bugs
-description: Diagnose hard bugs and performance regressions through a tight red-capable feedback loop. Use when a defect is broken, failing, throwing, flaky, slow, or assigned for diagnosis by another workflow. Not for speculative cleanup without an observed symptom.
+description: Diagnose hard bugs and performance regressions through a tight red-capable feedback loop. Use when a defect is failing, flaky, or slow. Not for speculative cleanup without an observed symptom.
+argument-hint: "<the observed symptom>"
+user-invocable: true
 metadata:
   invocation: model
   execution: thread
@@ -30,13 +32,9 @@ Input is the reporter's exact observed symptom plus the environment needed to dr
 3. the fix, regression proof at the correct seam or an explicit no-seam finding, and the original loop green;
 4. cleanup and project-check results.
 
-If no red-capable loop can be built, stop with what was tried and the concrete access, artifact, or temporary
-instrumentation needed. Do not replace a missing signal with a theory.
-
 ## Dependency surface
 
 - **Bundled references** — `reference/diagnosis.md` owns the method; `reference/setup.md` owns playbook
   reconciliation; `templates/diagnosing-bugs.md` is the delta-only playbook seed.
 - **Project playbook** — optional `docs/agents/diagnosing-bugs.md`, owned by the repo after setup and preserved
   on reconciliation.
-- **Sibling skills** — none. Callers invoke this skill by name and retain their surrounding lifecycle.

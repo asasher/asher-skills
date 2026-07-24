@@ -1,0 +1,7 @@
+interface:
+  display_name: "Staffing"
+  short_description: "Own the model roster — audit reachable models, then resolve which model should run each task"
+  default_prompt: "Use $staffing to resolve the required capability provider and choose the reachable model route for this task."
+
+policy:
+  allow_implicit_invocation: true

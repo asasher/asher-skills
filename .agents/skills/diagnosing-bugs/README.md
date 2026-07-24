@@ -15,7 +15,7 @@ method into the project.
   hypotheses; prediction-targeted instrumentation; correct-seam regression proof with an explicit no-seam
   outcome; cleanup and root-cause record.
 - **Local changes:** compressed the method behind a narrow public contract, removed upstream repository and
-  HITL-script assumptions, added a project-delta setup branch, made unattended blocking behavior explicit,
-  and defined a backlog lifecycle handoff.
+  HITL-script assumptions, added a project-delta setup branch, and made unattended blocking behavior
+  explicit.
 - **License/notices:** upstream is MIT; the preserved notice is in [LICENSE](LICENSE) and the immutable upstream
   license is [here](https://github.com/mattpocock/skills/blob/04fee67571bc52ac58a0e59fc4924a13f61b50a6/LICENSE).

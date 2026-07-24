@@ -1,69 +1,77 @@
 ---
 name: backlog
-description: Groom the backlog; run ready-for-agent issues through the build loop to reviewed changes; subcommands run standalone. Works against GitHub, a local on-disk tracker, or any bound platform.
-argument-hint: "[command] [issue, PR, or target]"
+description: Dispatch the backlog — groom sweeps unlabeled and needs-shaping tickets into user-confirmed batches and fans them into shaping threads; build fans ready, unblocked tickets into worktree-isolated subagents it supervises. Setup installs the playbooks.
+argument-hint: "[groom | build | setup] [ticket ids]"
 user-invocable: true
 disable-model-invocation: true
 metadata:
   invocation: user
   execution: orchestrator
-  requires: [diagnosing-bugs, prototype, research, review-loop, staffing]
+  requires: [build, shape, to-subagent, to-thread]
   optional: []
-  setup: reference/setup.md
 ---
 
 # Backlog
 
-This file is the command surface; each subcommand loads its own contract from `reference/` only when it runs.
+A dispatcher with two dispatch shapes. Grooming is interactive — human-in-the-loop work fans out as
+threads the user attends, and no result flows back. Building is autonomous — it fans out as subagents
+this session supervises to completion.
 
-## References
+Nouns are roles: *ticket*, *label*, *change request* are bound to this repo's real tracker, review
+surface, and version control by `docs/agents/platform.md`; label roles, dependency edges, and readiness
+by `docs/agents/backlog-policy.md`. Missing playbooks: run `backlog setup` first — don't improvise them.
 
-`reference/` and `templates/` are bundled with this skill; `docs/agents/` is the target repo's playbook, created by `backlog setup` and sibling setups. A subcommand's bundled reference is the **orchestration contract** — target, gates, staffing, handoffs. Project playbooks carry repo-specific working instructions; reusable disciplines may instead live in a named sibling. If a required playbook is missing, stop and tell the user to run `backlog setup`; do not improvise.
+## groom
 
-**Nouns are roles.** The references speak in a fixed vocabulary — *issue*, *label*, *PR*, *branch*, *worktree*, *push* — but each is a role, not a platform feature. `docs/agents/platform.md` binds every role to this repo's real tracker, review surface, version control, and harness, with verified commands per verb. On GitHub the bindings match the words; on other platforms (a local on-disk tracker, GitLab, jj) the words stay and the mechanics change. A reference never assumes a platform beyond what the binding records.
+Sweep the tracker for unlabeled tickets and tickets carrying the needs-shaping role, or take the ids
+given. Route first — as a plan, not as writes: a ticket whose decisions are already settled routes to
+the ready role, one owing reporter facts or human-only work to its parked role per the label roles, a
+duplicate or dead ticket to closure — the rest are shaping work. Group that rest twice: tickets whose
+decisions interlock form one **subject**; subjects that belong together (same subsystem, same domain
+area) form one **batch**, sized to what one thread can hold.
 
-## Commands
+**Confirm before anything changes.** Present the plan — which tickets, which batches, what each is
+about, and every proposed tracker mutation (role labels, closures, new tickets, body rewrites) — and
+adjust to the user's edits. The confirmation is the gate for all of it: until they approve, the tracker
+is untouched and no thread exists. Then execute the approved mutations and, per approved batch: mark
+its tickets shaping per the label roles — a ticket never gets two threads — and spawn one thread via
+the `to-thread` skill, named for the batch, seeded with the ticket ids (subjects marked) and the
+instruction to run the `shape` skill on them. A single batch spawns nothing: this session becomes the
+shaping thread and runs the `shape` skill itself.
 
-| Command | Role | Bundled reference | Project playbook |
-|---|---|---|---|
-| `groom` | With the human: classify work-type, clarify, resolve relationships, label readiness | `reference/groom.md` | `docs/agents/backlog-policy.md` + `platform.md` |
-| `run` | Queue ready issues; staff each coordinator before creating its worktree/child | `reference/run.md`, `reference/run-state.md`, `reference/build-loop.md` | `docs/agents/backlog-policy.md` + `platform.md`; threads read `change-description.md` + their step playbooks |
-| `setup` | Ask the work domain and install its baseline pack; reconcile playbooks; bind platforms; set isolation, app access, seed/checks, readiness; ensure siblings | `reference/setup.md`, `reference/worktree-isolation.md`, `templates/` | writes them |
-| `diagnose` | Hand a bug to the `diagnosing-bugs` skill; retain issue lifecycle and downstream verify/evidence | `reference/diagnose.md` + sibling by name | optional `docs/agents/diagnosing-bugs.md` delta + `environment.md` |
-| `prototype` | Throwaway code that answers a design question (logic or UI shape) | the `prototype` skill (composed by name) | — |
-| `research` | Establish source-backed facts and inferences; standalone or as the research work-type branch | the `research` skill (composed by name) | `docs/agents/researching.md` |
-| `implement` | Build the enhancement: just-in-time tactical plan, then test-first build | `reference/implement.md` | `docs/agents/implementing.md` + `environment.md` |
-| `refactor` | Behavior-preserving change locked by tests | `reference/refactor.md` | `docs/agents/refactoring.md` |
-| `verify` | Verdict loop: checks plus pass/fail against acceptance criteria | `reference/verify.md` | `docs/agents/verifying.md` + `environment.md` |
-| `evidence` | Capture and present proof once review converges; fill the PR's evidence block | `reference/evidence.md` | `docs/agents/evidence.md` + `environment.md` + `platform.md` |
-| `adversarial-review` | Reviewer ⇆ fixer subagents on a PR until LGTM or cap | `reference/adversarial-review.md` | `docs/agents/change-reviewer.md`, `docs/agents/change-fixer.md` + `environment.md` |
+Report each thread and how to attach; status on request comes from the tracker and the harness's thread
+listing. Inside the thread, shaping ends with a spec on each ticket and the user's blessing makes it
+ready — that endgame belongs to the `shape` skill, not this dispatcher.
 
-`docs/agents/environment.md` is the shared playbook (run/isolate/seed/auth + the parallelism verdict `run` reads); references that touch the app read it alongside their step playbook. `docs/agents/platform.md` is the other shared playbook — the platform bindings above. Five capabilities are **composed by plain name**, never imported: `diagnosing-bugs` owns the bug method; `research` source-backed investigation; `staffing` the roster/roles/fallback; `review-loop` presentation and review; `prototype` throwaway design questions.
+## build
 
-## Dependency surface
+Sweep for tickets carrying the ready role whose dependency edges are clear, or take the ids given.
+Preflight once per run: the platform verbs and credentials the builds will lean on answer a cheap live
+read — a dead one is drift, fixed by re-running `backlog setup` before any dispatch spends a build
+discovering it. For each ticket: mark it building per the label roles — a dispatched ticket must never
+dispatch twice, and the claim comment carries this runner's identity per the policy's § Building
+hygiene — then dispatch the `build` skill on it via the `to-subagent` skill, in its own worktree.
+Isolation and concurrency follow the environment playbook's verdicts (`docs/agents/environment.md`
+§ Worktree isolation, § Parallelism): under `serialize-verification`, parallel builds share the
+serialized singleton through the playbook's lane mechanics; a repo that can't isolate at all builds
+one ticket at a time in the main checkout. A spawn the harness refuses queues its ticket for the next freed slot — the claim stands, the
+spawn is not busy-retried.
 
-Three kinds of dependency, per `AGENTS.md` § Conventions:
+This session babysits the fleet: each build's completion wakes it, and it relays the outcome — the
+review-ready change request, or the failure, with a died-silent build reported, never dropped. Each
+dispatch also gets a deadline sized to the expected build — hours, far tighter than the multi-day
+quiet horizon the orphan sweep uses: a build past it with no completion is checked — worktree, branch
+tip, process — and respawned or reported, so a wedged build surfaces instead of sitting silent. **The tracker is the run ledger**: the claim comment and the
+outcome comment are its events, so a dispatcher that dies or compacts mid-fleet reconstructs from
+there — on resume, reconcile the claims this runner owns against live worktrees and branch tips before
+dispatching anything new. Merging the resulting change requests waits for explicit authorization.
 
-1. **Bundled references** — backlog's own dev contract under `reference/` plus the playbook baselines it ships under `templates/`: shared `templates/common/` plus per-domain packs `templates/<domain>/` (`software/` is the shipped default; the domain is chosen at setup). These ship with the skill and are not looked for in the target repo.
-2. **Project playbooks** — `docs/agents/*.md`, installed into the target repo by `setup`. A repo changes how a step works by editing its playbooks, never the skill.
-3. **Sibling skills** — `diagnosing-bugs`, `research`, `staffing`, `review-loop`, `prototype`, composed by plain name. `setup` ensures they are present; absent a sibling, backlog states the requirement rather than failing silently.
+## setup
 
-## Seams
-
-Backlog is deliberately one thin skill with three named internal contracts — documented seams, not separate
-skills:
-
-- **groom = organize.** The tracker as truth: admission audit, route judgment, serialized writes, the
-  verify-first triage discipline. The only stage that stamps readiness.
-- **run = schedule.** Dependency waves, parallelism, worktrees, dispatch, liveness — build-ignorant. **A
-  queue of one is a first-class invocation**: `backlog run <issue>` is the interactive chat-and-build shape —
-  the same build loop, no waves.
-- **build loop = one issue → reviewed PR.** The invariant dev tail (implement · verify · adversarial review ·
-  evidence). Its *inputs* vary by entryway — criteria from the ticket, the spec, or written at loop start;
-  evidence obligation scaling with absence — the gates never do.
-
-## Routing
-
-1. **No argument** → follow `reference/groom.md`, then offer to run the resulting ready-for-agent issues via `reference/run.md`. Show the command table first so the user can redirect.
-2. **First word matches a command** → load that bundled reference and follow it. Everything after the command name is the target (an issue number/URL, PR, branch, or path). A first word of `prototype` or `research` delegates to that named sibling rather than a bundled reference; invoke `staffing` or `review-loop` directly for their own commands.
-3. **First word does not match** → infer the closest command, state the inferred command, then load its reference and proceed.
+Install or reconcile the project playbooks from `templates/`: `docs/agents/platform.md` (platform
+bindings, with each verb verified live), `backlog-policy.md` (label roles, dependency edges, readiness
+decision), `environment.md` (run/seed/check), `codebase.md` (how the code is written and checked —
+seeded from the repo's own docs, accreting what sessions learn), `evidence.md` (the evidence bar),
+`change-description.md` (the change-request body outline). Reconcile with what
+exists — a repo-owned playbook is edited, never blindly overwritten. Verify the label roles exist in the
+tracker; create missing ones with the user's consent.

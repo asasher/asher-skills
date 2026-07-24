@@ -59,7 +59,8 @@ vague question.
   choose the inner fan-out from the remaining capacity and cost of contention.
 - After fan-in, deduplicate claims and reconcile cross-shard definitions and contradictions.
 - Use an independent challenger for consequential conclusions, weak-source claims, or multi-shard work. The
-  challenger tries to falsify material conclusions and find primary-source leakage; it does not rewrite.
+  challenger tries to falsify material conclusions and to catch secondary or uncited material standing
+  where a primary source should; it reports findings, never rewrites.
 - No fire-and-forget work: every shard is watched, has a named owner, and is either incorporated or reported
   as an unresolved gap before completion.
 
@@ -79,9 +80,8 @@ If research directly supports authoring a local skill and the project routes dev
 Temporary executor or visualization files may remain in thread scratch, but the delivered artifact is the
 canonical research file above.
 
-Research does not become evidence because someone reviews it. `evidence/` is for criterion-linked proof of a
-separate completed change. When the research dossier itself is the backlog deliverable, commit it in
-`research/`; its citations and audit are intrinsic provenance, not a second evidence package.
+When the research dossier itself is the work's deliverable, commit it in `research/`; its citations and
+audit are its intrinsic provenance.
 
 ## Dossier order
 
@@ -105,7 +105,7 @@ Before returning, check every material sentence:
 - Mutable or time-sensitive material carries an as-of or accessed date.
 - Contradictory sources and missing primary material are visible.
 - Parallel shards are all accounted for, reconciled, and no longer writing.
-- The dossier lives in the research location, never `evidence/`.
+- The dossier lives in the research location.
 
 The audit passes only when every material statement is traceable or explicitly unknown. Source count alone is
 not a quality signal.

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "external": {
+    "writing-great-skills": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "mount": ".agents/skills/writing-great-skills",
+      "computedHash": "581f78b50b3d81b095de86b5c18a4d9fa932fbe414cc82bd26d627d4da518f07",
+      "note": "Re-recorded 2026-07-24 (asher-skills#95): the old skills-lock entry claimed a local source that never existed; the mount is the only working-tree copy and is hands-off for lockfile-driven reinstalls."
+    }
+  }
+}

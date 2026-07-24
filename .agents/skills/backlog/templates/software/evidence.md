@@ -1,6 +1,6 @@
 # Playbook: Evidence
 
-> Project playbook for this repo. The backlog `evidence` subskill reads this file for what to capture, the format/storage contract, and the presentation contract that makes artifacts render for the human; the gates are in the skill's `reference/evidence.md`. How to run, seed, and authenticate against the app — and the capture drivers — are in `environment.md`; the review surface this presents to is bound in `platform.md`. The PR body outline that consumes the prepared evidence block is in `change-description.md`. Keep the presentation section for this repo's bound review surface; the others are reference for a rebind.
+> Project playbook for this repo. The `prove-your-work` skill reads this file for what to capture, the format/storage contract, and the presentation contract that makes artifacts render for the human. How to run, seed, and authenticate against the app — and the capture drivers — are in `environment.md`; the review surface this presents to is bound in `platform.md`. The PR body outline that consumes the prepared evidence block is in `change-description.md`. Keep the presentation section for this repo's bound review surface; the others are reference for a rebind.
 
 ## What to capture
 
@@ -14,10 +14,17 @@ Per change type — the shipped baseline; tune to this repo:
 - Data or migration change: the migration/command result plus before/after proof that the affected store is safe.
 - Repo-specific expectations beyond these: _<add yours, or "none">_.
 
-Captured once, after adversarial review converges, each artifact mapped to the acceptance criterion it proves.
-Styling-only verification captures may be reused only when their HEAD is the final reviewed HEAD and the
-Reviewer records **“no product-code change; no recapture”**; product-code, fixture, environment, or HEAD drift
-forces fresh final-HEAD evidence.
+Timing: capture once after adversarial review converges, each artifact mapped to the criterion it
+proves. A prior capture may be reused only when the reviewer confirmed the intervening change was
+styling-only.
+
+## Obligation scales with absence
+
+- **Unattended (AFK) run** — nobody watched, so the PR owes the full package above: every artifact at the
+  final reviewed HEAD, each mapped to the acceptance criterion it proves.
+- **Interactive work the human witnessed live** — the obligation may degrade to the PR body's verification
+  grades (each criterion marked with its grade); note that the human observed the behavior directly. Capture
+  full artifacts anyway when the change is risky or the reviewer isn't the person who watched.
 
 ## Format and storage
 
@@ -47,7 +54,7 @@ The contract is binding-independent: the deliverable is a **ready-to-paste block
 The review file (`platform.md` § Change review) lives on the same branch as the artifacts, so embeds are **repo-relative paths** — `![<criterion>](../../evidence/<slug>/<file>.png)` relative to the review file — which render in any markdown viewer and on the presentation surface alike, with no SHA pinning and no proxy pitfalls.
 
 - Mechanical checks before handing the block back: each path resolves from the review file's location at the branch's HEAD (`git cat-file -e HEAD:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4.
-- When the human reviews away from the machine, the evidence step may additionally publish the rendered review file to the presentation surface (`environment.md` § Presenting) — the committed file stays the source of truth, served in place by the `review-loop` skill. Publishing must preserve relative-path resolution: expose the review file *with* its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
+- When the human reviews away from the machine, the evidence step may additionally publish the rendered review file to the presentation surface (`environment.md` § Presenting) — the committed file stays the source of truth, served in place by the `serve-via-tailnet` skill. Publishing must preserve relative-path resolution: expose the review file *with* its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
 
 ### Other bindings
 
