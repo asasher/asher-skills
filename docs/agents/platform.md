@@ -7,7 +7,7 @@
 - Binding: **github** — repo `asasher/asher-skills`, via the `gh` CLI (authed as `asasher`, https protocol).
 - Verbs — verified against the repo at `backlog setup` time:
   - List open issues with their labels: `gh issue list --state open --json number,title,labels,body`.
-  - Read one issue — title, body, comments, labels: `gh issue view <n> --comments`.
+  - Read one issue — title, body, comments, labels: `gh issue view <n> --json title,body,labels,comments`. (The bare `gh issue view <n>` / `--comments` form is **broken** on this repo — GitHub's Projects-classic deprecation makes its GraphQL `repository.issue.projectCards` fetch fail; the `--json` field list avoids that path. Verified live 2026-07-25, asher-skills#98.)
   - Comment: `gh issue comment <n> --body '...'` (or `--body-file`).
   - Set / clear a role label: `gh issue edit <n> --add-label <role> --remove-label <role>`.
   - Create an issue: `gh issue create --title '...' --body '...' --label <work-type>,<readiness>`.
@@ -22,8 +22,8 @@
 - Binding: **github** — pull requests on `asasher/asher-skills`.
 - Verbs:
   - Open a PR (ready for review, with a body per `change-description.md`): `gh pr create --title '...' --body-file <file>`.
-  - Edit the PR body: `gh pr edit <n> --body-file <file>`.
-  - Read review comments since a SHA: `gh pr view <n> --comments`; for inline threads `gh api repos/asasher/asher-skills/pulls/<n>/comments`.
+  - Edit the PR body: `gh api -X PATCH repos/asasher/asher-skills/pulls/<n> -F body=@<file>`. (The `gh pr edit <n> --body-file <file>` form is **broken** on this repo by the same Projects-classic GraphQL deprecation — it fails on `repository.pullRequest.projectCards`; the REST PATCH avoids GraphQL entirely. Verified live 2026-07-25, asher-skills#98.)
+  - Read review comments since a SHA: `gh pr view <n> --json title,body,comments`; for inline threads `gh api repos/asasher/asher-skills/pulls/<n>/comments`. (The `gh pr view <n> --comments` form is **broken** by the same deprecation — same `--json`-avoids-GraphQL fix as the issue read above. Verified live 2026-07-25, asher-skills#98.)
   - Post a review comment / reply: `gh pr comment <n> --body '...'`.
   - Signal approval: an exact `LGTM` comment via `gh pr comment`.
   - Merge: the human merges on GitHub, or explicitly authorizes the `merge-changes` skill (`gh pr merge <n> --squash --delete-branch`) — the automated loop itself never merges.
@@ -44,7 +44,7 @@
 - Binding: **Claude Code** — the loop runs from Claude Code; the model roster per harness is in `environment.md` § Model staffing.
 - Create an issue coordinator with the route already selected before worktree/child creation: native Claude uses the Agent tool (`isolation: 'worktree'` when needed); Claude→Codex uses bounded `codex exec --cd <dir>` through its tracked wrapper (raw output teed to a file, resumable session id captured where offered, per the staffing external-worker contract); Codex→Claude uses bounded `claude -p --model <model> '<self-contained prompt>' </dev/null` and **never `--bare`**. Each command receives the worktree, coordinator assignment, and upward successor; completion is accepted only after its durable return/effect is verified.
 - Wrapper staffing evidence: the native Agent tool reports the spawned agent's type and model in its return metadata — that report is the wrapper-model proof. For `codex exec` children there is no native report; floor/cost compliance for the external model is **unproven** beyond the observable wrapper invocation, recorded per the template.
-- Directional reachability and fallback: a failed Codex→Claude invocation removes only that route and applies the successor in `environment.md` § Model staffing; Claude→Codex remains available. No Anthropic-policy or credit monitor gates dispatch. (Recorded machine facts: versioned model aliases are rejected by the installed Claude CLI, and Claude→`codex exec` is unavailable in unattended children — see staffing's reachability state.)
+- Directional reachability and fallback: a failed Codex→Claude invocation removes only that route and applies the successor in `environment.md` § Model staffing; Claude→Codex remains available. No Anthropic-policy or credit monitor gates dispatch. (Recorded machine facts: versioned model aliases are rejected by the installed Claude CLI. Claude→`codex exec` **is** available in unattended children — the earlier "unavailable" record was stale; verified live 2026-07-25 (asher-skills#98) when a native unattended Agent child ran `codex exec -s read-only` for its verification and review passes, and the `backlog build` preflight probe succeeded.)
 - Route trust: a routine dispatch trusts the recorded effect-verified verb — verification happens at setup, at re-verification, and when a route misbehaves, so dispatch needs no fresh probe session. A route that fails or hangs in use is drift: record the failure class, take the successor, re-verify that direction. Verification probe artifacts are cleaned up as part of the check.
 - Can a spawned thread read a skill's bundled references from disk? Yes — under `.claude/skills/<name>/` and `docs/agents/` in the checkout.
 - Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; a verdict wait blocks on the `serve-via-tailnet` skill's `review-await.py` (self-host path `skills/software-development/serve-via-tailnet/scripts/review-await.py`). Longer watches run per the `watch-until` skill's ladder — a watcher subagent, never the orchestrator inline (applies to both the approval gate and the PR-merge watch).
