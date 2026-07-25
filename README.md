@@ -4,17 +4,39 @@ Skills that I made or that I like. This is a single repo that I can use to insta
 
 ## Install
 
-Install globally:
+These skills install through this repo's own installer, run straight from GitHub — nothing is published
+to npm:
 
 ```bash
-npx skills add <repo-url> --skill <skill-name> -g
+npx github:asasher/asher-skills install --skill backlog build staffing   # first install: name the set
+npx github:asasher/asher-skills install                                  # refresh the recorded set
+npx github:asasher/asher-skills check                                    # diff mounts against source
 ```
 
-Install in the current project:
+Run it from the target repo. `install` mounts each skill at `.agents/skills/<name>` with a
+`.claude/skills/<name>` alias, pulls in any required siblings, compiles per-provider trees for skills
+declaring `metadata.variants` (today: `staffing`), and removes anything dropped from an explicit
+`--skill` set. A bare `install` refreshes exactly what is already recorded, so it never silently widens a
+curated selection.
+
+State lives in `.agents/asher-skills/install.json` — the set, each skill's source path, provider variants,
+and the source revision. No integrity hashes: `check` diffs each mount against the source it was built
+from and names the files that drifted, exiting 1 if any did. It is a dev-time command — skills are
+dev-time tooling and do not belong in a project's CI.
+
+From a checkout, the same thing without npx:
 
 ```bash
-npx skills add <repo-url> --skill <skill-name> -y
+python3 tools/install.py install --into <repo> --skill <names...>
+python3 tools/install.py check --into <repo>
 ```
+
+> **Not `npx skills add`.** That CLI cannot install these correctly: it ignores `metadata.variants` (so
+> `staffing` lands as uncompiled source with no roster), skips directories named `build`, and never
+> removes a skill dropped from the set — see
+> [#103](https://github.com/asasher/asher-skills/issues/103). It remains the right tool for the
+> third-party skills listed further down, which come from repos it does understand; this installer
+> touches only its own rows in `skills-lock.json` and otherwise leaves that file alone.
 
 Categories organize source browsing and the interactive installer. Skill names, `--skill <name>`, sibling
 references, and installed directories remain flat and unchanged. Invocation and execution are independent axes. `user` means
