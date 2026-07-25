@@ -319,8 +319,8 @@ class CatalogTests(unittest.TestCase):
 
     def test_root_marketplace_matches_generated_manifest(self) -> None:
         root = Path(__file__).parents[1]
-        committed = (root / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8")
-        self.assertEqual(committed, catalog.marketplace_text(root))
+        committed = (root / ".claude-plugin" / "marketplace.json").read_bytes()
+        self.assertEqual(committed, catalog.marketplace_text(root).encode("utf-8"))
 
     def test_marketplace_groups_categories_and_excludes_internal_skills(self) -> None:
         temp, root = self.fixture()
@@ -371,14 +371,17 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(run("marketplace", "--check"), 1)
 
         self.assertEqual(run("marketplace"), 0)
-        self.assertEqual(manifest_path.read_text(encoding="utf-8"), catalog.marketplace_text(root))
+        generated = manifest_path.read_bytes()
+        self.assertEqual(generated, catalog.marketplace_text(root).encode("utf-8"))
         self.assertEqual(run("marketplace", "--check"), 0)
 
-        data = json.loads(manifest_path.read_text(encoding="utf-8"))
+        data = json.loads(generated)
 
         data["plugins"][0]["skills"] = []  # a catalog skill missing from the file
         manifest_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+        mutated = manifest_path.read_bytes()
         self.assertEqual(run("marketplace", "--check"), 1)
+        self.assertEqual(manifest_path.read_bytes(), mutated)  # --check never repairs
 
         data["plugins"][0]["skills"] = [
             "./skills/creative/alpha",
@@ -387,8 +390,26 @@ class CatalogTests(unittest.TestCase):
         manifest_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         self.assertEqual(run("marketplace", "--check"), 1)
 
+        manifest_path.write_bytes(generated.replace(b"\n", b"\r\n"))  # newline drift
+        self.assertEqual(run("marketplace", "--check"), 1)
+
         self.assertEqual(run("marketplace"), 0)
+        self.assertEqual(manifest_path.read_bytes(), generated)
         self.assertEqual(run("marketplace", "--check"), 0)
+
+    def test_marketplace_rejects_misplaced_arguments(self) -> None:
+        temp, root = self.fixture()
+        self.addCleanup(temp.cleanup)
+        write_skill(root, "creative/alpha")
+        for argv in (
+            ["marketplace", "stray-skill", "--root", str(root)],
+            ["compile", "--check", "--root", str(root)],
+        ):
+            with self.subTest(argv=argv):
+                with contextlib.redirect_stderr(io.StringIO()):
+                    with self.assertRaises(SystemExit) as caught:
+                        catalog.main(argv)
+                self.assertEqual(caught.exception.code, 2)
 
     def test_internal_skill_is_cataloged_but_not_selectable(self) -> None:
         temp, root = self.fixture()

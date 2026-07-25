@@ -532,6 +532,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--provider", choices=sorted(PROVIDERS))
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args(argv)
+    if args.check and args.command != "marketplace":
+        parser.error("--check applies to the marketplace command")
+    if args.command == "marketplace" and args.skills:
+        parser.error("marketplace takes no skill arguments")
     try:
         if args.command == "compile":
             data = compile_catalog(args.root)
@@ -549,21 +553,24 @@ def main(argv: list[str] | None = None) -> int:
             print(f"valid: {len(actual['skills'])} skills")
         elif args.command == "marketplace":
             manifest = marketplace_manifest(args.root)
-            text = _marketplace_render(manifest)
+            expected = _marketplace_render(manifest).encode("utf-8")
             target = args.output or args.root / MARKETPLACE_PATH
             if args.check:
-                committed = target.read_text(encoding="utf-8") if target.is_file() else None
-                if committed != text:
+                committed = target.read_bytes() if target.is_file() else None
+                if committed != expected:
+                    regenerate = "catalog.py marketplace" + (
+                        f" --output {args.output}" if args.output else ""
+                    )
                     raise CatalogError(
                         f"{target}: marketplace manifest drifts from the compiled catalog; "
-                        "regenerate with `catalog.py marketplace`"
+                        f"regenerate with `{regenerate}`"
                     )
                 plugins = manifest["plugins"]
                 total = sum(len(plugin["skills"]) for plugin in plugins)
                 print(f"marketplace: {total} skills in {len(plugins)} plugins, no drift")
             else:
                 target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_text(text, encoding="utf-8")
+                target.write_bytes(expected)
         elif args.command == "closure":
             graph = discover(args.root)
             print(json.dumps(resolve(graph, set(args.skills), set(args.present)), indent=2, sort_keys=True))
@@ -581,7 +588,7 @@ def main(argv: list[str] | None = None) -> int:
                     sort_keys=True,
                 )
             )
-    except (CatalogError, OSError, json.JSONDecodeError) as exc:
+    except (CatalogError, OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     return 0
