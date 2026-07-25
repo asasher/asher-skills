@@ -34,8 +34,8 @@ python3 tools/install.py check --into <repo>
 > **Not `npx skills add`.** That CLI cannot install these correctly: it ignores `metadata.variants` (so
 > `staffing` lands as uncompiled source with no roster), skips directories named `build`, and never
 > removes a skill dropped from the set — see
-> [#103](https://github.com/asasher/asher-skills/issues/103). It remains the right tool for the
-> third-party skills listed further down, which come from repos it does understand; this installer
+> [#103](https://github.com/asasher/asher-skills/issues/103). It stays fine for skills from repos it
+> does understand — several under [Skills I Like](#skills-i-like) install that way. This installer
 > touches only its own rows in `skills-lock.json` and otherwise leaves that file alone.
 
 Categories organize source browsing and the interactive installer. Skill names, `--skill <name>`, sibling
@@ -101,32 +101,23 @@ The install/setup graph is compiled on demand from each skill's frontmatter
 
 ## Skills I Like
 
-### Project
-```bash
-## Almost always
-npx impeccable skills install
-npx skills add cyxzdev/Uncodixfy
-npx skills add https://github.com/vercel-labs/agent-browser --skill agent-browser
-npx skills add https://github.com/agentmail-to/agentmail-skills --skill agentmail portless
-npx skills add https://github.com/greptileai/skills --skill greploop
-npx skills@latest add mattpocock/skills --skill tdd
+Other people's skills I install alongside these. They come from their own repos, on their own terms —
+follow each project's own install instructions rather than any recorded here, which only go stale.
 
-## Depending on the deployment setup
-npx skills add https://github.com/railwayapp/railway-skills --skill use-railway
-npx skills add https://github.com/vercel/vercel --skill vercel-cli
-npx skills add https://github.com/get-convex/agent-skills
-```
+| Skill(s) | Source |
+|---|---|
+| `impeccable` | [impeccable](https://www.npmjs.com/package/impeccable) — vendor CLI, `npx impeccable install` |
+| `uncodixfy` | [cyxzdev/Uncodixfy](https://github.com/cyxzdev/Uncodixfy) |
+| `agent-browser` | [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) |
+| `agentmail`, `portless` | [agentmail-to/agentmail-skills](https://github.com/agentmail-to/agentmail-skills) |
+| `greploop` | [greptileai/skills](https://github.com/greptileai/skills) |
+| `tdd`, `caveman`, `diagnose`, `grill-me`, `improve-codebase-architecture`, `prototype`, `zoom-out`, `teach` | [mattpocock/skills](https://github.com/mattpocock/skills) |
+| `use-railway` | [railwayapp/railway-skills](https://github.com/railwayapp/railway-skills) |
+| `vercel-cli` | [vercel/vercel](https://github.com/vercel/vercel) |
+| convex skills | [get-convex/agent-skills](https://github.com/get-convex/agent-skills) |
+| `btca-local` | [davis7dotsh/better-context](https://github.com/davis7dotsh/better-context) |
+| `liteparse` | [run-llama/llamaparse-agent-skills](https://github.com/run-llama/llamaparse-agent-skills) |
 
-### Global
-
-```bash
-npx skills add cyxzdev/Uncodixfy -g
-npx skills add https://github.com/vercel-labs/agent-browser --skill agent-browser portless -g
-npx skills add https://github.com/agentmail-to/agentmail-skills --skill agentmail -g
-npx skills@latest add mattpocock/skills --skill caveman diagnose grill-me improve-codebase-architecture prototype zoom-out teach -g
-npx skills add https://github.com/greptileai/skills --skill greploop -g
-npx skills add https://github.com/railwayapp/railway-skills --skill use-railway -g
-npx skills add https://github.com/vercel/vercel --skill vercel-cli -g
-npx skills add https://github.com/davis7dotsh/better-context --skill btca-local -g
-npx skills add run-llama/llamaparse-agent-skills --skill liteparse -g
-```
+An external skill that an authored skill actually depends on is a different thing — it is declared in that
+skill's `metadata.external`, installed only after provenance review and explicit consent, and recorded in
+`external-dependencies.lock.json`. See `AGENTS.md` § Vocabulary.
