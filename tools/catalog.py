@@ -26,6 +26,18 @@ EXTERNAL_REQUIRED_KEYS = {"name", "kind", "source", "capability"}
 EXTERNAL_KEYS = EXTERNAL_REQUIRED_KEYS | {"version"}
 PROVIDERS = {"claude", "codex"}
 PROTECTED_VARIANT_PATHS = {"SKILL.md", "agents/openai.yaml", "reference/setup.md"}
+MARKETPLACE_PATH = Path(".claude-plugin/marketplace.json")
+MARKETPLACE_NAME = "asher-skills"
+MARKETPLACE_OWNER = {"name": "Asher"}
+MARKETPLACE_DESCRIPTION = "Asher's skills, grouped by purpose for installation and discovery."
+CATEGORY_DESCRIPTIONS = {
+    "creative": "Skills for visual design, interface craft, images, sprites, and media.",
+    "in-progress": "Skills under active development — installable knowingly, pending graduation to a permanent category.",
+    "personal": "Skills for personal operations, communications, opportunities, learning, and work.",
+    "software-development": "Skills for planning, building, diagnosing, and delivering work.",
+    "system": "Skills that operate and maintain the skill system itself.",
+    "thinking": "Skills for structured reasoning under uncertainty and constraint.",
+}
 
 
 class CatalogError(ValueError):
@@ -396,6 +408,47 @@ def compile_catalog(root: Path) -> dict[str, object]:
     }
 
 
+def marketplace_manifest(root: Path) -> dict[str, object]:
+    skills = discover(root)
+    categories: dict[str, list[str]] = {}
+    for skill in skills.values():
+        if skill.internal:
+            continue
+        if skill.category is None:
+            raise CatalogError(
+                f"{skill.name}: uncategorized skills cannot be published to the marketplace"
+            )
+        categories.setdefault(skill.category, []).append(skill.source)
+    uncurated = sorted(set(categories) - set(CATEGORY_DESCRIPTIONS))
+    if uncurated:
+        raise CatalogError(
+            "no curated marketplace description for: " + ", ".join(uncurated)
+        )
+    return {
+        "name": MARKETPLACE_NAME,
+        "owner": dict(MARKETPLACE_OWNER),
+        "description": MARKETPLACE_DESCRIPTION,
+        "plugins": [
+            {
+                "name": category,
+                "source": "./",
+                "description": CATEGORY_DESCRIPTIONS[category],
+                "category": category,
+                "skills": ["./" + source for source in sorted(categories[category])],
+            }
+            for category in sorted(categories)
+        ],
+    }
+
+
+def _marketplace_render(manifest: dict[str, object]) -> str:
+    return json.dumps(manifest, ensure_ascii=False, indent=2) + "\n"
+
+
+def marketplace_text(root: Path) -> str:
+    return _marketplace_render(marketplace_manifest(root))
+
+
 def _tree_files(root: Path, *, omit_variants: bool = False) -> list[Path]:
     files: list[Path] = []
     for path in sorted(root.rglob("*")):
@@ -468,14 +521,21 @@ def _write(path: Path, data: dict[str, object]) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("compile", "validate", "closure", "materialize"))
+    parser.add_argument(
+        "command", choices=("compile", "validate", "closure", "materialize", "marketplace")
+    )
     parser.add_argument("skills", nargs="*")
     parser.add_argument("--root", type=Path, default=Path.cwd())
     parser.add_argument("--output", type=Path)
     parser.add_argument("--snapshot", type=Path)
     parser.add_argument("--present", action="append", default=[])
     parser.add_argument("--provider", choices=sorted(PROVIDERS))
+    parser.add_argument("--check", action="store_true")
     args = parser.parse_args(argv)
+    if args.check and args.command != "marketplace":
+        parser.error("--check applies to the marketplace command")
+    if args.command == "marketplace" and args.skills:
+        parser.error("marketplace takes no skill arguments")
     try:
         if args.command == "compile":
             data = compile_catalog(args.root)
@@ -491,6 +551,26 @@ def main(argv: list[str] | None = None) -> int:
             if actual != expected:
                 raise CatalogError(f"{args.snapshot}: snapshot differs from source declarations")
             print(f"valid: {len(actual['skills'])} skills")
+        elif args.command == "marketplace":
+            manifest = marketplace_manifest(args.root)
+            expected = _marketplace_render(manifest).encode("utf-8")
+            target = args.output or args.root / MARKETPLACE_PATH
+            if args.check:
+                committed = target.read_bytes() if target.is_file() else None
+                if committed != expected:
+                    regenerate = "catalog.py marketplace" + (
+                        f" --output {args.output}" if args.output else ""
+                    )
+                    raise CatalogError(
+                        f"{target}: marketplace manifest drifts from the compiled catalog; "
+                        f"regenerate with `{regenerate}`"
+                    )
+                plugins = manifest["plugins"]
+                total = sum(len(plugin["skills"]) for plugin in plugins)
+                print(f"marketplace: {total} skills in {len(plugins)} plugins, no drift")
+            else:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(expected)
         elif args.command == "closure":
             graph = discover(args.root)
             print(json.dumps(resolve(graph, set(args.skills), set(args.present)), indent=2, sort_keys=True))
@@ -508,7 +588,7 @@ def main(argv: list[str] | None = None) -> int:
                     sort_keys=True,
                 )
             )
-    except (CatalogError, OSError, json.JSONDecodeError) as exc:
+    except (CatalogError, OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     return 0

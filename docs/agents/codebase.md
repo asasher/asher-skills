@@ -46,7 +46,10 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
 - Script check: for any changed stdlib-Python script, `python3 -m py_compile <script>` then drive it
   directly (`--help`, `--sweep`, the real paths) on this machine's Python 3.14. A script *refactor* is
   behavior-preserving only if the same driven paths produce the same output.
-- Catalog gate: `PATH=/usr/bin:$PATH python3 tools/test_catalog.py` (17 tests).
+- Catalog gate: `PATH=/usr/bin:$PATH python3 tools/test_catalog.py` (22 tests). This includes the
+  marketplace drift gate: `.claude-plugin/marketplace.json` must match the compiled catalog —
+  standalone check `python3 tools/catalog.py marketplace --check` (non-zero on drift), regenerate
+  with `python3 tools/catalog.py marketplace`.
 - Site manifest gate: a change touching any SDLC-family skill runs
   `PATH=/usr/bin:$PATH python3 site/check.py` (`site/MAINTENANCE.md`); errors block — **its exit code
   is the verdict; don't pipe it through `tail` in a `&&` chain or the failure is masked.**
@@ -86,3 +89,6 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
   it deletes the source itself).
 - The staffing provider trees under `.agents/` are compiled by staffing's apply step — regenerate,
   don't hand-edit.
+- `.claude-plugin/marketplace.json` is generated from the compiled catalog by
+  `python3 tools/catalog.py marketplace` — regenerate after any skill add/move/retire, don't
+  hand-edit; drift fails `tools/test_catalog.py` and `catalog.py marketplace --check`.

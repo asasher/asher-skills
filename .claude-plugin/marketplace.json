@@ -19,16 +19,12 @@
       ]
     },
     {
-      "name": "delivery",
+      "name": "in-progress",
       "source": "./",
-      "description": "Skills for planning, building, diagnosing, and delivering work.",
-      "category": "delivery",
+      "description": "Skills under active development — installable knowingly, pending graduation to a permanent category.",
+      "category": "in-progress",
       "skills": [
-        "./skills/delivery/backlog",
-        "./skills/delivery/diagnosing-bugs",
-          "./skills/delivery/prototype",
-        "./skills/delivery/to-spec",
-        "./skills/delivery/to-tickets"
+        "./skills/in-progress/goodwork"
       ]
     },
     {
@@ -41,15 +37,45 @@
         "./skills/personal/control-plane",
         "./skills/personal/eloquent",
         "./skills/personal/fair-deal",
-        "./skills/personal/goodwork",
         "./skills/personal/learn-anything",
-        "./skills/personal/manage-communications",
         "./skills/personal/manage-notes",
         "./skills/personal/manage-opportunities",
         "./skills/personal/manage-tasks",
         "./skills/personal/projects-triage",
+        "./skills/personal/relay",
         "./skills/personal/review-opportunities",
-        "./skills/personal/teamdrive"
+        "./skills/personal/teamdrive",
+        "./skills/personal/until-zero"
+      ]
+    },
+    {
+      "name": "software-development",
+      "source": "./",
+      "description": "Skills for planning, building, diagnosing, and delivering work.",
+      "category": "software-development",
+      "skills": [
+        "./skills/software-development/adversarial-review",
+        "./skills/software-development/backlog",
+        "./skills/software-development/build",
+        "./skills/software-development/code-review",
+        "./skills/software-development/diagnosing-bugs",
+        "./skills/software-development/domain-modeling",
+        "./skills/software-development/handoff",
+        "./skills/software-development/implement",
+        "./skills/software-development/interview",
+        "./skills/software-development/merge-changes",
+        "./skills/software-development/prototype",
+        "./skills/software-development/prove-your-work",
+        "./skills/software-development/research",
+        "./skills/software-development/serve-via-tailnet",
+        "./skills/software-development/shape",
+        "./skills/software-development/tdd",
+        "./skills/software-development/to-spec",
+        "./skills/software-development/to-subagent",
+        "./skills/software-development/to-thread",
+        "./skills/software-development/to-tickets",
+        "./skills/software-development/verify-your-work",
+        "./skills/software-development/watch-until"
       ]
     },
     {
@@ -70,8 +96,7 @@
       "skills": [
         "./skills/thinking/bayes",
         "./skills/thinking/constraints",
-        "./skills/thinking/dissolve",
-        "./.agents/skills/writing-great-skills"
+        "./skills/thinking/dissolve"
       ]
     }
   ]
