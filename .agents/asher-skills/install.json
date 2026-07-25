@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "source": "self",
+  "source_revision": "16c6b3c472c8388fcd26a918e1e3c70141a52e0b",
+  "mode": "live",
+  "skills": {
+    "adversarial-review": {
+      "source": "skills/software-development/adversarial-review"
+    },
+    "backlog": {
+      "source": "skills/software-development/backlog"
+    },
+    "build": {
+      "source": "skills/software-development/build"
+    },
+    "code-review": {
+      "source": "skills/software-development/code-review"
+    },
+    "diagnosing-bugs": {
+      "source": "skills/software-development/diagnosing-bugs"
+    },
+    "domain-modeling": {
+      "source": "skills/software-development/domain-modeling"
+    },
+    "handoff": {
+      "source": "skills/software-development/handoff"
+    },
+    "implement": {
+      "source": "skills/software-development/implement"
+    },
+    "interview": {
+      "source": "skills/software-development/interview"
+    },
+    "merge-changes": {
+      "source": "skills/software-development/merge-changes"
+    },
+    "prototype": {
+      "source": "skills/software-development/prototype"
+    },
+    "prove-your-work": {
+      "source": "skills/software-development/prove-your-work"
+    },
+    "research": {
+      "source": "skills/software-development/research"
+    },
+    "serve-via-tailnet": {
+      "source": "skills/software-development/serve-via-tailnet"
+    },
+    "shape": {
+      "source": "skills/software-development/shape"
+    },
+    "skill-loop": {
+      "source": "skills/system/skill-loop"
+    },
+    "staffing": {
+      "source": "skills/system/staffing",
+      "providers": {
+        "claude": ".claude/skills/staffing",
+        "codex": ".agents/skills/staffing"
+      }
+    },
+    "tdd": {
+      "source": "skills/software-development/tdd"
+    },
+    "to-spec": {
+      "source": "skills/software-development/to-spec"
+    },
+    "to-subagent": {
+      "source": "skills/software-development/to-subagent"
+    },
+    "to-thread": {
+      "source": "skills/software-development/to-thread"
+    },
+    "to-tickets": {
+      "source": "skills/software-development/to-tickets"
+    },
+    "verify-your-work": {
+      "source": "skills/software-development/verify-your-work"
+    },
+    "watch-until": {
+      "source": "skills/software-development/watch-until"
+    }
+  }
+}
