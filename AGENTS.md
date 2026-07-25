@@ -22,7 +22,7 @@ Skills Asher made or likes, kept in one repo so they can be installed elsewhere 
 - `tools/` — repo plumbing: the skill-catalog compiler (`catalog.py` + its tests); not part of any
   install.
 - `.agents/skills/` — primary mounts for skills installed *into* this repo; `.claude/skills/` may hold alias
-  mounts. Install provenance is tracked in `skills-lock.json`. See § Vocabulary.
+  mounts. Install provenance is tracked in `.agents/asher-skills/install.json`. See § Vocabulary.
 
 ## Vocabulary
 
@@ -39,12 +39,12 @@ Where a skill lives — three distinct places, three terms:
   of any install.
 - **Installed skill package** — the replaceable copy of a skill source that a harness loads. It is a build
   product: never edit it in place — edit the catalog-resolved skill source and reinstall, or the edit is lost
-  on refresh. Install provenance is tracked in `skills-lock.json`.
+  on refresh. Install provenance is tracked in `.agents/asher-skills/install.json`.
 - **Primary installed skill mount** — the Codex path `.agents/skills/<name>`, always a real copied directory.
   For a declared provider variant it is the compiled Codex tree; otherwise it is the shared package.
 - **Alias/provider installed skill mount** — a harness path such as `.claude/skills/<name>`. Unvaried skills
   use a symlink to the primary. A declared provider variant uses a separately compiled real directory plus
-  `.agents/asher-skills/variant-lock.json`; an undeclared independent copy is invalid.
+  `.agents/asher-skills/install.json`; an undeclared independent copy is invalid.
 - **Skill instance** — the consumer-owned project materialization created or maintained by running an
   installed package: an editable directory such as `control-plane/` containing scaffold, configuration,
   state, and artifacts. It is project material, not a package mount or author-side skill workspace, and a
@@ -115,7 +115,7 @@ Durable documents carrying this repo's domain and direction — read the one who
 ## Agent skills
 
 These skills are installed for this project — self-hosted from this repo's categorized `skills/` sources,
-so `skills-lock.json` records a local source. The mounts carry the v2 family. **This repo's mounts are
+so `install.json` records a local source. The mounts carry the v2 family. **This repo's mounts are
 live symlinks** into `skills/<category>/<name>`, so editing a source *is* editing the mount and they can
 never go stale; `staffing` is the one exception, compiled per provider because a compiled tree has no
 on-disk source to point at. `writing-great-skills` is an external (mattpocock/skills), recorded in
@@ -174,10 +174,22 @@ python3 tools/install.py install --self --into .            # refresh the record
 python3 tools/install.py install --self --into . --skill …  # change the set
 ```
 
-A bare `install` refreshes exactly the set `skills-lock.json` already records, so it can never silently
-widen a curated selection; naming `--skill` sets the selection, and anything dropped from it is removed
-(mount, alias, and lockfile entry) in the same pass. Only skills whose lockfile `source` matches this
-repo are ever pruned — third-party and external mounts are untouchable.
+A bare `install` refreshes exactly the set `.agents/asher-skills/install.json` already records, so it can
+never silently widen a curated selection; naming `--skill` sets the selection, and anything dropped from it
+is removed in the same pass. Only skills that file records are ever pruned — third-party and external
+mounts are untouchable.
+
+State is one first-party file. It records the set, each skill's source path, provider variants, and the
+source revision — **no integrity hashes**. Drift is answered on demand instead:
+
+```sh
+python3 tools/install.py check --into <repo>   # exit 1 and names the drifted files
+```
+
+That diffs each mount against the source it was built from, so it reports *which file* changed rather than
+"hash mismatch", and there is no stored quantity to keep in sync. `skills-lock.json` belongs to a different
+installer (`npx skills`); we read it once to migrate, strip our entries, and never write it again. Skills
+are dev-time tooling — nothing here belongs in a project's CI.
 
 Consumers install the same way without a checkout, since `npx` runs a public GitHub repo directly and
 this package is never published:

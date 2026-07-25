@@ -7,6 +7,7 @@ import contextlib
 import importlib.util
 import io
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -87,7 +88,9 @@ class CatalogTests(unittest.TestCase):
             except (UnicodeDecodeError, OSError):
                 continue
             for old in old_paths:
-                if old + "/" in text:
+                # `.agents/skills/<name>/` and `.claude/skills/<name>/` are mount
+                # paths, not the retired flat source layout this guards against.
+                if re.search(rf"(?<!\.agents/)(?<!\.claude/){re.escape(old)}/", text):
                     stale.append(f"{path.relative_to(root)}: {old}/")
         self.assertEqual(stale, [])
 
