@@ -1,7 +1,7 @@
 # asher-skills
 
 Skills Asher made or likes, kept in one repo so they can be installed elsewhere with
-`npx skills add <repo-url> --skill <name>`.
+`npx github:asasher/asher-skills install --skill <name>`.
 
 ## Layout
 
@@ -115,12 +115,11 @@ Durable documents carrying this repo's domain and direction — read the one who
 ## Agent skills
 
 These skills are installed for this project — self-hosted from this repo's categorized `skills/` sources,
-so `skills-lock.json` records a local source. The mounts carry the v2 family (refreshed 2026-07-24,
-asher-skills#95). Two install gotchas: the skills CLI's discovery skips directories named `build`, so the
-`build` skill is installed by hand (copy the source dir, symlink `.claude/skills/build`, write its lock
-entry); and a local self-install drops stray `skills/<name>` symlinks at the repo root — delete them
-(sources live only under `skills/<category>/`). `writing-great-skills` is an external
-(mattpocock/skills), recorded in `external-dependencies.lock.json`, excluded from reinstalls.
+so `skills-lock.json` records a local source. The mounts carry the v2 family. **This repo's mounts are
+live symlinks** into `skills/<category>/<name>`, so editing a source *is* editing the mount and they can
+never go stale; `staffing` is the one exception, compiled per provider because a compiled tree has no
+on-disk source to point at. `writing-great-skills` is an external (mattpocock/skills), recorded in
+`external-dependencies.lock.json` and untouched by installs.
 
 | Skill | What it does here | Scope |
 |-------|-------------------|-------|
@@ -165,9 +164,24 @@ plus `watch-until` convergence) → `prove-your-work`. `merge-changes` remains t
 authorization gate after a review-ready change request. `to-subagent` is the single staffing-aware
 dispatch route.
 
-**Source & updates:** installed from this repo itself. To refresh sources, install the complete desired
-local set in one atomic `npx skills add <path-to-this-repo> --skill <names...> -y` command — sequential
-single-skill adds can replace earlier selections. **Never `npx skills remove` here:** with the
-lockfile's local source path it deletes the skill *source* under `skills/`, not just the installed copy —
-uninstall by hand instead (remove the `.agents/skills/<name>` dir, the `.claude/skills/<name>` symlink,
-and the lockfile entry).
+**Source & updates:** installed from this repo itself, via this repo's own installer — **not
+`npx skills add`**, which cannot install these skills correctly (it ignores `metadata.variants`, so
+`staffing` lands as uncompiled source with no roster; it skips directories named `build`; and it never
+removes a skill dropped from the set — asher-skills#103).
+
+```sh
+python3 tools/install.py install --self --into .            # refresh the recorded set
+python3 tools/install.py install --self --into . --skill …  # change the set
+```
+
+A bare `install` refreshes exactly the set `skills-lock.json` already records, so it can never silently
+widen a curated selection; naming `--skill` sets the selection, and anything dropped from it is removed
+(mount, alias, and lockfile entry) in the same pass. Only skills whose lockfile `source` matches this
+repo are ever pruned — third-party and external mounts are untouchable.
+
+Consumers install the same way without a checkout, since `npx` runs a public GitHub repo directly and
+this package is never published:
+
+```sh
+npx github:asasher/asher-skills install --skill backlog build staffing …
+```

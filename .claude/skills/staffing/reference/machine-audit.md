@@ -47,7 +47,7 @@ The following is **one machine's audit result**, shown so you know the shape to 
 | gpt-5.6-sol   | 4    | 9            | 5     | high   |
 | gpt-5.6-terra | 6    | 5            | 3     | xhigh  |
 | sonnet-5      | 5    | 5            | 5     | high   |
-| opus-4.8      | 3    | 7            | 7     | high   |
+| opus-5        | 3    | 8            | 8     | high   |
 | fable-5       | 1    | 9            | 9     | high   |
 
 # Capability providers — effect-probed harness/tool routes, never model traits
