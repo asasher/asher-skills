@@ -41,7 +41,7 @@ say where its cost/intelligence/taste numbers come from. May you ship the five-m
 table as the roster? Cite the rule.
 
 **P8 (ac-6).** In `reference/machine-audit.md`, what status does the five-model table (gpt-5.6-sol,
-gpt-5.6-terra, sonnet-5, opus-4.8, fable-5) have? Quote the label the file gives it.
+gpt-5.6-terra, sonnet-5, opus-5, fable-5) have? Quote the label the file gives it.
 
 **P9 (ac-7).** Install `staffing` for a project that is identical to the machine default **except it forbids
 staffing below a higher floor**. What does the project override file contain? Cite the rule about what an
