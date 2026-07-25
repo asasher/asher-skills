@@ -19,7 +19,7 @@ and successors. It selects a route; it does not run the task or ship a fixed mac
 
 ## Commands
 
-- **setup** — load [setup](reference/setup.md); audit reachability and reconcile only the consented base/delta layers.
+- **setup** — load [setup](reference/setup.md); audit reachability and write or reconcile the project's staffing playbook.
 - **route `<task>`** — load [rankings-and-routing](reference/rankings-and-routing.md) and, for roles or route
   loss, [roles-and-fallback](reference/roles-and-fallback.md).
 - **reconcile** — load [install-and-reconcile](reference/install-and-reconcile.md) and the active provider's
@@ -43,15 +43,33 @@ the reachable coordinator-eligible set. Then:
 Never rank before gates or choose routine coordination cheapest-first. If no model is reachable, use the
 current model in a subagent and report the gap; never skip the stage.
 
-## Layers and sibling harnesses
+## Where the roster lives
 
-The user chooses project-only or a consented harness-specific global base plus sparse project deltas. Existing
-bases are preserved unless separately requested. Reachability is directional and effect-verified. For
-cross-harness routing or delegation, load the active installed
-package's `reference/harness.md`; provider compilation supplies that file without changing this shared public
-contract.
+**The project's staffing playbook is the sole authority.** Resolution reads it and nothing else. There is one
+layer, not two: no machine-level module, and no bundled roster consulted at runtime.
+
+The bundled roster is a **seed** — setup reads it once, when writing the playbook, and never again. A seed
+value that survives into the playbook does so because the audit verified it, not because it shipped. Absent a
+project playbook, report the gap and stop; never resolve from the seed, and never fall back to a
+home-directory path.
+
+The playbook carries **data**: model rows, per-harness eligibility and capability bindings, pins, floor,
+succession, probed reachability, and the machine the probes ran on. It never carries doctrine. Ranking and
+succession rules live in [rankings-and-routing](reference/rankings-and-routing.md) and
+[roles-and-fallback](reference/roles-and-fallback.md); harness command shapes, wrapper discipline, and wake
+mechanics live in the compiled provider's [harness mechanics](reference/harness.md). Those are identical on
+every machine, so they ship with the skill and are reviewed with it.
+
+One playbook serves every harness — a Codex session and a Claude session read the same file, and facts that
+differ between them are a column, not a second file. Reachability is directional and effect-verified: a
+failure removes one direction, never both.
+
+A playbook whose recorded machine is not this machine is stale. Re-run setup before dispatching rather than
+trusting rows probed elsewhere.
 
 ## Dependency surface
 
-- **Bundled:** setup, audit, routing, roles/fallback, install/reconcile, and compiled provider mechanics.
-- **Project/global:** roster base and delta playbooks written by setup with the user's scope consent.
+- **Bundled:** setup, audit, routing, roles/fallback, install/reconcile, compiled provider mechanics, and the
+  roster seed.
+- **Project:** the staffing playbook under the repo's agent-docs directory — the sole runtime authority,
+  written by setup.

@@ -28,12 +28,15 @@ workflow skill, an ad-hoc session, and any harness — not just one dev loop.
   independently; a failed direction falls back asymmetrically.
   Each external CLI runs inside a cheap, named, watched native relay; provider compilation keeps only the
   active harness mechanics in the installed tree.
-- **Scope is the human's choice.** Project-only (one project playbook, no global write) or
-  global-with-overrides: a harness-coupled global base filtered to the routes that harness can reach, plus
-  sparse project overrides in `docs/agents/` that carry
-  only deltas. A resolver reads base, then applies deltas.
+- **One layer, in the repo.** The project's staffing playbook under `docs/agents/` carries the complete
+  roster and is the only thing read at resolution time. The skill's bundled roster is a **seed**, read once
+  at setup and never at runtime. No home-directory module, no base-plus-delta overlay — two layers were the
+  previous shape and the reason this one exists.
+- **The playbook records its own machine.** Judgment numbers travel between machines; reachability, aliases,
+  and CLI versions do not, so a probe record at its head says where the rows came from. A playbook naming a
+  different machine is stale, and stale is worse than absent: it resolves cleanly and fails at the point of
+  use.
 - **Reconcile by LLM audit** — the shared posture across this repo's operator skills.
-- **Global writes are consent-gated** via a scope-decision flow.
 
 ## Layout
 
@@ -43,8 +46,8 @@ the setup branch; the other references hold the reusable audit and routing rules
 Declared `variants/{codex,claude}` overlays supply one active-harness `reference/harness.md` without
 duplicating the public identity, dependencies, invocation policy, or setup owner.
 `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
-`scripts/render-global.py` renders and preflight-checks the global modules for both providers, then
-applies them together — the script enforces the exact gates.
+`variants/*/templates/seed/roster-seed.md` is the per-provider roster seed setup reads when writing a
+project's playbook — data only; the doctrine that was once carried alongside it lives in the references.
 
 Self-contained at the file level; composes by name. **Sibling dependency: none — staffing is a root
 primitive** (invoked by siblings, depends on none).

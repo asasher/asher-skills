@@ -8,12 +8,11 @@ the harness is Claude Code.
 
 ## Staffing
 
-Load the harness-specific global module through `~/.claude/CLAUDE.md` § Staffing, then apply only the deltas
-below. Codex does the same through `~/.codex/AGENTS.md`.
+Read `docs/agents/staffing.md` fully before model choice, delegation, child/worktree creation,
+capability-provider work, watcher assignment, or route-loss fallback. It is the sole authority — the complete
+roster, this repo's deltas, and the machine its reachability rows were probed on. There is no machine-level
+staffing module; a home-directory roster is not consulted, and neither is the `staffing` skill's bundled seed.
+Codex sessions read the same file.
 
-This repo's deltas:
-
-- Probe evals run **dual-executor**: a Claude subagent in-session plus gpt-5.6-sol via `codex exec`
-  (`docs/agents/probe-evals.md`) — this repo's evals routinely shell out to Codex.
-- "Skill design" counts as orchestration-grade work here: it stays with the most capable model in the
-  session, never delegated to the mechanical builder.
+If that file is missing, or its probe record names a machine other than this one, say so and run
+`staffing setup` rather than dispatching on rows nobody verified here.

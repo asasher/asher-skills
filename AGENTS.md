@@ -65,9 +65,11 @@ How skills and instructions relate:
 - **Playbook** — a repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup
   (e.g. `environment.md`, `platform.md`). Skills speak in role nouns; the playbook binds those roles to
   this repo's reality. Owned by the repo once written — setups reconcile them, never blindly overwrite.
-- **Global agent instruction files** — the machine-level memory files every session on this machine
-  loads: `~/.claude/CLAUDE.md` (Claude Code) and `~/.codex/AGENTS.md` (Codex). Carry machine truths —
-  presentation conventions, the staffing base — never project specifics.
+- **Global agent instruction files** — the machine-level files every session on this machine loads:
+  `~/.claude/CLAUDE.md` (Claude Code) and `~/.codex/AGENTS.md` (Codex). Being unversioned and unreviewable,
+  they are **not** a home for durable knowledge: a fact only they carry is invisible to a fresh clone, a
+  cloud runner, and every diff. Staffing moved out of them for exactly that reason. A machine truth belongs
+  to the skill that owns it, or to this repo's `environment.md`; nothing new goes here.
 - **Project agent instruction files** — this repo's `AGENTS.md` (harness-neutral base; Claude Code never
   reads it natively, so `CLAUDE.md` inlines it via an `@AGENTS.md` import) and `CLAUDE.md` (that import
   plus Claude Code-specific additions and deltas). They extend and override the global files for work in
@@ -82,6 +84,8 @@ Durable documents carrying this repo's domain and direction — read the one who
 
 - `CONTEXT.md` — the domain glossary (skill kinds, layer law, shaping vocabulary); read before naming
   things or when a term of art is ambiguous.
+- `docs/adr/` — architecture decision records, sequentially numbered; read before revisiting a settled
+  structural decision, and write one when a hard-to-reverse call would otherwise look arbitrary later.
 
 ## Conventions
 
