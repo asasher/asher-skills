@@ -1,125 +1,149 @@
 {
-  "version": 1,
   "skills": {
     "adversarial-review": {
+      "computedHash": "sha256:5b034f6018270a01f04f5a34c9f3312d643e9b3d379a5e1d360083df2e856cff",
+      "skillPath": "skills/software-development/adversarial-review/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "a1d58e02d791d52e2b4e5b20d7b6f3aa84adb3ff9ca13484265ff31816e09de3"
+      "sourceType": "local"
     },
     "backlog": {
+      "computedHash": "sha256:d39b11546fcddae4c733cd1f4d4b623e88be02b7cb895b9d1b84c779a185fd12",
+      "skillPath": "skills/software-development/backlog/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "0724fedcefa394a54834c5de67d1a594689258590bc30f3911542b401556ff79"
+      "sourceType": "local"
     },
     "build": {
+      "computedHash": "sha256:ec442f37881bce830331d38d7726e1a111aa96c78cf5b828f32fd68e407025c8",
+      "skillPath": "skills/software-development/build/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "b64c6e9bec32a14ed9107cdcbed7376e01f975fb103ad866fe5c7c1489e97f9e"
+      "sourceType": "local"
     },
     "code-review": {
+      "computedHash": "sha256:6b4e66b66c51adb8f7132a1aa4fd3578d4a43752409416a5817e7badcd0521dd",
+      "skillPath": "skills/software-development/code-review/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "a81629ebc8086fe5ff68a7819583a7778b079ada2016dbe670ad99c9e59c8073"
+      "sourceType": "local"
     },
     "diagnosing-bugs": {
+      "computedHash": "sha256:d9d6c5819b4da91d9a83b8dd8174653c79c0d0e6087d49ab0eed488f2aa15429",
+      "skillPath": "skills/software-development/diagnosing-bugs/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "f249dbea5519c02c7f82843804839d6ecec074203fcc41464edd9bead2918080"
+      "sourceType": "local"
     },
     "domain-modeling": {
+      "computedHash": "sha256:1303894e52cca2956a73e9f61efab26ef73ed1a4ce703e95ccab0f66a827a40d",
+      "skillPath": "skills/software-development/domain-modeling/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "1a70086c1ba39e59de2fe74d541a7f0905cd4b2b0ac9a0997f3b6c5a99ca7c41"
+      "sourceType": "local"
     },
     "handoff": {
+      "computedHash": "sha256:8041f0f73e94da54a6c818e5e4a081f6fe2ec5008f53763eb0e2c88c882d89df",
+      "skillPath": "skills/software-development/handoff/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "bdc6c35bb928fa7a1665ffa33899b0ed7615003a7120f4d5cf5898983ac80664"
+      "sourceType": "local"
     },
     "implement": {
+      "computedHash": "sha256:42f5f759e39318504347283d35c5a5462766967f461610853f43715cc81c3af0",
+      "skillPath": "skills/software-development/implement/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "6b2aef39201716fa4b6c8f65113378cbdfe1c1f632b09377b1e645c2adb61a12"
+      "sourceType": "local"
     },
     "interview": {
+      "computedHash": "sha256:a66521d3e8e18542b5fea6d998b1117849430b08bd1f81612fc1396bc5f97a4a",
+      "skillPath": "skills/software-development/interview/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "1c10d68ad5650f01148fea4890abca918b617672eab4bdac858b6756d6edde6a"
+      "sourceType": "local"
     },
     "merge-changes": {
+      "computedHash": "sha256:fb68458f86b9dd9a573380a2013db1ab49e328fbd3a4ca0746dc57953bbe89c0",
+      "skillPath": "skills/software-development/merge-changes/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "0067efb22bdc7c5f46123b4a2f83589b8a42587114b4c002d6498b263d9580ae"
+      "sourceType": "local"
     },
     "prototype": {
+      "computedHash": "sha256:64918aee2e501b1c615fe46787f01f2dc5fa391c4487ee2a5a6901b7e1ce9479",
+      "skillPath": "skills/software-development/prototype/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "1a99dc1c52898dd5a89cac730f2cc592c9b1ccf6780a37d35fd319f67ba28372"
+      "sourceType": "local"
     },
     "prove-your-work": {
+      "computedHash": "sha256:838661262c05010cbcd4d9b8f60f9f9ff6709e6663dd1d1758828b506e40fa36",
+      "skillPath": "skills/software-development/prove-your-work/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "e20bee8b9a451ff953ddfed7538712d652b7a1a1f3dd0430d93b5fb3f717c273"
+      "sourceType": "local"
     },
     "research": {
+      "computedHash": "sha256:22ed18408ea836cb61a1e021041512a9bf7fe7eaf180d2ddf8977c4f0b008d06",
+      "skillPath": "skills/software-development/research/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "030807a57ada707a42923626df2924095b0e8a601e9dcf1646e229b4bea7cff9"
+      "sourceType": "local"
     },
     "serve-via-tailnet": {
+      "computedHash": "sha256:6e6e5af7fd5695373b7908a3e9d3766acf934f9b2b119a93593663358ba443d5",
+      "skillPath": "skills/software-development/serve-via-tailnet/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "98a8472fee34fe6ae21d310c2e1f7152d22a7a99a2acf1010911f4588ad5181c"
+      "sourceType": "local"
     },
     "shape": {
+      "computedHash": "sha256:378556d3f3b93cb9f61694f2ad75ee61e698f01a55d5bfccf9440ff5eabe98c1",
+      "skillPath": "skills/software-development/shape/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "05d7cebb1821461a6b103dca31dc8dfb5fe13f09253000bf2fc4c7e7b051a2a5"
+      "sourceType": "local"
     },
     "skill-loop": {
+      "computedHash": "sha256:99695ee3fc82da2102db082160eca02fc9dfd35e6422931862f28c0b45af9370",
+      "skillPath": "skills/system/skill-loop/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "09a59c6e4e6713b139f3e420010472d4434fb5688400c43466229c317da95eae"
+      "sourceType": "local"
     },
     "staffing": {
+      "computedHash": "sha256:1688789df8e38d7c443b7e50cc72ca31f78b750c583129d4b6c23fe9d8d292d0",
+      "skillPath": "skills/system/staffing/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "78c2e2239f38780e1cf627f291458a7490c1fb4ed4e91ad28a537b3007208bb6"
+      "sourceType": "local"
     },
     "tdd": {
+      "computedHash": "sha256:45231e6c8ad872c9e94520e39a9fd0c84d9ad0add9294f437851f4206f68a38d",
+      "skillPath": "skills/software-development/tdd/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "67af93861450bc8715ec73c0acb36bf00e4a003a0d2d645d647693909a9ee5e7"
+      "sourceType": "local"
     },
     "to-spec": {
+      "computedHash": "sha256:f5be8d1be5d8b5de8bd447b40b23c501d0724b5cff513b0d4551959081789626",
+      "skillPath": "skills/software-development/to-spec/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "095098b0013dc17bed5cfdcdedc366f5a509d2da287bc791553b1070b8ff10f1"
+      "sourceType": "local"
     },
     "to-subagent": {
+      "computedHash": "sha256:083a6e748791987e7a15567582bcedd515f4f0352875e6b4a4f5bbab4ebde669",
+      "skillPath": "skills/software-development/to-subagent/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "43bd61b6477c67a3398536ef5b72c95ac1aeaac17194052e6295ddf8f37e76f1"
+      "sourceType": "local"
     },
     "to-thread": {
+      "computedHash": "sha256:ad37d9ce1ab2736554b63de186b8e9bf2db38c5ee272ee63be9e8a95853a64c8",
+      "skillPath": "skills/software-development/to-thread/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "e8cda36f16a2a33a1823b3a5767dceab9d840dc5cc363d7cdf3045f9da34ca49"
+      "sourceType": "local"
     },
     "to-tickets": {
+      "computedHash": "sha256:799a67a36a9bbd509fc23a928bf23c6a8ac1dcf0c28c511703cde8e7dec7eca0",
+      "skillPath": "skills/software-development/to-tickets/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "26c9873298911958e7d466e7e0fb55cc97354094d7a5f583d5d71bbf80a21825"
+      "sourceType": "local"
     },
     "verify-your-work": {
+      "computedHash": "sha256:a6b381e6697c358f22526a397ef5a148e8c090de2916dc131b0618ea89ca756f",
+      "skillPath": "skills/software-development/verify-your-work/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "0ad0aee0eef9625de0b5ebbfa7596d83d611886fbef1f0a3186e1dcee80ae518"
+      "sourceType": "local"
     },
     "watch-until": {
+      "computedHash": "sha256:64e6cbecd929bb17e9a7cbcfae4f96e27ce84265c1c37ee9ae991a79e349b0e5",
+      "skillPath": "skills/software-development/watch-until/SKILL.md",
       "source": "/Users/asher/Projects/asher-skills",
-      "sourceType": "local",
-      "computedHash": "2f80ad029abddb3329818fa1538a7bc6cbbbb804a3a59021f6e3de61ab44b569"
+      "sourceType": "local"
     }
-  }
+  },
+  "version": 1
 }
