@@ -23,6 +23,7 @@ still compiled, because a compiled tree has no on-disk source to point at.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -55,9 +56,52 @@ def _read_json(path: Path, default: dict) -> dict:
         raise InstallError(f"{path}: invalid JSON") from exc
 
 
-def _write_json(path: Path, data: dict) -> None:
+def _write_json(path: Path, data: dict, *, sort_keys: bool = False) -> None:
+    """Write JSON preserving key order by default.
+
+    `skills-lock.json` is only partly ours — third-party entries live there too —
+    so sorting keys would rewrite every foreign entry's field order for no value
+    change. Order is preserved and callers decide what to touch.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(data, indent=2, sort_keys=sort_keys) + "\n", encoding="utf-8")
+
+
+SKIPPED_DIRS = {".git", "node_modules"}
+
+
+def installed_hash(mount: Path) -> str:
+    """Hash an installed mount the way the vendor CLI's `computeSkillFolderHash` does.
+
+    sha256 over every regular file in the folder, sorted by forward-slashed relative
+    path, updating with the path then the bytes; bare hex, no prefix. Matching the
+    vendor keeps `skills-lock.json` verifiable by existing checkers.
+
+    This hashes what is actually on disk, so it detects a hand-edited mount — which
+    a hash of the *source* tree cannot. The vendor writes this quantity for some
+    skills and a download-manifest snapshot for others; the snapshot is not derivable
+    from the folder, so entries carrying one have never been verifiable. Writing this
+    for every skill we install makes them all verifiable.
+    """
+    files: list[tuple[str, bytes]] = []
+
+    def walk(directory: Path) -> None:
+        for entry in sorted(directory.iterdir()):
+            if entry.is_symlink():
+                continue  # Node's Dirent.isFile() is false for symlinks
+            if entry.is_dir():
+                if entry.name not in SKIPPED_DIRS:
+                    walk(entry)
+            elif entry.is_file():
+                files.append((entry.relative_to(mount).as_posix(), entry.read_bytes()))
+
+    walk(mount)
+    files.sort(key=lambda item: item[0])
+    digest = hashlib.sha256()
+    for relative, data in files:
+        digest.update(relative.encode("utf-8"))
+        digest.update(data)
+    return digest.hexdigest()
 
 
 def _clear(path: Path) -> None:
@@ -183,7 +227,7 @@ def install(
             "source": label,
             "sourceType": "local" if live else "github",
             "skillPath": f"{skill.source}/SKILL.md",
-            "computedHash": catalog.tree_hash(source_root / skill.source, omit_variants=True),
+            "computedHash": installed_hash(target / PRIMARY / name),
         }
         installed.append(name)
 
@@ -192,9 +236,10 @@ def install(
         entries.pop(name, None)
         variants.pop(name, None)
 
+    skills_lock["skills"] = {name: entries[name] for name in sorted(entries)}
     _write_json(target / SKILLS_LOCK, skills_lock)
     if variants:
-        _write_json(target / VARIANT_LOCK, variant_lock)
+        _write_json(target / VARIANT_LOCK, variant_lock, sort_keys=True)
 
     return {
         "target": str(target),

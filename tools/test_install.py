@@ -141,6 +141,44 @@ class InstallTest(unittest.TestCase):
             variant_before, (self.target / ".agents/asher-skills/variant-lock.json").read_bytes()
         )
 
+    def test_computed_hash_matches_the_vendor_folder_hash(self) -> None:
+        """The lock must stay verifiable by the vendor's own checker.
+
+        `build` is the anchor: metis carried b64c6e9b… for it on 2026-07-24, computed
+        by the vendor CLI, and the source has not changed since. Reproducing it proves
+        we implement `computeSkillFolderHash`, not merely something deterministic.
+        """
+        install.install(ROOT, self.target, {"build"})
+        recorded = self.lock()["build"]["computedHash"]
+        self.assertNotIn(":", recorded, "must be bare hex, not a prefixed digest")
+        self.assertEqual(len(recorded), 64)
+        self.assertEqual(
+            recorded, install.installed_hash(self.target / ".agents/skills/build")
+        )
+        self.assertTrue(recorded.startswith("b64c6e9bec32"), recorded)
+
+    def test_computed_hash_tracks_the_installed_tree(self) -> None:
+        """A source hash cannot catch a hand-edited mount; this must."""
+        install.install(ROOT, self.target, {"handoff"})
+        before = self.lock()["handoff"]["computedHash"]
+        edited = self.target / ".agents/skills/handoff/SKILL.md"
+        edited.write_text(edited.read_text() + "\nhand edit\n")
+        self.assertNotEqual(before, install.installed_hash(edited.parent))
+
+    def test_foreign_entries_keep_their_field_order(self) -> None:
+        """skills-lock.json is only partly ours — don't churn other people's entries."""
+        install.install(ROOT, self.target, {"handoff"})
+        lock_path = self.target / "skills-lock.json"
+        data = json.loads(lock_path.read_text())
+        foreign = {"computedHash": "deadbeef", "zzz": 1, "source": "someone/else"}
+        data["skills"]["vendor-thing"] = dict(foreign)
+        lock_path.write_text(json.dumps(data, indent=2))
+
+        install.install(ROOT, self.target, {"handoff"})
+        after = json.loads(lock_path.read_text())["skills"]["vendor-thing"]
+        self.assertEqual(list(after.keys()), list(foreign.keys()))
+        self.assertEqual(after, foreign)
+
     def test_bare_install_refreshes_the_recorded_set(self) -> None:
         """A bare `install` must never widen a curated selection to every skill."""
         install.install(ROOT, self.target, {"handoff", "watch-until"})
