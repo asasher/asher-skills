@@ -1,10 +1,14 @@
 # Playbook: Evidence
 
-> Project playbook for this repo. The `prove-your-work` skill reads this file for what to capture, the format/storage contract, and the presentation contract that makes artifacts render for the human. How to run, seed, and authenticate against the app — and the capture drivers — are in `environment.md`; the review surface this presents to is bound in `platform.md`. The PR body outline that consumes the prepared evidence block is in `change-description.md`. Keep the presentation section for this repo's bound review surface; the others are reference for a rebind.
+> Project playbook for this **skill-authoring** repo (`backlog-policy.md` § Work domain). The `prove-your-work` skill reads this file for what to capture, the format/storage contract, and the presentation contract that makes artifacts render for the human. How to run probe scenarios through an executor harness, and the capture drivers, are in `environment.md` § Driving behavior; the review surface this presents to is bound in `platform.md`. The PR body outline that consumes the prepared evidence block is in `change-description.md`. Keep the presentation section for this repo's bound review surface; the others are reference for a rebind.
 
 ## What to capture
 
-This repo is the **no-running-app case**: there is no product surface to drive, so the honest proof is the probe-eval transcript (plus rendered-HTML screenshots for the skills that emit one). On a repo *with* a running app, evidence would instead be real check/test output plus screenshots driven through the actual app — a probe transcript is not a substitute there. Here, probes are the substitute because there is nothing else to drive.
+For skill behavior, the default proof is the **cited transcript from each executor role** plus a **pass/fail verdict table mapping every probe to every prewritten answer-key criterion** (`docs/agents/probe-evals.md`), with rendered-HTML screenshots added for the skills that emit one. Preserve the exact scenario and context each role received; for a behavioral rework, show the before/after verdict shift.
+
+This is the **direct observation, not a substitute for one.** A skill's runtime surface genuinely is an executor harness loading it and responding to a probe — so a graded transcript stands where a screenshot of a running app would stand elsewhere, and it is the stronger proof here, not a concession. (Recorded 2026-07-27 with the switch to the `skill-authoring` pack. The previous `software` pack framed probe transcripts as "a greenfield-only fallback" for repos with nothing to drive, which mis-described what this repo's evidence actually is.)
+
+After review converges, copy the final verify step's raw transcript and verdict record into the evidence package without rerunning or independently regrading it. If review changed behavior, reverify the affected criteria first. An uncited executor summary, or a screenshot without the keyed behavioral verdict, is not sufficient proof of a skill decision.
 
 Evidence is proof of a separate checked criterion, not a catch-all for anything a human reviews. Research
 briefs, source packets, findings, and rendered research reports stay under `research/` (or the owning

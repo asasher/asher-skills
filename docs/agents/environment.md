@@ -16,7 +16,7 @@
 > This is a **skills repository**, not a running product. "The app" is the skills themselves; there is no dev stack, no services, no ports.
 
 - Start the full dev stack: **n/a** — nothing to boot.
-- To exercise a skill (the equivalent of "running the app"): invoke it in a harness against a scenario. From Claude Code, the `Skill` tool or a subagent that reads the skill's `SKILL.md`; from Codex, per the skill's `agents/openai.yaml`. A "run" is a probe scenario driven through an executor model — see § Driving the app.
+- To exercise a skill (the equivalent of "running the app"): invoke it in a harness against a scenario. From Claude Code, the `Skill` tool or a subagent that reads the skill's `SKILL.md`; from Codex, per the skill's `agents/openai.yaml`. A "run" is a probe scenario driven through an executor model — see § Driving behavior.
 - Scripts the skills ship (e.g. `scripts/review-server.py`) are stdlib-only Python 3 — run directly with `python3`, no install.
 - Services / ports / URLs: **none** — the loop stands up no servers (the retired review surface's residual port note lives in § Presenting), only whatever transient port a probe or driven script briefly binds.
 - Headless contract: **no dev stack — nothing to detach.** The loop runs no long-lived processes; a script driven for verification stops with its check. (Retired-surface leftovers, if any turn up, are reaped per § Presenting.)
@@ -45,7 +45,7 @@
 
 - Seed regime: **none — drive the skill.** There is no data store to seed.
 - Command (if any): n/a.
-- **Drive-to-feature path:** the "state" a skill needs is a **probe scenario** — a situated dry-run prompt plus an answer key, per `docs/agents/probe-evals.md`. A skill's own `evals/` directory holds its scenarios; verification drives those scenarios through an executor model (§ Driving the app) rather than seeding a database and navigating a UI. (This is the greenfield/no-app case evidence.md names — there is no running app surface to drive, so probes are the honest substitute here.)
+- **Drive-to-feature path:** the "state" a skill needs is a **probe scenario** — a situated dry-run prompt plus an answer key, per `docs/agents/probe-evals.md`. A skill's own `evals/` directory holds its scenarios; verification drives those scenarios through an executor model (§ Driving behavior) rather than seeding a database and navigating a UI. This is the **primary** proof for skill behavior, not a substitute for one — the runtime surface of a skill genuinely is an executor harness loading it and responding to a probe, so a graded transcript is the direct observation, not a stand-in for a screenshot nobody could have taken.
 
 ## Authenticating for testing
 
@@ -72,9 +72,9 @@
   `~/.backlog/surface/asher-skills/<issue>/` entry from the retired review surface is also the ticket's to
   remove.) Everything else is shared, and destructive verbs stop at this line.
 
-## Driving the app & capturing evidence
+## Driving behavior & capturing evidence
 
-> Set by `backlog setup`'s app-access audit; read by `verify-your-work` (to exercise the app) and `prove-your-work` (to capture proof). One entry per surface the loop verifies.
+> Set by `backlog setup`'s access audit; read by `verify-your-work` (to exercise the skill) and `prove-your-work` (to capture proof). One entry per surface the loop verifies. Renamed from "Driving the app" 2026-07-27 with the switch to the `skill-authoring` pack (`backlog-policy.md` § Work domain) — there is no app here, and the old name made the honest answer read like a gap.
 
 - Form factor(s): **skill** — a Claude Code / Codex skill (SKILL.md + references/scripts). Not CLI/web/mobile/desktop. The thing under test is a prompt-driven procedure, so "driving the app" means running the skill against a scenario and judging the transcript.
 - Web driver: the v2 **Playwright-driving-Chrome** default is **n/a here** — there is no browser-driven app surface; probe executors are the drivers. The rule stays visible for the one browser-shaped case this repo has: judging **rendered HTML artifacts** (plans, prototypes, maquettes) covers happy/empty/error states in both color schemes, with screenshots as evidence; harness-native browser tools and `agent-browser` remain non-verification routes.

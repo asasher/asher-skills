@@ -152,5 +152,8 @@ Two, and no others — no project floor, capability-provider, or succession over
 - `fable-5` passed its CLI alias and basic effect probe on 2026-07-26, so the Codex-side bounded worker route
   is now reachable — earlier records omitted it pending exactly this verification. It stays a bounded worker
   route, not coordinator-eligible, until durable child ownership is separately proven.
-- Whether `staffing setup` records the three reachability states itself, rather than a human writing them
-  here, is tracked separately.
+- ~~Whether `staffing setup` records the three reachability states itself, rather than a human writing them
+  here, is tracked separately.~~ **Closed 2026-07-27** — asher-skills#59 landed in PR #126: setup now
+  classifies each direction into effect-verified / intentionally disabled / unavailable-with-failure-class,
+  carries the five evidence fields per row, and refuses to record an alias no probe accepted. The disabled
+  state is an owner decision setup asks for, never inferred from a failure.

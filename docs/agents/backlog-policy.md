@@ -4,7 +4,8 @@
 
 ## Work domain
 
-- Domain: **software** — step playbooks scaffolded from `templates/software/` (the shipped default). Recorded 2026-07-11 (issue #32).
+- Domain: **skill-authoring** — step playbooks scaffolded from `templates/skill-authoring/` plus the shared `templates/common/` baselines. Recorded 2026-07-27 by `backlog setup`, superseding **software** (recorded 2026-07-11, issue #32) — that pack was the shipped default before a skill-authoring pack existed.
+- Why the switch: the playbooks had already drifted to the new pack's shape and only the record lagged. `environment.md` names its staffing section `## Model staffing`, which is the skill-authoring template's heading — the common/software one is `## Staffing delta` — and `platform.md` cross-references `§ Model staffing` twice. More substantively, the software pack states that an agent-authored probe transcript "is **not** evidence here; it is a greenfield-only fallback", while probe transcripts are this repo's *primary* proof and the skill-authoring pack makes them the default. The repo was operating against a playbook that called its own main evidence a fallback.
 
 ## Label roles
 
