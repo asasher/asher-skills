@@ -1,6 +1,6 @@
 ---
 name: staffing
-description: Own the model roster for a machine and its projects. Use to install or reconcile the roster, add a project override, or resolve any "which model should do this?" question — directly or from a sibling skill. Not for running the task itself.
+description: Own the model roster for a project. Use to write or reconcile the project's staffing playbook, re-probe reachability after a CLI or machine change, or resolve any "which model should do this?" question — directly or from a sibling skill. Not for running the task itself.
 argument-hint: "[setup | route <task> | reconcile]"
 user-invocable: true
 metadata:
@@ -49,9 +49,13 @@ current model in a subagent and report the gap; never skip the stage.
 layer, not two: no machine-level module, and no bundled roster consulted at runtime.
 
 The bundled roster is a **seed** — setup reads it once, when writing the playbook, and never again. A seed
-value that survives into the playbook does so because the audit verified it, not because it shipped. Absent a
-project playbook, report the gap and stop; never resolve from the seed, and never fall back to a
-home-directory path.
+value that survives into the playbook does so because the audit verified it, not because it shipped.
+
+Absent a project playbook, **never resolve from the seed** and never reach for a home-directory path: its rows
+are unverified defaults, and staffing from them asserts a reachability nobody checked. That is a bar on
+*fabricating* a roster, not a hard stop on the work — degrade as
+[roles-and-fallback](reference/roles-and-fallback.md) directs, running the delegated step on the current model
+in a subagent and reporting the staffing gap. Run `staffing setup` to close it.
 
 The playbook carries **data**: model rows, per-harness eligibility and capability bindings, pins, floor,
 succession, probed reachability, and the machine the probes ran on. It never carries doctrine. Ranking and
@@ -71,5 +75,7 @@ trusting rows probed elsewhere.
 
 - **Bundled:** setup, audit, routing, roles/fallback, install/reconcile, compiled provider mechanics, and the
   roster seed.
-- **Project:** the staffing playbook under the repo's agent-docs directory — the sole runtime authority,
-  written by setup.
+- **Project playbooks:** the staffing playbook under the repo's agent-docs directory — the sole runtime
+  authority, written by setup.
+- **Sibling skills:** none — `staffing` is a root primitive. Siblings invoke it; it invokes none, so there is
+  no closure to carry and nothing to degrade when a sibling is absent.

@@ -15,8 +15,8 @@ dispatch.
 ## Probes
 
 **P1 (ac-1).** Read `skills/system/staffing/SKILL.md`. Does its frontmatter identify it as an invocable,
-global-capable staffing primitive, and do any of the skill's files import or read another skill's files? Cite
-what you checked.
+per-provider-compiled staffing primitive, and do any of the skill's files import or read another skill's
+files, or read any path outside the repo? Cite what you checked.
 
 **P2 (ac-2).** A composer skill wants to depend on `staffing`. From `SKILL.md`, list the three kinds of
 dependency pointer the skill declares, and state exactly what it says about sibling skills.
@@ -105,7 +105,10 @@ and what happens if you pass the roster name verbatim? Is the answer a memorised
 
 ## Answer key
 
-- **P1 (ac-1):** Frontmatter has `name: staffing`, `user-invocable: true`, and a `description` that reads as
+- **P1 (ac-1) — note:** the premise once read "global-capable"; that layer was removed, so the probe now
+  tests provider compilation and the no-outside-the-repo property instead. PASS needs `variants` in
+  frontmatter and an explicit finding that no file reads another skill's files or a home-directory path.
+  Frontmatter has `name: staffing`, `user-invocable: true`, and a `description` that reads as
   a global-capable staffing primitive invoked by name by siblings and directly by users — **pass**. No file
   imports another skill's files (the dependency surface says the references "import no other skill's files"
   and siblings are "none — root primitive"); a grep for cross-skill paths finds none. Claiming a cross-skill
@@ -146,10 +149,12 @@ and what happens if you pass the roster name verbatim? Is the answer a memorised
   authority, and resolution reads it and nothing else. There is no base to delta against: a "deltas only"
   answer is the *previous* shape and = fail. Cite `SKILL.md` § Where the roster lives and
   `reference/install-and-reconcile.md` § One layer.
-- **P10 (sole authority):** **Report the gap and stop** — run `staffing setup` to write a playbook. The seed
-  is read at setup only and is never a runtime fallback; its rows are unverified defaults, not this machine's
-  truth. Resolving from the seed, or from any home-directory path, = fail. Cite `SKILL.md` § Where the roster
-  lives.
+- **P10 (sole authority):** **Do not resolve from the seed** — its rows are unverified defaults, not this
+  machine's truth, so staffing from them asserts a reachability nobody checked. Report the staffing gap and
+  run `staffing setup`. This is a bar on fabricating a roster, **not** a hard stop: the delegated step still
+  degrades onto the current model in a subagent per `reference/roles-and-fallback.md` ("A missing roster
+  section degrades, it does not hard-stop"). Resolving from the seed or a home-directory path = fail; so does
+  refusing to proceed at all. Cite `SKILL.md` § Where the roster lives.
 - **P11 (staleness):** **No.** The judgment numbers travel between machines; reachability, aliases, and CLI
   versions do not. Re-run `staffing setup` to re-probe before dispatching, and treat every reachability row as
   unverified until then. It is worse than an absent playbook because a stale row **resolves cleanly and fails
@@ -203,9 +208,11 @@ and what happens if you pass the roster name verbatim? Is the answer a memorised
   the `codex exec` command shape in the compiled `reference/harness.md`. The test is machine-variance — a fact
   that differs per machine is data, a rule identical everywhere is doctrine. Putting a command shape in the
   playbook, or a succession chain in the skill, = fail.
-- **P21 (provider pilot):** PASS only with the checked-in baseline 10,391 bytes and current results at least
-  20% smaller for both providers, plus no opposite-direction harness branch in the files loaded by
-  reconcile. Cite `evals/test_provider_pilot.py`.
+- **P21 (provider pilot):** PASS only if each provider's loaded reconcile text is at least 20% smaller than
+  the unified text one uncompiled skill carrying both harnesses' mechanics would load, stays under the
+  absolute ceiling, and contains no opposite-direction harness branch. The baseline is **derived from the
+  same files, not a frozen byte count** — a hardcoded number stops measuring the claim as soon as content
+  moves between files. Citing a fixed baseline figure = fail. Cite `evals/test_provider_pilot.py`.
 - **P22 (alias crossing):** PASS only if the executor passes **`sonnet`**, not `sonnet-5` — taking it from the
   playbook's recorded alias mapping, and applying it as a **rule** ("this CLI rejects versioned names, accepts
   bare names") rather than a memorised pair, so a roster row the probe never covered is still handled. Passing

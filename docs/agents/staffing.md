@@ -50,12 +50,13 @@ Judgment numbers, higher-is-better, harness-independent. Effort is the dispatch 
 
 **Floor:** sonnet-5 for Claude-side roles, gpt-5.6-terra for Codex-side roles.
 
-A bounded worker route is not coordinator-eligible: invocation is verified, durable child ownership is not.
-Promoting one requires separately proving it can own a durable child and dispatch its worker stages.
+These rows are observations, not rules. Every model above is listed as a bounded worker route on the harness
+where it is not native because that is what this machine's probes established — invocation verified, durable
+child ownership not. Promoting one is a fresh probe, not an edit here.
 
 **Succession** — orchestrator: fable-5 → opus-5 → sonnet-5. Mechanical: gpt-5.6-sol → fable-5 → opus-5 →
 sonnet-5. UI/review: fable-5 → opus-5. Watcher/cron: sonnet-5 → fable-5 → opus-5 Claude-side, gpt-5.6-terra
-Codex-side. Watchers wait and relay only.
+Codex-side.
 
 **Pins** — mechanical/bulk work pins to gpt-5.6-sol through the Codex CLI.
 
@@ -87,22 +88,32 @@ Each direction carries its own state. A failure removes one direction only; neve
 
 | direction | state | evidence (2026-07-26) | successor on loss |
 |---|---|---|---|
-| Claude Code → Codex | **effect-verified** | `codex exec -s read-only --skip-git-repo-check`, closed stdin, rc=0, probe string returned | none needed — native Claude models remain |
-| Codex → Claude Code | **effect-verified** | nested probe: `codex exec -s danger-full-access` running `claude -p --model sonnet` with closed stdin, rc=0, probe string returned end to end | native Codex models; the direction is removed, the harness is not |
+| Claude Code → Codex | **effect-verified (write class)** | `codex exec -s danger-full-access --cd <dir>`, closed stdin: created a file with required contents, confirmed by the parent, artifact removed. Read class separately confirmed under `-s read-only` | none needed — native Claude models remain |
+| Codex → Claude Code | **effect-verified (write class)** | nested: `codex exec -s danger-full-access` running `claude -p --model sonnet --dangerously-skip-permissions`, closed stdin — the Claude child created a file with required contents, confirmed by the outermost parent, artifact removed | native Codex models; the direction is removed, the harness is not |
+
+The evidence is deliberately a **write**, not a returned string. A text-only echo proves the process ran, not
+that its effects landed — so a route verified by echo alone is recorded as invocation-verified and must not
+be staffed for builder-class work. Both rows above cleared the write class, so both may take builder roles.
+A reviewer-class role needs only the read-class probe.
 
 ### CLI alias mapping — the roster names are not dispatch aliases
 
-The installed Claude CLI **rejects every versioned roster name and accepts every bare name.** Verified across
-the whole roster on claude 2.1.220:
+Each CLI was probed with the names that would actually reach it, across the whole roster:
 
-| passed to `--model` | result |
-|---|---|
-| `sonnet-5`, `opus-5`, `fable-5` | rejected — "may not exist or you may not have access to it" |
-| `sonnet`, `opus`, `fable` | accepted, probe string returned |
+| CLI | passed to `--model` | result |
+|---|---|---|
+| claude 2.1.220 | `sonnet-5`, `opus-5`, `fable-5` | **rejected** — "may not exist or you may not have access to it" |
+| claude 2.1.220 | `sonnet`, `opus`, `fable` | accepted |
+| codex-cli 0.144.5 | `gpt-5.6-sol`, `gpt-5.6-terra` | **accepted verbatim** — no suffix stripping |
 
-This is a general rule for this CLI version, not a per-model quirk: **strip the version suffix when a roster
-name crosses into an executable `--model` argument.** A roster name written straight into a dispatch command
-produces a route that resolves cleanly and fails at the moment of use.
+**The rule is per CLI, not universal.** The Claude CLI rejects every versioned roster name and accepts the
+bare one, so strip the suffix when a Claude row crosses into a `--model` argument. The Codex CLI accepts its
+roster names as written, so stripping there would break the call. Both directions matter here because the
+mechanical pin dispatches a Codex row through the Codex CLI while cross-harness workers dispatch Claude rows
+through the Claude CLI.
+
+A roster name written into the wrong CLI's argument produces a route that resolves cleanly and fails at the
+moment of use. An alias set is a property of the installed version — re-probe after any CLI upgrade.
 
 ## Wake paths — what is verified here
 
@@ -111,11 +122,7 @@ The rule for choosing a wake path is doctrine and lives in the skill; these are 
 | harness | tracked wake (preferred, no model) | watcher fallback |
 |---|---|---|
 | Claude Code | background tasks, Agent/Workflow completions, Monitor conditions — completion re-invokes the session | sonnet-5, low effort |
-| Codex CLI | none verified — `codex exec` children are bounded and untracked; hold via a watched native subagent loop | gpt-5.6-terra (cron: gpt-5.6-terra) |
-
-Out-of-band waits (review verdicts, merge watches) hold on the top verified row for the harness running the
-wait. On Claude Code that is a tracked background process whose verdict-coded exit wakes the session — no
-watcher model at all.
+| Codex CLI | none verified — `codex exec` children are bounded and untracked | gpt-5.6-terra (cron: gpt-5.6-terra) |
 
 ## Permission envelope
 

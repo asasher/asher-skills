@@ -53,9 +53,10 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
 - Site manifest gate: a change touching any SDLC-family skill runs
   `PATH=/usr/bin:$PATH python3 site/check.py` (`site/MAINTENANCE.md`); errors block — **its exit code
   is the verdict; don't pipe it through `tail` in a `&&` chain or the failure is masked.**
-- Staffing eval suites (run from `skills/system/staffing/evals/`): `test_global_apply.py`,
-  `test_global_templates.py`, `test_provider_pilot.py`. The compiled per-provider staffing load has a
-  hard byte budget (`BASELINE_BYTES * 0.8` in `test_global_apply.py`) — prose added to
+- Staffing eval suite (run from `skills/system/staffing/evals/`): `test_provider_pilot.py`. The compiled
+  per-provider staffing load must stay under 80% of what one uncompiled skill carrying both harnesses'
+  mechanics would load, plus an absolute ceiling; the baseline is derived from the same files rather than
+  frozen, so it keeps measuring the claim when content moves between them — prose added to
   `install-and-reconcile.md` or `harness.md` must fit inside it.
 - Cold-reader check (pre-review, named): any change shipping audience-facing text — skill prose,
   templates, docs — gets a subagent with none of the authoring conversation reading the artifact
