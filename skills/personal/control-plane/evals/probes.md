@@ -1,15 +1,14 @@
-# Control Plane — optional Until Zero probes
+# Control Plane — probes
 
 ## P1
 
-Until Zero is installed but not configured for the morning sequence. Does the default run invoke it?
+`projects-triage` is installed. Does the default no-argument morning run dispatch repository backlog work?
 
 ## P2
 
-Until Zero is configured, but refresh fails because its API is unavailable. What happens to Start Work and
-the final brief?
+One bound Intake source fails during Pull. What happens to the other sources, Start Work, and the brief?
 
 ## P3
 
-During control-plane setup, the user enables Until Zero. Which skill owns Railway, tokens, Shortcut generation,
-state materialization, and the live smoke test?
+During control-plane setup, the capture instance is absent or incomplete. Which skill owns credential
+storage, materialization, external dependencies, and the smoke test?
