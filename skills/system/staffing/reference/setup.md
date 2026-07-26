@@ -21,7 +21,8 @@ that makes sessions read it. Setup writes only inside the repo.
    instruction file — the harness-neutral base every harness loads where one exists, else the instruction
    file the repo's harnesses actually read. A playbook nothing points at is never consulted; the trigger is
    what fires before model choice, delegation, child/worktree creation, watcher assignment, or fallback.
-   Reconcile an existing § Staffing section to the template's content; never overwrite foreign sections.
+   Reconcile an existing § Staffing section to the template's content — a section already matching it is
+   left as it is; never overwrite foreign sections.
 5. Resolve the resulting playbook and report unreachable routes, conflicting pins, any row the audit could
    not verify, and every drift between what this run probed and what the playbook recorded — a conflict is
    reported and applied per [install and reconcile](install-and-reconcile.md), never settled silently in
