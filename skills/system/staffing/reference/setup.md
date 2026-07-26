@@ -4,8 +4,10 @@ Write or reconcile the project's staffing playbook — the sole authority for th
 that makes sessions read it. Setup writes only inside the repo.
 
 1. Run the [machine audit](machine-audit.md) and read the compiled active provider's
-   [harness mechanics](harness.md). Record each route this harness can actually invoke, each direction's
-   state, and the probe evidence behind it.
+   [harness mechanics](harness.md). Record each route this harness can actually invoke, classify each
+   sibling-harness direction into its route state — effect-verified, intentionally disabled, or unavailable
+   with its failure class — and record the evidence behind each classification, per the audit's
+   § Route classification.
 2. Read the existing project staffing playbook if there is one, plus the bundled roster seed. The seed
    supplies starting values for what cannot be probed — the judgment numbers — and nothing else. Every
    reachability, alias, provider, and eligibility row in the playbook comes from the audit, not the seed.
@@ -18,8 +20,10 @@ that makes sessions read it. Setup writes only inside the repo.
    file the repo's harnesses actually read. A playbook nothing points at is never consulted; the trigger is
    what fires before model choice, delegation, child/worktree creation, watcher assignment, or fallback.
    Reconcile an existing § Staffing section to the template's content; never overwrite foreign sections.
-5. Resolve the resulting playbook and report unreachable routes, conflicting pins, and any row the audit
-   could not verify.
+5. Resolve the resulting playbook and report unreachable routes, conflicting pins, any row the audit could
+   not verify, and every drift between what this run probed and what the playbook recorded — a conflict is
+   reported and applied per [install and reconcile](install-and-reconcile.md), never settled silently in
+   either direction.
 
 Keep data and doctrine apart. The playbook holds model rows, per-harness eligibility and capability bindings,
 pins, floor, succession, probed reachability, and the probe record. Ranking rules, wake-path selection, and
@@ -28,4 +32,5 @@ that restates them is drift waiting to happen.
 
 Completion criterion: this project resolves one unambiguous roster from its playbook alone, with no
 home-directory dependency and no runtime read of the seed; every recorded route names the probe that
-verified it; and a machine that did not run those probes is told to re-run setup rather than trusting them.
+verified it and no recorded alias lacks a probe that accepted it; and a machine that did not run those
+probes is told to re-run setup rather than trusting them.

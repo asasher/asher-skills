@@ -103,6 +103,31 @@ harness? Use the checked-in structural test as evidence.
 Claude worker and must fill in the CLI's model argument. What do you pass, where does that answer come from,
 and what happens if you pass the roster name verbatim? Is the answer a memorised pair or a rule?
 
+**P23 (issue 59, three-state classification).** `staffing setup` is auditing a machine that runs both
+harnesses. The Codex CLI is installed and `codex --version` succeeds, but the owner has said Codex dispatch
+stays off this quarter for cost. On the same machine, the Codex→Claude probe failed last month with a
+permission denial. What state does setup record for each direction, where does each state's information come
+from, and how does a later reader tell the cost-disabled direction from the broken one without re-probing?
+On a re-run, does setup dispatch a probe down the disabled direction, and can a successful probe ever flip
+it to effect-verified? Cite.
+
+**P24 (issue 59, recorded-state conflict).** A repo's playbook records the Codex→Claude direction as
+**unavailable**, failure class "alias rejected", probed against an older Claude CLI. Your fresh audit's
+bounded effect probe on that direction **succeeds** at write class. What does setup write, what does it
+report, and is either silently keeping the recorded row or silently replacing it acceptable? Does the
+direction's route re-enter the resolved roster? Cite.
+
+**P25 (issue 59, alias guard).** Setup is writing the playbook's alias mapping. One roster row's name was
+never passed to any CLI's model argument during this audit, and no retained probe covers it. May that name
+be recorded as a dispatch alias? What does the playbook record for it instead? And when the probes do
+support a rule — "this CLI rejects versioned names, accepts bare ones" — does that rule extend to the
+sibling CLI? Cite.
+
+**P26 (issue 59, idempotent re-run).** `staffing setup` re-runs on the same machine with unchanged CLI
+versions, and every probe returns exactly what the playbook records. What does the re-run change in the
+file? What do the recorded timestamps mean, and why does leaving them untouched not make them dishonest?
+Cite.
+
 ## Answer key
 
 - **P1 (ac-1) — note:** the premise once read "global-capable"; that layer was removed, so the probe now
@@ -219,10 +244,40 @@ and what happens if you pass the roster name verbatim? Is the answer a memorised
   bare names") rather than a memorised pair, so a roster row the probe never covered is still handled. Passing
   the roster name verbatim yields a route that resolves cleanly and is rejected at invocation. Cite the
   playbook's alias mapping and the compiled `reference/harness.md` ("a roster name is not a CLI alias").
+- **P23 (issue 59):** The owner-disabled direction is **intentionally disabled** — an owner decision setup
+  records only from the owner's explicit choice, with the reason and the date it was made, plus the cheap
+  install premise (the CLI version from a no-dispatch version probe). The failed direction is **unavailable**
+  with its captured failure class (permission denied) and recorded successor. A later reader distinguishes
+  them because they are distinct recorded states, each row carrying its own evidence — the reason the
+  classification is three-state rather than boolean. On a re-run setup re-checks only that the CLI is still
+  installed and dispatches nothing down the disabled direction; a successful probe never promotes a disabled
+  row — lifting the disable is the owner's edit, not the audit's. Cite `reference/machine-audit.md` § Route
+  classification. Inferring "disabled" from the failure, collapsing the two rows into one state, or letting
+  a probe flip the disabled row = fail.
+- **P24 (issue 59):** Both, explicitly: setup **reports the drift** — recorded unavailable against a fresh
+  success — **and reclassifies** the direction effect-verified with the fresh evidence (CLI version,
+  timestamp, command shape, effect class), so the direction re-enters the resolved roster; a direction that
+  becomes reachable stops being treated as dead. Silently preserving the stale row and silently overwriting
+  it are the same failure seen from two sides. Cite `reference/install-and-reconcile.md` § Reconciling an
+  existing playbook. Reporting without reclassifying, reclassifying without reporting, or either silent
+  path = fail.
+- **P25 (issue 59):** **No.** An alias enters the playbook only from a probe result naming the CLI version
+  that produced it; the unprobed name is recorded as unverified — a gap, never a route — and a roster name
+  is never promoted to a dispatch alias by assumption. Where the probes support a rule, its scope is **per
+  CLI**: one CLI rejecting versioned names says nothing about how the sibling treats them, so the sibling's
+  rule needs its own probes. Cite `reference/machine-audit.md` (audit step 3) or the alias bullet in
+  `reference/install-and-reconcile.md` § Reconciling an existing playbook. Recording the roster name as the
+  alias, or extending one CLI's rule to the other = fail.
+- **P26 (issue 59):** **Nothing** — the file is byte-identical. Timestamps date the observation that
+  **established** each recorded state, not the latest run that confirmed it, so a probe that finds a row
+  exactly as recorded writes nothing; the rows stay honest because any change in what a probe observes is
+  written as fresh evidence with its own date. Refreshing a "last confirmed" date — turning every re-run
+  into a diff — = fail. Cite `reference/machine-audit.md` § Route classification and the byte-identical
+  bullet in `reference/install-and-reconcile.md` § Reconciling an existing playbook.
 
 ## Scoring
 
-22 probes × 2 executors (one Claude route + one Codex route). A probe passes only with the **correct action AND
+26 probes × 2 executors (one Claude route + one Codex route). A probe passes only with the **correct action AND
 a correct citation**. Ambiguity flags are recorded as findings, not failures — they are the most valuable
 output and should drive wording fixes before ship. Report a verdict table mapping each probe → its criterion
 → pass/fail per executor. Structural criteria are additionally confirmed by file check: ac-1 (frontmatter +
@@ -246,6 +301,7 @@ grep no cross-skill imports), ac-9 (grep finds no `vNN`/version stamp), ac-10 (Y
 | issue 48  | P18                   |
 | issue 49  | P16, P17              |
 | issue 60  | P19                    |
+| issue 59  | P23, P24, P25, P26     |
 | data/doctrine | P20                |
 | variants  | P21                    |
 | aliases   | P22                    |
