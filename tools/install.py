@@ -257,6 +257,18 @@ def _skills_touched(
     }
 
 
+def _recorded_dirty(value: object) -> list[str] | None:
+    """The last install's uncommitted-source record, or None if it cannot be read.
+
+    A list holding anything but skill names is no more answerable than no list at
+    all: dropping the members it cannot read would report a real comparison over a
+    set that quietly lost entries.
+    """
+    if isinstance(value, list) and all(isinstance(name, str) for name in value):
+        return value
+    return None
+
+
 def _setup_report(
     graph: dict[str, catalog.Skill],
     closure: set[str],
@@ -278,14 +290,15 @@ def _setup_report(
     `previously_dirty` is the skills the last install recorded as uncommitted. They
     were installed at content no revision describes, so the working tree matching
     the recorded revision does not mean their mounts are unchanged — reverting the
-    uncommitted work changed them. State that cannot answer this (anything but a
-    list, including state written before it was recorded) makes the whole
-    comparison unanswerable rather than silently half-true.
+    uncommitted work changed them. State that cannot answer this — anything
+    `_recorded_dirty` refuses, including state written before it was recorded —
+    makes the whole comparison unanswerable rather than silently half-true.
     """
+    dirty = _recorded_dirty(previously_dirty)
     if not previously:
         basis = "first-install"
         changed = set(closure)
-    elif changed_paths is None or not isinstance(previously_dirty, list):
+    elif changed_paths is None or dirty is None:
         basis = "unknown-revision"
         changed = set(closure)
     else:
@@ -293,7 +306,7 @@ def _setup_report(
         changed = _skills_touched(graph, closure, changed_paths)
         # A skill mounted here for the first time has never had its setup run.
         changed |= closure - previously
-        changed |= {name for name in previously_dirty if isinstance(name, str)} & closure
+        changed |= set(dirty) & closure
 
     return {
         "basis": basis,

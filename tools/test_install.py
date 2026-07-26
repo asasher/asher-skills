@@ -509,6 +509,39 @@ class SetupReportTest(unittest.TestCase):
         self.assertEqual(report["basis"], "unknown-revision")
         self.assertEqual(report["changed"], sorted(closure))
 
+    def test_a_dirty_record_holding_junk_is_as_unanswerable_as_none(self) -> None:
+        """Half-trusting the record is the outcome the fallback exists to prevent.
+
+        Dropping the unreadable members and keeping `revision-diff` would report a
+        real comparison over a set that silently lost entries.
+        """
+        graph = catalog.discover(ROOT)
+        resolution = catalog.resolve(graph, {"backlog"}, set())
+        closure = set(resolution["closure"])
+
+        for record in ([{"name": "diagnosing-bugs"}], ["diagnosing-bugs", 7], [None]):
+            with self.subTest(record=record):
+                report = install._setup_report(
+                    graph, closure, resolution["setup_order"], closure, [], "0123456", record,
+                )
+                self.assertEqual(report["basis"], "unknown-revision")
+                self.assertEqual(report["changed"], sorted(closure))
+
+    def test_a_corrupt_dirty_record_does_not_read_as_a_real_comparison(self) -> None:
+        """`install.json` is checked in, so a re-serialized entry is a reachable input."""
+        probe = self.dirty_source("skills/software-development/diagnosing-bugs")
+        result = install.install(ROOT, self.target, {"backlog"})
+        probe.unlink()
+
+        state = json.loads(self.state_path().read_text())
+        self.assertEqual(state["source_dirty"], ["diagnosing-bugs"])
+        state["source_dirty"] = [{"name": "diagnosing-bugs"}]
+        self.state_path().write_text(json.dumps(state, indent=2) + "\n")
+
+        report = install.install(ROOT, self.target, {"backlog"})["setup_report"]
+        self.assertEqual(report["basis"], "unknown-revision")
+        self.assertEqual(report["changed"], result["installed"])
+
     def test_a_recorded_revision_that_is_not_a_string_still_reads_as_recorded(self) -> None:
         """Absent and unusable are different states; the report must not merge them.
 
