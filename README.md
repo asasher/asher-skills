@@ -4,8 +4,54 @@ Skills that I made or that I like. This is a single repo that I can use to insta
 
 ## Install
 
-These skills install through this repo's own installer, run straight from GitHub — nothing is published
-to npm:
+Installing is two jobs — mount the skills, then run each one's setup against the repo it landed in —
+so hand it to an agent. Paste this into whichever coding agent you use, in the repository you want the
+skills in:
+
+```text
+Install Asher's skills into this repository, and finish the job.
+
+1. From the repository root, run:
+       npx github:asasher/asher-skills install --skill backlog build staffing
+   That list is a default — if I have named a different set, use mine, and ask me
+   before running anything if you are unsure which skills I want. If this repository
+   already has an `.agents/asher-skills/install.json`, it already has skills from
+   here: run the same command with no `--skill` at all instead, which refreshes
+   exactly the set that file records. Whenever you do name a set, name the whole set
+   I want, including what is already there — `--skill` replaces the recorded set and
+   removes the skills left out of it, so adding one is naming all of them. If there is
+   a `skills-lock.json` naming skills from here and no `install.json`, ask me which
+   set to record before running anything.
+2. The install prints a JSON report. Read its `setup_report`: `setup_order` names the
+   installed skills that declare a setup, already in the order to run them, and the
+   summary on stderr says the same thing.
+3. Run those setups yourself, one at a time, in that order. For each, read the skill
+   as installed — its `SKILL.md`, plus whatever that points you to — and follow the
+   setup it describes. A skill compiled per harness is mounted once per harness and
+   the copies differ, so read the one belonging to the harness you are running in.
+   A setup writes and reconciles this repository's playbooks, the files under
+   `docs/agents/` that the skills read at runtime, so work from what this repository
+   actually does, edit an existing playbook rather than replacing it, and ask me when
+   a setup needs a decision I have not given you.
+4. Then skim the `SKILL.md` of every skill in the report's `installed` list that
+   `setup_order` did not name: a skill can describe a setup without declaring one, and
+   those never reach the report. Run any setup you find there, after the ordered ones.
+5. Review the whole diff before you commit it: the skill mounts, the install state in
+   `.agents/asher-skills/install.json`, and every playbook a setup touched. A playbook
+   naming a command, branch, or tool this repository does not use is a defect to fix,
+   not a detail to wave through.
+6. Commit, with a message naming the skills you installed and the setups you ran.
+   Leave the installed skill directories alone otherwise — they are build products, and
+   the next install rewrites them.
+```
+
+The setups are the half that needs judgment: they bind role nouns like *tracker*, *change request*, and
+*base branch* to what this particular repository uses, and they sometimes have to ask. The installer
+names them and invokes nothing, so something with judgment has to close that gap — hence the prompt.
+
+### Driving the installer yourself
+
+The installer runs straight from GitHub; nothing is published to npm.
 
 ```bash
 npx github:asasher/asher-skills install --skill backlog build staffing   # first install: name the set
