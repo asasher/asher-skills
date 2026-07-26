@@ -30,14 +30,15 @@ The playbook is **repo-owned**. Reconcile it clause by clause; never overwrite i
   silently. Silently preserving a stale row and silently overwriting a fresh one are the same failure seen
   from two sides. Direction states move both ways under this rule: a recorded **unavailable** direction
   whose fresh effect probe succeeds is reported and reclassified effect-verified with the fresh evidence
-  (the fields the machine audit's § Route classification defines) —
-  a direction that becomes reachable stops being treated as dead, and its routes re-enter the resolved
-  roster — and a recorded **effect-verified** direction whose probe fails is reported and reclassified
-  unavailable with its captured failure class.
+  (the fields the machine audit's § Route classification defines) — a direction that becomes reachable
+  stops being treated as dead, and its routes re-enter the resolved roster — and a recorded
+  **effect-verified** direction whose probe fails is reported and reclassified unavailable with its
+  captured failure class.
 - **Intentionally disabled** rows are owner decisions, not audit output: a re-run confirms the install
   still exists (a version probe, no dispatch) and leaves the choice standing unless the owner lifts it in
-  that run's interview — a successful probe never promotes one. A vanished install is drift to report: the row is reclassified unavailable with its failure
-  class, retaining the owner's disable decision beside it as a note — not a second state — so a reinstall
+  that run's interview — a successful probe never promotes one. A vanished install is drift to report:
+  the row is reclassified unavailable with its failure class, retaining the owner's disable decision
+  beside it as a note — not a second state — so a reinstall
   does not silently re-enable the route. When the install returns, the standing decision puts the row back
   to intentionally disabled without a new owner interview; the state comes from the retained decision, not
   from the probe that noticed the reinstall.

@@ -251,9 +251,10 @@ them dishonest? Cite.
   them because they are distinct recorded states, each row carrying its own evidence — the reason the
   classification is three-state rather than boolean. On a re-run setup re-checks only that the CLI is still
   installed and dispatches nothing down the disabled direction; a successful probe never promotes a disabled
-  row — lifting the disable is the owner's edit, not the audit's. Cite `reference/machine-audit.md` § Route
-  classification. Inferring "disabled" from the failure, collapsing the two rows into one state, or letting
-  a probe flip the disabled row = fail.
+  row — "the disable lifts only when the owner says so — in setup's interview or by editing the playbook —
+  never from a probe result". Cite `reference/machine-audit.md` § Route classification. Inferring "disabled"
+  from the failure, collapsing the two rows into one state, or letting a probe flip the disabled row = fail;
+  an answer that also names the owner's lift channels is exactly right.
 - **P24 (issue 59):** Both, explicitly: setup **reports the drift** — recorded unavailable against a fresh
   success — **and reclassifies** the direction effect-verified with the fresh evidence (CLI version,
   timestamp, command shape, effect class), so the direction re-enters the resolved roster; a direction that
