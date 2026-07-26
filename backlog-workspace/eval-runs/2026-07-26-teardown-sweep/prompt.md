@@ -1,16 +1,76 @@
----
-name: backlog
-description: Dispatch the backlog — groom sweeps unlabeled and needs-shaping tickets into user-confirmed batches, fans them into shaping threads, and sweeps finished tickets' worktrees for teardown; build fans ready, unblocked tickets into worktree-isolated subagents it supervises. Setup installs the playbooks.
-argument-hint: "[groom | build | setup] [ticket ids]"
-user-invocable: true
-disable-model-invocation: true
-metadata:
-  invocation: user
-  execution: orchestrator
-  requires: [build, shape, to-subagent, to-thread]
-  optional: [merge-changes]
+# Situated dry-run probe — backlog skill
+
+You are an executor model being probed on the `backlog` skill. The ONLY skill material in scope is the
+skill's `SKILL.md`, reproduced in full at the bottom of this prompt. Do not consult any other file,
+playbook, or prior knowledge of this repo's conventions — answer from the SKILL.md text alone.
+
+Rules:
+- Each probe is situated: you are mid-task at the described moment. State your next concrete action(s),
+  not a summary of what the skill says.
+- For every answer, **cite the exact sentence(s) from SKILL.md** that decided it, quoted verbatim.
+- If the text is genuinely ambiguous at a decision point, flagging the ambiguity (with the citation that
+  makes it ambiguous) is a valid answer.
+- Answer all 13 probes, numbered P1–P12 (P1b counts as its own answer).
+
+## Scenario
+
+You are running the `backlog` skill in a repo with a bound tracker. Tickets: #10 and #11 carry
+needs-shaping (their decisions interlock), #12 carries needs-shaping alone (same subsystem as #10/#11);
+#13 carries no readiness label and its description reads fully settled; #20 is ready and unblocked,
+#21 is ready but already marked building, #22 is ready and unblocked.
+
+For the teardown probes (P9–P12): git's worktree listing shows, besides the main checkout, a worktree
+on branch `40-x` whose change request was **squash-merged** last week (its upstream is gone; a
+merge-base ancestor check against the base branch reports *not merged*) with a clean tree; a worktree
+on branch `41-y` whose change request is merged but whose tree holds uncommitted changes; and a
+worktree on branch `42-z` whose change request is open with review in progress. The environment
+playbook records per-worktree docker stacks; `docker ps` shows a compose project whose working-dir
+label points at a directory that no longer exists on disk.
+
+## Probes
+
+**P1 (groom sweep & gate).** `backlog groom` — which tickets enter grooming, how are they grouped, and
+what exists before the user says anything? Cite.
+
+**P1b (single batch).** The user approves one batch holding #10–#12. What spawns, and what happens to
+the labels? Cite.
+
+**P2 (two dispatch shapes).** An hour later the user asks "what did the shaping threads decide, and how
+are the builds going?" How does each half get answered? Cite.
+
+**P3 (double dispatch).** `backlog build` — is #21 dispatched? What happens before #20's subagent
+spawns, and via which skill does the dispatch go? Cite.
+
+**P4 (isolation verdict).** The environment playbook records that this repo cannot isolate worktree
+stacks. How do #20 and #22 run? Cite.
+
+**P5 (missing playbook).** There is no `docs/agents/platform.md`. What happens on `backlog build`? Cite.
+
+**P6 (merge boundary).** Both builds produced change requests with LGTM. Do you merge them? Cite.
+
+**P7 (resume).** The previous dispatcher session died mid-fleet. This fresh session runs `backlog
+build` and finds #30 marked building with a claim comment from this runner naming branch `30-x`, and
+#31 marked building with a claim comment from a different actor. What happens with each, and what runs
+before any new dispatch? Cite.
+
+**P8 (wedged build).** #20's build passes its deadline with no completion signal. What happens? Cite.
+
+**P9 (squash-merged, clean).** During `backlog groom`, what happens to the `40-x` worktree — and on
+what evidence do you call its change request merged, given the ancestor check says otherwise? In what
+order does removal proceed? Cite.
+
+**P10 (merged, dirty).** What happens to the `41-y` worktree? Cite.
+
+**P11 (live branch).** What happens to the `42-z` worktree? Cite.
+
+**P12 (label-orphaned stack).** The compose project whose working-dir label points at a nonexistent
+directory — does the sweep see it (its worktree is not in git's listing), and what happens to it? Cite.
+
 ---
 
+## SKILL.md (the only material in scope)
+
+```markdown
 # Backlog
 
 A dispatcher with two dispatch shapes. Grooming is interactive — human-in-the-loop work fans out as
@@ -95,3 +155,4 @@ seeded from the repo's own docs, accreting what sessions learn), `evidence.md` (
 `change-description.md` (the change-request body outline). Reconcile with what
 exists — a repo-owned playbook is edited, never blindly overwritten. Verify the label roles exist in the
 tracker; create missing ones with the user's consent.
+```
