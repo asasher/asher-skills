@@ -204,13 +204,20 @@ playbooks and sometimes ask the user, so the installer names them and invokes no
 
 `basis` says how much to trust the set. `revision-diff` is a real comparison; `first-install` and
 `unknown-revision` both report **every** installed skill as changed, because an unanswerable comparison
-must not read as nothing-to-do. `unknown-revision` covers three cases: a revision the source clone lacks,
-a recorded revision that is not an object name at all, and a source tree carrying no git history — which
-is what the installer runs from under `npx`, since the published package ships no `.git`. Discrimination
+must not read as nothing-to-do. `unknown-revision` covers four cases: a revision the source clone lacks,
+a recorded revision that is not an object name at all, a source tree carrying no git history — which
+is what the installer runs from under `npx`, since the published package ships no `.git` — and state
+that cannot say which sources were uncommitted at the last install. Discrimination
 is a property of installing from a checkout; from `npx`, expect the whole set every time.
 
-State is one first-party file. It records the set, each skill's source path, provider variants, and the
-source revision — **no integrity hashes**. Drift is answered on demand instead:
+Mounts are built from the working tree while the recorded revision is HEAD, so an install that followed
+uncommitted work carries content no revision describes. The state file records which sources those were,
+and the next install counts them as changed — reverting that work changes their mounts just as making it
+did, and only the record makes that visible once the tree is clean again.
+
+State is one first-party file. It records the set, each skill's source path, provider variants, the
+source revision, and which sources were uncommitted against it — **no integrity hashes**. Drift is
+answered on demand instead:
 
 ```sh
 python3 tools/install.py check --into <repo>   # exit 1 and names the drifted files

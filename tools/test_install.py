@@ -18,6 +18,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from collections.abc import Callable
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -247,10 +248,48 @@ class SetupReportTest(unittest.TestCase):
     def state_path(self) -> Path:
         return self.target / ".agents/asher-skills/install.json"
 
-    def rewrite_recorded_revision(self, revision: str | None) -> None:
+    def rewrite_recorded_revision(self, revision: object) -> None:
         state = json.loads(self.state_path().read_text())
         state["source_revision"] = revision
         self.state_path().write_text(json.dumps(state, indent=2) + "\n")
+
+    def seed_repo(self, files: dict[str, str]) -> tuple[Path, Callable[..., str], str]:
+        """A throwaway git repo holding `files`, committed. Returns (repo, run, head).
+
+        Every `_changed_sources` edge case needs the same repo, so the seed lives in
+        one place: a machine-level git default that breaks it is fixed here once.
+        """
+        repo = Path(tempfile.mkdtemp(prefix="install-git-"))
+        self.addCleanup(shutil.rmtree, repo, ignore_errors=True)
+
+        def run(*args: str) -> str:
+            done = subprocess.run(
+                ["git", "-C", str(repo), *args], capture_output=True, text=True, check=True
+            )
+            return done.stdout.strip()
+
+        run("init", "-q")
+        run("config", "user.email", "test@example.invalid")
+        run("config", "user.name", "test")
+        run("config", "commit.gpgsign", "false")  # signing configured on the host must not fail this
+        for relative, text in files.items():
+            path = repo / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text)
+        run("add", "-A")
+        run("commit", "-qm", "seed")
+        return repo, run, run("rev-parse", "HEAD")
+
+    def dirty_source(self, source: str) -> Path:
+        """Leave a real skill source uncommitted for the length of one test.
+
+        An untracked file is the reversible half of dirtiness: the tracked content
+        is never touched, so a crashed test cannot leave the repo edited.
+        """
+        probe = ROOT / source / ".setup-report-probe"
+        self.addCleanup(probe.unlink, missing_ok=True)
+        probe.write_text("uncommitted work\n")
+        return probe
 
     def git(self, *args: str) -> str:
         done = subprocess.run(
@@ -294,7 +333,7 @@ class SetupReportTest(unittest.TestCase):
         closure = set(resolution["closure"])
 
         report = install._setup_report(
-            graph, closure, resolution["setup_order"], closure, [], "0123456",
+            graph, closure, resolution["setup_order"], closure, [], "0123456", [],
         )
         self.assertEqual(
             sorted(report), ["basis", "changed", "setup_order", "since_revision"]
@@ -418,6 +457,76 @@ class SetupReportTest(unittest.TestCase):
         self.assertIn("not a usable object name", summary[0])
         self.assertNotIn("--output", summary[0])
 
+    def test_a_source_uncommitted_at_install_time_is_changed_once_it_is_reverted(self) -> None:
+        """The mounts are built from the working tree; the recorded revision is HEAD.
+
+        So an install that followed uncommitted work installed content the recorded
+        revision does not describe. Reverting that work changes the mount again, and
+        a report that called this nothing-to-do would be the silent under-report the
+        whole design exists to avoid.
+        """
+        source = "skills/software-development/diagnosing-bugs"
+        probe = self.dirty_source(source)
+
+        install.install(ROOT, self.target, {"backlog"})
+        probe.unlink()
+
+        report = install.install(ROOT, self.target, {"backlog"})["setup_report"]
+        self.assertIn("diagnosing-bugs", report["changed"])
+        self.assertIn("diagnosing-bugs", report["setup_order"])
+
+    def test_the_state_file_records_which_sources_were_uncommitted(self) -> None:
+        """That record is what makes the next comparison answerable."""
+        self.dirty_source("skills/software-development/diagnosing-bugs")
+
+        install.install(ROOT, self.target, {"backlog"})
+        recorded = json.loads(self.state_path().read_text())
+        self.assertIn("diagnosing-bugs", recorded["source_dirty"])
+
+    def test_a_previously_uncommitted_source_is_changed_against_a_clean_tree(self) -> None:
+        """Pinned on the pure reporter, so no working-tree state can mask it."""
+        graph = catalog.discover(ROOT)
+        resolution = catalog.resolve(graph, {"backlog"}, set())
+        closure = set(resolution["closure"])
+
+        report = install._setup_report(
+            graph, closure, resolution["setup_order"], closure, [], "0123456",
+            ["diagnosing-bugs"],
+        )
+        self.assertEqual(report["basis"], "revision-diff")
+        self.assertEqual(report["changed"], ["diagnosing-bugs"])
+        self.assertEqual(report["setup_order"], ["diagnosing-bugs"])
+
+    def test_state_that_cannot_say_what_was_uncommitted_falls_back_to_the_closure(self) -> None:
+        """State written before this was recorded cannot answer, so it must not claim to."""
+        graph = catalog.discover(ROOT)
+        resolution = catalog.resolve(graph, {"backlog"}, set())
+        closure = set(resolution["closure"])
+
+        report = install._setup_report(
+            graph, closure, resolution["setup_order"], closure, [], "0123456", None,
+        )
+        self.assertEqual(report["basis"], "unknown-revision")
+        self.assertEqual(report["changed"], sorted(closure))
+
+    def test_a_recorded_revision_that_is_not_a_string_still_reads_as_recorded(self) -> None:
+        """Absent and unusable are different states; the report must not merge them.
+
+        An operator told the field is absent goes looking in the wrong place, and a
+        consumer cannot tell "never recorded" from "recorded but corrupt" — the same
+        distinction `basis` exists to keep.
+        """
+        install.install(ROOT, self.target, {"backlog"})
+        self.rewrite_recorded_revision(12345)
+
+        report = install.install(ROOT, self.target, {"backlog"})["setup_report"]
+        self.assertEqual(report["basis"], "unknown-revision")
+        self.assertEqual(report["since_revision"], 12345)
+
+        summary = install._summarize(report)
+        self.assertIn("not a usable object name", summary[0])
+        self.assertNotIn("no source revision", summary[0])
+
     def test_a_malformed_recorded_revision_does_not_crash_the_install(self) -> None:
         for revision in (12345, ["abc"], "not a revision", ""):
             with self.subTest(revision=revision):
@@ -438,23 +547,7 @@ class SetupReportTest(unittest.TestCase):
         Driven against a throwaway git repo rather than this one, so the assertion
         does not depend on writing into real skill sources.
         """
-        repo = Path(tempfile.mkdtemp(prefix="install-git-"))
-        self.addCleanup(shutil.rmtree, repo, ignore_errors=True)
-
-        def run(*args: str) -> str:
-            done = subprocess.run(
-                ["git", "-C", str(repo), *args], capture_output=True, text=True, check=True
-            )
-            return done.stdout.strip()
-
-        run("init", "-q")
-        run("config", "user.email", "test@example.invalid")
-        run("config", "user.name", "test")
-        (repo / "skills").mkdir()
-        (repo / "skills" / "tracked.md").write_text("one\n")
-        run("add", "-A")
-        run("commit", "-qm", "seed")
-        head = run("rev-parse", "HEAD")
+        repo, _, head = self.seed_repo({"skills/tracked.md": "one\n"})
 
         self.assertEqual(install._changed_sources(repo, head), [])
         (repo / "skills" / "untracked.md").write_text("two\n")
@@ -466,23 +559,7 @@ class SetupReportTest(unittest.TestCase):
         The failure is silent and in the unsafe direction — the skill drops out of
         `changed`, so its setup is never named.
         """
-        repo = Path(tempfile.mkdtemp(prefix="install-git-"))
-        self.addCleanup(shutil.rmtree, repo, ignore_errors=True)
-
-        def run(*args: str) -> str:
-            done = subprocess.run(
-                ["git", "-C", str(repo), *args], capture_output=True, text=True, check=True
-            )
-            return done.stdout.strip()
-
-        run("init", "-q")
-        run("config", "user.email", "test@example.invalid")
-        run("config", "user.name", "test")
-        (repo / "skills").mkdir()
-        (repo / "skills" / "café.md").write_text("one\n")
-        run("add", "-A")
-        run("commit", "-qm", "seed")
-        head = run("rev-parse", "HEAD")
+        repo, _, head = self.seed_repo({"skills/café.md": "one\n"})
 
         (repo / "skills" / "café.md").write_text("two\n")
         (repo / "skills" / "référence.md").write_text("three\n")

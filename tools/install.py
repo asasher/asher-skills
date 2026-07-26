@@ -244,13 +244,27 @@ def _changed_sources(root: Path, since: object) -> list[str] | None:
     return sorted(set(changed) | set(untracked))
 
 
+def _skills_touched(
+    graph: dict[str, catalog.Skill], closure: set[str], paths: list[str]
+) -> set[str]:
+    """The installed skills owning any of `paths`."""
+    return {
+        name for name in closure
+        if any(
+            path == graph[name].source or path.startswith(graph[name].source + "/")
+            for path in paths
+        )
+    }
+
+
 def _setup_report(
     graph: dict[str, catalog.Skill],
     closure: set[str],
     setup_order: list[str],
     previously: set[str],
     changed_paths: list[str] | None,
-    since: str | None,
+    since: object,
+    previously_dirty: object,
 ) -> dict[str, object]:
     """Say which installed skills changed, and which setups that implies.
 
@@ -260,24 +274,26 @@ def _setup_report(
     `changed_paths` is what the source diff reported, or None when no diff was
     possible. Undeterminable is treated as everything-changed: "we cannot tell"
     must not read as "nothing to do".
+
+    `previously_dirty` is the skills the last install recorded as uncommitted. They
+    were installed at content no revision describes, so the working tree matching
+    the recorded revision does not mean their mounts are unchanged — reverting the
+    uncommitted work changed them. State that cannot answer this (anything but a
+    list, including state written before it was recorded) makes the whole
+    comparison unanswerable rather than silently half-true.
     """
     if not previously:
         basis = "first-install"
         changed = set(closure)
-    elif changed_paths is None:
+    elif changed_paths is None or not isinstance(previously_dirty, list):
         basis = "unknown-revision"
         changed = set(closure)
     else:
         basis = "revision-diff"
-        changed = {
-            name for name in closure
-            if any(
-                path == graph[name].source or path.startswith(graph[name].source + "/")
-                for path in changed_paths
-            )
-        }
+        changed = _skills_touched(graph, closure, changed_paths)
         # A skill mounted here for the first time has never had its setup run.
         changed |= closure - previously
+        changed |= {name for name in previously_dirty if isinstance(name, str)} & closure
 
     return {
         "basis": basis,
@@ -310,12 +326,24 @@ def install(
     recorded, previously = _recorded(target)
     removed = sorted(previously - closure) if prune else []
 
-    # Read against the revision we are about to overwrite.
+    # Read against the revision we are about to overwrite. The recorded value is
+    # reported as it was found — absent and unusable are different states, and
+    # `_changed_sources` refuses anything that is not an object name anyway.
     since = recorded.get("source_revision")
-    since = since if isinstance(since, str) else None
     changed_paths = _changed_sources(source_root, since)
     report = _setup_report(
         graph, closure, resolution["setup_order"], previously, changed_paths, since,
+        recorded.get("source_dirty"),
+    )
+
+    # The mounts come from the working tree, but the revision recorded below is
+    # HEAD. Note which sources that revision does not describe, so the next install
+    # can still tell that reverting the uncommitted work changed their mounts.
+    revision = _revision(source_root)
+    uncommitted = _changed_sources(source_root, revision)
+    dirty = (
+        sorted(_skills_touched(graph, closure, uncommitted))
+        if uncommitted is not None else None
     )
 
     skills: dict[str, dict] = {}
@@ -336,7 +364,8 @@ def install(
     _write_json(target / STATE, {
         "schema_version": 1,
         "source": source_label or ("self" if live else DEFAULT_SOURCE),
-        "source_revision": _revision(source_root),
+        "source_revision": revision,
+        "source_dirty": dirty,
         "mode": "live" if live else "copy",
         "skills": skills,
     })
@@ -445,7 +474,7 @@ def _summarize(report: dict[str, object]) -> list[str]:
     elif report["basis"] == "unknown-revision":
         if short:
             reason = f"cannot compare against recorded revision {short}"
-        elif since:
+        elif since is not None:
             reason = "recorded source revision is not a usable object name"
         else:
             reason = "no source revision to compare against"
