@@ -1,0 +1,7 @@
+interface:
+  display_name: "Research"
+  short_description: "Investigate questions from primary sources"
+  default_prompt: "Use $research to investigate this question from primary sources and separate findings from inferences."
+
+policy:
+  allow_implicit_invocation: true

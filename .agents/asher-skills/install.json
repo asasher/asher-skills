@@ -1,8 +1,7 @@
 {
   "schema_version": 1,
   "source": "self",
-  "source_revision": "c280be54d6788b8ba9451c1a0fbca4a9045eb5d5",
-  "mode": "live",
+  "source_revision": "348d0f02b168e1f5cbdc833a28310b781547a8ef",
   "skills": {
     "adversarial-review": {
       "source": "skills/software-development/adversarial-review"

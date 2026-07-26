@@ -1,0 +1,7 @@
+interface:
+  display_name: "To-Spec"
+  short_description: "Synthesize a settled direction into a spec on the subject's ticket — body canonical, diagram first; no interview"
+  default_prompt: "Use $to-spec to land this conversation's settled direction as a spec on its ticket."
+
+policy:
+  allow_implicit_invocation: true

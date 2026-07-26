@@ -1,0 +1,7 @@
+interface:
+  display_name: "Prototype"
+  short_description: "Answer one design question with a throwaway artifact — behavior or variants shape — then present it, capture the answer, and delete it"
+  default_prompt: "Use $prototype to settle this design question with a throwaway artifact."
+
+policy:
+  allow_implicit_invocation: true

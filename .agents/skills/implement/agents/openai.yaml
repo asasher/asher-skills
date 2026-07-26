@@ -1,0 +1,7 @@
+interface:
+  display_name: "Implement"
+  short_description: "Implement one ticket: defect → diagnosing-bugs, new behavior → tdd; typecheck and tests along the way, commit to the current branch"
+  default_prompt: "Use $implement to build this ticket."
+
+policy:
+  allow_implicit_invocation: true
