@@ -44,16 +44,15 @@ class InstallTest(unittest.TestCase):
         for provider, mount in (("claude", ".claude"), ("codex", ".agents")):
             tree = self.target / mount / "skills" / "staffing"
             self.assertFalse(tree.is_symlink(), f"{provider} mount collapsed to a symlink")
-            identity = (tree / "templates" / "global" / "provider.txt").read_text().strip()
+            identity = (tree / "templates" / "seed" / "provider.txt").read_text().strip()
             self.assertEqual(identity, provider)
             harness = (tree / "reference" / "harness.md").read_text()
             self.assertNotIn("placeholder", harness.lower())
-            module = (tree / "templates" / "global" / "staffing.module.md").read_text()
-            self.assertIn("| model | cost | intelligence | taste | effort |", module)
-            # {{COMMON}} is resolved by render-global.py, not at install time, so the
-            # compiled tree must ship the marker and its partial together.
-            self.assertEqual(module.count("{{COMMON}}"), 1)
-            self.assertTrue((tree / "templates" / "global" / "staffing.common.md").is_file())
+            seed = (tree / "templates" / "seed" / "roster-seed.md").read_text()
+            self.assertIn("| model | cost | intelligence | taste | effort |", seed)
+            # The seed is read whole by setup; nothing renders it, so it must ship
+            # self-contained rather than carrying a marker for a retired renderer.
+            self.assertNotIn("{{", seed)
             self.assertNotIn("variants", [p.name for p in tree.iterdir()])
 
     def test_build_skill_is_installed(self) -> None:
@@ -168,7 +167,7 @@ class InstallTest(unittest.TestCase):
         install.install(ROOT, self.target, {"staffing"}, live=True)
         tree = self.target / ".claude/skills/staffing"
         self.assertFalse(tree.is_symlink())
-        self.assertEqual((tree / "templates/global/provider.txt").read_text().strip(), "claude")
+        self.assertEqual((tree / "templates/seed/provider.txt").read_text().strip(), "claude")
 
     # ---- check ----------------------------------------------------------
 

@@ -1,49 +1,46 @@
-# Install, scope decision, reconciliation, and external-worker mechanics
+# Install, reconciliation, and external-worker mechanics
 
-## Install shapes
+## One layer
 
-The human chooses **project-only** or **global-with-overrides**. Project-only writes one project staffing
-playbook and no home-directory file. Global-with-overrides writes the audited machine truth once and gives
-each project a sparse delta.
+Setup writes exactly one file: the **project staffing playbook**, under the repo's agent-docs directory. It is
+the sole runtime authority. There is no home-directory module, no pointer section in a global agent
+instruction file, and no base-plus-delta overlay to resolve.
 
-For global-with-overrides, the active harness gets:
+The playbook contains the reachable model rows, per-harness eligibility, named capability providers and
+fallbacks, pins, floor, succession, directional reachability with its probe evidence, and the probe record
+naming the machine and CLI versions. Doctrine stays in this skill's references; a playbook that restates a
+ranking rule or a command shape has copied something that will drift.
 
-- a compact `## Staffing` pointer in its global agent instruction file;
-- a self-contained deferred module at the absolute path named by that pointer; and
-- project deltas under `docs/agents/`, containing only fields that differ.
+The bundled roster **seed** supplies starting values for the judgment numbers — cost, intelligence, taste,
+effort — because those cannot be probed. It is read once, at setup, and never at resolution time. Everything
+else in the playbook comes from the audit.
 
-The module contains the reachable rankings, named capability providers and fallbacks, pins,
-coordinator-eligible set, floor, succession, directional reachability, and active-harness mechanics. Resolve
-the module first, then overlay project deltas field by field. A project that only raises the floor writes only
-that raised floor; copying the base table is drift.
+Two layers were the previous shape and the reason this one exists: a base plus sparse deltas produces the
+"override silently re-copied the base" failure, and it puts the effective roster somewhere no project diff
+shows. One layer makes the roster reviewable in the repo that depends on it.
 
-## Scope decision
+## Reconciling an existing playbook
 
-- **A global base exists:** show it, preserve it, and offer a project delta. Editing the base is a separate
-  explicit request.
-- **No global base exists:** ask project-only versus global-with-overrides. A global choice is explicit
-  consent for the described home-directory writes, not blanket permission for later changes.
+The playbook is **repo-owned**. Reconcile it clause by clause; never overwrite it wholesale.
 
-The active provider's exact instruction-file/module paths and dispatch commands are in `reference/harness.md` in the
-installed package. Directory presence is evidence, not authority: setup confirms which harnesses are active.
+- Owner-tuned judgment numbers survive a re-run. They are the values setup cannot derive, so setup does not
+  get to reset them.
+- Audit-derived rows — reachability, aliases, provider bindings, eligibility — are replaced by what this run
+  probed, and a replacement that contradicts what was recorded is **reported as drift**, not applied
+  silently. Silently preserving a stale row and silently overwriting a fresh one are the same failure seen
+  from two sides.
+- Rows the audit could not verify are reported as gaps and left marked, never quietly dropped and never
+  promoted to verified.
+- A re-run with unchanged reachability leaves the file byte-identical.
 
-## Module-first owner reconciliation
-
-Staffing owns only its pointer, module, and roster — nothing else in the global file. The apply is
-`render-global.py apply`: the audited module is written atomically and read back, then the `## Staffing`
-section is reconciled into the global file with every foreign byte preserved. Module-first: the deferred module lands before the pointer
-that names it, within the same apply. Never use an eager import.
-
-An apply failure changes nothing: the read-back check fails closed. Missing, unreadable, or changed staffing
-modules fail closed: report the gap and do not dispatch. Do not rewrite unchanged modules. A second
-successful reconcile leaves durable module, global, delta, and lock bytes unchanged. Migration is proposed,
-never automatic; retain recovery bytes until the new policy passes its probes.
+A write that cannot be read back changes nothing: fail closed, report the gap, and do not dispatch on a
+roster that was not durably written. Retain recovery bytes until the new playbook passes its probes.
 
 ## Reconciliation is a prose audit
 
-Read the installed module, pointer, project delta, and current machine audit; report drift or conflict in
-prose. Examples: an unreachable row, a stale directional route, an override that recopies the base, or a pin
-conflict. That reading is the judgment mechanism. Provider-package effective
+Read the project playbook and a current machine audit; report drift or conflict in
+prose. Examples: an unreachable row, a stale directional route, a probe record naming a different machine, an
+alias the current CLI no longer accepts, or a pin conflict. That reading is the judgment mechanism. Provider-package effective
 hashes are install provenance, not roster-policy truth.
 
 ## External-worker contract

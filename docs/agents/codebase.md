@@ -53,10 +53,12 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
 - Site manifest gate: a change touching any SDLC-family skill runs
   `PATH=/usr/bin:$PATH python3 site/check.py` (`site/MAINTENANCE.md`); errors block — **its exit code
   is the verdict; don't pipe it through `tail` in a `&&` chain or the failure is masked.**
-- Staffing eval suites (run from `skills/system/staffing/evals/`): `test_global_apply.py`,
-  `test_global_templates.py`, `test_provider_pilot.py`. The compiled per-provider staffing load has a
-  hard byte budget (`BASELINE_BYTES * 0.8` in `test_global_apply.py`) — prose added to
-  `install-and-reconcile.md` or `harness.md` must fit inside it.
+- Staffing eval suite (run from `skills/system/staffing/evals/`): `test_provider_pilot.py`. The guard is
+  **harness isolation** — neither compiled path (nor installed mount) may carry an instruction only a
+  session of the other harness could act on. The size ratio (each provider ≤ 80% of the unified
+  both-harness load, derived from the same files) is corroboration that separation happened, not a prose
+  budget: there is deliberately no absolute byte ceiling, and a needed sentence is never traded away to
+  satisfy a number.
 - Cold-reader check (pre-review, named): any change shipping audience-facing text — skill prose,
   templates, docs — gets a subagent with none of the authoring conversation reading the artifact
   alone, flagging every sentence it cannot ground in the artifact itself; leakage is fixed or
@@ -84,10 +86,10 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
 
 ## Generated artifacts
 
-- `.agents/skills/` and `.claude/skills/` mounts are build products of `npx skills add` — edit the
+- `.agents/skills/` and `.claude/skills/` mounts are build products of this repo's own installer (`tools/install.py`; see `AGENTS.md` § Agent skills) — edit the
   skill source and reinstall, per `AGENTS.md` (and never `npx skills remove`: with a local source path
   it deletes the source itself).
-- The staffing provider trees under `.agents/` are compiled by staffing's apply step — regenerate,
+- The staffing provider trees under `.agents/` are compiled by `python3 tools/install.py install --self --into .` — regenerate,
   don't hand-edit.
 - `.claude-plugin/marketplace.json` is generated from the compiled catalog by
   `python3 tools/catalog.py marketplace` — regenerate after any skill add/move/retire, don't

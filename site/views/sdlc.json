@@ -916,8 +916,8 @@
         },
         {
           "group": "Templates",
-          "label": "staffing.common (global module)",
-          "path": "templates/global/staffing.common.md"
+          "label": "roster seed (claude)",
+          "path": "variants/claude/templates/seed/roster-seed.md"
         },
         {
           "group": "Provenance",
@@ -928,6 +928,10 @@
           "label": "probes",
           "path": "evals/probes.md",
           "group": "Evals"
+        },
+        {
+          "label": "instruction trigger (setup template)",
+          "path": "templates/instruction-trigger.md"
         }
       ],
       "playbooks": [
@@ -935,9 +939,9 @@
       ],
       "bindings": [
         {
-          "port": "global module",
-          "expects": "~/.claude/asher-skills/staffing.md + the ~/.codex twin (machine-level, consented; outside this repo)",
-          "default": "skills/system/staffing/templates/global/staffing.common.md"
+          "port": "roster playbook",
+          "expects": "docs/agents/staffing.md in the consuming repo — the sole runtime authority, written by setup",
+          "default": "skills/system/staffing/variants/claude/templates/seed/roster-seed.md"
         },
         {
           "port": "project deltas",

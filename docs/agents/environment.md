@@ -79,7 +79,7 @@
   - **In-session executor (Claude):** spawn a subagent (Agent tool, `subagent_type: claude` or `general-purpose`) that reads the target skill's `SKILL.md` and works a probe scenario. This is the primary driver — Opus/Fable in-session.
   - **Independent executor (gpt-5.6-sol):** `codex exec -s read-only --skip-git-repo-check` (or `-s workspace-write` when the run must edit) with a self-contained prompt that points at the skill and scenario. A second, differently-modeled executor per `docs/agents/probe-evals.md`.
   - Any stdlib script a skill ships (e.g. `review-server.py`) is driven directly with `python3`.
-- Independent runtime verification: delegate a scenario to `codex exec` for a second executor outside the orchestrator's context (mechanics in `~/.claude/CLAUDE.md` § Staffing → Mechanics, the global base). Reading skill files, grading transcripts against an answer key, and running a skill's `scripts/` stay local.
+- Independent runtime verification: delegate a scenario to `codex exec` for a second executor outside the orchestrator's context (dispatch mechanics in the `staffing` skill's compiled harness-mechanics reference; the roster and this machine's verified routes in `staffing.md`). Reading skill files, grading transcripts against an answer key, and running a skill's `scripts/` stay local.
 - Evidence capture per surface: the **eval transcript** (the executor's run) plus a **pass/fail verdict table** mapping each probe to its answer-key criterion. For a skill that produces a visual artifact (e.g. `maquette`, a rendered plan), also a screenshot of the rendered HTML. Terminal transcripts for script behavior.
 - Supporting tools: `docs/agents/probe-evals.md` (the eval harness), the skill's own `evals/` dir, and the review surface (§ Presenting) for artifacts a human should eyeball.
 - Gaps: no automated CI — every check is agent-driven on demand. A skill whose value is subjective (taste of copy, feel of a flow) can't be fully graded mechanically; the fallback is a human review pass on the presentation surface.
@@ -105,9 +105,14 @@
 
 ## Model staffing
 
-Resolve the active harness's deferred global staffing module, then apply `CLAUDE.md` § Staffing. This repo
-adds two deltas only: skill design remains orchestration-grade, and probe evals use the dual-executor contract
-in `docs/agents/probe-evals.md`. There is no project floor, capability-provider, or succession override.
+Read `staffing.md` — the sole authority for this repo's roster, carrying the model rows, per-harness
+eligibility and capability bindings, pins, floor, succession, and the probed reachability rows with the
+machine and CLI versions behind them. Its § Repo deltas holds this repo's only two overrides: skill design
+remains orchestration-grade, and probe evals use the dual-executor contract in `docs/agents/probe-evals.md`.
+There is no project floor, capability-provider, or succession override.
+
+There is no machine-level staffing module to resolve first. A playbook whose probe record names a different
+machine is stale — re-run `staffing setup` rather than dispatching on it.
 
 ## Parallelism verdict
 
