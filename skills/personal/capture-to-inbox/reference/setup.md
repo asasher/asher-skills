@@ -24,8 +24,9 @@ deployment, Shortcut build, and the smoke test are effect gates.
    directory, a private project-root `.env` ignored by Git, and its `capture_to_inbox.token_file` instance
    binding. The instance materializes under `capture-to-inbox/` by default; a consumer whose instance lives
    elsewhere (such as an existing `control-plane/` tree) passes `--instance <dir>` explicitly, and the drain's
-   `--config` flag targets that instance's config the same way. Preserve an existing token while tightening `.env` to mode `0600`. A conflict exit is a
-   reconciliation gate: inspect each candidate and consumer edit; never copy over it wholesale.
+   `--config` flag targets that instance's config the same way. Preserve an existing token while tightening
+   `.env` to mode `0600`. A conflict exit is a reconciliation gate: inspect each candidate and consumer edit;
+   never copy over it wholesale.
 4. **Deploy.** Follow [deployment](deployment.md). Bind Railway initially, create or reuse persistent storage,
    set provider-managed secrets, deploy only the consumer API copy, and effect-verify health and auth before
    recording non-secret identities.
