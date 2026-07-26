@@ -17,12 +17,13 @@ and the reconciliation rules there govern how steps (1), (2), and (4) are judged
 record the results:
 
 1. **Which routes work from this harness?** Enumerate native models, then probe the sibling-harness route
-   defined by the compiled `reference/harness.md`. Before dispatching any probe, ask the owner whether an
-   installed direction is deliberately off for cost or policy — that answer classifies the direction
-   intentionally disabled, and no dispatch probe runs down it. Classify each remaining direction into
-   exactly one route state and record its evidence per § Route classification below, plus the native
-   wrapper label/model evidence where a wrapper carried the probe. A failure removes this direction only.
-   Real invocation behavior is the operational signal.
+   defined by the compiled `reference/harness.md`. Run step 2's version probes first: a direction whose CLI
+   is absent is unavailable (CLI absent), with no owner question to ask. For each installed direction, ask
+   the owner before dispatching any probe whether it is deliberately off for cost or policy — that answer
+   classifies the direction intentionally disabled, and no dispatch probe runs down it. Classify each
+   remaining direction into exactly one route state and record its evidence per § Route classification
+   below, plus the native wrapper label/model evidence where a wrapper carried the probe. A failure removes
+   this direction only. Real invocation behavior is the operational signal.
 2. **Which sibling harness CLIs are installed?** Probe `codex --version` and `claude --version`, then retain
    only the routes step 1 actually exercised. Presence alone is not reachability. Record the versions — they
    are part of what makes a recorded route trustworthy on this machine and stale on another.
@@ -57,15 +58,19 @@ reading carries what the successor decision needs.
   with the reason and the date it was made, and never infers it from a failure. On a re-run setup re-checks
   only the cheap premise — the CLI is still installed, a version probe with no dispatch — and leaves the
   choice standing. A disabled row's evidence fields hold the version probe (its command shape and the CLI
-  version it returned) and the owner's decision with its reason and date as the result. A successful probe
-  never promotes a disabled row; lifting the disable is the owner's edit, not the audit's.
+  version it returned), the owner's decision with its reason and date as the result, and the direction's
+  recorded successor like any other row. A successful probe never promotes a disabled row; the disable
+  lifts only when the owner says so — in setup's interview or by editing the playbook — never from a probe
+  result.
 - **Unavailable** — the probe failed, and the row captures the failure class (CLI absent, alias rejected,
   permission denied, timeout, effect denied) rather than a bare no. The failure class is what the successor
   decision reads.
 
-The capability-provider registry's route-state field uses these same three states, and the disabled state
-is owner-owned there too; the five-field evidence contract below is stated for directions, which carry the
-cross-harness risk this classification exists for.
+The capability-provider registry's route-state field uses these same three state names with the same
+meaning — only an effect-verified route backs selection, and a probe never promotes a disabled one. Its
+rows carry the registry's own fields (primary, fallback, eligible executor) rather than this section's
+five, and its owner questions ride the audit's existing provider-binding interview; the contract below is
+stated for directions, which carry the cross-harness risk this classification exists for.
 
 Each classification carries five evidence fields, all resolvable from its row: the CLI version observed,
 the timestamp, the command shape used, the result or failure class, and the recorded successor for that

@@ -125,8 +125,8 @@ sibling CLI? Cite.
 
 **P26 (issue 59, idempotent re-run).** `staffing setup` re-runs on the same machine with unchanged CLI
 versions, and every probe returns exactly what the playbook records. What does the re-run change in the
-file? What do the recorded timestamps mean, and why does leaving them untouched not make them dishonest?
-Cite.
+file, header included? What do the recorded timestamps mean, and why does leaving them untouched not make
+them dishonest? Cite.
 
 ## Answer key
 
@@ -268,12 +268,14 @@ Cite.
   rule needs its own probes. Cite `reference/machine-audit.md` (audit step 3) or the alias bullet in
   `reference/install-and-reconcile.md` § Reconciling an existing playbook. Recording the roster name as the
   alias, or extending one CLI's rule to the other = fail.
-- **P26 (issue 59):** **Nothing** — the file is byte-identical. Timestamps date the observation that
-  **established** each recorded state, not the latest run that confirmed it, so a probe that finds a row
-  exactly as recorded writes nothing; the rows stay honest because any change in what a probe observes is
-  written as fresh evidence with its own date. Refreshing a "last confirmed" date — turning every re-run
-  into a diff — = fail. Cite `reference/machine-audit.md` § Route classification and the byte-identical
-  bullet in `reference/install-and-reconcile.md` § Reconciling an existing playbook.
+- **P26 (issue 59):** **Nothing** — the file is byte-identical, header included ("a run that confirms
+  every recorded fact rewrites nothing, header included", `reference/setup.md`). Timestamps date the
+  observation that **established** each recorded state, not the latest run that confirmed it, so a probe
+  that finds a row exactly as recorded writes nothing; the rows stay honest because any change in what a
+  probe observes is written as fresh evidence with its own date. Refreshing a "last confirmed" date — on a
+  row or the header, turning every re-run into a diff — = fail. Cite `reference/machine-audit.md` § Route
+  classification and the byte-identical bullet in `reference/install-and-reconcile.md` § Reconciling an
+  existing playbook.
 
 ## Scoring
 
