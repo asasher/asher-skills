@@ -17,9 +17,11 @@ Install Asher's skills into this repository, and finish the job.
    before running anything if you are unsure which skills I want. If this repository
    already has an `.agents/asher-skills/install.json`, it already has skills from
    here: run the same command with no `--skill` at all instead, which refreshes
-   exactly the set that file records without widening it. If it has no `install.json`
-   but a `skills-lock.json` naming skills from here, ask me which set to record before
-   running anything — naming a set there drops the skills you leave out of it.
+   exactly the set that file records. Whenever you do name a set, name the whole set
+   I want, including what is already there — `--skill` replaces the recorded set and
+   removes the skills left out of it, so adding one is naming all of them. If there is
+   a `skills-lock.json` naming skills from here and no `install.json`, ask me which
+   set to record before running anything.
 2. The install prints a JSON report. Read its `setup_report`: `setup_order` names the
    installed skills that declare a setup, already in the order to run them, and the
    summary on stderr says the same thing.
