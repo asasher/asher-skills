@@ -109,7 +109,7 @@ stays off this quarter for cost. On the same machine, the Codex→Claude probe f
 permission denial. What state does setup record for each direction, where does each state's information come
 from, and how does a later reader tell the cost-disabled direction from the broken one without re-probing?
 On a re-run, does setup dispatch a probe down the disabled direction, and can a successful probe ever flip
-it to effect-verified? Cite.
+it to effect-verified? If not a probe, what can lift the disable? Cite.
 
 **P24 (issue 59, recorded-state conflict).** A repo's playbook records the Codex→Claude direction as
 **unavailable**, failure class "alias rejected", probed against an older Claude CLI. Your fresh audit's
