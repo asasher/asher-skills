@@ -20,11 +20,14 @@ Install Asher's skills into this repository, and finish the job.
    exactly the set that file records without widening it.
 2. The install prints a JSON report. Read its `setup_report`: `setup_order` names the
    skills whose setup needs to run, already in the order to run them, and the summary
-   on stderr says the same thing. An empty list means there is nothing to set up.
+   on stderr says the same thing. An empty list means there is nothing to set up. If
+   the report carries no `setup_report` at all, work from its `installed` list instead
+   and set up every skill on it whose instructions describe a setup.
 3. Run those setups yourself, one at a time, in that order. For each, read
    `.agents/skills/<name>/SKILL.md` — the skill as installed — and follow the setup it
    describes, including any file it points you to. A setup writes and reconciles this
-   repository's playbooks — the files the skills read at runtime — so work from what
+   repository's playbooks — the files under `docs/agents/` that the skills read at
+   runtime, which belong to this repository once written — so work from what
    this repository actually does, edit an existing playbook rather than replacing it,
    and ask me when a setup needs a decision I have not given you.
 4. Review the whole diff before you commit it: the skill mounts, the install state in
