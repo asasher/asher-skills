@@ -35,7 +35,7 @@
   |-----------|----------------|---------------------|
   | GitHub tracker | one issue graph | no — but serialized main-branch writes handle it |
 
-  (The tailnet presentation surface row is gone: the review surface is retired — review is tracker-native on each change request, per-ticket by construction, so there is no review singleton at all. See § Presenting; asher-skills#116.)
+  (There is no review-surface singleton: review is tracker-native, on each change request — per-ticket by construction, so concurrent reviews share nothing. The tailnet surface that once held this role is retired; § Presenting, asher-skills#116.)
 
   The tracker does not collide with worktrees editing skill files, so it does not force serialized *verification* of the code.
 
@@ -105,7 +105,9 @@
   under `/asher-skills/...` is an orphan — `tailscale serve status` lists live handlers, and
   `tailscale serve --set-path <path> off` reaps one.
 - Keep-awake: **none** (setup choice, reconfirmed at retirement) — harnesses hold sleep assertions during
-  active runs; with review on the tracker, nothing AFK depends on this machine being awake.
+  active runs, and with review on the tracker the loop leaves nothing AFK depending on this machine being
+  awake. The one exception is an explicitly-invoked `serve-via-tailnet` session, which serves from this
+  machine — an AFK review over it may find the machine asleep; revisit if that bites.
 
 ## Model staffing
 
