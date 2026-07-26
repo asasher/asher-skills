@@ -46,7 +46,7 @@ Where a skill lives — three distinct places, three terms:
   use a symlink to the primary. A declared provider variant uses a separately compiled real directory plus
   `.agents/asher-skills/install.json`; an undeclared independent copy is invalid.
 - **Skill instance** — the consumer-owned project materialization created or maintained by running an
-  installed package: an editable directory such as `control-plane/` containing scaffold, configuration,
+  installed package: an editable directory such as `relay/` containing scaffold, configuration,
   state, and artifacts. It is project material, not a package mount or author-side skill workspace, and a
   package reinstall must preserve it.
 - **Skill state** — the mutable data inside or associated with a skill instance: checkpoints, queues,

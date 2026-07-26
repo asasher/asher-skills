@@ -137,7 +137,6 @@ including one marked `user`.
 | software-development | `verify-your-work` | model | thread |
 | software-development | `watch-until` | model | orchestrator |
 | personal | `capture-to-inbox` | model | thread |
-| personal | `control-plane` | user | orchestrator |
 | personal | `eloquent` | model | thread |
 | personal | `fair-deal` | user | orchestrator |
 | personal | `learn-anything` | user | thread |
