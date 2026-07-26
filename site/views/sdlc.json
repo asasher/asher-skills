@@ -48,6 +48,11 @@
           "path": "SKILL.md"
         },
         {
+          "group": "Reference",
+          "label": "setup",
+          "path": "reference/setup.md"
+        },
+        {
           "group": "Templates",
           "label": "platform",
           "path": "templates/common/platform.md"

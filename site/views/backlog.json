@@ -176,7 +176,7 @@
       "title": "setup",
       "blurb": "install/reconcile playbooks · verify label roles",
       "open": {
-        "file": "skills/software-development/backlog/SKILL.md"
+        "file": "skills/software-development/backlog/reference/setup.md"
       }
     },
     {

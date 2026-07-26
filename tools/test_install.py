@@ -322,13 +322,25 @@ class SetupReportTest(unittest.TestCase):
         recorded = json.loads(self.state_path().read_text())["skills"]
         return {name: entry["source"] for name, entry in recorded.items()}
 
+    def declared_setups(self, changed: list[str]) -> list[str]:
+        """The changed skills that declare a setup, in the catalog's resolution order.
+
+        Derived from the catalog and the given changed set — inputs independent of
+        the installer's own filter, which is the code under test.
+        """
+        graph = catalog.discover(ROOT)
+        order = catalog.resolve(graph, set(self.recorded_sources()))["setup_order"]
+        return [name for name in order if name in set(changed) and graph[name].setup]
+
     def test_first_install_treats_the_whole_closure_as_changed(self) -> None:
         result = install.install(ROOT, self.target, {"backlog"})
         report = result["setup_report"]
         self.assertEqual(report["basis"], "first-install")
         self.assertIsNone(report["since_revision"])
         self.assertEqual(report["changed"], result["installed"])
-        self.assertEqual(report["setup_order"], ["diagnosing-bugs"])
+        self.assertEqual(report["setup_order"], self.declared_setups(report["changed"]))
+        # asher-skills#120: `backlog` declares its setup, so the report names it.
+        self.assertIn("backlog", report["setup_order"])
 
     def test_nothing_changed_reports_empty_fields_rather_than_omitting_them(self) -> None:
         """"Nothing to do" and "not reported" must be distinguishable by a consumer."""
@@ -371,7 +383,8 @@ class SetupReportTest(unittest.TestCase):
         # Expectation from git itself, so the test cannot rot as history grows.
         self.assertEqual(report["changed"], self.changed_per_git(older, sources))
         self.assertIn("diagnosing-bugs", report["changed"])
-        self.assertEqual(report["setup_order"], ["diagnosing-bugs"])
+        self.assertEqual(report["setup_order"], self.declared_setups(report["changed"]))
+        self.assertIn("diagnosing-bugs", report["setup_order"])
 
     def test_setup_order_is_the_catalogs_own_resolution_order(self) -> None:
         selected = {"backlog", "research", "control-plane"}
@@ -411,7 +424,7 @@ class SetupReportTest(unittest.TestCase):
         self.assertEqual(report["basis"], "unknown-revision")
         self.assertEqual(report["since_revision"], "0" * 40)
         self.assertEqual(report["changed"], result["installed"])
-        self.assertEqual(report["setup_order"], ["diagnosing-bugs"])
+        self.assertEqual(report["setup_order"], self.declared_setups(report["changed"]))
 
     def test_a_missing_recorded_revision_falls_back_to_the_whole_closure(self) -> None:
         result = install.install(ROOT, self.target, {"backlog"})
@@ -464,7 +477,8 @@ class SetupReportTest(unittest.TestCase):
             (ROOT / source / "SKILL.md").read_bytes(),
         )
         self.assertIn("diagnosing-bugs", report["changed"])
-        self.assertEqual(report["setup_order"], ["diagnosing-bugs"])
+        self.assertEqual(report["setup_order"], self.declared_setups(report["changed"]))
+        self.assertIn("diagnosing-bugs", report["setup_order"])
 
     def test_a_recorded_revision_cannot_smuggle_a_git_option(self) -> None:
         """`install.json` is checked in, so a poisoned revision is a reachable input.
