@@ -1,6 +1,6 @@
 ---
 name: backlog
-description: Dispatch the backlog — groom sweeps unlabeled and needs-shaping tickets into user-confirmed batches and fans them into shaping threads; build fans ready, unblocked tickets into worktree-isolated subagents it supervises. Setup installs the playbooks.
+description: Dispatch the backlog — groom sweeps unlabeled and needs-shaping tickets into user-confirmed batches, fans them into shaping threads, and sweeps finished tickets' worktrees for teardown; build fans ready, unblocked tickets into worktree-isolated subagents it supervises. Setup installs the playbooks.
 argument-hint: "[groom | build | setup] [ticket ids]"
 user-invocable: true
 disable-model-invocation: true
@@ -8,7 +8,7 @@ metadata:
   invocation: user
   execution: orchestrator
   requires: [build, shape, to-subagent, to-thread]
-  optional: []
+  optional: [merge-changes]
 ---
 
 # Backlog
@@ -43,6 +43,21 @@ Report each thread and how to attach; status on request comes from the tracker a
 listing. Inside the thread, shaping ends with a spec on each ticket and the user's blessing makes it
 ready — that endgame belongs to the `shape` skill, not this dispatcher.
 
+**Hygiene rides the groom: the teardown sweep.** Every path that ends a ticket's work must also end its
+worktree. Merge-path teardown belongs solely to the `merge-changes` skill's cleanup step, and abort-path
+teardown to `backlog build` as it clears a claim — this sweep is the catch-all for what those owners
+missed: merges landed outside the loop, dead runners, stacks that outlived their directories. Enumerate
+from git's worktree listing joined with each branch's change-request state — never a directory scan. A
+worktree whose change request is merged or closed is a teardown candidate; detect merged squash-proof —
+the branch's upstream gone, or the change request's own recorded state — never a merge-base ancestor
+check, which squash merges defeat. A candidate with a clean tree is reaped without asking, environment
+before working copy per the environment playbook's teardown row; a dirty tree is surfaced for the user's
+confirmation and never silently deleted — it may hold unpushed work, the same rule the policy's
+branch-gone orphan sweep applies, and that sweep runs alongside this direction on its own quiet horizon. A
+worktree whose branch is live with its change request open is left alone. Where the environment playbook
+records container stacks, sweep one direction further: containers whose compose working-dir label points
+at a path that no longer exists are orphaned stacks — surface them for teardown too.
+
 ## build
 
 Sweep for tickets carrying the ready role whose dependency edges are clear, or take the ids given.
@@ -65,6 +80,11 @@ tip, process — and respawned or reported, so a wedged build surfaces instead o
 outcome comment are its events, so a dispatcher that dies or compacts mid-fleet reconstructs from
 there — on resume, reconcile the claims this runner owns against live worktrees and branch tips before
 dispatching anything new. Merging the resulting change requests waits for explicit authorization.
+
+An abort ends the worktree with the claim: clearing a claim without a merge — a handback, a failed
+build, a withdrawn dispatch — also removes that ticket's worktree, environment before working copy per
+the environment playbook's teardown row, so nothing the dispatch created outlives it. Merge-path
+teardown stays with the `merge-changes` skill; what both paths miss, groom's teardown sweep catches.
 
 ## setup
 
