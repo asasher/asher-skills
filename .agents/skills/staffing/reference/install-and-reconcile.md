@@ -28,10 +28,27 @@ The playbook is **repo-owned**. Reconcile it clause by clause; never overwrite i
 - Audit-derived rows — reachability, aliases, provider bindings, eligibility — are replaced by what this run
   probed, and a replacement that contradicts what was recorded is **reported as drift**, not applied
   silently. Silently preserving a stale row and silently overwriting a fresh one are the same failure seen
-  from two sides.
+  from two sides. Direction states move both ways under this rule: a recorded **unavailable** direction
+  whose fresh effect probe succeeds is reported and reclassified effect-verified with the fresh evidence
+  (the fields the machine audit's § Route classification defines) — a direction that becomes reachable
+  stops being treated as dead, and its routes re-enter the resolved roster — and a recorded
+  **effect-verified** direction whose probe fails is reported and reclassified unavailable with its
+  captured failure class.
+- **Intentionally disabled** rows are owner decisions, not audit output: a re-run confirms the install
+  still exists (a version probe, no dispatch) and leaves the choice standing unless the owner lifts it in
+  that run's interview — a successful probe never promotes one. A vanished install is drift to report:
+  the row is reclassified unavailable with its failure class, retaining the owner's disable decision
+  beside it as a note — not a second state — so a reinstall
+  does not silently re-enable the route. When the install returns, the standing decision puts the row back
+  to intentionally disabled without a new owner interview; the state comes from the retained decision, not
+  from the probe that noticed the reinstall.
+- An alias enters the playbook only from a probe result naming the CLI version that produced it. A roster
+  name is never promoted to a dispatch alias by assumption, and a name no probe ran against is recorded as
+  unverified, never as a route.
 - Rows the audit could not verify are reported as gaps and left marked, never quietly dropped and never
   promoted to verified.
-- A re-run with unchanged reachability leaves the file byte-identical.
+- A re-run with unchanged reachability leaves the file byte-identical. Evidence timestamps date the
+  observation that established each recorded state, so a probe that merely confirms a row writes nothing.
 
 A write that cannot be read back changes nothing: fail closed, report the gap, and do not dispatch on a
 roster that was not durably written. Retain recovery bytes until the new playbook passes its probes.
@@ -40,8 +57,9 @@ roster that was not durably written. Retain recovery bytes until the new playboo
 
 Read the project playbook and a current machine audit; report drift or conflict in
 prose. Examples: an unreachable row, a stale directional route, a probe record naming a different machine, an
-alias the current CLI no longer accepts, or a pin conflict. That reading is the judgment mechanism. Provider-package effective
-hashes are install provenance, not roster-policy truth.
+alias the current CLI no longer accepts, or a pin conflict. That reading is the judgment mechanism. The
+`reconcile` command only reports; applying what it finds is setup's write, under § Reconciling an existing
+playbook. Provider-package effective hashes are install provenance, not roster-policy truth.
 
 ## External-worker contract
 

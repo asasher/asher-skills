@@ -21,7 +21,7 @@ dispatch level where the harness exposes one.
 | sonnet-5 | 5 | 5 | 5 | high |
 | opus-5 | 3 | 8 | 8 | high |
 
-The Codex models are coordinator-eligible through native agent threads. The Claude rows are effect-verified bounded worker routes, not coordinator-eligible until durable child ownership is separately proven. Add a fable-5 row only after its CLI alias and requested effect are verified on this machine. Floor: gpt-5.6-terra for native Codex roles.
+The Codex models are coordinator-eligible through native agent threads. The Claude rows are bounded worker routes for the audit to effect-verify, not coordinator-eligible until durable child ownership is separately proven. Add a fable-5 row only after its CLI alias and requested effect are verified on this machine. Floor: gpt-5.6-terra for native Codex roles.
 
 ## Capability providers
 
