@@ -9,6 +9,7 @@ metadata:
   execution: orchestrator
   requires: [build, shape, to-subagent, to-thread]
   optional: [merge-changes]
+  setup: reference/setup.md
 ---
 
 # Backlog
@@ -88,10 +89,5 @@ teardown stays with the `merge-changes` skill; what both paths miss, groom's tea
 
 ## setup
 
-Install or reconcile the project playbooks from `templates/`: `docs/agents/platform.md` (platform
-bindings, with each verb verified live), `backlog-policy.md` (label roles, dependency edges, readiness
-decision), `environment.md` (run/seed/check), `codebase.md` (how the code is written and checked —
-seeded from the repo's own docs, accreting what sessions learn), `evidence.md` (the evidence bar),
-`change-description.md` (the change-request body outline). Reconcile with what
-exists — a repo-owned playbook is edited, never blindly overwritten. Verify the label roles exist in the
-tracker; create missing ones with the user's consent.
+Load [setup](reference/setup.md): install or reconcile the project playbooks from `templates/`, then
+verify the label roles exist in the tracker.

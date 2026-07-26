@@ -69,6 +69,25 @@ class CatalogTests(unittest.TestCase):
             row = f"| {skill.category} | `{skill.name}` | {skill.invocation} | {execution} |"
             self.assertEqual(readme.count(row), 1, row)
 
+    def test_skill_bodies_describing_a_setup_declare_it(self) -> None:
+        # A `## setup` command section without `metadata.setup` is invisible to the
+        # installer's setup_report, so its setup silently never reaches setup_order
+        # (asher-skills#120: `backlog` shipped exactly that).
+        root = Path(__file__).parents[1]
+        undeclared = sorted(
+            skill.name
+            for skill in catalog.discover(root).values()
+            if not skill.setup
+            and re.search(
+                r"^##\s+setup\b",
+                (root / skill.source / "SKILL.md")
+                .read_text(encoding="utf-8")
+                .split("---", 2)[-1],
+                re.IGNORECASE | re.MULTILINE,
+            )
+        )
+        self.assertEqual(undeclared, [])
+
     def test_no_stale_flat_source_paths_in_authoritative_surfaces(self) -> None:
         root = Path(__file__).parents[1]
         old_paths = {f"skills/{name}" for name in catalog.discover(root)}

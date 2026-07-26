@@ -33,14 +33,11 @@ Install Asher's skills into this repository, and finish the job.
    `docs/agents/` that the skills read at runtime, so work from what this repository
    actually does, edit an existing playbook rather than replacing it, and ask me when
    a setup needs a decision I have not given you.
-4. Then skim the `SKILL.md` of every skill in the report's `installed` list that
-   `setup_order` did not name: a skill can describe a setup without declaring one, and
-   those never reach the report. Run any setup you find there, after the ordered ones.
-5. Review the whole diff before you commit it: the skill mounts, the install state in
+4. Review the whole diff before you commit it: the skill mounts, the install state in
    `.agents/asher-skills/install.json`, and every playbook a setup touched. A playbook
    naming a command, branch, or tool this repository does not use is a defect to fix,
    not a detail to wave through.
-6. Commit, with a message naming the skills you installed and the setups you ran.
+5. Commit, with a message naming the skills you installed and the setups you ran.
    Leave the installed skill directories alone otherwise — they are build products, and
    the next install rewrites them.
 ```

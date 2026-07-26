@@ -28,7 +28,8 @@ the `merge-changes` skill.
 
 ## Dependency surface
 
-- **Bundled:** `templates/` — the playbook baselines `setup` installs (shared `common/` plus per-domain
+- **Bundled:** `reference/setup.md` — the setup procedure (declared as `metadata.setup`, so installers
+  report it); `templates/` — the playbook baselines `setup` installs (shared `common/` plus per-domain
   packs; `software/` is the shipped default).
 - **Project playbooks:** `docs/agents/platform.md` (platform bindings, verbs verified live),
   `backlog-policy.md` (label roles, dependency edges, readiness), `environment.md` (run/seed/check),

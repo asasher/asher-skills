@@ -46,7 +46,7 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
 - Script check: for any changed stdlib-Python script, `python3 -m py_compile <script>` then drive it
   directly (`--help`, `--sweep`, the real paths) on this machine's Python 3.14. A script *refactor* is
   behavior-preserving only if the same driven paths produce the same output.
-- Catalog gate: `PATH=/usr/bin:$PATH python3 tools/test_catalog.py` (22 tests). This includes the
+- Catalog gate: `PATH=/usr/bin:$PATH python3 tools/test_catalog.py` (23 tests). This includes the
   marketplace drift gate: `.claude-plugin/marketplace.json` must match the compiled catalog —
   standalone check `python3 tools/catalog.py marketplace --check` (non-zero on drift), regenerate
   with `python3 tools/catalog.py marketplace`.
