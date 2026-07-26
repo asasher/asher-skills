@@ -57,7 +57,7 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
   (verified live 2026-07-27, asher-skills#128). Don't reinstate the old `PATH=/usr/bin:$PATH` prefix on
   these gates: it pinned Apple's system python around a since-fixed homebrew hashlib breakage
   (`catalog.py` hashes with sha256; the record is in `relay-workspace/*/grading.md`), the worktree
-  sandbox builds run in rejects the env-assignment prefix form outright, and `/usr/bin/python3` is
+  sandbox that builds run in rejects the env-assignment prefix form outright, and `/usr/bin/python3` is
   3.9.6 — older than the 3.14 the script check above exercises.
 - Staffing eval suite (run from `skills/system/staffing/evals/`): `test_provider_pilot.py`. The guard is
   **harness isolation** — neither compiled path (nor installed mount) may carry an instruction only a
