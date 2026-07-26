@@ -16,7 +16,9 @@ workflow skill, an ad-hoc session, and any harness — not just one dev loop.
 ## Shape
 
 - **Compiled, not hardcoded.** A machine audit probes native models plus each installed sibling harness CLI
-  in each direction, then writes only effect-verified routes. The example table in `machine-audit.md` exists
+  in each direction, then classifies each direction — effect-verified, intentionally disabled by the owner,
+  or unavailable with its failure class — with the probe evidence behind it; only effect-verified directions
+  back dispatch. The example table in `machine-audit.md` exists
   only as a *labeled example of audit output*, never as the shipped roster. Cost/intelligence/taste are
   seeded and user-tuned.
 - **Three separate structures.** A rankings table (cost/intelligence/taste), a named harness/tool

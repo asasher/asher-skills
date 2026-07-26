@@ -67,7 +67,7 @@ every machine, so they ship with the skill and are reviewed with it.
 One playbook serves every harness — a Codex session and a Claude session read the same file, and facts that
 differ between them are a column, not a second file. Reachability is directional, and each direction carries
 one of three recorded states — effect-verified, intentionally disabled, or unavailable with its failure
-class: a failure removes one direction, never both, and only an effect-verified direction backs dispatch.
+class. A failure removes one direction, never both, and only an effect-verified direction backs dispatch.
 
 A playbook whose recorded machine is not this machine is stale. Re-run setup before dispatching rather than
 trusting rows probed elsewhere.

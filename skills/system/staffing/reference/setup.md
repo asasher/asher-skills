@@ -14,7 +14,9 @@ that makes sessions read it. Setup writes only inside the repo.
 3. Write or reconcile the playbook per [install and reconcile](install-and-reconcile.md). It is repo-owned:
    an existing file is reconciled clause by clause, never overwritten wholesale, and owner-tuned judgment
    numbers survive. Record the machine, probe date, and CLI versions at its head — a playbook whose recorded
-   machine is not this machine is stale, and saying so is what stops a foreign row from being trusted.
+   machine is not this machine is stale, and saying so is what stops a foreign row from being trusted. The
+   header dates follow the same establishing-observation rule as row evidence: a run that confirms every
+   recorded fact rewrites nothing, header included.
 4. Reconcile the shipped trigger template (`templates/instruction-trigger.md`) into the project's agent
    instruction file — the harness-neutral base every harness loads where one exists, else the instruction
    file the repo's harnesses actually read. A playbook nothing points at is never consulted; the trigger is
@@ -32,5 +34,6 @@ that restates them is drift waiting to happen.
 
 Completion criterion: this project resolves one unambiguous roster from its playbook alone, with no
 home-directory dependency and no runtime read of the seed; every recorded route names the probe that
-verified it and no recorded alias lacks a probe that accepted it; and a machine that did not run those
-probes is told to re-run setup rather than trusting them.
+verified it, and a dispatch alias appears only with the probe that accepted it — a name no probe covered
+stays marked unverified; and a machine that did not run those probes is told to re-run setup rather than
+trusting them.

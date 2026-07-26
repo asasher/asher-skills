@@ -17,10 +17,12 @@ and the reconciliation rules there govern how steps (1), (2), and (4) are judged
 record the results:
 
 1. **Which routes work from this harness?** Enumerate native models, then probe the sibling-harness route
-   defined by the compiled `reference/harness.md`. Classify each direction into exactly one route state and
-   record its evidence per § Route classification below, plus the native wrapper label/model evidence where
-   a wrapper carried the probe. A failure removes this direction only. Real invocation behavior is the
-   operational signal.
+   defined by the compiled `reference/harness.md`. Before dispatching any probe, ask the owner whether an
+   installed direction is deliberately off for cost or policy — that answer classifies the direction
+   intentionally disabled, and no dispatch probe runs down it. Classify each remaining direction into
+   exactly one route state and record its evidence per § Route classification below, plus the native
+   wrapper label/model evidence where a wrapper carried the probe. A failure removes this direction only.
+   Real invocation behavior is the operational signal.
 2. **Which sibling harness CLIs are installed?** Probe `codex --version` and `claude --version`, then retain
    only the routes step 1 actually exercised. Presence alone is not reachability. Record the versions — they
    are part of what makes a recorded route trustworthy on this machine and stale on another.
@@ -59,6 +61,10 @@ reading carries what the successor decision needs.
 - **Unavailable** — the probe failed, and the row captures the failure class (CLI absent, alias rejected,
   permission denied, timeout, effect denied) rather than a bare no. The failure class is what the successor
   decision reads.
+
+The capability-provider registry's route-state field uses these same three states, and the disabled state
+is owner-owned there too; the five-field evidence contract below is stated for directions, which carry the
+cross-harness risk this classification exists for.
 
 Each classification carries five evidence fields, all resolvable from its row: the CLI version observed,
 the timestamp, the command shape used, the result or failure class, and the recorded successor for that

@@ -36,8 +36,10 @@ The playbook is **repo-owned**. Reconcile it clause by clause; never overwrite i
 - **Intentionally disabled** rows are owner decisions, not audit output: a re-run confirms the install
   still exists (a version probe, no dispatch) and leaves the choice standing — a successful probe never
   promotes one. A vanished install is drift to report: the row is reclassified unavailable with its failure
-  class, retaining the owner's disable decision beside it so a reinstall does not silently re-enable the
-  route.
+  class, retaining the owner's disable decision beside it as a note — not a second state — so a reinstall
+  does not silently re-enable the route. When the install returns, the standing decision puts the row back
+  to intentionally disabled without a new owner interview; the state comes from the retained decision, not
+  from the probe that noticed the reinstall.
 - An alias enters the playbook only from a probe result naming the CLI version that produced it. A roster
   name is never promoted to a dispatch alias by assumption, and a name no probe ran against is recorded as
   unverified, never as a route.

@@ -9,8 +9,8 @@ pass/fail against the key. **The answer key is written before any runs** and gra
 acceptance criteria (`plans/1-extract-staffing.html`, ids ac-1..ac-11) — the plan is the source of truth; do
 not grade against looser criteria.
 
-The original fourteen probes protect ac-1..ac-11. P15–P17 cover owner-routed setup and sibling harness
-dispatch.
+P1–P14 protect ac-1..ac-11; each later probe names its subject in its own header, and the criterion
+coverage map at the end of this file is the index.
 
 ## Probes
 
@@ -164,8 +164,8 @@ Cite.
   cost/intelligence/taste from the documented default and mark them "tune these", omit the Codex CLI mechanics
   block (Codex absent), and effect-probe installed tools into a provider registry plus pins. You **may not** ship the
   five-model table as the roster — it is labeled example output, and the roster is compiled from *this*
-  machine. Cite `reference/machine-audit.md` (the audit procedure / "compiled from the current machine, never
-  shipped fixed"). Reproducing Asher's table as the roster, or inventing reachable models, = fail.
+  machine. Cite `reference/machine-audit.md` (the audit procedure / "Never write a seeded default this
+  machine failed to verify"). Reproducing Asher's table as the roster, or inventing reachable models, = fail.
 - **P8 (ac-6):** It is an **example of audit output for one machine — explicitly NOT the shipped/authoritative
   roster** (the file labels it "Example of audit output (illustrative only — NOT the shipped roster)" and
   introduces it as "**one machine's audit result**, shown so you know the shape to write"). Calling it the
