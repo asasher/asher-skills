@@ -44,9 +44,9 @@ Steps (1)–(5) all feed § Writing the roster from the audit; the judgment numb
 ## Route classification — three states, each with its evidence
 
 Every sibling-harness direction the audit records lands in exactly one of three states, and a later reader
-must be able to tell them apart from the playbook alone, without re-probing. A boolean cannot do this: it
-makes a deliberately disabled route read identically to a broken one, and neither reading carries what the
-successor decision needs.
+must be able to tell them apart from the playbook alone, without re-probing. A bare worked/failed record
+cannot express this: it reads a deliberately disabled route identically to a broken one, and neither
+reading carries what the successor decision needs.
 
 - **Effect-verified** — a live probe of the role's effect class succeeded, and the row names the class it
   cleared (write for builders, read for reviewers). Only this state backs dispatch.

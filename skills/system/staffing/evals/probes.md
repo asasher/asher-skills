@@ -135,9 +135,8 @@ Cite.
   frontmatter and an explicit finding that no file reads another skill's files or a home-directory path.
   Frontmatter has `name: staffing`, `user-invocable: true`, and a `description` that reads as
   a global-capable staffing primitive invoked by name by siblings and directly by users — **pass**. No file
-  imports another skill's files (the dependency surface says the references "import no other skill's files"
-  and siblings are "none — root primitive"); a grep for cross-skill paths finds none. Claiming a cross-skill
-  import exists = fail.
+  imports another skill's files (the dependency surface declares siblings "none — `staffing` is a root
+  primitive"); a grep for cross-skill paths finds none. Claiming a cross-skill import exists = fail.
 - **P2 (ac-2):** The three pointer kinds: **bundled references** (own `reference/` contract), **project
   playbooks** (installed into the target repo's `docs/agents/`), **sibling skills**. On siblings it must say
   **"none — `staffing` is a root primitive"** (invoked by siblings, depends on none). Missing any of the
@@ -169,7 +168,8 @@ Cite.
   shipped fixed"). Reproducing Asher's table as the roster, or inventing reachable models, = fail.
 - **P8 (ac-6):** It is an **example of audit output for one machine — explicitly NOT the shipped/authoritative
   roster** (the file labels it "Example of audit output (illustrative only — NOT the shipped roster)" and
-  "audit output for one environment"). Calling it the canonical table = fail.
+  introduces it as "**one machine's audit result**, shown so you know the shape to write"). Calling it the
+  canonical table = fail.
 - **P9 (ac-7):** The playbook contains the **complete roster**, raised floor included — it is the sole
   authority, and resolution reads it and nothing else. There is no base to delta against: a "deltas only"
   answer is the *previous* shape and = fail. Cite `SKILL.md` § Where the roster lives and
