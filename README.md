@@ -148,7 +148,6 @@ including one marked `user`.
 | personal | `relay` | model | thread |
 | personal | `review-opportunities` | user | thread |
 | personal | `teamdrive` | user | thread |
-| personal | `until-zero` | model | thread |
 | in-progress | `goodwork` | model | thread |
 
 The install/setup graph is compiled on demand from each skill's frontmatter
