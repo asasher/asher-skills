@@ -26,7 +26,7 @@ Self-install (`--self`) mounts the same way — real copies, exactly what a cons
 gets. Mounts are decoupled from sources on purpose: a running session reads a
 stable copy while sources change on branches, and a merged change reaches the
 mounts only through a deliberate reconcile — re-running the install in the main
-checkout (asher-skills#118).
+checkout.
 """
 
 from __future__ import annotations
