@@ -6,7 +6,9 @@ are eligible) lives in the project's staffing playbook, never here.
 
 ## Dispatch
 
-Native Claude work uses watched Agent/Workflow children.
+Native Claude work uses watched **Agent/Workflow** children — the harness's two native spawn paths: the
+single-child `Agent` tool, and the `Workflow` tool that scripts many children deterministically. Both are
+named because both prove the spawned child's model, which the wrapper-staffing rule below relies on.
 
 Claude→Codex work runs only inside a watched Claude wrapper named for the external Codex model and task, such
 as `gpt-5.6-sol:inspect-lock`. Staff that relay with the cheapest native Claude model the floor allows,

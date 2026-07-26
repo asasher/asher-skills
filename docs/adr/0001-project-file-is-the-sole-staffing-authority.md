@@ -13,7 +13,7 @@ carries the **complete** roster and is the only thing read at resolution time, a
 
 ## Considered options
 
-**Bundled roster as base, project file as overrides** — what the originating ticket first proposed. Rejected
+**Bundled roster as base, project file as overrides** — what asher-skills#107 first proposed. Rejected
 because it is still two-layer resolution: it relocates the drift generator rather than removing it, and a
 project diff still does not show the effective roster.
 

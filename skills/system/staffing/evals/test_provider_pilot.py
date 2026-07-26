@@ -18,7 +18,16 @@ MAX_SHARE_OF_UNIFIED = 0.8
 
 # Absolute ceiling, so the ratio test cannot be satisfied by both sides growing together.
 # Re-derive deliberately (and say why in the commit) rather than nudging it to pass.
-CEILING_BYTES = 13_000  # claude 12,150 / codex 11,935 as of the sole-authority migration
+#
+# 13,000 -> 13,500 (claude 13,070 / codex 13,104): the sole-authority migration's review
+# round added ~920 bytes of text that closed real defects — the sibling-surface
+# declaration and the absent-playbook stop-vs-degrade correction in SKILL.md, the
+# Agent/Workflow definition, and the rationale behind the `--bare` prohibition (it forces
+# API-key auth over the machine's subscription and skips CLAUDE.md discovery, so a --bare
+# child also resolves unstaffed). An unexplained prohibition is the kind of line an
+# executor talks itself past, so the bytes buy compliance. The ratio — the pilot's actual
+# claim — never came close to failing: 75.6% and 74.9% against an 80% limit.
+CEILING_BYTES = 13_500
 
 
 class StaffingProviderPilotTests(unittest.TestCase):
