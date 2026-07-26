@@ -56,8 +56,9 @@ reading carries what the successor decision needs.
   state is an owner decision, never a probe result: setup records it only from the owner's explicit choice,
   with the reason and the date it was made, and never infers it from a failure. On a re-run setup re-checks
   only the cheap premise — the CLI is still installed, a version probe with no dispatch — and leaves the
-  choice standing. A successful probe never promotes a disabled row; lifting the disable is the owner's
-  edit, not the audit's.
+  choice standing. A disabled row's evidence fields hold the version probe (its command shape and the CLI
+  version it returned) and the owner's decision with its reason and date as the result. A successful probe
+  never promotes a disabled row; lifting the disable is the owner's edit, not the audit's.
 - **Unavailable** — the probe failed, and the row captures the failure class (CLI absent, alias rejected,
   permission denied, timeout, effect denied) rather than a bare no. The failure class is what the successor
   decision reads.
