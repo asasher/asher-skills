@@ -928,6 +928,10 @@
           "label": "probes",
           "path": "evals/probes.md",
           "group": "Evals"
+        },
+        {
+          "label": "instruction trigger (setup template)",
+          "path": "templates/instruction-trigger.md"
         }
       ],
       "playbooks": [

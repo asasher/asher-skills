@@ -73,8 +73,8 @@ trusting rows probed elsewhere.
 
 ## Dependency surface
 
-- **Bundled:** setup, audit, routing, roles/fallback, install/reconcile, compiled provider mechanics, and the
-  roster seed.
+- **Bundled:** setup, audit, routing, roles/fallback, install/reconcile, compiled provider mechanics, the
+  roster seed, and the instruction-trigger template setup installs into the project instruction file.
 - **Project playbooks:** the staffing playbook under the repo's agent-docs directory — the sole runtime
   authority, written by setup.
 - **Sibling skills:** none — `staffing` is a root primitive. Siblings invoke it; it invokes none, so there is

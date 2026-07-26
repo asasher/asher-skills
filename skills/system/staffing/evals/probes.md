@@ -208,11 +208,12 @@ and what happens if you pass the roster name verbatim? Is the answer a memorised
   the `codex exec` command shape in the compiled `reference/harness.md`. The test is machine-variance — a fact
   that differs per machine is data, a rule identical everywhere is doctrine. Putting a command shape in the
   playbook, or a succession chain in the skill, = fail.
-- **P21 (provider pilot):** PASS only if each provider's loaded reconcile text is at least 20% smaller than
-  the unified text one uncompiled skill carrying both harnesses' mechanics would load, stays under the
-  absolute ceiling, and contains no opposite-direction harness branch. The baseline is **derived from the
-  same files, not a frozen byte count** — a hardcoded number stops measuring the claim as soon as content
-  moves between files. Citing a fixed baseline figure = fail. Cite `evals/test_provider_pilot.py`.
+- **P21 (provider pilot):** PASS only if the answer treats **harness isolation as the guard** — neither
+  loaded path carries an instruction only a session of the other harness could act on — with the size ratio
+  (each provider at least 20% under the unified both-harness load, derived from the same files, never a
+  frozen byte count) as corroboration that separation happened. There is deliberately **no absolute byte
+  ceiling**: citing one, treating the ratio as a prose budget, or citing a fixed baseline figure = fail.
+  Cite `evals/test_provider_pilot.py`.
 - **P22 (alias crossing):** PASS only if the executor passes **`sonnet`**, not `sonnet-5` — taking it from the
   playbook's recorded alias mapping, and applying it as a **rule** ("this CLI rejects versioned names, accepts
   bare names") rather than a memorised pair, so a roster row the probe never covered is still handled. Passing

@@ -27,10 +27,14 @@ REPO = SKILL.parents[2]
 
 MAX_SHARE_OF_UNIFIED = 0.8
 
-# Instructions only a session of that harness could act on. Cross-harness *dispatch* is
-# deliberately absent from these lists: the Claude file must describe `codex exec` and the
-# Codex file must describe `claude -p`, because reaching the sibling is each one's own job.
-# What may not leak is the other harness's native spawn vocabulary and config surface.
+# Instructions only a session of that harness could act on. Cross-harness *dispatch
+# commands* are deliberately absent from these lists: the Claude file must describe
+# `codex exec` and the Codex file must describe `claude -p`, because reaching the sibling is
+# each one's own job. The direction labels ("Claude→Codex" / "Codex→Claude") ARE markers and
+# belong here: each names the dispatch section written for one side — the Claude file heads
+# its section "Claude→Codex", so that string in the *codex* path means a Claude-addressed
+# section leaked, not that dispatch itself is forbidden. What may not leak is the other
+# harness's native spawn vocabulary, config surface, and addressed sections.
 CLAUDE_ONLY = (
     "Agent/Workflow",
     "`Agent` tool",
@@ -59,6 +63,17 @@ class StaffingProviderPilotTests(unittest.TestCase):
         )
         return "\n".join(path.read_text(encoding="utf-8") for path in paths)
 
+    def seed_text(self, provider: str) -> str:
+        # The seed is setup-time input, not part of the reconcile load — so it stays out of
+        # loaded_text and the size ratio. But it ships per provider, which makes it a leak
+        # surface: the isolation guard reads it alongside the loaded path.
+        seed = (
+            SKILL / "variants" / provider / "templates" / "seed" / "roster-seed.md"
+            if (SKILL / "variants").is_dir()
+            else SKILL / "templates" / "seed" / "roster-seed.md"
+        )
+        return seed.read_text(encoding="utf-8")
+
     def assert_no_foreign_instructions(self, provider: str, text: str, where: str) -> None:
         foreign = CODEX_ONLY if provider == "claude" else CLAUDE_ONLY
         for marker in foreign:
@@ -77,7 +92,9 @@ class StaffingProviderPilotTests(unittest.TestCase):
             self.skipTest("authoring tree only; the compiled case is covered below")
         for provider in ("claude", "codex"):
             self.assert_no_foreign_instructions(
-                provider, self.loaded_text(provider), f"variants/{provider}"
+                provider,
+                self.loaded_text(provider) + "\n" + self.seed_text(provider),
+                f"variants/{provider}",
             )
 
     def test_installed_mounts_carry_only_their_own_provider(self) -> None:
@@ -103,7 +120,12 @@ class StaffingProviderPilotTests(unittest.TestCase):
             )
             text = "\n".join(
                 (mount / name).read_text(encoding="utf-8")
-                for name in ("SKILL.md", "reference/install-and-reconcile.md", "reference/harness.md")
+                for name in (
+                    "SKILL.md",
+                    "reference/install-and-reconcile.md",
+                    "reference/harness.md",
+                    "templates/seed/roster-seed.md",
+                )
             )
             self.assert_no_foreign_instructions(provider, text, str(mount.relative_to(REPO)))
 
