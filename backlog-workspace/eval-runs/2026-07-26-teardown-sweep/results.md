@@ -7,12 +7,15 @@ subagent (sonnet, the Claude-side floor) and gpt-5.6-sol via
 `codex exec -s read-only --skip-git-repo-check` (`run-codex.sh`; transcript
 `run-codex-gpt-5.6-sol.txt`).
 
-Two rounds were run. Round 1 hit the pre-polish wording of one groom sentence (its tail clause
-"(that direction and its quiet horizon continue unchanged alongside)" was rewritten for
-authoring-context leakage before review); both executors scored 13/13 on it. Round 2 is the run of
-record, on the shipped text.
+Three rounds were run, 13/13 on both executors in every round. Round 1 hit the pre-polish wording of
+one groom sentence (its tail clause "(that direction and its quiet horizon continue unchanged
+alongside)" was rewritten for authoring-context leakage before review). Round 2 ran the shipped
+SKILL.md text but a probe fixture named the leave-alone worktree's branch `20-z`, colliding with
+ticket #20's pre-dispatch state in the base scenario (verifier finding); the fixture was renamed
+`42-z`. Round 3, on the shipped text and corrected fixture, is the run of record; its transcripts are
+the ones stored here.
 
-## Round 2 verdicts (shipped text)
+## Round 3 verdicts (shipped text, corrected fixture)
 
 | Probe | Decision point | key demands | codex gpt-5.6-sol | claude sonnet |
 |---|---|---|---|---|

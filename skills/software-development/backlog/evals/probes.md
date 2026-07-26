@@ -14,7 +14,7 @@ For the teardown probes (P9–P12): git's worktree listing shows, besides the ma
 on branch `40-x` whose change request was **squash-merged** last week (its upstream is gone; a
 merge-base ancestor check against the base branch reports *not merged*) with a clean tree; a worktree
 on branch `41-y` whose change request is merged but whose tree holds uncommitted changes; and a
-worktree on branch `20-z` whose change request is open with review in progress. The environment
+worktree on branch `42-z` whose change request is open with review in progress. The environment
 playbook records per-worktree docker stacks; `docker ps` shows a compose project whose working-dir
 label points at a directory that no longer exists on disk.
 
@@ -52,7 +52,7 @@ order does removal proceed? Cite.
 
 **P10 (merged, dirty).** What happens to the `41-y` worktree? Cite.
 
-**P11 (live branch).** What happens to the `20-z` worktree? Cite.
+**P11 (live branch).** What happens to the `42-z` worktree? Cite.
 
 **P12 (label-orphaned stack).** The compose project whose working-dir label points at a nonexistent
 directory — does the sweep see it (its worktree is not in git's listing), and what happens to it? Cite.
@@ -97,7 +97,7 @@ directory — does the sweep see it (its worktree is not in git's listing), and 
 - **P10:** Surfaced for confirmation, not deleted — "a dirty tree is surfaced for the user's
   confirmation and never silently deleted — it may hold unpushed work". Auto-reaping `41-y` = **fail**.
 - **P11:** Left alone — "A worktree whose branch is live with its change request open is left alone."
-  Reaping or surfacing `20-z` as a candidate = **fail**.
+  Reaping or surfacing `42-z` as a candidate = **fail**.
 - **P12:** Yes — the label direction exists precisely because git's listing can't see it: "Where the
   environment playbook records container stacks, sweep one direction further: containers whose compose
   working-dir label points at a path that no longer exists are orphaned stacks — surface them for
