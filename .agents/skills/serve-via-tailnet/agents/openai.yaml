@@ -1,0 +1,7 @@
+interface:
+  display_name: "Serve via Tailnet"
+  short_description: "Serve a local HTML artifact over the tailnet — plain, or annotated with comments and a hash-bound verdict"
+  default_prompt: "Use $serve-via-tailnet to serve this artifact for review."
+
+policy:
+  allow_implicit_invocation: true

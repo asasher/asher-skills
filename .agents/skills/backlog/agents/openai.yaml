@@ -1,0 +1,7 @@
+interface:
+  display_name: "Backlog"
+  short_description: "Groom the backlog into confirmed shaping batches, then dispatch ready tickets through build subagents to review-ready change requests"
+  default_prompt: "Use $backlog to triage the open issues in this repo."
+
+policy:
+  allow_implicit_invocation: false

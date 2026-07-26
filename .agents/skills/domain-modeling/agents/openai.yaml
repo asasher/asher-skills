@@ -1,0 +1,7 @@
+interface:
+  display_name: "Domain Modeling"
+  short_description: "Sharpen the project's domain model as decisions land — glossary terms into CONTEXT.md inline, hard-to-reverse decisions into one-paragraph ADRs"
+  default_prompt: "Use $domain-modeling to pin down this terminology or record this decision."
+
+policy:
+  allow_implicit_invocation: true

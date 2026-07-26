@@ -132,10 +132,13 @@ Durable documents carrying this repo's domain and direction — read the one who
 ## Agent skills
 
 These skills are installed for this project — self-hosted from this repo's categorized `skills/` sources,
-so `install.json` records a local source. The mounts carry the v2 family. **This repo's mounts are
-live symlinks** into `skills/<category>/<name>`, so editing a source *is* editing the mount and they can
-never go stale; `staffing` is the one exception, compiled per provider because a compiled tree has no
-on-disk source to point at. `writing-great-skills` is an external (mattpocock/skills), recorded in
+so `install.json` records a local source. The mounts carry the v2 family. **This repo's mounts are real
+copies, decoupled from the sources** (asher-skills#118) — exactly what a consumer repo gets, `staffing`
+compiled per provider as everywhere. Editing a source changes nothing a running session reads: changes
+land on a branch, merge when working, and reach the mounts only through the **reconcile step** — running
+the refresh command below in the main checkout after a merge that touches `skills/`. Until then
+`tools/install.py check` reporting drift against merged sources is the expected signal, not a fault.
+`writing-great-skills` is an external (mattpocock/skills), recorded in
 `external-dependencies.lock.json` and untouched by installs.
 
 | Skill | What it does here | Scope |
@@ -187,9 +190,14 @@ dispatch route.
 removes a skill dropped from the set — asher-skills#103).
 
 ```sh
-python3 tools/install.py install --self --into .            # refresh the recorded set
+python3 tools/install.py install --self --into .            # refresh the recorded set — also the post-merge reconcile
 python3 tools/install.py install --self --into . --skill …  # change the set
 ```
+
+**Reconcile:** after a merge to main that touches `skills/`, run the refresh in the main checkout so the
+mounts catch up to the merged sources. Nothing updates implicitly; sessions pick the change up at their
+next start. The refresh prints a `setup_report` (below) naming which of the freshly copied skills need
+their setup re-run — copying a source forward does not re-run the setup that source's playbooks came from.
 
 A bare `install` refreshes exactly the set `.agents/asher-skills/install.json` already records, so it can
 never silently widen a curated selection; naming `--skill` sets the selection, and anything dropped from it
@@ -199,8 +207,8 @@ mounts are untouchable.
 Every install ends with a `setup_report` in its JSON output, summarized on stderr for whoever is reading
 the terminal: `changed` — the installed skills whose source moved since the recorded revision, plus any
 newly mounted here, whose setup has never run against this repo — and `setup_order` — the subset of those
-declaring a setup, in the catalog's resolution order. Setups are agent-run: they reconcile repo-owned
-playbooks and sometimes ask the user, so the installer names them and invokes nothing.
+declaring a setup, in the catalog's resolution order. Setups are agent-run: they bring repo-owned playbooks
+into line and sometimes ask the user, so the installer names them and invokes nothing.
 
 `basis` says how much to trust the set. `revision-diff` is a real comparison; `first-install` and
 `unknown-revision` both report **every** installed skill as changed, because an unanswerable comparison

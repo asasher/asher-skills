@@ -1,0 +1,7 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Two-axis diff review since a fixed point — Standards (repo standards + smell baseline) and Spec (matches what was asked)"
+  default_prompt: "Use $code-review to review these changes on both axes."
+
+policy:
+  allow_implicit_invocation: true
