@@ -238,10 +238,9 @@ def setup(project: Path, instance_arg: str) -> tuple[int, dict[str, list[str]]]:
     if not project.is_dir():
         raise ValueError(f"project directory does not exist: {project}")
     instance, instance_relative = project_relative_path(project, instance_arg, "--instance")
-    capture_root = instance / "capture-to-inbox"
-    api_root = capture_root / "api"
-    shortcut_root = capture_root / "shortcut"
-    template_manifest = capture_root / "template.json"
+    api_root = instance / "api"
+    shortcut_root = instance / "shortcut"
+    template_manifest = instance / "template.json"
     template_root = Path(__file__).resolve().parents[1] / "assets" / "capture-api"
     if not template_root.is_dir():
         raise ValueError(f"API template is missing: {template_root}")
@@ -262,7 +261,7 @@ def setup(project: Path, instance_arg: str) -> tuple[int, dict[str, list[str]]]:
     manifest = reconcile_api(template_root, api_root, template_manifest, created, updated, conflicts)
     atomic_write(template_manifest, json_bytes(manifest))
 
-    deployment_relative = f"{instance_relative}/capture-to-inbox/deployment.json"
+    deployment_relative = f"{instance_relative}/deployment.json"
     config_defaults = {
         "schema_version": 1,
         "paths": {
@@ -303,7 +302,7 @@ def setup(project: Path, instance_arg: str) -> tuple[int, dict[str, list[str]]]:
     }
 
     ensure_json_skeleton(instance / "config.json", config_defaults, valid_config, created, conflicts)
-    ensure_json_skeleton(capture_root / "deployment.json", deployment_defaults, valid_deployment, created, conflicts)
+    ensure_json_skeleton(instance / "deployment.json", deployment_defaults, valid_deployment, created, conflicts)
     ensure_json_skeleton(instance / "state" / "intake-ledger.json", ledger_defaults, valid_state, created, conflicts)
     ensure_json_skeleton(instance / "state" / "setup.json", setup_defaults, valid_state, created, conflicts)
 
@@ -314,7 +313,12 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, default=Path.cwd(), help="consumer project root")
     parser.add_argument(
-        "--instance", default="control-plane", help="project-relative instance directory (default: control-plane)"
+        "--instance",
+        default="capture-to-inbox",
+        help=(
+            "project-relative instance directory (default: capture-to-inbox); a consumer whose instance"
+            " lives elsewhere (such as an existing control-plane tree) passes this flag explicitly"
+        ),
     )
     args = parser.parse_args(argv)
     try:

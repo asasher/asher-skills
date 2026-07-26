@@ -319,7 +319,7 @@ def resolve_runtime(args: argparse.Namespace) -> tuple[Path, Path, Path, str, st
     project = args.project.resolve()
     if not project.is_dir():
         raise DrainError(f"project directory does not exist: {project}")
-    config_path = args.config.resolve() if args.config else project / "control-plane" / "config.json"
+    config_path = args.config.resolve() if args.config else project / "capture-to-inbox" / "config.json"
     config = load_json_object(config_path)
     paths = config.get("paths") if isinstance(config.get("paths"), dict) else {}
     capture = config.get("capture_to_inbox") if isinstance(config.get("capture_to_inbox"), dict) else {}
@@ -409,7 +409,7 @@ def run(args: argparse.Namespace) -> int:
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, default=Path.cwd(), help="consumer project root")
-    parser.add_argument("--config", type=Path, help="config path (default: <project>/control-plane/config.json)")
+    parser.add_argument("--config", type=Path, help="config path (default: <project>/capture-to-inbox/config.json)")
     parser.add_argument("--api-url", help="temporary API URL override")
     parser.add_argument("--dry-run", action="store_true", help="list without local writes or remote deletes")
     parser.add_argument("--keep-remote", action="store_true", help="write locally without deleting queue items")

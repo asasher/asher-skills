@@ -9,7 +9,7 @@ initial binding.
 2. Attach a persistent volume at `/data`; set `QUEUE_DIR=/data/queue` and a freshly generated
    `CAPTURE_TOKEN` as provider secrets. Put the same token in the consumer root `.env`, which must be ignored
    by Git and mode `0600`. Never print it or write it into tracked project files.
-3. From the materialized `control-plane/capture-to-inbox/api/`, deploy with `railway up` against the selected
+3. From the materialized `capture-to-inbox/api/`, deploy with `railway up` against the selected
    project/environment/service. Wait for the deployment rather than treating upload acceptance as success.
 4. Provision or resolve the HTTPS domain, then verify `/healthz` reports `ok: true` and
    `auth_configured: true`. Verify an unauthenticated queue request returns `401`.

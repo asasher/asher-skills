@@ -22,7 +22,7 @@ must not be embedded in source XML committed to the consumer project.
 ## Build Gate
 
 Invoke `shortcuts-playground` by name to author the smallest complete plist XML at
-`control-plane/capture-to-inbox/shortcut/Queue to Inbox.xml`. Follow its required reading and icon resolver,
+`capture-to-inbox/shortcut/Queue to Inbox.xml`. Follow its required reading and icon resolver,
 validate to a clean result, sign it, and verify the signed `.shortcut` exists and is non-empty. Record the
 resolved plugin version, validation result, signing mode, source XML checksum, and generated output path in
 `shortcut/build.json`; keep the signed artifact out of version control unless the consumer explicitly chooses
