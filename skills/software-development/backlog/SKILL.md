@@ -1,6 +1,6 @@
 ---
 name: backlog
-description: Dispatch the backlog — groom sweeps unlabeled and needs-shaping tickets into user-confirmed batches and fans them into shaping threads; build fans ready, unblocked tickets into worktree-isolated subagents it supervises. Setup installs the playbooks.
+description: Dispatch the backlog — groom sweeps unlabeled and needs-shaping tickets into user-confirmed batches, fans them into shaping threads, and sweeps finished tickets' worktrees for teardown; build fans ready, unblocked tickets into worktree-isolated subagents it supervises. Setup installs the playbooks.
 argument-hint: "[groom | build | setup] [ticket ids]"
 user-invocable: true
 disable-model-invocation: true
@@ -8,7 +8,7 @@ metadata:
   invocation: user
   execution: orchestrator
   requires: [build, shape, to-subagent, to-thread]
-  optional: []
+  optional: [merge-changes]
 ---
 
 # Backlog

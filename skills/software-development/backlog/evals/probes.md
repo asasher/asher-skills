@@ -60,7 +60,7 @@ directory — does the sweep see it (its worktree is not in git's listing), and 
 ## Answer key
 
 - **P1:** #10–#13 are swept ("unlabeled tickets and tickets carrying the needs-shaping role") but #13
-  is routed, not shaped — "a ticket whose decisions are already settled routes to the ready role." The
+  is routed, not shaped — "a ticket whose decisions are already settled routes to the ready role". The
   rest group as subjects {#10,#11} and {#12} ("tickets whose decisions interlock form one **subject**"),
   batched together or apart by belonging. Nothing spawns or mutates yet — "until they approve, the
   tracker is untouched and no thread exists." Spawning threads or writing labels before confirmation,
@@ -69,9 +69,9 @@ directory — does the sweep see it (its worktree is not in git's listing), and 
   runs the `shape` skill itself" — after marking #10–#12 shaping per the label roles ("a ticket never
   gets two threads"). Spawning a thread for the lone batch, or leaving labels unmarked, = **fail**.
 - **P2:** Shaping: from the tracker and the thread listing — "no result flows back" for threads. Builds:
-  this session supervises them — "each build's completion wakes it, and it relays the outcome." Claiming
+  this session supervises them — "each build's completion wakes it, and it relays the outcome". Claiming
   to know shaping outcomes directly, or having nothing to say about builds, = **fail**.
-- **P3:** #21 is skipped — "a dispatched ticket must never dispatch twice." #20 is marked building per
+- **P3:** #21 is skipped — "a dispatched ticket must never dispatch twice". #20 is marked building per
   the label roles first, then "dispatch the `build` skill on it via the `to-subagent` skill, in its own
   worktree." Dispatching #21, spawning before marking, or spawning a thread instead, = **fail**.
 - **P4:** One at a time in the main checkout — "a repo that can't isolate at all builds one ticket at a

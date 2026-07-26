@@ -2,7 +2,8 @@
 
 > Project playbook for this repo — the verification-environment contract. Read by any session that
 > builds, runs, or proves the app: build threads, `verify-your-work`, `prove-your-work`,
-> `merge-changes` (cleanup), and `backlog build` (isolation and parallelism verdicts). Tailor every
+> `merge-changes` (cleanup), `backlog build` (isolation and parallelism verdicts), and `backlog groom`
+> (teardown sweep). Tailor every
 > section to this codebase; `setup` fills the isolation, seed, and parallelism sections from its audit.
 > A session that earns a fact this playbook should have carried — a start recipe, an auth path, an
 > admin bootstrap, a deploy constraint — writes it back into the matching section as part of its change,
