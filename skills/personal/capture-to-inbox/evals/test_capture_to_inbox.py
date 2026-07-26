@@ -49,14 +49,17 @@ class SetupTests(unittest.TestCase):
             self.assertEqual((project / ".env").read_text(encoding="utf-8"), "CAPTURE_TOKEN=\n")
             self.assertEqual((project / ".env").stat().st_mode & 0o777, 0o600)
             self.assertIn(".env", (project / ".gitignore").read_text(encoding="utf-8").splitlines())
-            self.assertTrue((project / "control-plane" / "capture-to-inbox" / "api" / "src" / "app.js").is_file())
-            self.assertTrue((project / "control-plane" / "config.json").is_file())
-            config = json.loads((project / "control-plane" / "config.json").read_text(encoding="utf-8"))
+            self.assertTrue((project / "capture-to-inbox" / "api" / "src" / "app.js").is_file())
+            self.assertTrue((project / "capture-to-inbox" / "config.json").is_file())
+            config = json.loads((project / "capture-to-inbox" / "config.json").read_text(encoding="utf-8"))
             self.assertEqual(config["capture_to_inbox"]["token_file"], ".env")
-            self.assertTrue((project / "control-plane" / "state" / "intake-ledger.json").is_file())
-            self.assertTrue((project / "control-plane" / "state" / "setup.json").is_file())
-            self.assertTrue((project / "control-plane" / "capture-to-inbox" / "deployment.json").is_file())
-            shortcut = project / "control-plane" / "capture-to-inbox" / "shortcut"
+            self.assertEqual(config["capture_to_inbox"]["deployment"], "capture-to-inbox/deployment.json")
+            self.assertTrue((project / "capture-to-inbox" / "template.json").is_file())
+            self.assertTrue((project / "capture-to-inbox" / "state" / "intake-ledger.json").is_file())
+            self.assertTrue((project / "capture-to-inbox" / "state" / "setup.json").is_file())
+            self.assertTrue((project / "capture-to-inbox" / "deployment.json").is_file())
+            self.assertFalse((project / "capture-to-inbox" / "capture-to-inbox").exists())
+            shortcut = project / "capture-to-inbox" / "shortcut"
             self.assertEqual(list(shortcut.iterdir()), [])
             self.assertEqual(list(project.rglob("*.xml")), [])
 
@@ -87,7 +90,7 @@ class SetupTests(unittest.TestCase):
             self.assertEqual(first.returncode, 0, first.stderr)
             self.assertEqual(inbox.read_text(encoding="utf-8"), "consumer inbox\n")
 
-            target = project / "control-plane" / "capture-to-inbox" / "api" / "src" / "app.js"
+            target = project / "capture-to-inbox" / "api" / "src" / "app.js"
             target.write_text(target.read_text(encoding="utf-8") + "\n// consumer edit\n", encoding="utf-8")
             edited = target.read_bytes()
             rerun = run_script(SETUP, "--project", str(project))
@@ -191,15 +194,15 @@ class DrainTests(unittest.TestCase):
         self.project = Path(self.temporary.name)
         (self.project / "Inbox").mkdir()
         (self.project / "Inbox" / "INBOX.md").write_text("raw inbox\n", encoding="utf-8")
-        capture_root = self.project / "control-plane" / "capture-to-inbox"
+        capture_root = self.project / "capture-to-inbox"
         capture_root.mkdir(parents=True)
-        (self.project / "control-plane" / "config.json").write_text(
+        (capture_root / "config.json").write_text(
             json.dumps(
                 {
                     "schema_version": 1,
                     "paths": {"inbox": "Inbox/INBOX.md", "attachments": "Attachments/Captures"},
                     "capture_to_inbox": {
-                        "deployment": "control-plane/capture-to-inbox/deployment.json",
+                        "deployment": "capture-to-inbox/deployment.json",
                         "token_env": "CAPTURE_TOKEN",
                         "token_file": ".env",
                     },

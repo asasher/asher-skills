@@ -5,7 +5,7 @@ deployment, Shortcut build, and the smoke test are effect gates.
 
 ## Sequence
 
-1. **Inspect.** Locate the consumer root and existing `control-plane/` instance, config, external dependency
+1. **Inspect.** Locate the consumer root and existing `capture-to-inbox/` instance, config, external dependency
    lock, provider binding, API source, and Shortcut artifacts. Record local edits and incomplete prior steps.
 2. **Resolve external capability.** Detect `build-apple-shortcuts`. If absent or incompatible, disclose the
    exact `metadata.external` identity: Shortcuts Playground, Federico Viticci/MacStories, MIT license,
@@ -22,7 +22,9 @@ deployment, Shortcut build, and the smoke test are effect gates.
 
    It creates a missing Inbox, API source, config/state/deployment skeletons, an empty Shortcut working
    directory, a private project-root `.env` ignored by Git, and its `capture_to_inbox.token_file` instance
-   binding. Preserve an existing token while tightening `.env` to mode `0600`. A conflict exit is a
+   binding. The instance materializes under `capture-to-inbox/` by default; a consumer whose instance lives
+   elsewhere (such as an existing `control-plane/` tree) passes `--instance <dir>` explicitly, and the drain's
+   `--config` flag targets that instance's config the same way. Preserve an existing token while tightening `.env` to mode `0600`. A conflict exit is a
    reconciliation gate: inspect each candidate and consumer edit; never copy over it wholesale.
 4. **Deploy.** Follow [deployment](deployment.md). Bind Railway initially, create or reuse persistent storage,
    set provider-managed secrets, deploy only the consumer API copy, and effect-verify health and auth before

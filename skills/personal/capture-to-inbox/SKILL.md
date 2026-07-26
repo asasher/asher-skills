@@ -40,6 +40,6 @@ plugin consent, Shortcut generation, signing, and the live smoke test remain eff
 ## Dependency Surface
 
 - **Bundled:** the API template, setup and drain scripts, and the deployment and Shortcut contracts above.
-- **Project:** `control-plane/config.json` plus the consumer-owned capture instance and Inbox paths it binds.
+- **Project:** `capture-to-inbox/config.json` plus the consumer-owned capture instance and Inbox paths it binds.
 - **Siblings:** none. The external `shortcuts-playground` Codex plugin supplies
   `build-apple-shortcuts` during setup; it is not an internal sibling and none of its files are copied here.
