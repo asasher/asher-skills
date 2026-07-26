@@ -7,7 +7,7 @@ workflow skill, an ad-hoc session, and any harness — not just one dev loop.
 ## When to use
 
 - **Setting up a machine or project** — audit reachable models and write the roster.
-- **Routing a task** — resolve who staffs it (a sibling skill like plan/prototype/backlog invokes this by
+- **Routing a task** — resolve who staffs it (a sibling skill like prototype/backlog invokes this by
   name; a user can ask directly).
 - **Staffing an issue before dispatch** — route groomed routine work over the coordinator-eligible set, while
   named judgment/design/hard-diagnosis work goes to the orchestrator with an upward successor recorded.
@@ -54,7 +54,7 @@ primitive** (invoked by siblings, depends on none).
 
 ## Install
 
-`npx skills add <repo-url> --skill staffing`, then invoke it (`setup`) to run the audit and write the roster
+`npx github:asasher/asher-skills install --skill staffing`, then invoke it (`setup`) to run the audit and write the roster
 for your machine.
 
 ## Credits

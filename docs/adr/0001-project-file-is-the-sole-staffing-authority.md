@@ -24,9 +24,9 @@ repo already carries two real deltas.
 
 Propagation stops being automatic. A roster change at source now requires an install *and* a setup re-run per
 project, where previously editing one home-directory file served every project on the machine. That cost is
-deliberate, and it is why the installer reports which skills changed and which setups are consequently stale
-— without that reporting, the staleness is carried in an operator's head, which is how a consumer once
-drifted a whole family version behind.
+deliberate, and it is why the installer is to report which skills changed and which setups are consequently
+stale — that reporting does not exist yet and is tracked separately. Until it does, the staleness is carried
+in an operator's head, which is the failure mode this decision otherwise accepts knowingly.
 
 Because the roster is committed, it travels to machines that never ran its probes. The playbook therefore
 records the machine, probe date, and CLI versions at its head, and a session whose machine does not match

@@ -25,8 +25,8 @@ The Codex models are coordinator-eligible through native agent threads. The Clau
 
 ## Capability providers
 
-Each row is a role slot with this machine's default binding; setup probes the default and asks the owner
-about gaps.
+Each row is a role slot with a suggested default binding; setup probes that default on the target machine and
+asks the owner about gaps. Nothing here is a verified route until the audit says so.
 
 | need | primary provider (default binding) | fallback / hard edge |
 |---|---|---|

@@ -51,7 +51,8 @@ model at all. A model watcher is the last resort, waits and relays only, and nev
   nothing about effects.
 - **Session identity.** Capture the Codex session id at launch and resume by id, never `resume --last` —
   parallel wrappers collide on it and can silently resume a sibling's session.
-- **Telemetry.** Record the spawned model, effort, role, route, and session id in the run-state spawn event,
+- **Telemetry.** Record the spawned model, effort, role, route, and session id wherever the dispatching
+  run keeps its state — a run log, the ticket thread, whatever the caller already writes to —
   and assert model and effort against the staffed role before dispatch. A mismatch is a dispatch blocker, not
   a note.
 

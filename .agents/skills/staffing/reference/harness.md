@@ -50,7 +50,8 @@ is running there.
   parallel wrappers collide on it.
 - **Minimal context.** Spawn children with a self-contained task packet: issue, role, worktree, gate,
   expected return. Never a full-history fork.
-- **Telemetry.** Record the spawned model, effort, role, route, and session id in the run-state spawn event,
+- **Telemetry.** Record the spawned model, effort, role, route, and session id wherever the dispatching
+  run keeps its state — a run log, the ticket thread, whatever the caller already writes to —
   and assert model and effort against the staffed role before dispatch. A mismatch is a dispatch blocker, not
   a note. Children inherit the picker's current model, so verify the orchestrator's own model against the
   roster before any wave dispatch.

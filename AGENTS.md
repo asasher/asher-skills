@@ -78,6 +78,19 @@ How skills and instructions relate:
 Kinds of skill: defined in `CONTEXT.md` (the two axes — primitive/composite/orchestrator and
 pure/effectful/stateful — the layer law, and the agent-decision/shipped-script split).
 
+## Staffing
+
+Read `docs/agents/staffing.md` fully before model choice, delegation, child/worktree creation,
+capability-provider work, watcher assignment, or route-loss fallback. It is the sole authority for this repo:
+the complete roster, per-harness eligibility and capability bindings, this repo's deltas, and the machine its
+reachability rows were probed on. Claude Code and Codex sessions read the same file.
+
+Do not resolve from a home-directory roster or from the `staffing` skill's bundled seed. If a machine-level
+staffing instruction is loaded ahead of this one, it is superseded — the repo's playbook wins.
+
+If that file is missing, or its probe record names a machine other than this one, say so and run
+`staffing setup` rather than dispatching on rows nobody verified here.
+
 ## Context documents
 
 Durable documents carrying this repo's domain and direction — read the one whose clause matches the work:
@@ -149,7 +162,7 @@ on-disk source to point at. `writing-great-skills` is an external (mattpocock/sk
 | watch-until | Watches a target until a condition holds, then relays | project |
 | serve-via-tailnet | Serves HTML artifacts on the tailnet, optionally annotated with verdicts | project |
 | handoff | Compacts the conversation into a handoff document | project |
-| staffing | Owns the model roster; each harness loads its global module plus this repo's deltas | project |
+| staffing | Owns the model roster; both harnesses resolve it from `docs/agents/staffing.md` (§ Staffing) | project |
 | skill-loop | Iterates a skill through eval → revise cycles | project |
 | writing-great-skills | Authoring guidance for writing skills (external: mattpocock/skills, see `external-dependencies.lock.json`) | project |
 

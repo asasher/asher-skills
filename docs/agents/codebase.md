@@ -85,10 +85,10 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
 
 ## Generated artifacts
 
-- `.agents/skills/` and `.claude/skills/` mounts are build products of `npx skills add` — edit the
+- `.agents/skills/` and `.claude/skills/` mounts are build products of this repo's own installer (`tools/install.py`; see `AGENTS.md` § Agent skills) — edit the
   skill source and reinstall, per `AGENTS.md` (and never `npx skills remove`: with a local source path
   it deletes the source itself).
-- The staffing provider trees under `.agents/` are compiled by staffing's apply step — regenerate,
+- The staffing provider trees under `.agents/` are compiled by `python3 tools/install.py install --self --into .` — regenerate,
   don't hand-edit.
 - `.claude-plugin/marketplace.json` is generated from the compiled catalog by
   `python3 tools/catalog.py marketplace` — regenerate after any skill add/move/retire, don't

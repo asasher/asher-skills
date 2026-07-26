@@ -68,7 +68,7 @@ Capabilities belong to harness and tool providers, never to model rows. Installa
 |---|---|---|
 | browser-use | scripted **Playwright driving Chrome** — verification is a script with artifacts, headed or headless (headless Chrome launches only outside the command sandbox on this machine) | same, staffed by gpt-5.6-terra |
 | computer-use | **none** — no native provider; handoff to the Codex provider only behind the gate below | `computer-use:computer-use`, staffed by gpt-5.6-terra, **gated** |
-| imagegen | installed repo `codex-imagegen` skill through bounded Codex CLI | Codex system `imagegen` skill/tool, with the repo `codex-imagegen` skill as fallback |
+| imagegen | **gap — unverified**: the repo `codex-imagegen` skill is a source in this repo but is mounted in neither skill tree, so there is no reachable route from here today | Codex system `imagegen` skill/tool (not probed) |
 
 **browser-use fallbacks and hard edges.** The machine `agent-browser` and harness-native web bindings have
 proven unreliable — never the default, only for interactive exploration a script cannot serve. ChatGPT-in-Chrome
@@ -79,6 +79,11 @@ launch is a tool failure to surface, never a licence to switch surfaces.
 **computer-use gate.** Requires both a concrete use case recorded in `environment.md` **and** explicit user
 approval for the engagement. An unmet gate is a hard capability gap — never fall back to the user's browser or
 desktop.
+
+**imagegen is a recorded gap, not a binding.** The row above is the only capability here without an
+effect-verified route: `codex-imagegen` exists as a source in this repo but is installed in no skill tree, and
+installation would not by itself be reachability. Treat an imagegen need as a hard capability gap and say so,
+rather than reaching for a route this file cannot back. Closing it means installing the skill and probing it.
 
 For user-facing images, generation and taste review are separate stages.
 

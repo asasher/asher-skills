@@ -33,7 +33,8 @@ record the results:
    completion, monitors, cron — and record which ones re-invoke the session, effect-verified. These become
    the Wake-paths rows.
 
-Steps (1)–(2) feed § Writing the roster; the judgment numbers cannot be probed — see § The default seed.
+Steps (1)–(5) all feed § Writing the roster from the audit; the judgment numbers cannot be probed — see
+§ The seed (numbers the user tunes).
 
 ## The seed (numbers the user tunes)
 
