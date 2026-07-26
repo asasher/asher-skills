@@ -39,8 +39,12 @@
   stack beside another's.
 - How to bring up an **isolated** stack for one worktree: _<the derived-env command / hook, or "main
   checkout only">_.
-- Teardown for a worktree's stack (read by `merge-changes` cleanup): _<command, or "nothing to tear
-  down">_.
+- Teardown for a worktree's stack (read by `merge-changes` cleanup, `backlog build`'s abort-path
+  teardown, and `backlog groom`'s teardown sweep): _<command, or "nothing to tear down">_. The recorded
+  command must resolve the **same environment-wrapped compose project** the bring-up resolved (same env
+  files, same project-name derivation, run from inside the worktree) and remove its volumes (`docker
+  compose down -v` or equivalent) — a cleanup that computes a different project name silently no-ops,
+  and one that skips volumes leaves the stack's data pinned forever.
 - **Shared-singleton list** — every resource two concurrent worktrees would contend for. One row each;
   the parallelism verdict below derives from it.
 
@@ -54,6 +58,15 @@
   operations from parallel worktrees can collide on its locks (`index.lock`, ref locks) — a lock error
   is contention, so wait and retry briefly; a lock that outlives the retry with no live git process
   behind it is a crashed operation's leftover, and only then safe to remove.
+
+  Where isolation is container stacks, soundness cuts both ways — bring-up and teardown: the compose
+  project name must derive from the worktree (its path or a per-worktree env), never be hardcoded. A
+  hardcoded compose project or `container_name` in a repo that runs parallel worktrees is an
+  anti-pattern twice over: concurrent stacks collide on the one shared name instead of isolating, and
+  the surviving stack stays pinned by compose labels to whichever directory ran it last — including one
+  since deleted. Containers whose compose working-dir label
+  (`com.docker.compose.project.working_dir`) points at a path that no longer exists are orphans of
+  exactly this failure; `backlog groom`'s teardown sweep surfaces them.
 
 ## Seed data
 
