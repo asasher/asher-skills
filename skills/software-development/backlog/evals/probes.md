@@ -89,13 +89,13 @@ directory — does the sweep see it (its worktree is not in git's listing), and 
   respawned or reported, so a wedged build surfaces instead of sitting silent." Waiting indefinitely
   on the completion wake = **fail**.
 - **P9:** Reaped without asking — "A candidate with a clean tree is reaped without asking, environment
-  before working copy per the environment playbook's teardown row." Merged is called on upstream-gone
+  before working copy per the environment playbook's teardown row". Merged is called on upstream-gone
   or change-request state — "detect merged squash-proof — the branch's upstream gone, or the change
   request's own recorded state — never a merge-base ancestor check, which squash merges defeat."
   Trusting the ancestor check (leaving `40-x` alone as unmerged), asking the user before reaping a
   clean tree, or removing the working copy before the environment, = **fail**.
 - **P10:** Surfaced for confirmation, not deleted — "a dirty tree is surfaced for the user's
-  confirmation and never silently deleted — it may hold unpushed work." Auto-reaping `41-y` = **fail**.
+  confirmation and never silently deleted — it may hold unpushed work". Auto-reaping `41-y` = **fail**.
 - **P11:** Left alone — "A worktree whose branch is live with its change request open is left alone."
   Reaping or surfacing `20-z` as a candidate = **fail**.
 - **P12:** Yes — the label direction exists precisely because git's listing can't see it: "Where the
