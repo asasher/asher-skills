@@ -19,8 +19,17 @@ declaring `metadata.variants` (today: `staffing`), and removes anything dropped 
 `--skill` set. A bare `install` refreshes exactly what is already recorded, so it never silently widens a
 curated selection.
 
+An install ends with a `setup_report` in its JSON output, summarized on stderr: which installed skills'
+sources changed since the recorded revision — plus any mounted here for the first time — and, as
+`setup_order`, the changed skills that declare a setup, in the order the catalog resolves them. Running those setups is an agent's job — the installer
+names them and invokes nothing. Its `basis` field says how the set was arrived at: a real comparison
+needs git history in the source tree, so an install from the `npx`-packed package — which ships no
+`.git` — reports every installed skill as changed rather than guessing at nothing-to-do. Installing from
+a checkout with uncommitted work is comparable: the sources carrying it are recorded, and count as
+changed on the next install too, since reverting that work changes their mounts as much as making it did.
+
 State lives in `.agents/asher-skills/install.json` — the set, each skill's source path, provider variants,
-and the source revision. No integrity hashes: `check` diffs each mount against the source it was built
+the source revision, and which sources were uncommitted against it. No integrity hashes: `check` diffs each mount against the source it was built
 from and names the files that drifted, exiting 1 if any did. It is a dev-time command — skills are
 dev-time tooling and do not belong in a project's CI.
 

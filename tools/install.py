@@ -22,11 +22,19 @@ than a hash mismatch, and with no stored quantity to keep in sync. `skills-lock.
 belongs to a different installer; we read it once to migrate, strip our entries, and
 never write it again.
 
+An install ends with a `setup_report`: which installed skills' sources changed
+since the recorded revision, and which of those declare a setup, ordered by the
+catalog's own resolution. Setups bring repo-owned playbooks into line and sometimes
+ask the user, so they are agent-run — this reports them and invokes nothing. A source
+tree with no git history to compare against reports every installed skill as
+changed, since an unanswerable comparison must not read as nothing-to-do.
+
 Self-install (`--self`) mounts the same way — real copies, exactly what a consumer
 gets. Mounts are decoupled from sources on purpose: a running session reads a
 stable copy while sources change on branches, and a merged change reaches the
 mounts only through a deliberate reconcile — re-running the install in the main
-checkout.
+checkout. That reconcile is the moment the report speaks to: it names which of the
+freshly copied skills need their setup re-run.
 """
 
 from __future__ import annotations
@@ -35,6 +43,7 @@ import argparse
 import filecmp
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -53,6 +62,7 @@ STATE = Path(".agents") / "asher-skills" / "install.json"
 LEGACY_VARIANT_LOCK = Path(".agents") / "asher-skills" / "variant-lock.json"
 FOREIGN_LOCK = Path("skills-lock.json")
 DEFAULT_SOURCE = "github:asasher/asher-skills"
+OBJECT_NAME = re.compile(r"[0-9a-fA-F]{7,40}")
 
 
 class InstallError(RuntimeError):
@@ -74,7 +84,7 @@ def _write_json(path: Path, data: dict) -> None:
 
 
 def _revision(root: Path) -> str | None:
-    """Best-effort git revision of the source, for humans reading the state file."""
+    """Best-effort git revision of the source; the baseline the next install diffs against."""
     try:
         done = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD"],
@@ -187,6 +197,125 @@ def _recorded(target: Path) -> tuple[dict, set[str]]:
     return state, owned
 
 
+def _git_lines(root: Path, args: list[str]) -> list[str] | None:
+    """Run a git command in `root` and split its output. None if it could not run.
+
+    `core.quotePath=false` because the default wraps any non-ASCII path in quotes
+    and octal-escapes it, which matches no skill's source prefix — the skill would
+    drop out of the report silently, in the unsafe direction.
+    """
+    try:
+        done = subprocess.run(
+            ["git", "-C", str(root), "-c", "core.quotePath=false", *args],
+            capture_output=True, text=True, timeout=30,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if done.returncode != 0:
+        return None
+    return [line for line in done.stdout.splitlines() if line]
+
+
+def _changed_sources(root: Path, since: object) -> list[str] | None:
+    """Source-relative paths that differ between `since` and the source working tree.
+
+    The comparison runs against the working tree rather than a second revision, and
+    counts files git does not track yet, so a source edited or extended in place is
+    changed — a skill that gains a `reference/setup.md` is exactly the case this has
+    to catch. None means the question could not be answered here: no git, a revision
+    this clone lacks, or a recorded revision that is not an object name.
+
+    `since` arrives from a checked-in state file, so it is never trusted as a git
+    argument: anything but an object name is refused, and `--end-of-options` keeps
+    even that from being read as a flag. Handed a bare `--output=<path>`, git would
+    truncate that path and exit 0 with empty output — a destructive write reported
+    as nothing-to-do.
+    """
+    if not isinstance(since, str) or not OBJECT_NAME.fullmatch(since):
+        return None
+    changed = _git_lines(
+        root, ["diff", "--name-only", "--relative", "--end-of-options", since, "--"]
+    )
+    if changed is None:
+        return None
+    untracked = _git_lines(root, ["ls-files", "--others", "--exclude-standard"])
+    if untracked is None:
+        return None  # Half an answer would under-report; fall back to the whole closure.
+    return sorted(set(changed) | set(untracked))
+
+
+def _skills_touched(
+    graph: dict[str, catalog.Skill], closure: set[str], paths: list[str]
+) -> set[str]:
+    """The installed skills owning any of `paths`."""
+    return {
+        name for name in closure
+        if any(
+            path == graph[name].source or path.startswith(graph[name].source + "/")
+            for path in paths
+        )
+    }
+
+
+def _recorded_dirty(value: object) -> list[str] | None:
+    """The last install's uncommitted-source record, or None if it cannot be read.
+
+    A list holding anything but skill names is no more answerable than no list at
+    all: dropping the members it cannot read would report a real comparison over a
+    set that quietly lost entries.
+    """
+    if isinstance(value, list) and all(isinstance(name, str) for name in value):
+        return value
+    return None
+
+
+def _setup_report(
+    graph: dict[str, catalog.Skill],
+    closure: set[str],
+    setup_order: list[str],
+    previously: set[str],
+    changed_paths: list[str] | None,
+    since: object,
+    previously_dirty: object,
+) -> dict[str, object]:
+    """Say which installed skills changed, and which setups that implies.
+
+    `setup_order` is exactly the changed skills that declare a setup, listed in the
+    catalog's own resolution order — the subset and the run order in one field.
+
+    `changed_paths` is what the source diff reported, or None when no diff was
+    possible. Undeterminable is treated as everything-changed: "we cannot tell"
+    must not read as "nothing to do".
+
+    `previously_dirty` is the skills the last install recorded as uncommitted. They
+    were installed at content no revision describes, so the working tree matching
+    the recorded revision does not mean their mounts are unchanged — reverting the
+    uncommitted work changed them. State that cannot answer this — anything
+    `_recorded_dirty` refuses, including state written before it was recorded —
+    makes the whole comparison unanswerable rather than silently half-true.
+    """
+    dirty = _recorded_dirty(previously_dirty)
+    if not previously:
+        basis = "first-install"
+        changed = set(closure)
+    elif changed_paths is None or dirty is None:
+        basis = "unknown-revision"
+        changed = set(closure)
+    else:
+        basis = "revision-diff"
+        changed = _skills_touched(graph, closure, changed_paths)
+        # A skill mounted here for the first time has never had its setup run.
+        changed |= closure - previously
+        changed |= set(dirty) & closure
+
+    return {
+        "basis": basis,
+        "since_revision": since,
+        "changed": sorted(changed),
+        "setup_order": [name for name in setup_order if name in changed and graph[name].setup],
+    }
+
+
 def install(
     source_root: Path,
     target: Path,
@@ -204,9 +333,30 @@ def install(
         raise InstallError(f"unknown skill(s): {', '.join(unknown)}")
 
     # Pull in required siblings so a mounted skill never dangles.
-    closure = set(catalog.resolve(graph, selected, set())["closure"])
-    _, previously = _recorded(target)
+    resolution = catalog.resolve(graph, selected, set())
+    closure = set(resolution["closure"])
+    recorded, previously = _recorded(target)
     removed = sorted(previously - closure) if prune else []
+
+    # Read against the revision we are about to overwrite. The recorded value is
+    # reported as it was found — absent and unusable are different states, and
+    # `_changed_sources` refuses anything that is not an object name anyway.
+    since = recorded.get("source_revision")
+    changed_paths = _changed_sources(source_root, since)
+    report = _setup_report(
+        graph, closure, resolution["setup_order"], previously, changed_paths, since,
+        recorded.get("source_dirty"),
+    )
+
+    # The mounts come from the working tree, but the revision recorded below is
+    # HEAD. Note which sources that revision does not describe, so the next install
+    # can still tell that reverting the uncommitted work changed their mounts.
+    revision = _revision(source_root)
+    uncommitted = _changed_sources(source_root, revision)
+    dirty = (
+        sorted(_skills_touched(graph, closure, uncommitted))
+        if uncommitted is not None else None
+    )
 
     skills: dict[str, dict] = {}
     compiled: list[str] = []
@@ -226,7 +376,8 @@ def install(
     _write_json(target / STATE, {
         "schema_version": 1,
         "source": source_label or DEFAULT_SOURCE,
-        "source_revision": _revision(source_root),
+        "source_revision": revision,
+        "source_dirty": dirty,
         "skills": skills,
     })
 
@@ -241,6 +392,7 @@ def install(
         "compiled": compiled,
         "removed": removed,
         "unlocked_from_foreign_lockfile": stripped,
+        "setup_report": report,
     }
 
 
@@ -315,6 +467,39 @@ def check(source_root: Path, target: Path) -> dict[str, object]:
     }
 
 
+def _summarize(report: dict[str, object]) -> list[str]:
+    """The same report as two lines a human can act on."""
+    changed = report["changed"]
+    setups = report["setup_order"]
+    since = report["since_revision"]
+    short = since[:7] if isinstance(since, str) and OBJECT_NAME.fullmatch(since) else None
+
+    sources = "1 skill source" if len(changed) == 1 else f"{len(changed)} skill sources"
+
+    if report["basis"] == "first-install":
+        first = f"first install: treating {sources} as changed"
+    elif report["basis"] == "unknown-revision":
+        if short:
+            reason = f"cannot compare against recorded revision {short}"
+        elif since is not None:
+            reason = "recorded source revision is not a usable object name"
+        else:
+            reason = "no source revision to compare against"
+        first = f"{reason}; treating {sources} as changed"
+    else:
+        against = f" since {short}" if short else ""
+        first = (
+            f"{sources} changed{against}: " + ", ".join(changed) if changed
+            else f"no skill sources changed{against}"
+        )
+
+    second = (
+        "setups to re-run, in order: " + ", ".join(setups) if setups
+        else "no setups to re-run"
+    )
+    return [first, second]
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=("install", "check"))
@@ -357,6 +542,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     print(json.dumps(result, indent=2))
+    for line in _summarize(result["setup_report"]):
+        print(line, file=sys.stderr)
     return 0
 
 

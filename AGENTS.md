@@ -196,15 +196,36 @@ python3 tools/install.py install --self --into . --skill …  # change the set
 
 **Reconcile:** after a merge to main that touches `skills/`, run the refresh in the main checkout so the
 mounts catch up to the merged sources. Nothing updates implicitly; sessions pick the change up at their
-next start.
+next start. The refresh prints a `setup_report` (below) naming which of the freshly copied skills need
+their setup re-run — copying a source forward does not re-run the setup that source's playbooks came from.
 
 A bare `install` refreshes exactly the set `.agents/asher-skills/install.json` already records, so it can
 never silently widen a curated selection; naming `--skill` sets the selection, and anything dropped from it
 is removed in the same pass. Only skills that file records are ever pruned — third-party and external
 mounts are untouchable.
 
-State is one first-party file. It records the set, each skill's source path, provider variants, and the
-source revision — **no integrity hashes**. Drift is answered on demand instead:
+Every install ends with a `setup_report` in its JSON output, summarized on stderr for whoever is reading
+the terminal: `changed` — the installed skills whose source moved since the recorded revision, plus any
+newly mounted here, whose setup has never run against this repo — and `setup_order` — the subset of those
+declaring a setup, in the catalog's resolution order. Setups are agent-run: they bring repo-owned playbooks
+into line and sometimes ask the user, so the installer names them and invokes nothing.
+
+`basis` says how much to trust the set. `revision-diff` is a real comparison; `first-install` and
+`unknown-revision` both report **every** installed skill as changed, because an unanswerable comparison
+must not read as nothing-to-do. `unknown-revision` covers four cases: a revision the source clone lacks,
+a recorded revision that is not an object name at all, a source tree carrying no git history — which
+is what the installer runs from under `npx`, since the published package ships no `.git` — and state
+that cannot say which sources were uncommitted at the last install. Discrimination
+is a property of installing from a checkout; from `npx`, expect the whole set every time.
+
+Mounts are built from the working tree while the recorded revision is HEAD, so an install that followed
+uncommitted work carries content no revision describes. The state file records which sources those were,
+and the next install counts them as changed — reverting that work changes their mounts just as making it
+did, and only the record makes that visible once the tree is clean again.
+
+State is one first-party file. It records the set, each skill's source path, provider variants, the
+source revision, and which sources were uncommitted against it — **no integrity hashes**. Drift is
+answered on demand instead:
 
 ```sh
 python3 tools/install.py check --into <repo>   # exit 1 and names the drifted files
