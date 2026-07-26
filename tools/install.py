@@ -25,7 +25,9 @@ never write it again.
 An install ends with a `setup_report`: which installed skills' sources changed
 since the recorded revision, and which of those declare a setup, ordered by the
 catalog's own resolution. Setups reconcile repo-owned playbooks and sometimes ask
-the user, so they stay agent-run — this reports them and invokes nothing.
+the user, so they are agent-run — this reports them and invokes nothing. A source
+tree with no git history to compare against reports every installed skill as
+changed, since an unanswerable comparison must not read as nothing-to-do.
 
 Self-install (`--self`) mounts by symlink into `skills/<category>/<name>`, so this
 repo's mounts are live and can never go stale. Variant skills are still compiled,
@@ -38,6 +40,7 @@ import argparse
 import filecmp
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -56,6 +59,7 @@ STATE = Path(".agents") / "asher-skills" / "install.json"
 LEGACY_VARIANT_LOCK = Path(".agents") / "asher-skills" / "variant-lock.json"
 FOREIGN_LOCK = Path("skills-lock.json")
 DEFAULT_SOURCE = "github:asasher/asher-skills"
+OBJECT_NAME = re.compile(r"[0-9a-fA-F]{7,40}")
 
 
 class InstallError(RuntimeError):
@@ -193,16 +197,11 @@ def _recorded(target: Path) -> tuple[dict, set[str]]:
     return state, owned
 
 
-def _changed_sources(root: Path, since: str) -> list[str] | None:
-    """Source-relative paths that differ between `since` and the source working tree.
-
-    The comparison runs against the working tree rather than a second revision, so
-    uncommitted source edits count as changed. None means the question could not be
-    answered here — no git, or a revision this clone does not have.
-    """
+def _git_lines(root: Path, args: list[str]) -> list[str] | None:
+    """Run a git command in `root` and split its output. None if it could not run."""
     try:
         done = subprocess.run(
-            ["git", "-C", str(root), "diff", "--name-only", "--relative", since, "--"],
+            ["git", "-C", str(root), *args],
             capture_output=True, text=True, timeout=30,
         )
     except (OSError, subprocess.SubprocessError):
@@ -210,6 +209,32 @@ def _changed_sources(root: Path, since: str) -> list[str] | None:
     if done.returncode != 0:
         return None
     return [line for line in done.stdout.splitlines() if line]
+
+
+def _changed_sources(root: Path, since: object) -> list[str] | None:
+    """Source-relative paths that differ between `since` and the source working tree.
+
+    The comparison runs against the working tree rather than a second revision, and
+    counts files git does not track yet, so a source edited or extended in place is
+    changed — a skill that gains a `reference/setup.md` is exactly the case this has
+    to catch. None means the question could not be answered here: no git, a revision
+    this clone lacks, or a recorded revision that is not an object name.
+
+    `since` arrives from a checked-in state file, so it is never trusted as a git
+    argument: anything but an object name is refused, and `--end-of-options` keeps
+    even that from being read as a flag. Handed a bare `--output=<path>`, git would
+    truncate that path and exit 0 with empty output — a destructive write reported
+    as nothing-to-do.
+    """
+    if not isinstance(since, str) or not OBJECT_NAME.fullmatch(since):
+        return None
+    changed = _git_lines(
+        root, ["diff", "--name-only", "--relative", "--end-of-options", since, "--"]
+    )
+    if changed is None:
+        return None
+    untracked = _git_lines(root, ["ls-files", "--others", "--exclude-standard"]) or []
+    return sorted(set(changed) | set(untracked))
 
 
 def _setup_report(
@@ -222,9 +247,8 @@ def _setup_report(
 ) -> dict[str, object]:
     """Say which installed skills changed, and which setups that implies.
 
-    `setup_order` answers both halves at once: it is exactly the changed skills
-    that declare a setup, listed in the catalog's own resolution order, so it is
-    both the subset and the run order and needs no second field.
+    `setup_order` is exactly the changed skills that declare a setup, listed in the
+    catalog's own resolution order — the subset and the run order in one field.
 
     `changed_paths` is what the source diff reported, or None when no diff was
     possible. Undeterminable is treated as everything-changed: "we cannot tell"
@@ -281,7 +305,8 @@ def install(
 
     # Read against the revision we are about to overwrite.
     since = recorded.get("source_revision")
-    changed_paths = _changed_sources(source_root, since) if since else None
+    since = since if isinstance(since, str) else None
+    changed_paths = _changed_sources(source_root, since)
     report = _setup_report(
         graph, closure, resolution["setup_order"], previously, changed_paths, since,
     )
@@ -404,18 +429,20 @@ def _summarize(report: dict[str, object]) -> list[str]:
     changed = report["changed"]
     setups = report["setup_order"]
     since = report["since_revision"]
-    short = since[:7] if since else None
+    short = since[:7] if isinstance(since, str) and OBJECT_NAME.fullmatch(since) else None
 
     sources = "1 skill source" if len(changed) == 1 else f"{len(changed)} skill sources"
 
     if report["basis"] == "first-install":
-        first = f"first install: all {sources} count as changed"
+        first = f"first install: treating {sources} as changed"
     elif report["basis"] == "unknown-revision":
-        reason = (
-            f"cannot compare against recorded revision {short}" if short
-            else "no source revision recorded"
-        )
-        first = f"{reason}; treating all {sources} as changed"
+        if short:
+            reason = f"cannot compare against recorded revision {short}"
+        elif since:
+            reason = "recorded source revision is not a usable object name"
+        else:
+            reason = "no source revision to compare against"
+        first = f"{reason}; treating {sources} as changed"
     elif changed:
         first = f"{sources} changed since {short}: " + ", ".join(changed)
     else:
