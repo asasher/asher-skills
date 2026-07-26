@@ -67,15 +67,16 @@ grooming gap, never permission to infer them or default to the orchestrator — 
 
 - The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. `ready-for-human`, `needs-info`, `needs-shaping`, and exclusion roles need no per-issue confirmation — they ride the groom plan's blanket approval, since every tracker mutation waits for that gate.
 - Adjust this rule if this team wants more or less agent autonomy (e.g. let the agent auto-bless low-risk bugs).
-- **Work on the loop runs outside the loop.** An issue that modifies the machinery a build session itself
-  runs on — staffing resolution, the dispatch adapters, the skill mounts a running session reads, the
-  global surfaces every session resolves through — is `ready-for-human` by default, never
-  `ready-for-agent`. A subagent dispatched against such work is standing on the thing it is changing, and
-  the failure is silent: it resolved its model and its playbooks before the change and cannot notice the
-  ground moved. Worktree isolation does not remove this — a compiled mount and its source diverge without
-  either side erroring. The test is not "is this repo-tooling work" but "would a build session be
-  resolving through the surface this issue rewrites": installer and documentation changes stay in the
-  loop, staffing and dispatch changes do not. Recorded 2026-07-26 (asher-skills#107 and its split).
+- **Work on the loop is dispatchable when it rides the branch → merge → reconcile path.** Since the
+  mounts decoupled from the sources (asher-skills#118), a build session reads stable installed copies:
+  a worktree edit to skill sources, templates, or playbooks changes nothing a running session resolves
+  through until the change merges and the reconcile step is run deliberately in the main checkout. Such
+  issues may be `ready-for-agent`. What remains `ready-for-human` is work that **mutates a live
+  resolution surface in place**, outside that path: the main checkout's playbooks during an active run,
+  the installed mounts themselves, machine-global instruction files, or the reconcile step itself. The
+  test: "does executing this issue rewrite, in place, a surface a concurrently running session resolves
+  through?" Recorded 2026-07-26 (asher-skills#118), narrowing the blanket rule from #107's split — its
+  silent-failure concern is answered by the decoupling, not abandoned.
 
 ## Building hygiene
 
