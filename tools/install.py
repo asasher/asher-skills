@@ -22,9 +22,11 @@ than a hash mismatch, and with no stored quantity to keep in sync. `skills-lock.
 belongs to a different installer; we read it once to migrate, strip our entries, and
 never write it again.
 
-Self-install (`--self`) mounts by symlink into `skills/<category>/<name>`, so this
-repo's mounts are live and can never go stale. Variant skills are still compiled,
-because a compiled tree has no on-disk source to point at.
+Self-install (`--self`) mounts the same way — real copies, exactly what a consumer
+gets. Mounts are decoupled from sources on purpose: a running session reads a
+stable copy while sources change on branches, and a merged change reaches the
+mounts only through a deliberate reconcile — re-running the install in the main
+checkout (asher-skills#118).
 """
 
 from __future__ import annotations
@@ -118,12 +120,9 @@ def _link(destination: Path, target: Path) -> None:
     destination.symlink_to(os.path.relpath(target, destination.parent))
 
 
-def _mount_plain(skill: catalog.Skill, source_root: Path, target: Path, *, live: bool) -> None:
+def _mount_plain(skill: catalog.Skill, source_root: Path, target: Path) -> None:
     primary = target / PRIMARY / skill.name
-    if live:
-        _link(primary, source_root / skill.source)
-    else:
-        _replace_dir(source_root / skill.source, primary, skip={"variants"})
+    _replace_dir(source_root / skill.source, primary, skip={"variants"})
     _link(target / ALIAS / skill.name, primary)
 
 
@@ -193,7 +192,6 @@ def install(
     target: Path,
     selected: set[str],
     *,
-    live: bool = False,
     source_label: str | None = None,
     prune: bool = True,
 ) -> dict[str, object]:
@@ -219,7 +217,7 @@ def install(
             record["providers"] = _mount_variant(skill, source_root, target)
             compiled.append(name)
         else:
-            _mount_plain(skill, source_root, target, live=live)
+            _mount_plain(skill, source_root, target)
         skills[name] = record
 
     for name in removed:
@@ -227,9 +225,8 @@ def install(
 
     _write_json(target / STATE, {
         "schema_version": 1,
-        "source": source_label or ("self" if live else DEFAULT_SOURCE),
+        "source": source_label or DEFAULT_SOURCE,
         "source_revision": _revision(source_root),
-        "mode": "live" if live else "copy",
         "skills": skills,
     })
 
@@ -243,7 +240,6 @@ def install(
         "installed": sorted(skills),
         "compiled": compiled,
         "removed": removed,
-        "mode": "live" if live else "copy",
         "unlocked_from_foreign_lockfile": stripped,
     }
 
@@ -289,7 +285,6 @@ def check(source_root: Path, target: Path) -> dict[str, object]:
     graph = catalog.discover(source_root)
     drift: dict[str, list[str]] = {}
     missing: list[str] = []
-    live = state.get("mode") == "live"
 
     with tempfile.TemporaryDirectory(prefix="skills-check-") as raw:
         scratch = Path(raw)
@@ -307,8 +302,6 @@ def check(source_root: Path, target: Path) -> dict[str, object]:
                 if not mount.exists():
                     missing.append(str(mount))
                     continue
-                if live and provider is None:
-                    continue  # a symlinked mount *is* the source
                 found = _diff_trees(_expected_tree(skill, source_root, provider, scratch), mount)
                 if found:
                     drift.setdefault(name, []).extend(found)
@@ -330,7 +323,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parent.parent)
     parser.add_argument(
         "--self", dest="self_install", action="store_true",
-        help="mount by symlink into skills/<category>/<name>; for this repo only",
+        help="install this repo's own mounts from the local sources; --into must be the repo root",
     )
     parser.add_argument("--source-label", help="value recorded as `source` in install.json")
     parser.add_argument("--no-prune", action="store_true", help="keep skills dropped from the set")
@@ -357,8 +350,7 @@ def main(argv: list[str] | None = None) -> int:
                 )
         result = install(
             root, target, selected,
-            live=args.self_install,
-            source_label=args.source_label,
+            source_label=args.source_label or ("self" if args.self_install else None),
             prune=not args.no_prune,
         )
     except (catalog.CatalogError, InstallError, OSError) as exc:

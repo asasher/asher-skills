@@ -155,19 +155,23 @@ class InstallTest(unittest.TestCase):
 
     # ---- self-install ---------------------------------------------------
 
-    def test_live_mode_links_to_source(self) -> None:
-        """Self-install mounts point at the source, so they cannot go stale."""
-        install.install(ROOT, self.target, {"handoff"}, live=True)
-        primary = self.target / ".agents/skills/handoff"
-        self.assertTrue(primary.is_symlink())
-        self.assertEqual(primary.resolve(), (ROOT / "skills/software-development/handoff").resolve())
+    def test_primary_mount_is_a_real_copy(self) -> None:
+        """Mounts are decoupled from sources — no symlink mode (asher-skills#118).
 
-    def test_live_mode_still_compiles_variants(self) -> None:
-        """A compiled tree has no on-disk source to link to."""
-        install.install(ROOT, self.target, {"staffing"}, live=True)
-        tree = self.target / ".claude/skills/staffing"
-        self.assertFalse(tree.is_symlink())
-        self.assertEqual((tree / "templates/seed/provider.txt").read_text().strip(), "claude")
+        A running session must read a stable copy while sources change on
+        branches; a merged change reaches mounts only via reconcile (reinstall).
+        """
+        install.install(ROOT, self.target, {"handoff"})
+        primary = self.target / ".agents/skills/handoff"
+        self.assertTrue(primary.is_dir())
+        self.assertFalse(primary.is_symlink())
+        source = (ROOT / "skills/software-development/handoff/SKILL.md").read_text()
+        self.assertEqual((primary / "SKILL.md").read_text(), source)
+
+    def test_self_install_rejects_a_foreign_target(self) -> None:
+        """--self means this repo into itself; any other target is an error."""
+        with self.assertRaises(SystemExit), contextlib.redirect_stderr(io.StringIO()):
+            install.main(["install", "--self", "--into", str(self.target), "--root", str(ROOT)])
 
     # ---- check ----------------------------------------------------------
 
