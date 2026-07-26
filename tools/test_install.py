@@ -387,7 +387,7 @@ class SetupReportTest(unittest.TestCase):
         self.assertIn("diagnosing-bugs", report["setup_order"])
 
     def test_setup_order_is_the_catalogs_own_resolution_order(self) -> None:
-        selected = {"backlog", "research", "control-plane"}
+        selected = {"backlog", "research", "capture-to-inbox"}
         graph = catalog.discover(ROOT)
         expected = [
             name for name in catalog.resolve(graph, selected, set())["setup_order"]

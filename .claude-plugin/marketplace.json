@@ -34,7 +34,6 @@
       "category": "personal",
       "skills": [
         "./skills/personal/capture-to-inbox",
-        "./skills/personal/control-plane",
         "./skills/personal/eloquent",
         "./skills/personal/fair-deal",
         "./skills/personal/learn-anything",
@@ -44,8 +43,7 @@
         "./skills/personal/projects-triage",
         "./skills/personal/relay",
         "./skills/personal/review-opportunities",
-        "./skills/personal/teamdrive",
-        "./skills/personal/until-zero"
+        "./skills/personal/teamdrive"
       ]
     },
     {

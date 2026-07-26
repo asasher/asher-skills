@@ -134,7 +134,6 @@ including one marked `user`.
 | software-development | `verify-your-work` | model | thread |
 | software-development | `watch-until` | model | orchestrator |
 | personal | `capture-to-inbox` | model | thread |
-| personal | `control-plane` | user | orchestrator |
 | personal | `eloquent` | model | thread |
 | personal | `fair-deal` | user | orchestrator |
 | personal | `learn-anything` | user | thread |
@@ -145,7 +144,6 @@ including one marked `user`.
 | personal | `relay` | model | thread |
 | personal | `review-opportunities` | user | thread |
 | personal | `teamdrive` | user | thread |
-| personal | `until-zero` | model | thread |
 | in-progress | `goodwork` | model | thread |
 
 The install/setup graph is compiled on demand from each skill's frontmatter
