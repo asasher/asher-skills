@@ -19,6 +19,11 @@ declaring `metadata.variants` (today: `staffing`), and removes anything dropped 
 `--skill` set. A bare `install` refreshes exactly what is already recorded, so it never silently widens a
 curated selection.
 
+An install ends with a `setup_report` in its JSON output, echoed as a line on stderr: which installed
+skills' sources changed since the recorded revision, and, as `setup_order`, the changed skills that
+declare a setup, in the order the catalog resolves them. Running those setups stays an agent's job — the
+installer names them and invokes nothing.
+
 State lives in `.agents/asher-skills/install.json` — the set, each skill's source path, provider variants,
 and the source revision. No integrity hashes: `check` diffs each mount against the source it was built
 from and names the files that drifted, exiting 1 if any did. It is a dev-time command — skills are

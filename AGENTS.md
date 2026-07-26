@@ -196,6 +196,13 @@ never silently widen a curated selection; naming `--skill` sets the selection, a
 is removed in the same pass. Only skills that file records are ever pruned — third-party and external
 mounts are untouchable.
 
+Every install ends with a `setup_report` in its JSON output, echoed as a line on stderr: `changed` — the
+installed skills whose source moved since the recorded revision — and `setup_order` — the subset of those
+declaring a setup, in the catalog's resolution order. Setups are agent-run: they reconcile repo-owned
+playbooks and sometimes ask the user, so the installer names them and invokes nothing. When the recorded
+revision cannot be compared (first install, or a revision this clone lacks), every installed skill is
+reported as changed.
+
 State is one first-party file. It records the set, each skill's source path, provider variants, and the
 source revision — **no integrity hashes**. Drift is answered on demand instead:
 

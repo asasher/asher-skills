@@ -22,6 +22,11 @@ than a hash mismatch, and with no stored quantity to keep in sync. `skills-lock.
 belongs to a different installer; we read it once to migrate, strip our entries, and
 never write it again.
 
+An install ends with a `setup_report`: which installed skills' sources changed
+since the recorded revision, and which of those declare a setup, ordered by the
+catalog's own resolution. Setups reconcile repo-owned playbooks and sometimes ask
+the user, so they stay agent-run — this reports them and invokes nothing.
+
 Self-install (`--self`) mounts by symlink into `skills/<category>/<name>`, so this
 repo's mounts are live and can never go stale. Variant skills are still compiled,
 because a compiled tree has no on-disk source to point at.
@@ -188,6 +193,69 @@ def _recorded(target: Path) -> tuple[dict, set[str]]:
     return state, owned
 
 
+def _changed_sources(root: Path, since: str) -> list[str] | None:
+    """Source-relative paths that differ between `since` and the source working tree.
+
+    The comparison runs against the working tree rather than a second revision, so
+    uncommitted source edits count as changed. None means the question could not be
+    answered here — no git, or a revision this clone does not have.
+    """
+    try:
+        done = subprocess.run(
+            ["git", "-C", str(root), "diff", "--name-only", "--relative", since, "--"],
+            capture_output=True, text=True, timeout=30,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if done.returncode != 0:
+        return None
+    return [line for line in done.stdout.splitlines() if line]
+
+
+def _setup_report(
+    graph: dict[str, catalog.Skill],
+    closure: set[str],
+    setup_order: list[str],
+    previously: set[str],
+    changed_paths: list[str] | None,
+    since: str | None,
+) -> dict[str, object]:
+    """Say which installed skills changed, and which setups that implies.
+
+    `setup_order` answers both halves at once: it is exactly the changed skills
+    that declare a setup, listed in the catalog's own resolution order, so it is
+    both the subset and the run order and needs no second field.
+
+    `changed_paths` is what the source diff reported, or None when no diff was
+    possible. Undeterminable is treated as everything-changed: "we cannot tell"
+    must not read as "nothing to do".
+    """
+    if not previously:
+        basis = "first-install"
+        changed = set(closure)
+    elif changed_paths is None:
+        basis = "unknown-revision"
+        changed = set(closure)
+    else:
+        basis = "revision-diff"
+        changed = {
+            name for name in closure
+            if any(
+                path == graph[name].source or path.startswith(graph[name].source + "/")
+                for path in changed_paths
+            )
+        }
+        # A skill mounted here for the first time has never had its setup run.
+        changed |= closure - previously
+
+    return {
+        "basis": basis,
+        "since_revision": since,
+        "changed": sorted(changed),
+        "setup_order": [name for name in setup_order if name in changed and graph[name].setup],
+    }
+
+
 def install(
     source_root: Path,
     target: Path,
@@ -206,9 +274,17 @@ def install(
         raise InstallError(f"unknown skill(s): {', '.join(unknown)}")
 
     # Pull in required siblings so a mounted skill never dangles.
-    closure = set(catalog.resolve(graph, selected, set())["closure"])
-    _, previously = _recorded(target)
+    resolution = catalog.resolve(graph, selected, set())
+    closure = set(resolution["closure"])
+    recorded, previously = _recorded(target)
     removed = sorted(previously - closure) if prune else []
+
+    # Read against the revision we are about to overwrite.
+    since = recorded.get("source_revision")
+    changed_paths = _changed_sources(source_root, since) if since else None
+    report = _setup_report(
+        graph, closure, resolution["setup_order"], previously, changed_paths, since,
+    )
 
     skills: dict[str, dict] = {}
     compiled: list[str] = []
@@ -245,6 +321,7 @@ def install(
         "removed": removed,
         "mode": "live" if live else "copy",
         "unlocked_from_foreign_lockfile": stripped,
+        "setup_report": report,
     }
 
 
@@ -322,6 +399,35 @@ def check(source_root: Path, target: Path) -> dict[str, object]:
     }
 
 
+def _summarize(report: dict[str, object]) -> list[str]:
+    """The same report as two lines a human can act on."""
+    changed = report["changed"]
+    setups = report["setup_order"]
+    since = report["since_revision"]
+    short = since[:7] if since else None
+
+    sources = "1 skill source" if len(changed) == 1 else f"{len(changed)} skill sources"
+
+    if report["basis"] == "first-install":
+        first = f"first install: all {sources} count as changed"
+    elif report["basis"] == "unknown-revision":
+        reason = (
+            f"cannot compare against recorded revision {short}" if short
+            else "no source revision recorded"
+        )
+        first = f"{reason}; treating all {sources} as changed"
+    elif changed:
+        first = f"{sources} changed since {short}: " + ", ".join(changed)
+    else:
+        first = f"no skill sources changed since {short}"
+
+    second = (
+        "setups to re-run, in order: " + ", ".join(setups) if setups
+        else "no setups to re-run"
+    )
+    return [first, second]
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=("install", "check"))
@@ -365,6 +471,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     print(json.dumps(result, indent=2))
+    for line in _summarize(result["setup_report"]):
+        print(line, file=sys.stderr)
     return 0
 
 

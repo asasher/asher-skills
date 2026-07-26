@@ -14,6 +14,7 @@ import contextlib
 import io
 import json
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -21,6 +22,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import catalog  # noqa: E402
 import install  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -228,6 +230,162 @@ class InstallTest(unittest.TestCase):
     def test_unknown_skill_is_rejected(self) -> None:
         with self.assertRaises(install.InstallError):
             install.install(ROOT, self.target, {"no-such-skill"})
+
+
+class SetupReportTest(unittest.TestCase):
+    """What an install says about which skills changed and which setups follow.
+
+    The installer reports; it never runs a setup. These tests run against the real
+    sources and real git history, so the expectations are derived from git rather
+    than pinned to shas that rot.
+    """
+
+    def setUp(self) -> None:
+        self.target = Path(tempfile.mkdtemp(prefix="install-report-"))
+        self.addCleanup(shutil.rmtree, self.target, ignore_errors=True)
+
+    def state_path(self) -> Path:
+        return self.target / ".agents/asher-skills/install.json"
+
+    def rewrite_recorded_revision(self, revision: str | None) -> None:
+        state = json.loads(self.state_path().read_text())
+        state["source_revision"] = revision
+        self.state_path().write_text(json.dumps(state, indent=2) + "\n")
+
+    def git(self, *args: str) -> str:
+        done = subprocess.run(
+            ["git", "-C", str(ROOT), *args], capture_output=True, text=True, check=True
+        )
+        return done.stdout.strip()
+
+    def skip_if_dirty(self, source: str) -> None:
+        """A source edited in the working tree counts as changed; say so and skip."""
+        if self.git("status", "--porcelain", "--", source):
+            self.skipTest(f"{source} has uncommitted edits, so it is legitimately changed")
+
+    def test_first_install_treats_the_whole_closure_as_changed(self) -> None:
+        result = install.install(ROOT, self.target, {"backlog"})
+        report = result["setup_report"]
+        self.assertEqual(report["basis"], "first-install")
+        self.assertIsNone(report["since_revision"])
+        self.assertEqual(report["changed"], result["installed"])
+        self.assertEqual(report["setup_order"], ["diagnosing-bugs"])
+
+    def test_reinstall_at_the_same_revision_reports_an_empty_set(self) -> None:
+        """An empty set of fields, rather than absent fields, is how nothing-to-do reads."""
+        self.skip_if_dirty("skills/software-development/handoff")
+        install.install(ROOT, self.target, {"handoff"})
+        report = install.install(ROOT, self.target, {"handoff"})["setup_report"]
+        self.assertEqual(report["basis"], "revision-diff")
+        self.assertEqual(report["since_revision"], self.git("rev-parse", "HEAD"))
+        self.assertEqual(report["changed"], [])
+        self.assertEqual(report["setup_order"], [])
+
+    def test_a_real_source_change_since_the_recorded_revision_is_reported(self) -> None:
+        """Demoable end to end: the skill whose source moved is the one named."""
+        source = "skills/software-development/diagnosing-bugs"
+        older = self.git("rev-parse", self.git("log", "-1", "--format=%H", "--", source) + "^")
+
+        install.install(ROOT, self.target, {"backlog"})
+        recorded = json.loads(self.state_path().read_text())["skills"]
+        recorded_sources = {name: entry["source"] for name, entry in recorded.items()}
+        self.rewrite_recorded_revision(older)
+
+        report = install.install(ROOT, self.target, {"backlog"})["setup_report"]
+        self.assertEqual(report["basis"], "revision-diff")
+        self.assertEqual(report["since_revision"], older)
+
+        # Expectation from git itself, so the test cannot rot as history grows.
+        touched = self.git("diff", "--name-only", "--relative", older, "--").splitlines()
+        expected = sorted(
+            name for name, path in recorded_sources.items()
+            if any(line == path or line.startswith(path + "/") for line in touched)
+        )
+        self.assertEqual(report["changed"], expected)
+        self.assertIn("diagnosing-bugs", report["changed"])
+        self.assertEqual(report["setup_order"], ["diagnosing-bugs"])
+
+    def test_setup_order_is_the_catalogs_own_resolution_order(self) -> None:
+        selected = {"backlog", "research", "control-plane"}
+        graph = catalog.discover(ROOT)
+        expected = [
+            name for name in catalog.resolve(graph, selected, set())["setup_order"]
+            if graph[name].setup
+        ]
+
+        report = install.install(ROOT, self.target, selected)["setup_report"]
+        self.assertEqual(report["setup_order"], expected)
+        self.assertNotEqual(expected, sorted(expected), "resolution order is being re-sorted away")
+        self.assertTrue(set(expected) < set(report["changed"]), "setups must be a subset of changed")
+
+    def test_a_newly_added_skill_is_changed_even_at_the_same_revision(self) -> None:
+        """Its mounts are new here, so its setup has never run in this repo."""
+        self.skip_if_dirty("skills/software-development/diagnosing-bugs")
+        install.install(ROOT, self.target, {"backlog"})
+
+        report = install.install(ROOT, self.target, {"backlog", "research"})["setup_report"]
+        self.assertEqual(report["basis"], "revision-diff")
+        self.assertEqual(report["changed"], ["research"])
+        # diagnosing-bugs is installed and declares a setup, but it did not change.
+        self.assertEqual(report["setup_order"], ["research"])
+
+    def test_an_unresolvable_recorded_revision_falls_back_to_the_whole_closure(self) -> None:
+        """An unanswerable comparison must not read as nothing-to-do."""
+        result = install.install(ROOT, self.target, {"backlog"})
+        self.rewrite_recorded_revision("0" * 40)
+
+        report = install.install(ROOT, self.target, {"backlog"})["setup_report"]
+        self.assertEqual(report["basis"], "unknown-revision")
+        self.assertEqual(report["since_revision"], "0" * 40)
+        self.assertEqual(report["changed"], result["installed"])
+        self.assertEqual(report["setup_order"], ["diagnosing-bugs"])
+
+    def test_a_missing_recorded_revision_falls_back_to_the_whole_closure(self) -> None:
+        result = install.install(ROOT, self.target, {"backlog"})
+        self.rewrite_recorded_revision(None)
+
+        report = install.install(ROOT, self.target, {"backlog"})["setup_report"]
+        self.assertEqual(report["basis"], "unknown-revision")
+        self.assertIsNone(report["since_revision"])
+        self.assertEqual(report["changed"], result["installed"])
+
+    def test_an_install_runs_no_process_but_git(self) -> None:
+        """The report names the setups; running them stays the agent's job."""
+        real = install.subprocess.run
+        commands: list[list[str]] = []
+
+        def spy(command, *args, **kwargs):
+            commands.append(list(command))
+            return real(command, *args, **kwargs)
+
+        install.subprocess.run = spy
+        self.addCleanup(setattr, install.subprocess, "run", real)
+
+        install.install(ROOT, self.target, {"research", "staffing"})
+        install.install(ROOT, self.target, {"research", "staffing"})
+
+        self.assertTrue(commands, "no subprocess ran at all; the spy is not wired in")
+        for command in commands:
+            self.assertEqual(command[0], "git", f"unexpected process: {command}")
+
+    def run_main(self, *extra: str) -> tuple[dict, str]:
+        out, err = io.StringIO(), io.StringIO()
+        argv = ["install", "--into", str(self.target), "--root", str(ROOT), *extra]
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = install.main(argv)
+        self.assertEqual(code, 0, err.getvalue())
+        return json.loads(out.getvalue()), err.getvalue()
+
+    def test_stdout_stays_parseable_and_the_summary_goes_to_stderr(self) -> None:
+        self.skip_if_dirty("skills/software-development/diagnosing-bugs")
+        result, summary = self.run_main("--skill", "backlog")
+        self.assertEqual(result["setup_report"]["basis"], "first-install")
+        self.assertIn("diagnosing-bugs", summary)
+
+        result, summary = self.run_main()
+        self.assertEqual(result["setup_report"]["changed"], [])
+        self.assertIn("no setups to re-run", summary)
+        self.assertNotIn("diagnosing-bugs", summary)
 
 
 if __name__ == "__main__":
