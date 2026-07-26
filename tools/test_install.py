@@ -254,7 +254,10 @@ class SetupReportTest(unittest.TestCase):
 
     def git(self, *args: str) -> str:
         done = subprocess.run(
-            ["git", "-C", str(ROOT), *args], capture_output=True, text=True, check=True
+            # Same quoting setting the installer uses, so the expectation this
+            # derives cannot share a blind spot with the code under test.
+            ["git", "-C", str(ROOT), "-c", "core.quotePath=false", *args],
+            capture_output=True, text=True, check=True,
         )
         return done.stdout.strip()
 
@@ -456,6 +459,37 @@ class SetupReportTest(unittest.TestCase):
         self.assertEqual(install._changed_sources(repo, head), [])
         (repo / "skills" / "untracked.md").write_text("two\n")
         self.assertEqual(install._changed_sources(repo, head), ["skills/untracked.md"])
+
+    def test_a_path_git_would_quote_is_still_matched_against_its_source(self) -> None:
+        """git quotes non-ASCII paths by default; a quoted path matches no source.
+
+        The failure is silent and in the unsafe direction — the skill drops out of
+        `changed`, so its setup is never named.
+        """
+        repo = Path(tempfile.mkdtemp(prefix="install-git-"))
+        self.addCleanup(shutil.rmtree, repo, ignore_errors=True)
+
+        def run(*args: str) -> str:
+            done = subprocess.run(
+                ["git", "-C", str(repo), *args], capture_output=True, text=True, check=True
+            )
+            return done.stdout.strip()
+
+        run("init", "-q")
+        run("config", "user.email", "test@example.invalid")
+        run("config", "user.name", "test")
+        (repo / "skills").mkdir()
+        (repo / "skills" / "café.md").write_text("one\n")
+        run("add", "-A")
+        run("commit", "-qm", "seed")
+        head = run("rev-parse", "HEAD")
+
+        (repo / "skills" / "café.md").write_text("two\n")
+        (repo / "skills" / "référence.md").write_text("three\n")
+        self.assertEqual(
+            install._changed_sources(repo, head),
+            ["skills/café.md", "skills/référence.md"],
+        )
 
     def run_main(self, *extra: str) -> tuple[dict, str]:
         out, err = io.StringIO(), io.StringIO()

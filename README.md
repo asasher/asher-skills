@@ -20,8 +20,8 @@ declaring `metadata.variants` (today: `staffing`), and removes anything dropped 
 curated selection.
 
 An install ends with a `setup_report` in its JSON output, summarized on stderr: which installed skills'
-sources changed since the recorded revision, and, as `setup_order`, the changed skills that declare a
-setup, in the order the catalog resolves them. Running those setups is an agent's job — the installer
+sources changed since the recorded revision — plus any mounted here for the first time — and, as
+`setup_order`, the changed skills that declare a setup, in the order the catalog resolves them. Running those setups is an agent's job — the installer
 names them and invokes nothing. Its `basis` field says how the set was arrived at: a real comparison
 needs git history in the source tree, so an install from the `npx`-packed package — which ships no
 `.git` — reports every installed skill as changed rather than guessing at nothing-to-do.

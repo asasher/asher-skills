@@ -81,7 +81,7 @@ def _write_json(path: Path, data: dict) -> None:
 
 
 def _revision(root: Path) -> str | None:
-    """Best-effort git revision of the source, for humans reading the state file."""
+    """Best-effort git revision of the source; the baseline the next install diffs against."""
     try:
         done = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD"],
@@ -198,10 +198,15 @@ def _recorded(target: Path) -> tuple[dict, set[str]]:
 
 
 def _git_lines(root: Path, args: list[str]) -> list[str] | None:
-    """Run a git command in `root` and split its output. None if it could not run."""
+    """Run a git command in `root` and split its output. None if it could not run.
+
+    `core.quotePath=false` because the default wraps any non-ASCII path in quotes
+    and octal-escapes it, which matches no skill's source prefix — the skill would
+    drop out of the report silently, in the unsafe direction.
+    """
     try:
         done = subprocess.run(
-            ["git", "-C", str(root), *args],
+            ["git", "-C", str(root), "-c", "core.quotePath=false", *args],
             capture_output=True, text=True, timeout=30,
         )
     except (OSError, subprocess.SubprocessError):
@@ -233,7 +238,9 @@ def _changed_sources(root: Path, since: object) -> list[str] | None:
     )
     if changed is None:
         return None
-    untracked = _git_lines(root, ["ls-files", "--others", "--exclude-standard"]) or []
+    untracked = _git_lines(root, ["ls-files", "--others", "--exclude-standard"])
+    if untracked is None:
+        return None  # Half an answer would under-report; fall back to the whole closure.
     return sorted(set(changed) | set(untracked))
 
 
@@ -443,10 +450,12 @@ def _summarize(report: dict[str, object]) -> list[str]:
         else:
             reason = "no source revision to compare against"
         first = f"{reason}; treating {sources} as changed"
-    elif changed:
-        first = f"{sources} changed since {short}: " + ", ".join(changed)
     else:
-        first = f"no skill sources changed since {short}"
+        against = f" since {short}" if short else ""
+        first = (
+            f"{sources} changed{against}: " + ", ".join(changed) if changed
+            else f"no skill sources changed{against}"
+        )
 
     second = (
         "setups to re-run, in order: " + ", ".join(setups) if setups

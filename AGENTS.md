@@ -197,17 +197,17 @@ is removed in the same pass. Only skills that file records are ever pruned — t
 mounts are untouchable.
 
 Every install ends with a `setup_report` in its JSON output, summarized on stderr for whoever is reading
-the terminal: `changed` — the installed skills whose source moved since the recorded revision — and
-`setup_order` — the subset of those declaring a setup, in the catalog's resolution order. Setups are
-agent-run: they reconcile repo-owned playbooks and sometimes ask the user, so the installer names them
-and invokes nothing.
+the terminal: `changed` — the installed skills whose source moved since the recorded revision, plus any
+newly mounted here, whose setup has never run against this repo — and `setup_order` — the subset of those
+declaring a setup, in the catalog's resolution order. Setups are agent-run: they reconcile repo-owned
+playbooks and sometimes ask the user, so the installer names them and invokes nothing.
 
 `basis` says how much to trust the set. `revision-diff` is a real comparison; `first-install` and
 `unknown-revision` both report **every** installed skill as changed, because an unanswerable comparison
-must not read as nothing-to-do. `unknown-revision` covers a revision the source clone lacks and a source
-tree carrying no git history at all — which is the case when the installer runs from an `npx`-packed
-tree, since the published package ships no `.git`. Discrimination is a property of installing from a
-checkout; from `npx`, expect the whole set every time.
+must not read as nothing-to-do. `unknown-revision` covers three cases: a revision the source clone lacks,
+a recorded revision that is not an object name at all, and a source tree carrying no git history — which
+is what the installer runs from under `npx`, since the published package ships no `.git`. Discrimination
+is a property of installing from a checkout; from `npx`, expect the whole set every time.
 
 State is one first-party file. It records the set, each skill's source path, provider variants, and the
 source revision — **no integrity hashes**. Drift is answered on demand instead:
