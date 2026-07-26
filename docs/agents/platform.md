@@ -26,13 +26,14 @@
   - Read review comments since a SHA: `gh pr view <n> --json title,body,comments`; for inline threads `gh api repos/asasher/asher-skills/pulls/<n>/comments`. (The `gh pr view <n> --comments` form is **broken** by the same deprecation — same `--json`-avoids-GraphQL fix as the issue read above. Verified live 2026-07-25, asher-skills#98.)
   - Post a review comment / reply: `gh pr comment <n> --body '...'`.
   - Signal approval: an exact `LGTM` comment via `gh pr comment`.
-  - Merge: the human merges on GitHub, or explicitly authorizes the `merge-changes` skill (`gh pr merge <n> --squash --delete-branch`) — the automated loop itself never merges.
+  - Merge: the human merges on GitHub, or explicitly authorizes the `merge-changes` skill (`gh pr merge <n> --squash --delete-branch`) — the automated loop itself never merges. Near-simultaneous review-ready PRs land as an explicitly-authorized **batch** through `merge-changes`, which orders, merges, and reconciles them; in-flight builds never rebase onto each other (`environment.md` § Parallelism verdict).
 - Where the review conversation persists: the PR thread on GitHub.
 
 ## Version control — working copies and publication
 
-- Binding: **git** (GitHub remote `origin`, https). Parallel-safe verdict with a standing sequential dispatch preference (`environment.md` § Parallelism verdict) — usually one work branch at a time, worktrees optional.
-  - Create an isolated working copy off the base branch: `git worktree add <path> -b <branch> main` (used only if a thread wants isolation; sequential runs may work the primary checkout on a branch).
+- Binding: **git** (GitHub remote `origin`, https). Parallel-safe verdict with a standing **parallel, uncapped** dispatch preference (`environment.md` § Parallelism verdict) — every ready, unblocked ticket fans out into its own worktree by default; a per-run override narrows to a width or to sequential.
+  - Create an isolated working copy off the base branch: the harness's **native isolation mechanism** (§ Harness — the Agent tool with `isolation: 'worktree'`), never hand-rolled worktree commands in loop dispatch; `git worktree add <path> -b <branch> main` remains for manual, out-of-loop work.
+  - Enumerate live working copies: `git worktree list` plus branch/PR state — never a directory scan (`environment.md` § Worktree isolation).
   - Name a line of work: a git branch, `<issue-number>-<slug>` per `environment.md` § Branching.
   - Sync the base before forking: `git fetch origin && git checkout main && git pull --ff-only`.
   - Publish a line of work: `git push -u origin <branch>`.
@@ -47,7 +48,7 @@
 - Directional reachability and fallback: a failed Codex→Claude invocation removes only that route and applies the successor in `environment.md` § Model staffing; Claude→Codex remains available. No Anthropic-policy or credit monitor gates dispatch. (Recorded machine facts: versioned model aliases are rejected by the installed Claude CLI. Claude→`codex exec` **is** available in unattended children — the earlier "unavailable" record was stale; verified live 2026-07-25 (asher-skills#98) when a native unattended Agent child ran `codex exec -s read-only` for its verification and review passes, and the `backlog build` preflight probe succeeded.)
 - Route trust: a routine dispatch trusts the recorded effect-verified verb — verification happens at setup, at re-verification, and when a route misbehaves, so dispatch needs no fresh probe session. A route that fails or hangs in use is drift: record the failure class, take the successor, re-verify that direction. Verification probe artifacts are cleaned up as part of the check.
 - Can a spawned thread read a skill's bundled references from disk? Yes — under `.claude/skills/<name>/` and `docs/agents/` in the checkout.
-- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; a verdict wait blocks on the `serve-via-tailnet` skill's `review-await.py` (self-host path `skills/software-development/serve-via-tailnet/scripts/review-await.py`). Longer watches run per the `watch-until` skill's ladder — a watcher subagent, never the orchestrator inline (applies to both the approval gate and the PR-merge watch).
+- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; review is tracker-native, so a verdict wait polls the change request thread through the verified `--json` read verbs (§ Change review) — the retired tailnet surface's `review-await.py` block is no longer a wait path (asher-skills#116). Longer watches run per the `watch-until` skill's ladder — a watcher subagent, never the orchestrator inline (applies to both the approval gate and the PR-merge watch).
 
 ## The local binding — tracker contract
 

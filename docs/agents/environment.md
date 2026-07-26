@@ -18,23 +18,26 @@
 - Start the full dev stack: **n/a** — nothing to boot.
 - To exercise a skill (the equivalent of "running the app"): invoke it in a harness against a scenario. From Claude Code, the `Skill` tool or a subagent that reads the skill's `SKILL.md`; from Codex, per the skill's `agents/openai.yaml`. A "run" is a probe scenario driven through an executor model — see § Driving the app.
 - Scripts the skills ship (e.g. `scripts/review-server.py`) are stdlib-only Python 3 — run directly with `python3`, no install.
-- Services / ports / URLs: **none**, except the presentation surface (§ Presenting) and any transient review-server port.
-- Headless contract: **no dev stack — nothing to detach.** The only long-lived processes are review servers, which already run detached with logs and a recorded stop (`--stop --state <dir>`); teardown is audited via `tailscale serve status` plus the reap rule in § Presenting.
+- Services / ports / URLs: **none** — the loop stands up no servers (the retired review surface's residual port note lives in § Presenting), only whatever transient port a probe or driven script briefly binds.
+- Headless contract: **no dev stack — nothing to detach.** The loop runs no long-lived processes; a script driven for verification stops with its check. (Retired-surface leftovers, if any turn up, are reaped per § Presenting.)
 
 ## Worktree isolation
 
-> Set by `setup` per `reference/worktree-isolation.md`.
+> Set by `setup`'s isolation audit; fan-out mechanics recorded 2026-07-26 (asher-skills#116).
 
 - Regime: **local-isolatable** — skills are files + stdlib-Python scripts with no shared runtime state, so a `git worktree` is a complete isolated copy. No derived env, no ports to remap.
-- How to bring up an **isolated** stack for one worktree: `git worktree add <path> -b <branch> main` is sufficient — there is nothing else to stand up. Sequential verdict means the loop normally works the main checkout on a branch and does not fan out worktrees.
-- **Shared-singleton list** — there is no code-level shared runtime (no DB, no ports, no shared build cache; each skill is files + stdlib scripts), so the code isolates completely. The only singletons are loop infrastructure, both handled without serializing code work:
+- How to bring up an **isolated** stack for one worktree: worktree creation goes through the **harness's native isolation mechanism** (from Claude Code, the Agent tool with `isolation: "worktree"`, or `EnterWorktree`) — never hand-rolled `git worktree add` in loop dispatch; there is nothing else to stand up. Manual, out-of-loop work may still use `git worktree add <path> -b <branch> main` directly.
+- **Enumeration**: the lifecycle discovers live worktrees via `git worktree list` plus branch/change-request state — never a directory scan — so harness-placed trees cannot become an invisible accumulation surface.
+- **Teardown**: nothing to tear down beyond removing the worktree — no derived env, ports, or services to reap. `git worktree remove <path>` (plus `git worktree prune` for stale registrations) completes it. The skill-common teardown lifecycle — abort path, sweep, ownership per path — is asher-skills#83's deliverable.
+- **Shared-singleton list** — there is no code-level shared runtime (no DB, no ports, no shared build cache; each skill is files + stdlib scripts), so the code isolates completely. The only remaining singleton is loop infrastructure, handled without serializing code work:
 
   | Singleton | Collision mode | Locally isolatable? |
   |-----------|----------------|---------------------|
   | GitHub tracker | one issue graph | no — but serialized main-branch writes handle it |
-  | Tailnet presentation surface | one URL root | no — one review published at a time |
 
-  Neither collides with two worktrees editing skill files, so they do not force serialized *verification* of the code.
+  (There is no review-surface singleton: review is tracker-native, on each change request — per-ticket by construction, so concurrent reviews share nothing. The tailnet surface that once held this role is retired; § Presenting, asher-skills#116.)
+
+  The tracker does not collide with worktrees editing skill files, so it does not force serialized *verification* of the code.
 
   One row is standing in every multi-worktree repo: the parent `.git` itself. Concurrent git operations from parallel worktrees can collide on its locks (`index.lock`, ref locks) — a lock error is contention, so wait and retry briefly; a lock that outlives the retry with no live git process behind it is a crashed operation's leftover, and only then safe to remove.
 
@@ -65,9 +68,9 @@
 - Lifetime/cleanup: the owning test retains fixtures through its final assertion/evidence capture, then
   removes only its own temporary root.
 - **Per-ticket-disposable stores** — what a single ticket may reset or wipe wholesale: the ticket's own
-  worktree, its `VERIFY-<issue>-*` fixtures and temporary roots, and its own
-  `~/.backlog/surface/asher-skills/<issue>/` entry. Everything else is shared, and destructive verbs stop
-  at this line.
+  worktree, and its `VERIFY-<issue>-*` fixtures and temporary roots. (A leftover
+  `~/.backlog/surface/asher-skills/<issue>/` entry from the retired review surface is also the ticket's to
+  remove.) Everything else is shared, and destructive verbs stop at this line.
 
 ## Driving the app & capturing evidence
 
@@ -81,27 +84,30 @@
   - Any stdlib script a skill ships (e.g. `review-server.py`) is driven directly with `python3`.
 - Independent runtime verification: delegate a scenario to `codex exec` for a second executor outside the orchestrator's context (dispatch mechanics in the `staffing` skill's compiled harness-mechanics reference; the roster and this machine's verified routes in `staffing.md`). Reading skill files, grading transcripts against an answer key, and running a skill's `scripts/` stay local.
 - Evidence capture per surface: the **eval transcript** (the executor's run) plus a **pass/fail verdict table** mapping each probe to its answer-key criterion. For a skill that produces a visual artifact (e.g. `maquette`, a rendered plan), also a screenshot of the rendered HTML. Terminal transcripts for script behavior.
-- Supporting tools: `docs/agents/probe-evals.md` (the eval harness), the skill's own `evals/` dir, and the review surface (§ Presenting) for artifacts a human should eyeball.
-- Gaps: no automated CI — every check is agent-driven on demand. A skill whose value is subjective (taste of copy, feel of a flow) can't be fully graded mechanically; the fallback is a human review pass on the presentation surface.
+- Supporting tools: `docs/agents/probe-evals.md` (the eval harness) and the skill's own `evals/` dir; an artifact a human should eyeball rides the change request (committed and screenshotted per `evidence.md`) or is opened locally (§ Presenting).
+- Gaps: no automated CI — every check is agent-driven on demand. A skill whose value is subjective (taste of copy, feel of a flow) can't be fully graded mechanically; the fallback is a human review pass on the change request.
 
 ## Presenting to the human
 
-> Owned by the **`serve-via-tailnet`** skill (composed by name): the presentation surface and interactive review — how plans, prototypes, and review sheets reach a human who may not be at the machine. Read by `prototype` and `to-spec` when they pause for review; serve-via-tailnet's setup records this repo's surface config here. The shipped default is a singular tailnet surface; local-only and custom channels are legitimate alternates.
+> **The tailnet HTML review surface is retired** (Asher, 2026-07-26, asher-skills#116). Review is
+> **tracker-native**: each build's review happens on its own change request — the PR thread bound in
+> `platform.md` § Change review — which is per-ticket by construction, so concurrent reviews need no shared
+> surface, no cap, and nothing to keep alive. Spec sign-off lives on the ticket; prototype feedback arrives
+> in chat. Do not publish reviews to the tailnet, stand up review servers, or proxy review ports for the loop.
 
-- Surface: **tailnet** (`tailscale serve`, Funnel off — private to Asher's own devices: this MacBook + iphone-14-pro-max).
-- **Always open in the browser:** whenever a plan or prototype is published for review, open its URL locally with `open <url>` immediately after presenting — standing instruction from Asher, every presentation, no need to ask.
-- Root URL: `https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills` (machine root `https://ashers-macbook-pro.tail045dd5.ts.net`; tailscale 1.98.8).
-- Surface directory: `~/.backlog/surface/asher-skills` — holds `registry.json` and the generated `index.html` (the hub) at its root, plus each issue's published static docs under `<issue>/`.
-- Bringing the tailnet up (precondition for every publish/serve below; contract: serve-via-tailnet `reference/surface-and-hub.md` § Bringing the tailnet up): all the `tailscale serve` commands here assume this node is on the tailnet. Before publishing a review, check with `tailscale status` — it exits non-zero and prints `Logged out.` / `Tailscale is stopped.` when the node is down. Only when it is down **and** a review is being published now, run `tailscale up` to reconnect. If `tailscale status` already succeeds (node connected, peers listed), do nothing — never `tailscale down`/`up` to "reset" a healthy connection. If `tailscale up` prints an auth URL or fails (expired key, SSO/admin approval), surface that to Asher as the blocker and fall back to opening the file locally (`open <file>`) with a note that remote review is unavailable — never enable Funnel or improvise a public tunnel.
-- Document server: the sandboxed macOS tailscale app cannot serve file paths, so static docs are served by a stdlib static server rooted at the surface dir and proxied once:
-  - `python3 -m http.server 8390 --directory ~/.backlog/surface/asher-skills` (a stable port; pick another if 8390 is taken — 8377 is already held by a prior `/review` handler).
-  - `tailscale serve --bg --set-path /asher-skills http://localhost:8390`.
-- Publish a document: `mkdir -p ~/.backlog/surface/asher-skills/<issue> && ln -sfn <absolute path to the committed HTML> ~/.backlog/surface/asher-skills/<issue>/<name>.html` → resolves at `<root URL>/<issue>/<name>.html`.
-- Review server (annotated review with a recorded verdict — optional: spec sign-off lives on the ticket and prototype feedback arrives in chat, so this serves only artifacts that need one; contract: serve-via-tailnet `reference/annotation-contract.md`; scripts ship with the `serve-via-tailnet` skill — self-host path `skills/software-development/serve-via-tailnet/scripts/`): `python3 skills/software-development/serve-via-tailnet/scripts/review-server.py --doc <file> --title "…" --issue <n> --kind plan --state <run state dir> --surface ~/.backlog/surface/asher-skills --port <p> --public-url https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills/<n>/review`, with the port proxied once — `tailscale serve --bg --set-path /asher-skills/<n>/review http://localhost:<p>`. The agent blocks on `python3 skills/software-development/serve-via-tailnet/scripts/review-await.py --state <run state dir> --timeout <secs>` (exit 0 approve / 3 nits / 10 changes / 124 timeout).
-- Hub: `https://ashers-macbook-pro.tail045dd5.ts.net/asher-skills/` serves the generated `index.html` beside `registry.json`; swept by `python3 skills/software-development/serve-via-tailnet/scripts/review-server.py --sweep --surface ~/.backlog/surface/asher-skills`.
-- Expose a live prototype: `tailscale serve --bg --set-path /asher-skills/<n>/proto http://localhost:<port>`.
-- Reap rule: on teardown, remove the issue's symlinks under `~/.backlog/surface/asher-skills/<n>/` and turn off its proxies — `tailscale serve --set-path /asher-skills/<n>/review off` (and `.../proto off`); `tailscale serve status` lists live handlers for the orphan sweep. **Note:** the pre-existing `/review → http://localhost:8377` handler (the v1 multi-repo hub) was reaped 2026-07-24 during the v2 migration; the LaunchAgent `com.asher.backlog-surface` still serves `~/.backlog/surface` on 8377 locally, and port 8377 remains taken.
-- Keep-awake: **none** (setup choice) — the surface is up when the machine is awake; harnesses hold sleep assertions during active runs. No LaunchAgent, no `caffeinate`. AFK reviews that outlast an active run may find the machine asleep; revisit if that bites.
+- Artifacts that genuinely need rendering (a plan or prototype HTML a human should eyeball) are a separate
+  concern with **no standing surface bound here**: open them locally with `open <file>`, or commit and
+  screenshot them onto the change request per `evidence.md`. The `serve-via-tailnet` skill remains installed
+  and may be invoked explicitly on demand, but it is not the review path and has no standing config in this
+  playbook.
+- Residual machine facts from the retired surface: the LaunchAgent `com.asher.backlog-surface` still serves
+  `~/.backlog/surface` on port 8377 locally (the port remains taken); any leftover `tailscale serve` handler
+  under `/asher-skills/...` is an orphan — `tailscale serve status` lists live handlers, and
+  `tailscale serve --set-path <path> off` reaps one.
+- Keep-awake: **none** (setup choice, reconfirmed at retirement) — harnesses hold sleep assertions during
+  active runs, and with review on the tracker the loop leaves nothing AFK depending on this machine being
+  awake. The one exception is an explicitly-invoked `serve-via-tailnet` session, which serves from this
+  machine — an AFK review over it may find the machine asleep; revisit if that bites.
 
 ## Model staffing
 
@@ -119,5 +125,7 @@ machine is stale — re-run `staffing setup` rather than dispatching on it.
 > Read by `backlog build` before dispatch.
 
 - Verdict: **parallel-safe** — re-derived 2026-07-24 under v2 semantics (asher-skills#95): the v1 record said `serialize-verification` but justified it as "user chose sequential", and the shared-singleton audit above shows **no code-level collision** — nothing environmental forces serialization. v2 distinguishes constraint from preference, so the honest verdict is parallel-safe.
-- Standing dispatch preference: **sequential** — Asher's recorded working preference is one issue thread at a time; `backlog build` defaults to that unless he asks for fan-out. This is policy, not environment: no lane lock, no exception lane, and the preference can change per-run without re-auditing.
-- The tracker and review surface handle concurrency by serializing their own writes, never by serializing code verification. (Keep-awake stays **none** — reconfirmed 2026-07-24; the note lives beside § Presenting.)
+- Standing dispatch preference: **parallel, uncapped** — every ready, unblocked ticket fans out by default (recorded 2026-07-26, asher-skills#116; supersedes the earlier sequential preference). The fleet is bounded by the ready queue and the harness's own concurrency limits, not by policy — the queue-on-refused-spawn rule absorbs whatever the harness declines to run at once. A **per-run override** may narrow a run to a width limit or to fully sequential; changing the day's working mode never requires a playbook edit. This is policy, not environment: the parallel-safe verdict stands on its own, and the preference can change per-run without re-auditing. (Deferred: introduce a width cap only if uncapped fan-out proves noisy in practice — review pile-up, machine load.)
+- **No mid-flight rebases**: each build targets the base branch as of its fork; drift between in-flight builds is absorbed at review and merge time, never pushed into running builds.
+- **Merge posture: batch via the `merge-changes` skill** — the human authorizes a batch of review-ready change requests; the skill computes dependency order, merges, and reconciles mechanically; a conflict needing judgment stops the run. The human authorization gate itself is unchanged.
+- **Review posture: tracker-native** — each build's review happens on its own change request, per-ticket by construction, so concurrent reviews serialize nothing (§ Presenting records the surface retirement). The tracker handles concurrency by serializing its own writes, never by serializing code verification. (Keep-awake stays **none** — the note lives in § Presenting.)
