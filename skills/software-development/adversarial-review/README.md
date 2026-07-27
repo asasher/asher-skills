@@ -1,9 +1,10 @@
 # Adversarial Review
 
-Converges a change request to LGTM with two concurrent subagents that share nothing but the change
-request itself: a reviewer (code-review per pass, findings as anchored comments, re-review on new
-commits, LGTM when a pass is clean and priors are addressed) and a fixer (fix or argue each finding,
-reply per comment, stop on LGTM) — both bounded by a timeout and an iteration cap.
+Converges a change request to LGTM by alternating bounded reviewer and fixer passes that share
+nothing but the change request itself: a reviewer pass (code-review, findings as anchored comments,
+LGTM when a pass is clean and priors are addressed) and a fixer pass (fix or argue each finding,
+reply per comment) — sequenced by the session driving the loop, which holds its turn until the loop
+converges or hits a bound (timeout, iteration cap).
 
 ## When to use
 
@@ -12,8 +13,10 @@ reply per comment, stop on LGTM) — both bounded by a timeout and an iteration 
 ## Dependency surface
 
 - **Bundled:** `reference/conduct.md` — both roles' briefs: comment conduct, the LGTM bar, iteration
-  state, the product-semantics escalation.
-- **Siblings (required, by name):** `code-review`, `watch-until`, `to-subagent`.
+  state, the product-semantics ruling.
+- **Siblings (required, by name):** `code-review`, `to-subagent`.
+- **Siblings (optional, by name):** `diagnosing-bugs` — the fixer's route for findings reproducible
+  only at runtime.
 
 ## Provenance
 

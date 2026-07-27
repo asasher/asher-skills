@@ -1,18 +1,22 @@
 # Reviewer and fixer conduct
 
-The briefs both dispatched agents carry. The change request is the only shared state; these rules are
+The briefs both dispatched roles carry. The change request is the only shared state; these rules are
 what make that enough.
 
 ## Shared rules
 
 - Before any work: identify the change request, its ticket, branch, current head SHA, and the latest
   recorded reviewer state.
-- Watches run per the `watch-until` skill. If no watch mechanism works, comment
-  `BLOCKED_MONITOR_SETUP` on the change request and stop with the blocker reported.
-- After each iteration, persist state on the change request via the platform's comment verb: role,
+- Each dispatch is one bounded pass: do the pass's work, persist state, return the report to the
+  driver. No role watches for the other — the driver sequences the passes.
+- After each pass, persist state on the change request via the platform's comment verb: role,
   iteration count, last-seen SHA, status, next expected actor. Either side can die and be respawned
-  from this record alone.
-- Stop on `LGTM`, the iteration cap, or a blocked watch — each an explicitly reported outcome.
+  from this record alone. Every SHA in a comment is read at writing time — `git rev-parse HEAD`, or
+  the platform's own read — never retyped from another comment or from memory.
+- A report that cannot reach the driver is posted on the change request instead — the outcome lands
+  where the next reader looks, never only in a return value.
+- The loop's stops — `LGTM`, the iteration cap, the timeout — are the driver's to enforce and
+  report, each an explicitly reported outcome; a pass ends by returning its report.
 
 ## Reviewer
 
@@ -35,11 +39,11 @@ what make that enough.
 
 ## Fixer
 
-- Watches for reviewer comments; each iteration addresses every actionable finding: a fix commit, or an
+- Each pass addresses every actionable finding it was dispatched with: a fix commit, or an
   explicit non-fix reply with the reason it's wrong. Disagreement is addressed; silence is not.
 - A behavior finding is reproduced as a failing check before the fix commit — red first, on the surface
   where the reviewer saw it. A finding reproducible only at runtime routes through the
   `diagnosing-bugs` skill rather than a patch argued from the diff; absent that sibling, say so and
   apply the same discipline in place — reproduce live before fixing.
-- Push, reply to each comment with what was done, prompt re-review, resume watching.
-- Done when `LGTM` lands.
+- Push, reply to each comment with what was done, persist state, and return the pass report — the
+  driver decides whether a re-review follows.
