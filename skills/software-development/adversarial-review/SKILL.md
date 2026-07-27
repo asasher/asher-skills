@@ -1,6 +1,6 @@
 ---
 name: adversarial-review
-description: Converge a change request to LGTM through two independent agents — a reviewer that re-reviews until a pass finds nothing new, and a fixer that addresses findings until LGTM lands. Use once a change request exists and needs review pressure without a human in the loop.
+description: Converge a change request to LGTM through driver-sequenced bounded passes — a reviewer that re-reviews until a pass finds nothing new, and a fixer that addresses findings until LGTM lands. Use once a change request exists and needs review pressure without a human in the loop.
 argument-hint: "<change request>"
 user-invocable: true
 metadata:
@@ -54,5 +54,6 @@ review, defaulting to one hour), both enforced by the driver on the passes it di
 bound, stop and report the open findings as unresolved — a stuck convergence is a reported outcome,
 not an endless loop.
 
-A pass that dies without returning is re-dispatched from the change request's persisted state
-(conduct § Shared rules), picking up at the next expected action.
+The driver names each pass's own bound at its dispatch, and treats a pass that outlives that bound
+as one that died. A pass that dies without returning is re-dispatched from the change request's
+persisted state (conduct § Shared rules), picking up at the next expected action.
