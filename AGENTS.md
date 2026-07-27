@@ -179,8 +179,8 @@ readiness; `to-tickets` supersedes a spec'd ticket with born-shaped children onl
 approval. `backlog build` fans ready tickets into
 worktree-isolated subagents it babysits — building is autonomous, so outcomes flow back; each runs
 `build`: `implement` (defect → `diagnosing-bugs`, new behavior
-→ `tdd`) → `verify-your-work` (the thread fixes) → change request → `adversarial-review` (`code-review`
-plus `watch-until` convergence) → `prove-your-work`. `merge-changes` remains the explicit human
+→ `tdd`) → `verify-your-work` (the thread fixes) → change request → `adversarial-review` (driver-run
+`code-review` passes to convergence) → `prove-your-work`. `merge-changes` remains the explicit human
 authorization gate after a review-ready change request. `to-subagent` is the single staffing-aware
 dispatch route.
 
