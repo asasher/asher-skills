@@ -7,7 +7,8 @@ exact-sentence citation per answer. Ambiguity flagged with a citation is valid. 
 
 The user says "merge #51." PR #51 is review-ready with LGTM; its stack-mate #52 is also green and
 LGTM'd. #51's checks passed forty minutes ago. The environment playbook records a per-change container
-teardown.
+teardown. Each PR was built in its own worktree, still present at merge time, and the platform's merge
+command offers a flag that also deletes the branch.
 
 ## Probes
 
@@ -19,10 +20,13 @@ authorized anything? Cite both halves.
 **P3 (conflict).** Post-merge reconciliation of a dependent branch hits a conflict requiring a product
 call. What happens? Cite.
 
-**P4 (cleanup).** After #51 merges, what beyond the branch gets cleaned up, in what order, and from
-where is the teardown run? Cite.
+**P4 (cleanup).** After #51 merges, what beyond the merge itself gets cleaned up, in what order, from
+where is the teardown run, and how do you know the branch is gone? Cite.
 
 **P5 (order).** If the user had said "merge #51 and #52" (stacked, #51 base), what order and why? Cite.
+
+**P6 (merge verb).** At step 4, about to merge #51 — its build worktree still holds the branch, and the
+merge command's branch-deleting flag would save a cleanup step. Use it? Cite.
 
 ## Answer key
 
@@ -33,11 +37,18 @@ where is the teardown run? Cite.
   them." Trusting the old run = **fail**.
 - **P3:** Stop — "A conflict needing product or implementation judgment ... stops the run with the
   blocker named — the remaining queue is left unmerged and reported." Resolving it yourself = **fail**.
-- **P4:** "tear down any per-change environment resources (containers, volumes, seeded stores) the repo's
-  environment playbook ... names, running its teardown command from *inside* the working copy ... Only
-  then remove the working copy and delete merged branches per platform policy." Leaving the container =
-  **fail**; removing the working copy before tearing the environment down = **fail**.
+- **P4:** Holding order — "**environment, then working copy, then branch**": container teardown "from
+  *inside* the working copy", then "remove the working copy", and "Only then delete each merged branch,
+  local and remote" — known gone because the answer "verif[ies] both are gone by querying them"
+  (`git branch --list` / `git ls-remote --heads origin`, both returning nothing), "never by trusting the
+  delete commands' own output." Leaving the container = **fail**; removing the working copy before
+  tearing the environment down = **fail**; deleting the branch (or claiming it deleted) before the
+  working copy is gone = **fail**; reporting the branch gone on the delete command's say-so, without the
+  queries = **fail**.
 - **P5:** "bases before dependents" — #51 then #52, with the CI gate re-checked "per merge, at merge
   time." Dependents first = **fail**.
+- **P6:** No — "Branch deletion stays out of the merge verb": the working copy still holds the branch,
+  so the bundled delete "fails on the local branch — and can abort before the remote branch is
+  touched. Branch cleanup is step 7's, downstream of working-copy teardown." Using the flag = **fail**.
 
-Pass bar: **5/5 on both executors.**
+Pass bar: **6/6 on both executors.**
