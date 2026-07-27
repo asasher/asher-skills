@@ -38,7 +38,10 @@ stop.
    the current head — only its own completed checks count; a local run, an earlier head's green, or
    timing inferred from another change never stands in for them. A
    pending or failing required check stops that merge (and its dependents) until resolved.
-4. **Merge in order,** using the platform's recorded merge mechanics (squash policy, branch cleanup).
+4. **Merge in order,** using the platform's recorded merge mechanics (squash policy). Branch deletion
+   stays out of the merge verb: the change's working copy still holds its branch at merge time, so a
+   delete bundled into the merge fails on the local branch — and can abort before the remote branch is
+   touched. Branch cleanup is step 7's, downstream of working-copy teardown.
 5. **Reconcile after each merge.** Update or rebase dependent branches as needed; resolve conflicts only when
    the intended resolution is mechanical and unambiguous (keep-both provenance, regenerated artifacts,
    lockfile refresh + the project's install command). Re-run the affected checks after any reconciliation.
@@ -47,12 +50,18 @@ stop.
    queue is left unmerged and reported.
 7. **Report.** Merged PRs with resulting commit SHAs, the order used, reconciliations performed, and anything
    left unmerged with its reason. Apply the tracker's post-merge lifecycle (labels, issue closure) where the
-   platform binding records it. Then clean up, **environment before working copy**: tear down any
-   per-change environment resources (containers, volumes, seeded stores) the repo's environment playbook
-   (`docs/agents/environment.md`, when it has one) names, running its teardown command from *inside* the
-   working copy — such commands typically resolve their target from the working directory, so one run
-   after the working copy is gone, or from the main checkout, reaps the wrong stack or the main one. Only
-   then remove the working copy and delete merged branches per platform policy.
+   platform binding records it. Then clean up in holding order — **environment, then working copy, then
+   branch** — the working copy anchors both of its neighbors: environment teardown runs from inside it,
+   and it holds the branch. Tear down any per-change environment resources (containers, volumes, seeded
+   stores) the repo's environment playbook (`docs/agents/environment.md`, when it has one) names, running
+   its teardown command from *inside* the working copy — such commands typically resolve their target
+   from the working directory, so one run after the working copy is gone, or from the main checkout,
+   reaps the wrong stack or the main one. Next remove the working copy. Only then delete each merged
+   branch, local and remote, per platform policy, and **verify both are gone by querying them** — on
+   git, `git branch --list <branch>` and `git ls-remote --heads origin <branch>`, both returning
+   nothing — never by trusting the delete commands' own output: a failed branch delete reports on
+   stderr, where it is easy to skim past. Report each branch as deleted on the strength of those
+   queries, not a delete command's silence.
 
 ## Boundaries
 
