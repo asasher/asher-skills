@@ -2,8 +2,8 @@
 
 > **Status: in progress.** Chat-native rework: the approval server, execution ladder, and JSONL event
 > machinery are retired; state is two files and one generated board; the interview delegates conduct to
-> the `interview` sibling skill. Probe evals rewritten for this design but not yet run — pre-deployment
-> eval pending per `docs/agents/probe-evals.md`. Install knowingly.
+> the `interview` sibling skill. Tier 1 probe evals pass 10/10 on both executors (2026-07-29, Claude
+> subagent + gpt-5.6-sol); human field test pending. Install knowingly.
 
 A career skill for one person, run from one folder, entirely in chat: interview the person to define
 what good work means for them, build the professional profile that becomes the project's state, then
