@@ -1,7 +1,0 @@
-interface:
-  display_name: "Eloquent"
-  short_description: "Resume, job search, and career docs"
-  default_prompt: "Use $eloquent to optimize my resume for a target job."
-
-policy:
-  allow_implicit_invocation: true

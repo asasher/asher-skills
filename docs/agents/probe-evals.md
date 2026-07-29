@@ -46,10 +46,10 @@ separate until runs are graded).
 When the skill's risk is in tool mechanics rather than wording, script the whole protocol against a
 sandbox and assert invariants at every step.
 
-Canonical: `skills/personal/fair-deal/eval/protocol-dryrun.sh` — exercises the full two-party negotiation protocol
-with a bare local repo standing in for the remote and two clones playing the partners; 35 checks (privacy
-firewall, turn alternation, shared-state integrity); scaffolds into a fresh `mktemp` dir each run and
-never touches this repo; exits non-zero on any FAIL.
+Canonical (from the since-removed `fair-deal` skill, whose `eval/protocol-dryrun.sh` exercised the full
+two-party negotiation protocol with a bare local repo standing in for the remote and two clones playing
+the partners; 35 checks covering privacy firewall, turn alternation, shared-state integrity). The pattern
+stands: scaffold into a fresh `mktemp` dir each run, never touch this repo, exit non-zero on any FAIL.
 
 ## How to adopt
 
@@ -71,5 +71,5 @@ never touches this repo; exits non-zero on any FAIL.
 
 ## Instances
 
-triage (method origin), bayes, maquette (Tier 1); fair-deal (Tier 2); shadixfy (`evals/evals.json`
+triage (method origin), bayes, maquette (Tier 1); fair-deal (Tier 2, skill since removed); shadixfy (`evals/evals.json`
 harness shipped in-skill); skill-loop consumes these harnesses as its eval input.
