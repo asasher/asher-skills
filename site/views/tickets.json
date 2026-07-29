@@ -1,7 +1,7 @@
 {
   "id": "tickets",
   "title": "Ticket states",
-  "subtitle": "The ticket lifecycle as a state machine — label roles from backlog-policy.md. Solid ring = final; dashed = repo override / born shaped; rose = parked. Click any state for the governing prose.",
+  "subtitle": "The ticket lifecycle as a state machine — label roles from backlog-policy.md. Solid ring = final; dashed = repo override / born shaped / capstone parent; rose = parked. Click any state for the governing prose.",
   "type": "statemachine",
   "nodes": [
     {
@@ -40,10 +40,20 @@
     {
       "id": "t-born",
       "title": "born shaped",
-      "blurb": "child of an approved split",
+      "blurb": "child slice of an approved split",
       "tone": "shaping",
       "dashed": true,
       "col": 4,
+      "row": 0,
+      "open": { "file": "skills/software-development/to-slices/reference/slicing.md" }
+    },
+    {
+      "id": "t-capstone",
+      "title": "capstone parent",
+      "blurb": "holds the spec its slices deliver; open children block dispatch",
+      "tone": "ready",
+      "dashed": true,
+      "col": 5,
       "row": 0,
       "open": { "file": "skills/software-development/to-slices/reference/slicing.md" }
     },
@@ -124,8 +134,10 @@
     { "from": "t-needs", "to": "t-shaping", "style": "flow", "label": "batch confirmed — thread" },
     { "from": "t-shaping", "to": "t-needs", "style": "optional", "label": "thread abandoned", "labelAt": 0.5 },
     { "from": "t-shaping", "to": "t-ready", "style": "flow", "label": "spec blessed — LGTM" },
-    { "from": "t-shaping", "to": "t-born", "style": "external", "label": "split approved: children", "labelAt": 0.4 },
-    { "from": "t-shaping", "to": "t-excl", "style": "external", "label": "superseded by the split", "labelAt": 0.5 },
+    { "from": "t-shaping", "to": "t-born", "style": "external", "label": "split approved: child slices", "labelAt": 0.4 },
+    { "from": "t-shaping", "to": "t-capstone", "style": "external", "label": "split approved: parent converts", "labelAt": 0.55 },
+    { "from": "t-capstone", "to": "t-building", "style": "flow", "label": "last child closes — coverage check", "labelAt": 0.5 },
+    { "from": "t-building", "to": "t-capstone", "style": "optional", "label": "gaps filed as new children", "labelAt": 0.35 },
     { "from": "t-born", "to": "t-ready", "style": "flow", "label": "comment watch → LGTM", "labelAt": 0.55 },
     { "from": "t-ready", "to": "t-building", "style": "flow", "label": "build dispatches — edges clear" },
     { "from": "t-building", "to": "t-closed", "style": "flow", "label": "merged — Closes #N" },

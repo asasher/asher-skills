@@ -58,6 +58,18 @@
   ],
   "messages": [
     {
+      "phase": "Capture — any conversation"
+    },
+    {
+      "from": "user",
+      "to": "tracker",
+      "label": "to-backlog: loose items → work-typed tickets, no readiness role",
+      "style": "flow",
+      "open": {
+        "node": "to-backlog"
+      }
+    },
+    {
       "phase": "Groom — interactive, nothing flows back"
     },
     {
@@ -316,6 +328,15 @@
       "style": "flow",
       "open": {
         "node": "merge-changes"
+      }
+    },
+    {
+      "from": "backlog",
+      "to": "tracker",
+      "label": "capstone surfaces once its slices close — coverage check: gaps → new children, clean pass → closed",
+      "style": "flow",
+      "open": {
+        "node": "to-slices"
       }
     }
   ]

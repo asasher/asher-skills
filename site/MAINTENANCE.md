@@ -16,8 +16,11 @@ cannot fetch.
   (Esc/× pops one, clicking a peeking lower sheet returns to it, backdrop closes all). Reference
   detection lives in `wireRefs()`; bare well-known names (`CONTEXT.md`, playbook filenames) resolve via
   its `BARE` map.
-- **Layer 2 (can drift, gated):** `views/*.json` — four views today: `sdlc` (family dependency graph;
-  edges from frontmatter), `sequence` (the lifecycle over time: actors, lifelines, messages — type
+- **Layer 2 (can drift, gated):** `views/*.json` — five views today: `sdlc` (family dependency graph;
+  edges from frontmatter), `journey` (the user's one trip through the lifecycle — type `swimlane`,
+  rendered by `buildSwimElements`: the four phases as columns, who-holds-the-work as lanes, ✋ marking
+  the four user-only decisions; every step's `open` jumps to the skill behind it), `sequence` (the
+  lifecycle over time: actors, lifelines, messages — type
   `sequence`, rendered by `drawSequence`; actors and messages carry `open` targets, so every step is
   clickable and opens the skill or prose behind it), `tickets` (the ticket lifecycle as a proper state machine —
   type `statemachine`, rendered by `drawStateMachine`: label-role states as tone-colored pills on a
@@ -29,11 +32,6 @@ cannot fetch.
   The site documents the shipped skills — never this repo's own installation of them, which is a separate
   consumer-side matter. `check.py` turns manifest drift into a failing check — including open targets or
   binding defaults pointing at missing files or unknown nodes/views.
-
-- **Static prose pages:** `user-flow.html` — the hand-authored user-journey page ("one trip through the
-  lifecycle"), linked from the nav. It is Layer-2-like drift: its wording duplicates the family's shape
-  and is **not** gated by `check.py`, so a change to the family (a skill added/renamed, a lifecycle
-  step reworked) must update it by hand in the same change, like the views.
 
 ## Agent instructions
 
