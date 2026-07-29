@@ -30,6 +30,11 @@ cannot fetch.
   consumer-side matter. `check.py` turns manifest drift into a failing check — including open targets or
   binding defaults pointing at missing files or unknown nodes/views.
 
+- **Static prose pages:** `user-flow.html` — the hand-authored user-journey page ("one trip through the
+  lifecycle"), linked from the nav. It is Layer-2-like drift: its wording duplicates the family's shape
+  and is **not** gated by `check.py`, so a change to the family (a skill added/renamed, a lifecycle
+  step reworked) must update it by hand in the same change, like the views.
+
 ## Agent instructions
 
 - **Touching a family skill?** The site is part of the change's blast radius. Adding/renaming/removing a

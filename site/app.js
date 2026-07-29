@@ -801,6 +801,7 @@
     }));
     const nav = $('#nav');
     for (const id of VIEW_IDS) nav.append(el('button', { 'data-view': id, onclick: () => switchView(id) }, state.views[id].title));
+    nav.append(el('a', { class: 'nav-page', href: 'user-flow.html' }, 'User journey'));
     await Promise.all(state.views.sdlc.nodes.map(async n => {
       try { state.fm[n.id] = parseFrontmatter(await fetchText(`${n.source}/SKILL.md`)).fm; }
       catch { state.fm[n.id] = {}; }

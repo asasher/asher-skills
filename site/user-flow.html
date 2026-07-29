@@ -191,7 +191,8 @@
     <div class="titles">
       <h1>One trip through the lifecycle</h1>
       <p class="subtitle">How you interact with a repo that has the asher-skills SDLC set installed —
-      from a raw idea to merged code. Columns show <em>who is holding the work</em> at each step.</p>
+      from a raw idea to merged code. Columns show <em>who is holding the work</em> at each step.
+      Part of the <a href="index.html">skill family docs</a>, where every skill's real files render live.</p>
     </div>
     <button class="theme-toggle" id="themeToggle" type="button">Toggle dark mode</button>
   </header>
@@ -223,11 +224,16 @@
     <!-- ============ CAPTURE ============ -->
     <section class="phase" data-phase="capture">
       <span class="phase-tag">Capture</span>
-      <div class="node col-1" id="idea">
-        <div class="kicker">You · any time</div>
-        <h3>File ideas as tickets</h3>
-        <p>Rough tickets land in the tracker — unlabeled or <code>needs-shaping</code>. No polish required; shaping is a later step, not a filing standard.</p>
+      <div class="node col-1" id="idea" style="grid-row:1">
+        <div class="kicker">You · any conversation</div>
+        <h3>Loose items surface anywhere</h3>
+        <p>A bug mentioned mid-interview, an idea during a build, a follow-up nobody should have to remember — or a ticket you file by hand. No polish required; shaping is a later step, not a filing standard.</p>
         <div class="badge-row"><span class="badge">↩ shipped work sparks the next idea</span></div>
+      </div>
+      <div class="node col-2" id="capture" style="grid-row:1">
+        <div class="kicker">to-backlog · in that same conversation</div>
+        <h3>Sweep → confirm → publish</h3>
+        <p>The conversation's loose items become minimal tickets: <strong>work-typed</strong> (a fact the live chat knows), <strong>no readiness role</strong> (routing stays groom's judgment), each carrying its chat context verbatim so it survives being read cold. You approve the capture list in-line — a light confirm, not a lifecycle gate. Mid-build finds can attach as children of a capstone parent, re-blocking it.</p>
       </div>
     </section>
 
@@ -244,7 +250,7 @@
       <div class="node col-2" id="groom-sweep" style="grid-row:2">
         <div class="kicker">backlog · dispatcher</div>
         <h3>Sweep → proposed batches</h3>
-        <p>Unlabeled and <code>needs-shaping</code> tickets are grouped into candidate shaping batches.</p>
+        <p>Tickets carrying <strong>no readiness role</strong> — captures arrive here work-typed but unrouted — and <code>needs-shaping</code> tickets are grouped into candidate shaping batches; the already-settled route straight to ready.</p>
       </div>
 
       <div class="node gate col-1" id="confirm-batches" style="grid-row:3">
@@ -288,9 +294,9 @@
       </div>
 
       <div class="node col-2" id="split" style="grid-row:8">
-        <div class="kicker">to-tickets · on your approval</div>
-        <h3>Split into tracer-bullet tickets</h3>
-        <p>Quizzes you on granularity and blocking edges, then publishes born-shaped children in dependency order. The spec'd parent is superseded.</p>
+        <div class="kicker">to-slices · on your approval</div>
+        <h3>Split into tracer-bullet slices</h3>
+        <p>Quizzes you on granularity and blocking edges, then publishes born-shaped child slices in dependency order. The spec'd parent isn't superseded — it becomes the <code>capstone</code> over them: alive as the shared context, undispatchable while any child is open.</p>
         <div class="badge-row"><span class="badge hard">gate 3 of 4 — you approve the split</span></div>
       </div>
     </section>
@@ -351,6 +357,13 @@
         <h3>Merge, close, clean</h3>
         <p>Merges the authorized change, closes its tickets, and cleans up worktrees and stacks.</p>
       </div>
+
+      <div class="node afk col-3" id="capstone" style="grid-row:2">
+        <div class="kicker">capstone · automatic</div>
+        <h3>The whole gets checked last</h3>
+        <p>When the last slice closes, the capstone parent surfaces in the next <code>backlog build</code> sweep for its coverage check: the delivered slices are verified against the spec. A gap becomes a new child slice — re-blocking the parent — and a clean pass closes it.</p>
+        <div class="badge-row"><span class="badge">AFK-ok</span><span class="badge">nothing left out</span></div>
+      </div>
     </section>
 
   </div>
@@ -376,7 +389,8 @@
   });
 
   var EDGES = [
-    { from: 'idea',            to: 'groom-run' },
+    { from: 'idea',       to: 'capture', h: true, frac: 0.5 },
+    { from: 'capture',         to: 'groom-run' },
     { from: 'groom-run',       to: 'groom-sweep' },
     { from: 'groom-sweep',     to: 'confirm-batches' },
     { from: 'confirm-batches', to: 'threads' },
@@ -393,6 +407,7 @@
     { from: 'pipeline',        to: 'evidence-read', label: 'review-ready CR' },
     { from: 'evidence-read',   to: 'authorize' },
     { from: 'authorize',  to: 'merge', h: true, frac: 0.5 },
+    { from: 'merge',      to: 'capstone', h: true, frac: 0.5, dashed: true, label: 'last slice closes' },
     { from: 'merge',      to: 'idea', loop: true, dashed: true }
   ];
 
