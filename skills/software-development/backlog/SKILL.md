@@ -8,7 +8,7 @@ metadata:
   invocation: user
   execution: orchestrator
   requires: [build, shape, to-subagent, to-thread]
-  optional: [merge-changes]
+  optional: [merge-changes, retro]
   setup: reference/setup.md
 ---
 
@@ -21,6 +21,13 @@ this session supervises to completion.
 Nouns are roles: *ticket*, *label*, *change request* are bound to this repo's real tracker, review
 surface, and version control by `docs/agents/platform.md`; label roles, dependency edges, and readiness
 by `docs/agents/backlog-policy.md`. Missing playbooks: run `backlog setup` first — don't improvise them.
+
+**Friction is noted as it happens.** A stumble in this loop — an instruction misread, a confirmation
+the user had to repeat, a stale playbook row, a workaround that shouldn't have been needed — is
+recorded the moment it shows via the `retro` sibling's note verb, and a run's end is the sweep for
+anything unnoted, stumbles relayed in build outcomes included. When the note verb reports a retro pass
+due, relay that report and stop — running the pass is never this dispatcher's call. Absent the `retro`
+sibling, friction goes unrecorded: say so once when there was something worth noting, then move on.
 
 ## groom
 

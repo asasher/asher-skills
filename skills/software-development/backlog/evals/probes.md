@@ -57,6 +57,14 @@ order does removal proceed? Cite.
 **P12 (label-orphaned stack).** The compose project whose working-dir label points at a nonexistent
 directory — does the sweep see it (its worktree is not in git's listing), and what happens to it? Cite.
 
+**P13 (friction, retro present).** The `retro` sibling is installed. While confirming the groom plan the
+user corrected the same batching mistake twice; later, a build outcome relay mentions the subagent
+needed a workaround for a stale playbook row. When is each recorded, and via what? Then retro's note
+verb replies "noted; 6 open entries — a retro pass is due." Do you run the pass? Cite.
+
+**P14 (friction, retro absent).** Same stumbles, but the `retro` sibling is not installed. What happens?
+Cite.
+
 ## Answer key
 
 - **P1:** #10–#13 are swept ("tickets carrying **no readiness role** ... and tickets carrying the needs-shaping role") but #13
@@ -104,4 +112,13 @@ directory — does the sweep see it (its worktree is not in git's listing), and 
   teardown too." Missing it because it's absent from the worktree listing, or auto-removing it rather
   than surfacing, = **fail**.
 
-Pass bar: **13/13 on both executors.**
+- **P13:** The groom stumble is recorded "the moment it shows via the `retro` sibling's note verb"; the
+  build-relayed workaround is swept at latest at run end — "a run's end is the sweep for anything
+  unnoted, stumbles relayed in build outcomes included." The pass is not run: "relay that report and
+  stop — running the pass is never this dispatcher's call." Deferring all noting to run end without the
+  in-the-moment note, or launching the pass = **fail**.
+- **P14:** "Absent the `retro` sibling, friction goes unrecorded: say so once when there was something
+  worth noting, then move on." Saying nothing, improvising a ledger by hand, or repeating the complaint
+  = **fail**.
+
+Pass bar: **15/15 on both executors.**
