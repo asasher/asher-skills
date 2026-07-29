@@ -1,6 +1,6 @@
 ---
 name: backlog
-description: Dispatch the backlog — groom sweeps unlabeled and needs-shaping tickets into user-confirmed batches, fans them into shaping threads, and sweeps finished tickets' worktrees for teardown; build fans ready, unblocked tickets into worktree-isolated subagents it supervises. Setup installs the playbooks.
+description: Dispatch the backlog — groom sweeps tickets carrying no readiness role and needs-shaping tickets into user-confirmed batches, fans them into shaping threads, and sweeps finished tickets' worktrees for teardown; build fans ready, unblocked tickets with no open children into worktree-isolated subagents it supervises. Setup installs the playbooks.
 argument-hint: "[groom | build | setup] [ticket ids]"
 user-invocable: true
 disable-model-invocation: true
@@ -24,8 +24,9 @@ by `docs/agents/backlog-policy.md`. Missing playbooks: run `backlog setup` first
 
 ## groom
 
-Sweep the tracker for unlabeled tickets and tickets carrying the needs-shaping role, or take the ids
-given. Route first — as a plan, not as writes: a ticket whose decisions are already settled routes to
+Sweep the tracker for tickets carrying **no readiness role** — however else they are labeled: a
+captured ticket arrives work-typed but unrouted — and tickets carrying the needs-shaping role, or take
+the ids given. Route first — as a plan, not as writes: a ticket whose decisions are already settled routes to
 the ready role, one owing reporter facts or human-only work to its parked role per the label roles, a
 duplicate or dead ticket to closure — the rest are shaping work. Group that rest twice: tickets whose
 decisions interlock form one **subject**; subjects that belong together (same subsystem, same domain
@@ -61,7 +62,10 @@ at a path that no longer exists are orphaned stacks — surface them for teardow
 
 ## build
 
-Sweep for tickets carrying the ready role whose dependency edges are clear, or take the ids given.
+Sweep for tickets carrying the ready role whose dependency edges are clear **and that have no open
+children** (the policy's open-children rule: a parent — a capstone over its slices — is dispatchable
+only once every child is closed; the relation itself is the block, no wired edges needed), or take the
+ids given.
 Preflight once per run: the platform verbs and credentials the builds will lean on answer a cheap live
 read — a dead one is drift, fixed by re-running `backlog setup` before any dispatch spends a build
 discovering it. For each ticket: mark it building per the label roles — a dispatched ticket must never

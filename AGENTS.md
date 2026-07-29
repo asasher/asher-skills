@@ -155,7 +155,8 @@ the refresh command below in the main checkout after a merge that touches `skill
 | prove-your-work | Evidence package posted on the change request | project |
 | merge-changes | Merges explicitly authorized changes; closes tickets, cleans worktrees and stacks | project |
 | to-spec | Synthesizes the conversation into a spec deliverable | project |
-| to-tickets | Splits a direction into tracer-bullet tickets with blocking edges | project |
+| to-slices | Splits a direction into tracer-bullet tickets with blocking edges; a split parent becomes the capstone over its slices | project |
+| to-backlog | Captures a conversation's loose items as work-typed, readiness-unlabeled tickets for groom's intake | project |
 | interview | Frontier-round interview until shared understanding | project |
 | domain-modeling | CONTEXT.md glossary and ADRs, written as decisions land | project |
 | research | Primary-source dossiers with traceable claims | project |
@@ -169,14 +170,17 @@ the refresh command below in the main checkout after a merge that touches `skill
 | skill-loop | Iterates a skill through eval → revise cycles | project |
 | writing-great-skills | Authoring guidance for writing skills (external: mattpocock/skills, see `external-dependencies.lock.json`) | project |
 
-**How they fit together:** `backlog` is a dispatcher. `backlog groom` sweeps unlabeled and
+**How they fit together:** `backlog` is a dispatcher. `to-backlog` is its intake feeder: any
+conversation's loose items — bugs, ideas, follow-ups — land as work-typed tickets with no readiness
+role. `backlog groom` sweeps tickets carrying no readiness role and
 `needs-shaping` tickets into user-confirmed batches, then fans one interactive shaping thread per batch
 via `to-thread` (a single batch runs in the groom session itself); each runs `shape` — one engine per
 subject, composing `interview` and `domain-modeling`, dispatching `research` and `prototype` through
 `to-subagent` — and a settled subject crystallises automatically via `to-spec` (the spec on its ticket,
 diagram first), the thread watching the spec'd tickets for AFK comments until the user blesses
-readiness; `to-tickets` supersedes a spec'd ticket with born-shaped children only on the user's
-approval. `backlog build` fans ready tickets into
+readiness; `to-slices` splits a spec'd ticket into born-shaped child slices only on the user's
+approval, the parent staying alive as the `capstone` over them — undispatchable while any child is
+open, closing with a coverage check once they're done. `backlog build` fans ready, unblocked tickets with no open children into
 worktree-isolated subagents it babysits — building is autonomous, so outcomes flow back; each runs
 `build`: `implement` (defect → `diagnosing-bugs`, new behavior
 → `tdd`) → `verify-your-work` (the thread fixes) → change request → `adversarial-review` (driver-run

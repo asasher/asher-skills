@@ -8,7 +8,8 @@ for artifacts). Stateful: the record lives in the ticket thread, `CONTEXT.md`, a
 session re-asks nothing the record answers. A settled subject crystallises automatically: to-spec lands
 the spec on its ticket, diagram first. The thread then watches the spec'd tickets for AFK comments —
 tweaks applied and replied to — until the user's explicit readiness signal, which it executes; a
-recommended split runs to-tickets only on the user's approval. Shape stamps nothing of its own judgment.
+recommended split runs to-slices only on the user's approval. Shape stamps nothing of its own judgment.
+Mid-thread items that aren't batch subjects are offered to to-backlog for capture.
 
 ## When to use
 
@@ -19,7 +20,8 @@ recommended split runs to-tickets only on the user's approval. Shape stamps noth
 - **Bundled:** `SKILL.md` only.
 - **Siblings (required, by name):** `interview`, `domain-modeling`, `to-spec`.
 - **Siblings (optional, by name):** `research`, `prototype`, `to-subagent` (their dispatch and the
-  batch's engines), `to-tickets` (the approved split), `watch-until` (the comment watch).
+  batch's engines), `to-slices` (the approved split), `to-backlog` (mid-thread capture), `watch-until`
+  (the comment watch).
 - **Project surface:** the instruction file's `## Context documents` index; the tracker binding in
   `docs/agents/platform.md` when the subject is a ticket.
 

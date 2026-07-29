@@ -16,7 +16,7 @@
     {
       "id": "crystallise",
       "title": "Crystallise",
-      "blurb": "Shaping's exit: a settled subject auto-specs onto its ticket; your LGTM blesses it, an approved split supersedes it."
+      "blurb": "Shaping's exit: a settled subject auto-specs onto its ticket; your LGTM blesses it, an approved split parents it as the capstone over its slices. Loose items from any conversation capture in as unrouted tickets."
     },
     {
       "id": "build",
@@ -39,7 +39,7 @@
       "id": "backlog",
       "lane": "dispatch",
       "title": "backlog",
-      "blurb": "The dispatcher: groom sweeps unlabeled + needs-shaping tickets into user-confirmed batches of shaping threads, build fans ready tickets into supervised build subagents — no result flows back",
+      "blurb": "The dispatcher: groom sweeps no-readiness-role + needs-shaping tickets into user-confirmed batches of shaping threads, build fans ready tickets with no open children into supervised build subagents — no result flows back",
       "source": "skills/software-development/backlog",
       "files": [
         {
@@ -438,11 +438,11 @@
       ]
     },
     {
-      "id": "to-tickets",
+      "id": "to-slices",
       "lane": "crystallise",
-      "title": "to-tickets",
-      "blurb": "Approved split → tracer-bullet tickets with native blocking edges; quizzes granularity before publishing; supersedes the spec'd parent",
-      "source": "skills/software-development/to-tickets",
+      "title": "to-slices",
+      "blurb": "Approved split → tracer-bullet tickets with native blocking edges; quizzes granularity before publishing; parents the spec'd ticket as capstone over its slices",
+      "source": "skills/software-development/to-slices",
       "files": [
         {
           "group": "Skill",
@@ -477,12 +477,52 @@
       "bindings": [
         {
           "port": "platform",
-          "expects": "tracker verbs: create tickets, native blocking edges, labels",
+          "expects": "tracker verbs: create tickets, native blocking edges, parent/child relation, labels",
           "default": "skills/software-development/backlog/templates/common/platform.md"
         },
         {
           "port": "backlog-policy",
-          "expects": "how a blocking edge is recorded; readiness left to admission",
+          "expects": "how a blocking edge is recorded; the capstone role and open-children rule; readiness left to admission",
+          "default": "skills/software-development/backlog/templates/common/backlog-policy.md"
+        }
+      ]
+    },
+    {
+      "id": "to-backlog",
+      "lane": "crystallise",
+      "title": "to-backlog",
+      "blurb": "Conversation's loose items → minimal work-typed tickets with no readiness role; groom's intake feeder; optional capstone-parent attach",
+      "source": "skills/software-development/to-backlog",
+      "files": [
+        {
+          "group": "Skill",
+          "label": "SKILL.md",
+          "path": "SKILL.md"
+        },
+        {
+          "group": "Provenance",
+          "label": "README",
+          "path": "README.md"
+        },
+        {
+          "label": "probes",
+          "path": "evals/probes.md",
+          "group": "Evals"
+        }
+      ],
+      "playbooks": [
+        "docs/agents/platform.md",
+        "docs/agents/backlog-policy.md"
+      ],
+      "bindings": [
+        {
+          "port": "platform",
+          "expects": "tracker verbs: create tickets, attach a child, labels",
+          "default": "skills/software-development/backlog/templates/common/platform.md"
+        },
+        {
+          "port": "backlog-policy",
+          "expects": "work-type names; no-readiness-role as groom's intake",
           "default": "skills/software-development/backlog/templates/common/backlog-policy.md"
         }
       ]
@@ -973,13 +1013,18 @@
     },
     {
       "from": "to-spec",
-      "to": "to-tickets",
+      "to": "to-slices",
       "label": "user's call: split into tickets"
     },
     {
-      "from": "to-tickets",
+      "from": "to-slices",
       "to": "backlog",
-      "label": "published tickets, blocking edges"
+      "label": "published child slices under the capstone parent, blocking edges"
+    },
+    {
+      "from": "to-backlog",
+      "to": "backlog",
+      "label": "captured tickets, work-typed, no readiness role"
     },
     {
       "from": "backlog",

@@ -52,7 +52,7 @@ and whatever the composer captures. Example: `interview`.
 
 **Effectful skill**:
 Writes durable artifacts (documents, tickets, code) but keeps no resume state of its own. Example:
-`to-tickets`.
+`to-slices`.
 
 **Stateful skill**:
 Its durable artifacts double as resume state: a bare invocation reads them and continues exactly
@@ -73,8 +73,30 @@ facts, prototyping unsettleable questions, maintaining the domain model as terms
 rounds combined across the batch. The spec is shaping's exit: a settled subject crystallises via
 `to-spec` automatically, the spec landing on its ticket (body canonical, diagram first); the thread
 then watches the spec'd tickets for AFK comments until the user blesses readiness. Splitting a
-spec'd ticket (`to-tickets` superseding it with born-shaped children) happens only on the user's
-explicit approval. `backlog groom` dispatches shaping work into these threads.
+spec'd ticket (`to-slices` parenting it, as capstone, over born-shaped child slices) happens only on
+the user's explicit approval. `backlog groom` dispatches shaping work into these threads.
+
+**Slice / tracer bullet**:
+The unit `to-slices` cuts a decided direction into. A **slice** is vertical — a narrow-but-complete
+path through every layer the change spans, demoable on its own; a **tracer bullet** is the sizing
+discipline on top: one fresh context window. The anti-pattern is the horizontal layer ("all the
+models"), which can't be demoed alone. The one exception is the wide refactor — mechanical and
+high-blast-radius — sequenced expand → migrate-in-batches → contract instead.
+
+**Capstone**:
+The work-type a spec'd ticket converts to when `to-slices` splits it: the parent of the slices,
+holding the spec they deliver in installments. Undispatchable while any child is open — the
+parent/child relation itself carries the block (the backlog policy's open-children rule), never
+per-slice edges — and its terminal work is the coverage check: verify the delivered children against
+the spec, file gaps as new children (re-blocking it), close on a clean pass. Replaces the old
+supersede semantics, which killed the parent and with it the accountability for the whole.
+
+**Capture**:
+The `to-backlog` move: sweep a conversation's loose items — bugs, ideas, follow-ups that aren't the
+conversation's deliverable — into minimal tickets, work-typed (a fact the live chat knows) but
+carrying no readiness role (routing is grooming's judgment), each preserving its chat context.
+Capture is N undecided things into the intake queue; the opposite move — one decided thing into
+ordered parts — is `to-slices`.
 
 **Repo context files**:
 The repo-owned strategic context a shaping session reads at intake: `CONTEXT.md` (the domain

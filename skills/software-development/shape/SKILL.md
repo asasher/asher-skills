@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [domain-modeling, interview, to-spec]
-  optional: [prototype, research, to-subagent, to-tickets, watch-until]
+  optional: [prototype, research, to-backlog, to-slices, to-subagent, watch-until]
 ---
 
 # Shape
@@ -45,15 +45,18 @@ ask.
   question blocks only what depends on it; results re-enter the frontier as evidence.
 - When the subject is a ticket, record settled decisions on its thread as they land — the thread is the
   resume state.
+- An item surfacing mid-thread that is real work but not a batch subject — a bug mentioned in passing,
+  an adjacent idea — is offered to the `to-backlog` skill for capture, not absorbed into the subject or
+  lost with the chat.
 
 ## Crystallise — the spec is the exit
 
 When a subject's frontier is empty, run the `to-spec` skill on it — automatically, not on request: the
 spec lands on the subject's ticket, opening with a diagram (to-spec creates the ticket when the subject
 was only an idea). Posting a spec is a proposal, not a state change — readiness still waits for the
-user's blessing. A spec may end by recommending a split; executing one — the `to-tickets` skill
-superseding the ticket with born-shaped children — happens only on the user's explicit approval, in a
-comment or here in the thread.
+user's blessing. A spec may end by recommending a split; executing one — the `to-slices` skill
+parenting the ticket, as capstone, over born-shaped child slices — happens only on the user's explicit
+approval, in a comment or here in the thread.
 
 ## Done
 
@@ -84,7 +87,8 @@ recomputes the frontier from what is still open, and re-asks nothing the record 
   and stop.
 - **Siblings (optional, by name):** `research` (source-backed questions), `prototype` (probes),
   `to-subagent` (their dispatch, and the batch's engines — absent it, shape the batch's subjects one at
-  a time inline), `to-tickets` (the approved split), `watch-until` (the comment watch — absent it,
+  a time inline), `to-slices` (the approved split), `to-backlog` (capturing mid-thread items that
+  aren't batch subjects), `watch-until` (the comment watch — absent it,
   say comments need an explicit ping). Absent one, park the affected work as open and say so; never
   silently skip.
 - **Project surface:** the repo context files (`CONTEXT.md`, plus `PRODUCT.md`/`DESIGN.md` where they

@@ -34,6 +34,7 @@ Two further lifecycle values appear only where the tracker has no native equival
 - `refactor` — refactor branch. Default `refactor` — _<your label>_.
 - `research` — source-audit branch, for **epistemic-terminal** work: the deliverable establishes what primary sources support, what follows by inference, what conflicts, and what remains unknown. Correctness comes from traceability and the research skill's claim audit, not taste or implementation behavior. Default `research` — _<your label>_.
 - `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a narrative synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — no mechanical `verify` pass/fail. Default `draft` — _<your label>_.
+- `capstone` — coverage-check branch, set by the `to-slices` skill when it parents a split spec'd ticket over its slices: the ticket holds the spec its children deliver in installments, and stays the shared context they inherit from. Undispatchable while any child is open (§ Dependencies — open children block the parent); when the last child closes it surfaces to `backlog build`, and the dispatched session verifies the delivered children against the spec — filing each gap as a new child, which re-blocks the parent, or closing it on a clean pass. Its spec text is never rewritten. Default `capstone` — _<your label>_.
 
 > Recognizing the boundary: if the terminal question is “what do the sources establish?”, groom to `research`.
 > If the sources are inputs to prose judged by voice, persuasion, or fit, groom to `draft`. If behavior must
@@ -68,6 +69,7 @@ grooming gap: `backlog build` skips the ticket rather than inferring it or defau
 
 - How this repo records that one issue is blocked by another, so `backlog build` can skip blocked work: _<prefer the tracker's exercised native relation (GitHub `blocked_by`, Jira `is blocked by`, Linear `blocked-by`) via `platform.md`; local uses `deps:` frontmatter; a tracker without an exercisable native relation names its explicit fallback here>_.
 - `backlog build` treats an issue with any unresolved (open/incomplete) blocker as blocked and skips it. Duplicate/supersede links: _<the convention — a `duplicate of #N` / `superseded by #N` body line plus the exclusion label, or the tracker's native link>_.
+- **Open children block the parent.** How this repo records that one issue is a child of another: _<prefer the tracker's native parent/child relation (GitHub sub-issues) via `platform.md`; local uses `parent:` frontmatter; a tracker without one names its explicit fallback here>_. An issue with any open child is never dispatchable, whatever its labels — `backlog build` skips it exactly as it skips a blocked issue. No per-child blocking edges are wired: the relation itself carries the block, so a child attached mid-flight (a capture, a gap the capstone check files) re-blocks the parent by existing.
 
 ## Readiness decision
 
