@@ -1,12 +1,12 @@
 # Backlog
 
-Dispatcher for the tracker, with two dispatch shapes. `groom` sweeps unlabeled and needs-shaping
-tickets, routes the already-settled and parked ones, groups the rest into subjects (interlocked tickets
+Dispatcher for the tracker, with two dispatch shapes. `groom` sweeps no-readiness-role and needs-shaping
+tickets (a captured ticket arrives work-typed but unrouted), routes the already-settled and parked ones, groups the rest into subjects (interlocked tickets
 together) and batches (related subjects, one thread's worth), and — **after the user confirms the batch
 plan** — fans one interactive shaping thread per batch, each seeded to run the `shape` skill, its
 tickets marked shaping; a single batch runs in the current session instead. Threads are harness-native
 sessions the user attends, and nothing reports back.
-`build` fans ready, unblocked tickets into worktree-isolated **subagents**, each running the `build`
+`build` fans ready, unblocked tickets with no open children into worktree-isolated **subagents**, each running the `build`
 skill, marked building so nothing dispatches twice — building is autonomous, so the dispatcher
 babysits: completion wakes it and it relays each outcome.
 
@@ -16,7 +16,7 @@ Platform-bound, not bound-to-GitHub: *ticket*, *label*, and *change request* are
 ## Use
 
 ```bash
-backlog groom            # sweep unlabeled + needs-shaping tickets into confirmed batches, then threads
+backlog groom            # sweep no-readiness-role + needs-shaping tickets into confirmed batches, then threads
 backlog groom 42 51      # just these tickets, grouped if their decisions interlock
 backlog build            # sweep ready, unblocked tickets into supervised build subagents
 backlog build 42         # just this ticket

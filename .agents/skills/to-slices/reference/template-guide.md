@@ -36,7 +36,9 @@ back up — the implementing agent carries that detail.
 One scratch document, drafted before the quiz and revised through it, containing:
 
 - **Source** — what direction this split came from (the spec'd ticket, a document path, or "this
-  conversation"). Recorded so a reader can trace tickets back.
+  conversation"). Recorded so a reader can trace tickets back. When the source is a spec'd ticket, note
+  that on publish it becomes the **capstone parent**: every ticket below attaches as its child, and it
+  stays undispatchable until they close.
 - **Ordered tickets** — the tickets in **dependency order, blockers first**, each carrying the content
   above but numbered locally (T1, T2, …) since tracker ids don't exist until publish.
 - **Edge list** — the dependency graph as a compact list (`T2 depends on T1`, `T3 depends on T1`), so the user

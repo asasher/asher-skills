@@ -32,6 +32,7 @@ Two further lifecycle values appear only where the tracker has no native equival
 - `refactor` — refactor branch. Label: **`refactor`** (identity).
 - `research` — source-audit branch for epistemic-terminal work. The kept dossier records supported facts, traceable inferences, contradictions, and unknowns under `research/<slug>/`. Label: **`research`** (identity).
 - `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a narrative synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — there is **no mechanical `verify` pass/fail**. The artifact is **kept** (committed and merged): that is the line against `prototype`, which is throwaway — keep the answer, delete the artifact. Label: **`draft`** (identity).
+- `capstone` — coverage-check branch, set by the `to-slices` skill when it parents a split spec'd ticket over its slices: the ticket holds the spec its children deliver in installments, and stays the shared context they inherit from. Undispatchable while any child is open (§ Dependencies — open children block the parent); when the last child closes it surfaces to `backlog build`, and the dispatched session verifies the delivered children against the spec — filing each gap as a new child, which re-blocks the parent, or closing it on a clean pass. Its spec text is never rewritten. Label: **`capstone`** (identity).
 
 > If the terminal question is what sources establish, use `research`. If sources feed prose judged by voice,
 > persuasion, or fit, use `draft`. If behavior must change, keep the applicable code work-type and invoke
@@ -63,6 +64,7 @@ grooming gap, never permission to infer them or default to the orchestrator — 
 ## Dependencies
 
 - How this repo records that one issue is blocked by another: GitHub's native `blocked_by` relation, read and written with the verified verbs in `platform.md`. `backlog build` treats an issue with any unresolved (open/incomplete) blocker as blocked and skips it, releasing it once the edge clears. Duplicate/supersede links remain a `duplicate of #N` / `superseded by #N` body line plus the exclusion label.
+- **Open children block the parent.** How this repo records that one issue is a child of another: GitHub's native sub-issue relation, read and written with the verified verbs in `platform.md`. An issue with any open child is never dispatchable, whatever its labels — `backlog build` skips it exactly as it skips a blocked issue. No per-child blocking edges are wired: the relation itself carries the block, so a child attached mid-flight (a capture, a gap the capstone check files) re-blocks the parent by existing.
 
 ## Readiness decision
 

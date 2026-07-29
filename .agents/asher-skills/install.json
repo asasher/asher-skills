@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source": "self",
-  "source_revision": "2f17cdef04e6bf2d5c7fb8e259c785ca23d17a8e",
+  "source_revision": "ad0243ec86908481925e2637a750249cb98267b5",
   "source_dirty": [],
   "skills": {
     "adversarial-review": {
@@ -62,6 +62,12 @@
     "tdd": {
       "source": "skills/software-development/tdd"
     },
+    "to-backlog": {
+      "source": "skills/software-development/to-backlog"
+    },
+    "to-slices": {
+      "source": "skills/software-development/to-slices"
+    },
     "to-spec": {
       "source": "skills/software-development/to-spec"
     },
@@ -70,9 +76,6 @@
     },
     "to-thread": {
       "source": "skills/software-development/to-thread"
-    },
-    "to-tickets": {
-      "source": "skills/software-development/to-tickets"
     },
     "verify-your-work": {
       "source": "skills/software-development/verify-your-work"

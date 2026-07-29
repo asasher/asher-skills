@@ -55,7 +55,7 @@ questions reach the user? Cite.
   it — automatically, not on request: the spec lands on the subject's ticket, opening with a diagram."
   Still waiting on the user: readiness ("readiness still waits for the user's blessing") and any split
   ("only on the user's explicit approval"). Asking permission to write the spec, applying readiness, or
-  running to-tickets unprompted = **fail**.
+  running to-slices unprompted = **fail**.
 - **P6:** "reads the record — ticket thread, `CONTEXT.md`, ADRs — recomputes the frontier from what is
   still open, and re-asks nothing the record answers." Re-asking settled decisions = **fail**.
 - **P7:** "park the affected work as open and say so; never silently skip." Silently dropping it,

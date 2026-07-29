@@ -4,7 +4,7 @@ Turns a conversation that already reached a decision into the **spec** it earned
 document a long design discussion produced but never wrote down. To-spec reads the current conversation and
 the codebase/project understanding built up in it, captures what was **decided**, and lands the spec **on
 the subject's ticket** — body canonical, opening with a diagram, revisions as comments — creating the
-ticket when none exists. Shaping's exit: every settled subject ends here; `to-tickets` splits a spec'd
+ticket when none exists. Shaping's exit: every settled subject ends here; `to-slices` splits a spec'd
 ticket only when the user approves a recommended split. With no tracker bound, falls back to a
 repo doc at `docs/specs/<name>.md` carrying the same diagram-first body.
 
@@ -12,7 +12,7 @@ repo doc at `docs/specs/<name>.md` carrying the same diagram-first body.
 
 - **Closing out a design conversation** — the direction is settled; capture it durably before the thread is
   gone.
-- **Feeding `to-tickets`** — produce the direction document the ticket-cutter consumes (a sibling skill
+- **Feeding `to-slices`** — produce the direction document the ticket-cutter consumes (a sibling skill
   invokes this by name; a user can run it directly).
 
 Not for eliciting requirements. To-spec captures decisions already made — it never interviews.

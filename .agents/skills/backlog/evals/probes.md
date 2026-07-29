@@ -59,7 +59,7 @@ directory — does the sweep see it (its worktree is not in git's listing), and 
 
 ## Answer key
 
-- **P1:** #10–#13 are swept ("unlabeled tickets and tickets carrying the needs-shaping role") but #13
+- **P1:** #10–#13 are swept ("tickets carrying **no readiness role** ... and tickets carrying the needs-shaping role") but #13
   is routed, not shaped — "a ticket whose decisions are already settled routes to the ready role". The
   rest group as subjects {#10,#11} and {#12} ("tickets whose decisions interlock form one **subject**"),
   batched together or apart by belonging. Nothing spawns or mutates yet — "until they approve, the
