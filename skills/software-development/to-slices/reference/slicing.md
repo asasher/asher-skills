@@ -1,11 +1,11 @@
 # Slicing — the method
 
-To-tickets' job is to split a decided direction into backlog-ready tickets with blocking edges, quizzing the
+To-slices' job is to split a decided direction into backlog-ready tickets with blocking edges, quizzing the
 user until the split is approved, then publishing in dependency order. This file is the method.
 
 ## Read the direction — three inputs, one treatment
 
-To-tickets splits a direction someone already decided — and only on the user's explicit call: a spec may
+To-slices splits a direction someone already decided — and only on the user's explicit call: a spec may
 *recommend* a split, but nothing splits until the user approves it. The input comes in one of these
 forms; all are read the same way — mine the decided direction, the actors, and the full surface:
 
@@ -20,8 +20,8 @@ forms; all are read the same way — mine the decided direction, the actors, and
 - **The raw current conversation** — when no spec or plan was written, mine the conversation and the
   codebase/project understanding built up in it.
 
-**Never modify the spec text.** To-tickets reads the spec, plan, or parent ticket; it never edits the
-direction itself. Superseding a split parent (below) changes tracker state, not spec content.
+**Never modify the spec text.** To-slices reads the spec, plan, or parent ticket; it never edits the
+direction itself. Parenting a split ticket over its slices (below) changes tracker state, not spec content.
 
 ## Draft vertical slices — the default shape
 
@@ -51,7 +51,7 @@ vertical slice, not this exception.
 
 ## Quiz the user — the human-confirmation step
 
-**To-tickets interviews.** After drafting the
+**To-slices interviews.** After drafting the
 split, present it and **quiz the user** on the two things only they can settle:
 
 - **Granularity** — are the slices the right size? Too coarse (a ticket that won't fit one context window, or
@@ -75,7 +75,7 @@ Wire each dependency **exactly as the repo's dependency playbook records it** (`
 **native blocking relation** (e.g. GitHub `blocked_by`, written via the verbs in
 `docs/agents/platform.md`), write the native edge — it renders the blocking structure in the tracker's own UI. Where it
 records a body-line marker (`- [ ] depends on #N`) or `deps:` frontmatter instead, copy the playbook's
-literal form — don't restyle it. The convention is the **project playbook's**: to-tickets emits *into* it,
+literal form — don't restyle it. The convention is the **project playbook's**: to-slices emits *into* it,
 so the playbook's wording is the authority.
 
 ## Audit each ticket for readiness
@@ -102,15 +102,30 @@ backlog needs a tracker, so publishing waits on that decision. Link each ticket 
 ticket when one exists. Publish each body per template-guide § A single ticket, wiring the
 dependency edges in the playbook's recorded form.
 
-## Supersede the parent
+## Parent the slices
 
-When the input was a spec'd ticket, the children now carry the work — finish by **superseding the
-parent**: mark it per the tracker's superseded/excluded label role (recorded in
-`docs/agents/backlog-policy.md`) and post a comment linking every child, so anyone landing on the parent
-is routed forward. Each child links back to the parent in turn (§ Audit — inherited context links): the
-parent's spec remains the direction record the slices inherit from. The parent's spec text is never
-edited, and a parent that was *not* a ticket (a spec document, a plan, the conversation) has nothing to
-supersede — skip this step.
+When the input was a spec'd ticket, the slices carry the installments but the parent keeps the whole —
+finish by **parenting it over them**:
+
+- **Attach every slice as a child** of the parent, through the parent/child relation the platform
+  playbook records (`docs/agents/platform.md` — the tracker's native sub-issue relation where it has
+  one, else the playbook's recorded form). The relation is load-bearing: the backlog policy's
+  open-children rule reads it, keeping the parent undispatchable while any child is open — no
+  per-slice blocking edges are wired for this.
+- **Convert the parent to the `capstone` work-type** per the label roles (`docs/agents/backlog-policy.md`
+  § Label roles), replacing its previous work-type. The parent's remaining work is the coverage check
+  that role names: when the last child closes, it surfaces to dispatch, and the dispatched session
+  verifies the delivered slices against the spec — filing any gap as a new child (which re-blocks the
+  parent) or closing it on a clean pass.
+- **Post a pointer comment** on the parent linking every child, so anyone landing on it sees the split.
+  Each child links back to the parent in turn (§ Audit — inherited context links): the parent's spec
+  remains the direction record the slices inherit from, live for as long as they build.
+
+The parent's spec text is never edited, and its readiness role is left as it stands — the open-children
+rule, not a label change, is what keeps it out of the build sweep. A slice discovered later (a mid-build
+capture, a gap the capstone check finds) is attached as a child the same way and re-blocks the parent by
+existing. A parent that was *not* a ticket (a spec document, a plan, the conversation) has nothing to
+parent — skip this step.
 
 ## Readiness — leave it unset
 
@@ -131,4 +146,4 @@ decision-rich fragment and note it came from a prototype. Absent that exception,
 ## Vocabulary
 
 Speak generically. A **ticket** is the unit of pickup-able work — exactly the tracker's "issue" role, in a
-tracker-agnostic word. Say "ticket" in everything to-tickets writes, whatever the bound tracker calls it.
+tracker-agnostic word. Say "ticket" in everything to-slices writes, whatever the bound tracker calls it.

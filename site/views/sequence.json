@@ -72,7 +72,7 @@
     {
       "from": "backlog",
       "to": "tracker",
-      "label": "sweep unlabeled + needs-shaping · route settled/parked",
+      "label": "sweep no-readiness-role + needs-shaping · route settled/parked",
       "style": "flow",
       "open": {
         "node": "backlog"
@@ -183,16 +183,16 @@
       "label": "approve the recommended split (when one is)",
       "style": "flow",
       "open": {
-        "node": "to-tickets"
+        "node": "to-slices"
       }
     },
     {
       "from": "thread",
       "to": "tracker",
-      "label": "to-tickets: supersede parent → born-shaped children",
+      "label": "to-slices: capstone parent → born-shaped child slices",
       "style": "flow",
       "open": {
-        "node": "to-tickets"
+        "node": "to-slices"
       }
     },
     {

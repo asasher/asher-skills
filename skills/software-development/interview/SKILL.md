@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: []
-  optional: [to-subagent]
+  optional: [to-backlog, to-subagent]
 ---
 
 # Interview
@@ -32,6 +32,10 @@ environment (filesystem, tools, docs), dispatch a lookup via the `to-subagent` s
 up in-session) — don't ask the user for anything you could look up yourself. Don't block on it: a running
 lookup is an unsettled prerequisite, so only the questions downstream of it wait for the subagent to
 report — ask the rest of the frontier now. The **decisions** are the user's — put each to them and wait.
+
+An interview also surfaces items that are real work but not this tree's subject — a bug the user
+mentions in passing, an adjacent idea. Offer them to the `to-backlog` skill for capture (absent it, list
+them explicitly at the close) rather than absorbing them into the tree or losing them with the chat.
 
 The session is done when the frontier is empty: every branch of the design tree visited, nothing left
 silently assumed. Do not act on it until the user confirms you have reached a shared understanding.

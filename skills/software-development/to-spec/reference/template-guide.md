@@ -42,6 +42,6 @@ Don't manufacture prose to fill a heading that doesn't apply.
 
 ## Order and altitude
 
-Sections stay in template order so `to-tickets` and any human reader find them in a predictable place. Keep
+Sections stay in template order so `to-slices` and any human reader find them in a predictable place. Keep
 every section at the altitude of **direction**. If a section is drifting into file-by-file implementation detail, pull it
 back up — the tickets carry that detail, the spec sets the direction they're cut from.

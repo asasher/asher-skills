@@ -68,10 +68,11 @@
         "./skills/software-development/serve-via-tailnet",
         "./skills/software-development/shape",
         "./skills/software-development/tdd",
+        "./skills/software-development/to-backlog",
+        "./skills/software-development/to-slices",
         "./skills/software-development/to-spec",
         "./skills/software-development/to-subagent",
         "./skills/software-development/to-thread",
-        "./skills/software-development/to-tickets",
         "./skills/software-development/verify-your-work",
         "./skills/software-development/watch-until"
       ]

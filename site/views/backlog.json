@@ -13,7 +13,7 @@
     {
       "id": "groom",
       "title": "groom = shaping fan-out",
-      "blurb": "Sweep unlabeled + needs-shaping tickets, route the settled and parked, group into subjects and batches, confirm the plan with the user — then one thread per batch."
+      "blurb": "Sweep no-readiness-role + needs-shaping tickets, route the settled and parked, group into subjects and batches, confirm the plan with the user — then one thread per batch."
     },
     {
       "id": "buildout",
@@ -50,7 +50,7 @@
       "id": "b-groom",
       "lane": "groom",
       "title": "groom",
-      "blurb": "unlabeled + needs-shaping → subjects → batches → your OK → threads",
+      "blurb": "no readiness role + needs-shaping → subjects → batches → your OK → threads",
       "open": {
         "file": "skills/software-development/backlog/SKILL.md"
       }
