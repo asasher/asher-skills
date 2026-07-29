@@ -6,8 +6,8 @@ existing), and the implementation contract a full-stack agent can build the real
 
 ## Shape
 
-- **Intake interview first** — one question at a time until shared understanding; `BRIEF.md` sign-off gates
-  everything, presented through the `serve-via-tailnet` skill.
+- **Intake interview first** — run through the `interview` sibling skill, one question at a time until
+  shared understanding; `BRIEF.md` sign-off in chat gates everything.
 - **One architectural seam** — typed schema + seeded fixtures + a mock `lib/api/` layer with simulated
   latency over a localStorage-persisted client store. No dead clicks, session-coherent state, `@mock`
   markers everywhere reality is faked.

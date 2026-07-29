@@ -2,9 +2,9 @@
 
 Build what the market sees, from the profile and niche. Strategy lives here; document mechanics delegate.
 
-## Delegation
+## Document production
 
-If the `eloquent` skill is available, use it for document production: `compile`, `tailor`, `ats`, `cover-letter`, `linkedin`, `portfolio-case-study`, feeding it the Good Work Profile and `NICHE.md` — verified evidence instead of asking cold. Without eloquent, produce the documents directly under the same rules: never invent experience, employers, metrics, or credentials; label inference as positioning, not fact.
+Produce the documents directly from the Good Work Profile and `NICHE.md` — verified evidence instead of asking cold. Never invent experience, employers, metrics, or credentials; label inference as positioning, not fact.
 
 ## What goodwork adds on top of documents
 
@@ -24,4 +24,4 @@ Rules: sustained and relevant beats scattered (one repo with real commits over t
 
 ## Output
 
-Updated documents (via eloquent where available), a proof-of-work plan appended to `goodwork/NICHE.md` with the artifact queue, the consistency audit result. Nothing publishes without the user's explicit approval of the final text.
+Updated documents, a proof-of-work plan appended to `goodwork/NICHE.md` with the artifact queue, the consistency audit result. Nothing publishes without the user's explicit approval of the final text.

@@ -1,42 +1,42 @@
 # Sign-off gates
 
-Maquette's human sign-off gates run through the **`serve-via-tailnet` skill**: a sibling root primitive invoked by
-name. Maquette carries no review server of its own and imports no serve-via-tailnet files.
+Maquette's human sign-off gates run **in chat**: the user reads the deliverable and gives an explicit
+verdict in the conversation. Maquette carries no review server and requires no presentation
+infrastructure.
 
-## Render the deliverable
+## Present the deliverable
 
-At a gate, render the current markdown deliverable — `BRIEF.md` or `JOURNEYS.md` — to a self-contained HTML
-page. Each top-level section becomes a block with a stable `id` derived from a slug of its heading; for
-`JOURNEYS.md`, each journey and each screen entry gets the same treatment. Ids never change across
-revisions. This is the stable-id convention serve-via-tailnet documents in its
-`reference/annotation-contract.md`.
+At a gate, present the current markdown deliverable — `BRIEF.md` or `JOURNEYS.md` — for review:
 
-Keep the HTML self-contained: inline styles, no external fetches. The render is ephemeral, produced for the
-gate; the markdown remains the canonical deliverable.
+- Summarize it in chat: the decisions it locks in, the scope fence, and anything you flagged or assumed.
+- Point at the file itself as the canonical text. If the harness offers a native rendered surface
+  (artifacts, a hosted preview), use it; otherwise the user reads the file directly.
+- For a long deliverable, lead with what changed since the last round rather than re-presenting the whole
+  document.
 
-## Serve and await
+The markdown remains the canonical deliverable; any rendered view is ephemeral.
 
-Present the rendered page through the `serve-via-tailnet` skill: serve it with `--kind maquette --issue <slug>`,
-point the human at the printed URL, and block on await. The exact serve/await CLI, flags, and exit-code
-verdicts live in the serve-via-tailnet skill's `reference/scripts.md`: `serve` is `scripts/review-server.py`,
-`await` is `scripts/review-await.py`; exit `0` approve, `3` approve_with_nits, `10` request_changes,
-`124` timeout.
+## Await the verdict
 
-Branch on the exit code:
+Ask for an explicit verdict and block on it. Three outcomes:
 
-- **approve** — proceed to the next phase.
-- **approve_with_nits** — apply the batched notes, then proceed without a re-review round.
-- **request_changes** — revise the deliverable, write a ledger disposition for every annotation
-  (`changed`, `kept`, or `orphaned`), re-serve, and re-await. A revision without a ledger is a contract
-  violation.
-- **timeout** — end the turn with the review URL and hub URL; re-await next turn.
+- **Approve** — proceed to the next phase.
+- **Approve with nits** — apply the noted changes, then proceed without a re-review round.
+- **Request changes** — revise the deliverable, reply in chat with how each note was addressed
+  (`changed`, `kept` with the reason, or no longer applicable), and re-present. Never silently drop a
+  note.
 
-## Surface
+Silence, a topic change, or "looks interesting" is not a verdict. If the turn ends without one, resume by
+re-asking, not by building.
 
-The presentation surface is inherited from the repo's `docs/agents/environment.md` § Presenting, exactly as
-serve-via-tailnet specifies: tailnet path proxy plus hub, or local fallback. Maquette adds no surface knowledge of
-its own. Absent surface config, serve-via-tailnet degrades to local-only fallback: open the file on the machine;
-remote review is unavailable.
+## The approval record
 
-The approve event — verdict, content hash, timestamp — is the approval record. Never build past a gate
-without it.
+Record the approval where the pipeline can find it later: a dated `Approved` line at the top of the
+deliverable (who, when, any nits applied). A mid-pipeline entry (see SKILL.md operating rules) checks for
+these records before building on prior phases.
+
+## Demo distribution is separate
+
+Sign-off gates cover documents; showing the built maquette is a different act. The demo runs locally by
+default. When the user wants a shareable link, use the static deploy mode (e.g. Vercel) described in
+[architecture](architecture.md) — optional, on request, never a gate requirement.

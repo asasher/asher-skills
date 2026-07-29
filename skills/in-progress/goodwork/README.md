@@ -20,7 +20,7 @@ Synthesized from: Designing Your Life & Designing Your New Work Life (Burnett & 
 
 ## Companions
 
-Document mechanics (resume compile/tailor/ATS, cover letters, LinkedIn, salary negotiation) delegate to the `eloquent` skill when available.
+Document mechanics (resume compile/tailor/ATS, cover letters, LinkedIn) are produced directly under the evidence rules in `reference/assets.md`.
 
 ## v2 Operator Notes
 

@@ -18,9 +18,9 @@ stock shadcn. **Personas:** dispatcher, ops manager.
 ## Hard gates (fail ⇒ eval fails)
 
 1. **Interview conduct:** questions asked one at a time (never a batch dump); BRIEF.md and JOURNEYS.md
-   produced and approved before any scaffold/build command runs. Approved means a serve-via-tailnet approve
-   verdict: each deliverable is rendered, served through the `serve-via-tailnet` skill, and awaited; the eval
-   harness, playing the user, submits the approve verdict through that surface.
+   produced and approved before any scaffold/build command runs. Approved means the user's explicit
+   in-chat verdict: each deliverable is presented for sign-off and the eval harness, playing the user,
+   gives the approve verdict in chat before the build proceeds.
 2. **Dead-click sweep:** drive every route and rendered control; zero dead ends, zero `#` links, zero
    "coming soon".
 3. **The seam:** no component imports fixtures directly (`grep` imports of `lib/fixtures` outside
