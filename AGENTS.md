@@ -65,11 +65,13 @@ How skills and instructions relate:
 - **Playbook** — a repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup
   (e.g. `environment.md`, `platform.md`). Skills speak in role nouns; the playbook binds those roles to
   this repo's reality. Owned by the repo once written — setups reconcile them, never blindly overwrite.
-- **Global agent instruction files** — the machine-level files every session on this machine loads:
-  `~/.claude/CLAUDE.md` (Claude Code) and `~/.codex/AGENTS.md` (Codex). Being unversioned and unreviewable,
-  they are **not** a home for durable knowledge: a fact only they carry is invisible to a fresh clone, a
-  cloud runner, and every diff. Staffing moved out of them for exactly that reason. A machine truth belongs
-  to the skill that owns it, or to this repo's `environment.md`; nothing new goes here.
+- **Global agent instruction files** — the machine-level files a harness loads from the home directory when
+  they exist: `~/.claude/CLAUDE.md` (Claude Code) and `~/.codex/AGENTS.md` (Codex). **Retired on this
+  machine** (asher-skills#114) — staffing, their last content, moved into each repo's own playbook and the
+  files were removed (backups: `evidence/114-global-staffing-retirement/`). Being unversioned and
+  unreviewable, they were never a home for durable knowledge: a fact only they carry is invisible to a fresh
+  clone, a cloud runner, and every diff. A machine truth belongs to the skill that owns it, or to this repo's
+  `environment.md`; nothing goes here — do not recreate these files.
 - **Project agent instruction files** — this repo's `AGENTS.md` (harness-neutral base; Claude Code never
   reads it natively, so `CLAUDE.md` inlines it via an `@AGENTS.md` import) and `CLAUDE.md` (that import
   plus Claude Code-specific additions and deltas). They extend and override the global files for work in
