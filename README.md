@@ -142,6 +142,7 @@ including one marked `user`.
 | personal | `relay` | model | thread |
 | personal | `review-opportunities` | user | thread |
 | in-progress | `goodwork` | model | thread |
+| in-progress | `retro` | model | thread |
 
 The install/setup graph is compiled on demand from each skill's frontmatter
 (`python3 tools/catalog.py compile`).

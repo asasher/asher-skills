@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Tier 2 scripted dry-run for scripts/scrub.py, per docs/agents/probe-evals.md: fresh mktemp
+# sandbox, never touches the repo, exit non-zero on any FAIL.
+set -u
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRUB="$SCRIPT_DIR/../scripts/scrub.py"
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+fail=0
+
+ok()  { echo "PASS: $1"; }
+bad() { echo "FAIL: $1"; fail=1; }
+
+cat > "$TMP/denylist.txt" <<'EOF'
+# internal codenames
+
+Acme
+falconworks
+EOF
+
+cat > "$TMP/dirty.md" <<'EOF'
+The ACME repo stumbled during groom.
+Contact asher@example.com for details.
+Paths leaked: /Users/someone/project/file.txt then ~/secrets/notes.md then C:\work\repo\a.txt
+Tracker: https://tracker.internal.example/T-123
+Upstream: https://github.com/asasher/asher-skills/issues/1
+EOF
+
+out="$(python3 "$SCRUB" "$TMP/dirty.md" "$TMP/denylist.txt" \
+  --allow https://github.com/asasher/asher-skills 2>/dev/null)"
+rc=$?
+
+[ "$rc" -eq 1 ] && ok "dirty draft exits 1" || bad "dirty draft exits 1 (got $rc)"
+grep -q "denylist: Acme" <<<"$out" && ok "denylist term, case-insensitive" || bad "denylist term, case-insensitive"
+grep -q "email: asher@example.com" <<<"$out" && ok "email flagged" || bad "email flagged"
+grep -q "path: /Users/someone" <<<"$out" && ok "absolute path flagged" || bad "absolute path flagged"
+grep -q "path: ~/secrets" <<<"$out" && ok "home path flagged" || bad "home path flagged"
+grep -q 'path: C:' <<<"$out" && ok "windows path flagged" || bad "windows path flagged"
+grep -q "url: https://tracker.internal.example" <<<"$out" && ok "foreign url flagged" || bad "foreign url flagged"
+grep -q "asasher/asher-skills" <<<"$out" && bad "allowed url not flagged" || ok "allowed url not flagged"
+
+cat > "$TMP/clean.md" <<'EOF'
+When a capstone ticket has one open child, the groom sweep re-proposes it every run.
+Repro: split a parent into two slices, close one, run the groom twice.
+EOF
+
+python3 "$SCRUB" "$TMP/clean.md" "$TMP/denylist.txt" >/dev/null 2>&1
+rc=$?
+[ "$rc" -eq 0 ] && ok "clean draft exits 0" || bad "clean draft exits 0 (got $rc)"
+
+if [ "$fail" -ne 0 ]; then
+  echo "scrub-dryrun: FAIL" >&2
+  exit 1
+fi
+echo "scrub-dryrun: all checks passed" >&2
