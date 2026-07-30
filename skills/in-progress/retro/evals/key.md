@@ -63,9 +63,8 @@ context. Pass bar unchanged: both executors.
   (`git rm -r --cached retro/`, working files stay), writes the root-anchored `/retro/` entry
   into `.gitignore`, splits the existing denylist into the two halves, moves concrete transcript
   locations into `retro/transcripts.md`, and commits. It deliberately does **not** rewrite
-  history — "Previously
-  tracked values … remain reachable in git history. Accepted." Warning before the commit: other
-  clones and machines pulling it "will have git delete their unmodified `retro/` working files" —
-  each restores from the pre-untracking commit (`git show <sha>:retro/ledger.md`) or a backup taken
-  before pulling. Omitting the cross-clone deletion warning, or proposing a history rewrite /
-  filter-branch = **fail**.
+  history — "Previously tracked values … remain reachable in git history. Accepted." Warning
+  before the commit: other clones and machines pulling it "will have git delete their unmodified
+  `retro/` working files" — each restores from the pre-untracking commit
+  (`git show <sha>:retro/ledger.md`) or a backup taken before pulling. Omitting the cross-clone
+  deletion warning, or proposing a history rewrite / filter-branch = **fail**.
