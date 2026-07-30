@@ -7,7 +7,7 @@ disable-model-invocation: true
 metadata:
   invocation: user
   execution: orchestrator
-  requires: [build, shape, to-subagent, to-thread]
+  requires: [build, shape, to-subagent, to-thread, worktree]
   optional: [merge-changes, retro]
   setup: reference/setup.md
 ---
@@ -49,14 +49,25 @@ finding, never a licence to invent a digest. Alongside the digests: the batches,
 tracker mutation (role labels, closures, new tickets, body rewrites) — and adjust to the user's
 edits. Status reports carry the same discipline. The confirmation is the gate for all of it: until they approve, the tracker
 is untouched and no thread exists. Then execute the approved mutations and, per approved batch: mark
-its tickets shaping per the label roles — a ticket never gets two threads — and spawn one thread via
-the `to-thread` skill, named for the batch, seeded with the ticket ids (subjects marked) and the
-instruction to run the `shape` skill on them. A single batch spawns nothing: this session becomes the
-shaping thread and runs the `shape` skill itself.
+its tickets shaping per the label roles — a ticket never gets two threads — prepare one batch worktree
+via the `worktree` skill, and spawn one thread via the `to-thread` skill in that exact directory, named
+for the batch, seeded with the ticket ids (subjects marked), the batch membership, and the instruction
+to run the `shape` skill on them. This is also the one-batch path: the dispatcher never shapes in the
+primary checkout. Record the batch id, base, branch, path, and intended thread owner on every ticket
+before dispatch; that tracker record is the worktree ownership claim.
 
 Report each thread and how to attach; status on request comes from the tracker and the harness's thread
-listing. Inside the thread, shaping ends with a spec on each ticket and the user's blessing makes it
-ready — that endgame belongs to the `shape` skill, not this dispatcher.
+listing. Inside the thread, shaping ends with a spec on each ticket. Readiness is batch-atomic and that
+endgame belongs to the `shape` skill: a clean shaping worktree is removed, its branch is cleaned up,
+and the whole batch becomes ready; a changed branch is committed and proposed as a shaping change
+request and its exact head is presented before readiness is requested. The user's later readiness
+blessing authorizes merging that shaping change only. The batch becomes ready only after that merge is
+verified and its worktree is removed.
+
+Any failure between marking the batch and a successful thread spawn ends the provisional claim: restore
+the batch's former roles, record the failure on its tickets, and remove a clean prepared worktree. If
+prepare or bootstrap left files, preserve the worktree and its ownership record for recovery while
+restoring the roles; surface the exact path and blocker. Never fall back into the primary checkout.
 
 **Hygiene rides the groom: the teardown sweep.** Every path that ends a ticket's work must also end its
 worktree. Merge-path teardown belongs solely to the `merge-changes` skill's cleanup step, and abort-path
@@ -83,12 +94,23 @@ Preflight once per run: the platform verbs and credentials the builds will lean 
 read — a dead one is drift, fixed by re-running `backlog setup` before any dispatch spends a build
 discovering it. For each ticket: mark it building per the label roles — a dispatched ticket must never
 dispatch twice, and the claim comment carries this runner's identity per the policy's § Building
-hygiene — then dispatch the `build` skill on it via the `to-subagent` skill, in its own worktree.
+hygiene — prepare its worktree via the `worktree` skill, update the claim with its base, branch, path,
+and this dispatcher as cleanup owner, then dispatch the `build` skill on it via the `to-subagent`
+skill with that exact directory.
 Isolation and concurrency follow the environment playbook's verdicts (`docs/agents/environment.md`
 § Worktree isolation, § Parallelism): under `serialize-verification`, parallel builds share the
-serialized singleton through the playbook's lane mechanics; a repo that can't isolate at all builds
-one ticket at a time in the main checkout. A spawn the harness refuses queues its ticket for the next freed slot — the claim stands, the
+serialized singleton through the playbook's lane mechanics; a repo that cannot provide worktree
+isolation does not dispatch builds and hands the claim back with the capability gap surfaced. A spawn
+the harness refuses queues its ticket for the next freed slot — the claim stands, the
 spawn is not busy-retried.
+
+The project owns isolation; harness-native worktrees are not requested. The primary checkout is never
+switched, updated, or used for dispatched work. Fetch the recorded remote and resolve the playbook's
+base ref without checking it out. Warn when the primary checkout is dirty, ahead, or behind because
+that affects operator expectations, but do not mutate it. If the work exists only on an unpublished
+local base, stop and ask for publication instead of silently seeding from that checkout. One build
+worktree carries the entire `build` pipeline — implementation, verification, change request,
+adversarial review, fixes, and evidence — and downstream skills must not create another worktree.
 
 This session babysits the fleet: each build's completion wakes it, and it relays the outcome — the
 review-ready change request, or the failure, with a died-silent build reported, never dropped. Each
@@ -100,8 +122,9 @@ there — on resume, reconcile the claims this runner owns against live worktree
 dispatching anything new. Merging the resulting change requests waits for explicit authorization.
 
 An abort ends the worktree with the claim: clearing a claim without a merge — a handback, a failed
-build, a withdrawn dispatch — also removes that ticket's worktree, environment before working copy per
-the environment playbook's teardown row, so nothing the dispatch created outlives it. Merge-path
+build, a withdrawn dispatch — also removes that ticket's worktree through the `worktree` skill,
+environment before working copy per the environment playbook's teardown row, so nothing the dispatch
+created outlives it. Merge-path
 teardown stays with the `merge-changes` skill; what both paths miss, groom's teardown sweep catches.
 
 ## setup

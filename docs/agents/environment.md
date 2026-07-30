@@ -23,12 +23,20 @@
 
 ## Worktree isolation
 
-> Set by `setup`'s isolation audit; fan-out mechanics recorded 2026-07-26 (asher-skills#116).
+> Set by `setup`'s isolation audit; project-owned lifecycle superseded harness-native creation on
+> 2026-07-30 (asher-skills#136).
 
 - Regime: **local-isolatable** — skills are files + stdlib-Python scripts with no shared runtime state, so a `git worktree` is a complete isolated copy. No derived env, no ports to remap.
-- How to bring up an **isolated** stack for one worktree: worktree creation goes through the **harness's native isolation mechanism** (from Claude Code, the Agent tool with `isolation: "worktree"`, or `EnterWorktree`) — never hand-rolled `git worktree add` in loop dispatch; there is nothing else to stand up. Manual, out-of-loop work may still use `git worktree add <path> -b <branch> main` directly.
+- Working-copy ownership: prepare, inspect, and remove through the project-owned `worktree` skill,
+  rooted at `../asher-skills-worktrees`; dispatchers pass that exact directory and never request a
+  harness-native worktree.
+- How to bring up an **isolated** stack for one worktree: nothing beyond the prepared working copy;
+  there is no app stack to stand up. The primary checkout is not a build fallback.
 - **Enumeration**: the lifecycle discovers live worktrees via `git worktree list` plus branch/change-request state — never a directory scan — so harness-placed trees cannot become an invisible accumulation surface.
-- **Teardown**: nothing to tear down beyond removing the worktree — no derived env, ports, or services to reap. `git worktree remove <path>` (plus `git worktree prune` for stale registrations) completes it. The skill-common teardown lifecycle — abort path, sweep, ownership per path — is asher-skills#83's deliverable.
+- **Teardown**: nothing to tear down beyond removing the worktree — no derived env, ports, or services
+  to reap. The `worktree` skill performs guarded removal and preserves the branch for the caller's
+  subsequent branch cleanup. The skill-common teardown lifecycle — abort path, sweep, ownership per
+  path — is asher-skills#83's deliverable.
 - **Shared-singleton list** — there is no code-level shared runtime (no DB, no ports, no shared build cache; each skill is files + stdlib scripts), so the code isolates completely. The only remaining singleton is loop infrastructure, handled without serializing code work:
 
   | Singleton | Collision mode | Locally isolatable? |

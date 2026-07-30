@@ -34,18 +34,39 @@
 ## Version control — working copies and publication
 
 - Binding: **git** (GitHub remote `origin`, https). Parallel-safe verdict with a standing **parallel, uncapped** dispatch preference (`environment.md` § Parallelism verdict) — every ready, unblocked ticket fans out into its own worktree by default; a per-run override narrows to a width or to sequential.
-  - Create an isolated working copy off the base branch: the harness's **native isolation mechanism** (§ Harness — the Agent tool with `isolation: 'worktree'`), never hand-rolled worktree commands in loop dispatch; `git worktree add <path> -b <branch> main` remains for manual, out-of-loop work.
+  - Prepare an isolated working copy off the base branch: the project-owned `worktree` skill, rooted
+    at `../asher-skills-worktrees`, with `origin/main` as the base. It creates the branch and working
+    copy in one guarded operation, inspects git's registration before reuse, and never switches the
+    primary checkout.
   - Enumerate live working copies: `git worktree list` plus branch/PR state — never a directory scan (`environment.md` § Worktree isolation).
   - Name a line of work: a git branch, `<issue-number>-<slug>` per `environment.md` § Branching.
-  - Sync the base before forking: `git fetch origin && git checkout main && git pull --ff-only`.
+  - Sync the base before forking: `git fetch origin`; resolve `origin/main` directly without checking
+    out or updating the primary checkout. If required work exists only on an unpublished local base,
+    publish it or stop.
   - Publish a line of work: `git push -u origin <branch>`.
-  - Tear down a working copy: `git worktree remove <path>`.
+  - Tear down a working copy: the `worktree` skill after environment teardown; it refuses the primary
+    checkout, dirty worktrees, and unregistered paths.
 - Pinned-SHA semantics: the commit SHA references a change durably for plans and evidence. No history-rewrite policy — force-pushes after evidence capture orphan pinned blob URLs (`evidence.md` § GitHub binding covers re-pinning).
 
 ## Harness — how threads are spawned
 
-- Binding: **Claude Code** — the loop runs from Claude Code; the model roster per harness is in `environment.md` § Model staffing.
-- Create an issue coordinator with the route already selected before worktree/child creation: native Claude uses the Agent tool (`isolation: 'worktree'` when needed); Claude→Codex uses bounded `codex exec --cd <dir>` through its tracked wrapper (raw output teed to a file, resumable session id captured where offered, per the staffing external-worker contract); Codex→Claude uses bounded `claude -p --model <model> '<self-contained prompt>' </dev/null` and **never `--bare`**. Each command receives the worktree, coordinator assignment, and upward successor; completion is accepted only after its durable return/effect is verified.
+- Binding: **outermost active harness** — T3 Code, Claude Code, or Codex. The dispatch skill resolves
+  explicit system/runtime host metadata before an embedded Codex/Claude runtime; product-native tools
+  corroborate that host context but their mere installation does not establish ownership. Model
+  staffing per harness is in `environment.md` § Model staffing.
+- Create an interactive issue coordinator with the route already selected and an exact prepared
+  directory: T3 uses `to-thread`'s local authenticated HTTP adapter against the loopback runtime
+  (`thread.create` then `thread.turn.start`, with temporary credentials revoked); Claude and Codex use
+  their native thread/session mechanisms. T3 Code 0.0.30 is the latest effect-verified build as of
+  2026-07-30, an observation rather than a version pin — dispatch gates on runtime capabilities and
+  fails visibly if they drift. No route requests harness-native worktree isolation.
+- Create a non-interactive coordinator: native subagent dispatch receives the exact prepared
+  worktree. Claude→Codex uses bounded `codex exec --cd <dir>` through its tracked wrapper (raw output
+  teed to a file, resumable session id captured where offered, per the staffing external-worker
+  contract); Codex→Claude uses bounded `claude -p --model <model> '<self-contained prompt>'
+  </dev/null` from the prepared directory and **never `--bare`**. Each command receives the coordinator
+  assignment and upward successor; completion is accepted only after its durable return/effect is
+  verified.
 - Wrapper staffing evidence: the native Agent tool reports the spawned agent's type and model in its return metadata — that report is the wrapper-model proof. For `codex exec` children there is no native report; floor/cost compliance for the external model is **unproven** beyond the observable wrapper invocation, recorded per the template.
 - Directional reachability and fallback: a failed Codex→Claude invocation removes only that route and applies the successor in `environment.md` § Model staffing; Claude→Codex remains available. No Anthropic-policy or credit monitor gates dispatch. (Recorded machine facts: versioned model aliases are rejected by the installed Claude CLI. Claude→`codex exec` **is** available in unattended children — the earlier "unavailable" record was stale; verified live 2026-07-25 (asher-skills#98) when a native unattended Agent child ran `codex exec -s read-only` for its verification and review passes, and the `backlog build` preflight probe succeeded.)
 - Route trust: a routine dispatch trusts the recorded effect-verified verb — verification happens at setup, at re-verification, and when a route misbehaves, so dispatch needs no fresh probe session. A route that fails or hangs in use is drift: record the failure class, take the successor, re-verify that direction. Verification probe artifacts are cleaned up as part of the check.

@@ -163,7 +163,8 @@ the refresh command below in the main checkout after a merge that touches `skill
 | domain-modeling | CONTEXT.md glossary and ADRs, written as decisions land | project |
 | research | Primary-source dossiers with traceable claims | project |
 | prototype | Throwaway artifact answering one design question | project |
-| to-thread | Spawns named, attachable, harness-native background sessions | project |
+| worktree | Project-owned prepare, inspect, and remove mechanics for isolated working copies | project |
+| to-thread | Spawns named, attachable sessions through the outermost harness | project |
 | to-subagent | Staffed non-interactive dispatch with a wake path | project |
 | watch-until | Watches a target until a condition holds, then relays | project |
 | serve-via-tailnet | Serves HTML artifacts on the tailnet, optionally annotated with verdicts | project |
@@ -175,20 +176,24 @@ the refresh command below in the main checkout after a merge that touches `skill
 **How they fit together:** `backlog` is a dispatcher. `to-backlog` is its intake feeder: any
 conversation's loose items — bugs, ideas, follow-ups — land as work-typed tickets with no readiness
 role. `backlog groom` sweeps tickets carrying no readiness role and
-`needs-shaping` tickets into user-confirmed batches, then fans one interactive shaping thread per batch
-via `to-thread` (a single batch runs in the groom session itself); each runs `shape` — one engine per
+`needs-shaping` tickets into user-confirmed batches, then prepares one project-owned worktree and fans
+one interactive shaping thread per batch via `to-thread`, including the single-batch case; each runs
+`shape` — one engine per
 subject, composing `interview` and `domain-modeling`, dispatching `research` and `prototype` through
 `to-subagent` — and a settled subject crystallises automatically via `to-spec` (the spec on its ticket,
 diagram first), the thread watching the spec'd tickets for AFK comments until the user blesses
-readiness; `to-slices` splits a spec'd ticket into born-shaped child slices only on the user's
+readiness. A changed shaping branch merges and cleans up before the batch advances atomically.
+`to-slices` splits a spec'd ticket into born-shaped child slices only on the user's
 approval, the parent staying alive as the `capstone` over them — undispatchable while any child is
 open, closing with a coverage check once they're done. `backlog build` fans ready, unblocked tickets with no open children into
 worktree-isolated subagents it babysits — building is autonomous, so outcomes flow back; each runs
 `build`: `implement` (defect → `diagnosing-bugs`, new behavior
 → `tdd`) → `verify-your-work` (the thread fixes) → change request → `adversarial-review` (driver-run
-`code-review` passes to convergence) → `prove-your-work`. `merge-changes` remains the explicit human
+`code-review` passes to convergence) → `prove-your-work`, all in the issue's one project-owned
+worktree. `merge-changes` remains the explicit human
 authorization gate after a review-ready change request. `to-subagent` is the single staffing-aware
-dispatch route.
+dispatch route; both dispatch adapters consume prepared directories and never add harness-native
+isolation.
 
 **Source & updates:** installed from this repo itself, via this repo's own installer — **not
 `npx skills add`**, which cannot install these skills correctly (it ignores `metadata.variants`, so

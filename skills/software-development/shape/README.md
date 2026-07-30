@@ -9,7 +9,11 @@ session re-asks nothing the record answers. A settled subject crystallises autom
 the spec on its ticket, diagram first. The thread then watches the spec'd tickets for AFK comments —
 tweaks applied and replied to — until the user's explicit readiness signal, which it executes; a
 recommended split runs to-slices only on the user's approval. Shape stamps nothing of its own judgment.
-Mid-thread items that aren't batch subjects are offered to to-backlog for capture.
+For backlog batches, readiness is atomic: a clean shaping worktree and branch are removed before every
+ticket advances; a changed one becomes an exact-head shaping change request presented before the
+readiness signal, and the batch advances only after its narrowly authorized merge is verified and
+cleaned up. Mid-thread items that aren't
+batch subjects are offered to to-backlog for capture.
 
 ## When to use
 
@@ -18,7 +22,8 @@ Mid-thread items that aren't batch subjects are offered to to-backlog for captur
 ## Dependency surface
 
 - **Bundled:** `SKILL.md` only.
-- **Siblings (required, by name):** `interview`, `domain-modeling`, `to-spec`.
+- **Siblings (required, by name):** `interview`, `domain-modeling`, `to-spec`, `worktree`,
+  `merge-changes`.
 - **Siblings (optional, by name):** `research`, `prototype`, `to-subagent` (their dispatch and the
   batch's engines), `to-slices` (the approved split), `to-backlog` (mid-thread capture), `watch-until`
   (the comment watch).

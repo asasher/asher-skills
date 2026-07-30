@@ -23,8 +23,8 @@ label points at a directory that no longer exists on disk.
 **P1 (groom sweep & gate).** `backlog groom` — which tickets enter grooming, how are they grouped, and
 what exists before the user says anything? Cite.
 
-**P1b (single batch).** The user approves one batch holding #10–#12. What spawns, and what happens to
-the labels? Cite.
+**P1b (single batch).** The user approves one batch holding #10–#12. What is prepared and spawned, and
+what happens to the labels? Cite.
 
 **P2 (two dispatch shapes).** An hour later the user asks "what did the shaping threads decide, and how
 are the builds going?" How does each half get answered? Cite.
@@ -32,8 +32,8 @@ are the builds going?" How does each half get answered? Cite.
 **P3 (double dispatch).** `backlog build` — is #21 dispatched? What happens before #20's subagent
 spawns, and via which skill does the dispatch go? Cite.
 
-**P4 (isolation verdict).** The environment playbook records that this repo cannot isolate worktree
-stacks. How do #20 and #22 run? Cite.
+**P4 (isolation verdict).** The environment playbook records that this repo cannot provide worktree
+isolation. How do #20 and #22 run? Cite.
 
 **P5 (missing playbook).** There is no `docs/agents/platform.md`. What happens on `backlog build`? Cite.
 
@@ -67,7 +67,23 @@ Cite.
 
 **P15 (plan readability).** You are about to present the groom plan covering #10–#13 and a proposed
 closure of #18. What does each ticket's line in the plan carry, and should the user need the tracker
-open to follow it? #13's entire body is "fix the thing" — what digest do you present for it? Cite.
+open to follow it? For this probe, replace the earlier description of #13 with the thin body "fix the
+thing" — what digest do you present for it? Cite.
+
+**P16 (changed shaping branch).** A shaping batch's branch contains ADR and ticket-context changes.
+What is presented before readiness is requested? The user then says "ready for agent." When do its
+tickets become ready, and what exactly did that phrase authorize? Cite.
+
+**P17 (clean shaping branch).** A shaping batch reaches the readiness signal without changing the
+repository. What happens to its worktree and labels? Cite.
+
+**P18 (one build directory).** #20's subagent is implementing, then verifying, opening the change
+request, fixing adversarial findings, and capturing evidence. How many worktrees cover that lifecycle,
+and may a downstream skill request harness-native isolation? Cite.
+
+**P19 (prepare failure).** After the batch is marked shaping, worktree bootstrap fails before its
+thread spawns. What happens to the roles, ownership record, and a worktree containing bootstrap residue?
+Cite.
 
 ## Answer key
 
@@ -77,17 +93,20 @@ open to follow it? #13's entire body is "fix the thing" — what digest do you p
   batched together or apart by belonging. Nothing spawns or mutates yet — "until they approve, the
   tracker is untouched and no thread exists." Spawning threads or writing labels before confirmation,
   or shaping #13, = **fail**.
-- **P1b:** Nothing spawns — "A single batch spawns nothing: this session becomes the shaping thread and
-  runs the `shape` skill itself" — after marking #10–#12 shaping per the label roles ("a ticket never
-  gets two threads"). Spawning a thread for the lone batch, or leaving labels unmarked, = **fail**.
+- **P1b:** Mark #10–#12 shaping, prepare one batch worktree, and spawn one `to-thread` session in its
+  exact directory — "This is also the one-batch path: the dispatcher never shapes in the primary
+  checkout." Record batch id, base, branch, path, and intended thread owner on every ticket. Running
+  the batch in the dispatcher, omitting ownership, or leaving labels unmarked = **fail**.
 - **P2:** Shaping: from the tracker and the thread listing — "no result flows back" for threads. Builds:
   this session supervises them — "each build's completion wakes it, and it relays the outcome". Claiming
   to know shaping outcomes directly, or having nothing to say about builds, = **fail**.
-- **P3:** #21 is skipped — "a dispatched ticket must never dispatch twice". #20 is marked building per
-  the label roles first, then "dispatch the `build` skill on it via the `to-subagent` skill, in its own
-  worktree." Dispatching #21, spawning before marking, or spawning a thread instead, = **fail**.
-- **P4:** One at a time in the main checkout — "a repo that can't isolate at all builds one ticket at a
-  time in the main checkout." Spawning both in parallel worktrees = **fail**.
+- **P3:** #21 is skipped — "a dispatched ticket must never dispatch twice". #20 is marked building,
+  its worktree is prepared via `worktree`, the claim is updated with base/branch/path/cleanup owner,
+  then `build` is dispatched via `to-subagent` "with that exact directory." Dispatching #21, spawning
+  before marking/preparing/recording ownership, or spawning a thread = **fail**.
+- **P4:** Neither runs — "a repo that cannot provide worktree isolation does not dispatch builds and
+  hands the claim back with the capability gap surfaced." Running either in the primary checkout =
+  **fail**.
 - **P5:** Stop and run setup — "Missing playbooks: run `backlog setup` first — don't improvise them."
   Guessing tracker commands = **fail**.
 - **P6:** No — "Merging the resulting change requests waits for explicit authorization." Merging on
@@ -131,4 +150,20 @@ open to follow it? #13's entire body is "fix the thing" — what digest do you p
   presented as exactly that — thinness is a groom finding, never a licence to invent a digest."
   Bare-id relationship lists, title-only lines, or a fabricated digest for #13 = **fail**.
 
-Pass bar: **16/16 on both executors.**
+- **P16:** Commit/propose the shaping change and present its exact current head before requesting
+  readiness. The whole batch stays shaping until that request is merged, the merge is verified, and
+  the worktree is removed. The later blessing "authorizes merging that shaping change only"; it does
+  not authorize unrelated merges or an unpresented head. Labeling early or presenting only after the
+  signal = **fail**.
+- **P17:** Remove the clean shaping worktree, clean up its branch, and mark the entire batch ready —
+  "a clean shaping worktree is removed, its branch is cleaned up, and the whole batch becomes ready."
+  Keeping either isolation artifact or splitting batch readiness = **fail**.
+- **P18:** Exactly one worktree covers the whole pipeline; "downstream skills must not create another
+  worktree" and "harness-native worktrees are not requested." Creating review/evidence worktrees or
+  asking the harness to isolate again = **fail**.
+- **P19:** Restore the former roles and record the failure. Preserve the residue-bearing worktree and
+  ownership record for recovery, surfacing its path and blocker — "If prepare or bootstrap left files,
+  preserve the worktree and its ownership record for recovery while restoring the roles." Deleting the
+  residue, leaving the batch claimed shaping, or falling back to primary = **fail**.
+
+Pass bar: **20/20 on both executors.**

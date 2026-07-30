@@ -6,7 +6,7 @@ user-invocable: true
 metadata:
   invocation: model
   execution: orchestrator
-  requires: []
+  requires: [worktree]
   optional: [staffing]
 ---
 
@@ -16,8 +16,8 @@ Dispatch one unit of work to one non-interactive agent and relay its result.
 
 ## Staffing
 
-Pick the subagent's model and effort from the staffing roster (the `staffing` sibling: the machine's
-global module plus the repo's deltas), matched to the kind of work — mechanical, review, orchestration.
+Pick the subagent's model and effort from the project's staffing roster, matched to the kind of work —
+mechanical, review, orchestration.
 Absent the roster, run the subagent on this session's own model and effort; never downgrade on a guess.
 
 ## The prompt
@@ -35,13 +35,17 @@ checker role gets a read-only mode where the harness has one, and a role whose c
 commands the envelope would block gets the envelope that allows them — a brief demanding what the
 sandbox forbids fails as a staffing error, loudly, at dispatch.
 
-## Isolation
+## Directory and isolation
 
-Work that edits files this session or a parallel agent may also touch gets its own worktree, created —
-branch and directory in one step — off the base ref (`git worktree add <path> -b <branch> <base>`, or
-the equivalent one-step command the repo's VCS provides). The primary checkout is never switched: it stays on the user's
-branch throughout, so never create or check out the work branch there first. Read-only work runs in
-place.
+Dispatch in the supplied directory exactly. Worktree policy belongs to the workflow that owns the
+unit's lifecycle; do not infer a new worktree from the brief's edit intent. A workflow that prepared a
+worktree passes that path and retains cleanup ownership.
+
+On direct invocation, create isolation only when the user explicitly requests it. Use the `worktree`
+skill before dispatch, then pass its returned directory. This parent remains cleanup owner through the
+child's completion; the harness child record plus the dispatch report record branch, path, and owner.
+Report the branch and path with the child. Without an explicit isolation request, run in the supplied
+checkout and make that directory visible in the dispatch report.
 
 ## Wake path
 
@@ -59,3 +63,9 @@ transcript. A subagent that died or came back empty is a reported outcome, not a
 Before resuming or replacing a dead child, audit what actually happened: the worktree's status, the
 branch tip, any partial commits — reality outranks the last narrative. Committed work is adopted on its
 branch, not redone; only the genuinely unfinished part is re-dispatched.
+
+## Dependency surface
+
+- **Sibling (required, by name):** `worktree` — explicit direct isolation; prepared workflow
+  directories are accepted as supplied.
+- **Sibling (optional, by name):** `staffing` — model, effort, and wake-path resolution.
