@@ -39,9 +39,15 @@ duplicate or dead ticket to closure — the rest are shaping work. Group that re
 decisions interlock form one **subject**; subjects that belong together (same subsystem, same domain
 area) form one **batch**, sized to what one thread can hold.
 
-**Confirm before anything changes.** Present the plan — which tickets, which batches, what each is
-about, and every proposed tracker mutation (role labels, closures, new tickets, body rewrites) — and
-adjust to the user's edits. The confirmation is the gate for all of it: until they approve, the tracker
+**Confirm before anything changes — with a plan that grooms from the chat alone.** The user never
+needs the tracker open to follow it: every ticket the plan names — routed, batched, blocked, or
+proposed for closure — carries its id, its title, and a one-or-two-sentence digest drawn from its
+body (what it is, and why it routes where it does when the routing turns on that). Relations are
+said in words — "#12 blocks #14", "#7 is #5's last open child" — never bare id lists; a number by
+itself is opaque. A body too thin to digest is presented as exactly that — thinness is a groom
+finding, never a licence to invent a digest. Alongside the digests: the batches, and every proposed
+tracker mutation (role labels, closures, new tickets, body rewrites) — and adjust to the user's
+edits. Status reports carry the same discipline. The confirmation is the gate for all of it: until they approve, the tracker
 is untouched and no thread exists. Then execute the approved mutations and, per approved batch: mark
 its tickets shaping per the label roles — a ticket never gets two threads — and spawn one thread via
 the `to-thread` skill, named for the batch, seeded with the ticket ids (subjects marked) and the

@@ -65,6 +65,10 @@ verb replies "noted; 6 open entries — a retro pass is due." Do you run the pas
 **P14 (friction, retro absent).** Same stumbles, but the `retro` sibling is not installed. What happens?
 Cite.
 
+**P15 (plan readability).** You are about to present the groom plan covering #10–#13 and a proposed
+closure of #18. What does each ticket's line in the plan carry, and should the user need the tracker
+open to follow it? #13's entire body is "fix the thing" — what digest do you present for it? Cite.
+
 ## Answer key
 
 - **P1:** #10–#13 are swept ("tickets carrying **no readiness role** ... and tickets carrying the needs-shaping role") but #13
@@ -121,4 +125,10 @@ Cite.
   worth noting, then move on." Saying nothing, improvising a ledger by hand, or repeating the complaint
   = **fail**.
 
-Pass bar: **15/15 on both executors.**
+- **P15:** Every named ticket carries "its id, its title, and a one-or-two-sentence digest drawn from
+  its body", relations "said in words — '#12 blocks #14' ... never bare id lists"; the user "never
+  needs the tracker open to follow it." For #13: no digest is invented — "A body too thin to digest is
+  presented as exactly that — thinness is a groom finding, never a licence to invent a digest."
+  Bare-id relationship lists, title-only lines, or a fabricated digest for #13 = **fail**.
+
+Pass bar: **16/16 on both executors.**
