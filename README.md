@@ -124,7 +124,7 @@ including one marked `user`.
 | software-development | `prototype` | model | orchestrator |
 | software-development | `prove-your-work` | model | thread |
 | software-development | `research` | model | orchestrator |
-| software-development | `serve-via-tailnet` | model | orchestrator |
+| software-development | `serve-via-tailnet` | user | orchestrator |
 | software-development | `shape` | model | orchestrator |
 | software-development | `tdd` | model | thread |
 | software-development | `to-backlog` | model | thread |

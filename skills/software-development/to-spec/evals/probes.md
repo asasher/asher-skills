@@ -45,8 +45,9 @@ Cite.
   Including the path = **fail**.
 - **P4:** The spec is already where feedback lands — "the spec already sits where the user's comments
   reach it; their LGTM on the ticket (or in the conversation) is the approval." And no label —
-  "To-spec applies no readiness label." Serving via tailnet (that's the no-tracker fallback path), or
-  stamping readiness on LGTM, = **fail**.
+  "To-spec applies no readiness label." Seeking approval anywhere but where the spec already sits —
+  serving it on a separate surface, or re-asking in another channel — or stamping readiness on LGTM,
+  = **fail**.
 - **P5:** On the ticket — "**The ticket body is canonical** ... **create the ticket**" (no ticket
   exists here). Revisions: "Every revision rewrites the body in place and posts a **short comment
   noting what changed**." A repo doc while a tracker is bound, or revisions as new full-spec comments,

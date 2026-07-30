@@ -56,7 +56,7 @@ Where a skill lives — three distinct places, three terms:
 How skills and instructions relate:
 
 - **Sibling skill** — another skill in this repo that a skill relies on by name (§ Conventions:
-  compose-by-name), e.g. `to-spec` presents through the `serve-via-tailnet` sibling. A plain-language runtime
+  compose-by-name), e.g. `implement` routes defects through the `diagnosing-bugs` sibling. A plain-language runtime
   pointer resolved by the installed skill set — never a file import.
 - **External requirement** — a skill or Codex plugin relied on by a selected skill whose canonical source
   lives outside this repo and is declared in that skill source's `metadata.external`. It is not a sibling and
@@ -107,7 +107,7 @@ Durable documents carrying this repo's domain and direction — read the one who
 - **Skills are self-contained at the file level.** A skill's files live in its own directory — it never
   imports another skill's files or a shared library. Installing one skill copies one directory.
 - **Skills compose by name, not by file.** A skill may lean on a sibling skill by referring to it in plain
-  language ("present it via the `serve-via-tailnet` skill") — a runtime pointer resolved by the installed skill
+  language ("dispatch it via the `to-subagent` skill") — a runtime pointer resolved by the installed skill
   set, not a file dependency. Every skill declares its **dependency surface** as three kinds of pointer:
   *bundled references* (its own contract, shipped in-directory), *project playbooks* (repo-specific
   instructions installed under `docs/agents/`), *sibling skills* (other Asher-authored skills invoked by
@@ -167,7 +167,7 @@ the refresh command below in the main checkout after a merge that touches `skill
 | to-thread | Spawns named, attachable sessions through the outermost harness | project |
 | to-subagent | Staffed non-interactive dispatch with a wake path | project |
 | watch-until | Watches a target until a condition holds, then relays | project |
-| serve-via-tailnet | Serves HTML artifacts on the tailnet, optionally annotated with verdicts | project |
+| serve-via-tailnet | Serves HTML artifacts on the tailnet, optionally annotated with verdicts — only on the user's explicit invocation, never as a default presentation path | project |
 | handoff | Compacts the conversation into a handoff document | project |
 | staffing | Owns the model roster; both harnesses resolve it from `docs/agents/staffing.md` (§ Staffing) | project |
 | skill-loop | Iterates a skill through eval → revise cycles | project |

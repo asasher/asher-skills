@@ -51,10 +51,10 @@ The contract is binding-independent: the deliverable is a **ready-to-paste block
 
 ### Local binding
 
-The review file (`platform.md` § Change review) lives on the same branch as the artifacts, so embeds are **repo-relative paths** — `![<criterion>](../../evidence/<slug>/<file>.png)` relative to the review file — which render in any markdown viewer and on the presentation surface alike, with no SHA pinning and no proxy pitfalls.
+The review file (`platform.md` § Change review) lives on the same branch as the artifacts, so embeds are **repo-relative paths** — `![<criterion>](../../evidence/<slug>/<file>.png)` relative to the review file — which render in any markdown viewer, with no SHA pinning and no proxy pitfalls.
 
 - Mechanical checks before handing the block back: each path resolves from the review file's location at the branch's HEAD (`git cat-file -e HEAD:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4.
-- When the human reviews away from the machine, the evidence step may additionally publish the rendered review file to the presentation surface (`environment.md` § Presenting) — the committed file stays the source of truth, served in place by the `serve-via-tailnet` skill. Publishing must preserve relative-path resolution: expose the review file *with* its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
+- When the human reviews away from the machine, the evidence step may additionally serve the rendered review file over a presentation channel the user explicitly invokes (e.g. the `serve-via-tailnet` skill where installed — no standing surface is bound; `environment.md` § Presenting) — the committed file stays the source of truth. Publishing must preserve relative-path resolution: expose the review file *with* its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
 
 ### Other bindings
 
