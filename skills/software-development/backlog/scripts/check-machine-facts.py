@@ -12,6 +12,10 @@ Findings — a machine-record naming another machine, a declared machine-local
 overlay whose file is absent, or a marker matching the comment prefix but not
 the grammar — print one per line on stdout. Exit 1 when any finding exists,
 0 when none. No stored state: the scan is the whole verdict.
+
+A marker counts only when the comment opens the line (leading whitespace
+aside): prose quoting a marker mid-sentence is ignored rather than reported
+malformed.
 """
 
 import argparse
@@ -27,7 +31,7 @@ RECORD_RE = re.compile(
 LOCAL_RE = re.compile(
     r'^<!--\s*machine-local:\s*(\S+)\s+setup="([^"]+)"\s*-->$'
 )
-PREFIX_RE = re.compile(r"<!--\s*machine-(record|local)\b")
+PREFIX_RE = re.compile(r"^<!--\s*machine-(record|local)\b")
 
 
 def normalize(name):

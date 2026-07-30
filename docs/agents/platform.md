@@ -50,6 +50,8 @@
 
 ## Harness — how threads are spawned
 
+<!-- machine-record: machine=Ashers-MacBook-Pro probed=2026-07-30 -->
+
 - Binding: **outermost active harness** — T3 Code, Claude Code, or Codex. The dispatch skill resolves
   explicit system/runtime host metadata before an embedded Codex/Claude runtime; product-native tools
   corroborate that host context but their mere installation does not establish ownership. Model
