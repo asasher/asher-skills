@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source": "self",
-  "source_revision": "ad0243ec86908481925e2637a750249cb98267b5",
+  "source_revision": "49bfce71082b9e6cac551d2f496c67f479a1010f",
   "source_dirty": [],
   "skills": {
     "adversarial-review": {
@@ -42,6 +42,9 @@
     },
     "research": {
       "source": "skills/software-development/research"
+    },
+    "retro": {
+      "source": "skills/in-progress/retro"
     },
     "serve-via-tailnet": {
       "source": "skills/software-development/serve-via-tailnet"
