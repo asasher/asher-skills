@@ -132,7 +132,7 @@ class RelayTests(unittest.TestCase):
         result = run(str(BUILD_REVIEW), str(root), "--run", str(run_dir), env={**os.environ, "RELAY_NOW": "2026-07-16T09:00:00Z"})
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         review = run_dir / "review.html"
-        event = {"type": "chat_approval", "verdict": "approve", "doc_hash": hashlib.sha256(review.read_bytes()).hexdigest()[:16], "annotations": [], "timestamp": "2026-07-16T09:10:00Z"}
+        event = {"type": "chat_approval", "verdict": "approve", "doc_hash": hashlib.sha256(review.read_bytes()).hexdigest()[:16], "timestamp": "2026-07-16T09:10:00Z"}
         (run_dir / "review-state").mkdir()
         (run_dir / "review-state" / "events.jsonl").write_text(json.dumps(event) + "\n", encoding="utf-8")
         return run_dir
