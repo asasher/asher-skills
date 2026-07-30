@@ -46,8 +46,10 @@ Written before any delta-probe runs; never in executor context. Pass bar unchang
   `scripts/scrub.py <draft> retro/denylist.txt docs/agents/retro-denylist.txt` — both denylist
   halves, the machine-local and the repo-shareable". Two because the terms are split: machine and
   person terms live untracked with the instance, repo-shareable terms are tracked for every clone.
-  Missing half: "If one half is absent, run with the one that exists and say so." Naming only one
-  file when both exist, skipping the scrub, or silently ignoring the absent half = **fail**.
+  Missing half: "A half counts as absent only when it is missing from its resolved location" —
+  `retro/denylist.txt` resolves against the main working tree, so declaring it absent from a linked
+  worktree's cwd without checking there = **fail**. Naming only one file when both exist, skipping
+  the scrub, or silently ignoring the absent half = **fail**.
 - **P12:** Re-run setup's transcript-binding step — "when `retro/transcripts.md` is missing or a
   recorded location no longer resolves, re-run setup's transcript-binding step rather than guessing
   a path." Guessing or constructing a transcript path, or silently running the pass without

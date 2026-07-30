@@ -55,10 +55,9 @@ The ledger lives in the **skill instance** `retro/` at the project root, created
 `ledger.md` (the entries), `denylist.txt` (the machine-local scrub terms), and `transcripts.md`
 (this machine's verified transcript locations, written by setup). The instance is **machine-local
 and untracked** — setup writes the root-anchored `/retro/` entry into the repo's `.gitignore` —
-because everything
-in it describes one machine: the ledger is **local and private — entries carry full local
-specifics**, because a local fix needs them; sanitization is a property of the upstream gate, never
-of capture.
+because everything in it describes one machine: the ledger is **local and private — entries carry
+full local specifics**, because a local fix needs them; sanitization is a property of the upstream
+gate, never of capture.
 
 The scrub terms come in two halves, both user-editable and seeded at setup. `retro/denylist.txt`
 holds the machine and person terms — hostname, machine username, email fragments, employer and
@@ -124,9 +123,11 @@ The privacy discipline for anything that leaves the repo. Every layer applies, i
 - **Scrubbed mechanically.** Run
   `scripts/scrub.py <draft> retro/denylist.txt docs/agents/retro-denylist.txt` — both denylist
   halves, the machine-local and the repo-shareable — flagging denylist terms, email addresses,
-  absolute filesystem paths, and URLs outside the upstream repo. If one half is absent, run with
-  the one that exists and say so. A finding means rewrite and re-run. A clean exit is necessary,
-  never sufficient.
+  absolute filesystem paths, and URLs outside the upstream repo. `retro/denylist.txt` is instance
+  state, so it resolves like the instance — against the repo's main working tree, never a linked
+  worktree's cwd. A half counts as absent only when it is missing from its resolved location; then
+  run with the one that exists and say so. A finding means rewrite and re-run. A clean exit is
+  necessary, never sufficient.
 - **Approved verbatim, per issue.** Show the user the exact final text — title, body, label — and
   submit nothing without their explicit approval of that text. Consent recorded at setup means the
   pass may *draft and propose*; it never means submit. **There is no auto-submit, ever.**
