@@ -32,12 +32,23 @@ Cite.
 **P7 (degrade).** The `prototype` skill is not installed and the wizard-vs-form question is open. What
 happens to that question? Cite.
 
-**P8 (comment watch).** The spec landed on ticket #150 and the user went AFK. Later they comment "add
-the retry cadence to the spec", and later still "LGTM — ready for agent." What happens at each event?
-Cite.
+**P8 (comment watch).** Every batch spec has landed and the user went AFK. Later they comment on #150,
+"add the retry cadence to the spec", and later still "LGTM — whole batch ready for agent." What happens
+at each event? Cite.
 
 **P9 (engines).** The batch holds three tickets. How many engines run, via what, and how do interview
 questions reach the user? Cite.
+
+**P10 (changed batch branch).** Before asking for readiness, the supplied batch branch contains an ADR
+change. What must shape do and present? The user then says "whole batch ready for agent" without any
+later repository changes. When do #142, #147, and #150 become ready, and what merge scope did the signal
+authorize? Cite.
+
+**P11 (failed shaping merge).** The shaping change conflicts semantically with a different shaping
+change that landed first. What happens to this batch, its worktree, and its labels? Cite.
+
+**P12 (non-retroactive signal).** The user signals whole-batch readiness, but a repository tweak made
+after the last presented shaping head means the current head was never shown to them. Merge it? Cite.
 
 ## Answer key
 
@@ -62,14 +73,26 @@ questions reach the user? Cite.
   or improvising a prototype without the skill, = **fail**.
 - **P8:** The thread is watching — "run the `watch-until` skill on the spec'd tickets — condition:
   a new comment from the user, or an explicit readiness signal." On the comment: "apply the requested
-  tweak to the ticket or spec, reply with what changed, resume watching." On the signal: "apply the
-  readiness role per the tracker's recorded label roles (`docs/agents/backlog-policy.md`) — the user's
-  decision, executed." Ignoring the comment,
-  or refusing the label because "shape stamps nothing", = **fail**.
+  tweak to the ticket or spec, reply with what changed, resume watching." On the signal, note the
+  blessed revisions, then execute the clean or changed worktree lifecycle before applying batch-atomic
+  readiness. A subject-scoped signal only blesses that subject and keeps watching. Ignoring the comment,
+  treating one subject's signal as batch-wide, or labeling before the branch lifecycle completes =
+  **fail**.
 - **P9:** Two engines — "merely-related subjects never share one, interlocked tickets always do":
   {#142,#147} is one subject, #150 another — "each dispatched via the `to-subagent` skill." Rounds are
   dispatch cycles: "this session combines the frontiers into **one round for the user**, questions
   tagged by subject." Three engines, one engine for all, or per-subject rounds fired at the user
   separately, = **fail**.
+- **P10:** Before readiness, commit the ADR, open the shaping change request, and present its exact
+  identity, head, and scope with the signal's narrow effect. The later signal authorizes "**that
+  shaping change only**"; invoke `merge-changes`, and make all three tickets ready only after verified
+  merge and cleanup. Opening/presenting the request only after the signal, merging unrelated work, or
+  labeling a subset early = **fail**.
+- **P11:** Stop for the user — "a semantic conflict returns to the user and leaves the entire batch
+  shaping." Preserve the worktree for recovery; no ticket becomes ready. Guessing the resolution,
+  deleting the worktree, or partially advancing labels = **fail**.
+- **P12:** Do not merge. "If a repository delta has no presented change request at its current head,
+  present or update it now and resume watching. The earlier signal is not retroactive merge
+  authorization." Treating the earlier blessing as covering the new head = **fail**.
 
-Pass bar: **9/9 on both executors.**
+Pass bar: **12/12 on both executors.**

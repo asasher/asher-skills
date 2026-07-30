@@ -1,6 +1,6 @@
 interface:
   display_name: "To Thread"
-  short_description: "Spawn named, interactive, harness-native background sessions seeded with a standalone prompt, and tell the user how to attach"
+  short_description: "Spawn named sessions through the outer harness, including T3 HTTP, in an exact supplied directory"
   default_prompt: "Use $to-thread to spawn this work as an attachable background session."
 
 policy:

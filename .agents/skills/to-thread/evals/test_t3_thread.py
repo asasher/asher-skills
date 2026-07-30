@@ -1,0 +1,330 @@
+#!/usr/bin/env python3
+"""Integration-style tests for the public T3 thread helper."""
+
+from __future__ import annotations
+
+import base64
+import json
+import os
+import subprocess
+import tempfile
+import threading
+import unittest
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+
+
+SKILL_ROOT = Path(__file__).resolve().parents[1]
+SCRIPT = SKILL_ROOT / "scripts" / "t3-thread.py"
+
+
+def token_for(session_id: str) -> str:
+    payload = json.dumps({"sid": session_id}, separators=(",", ":")).encode()
+    encoded = base64.urlsafe_b64encode(payload).decode().rstrip("=")
+    return f"{encoded}.signature"
+
+
+class ApiState:
+    def __init__(self, project_root: Path) -> None:
+        self.project_root = project_root
+        self.posts: list[dict[str, object]] = []
+        self.fail_turn = False
+        self.include_other_project = False
+        self.snapshot_redirect: str | None = None
+        self.bad_create_ack = False
+        self.bad_turn_ack = False
+
+
+class Handler(BaseHTTPRequestHandler):
+    server: "ApiServer"
+
+    def do_GET(self) -> None:
+        if self.path != "/api/orchestration/snapshot":
+            self.send_error(404)
+            return
+        if self.server.state.snapshot_redirect:
+            self.send_response(302)
+            self.send_header("Location", self.server.state.snapshot_redirect)
+            self.end_headers()
+            return
+        projects = [
+            {
+                "id": "project-1",
+                "title": "Project",
+                "workspaceRoot": str(self.server.state.project_root),
+                "deletedAt": None,
+            }
+        ]
+        if self.server.state.include_other_project:
+            projects.append(
+                {
+                    "id": "project-2",
+                    "title": "Other",
+                    "workspaceRoot": str(self.server.state.project_root.parent / "other"),
+                    "deletedAt": None,
+                }
+            )
+        self.respond(
+            200,
+            {
+                "projects": projects,
+                "threads": [],
+                "snapshotSequence": 1,
+                "updatedAt": "2026-07-30T00:00:00Z",
+            },
+        )
+
+    def do_POST(self) -> None:
+        if self.path != "/api/orchestration/dispatch":
+            self.send_error(404)
+            return
+        length = int(self.headers.get("Content-Length", "0"))
+        payload = json.loads(self.rfile.read(length))
+        self.server.state.posts.append(payload)
+        if payload["type"] == "thread.create" and self.server.state.bad_create_ack:
+            self.respond(200, {"error": "command was not acknowledged"})
+            return
+        if payload["type"] == "thread.turn.start" and self.server.state.bad_turn_ack:
+            self.respond(200, {"error": "command was not acknowledged"})
+            return
+        if payload["type"] == "thread.turn.start" and self.server.state.fail_turn:
+            self.respond(500, {"error": "unsupported command shape"})
+            return
+        self.respond(200, {"sequence": len(self.server.state.posts)})
+
+    def respond(self, status: int, payload: dict[str, object]) -> None:
+        body = json.dumps(payload).encode()
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, format: str, *args: object) -> None:
+        return
+
+
+class ApiServer(ThreadingHTTPServer):
+    def __init__(self, state: ApiState) -> None:
+        super().__init__(("127.0.0.1", 0), Handler)
+        self.state = state
+
+
+class T3ThreadHelperTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.sandbox = tempfile.TemporaryDirectory()
+        self.root = Path(self.sandbox.name)
+        self.project = self.root / "project"
+        self.worktree = self.root / "project-worktrees" / "136-shape"
+        self.project.mkdir()
+        self.worktree.mkdir(parents=True)
+        self.state = ApiState(self.project.resolve())
+        self.server = ApiServer(self.state)
+        self.server_thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+        self.server_thread.start()
+        self.origin = f"http://127.0.0.1:{self.server.server_port}"
+
+        self.runtime_file = self.root / "server-runtime.json"
+        self.runtime_file.write_text(json.dumps({"version": 1, "origin": self.origin}))
+        self.base_dir = self.root / ".t3"
+        self.base_dir.mkdir()
+        self.revoke_log = self.root / "revoked.txt"
+        self.server_entry = self.root / "bin.mjs"
+        self.server_entry.write_text("// placeholder\n")
+        self.fake_cli = self.root / "fake-t3-cli.py"
+        self.fake_cli.write_text(
+            """#!/usr/bin/env python3
+import os
+import pathlib
+import sys
+import json
+
+args = sys.argv[2:]
+if args[:3] == ["auth", "session", "issue"]:
+    if "--json" in args:
+        print(json.dumps({
+            "token": os.environ["FAKE_T3_TOKEN"],
+            "sessionId": os.environ["FAKE_T3_SESSION_ID"],
+            "subject": "local to-thread dispatch",
+        }))
+    else:
+        print(os.environ["FAKE_T3_TOKEN"])
+    raise SystemExit(0)
+if args[:3] == ["auth", "session", "revoke"]:
+    pathlib.Path(os.environ["FAKE_T3_REVOKE_LOG"]).write_text(args[3] + "\\n")
+    raise SystemExit(0)
+raise SystemExit(2)
+"""
+        )
+        self.fake_cli.chmod(0o755)
+        self.fake_app_cli = self.root / "T3 Code.app" / "Contents" / "MacOS" / "T3 Code"
+        self.fake_app_cli.parent.mkdir(parents=True)
+        self.fake_app_cli.write_text(self.fake_cli.read_text())
+        self.fake_app_cli.chmod(0o755)
+        fake_archive = self.root / "T3 Code.app" / "Contents" / "Resources" / "app.asar"
+        fake_archive.parent.mkdir(parents=True)
+        fake_archive.write_text("archive placeholder\n")
+        self.session_id = "session-123"
+
+    def tearDown(self) -> None:
+        self.server.shutdown()
+        self.server.server_close()
+        self.server_thread.join(timeout=2)
+        self.sandbox.cleanup()
+
+    def run_helper(
+        self,
+        *,
+        check: bool = True,
+        derive_server_entry: bool = False,
+        token: str | None = None,
+    ) -> subprocess.CompletedProcess[str]:
+        env = os.environ.copy()
+        env["FAKE_T3_TOKEN"] = token or token_for(self.session_id)
+        env["FAKE_T3_SESSION_ID"] = self.session_id
+        env["FAKE_T3_REVOKE_LOG"] = str(self.revoke_log)
+        command = [
+                "python3",
+                str(SCRIPT),
+                "--name",
+                "shape-driver-payouts",
+                "--prompt",
+                "Shape ticket #136 and wait for the user.",
+                "--project-directory",
+                str(self.project),
+                "--directory",
+                str(self.worktree),
+                "--branch",
+                "136-shape",
+                "--model",
+                "gpt-5.6-sol",
+                "--effort",
+                "high",
+                "--runtime-mode",
+                "approval-required",
+                "--base-dir",
+                str(self.base_dir),
+                "--runtime-file",
+                str(self.runtime_file),
+                "--t3-executable",
+                str(self.fake_app_cli if derive_server_entry else self.fake_cli),
+            ]
+        if not derive_server_entry:
+            command.extend(["--server-entry", str(self.server_entry)])
+        result = subprocess.run(
+            command,
+            check=False,
+            text=True,
+            capture_output=True,
+            env=env,
+        )
+        if check and result.returncode:
+            self.fail(f"helper failed: {result.stderr}")
+        return result
+
+    def test_creates_and_starts_named_thread_with_external_worktree(self) -> None:
+        result = self.run_helper()
+        output = json.loads(result.stdout)
+
+        self.assertEqual(0, result.returncode)
+        self.assertEqual("shape-driver-payouts", output["name"])
+        self.assertEqual("project-1", output["project_id"])
+        self.assertEqual(str(self.worktree.resolve()), output["worktree_path"])
+        self.assertEqual(2, len(self.state.posts))
+
+        create, turn = self.state.posts
+        self.assertEqual("thread.create", create["type"])
+        self.assertEqual("project-1", create["projectId"])
+        self.assertEqual("136-shape", create["branch"])
+        self.assertEqual(str(self.worktree.resolve()), create["worktreePath"])
+        self.assertEqual("gpt-5.6-sol", create["modelSelection"]["model"])
+        self.assertEqual("thread.turn.start", turn["type"])
+        self.assertEqual(create["threadId"], turn["threadId"])
+        self.assertNotIn("titleSeed", turn)
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_resolves_exact_workspace_when_snapshot_has_multiple_projects(self) -> None:
+        self.state.include_other_project = True
+
+        result = self.run_helper()
+        output = json.loads(result.stdout)
+
+        self.assertEqual("project-1", output["project_id"])
+        self.assertEqual("project-1", self.state.posts[0]["projectId"])
+
+    def test_accepts_server_entry_inside_present_asar_archive(self) -> None:
+        result = self.run_helper(derive_server_entry=True)
+
+        self.assertEqual(0, result.returncode)
+        self.assertEqual(2, len(self.state.posts))
+
+    def test_accepts_opaque_token_and_revokes_structured_session_id(self) -> None:
+        result = self.run_helper(token="opaque-local-token")
+
+        self.assertEqual(0, result.returncode)
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_revokes_session_when_turn_start_fails(self) -> None:
+        self.state.fail_turn = True
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("thread.turn.start", result.stderr)
+        self.assertEqual(
+            ["thread.create", "thread.turn.start", "thread.delete"],
+            [post["type"] for post in self.state.posts],
+        )
+        self.assertEqual(self.state.posts[0]["threadId"], self.state.posts[2]["threadId"])
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_deletes_ambiguous_creation_when_success_ack_is_invalid(self) -> None:
+        self.state.bad_create_ack = True
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("acknowledge", result.stderr.lower())
+        self.assertEqual(
+            ["thread.create", "thread.delete"],
+            [post["type"] for post in self.state.posts],
+        )
+        self.assertEqual(self.state.posts[0]["threadId"], self.state.posts[1]["threadId"])
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_deletes_partial_thread_when_turn_success_ack_is_invalid(self) -> None:
+        self.state.bad_turn_ack = True
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("thread.turn.start", result.stderr)
+        self.assertEqual(
+            ["thread.create", "thread.turn.start", "thread.delete"],
+            [post["type"] for post in self.state.posts],
+        )
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_fails_before_creation_when_project_is_not_registered(self) -> None:
+        self.state.project_root = self.root / "different-project"
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("project", result.stderr.lower())
+        self.assertEqual([], self.state.posts)
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_refuses_http_redirects_before_forwarding_bearer_credentials(self) -> None:
+        self.state.snapshot_redirect = "http://127.0.0.1:9/credential-leak"
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("redirect", result.stderr.lower())
+        self.assertEqual([], self.state.posts)
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+
+if __name__ == "__main__":
+    unittest.main()

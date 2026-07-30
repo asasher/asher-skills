@@ -34,12 +34,14 @@
 
 ## Worktree isolation
 
-> Set by `setup` from its audit; read by `backlog build` before dispatching parallel threads.
+> Set by `setup` from its audit; read by `backlog build` before dispatching parallel threads. Working
+> copy creation, inspection, and removal always go through the project-owned `worktree` skill; this
+> section decides whether the application stack inside each copy can also be isolated.
 
 - Regime: _<local-isolatable | cloud-singleton | none>_ — whether one worktree can run its own full
   stack beside another's.
-- How to bring up an **isolated** stack for one worktree: _<the derived-env command / hook, or "main
-  checkout only">_.
+- How to bring up an **isolated** stack for one worktree: _<the derived-env command / hook, or
+  "unavailable — builds must not dispatch">_. The primary checkout is never a build fallback.
 - Teardown for a worktree's stack (read by `merge-changes` cleanup, `backlog build`'s abort-path
   teardown, and `backlog groom`'s teardown sweep): _<command, or "nothing to tear down">_. The recorded
   command must resolve the **same environment-wrapped compose project** the bring-up resolved (same env

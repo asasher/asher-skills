@@ -20,6 +20,8 @@
 ## Worktree isolation
 
 - Regime: **local-isolatable** — checked-in skill files and stdlib-only scripts are isolated by the worktree unless the repository records an external shared resource below.
+- Working-copy ownership: project-owned `worktree` skill; dispatch receives the prepared directory and
+  never asks a harness for native isolation.
 - How to create an isolated skill run for one worktree: _<run the executor with that worktree's skill source and eval scenario>_.
 - Shared-singleton list: _<external executor session, cache, publishing target, or account; otherwise “none — files and scripts are worktree-local”>_.
 

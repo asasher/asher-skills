@@ -12,8 +12,8 @@ has no staffing roster installed.
 
 **P1 (staffing degrade).** No roster — which model and effort run the subagent? Cite.
 
-**P2 (prompt).** What three things must the prompt state about the deliverable, given the subagent sees
-nothing of this session? Cite.
+**P2 (prompt).** What must the prompt state about the deliverable, given the subagent sees nothing of
+this session? Cite.
 
 **P3 (wake).** The harness tracks the child. Do you poll it? And when would a watcher be used instead?
 Cite.
@@ -27,6 +27,12 @@ happens if the brief demands a command the sandbox blocks? Cite.
 
 **P7 (recovery).** A replacement is needed for the dead subagent from P5, and its worktree turns out to
 hold two pushed commits. Re-dispatch the whole unit? Cite.
+
+**P8 (prepared directory).** A composing workflow supplies `/work/142-driver-payouts`. The brief edits
+files. Do you create another worktree? Cite.
+
+**P9 (direct isolation).** A direct user request says "run this in an isolated worktree." What happens
+before dispatch, and what is reported? Cite.
 
 ## Answer key
 
@@ -49,5 +55,11 @@ hold two pushed commits. Re-dispatch the whole unit? Cite.
 - **P7:** No — audit first: "audit what actually happened: the worktree's status, the branch tip, any
   partial commits — reality outranks the last narrative. Committed work is adopted on its branch, not
   redone; only the genuinely unfinished part is re-dispatched." Redoing the whole unit = **fail**.
+- **P8:** No — "Dispatch in the supplied directory exactly" and "do not infer a new worktree from the
+  brief's edit intent." Dispatch in `/work/142-driver-payouts`; nested isolation = **fail**.
+- **P9:** Use the `worktree` skill first, then pass its result — "create isolation only when the user
+  explicitly requests it"; this parent stays cleanup owner, and the harness child record plus dispatch
+  report carry branch/path/owner. Dispatching before preparation, hiding ownership, or making the
+  child the untracked cleanup owner = **fail**.
 
-Pass bar: **7/7 on both executors.**
+Pass bar: **9/9 on both executors.**
