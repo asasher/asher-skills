@@ -316,8 +316,22 @@ def prepare(args: argparse.Namespace) -> None:
     if path == repo or repo in path.parents:
         fail("the requested path is inside the primary checkout")
 
-    registered_path = registration_at(repo, path)
-    registered_branch = registration_for_branch(repo, args.branch)
+    registered = registrations(repo)
+    containing_checkout = next(
+        (item for item in registered if item.path in path.parents),
+        None,
+    )
+    if containing_checkout:
+        fail(
+            f"the requested path is inside a registered checkout "
+            f"at {containing_checkout.path}"
+        )
+
+    registered_path = next((item for item in registered if item.path == path), None)
+    registered_branch = next(
+        (item for item in registered if item.branch == args.branch),
+        None,
+    )
     if registered_path:
         if registered_path.prunable or not path.is_dir():
             fail(f"path has a prunable registration or missing working directory: {path}")

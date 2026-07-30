@@ -9,7 +9,9 @@ request its harness-native worktree made the checkout boundary implicit: the pri
 be changed without a visible prepare step, paths and bases differed by harness, and T3's native
 worktree behavior was considerably harder to coordinate with the backlog lifecycle. We decided that
 the project prepares, inspects, and removes every shaping and build worktree through one deterministic
-`worktree` primitive. Dispatch adapters receive the exact directory and must not add isolation.
+`worktree` primitive. Dispatch adapters receive exact workflow directories without adding
+harness-native isolation; on direct invocation, they compose the same primitive only for an explicit
+isolation request.
 
 `backlog groom` owns one worktree per approved shaping batch, including a single batch.
 `backlog build` owns one worktree per issue for the entire implementation-through-evidence pipeline.

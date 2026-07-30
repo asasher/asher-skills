@@ -29,19 +29,21 @@ the dispatcher babysits (`to-subagent` — completion wakes it, outcomes are rel
 build subagent per ready ticket).
 
 **Dispatch adapter**:
-A primitive owning *how* work is dispatched, not what the work is: `to-thread` spawns named,
+A thin composite owning *how* work is dispatched, not what the work is: `to-thread` spawns named,
 interactive sessions the user attends through the outermost dispatching harness; `to-subagent`
-spawns non-interactive subagents with a wake path. Both consume an exact supplied directory and
-never infer or add isolation. Harness and staffing knowledge live only here — `to-subagent` is the
-one skill permitted to name `staffing`; every other skill reaches models and wake paths solely by
-saying "via `to-subagent`".
+spawns non-interactive subagents with a wake path. Both consume an exact supplied directory without
+adding harness-native isolation. On direct invocation, an explicit isolation request composes the
+`worktree` primitive before dispatch; workflow-owned isolation arrives already prepared.
+`to-subagent` may additionally compose `staffing` for model and wake-path resolution. Every other
+skill reaches models and wake paths solely by saying "via `to-subagent`".
 
 **Worktree primitive**:
 The project-owned mechanical boundary for prepare, inspect, and remove. It creates one branch and
 working copy from a named base without switching or updating the primary checkout, treats git's
 worktree registration as ownership truth, and refuses ambiguous reuse or dirty removal. Orchestrators
-decide *when* isolation is required and pass the resulting directory to dispatch adapters; harnesses
-do not create another worktree.
+decide *when* workflow-owned isolation is required and pass the resulting directory to dispatch
+adapters. A direct adapter treats the user's explicit isolation request as its policy input and
+composes this primitive; harnesses do not create another worktree.
 
 **Layer law**:
 A skill may name only skills at layers below its own — and a primitive names none at all. A

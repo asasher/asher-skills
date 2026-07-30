@@ -308,6 +308,38 @@ class WorktreeCliTests(unittest.TestCase):
         self.assertFalse((self.repo / "nested-worktree").exists())
         self.assertEqual(before_status, run("git", "status", "--porcelain", cwd=self.repo).stdout)
 
+    def test_prepare_refuses_a_path_inside_a_secondary_worktree(self) -> None:
+        prepared = self.prepare("first-worktree")
+        first_worktree = Path(str(prepared["path"]))
+        nested_path = first_worktree / "nested-worktree"
+        before_status = run(
+            "git",
+            "status",
+            "--porcelain",
+            cwd=first_worktree,
+        ).stdout
+
+        result = self.cli(
+            "prepare",
+            "--repo",
+            str(self.repo),
+            "--branch",
+            "nested-secondary",
+            "--base",
+            "main",
+            "--path",
+            str(nested_path),
+            check=False,
+        )
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("registered checkout", result.stderr.lower())
+        self.assertFalse(nested_path.exists())
+        self.assertEqual(
+            before_status,
+            run("git", "status", "--porcelain", cwd=first_worktree).stdout,
+        )
+
     def test_inspect_reports_registration_branch_and_dirty_state(self) -> None:
         prepared = self.prepare()
         worktree_path = Path(str(prepared["path"]))

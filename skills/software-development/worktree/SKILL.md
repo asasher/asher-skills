@@ -36,6 +36,7 @@ the path provisionally between prepare and successful dispatch. A branch claimed
 is a conflict. Any other existing registration, directory, or unregistered branch stops the operation.
 A prunable registration, missing prepared-base record, or missing working directory also stops for
 recovery; never silently prune and recreate it.
+A requested path inside any registered checkout stops before Git changes either working tree.
 
 After creation, run the repository's recorded worktree bootstrap from inside the new working copy. A
 failed bootstrap leaves the registration intact for inspection; never erase its evidence automatically.
