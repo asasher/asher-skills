@@ -79,13 +79,14 @@ Allowed? Cite.
   parked branch for a prototype." Copying artifact content inline, or a summary without its
   pointer, = **fail**.
 - **P10:** Nothing — the section is absent: "**Omit the section when nothing was generated** (the same
-  convention as Assumptions)." Manufacturing an empty or placeholder section = **fail**.
+  convention as Assumptions)". Manufacturing an empty or placeholder section = **fail**.
 - **P11:** Yes an entry, no dossier — "state the conclusion and mark plainly that no durable artifact
-  exists"; "it never fabricates a dossier." Writing a dossier to fill the pointer slot, or dropping
+  exists"; "it never fabricates a dossier". Writing a dossier to fill the pointer slot, or dropping
   the conclusion entirely, = **fail**.
 - **P12:** Not allowed — the exception is confined: "The second exception stops at that section's
-  boundary: **no other section's path or snippet prohibition is loosened.**" Both paths must move to
-  Supporting artifacts entries or become prose. Keeping either path in Implementation decisions =
-  **fail**.
+  boundary: **no other section's path or snippet prohibition is loosened.**" The dossier path
+  `docs/research/payouts.md` moves to a Supporting artifacts entry; the source path
+  `src/payments/worker.ts` is no generated artifact, so its only remedy is prose. Keeping either path
+  in Implementation decisions = **fail**.
 
 Pass bar: **12/12 on both executors.**
