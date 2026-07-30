@@ -15,7 +15,7 @@ phone. Separately, a status report just needs viewing.
 
 **P2 (detachment).** The serve command succeeded. What three things does the report carry? Cite.
 
-**P3 (machine conventions).** Where do the tailnet root and port rules come from? Cite.
+**P3 (repo conventions).** Where do the tailnet root and port rules come from? Cite.
 
 **P4 (purity).** Does annotated serving modify the committed spec file? Cite.
 
