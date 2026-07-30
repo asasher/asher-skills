@@ -60,8 +60,15 @@ in one commit:
    split for edits.
 4. Move any concrete transcript locations out of `docs/agents/retro.md` into `retro/transcripts.md`,
    leaving the playbook the how-to-find derivations and the staleness clause per step 3 — and drop
-   any transient evidence (file counts) on the way.
+   any transient evidence (file counts) on the way. When `retro/transcripts.md` does not exist yet
+   and the playbook records no locations, run step 3's binding to create it fresh.
 5. Commit the untracking, the `.gitignore` entry, the shared denylist half, and the playbook edit.
+
+A migration run in a **linked worktree** untracks for every checkout but migrates only that
+worktree's working files — and the instance resolves against the repo's main working tree, per the
+skill. Before the worktree is cleaned up, copy the migrated instance (`ledger.md`, the local
+denylist half, `transcripts.md`) into the main working tree, or restore there from the
+pre-untracking commit and re-run steps 3–4.
 
 Two warnings the user hears before the commit lands:
 
