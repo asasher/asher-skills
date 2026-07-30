@@ -89,6 +89,29 @@ class WorktreeCliTests(unittest.TestCase):
         self.assertEqual(first["path"], second["path"])
         self.assertEqual(first["base_oid"], second["base_oid"])
 
+    def test_prepare_refuses_reuse_with_a_different_ancestor_base(self) -> None:
+        older_base = run("git", "rev-parse", "HEAD", cwd=self.repo).stdout.strip()
+        (self.repo / "new-base.txt").write_text("new base\n")
+        run("git", "add", "new-base.txt", cwd=self.repo)
+        run("git", "commit", "-m", "advance base", cwd=self.repo)
+        prepared = self.prepare()
+
+        result = self.cli(
+            "prepare",
+            "--repo",
+            str(self.repo),
+            "--branch",
+            "136-worktree",
+            "--base",
+            older_base,
+            "--path",
+            str(prepared["path"]),
+            check=False,
+        )
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("base", result.stderr.lower())
+
     def test_prepare_refuses_a_prunable_registration_with_missing_directory(self) -> None:
         first = self.prepare()
         worktree_path = Path(str(first["path"]))

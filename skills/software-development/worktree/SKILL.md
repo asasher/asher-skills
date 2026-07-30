@@ -28,13 +28,14 @@ committing, or resetting the primary checkout. Fetching a remote ref is allowed 
 binding requires it; changing the primary checkout is not. Surface dirty, ahead, or behind primary
 state. Stop only when the requested base cannot be resolved without unpublished primary-checkout work.
 
-`prepare` reuses an existing worktree only when path, branch, and base ancestry match. Before reuse,
-confirm the workflow's ownership record names this branch: a tracker claim for backlog work, or the
-harness's live thread/child record plus its parent dispatch report for direct work. The caller owns the
-path provisionally between prepare and successful dispatch. A branch claimed by another live run is a
-conflict. Any other existing registration, directory, or unregistered branch stops the operation.
-A prunable registration or missing working directory also stops for recovery; never silently prune and
-recreate it.
+`prepare` reuses an existing worktree only when path, branch, and its project-owned prepared-base
+record exactly match the request. A different ancestor is a different base and stops reuse. Before
+reuse, confirm the workflow's ownership record names this branch: a tracker claim for backlog work, or
+the harness's live thread/child record plus its parent dispatch report for direct work. The caller owns
+the path provisionally between prepare and successful dispatch. A branch claimed by another live run
+is a conflict. Any other existing registration, directory, or unregistered branch stops the operation.
+A prunable registration, missing prepared-base record, or missing working directory also stops for
+recovery; never silently prune and recreate it.
 
 After creation, run the repository's recorded worktree bootstrap from inside the new working copy. A
 failed bootstrap leaves the registration intact for inspection; never erase its evidence automatically.

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -14,6 +15,9 @@ from typing import NoReturn, Sequence
 
 class WorktreeError(RuntimeError):
     """A user-actionable worktree lifecycle failure."""
+
+
+OWNERSHIP_FILENAME = "asher-skills-worktree.json"
 
 
 @dataclass(frozen=True)
@@ -131,6 +135,8 @@ def expected_git_directory(repo: Path, path: Path) -> Path | None:
         return None
     matches: list[Path] = []
     for candidate in administrative_root.iterdir():
+        if candidate.is_symlink() or not candidate.is_dir():
+            continue
         backlink_file = candidate / "gitdir"
         try:
             backlink = Path(backlink_file.read_text().strip()).resolve()
@@ -139,6 +145,70 @@ def expected_git_directory(repo: Path, path: Path) -> Path | None:
         if backlink.name == ".git" and backlink.parent == path:
             matches.append(candidate.resolve())
     return matches[0] if len(matches) == 1 else None
+
+
+def ownership_path(repo: Path, path: Path) -> Path:
+    administrative_directory = expected_git_directory(repo, path)
+    if administrative_directory is None:
+        fail(f"worktree has no unique administrative directory: {path}")
+    return administrative_directory / OWNERSHIP_FILENAME
+
+
+def write_ownership(
+    repo: Path,
+    path: Path,
+    branch_ref: str,
+    base_oid: str,
+) -> None:
+    destination = ownership_path(repo, path)
+    if destination.exists() or destination.is_symlink():
+        fail(f"worktree ownership record already exists: {destination}")
+    payload = {
+        "base_oid": base_oid,
+        "branch_ref": branch_ref,
+        "path": str(path),
+        "repo": str(repo),
+        "schema_version": 1,
+    }
+    temporary = destination.with_name(f".{OWNERSHIP_FILENAME}.{os.getpid()}.tmp")
+    try:
+        with temporary.open("x", encoding="utf-8") as handle:
+            json.dump(payload, handle, sort_keys=True)
+            handle.write("\n")
+        temporary.replace(destination)
+    except OSError as error:
+        fail(f"could not write worktree ownership record: {error}")
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
+def prepared_base(
+    repo: Path,
+    path: Path,
+    branch_ref: str,
+) -> str:
+    source = ownership_path(repo, path)
+    if source.is_symlink() or not source.is_file():
+        fail(f"worktree has no valid project ownership record: {path}")
+    try:
+        payload = json.loads(source.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        fail(f"worktree ownership record is unreadable: {error}")
+    expected_identity = {
+        "branch_ref": branch_ref,
+        "path": str(path),
+        "repo": str(repo),
+        "schema_version": 1,
+    }
+    if not isinstance(payload, dict) or any(
+        payload.get(key) != value for key, value in expected_identity.items()
+    ):
+        fail(f"worktree ownership record does not match the requested identity: {path}")
+    base_oid = payload.get("base_oid")
+    if not isinstance(base_oid, str):
+        fail(f"worktree ownership record has no prepared base: {path}")
+    return base_oid
 
 
 def worktree_directory_matches(
@@ -186,21 +256,6 @@ def worktree_directory_matches(
     if item.detached:
         return actual_branch.returncode != 0
     return actual_branch.returncode == 0 and actual_branch.stdout.strip() == item.branch_ref
-
-
-def is_ancestor(repo: Path, ancestor: str, descendant: str) -> bool:
-    result = run_git(
-        repo,
-        "merge-base",
-        "--is-ancestor",
-        ancestor,
-        descendant,
-        check=False,
-    )
-    if result.returncode not in (0, 1):
-        detail = result.stderr.strip() or "could not compare the requested base to the branch"
-        raise WorktreeError(detail)
-    return result.returncode == 0
 
 
 def dirty(path: Path) -> bool:
@@ -273,10 +328,11 @@ def prepare(args: argparse.Namespace) -> None:
                 f"path is registered to {registered_path.branch or 'a detached worktree'}, "
                 f"not {args.branch}: {path}"
             )
-        if not is_ancestor(repo, base_oid, registered_path.head or branch_ref):
+        owned_base = prepared_base(repo, path, branch_ref)
+        if owned_base != base_oid:
             fail(
-                f"requested base {args.base} ({base_oid}) is not an ancestor of "
-                f"the registered branch {args.branch}"
+                f"requested base {args.base} ({base_oid}) does not match "
+                f"the prepared base ({owned_base})"
             )
         emit(
             {
@@ -308,6 +364,7 @@ def prepare(args: argparse.Namespace) -> None:
             f"git did not produce a valid working directory at the requested path; "
             f"branch and registration retained for recovery: {path}"
         )
+    write_ownership(repo, path, branch_ref, base_oid)
     emit(
         {
             "base": args.base,
