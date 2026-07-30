@@ -287,10 +287,11 @@ it, ignore it, or something else — and which file may record the CLI version a
   sole home — cite `reference/setup.md`: "This playbook is the one home for model and capability
   reachability — routes, dispatch aliases, effect verdicts — and for the CLI-version metadata stamped
   on their probes: report any other playbook found restating them as drift."
-  Setup does not fix the environment file itself, because "Setup writes exactly one file: the
-  **project staffing playbook**" (`reference/install-and-reconcile.md` § One layer) — the restatement
-  is reported for its owning setup to resolve. Editing `environment.md` directly, ignoring the
-  restatement because the playbook is right, or recording the version in both files = fail.
+  Setup does not fix the environment file itself — its writes are the staffing playbook (and the
+  trigger section of the agent instruction file, step 4), never a foreign playbook — so the
+  restatement is reported for its owning setup to resolve. Editing `environment.md` directly,
+  ignoring the restatement because the playbook is right, or recording the version in both files
+  = fail.
 
 ## Scoring
 

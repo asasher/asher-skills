@@ -18,8 +18,9 @@
 
 ## Parallelism
 
-- Executor routes: the staffing playbook's probe record is their one home — point at it here, never
-  restate routes or aliases. Practical worker cap for research fan-out: _<the research-specific cap>_.
+- Executor routes (which harnesses and models can carry a research worker): the staffing playbook's
+  probe record is their one home — never restate routes or aliases; pointer: _<path, e.g.
+  `docs/agents/staffing.md`>_. Practical worker cap for research fan-out: _<the research-specific cap>_.
 - Serialized source systems or rate limits: _<add, or “none”>_.
 - Project rule for nested fan-out when the caller is already parallel: _<add>_.
 

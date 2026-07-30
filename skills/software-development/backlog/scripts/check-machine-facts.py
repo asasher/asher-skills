@@ -52,7 +52,7 @@ def current_machine():
             name = result.stdout.strip()
             if result.returncode == 0 and name:
                 return name
-        except OSError:
+        except (OSError, subprocess.SubprocessError):
             pass
     return socket.gethostname()
 
@@ -65,7 +65,7 @@ def scan(root, machine):
     for path in sorted(agents_dir.rglob("*.md")):
         rel = path.relative_to(root)
         for lineno, line in enumerate(
-            path.read_text(encoding="utf-8").splitlines(), 1
+            path.read_text(encoding="utf-8", errors="replace").splitlines(), 1
         ):
             stripped = line.strip()
             if not PREFIX_RE.search(stripped):

@@ -80,7 +80,9 @@ direction. Where one audit run established every row, the machine, CLI versions,
 the probe record the rows sit under; a row probed at any other time carries its own values inline, so the
 shared record never misdescribes it. The shared record's machine-readable form is the stamp line
 `<!-- machine-record: machine=<short hostname> probed=<YYYY-MM-DD> -->` at its head — what a mechanical
-staleness check parses where a repo's installed skill set ships one.
+staleness check parses where a repo's installed skill set ships one. The machine value is the stable
+short hostname as a single whitespace-free token — the segment before the first dot, on macOS the
+local host name (`scutil --get LocalHostName`) — compared case-insensitively.
 
 Timestamps date the observation that **established** the recorded state, not the latest run that confirmed
 it: a re-probe that finds a row exactly as recorded writes nothing. That is what keeps a re-run with

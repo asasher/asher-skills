@@ -89,7 +89,7 @@ Cite.
 **P20 (setup, machine-fact classification).** During `backlog setup`, reconciling a repo's
 `docs/agents/environment.md`, you find the line "Codex CLI authed (`codex --version` → 0.145.0)".
 Read `reference/machine-facts.md`. Classify this fact, say what the reconciled playbook carries
-instead, and name the only file that may record the version at all. Cite.
+instead, and name the only file that may record the CLI's version at all. Cite.
 
 **P21 (build preflight, stale stamp).** `backlog build`'s preflight runs
 `scripts/check-machine-facts.py` and it exits nonzero with `stale docs/agents/staffing.md: recorded
@@ -189,8 +189,8 @@ what happens before any dispatch? Cite.
   expensive probe cache = **fail**.
 - **P21:** A stale machine-record stamp — the checker's exit is the drift signal, and dispatch waits:
   "The preflight also runs this skill's `scripts/check-machine-facts.py` against the repo — a stale
-  or missing record is the same drift, fixed by re-running the owning setup before dispatch."
-  Dispatching anyway, treating the finding as advisory, or hand-editing the stamp to match instead of
-  re-running the owning setup = **fail**.
+  stamped record or a missing declared overlay is the same drift, fixed by re-running the owning
+  setup before dispatch." Dispatching anyway, treating the finding as advisory, or hand-editing the
+  stamp to match instead of re-running the owning setup = **fail**.
 
 Pass bar: **22/22 on both executors.**
