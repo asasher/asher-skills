@@ -2,17 +2,19 @@
 
 Method (per `docs/agents/probe-evals.md`): situated probes against executor models — a Claude
 subagent in-session plus `codex exec --sandbox read-only` (dual-executor, both directions
-independently fallible). Context per probe: **[S]** = `SKILL.md` only. Executors must cite the exact
-sentence that decided each answer; flagging genuine ambiguity is a valid answer and a valuable
-finding. Grade pass/fail against `evals/key.md`, written before any runs and never in executor
-context.
+independently fallible). Context per probe: **[S]** = `SKILL.md` only; **[S+U]** = `SKILL.md` plus
+`reference/setup.md`. Executors must cite the exact sentence that decided each answer; flagging
+genuine ambiguity is a valid answer and a valuable finding. Grade pass/fail against `evals/key.md`,
+written before any runs and never in executor context.
 
 ## Scenario
 
 You are an agent in a consumer repo that has the `retro` skill installed. The repo runs the backlog
 loop (`backlog`, `build`, `shape` and their siblings). Where a probe needs it: `docs/agents/retro.md`
 exists and records the upstream target `asasher/asher-skills`, label `feedback`, and a pass-due
-threshold of 5 open entries; the skill instance `retro/` exists with a ledger and a denylist.
+threshold of 5 open entries; the skill instance `retro/` exists (machine-local, untracked) with a
+ledger and the machine-local denylist half; the tracked shared half exists at
+`docs/agents/retro-denylist.txt`.
 
 ## Probes
 
@@ -53,3 +55,20 @@ fails: `gh` is unauthenticated. Next concrete action? Cite.
 **P10 [S] (pass endgame).** A pass triaged 4 clusters; one is a local fix too large for an inline
 playbook edit, and the `to-backlog` sibling is installed. What happens to that cluster, and what is
 the pass's last act? Cite.
+
+## Delta probes — machine-local instance (2026-07-31)
+
+Added with the machine-local rework: untracked instance, denylist split, transcript
+verify-at-use. Key entries written before any runs, same method.
+
+**P11 [S] (denylist halves).** Consent is enabled and your upstream draft is written. Which
+denylist file(s) does the scrub invocation name, and why more than one? Suppose one of them does
+not exist in this repo — what do you do? Cite.
+
+**P12 [S] (stale transcript binding).** At pass time, `retro/transcripts.md` is missing — or the
+location it records no longer resolves on disk. Next concrete action? Cite.
+
+**P13 [S+U] (tracked-instance migration).** You are running `retro setup` in a repo where
+`git ls-files retro/` lists `retro/ledger.md` and `retro/denylist.txt`. What does the migration do
+— and what does it deliberately not do? What must the user be warned about before the commit
+lands? Cite.

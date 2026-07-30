@@ -46,14 +46,29 @@ report (below), and a pass opens with what it found — never with a bare reques
 - **`retro`** — run a retro pass over the open ledger entries and the transcripts of the runs behind
   them.
 - **`retro setup`** — load [setup](reference/setup.md): record the consent decision, bind the
-  upstream target and transcript locations, seed the denylist, install the playbook.
+  upstream target and transcript locations, seed the denylist halves, install the playbook, and
+  keep the instance untracked.
 
 ## The friction ledger
 
 The ledger lives in the **skill instance** `retro/` at the project root, created on first use:
-`ledger.md` (the entries) and `denylist.txt` (the scrub terms, seeded at setup, user-editable). The
-ledger is **local and private — entries carry full local specifics**, because a local fix needs
-them; sanitization is a property of the upstream gate, never of capture.
+`ledger.md` (the entries), `denylist.txt` (the machine-local scrub terms), and `transcripts.md`
+(this machine's verified transcript locations, written by setup). The instance is **machine-local
+and untracked** — setup writes the root-anchored `/retro/` entry into the repo's `.gitignore` —
+because everything
+in it describes one machine: the ledger is **local and private — entries carry full local
+specifics**, because a local fix needs them; sanitization is a property of the upstream gate, never
+of capture.
+
+The scrub terms come in two halves, both user-editable and seeded at setup. `retro/denylist.txt`
+holds the machine and person terms — hostname, machine username, email fragments, employer and
+person names — and stays untracked with the rest of the instance. The repo-shareable terms — repo
+and org names, tracker project keys, product and internal codenames — live in the tracked
+`docs/agents/retro-denylist.txt`, where every clone of the repo benefits from them.
+
+The instance resolves against the repo's main working tree — the parent of
+`git rev-parse --git-common-dir` — so a session in a linked worktree appends to the machine's one
+ledger rather than to a per-worktree copy that dies with the worktree.
 
 `ledger.md` holds two sections. Every entry starts under `## Open`:
 
@@ -73,9 +88,12 @@ due`. That report is the entire escalation mechanism; whoever sees it decides.
 ## The retro pass
 
 1. **Collect.** Read the playbook (`docs/agents/retro.md`), the open ledger entries, and — per the
-   playbook's transcript binding — the transcripts of the runs those entries name, plus any runs
-   since the last pass with no entry at all: the user's corrections, aborts, and repeated
-   instructions in a transcript are friction nobody noted, and routinely the best signal.
+   transcript locations recorded in `retro/transcripts.md` — the transcripts of the runs those
+   entries name, plus any runs since the last pass with no entry at all: the user's corrections,
+   aborts, and repeated instructions in a transcript are friction nobody noted, and routinely the
+   best signal. Transcript locations are verified at use: when `retro/transcripts.md` is missing or
+   a recorded location no longer resolves, re-run setup's transcript-binding step rather than
+   guessing a path.
 2. **Cluster.** Group entries and transcript observations that are the same underlying stumble,
    however differently worded. A cluster's size across distinct runs is its recurrence count — and
    the count spans passes, not just this one: a match among `## Triaged` entries (a prior noise
@@ -103,9 +121,12 @@ The privacy discipline for anything that leaves the repo. Every layer applies, i
   or ledger entry. You cannot leak what you never included. No repo or product names, no file paths,
   no code, no ticket ids or titles, no business terms. Reproduction steps reference the skill's own
   abstractions ("a capstone ticket with one open child"), never this repo's instances.
-- **Scrubbed mechanically.** Run `scripts/scrub.py <draft> retro/denylist.txt` — it flags denylist
-  terms, email addresses, absolute filesystem paths, and URLs outside the upstream repo. A finding
-  means rewrite and re-run. A clean exit is necessary, never sufficient.
+- **Scrubbed mechanically.** Run
+  `scripts/scrub.py <draft> retro/denylist.txt docs/agents/retro-denylist.txt` — both denylist
+  halves, the machine-local and the repo-shareable — flagging denylist terms, email addresses,
+  absolute filesystem paths, and URLs outside the upstream repo. If one half is absent, run with
+  the one that exists and say so. A finding means rewrite and re-run. A clean exit is necessary,
+  never sufficient.
 - **Approved verbatim, per issue.** Show the user the exact final text — title, body, label — and
   submit nothing without their explicit approval of that text. Consent recorded at setup means the
   pass may *draft and propose*; it never means submit. **There is no auto-submit, ever.**
@@ -120,7 +141,9 @@ user the ready-to-file draft instead of improvising another channel.
 ## Dependency surface
 
 - **Project playbook** — `docs/agents/retro.md`: the consent decision, upstream target, pass-due
-  threshold, and transcript binding. Absent, only `retro note` works (the ledger needs no bindings);
+  threshold, and how to find each harness's transcripts (the verified locations themselves live in
+  the untracked `retro/transcripts.md`). The tracked `docs/agents/retro-denylist.txt` carries the
+  repo-shareable scrub terms. Absent, only `retro note` works (the ledger needs no bindings);
   a pass or a submission states the gap and asks for `retro setup` first.
 - **Sibling skills** — `to-backlog`, optional, for turning larger local fixes into tracked tickets;
   absent, the pass lists them for the user instead.
