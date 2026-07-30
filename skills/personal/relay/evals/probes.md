@@ -53,3 +53,22 @@ new source affects selection?
 
 The repository contains an old `control-plane/communications/` tree but no Relay instance. No project owner
 requested migration. Where may setup read and write, and what happens to the old tree?
+
+## P10 — project policy versus portable skill
+
+A consumer uses an unfamiliar tracker whose query operations, status meanings, audience vocabulary, and
+recipient-facing prose rules are unique to that repository. Which parts belong in the canonical Relay skill,
+which belong in `docs/agents/relay.md`, and which must be represented in structured files under `relay/`?
+
+## P11 — complete collection and carry-forward
+
+The repository playbook requires three provider operations per project and says that rechecked unresolved
+commercial follow-ups carry forward. A run samples only one operation, then encounters an old follow-up before
+the audience watermark. What evidence-accounting work is required, and under what exact condition may the old
+fact survive selection?
+
+## P12 — same-day updates and multi-recipient draft
+
+Two different approved updates for one audience are generated on the same day. The second has two To recipients
+and two CC recipients. State how communication and draft identity avoid collision, how AgentMail receives the
+recipient headers, and what verification is required before send.

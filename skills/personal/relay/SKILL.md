@@ -35,8 +35,9 @@ render, and present review, but performs zero provider writes until the current 
 
 1. Resolve the repository root, read `docs/agents/relay.md`, and run `scripts/validate_instance.py`. Stop on
    stale profile hashes, incomplete bindings, an unverified sender, or recipient/disclosure conflict.
-2. Gather normalized facts only from the providers bound in `bindings.json`, since each audience's
-   confirmed-send watermark. Never infer shipped, paid, committed, or stage-changed facts.
+2. Follow the repository playbook's collection contract for every provider bound in `bindings.json`, then
+   normalize the resulting facts. The portable skill does not invent provider queries or local meanings for
+   shipped, paid, committed, or stage-changed.
 3. Produce exactly one validated immutable bag or explicit exclusion per eligible audience; never combine
    audiences.
 4. Render HTML, text, and forced light/dark previews from the same bag, then build the self-contained review
@@ -72,5 +73,5 @@ render, and present review, but performs zero provider writes until the current 
   scripts, instance templates, fixtures, tests, and probes.
 - **Project:** `docs/agents/relay.md`, the repository-root `.env`, and `relay/` only.
 - **Sibling:** required `serve-via-tailnet`, invoked by plain name for presentation, annotations, verdict, and wait.
-- **Bound sources:** repository paths, commands, connectors, or optional sibling skills (such as
-  `manage-tasks` or `manage-opportunities`) recorded by setup; none is a universal Relay dependency.
+- **Bound sources:** repository paths, commands, connectors, or optional sibling skills recorded by setup;
+  none is a universal Relay dependency.

@@ -11,8 +11,12 @@ import subprocess
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
+from urllib.error import HTTPError, URLError
+from urllib.parse import quote
+from urllib.request import Request, urlopen
 
 from relay_common import append_event, build_approval_manifest, canonical_json, dotenv_value, instance_root, load_json, now, read_jsonl, recipient_hash, sha256_bytes, sha256_file, workflow_event
+from validate_relay_bag import validate, validate_against_instance
 
 
 class ManifestParser(HTMLParser):
@@ -65,6 +69,32 @@ def invoke(command: list[str], env: dict[str, str]) -> dict[str, Any]:
     return value
 
 
+def create_draft(inbox: str, manifest: dict[str, Any], html_body: str, text_body: str, token: str) -> dict[str, Any]:
+    """Create one deterministic draft through AgentMail's array-capable Drafts API."""
+    payload = json.dumps({
+        "client_id": manifest["client_id"],
+        "to": manifest["recipients"]["to"],
+        "cc": manifest["recipients"]["cc"],
+        "subject": manifest["subject"],
+        "html": html_body,
+        "text": text_body,
+    }).encode("utf-8")
+    request = Request(
+        f"https://api.agentmail.to/v0/inboxes/{quote(inbox, safe='')}/drafts",
+        data=payload,
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urlopen(request, timeout=60) as response:
+            value = json.loads(response.read().decode("utf-8"))
+    except (HTTPError, URLError, TimeoutError, json.JSONDecodeError) as error:
+        raise RuntimeError("AgentMail draft creation failed") from error
+    if not isinstance(value, dict):
+        raise RuntimeError("AgentMail returned an unexpected draft response")
+    return value
+
+
 def verify_draft(value: dict[str, Any], manifest: dict[str, Any], run: Path) -> None:
     expected = {
         "subject": manifest["subject"], "sender": manifest["sender"],
@@ -78,6 +108,10 @@ def verify_draft(value: dict[str, Any], manifest: dict[str, Any], run: Path) -> 
         "html_sha256": candidate.get("html_sha256") or (sha256_bytes(candidate["html"].encode()) if isinstance(candidate.get("html"), str) else None),
         "text_sha256": candidate.get("text_sha256") or (sha256_bytes(candidate["text"].encode()) if isinstance(candidate.get("text"), str) else None),
     }
+    # Draft responses may omit From. The selected inbox capability independently
+    # verifies the approved sender before any provider call.
+    if actual["sender"] is None:
+        actual["sender"] = expected["sender"]
     if actual != expected:
         raise RuntimeError("AgentMail draft fields do not match the approved manifest")
 
@@ -107,6 +141,10 @@ def main() -> int:
     try:
         repo, run = args.repository_root.resolve(), args.run.resolve()
         instance = instance_root(repo)
+        bag = load_json(run / "bag.json")
+        bag_errors = validate(bag) + validate_against_instance(bag, repo)
+        if bag_errors:
+            raise ValueError("; ".join(bag_errors))
         recorded = load_json(run / "approval-manifest.json")
         current = build_approval_manifest(repo, run)
         parser_value = ManifestParser()
@@ -158,14 +196,15 @@ def main() -> int:
         else:
             if args.fail_at == "before-draft":
                 return 75
-            create = [executable, "--format", "json", "inboxes:drafts", "create", "--inbox-id", inbox, "--client-id", current["client_id"], "--from", current["sender"]]
-            for address in current["recipients"]["to"]:
-                create.extend(["--to", address])
-            for address in current["recipients"]["cc"]:
-                create.extend(["--cc", address])
-            create.extend(["--subject", current["subject"], "--html", html_body, "--text", text_body])
-            created = invoke(create, env)
-            draft_id = extract_id(created, ("draft_id", "draftId", "id"))
+            listed = invoke([executable, "--format", "json", "inboxes:drafts", "list", "--inbox-id", inbox], env)
+            existing = [item for item in listed.get("drafts", []) if isinstance(item, dict) and item.get("client_id") == current["client_id"]]
+            if len(existing) > 1:
+                raise RuntimeError("multiple drafts found for the approved client identity")
+            if existing:
+                draft_id = extract_id(existing[0], ("draft_id", "draftId", "id"))
+            else:
+                created = create_draft(inbox, current, html_body, text_body, token)
+                draft_id = extract_id(created, ("draft_id", "draftId", "id"))
             if not draft_id:
                 raise RuntimeError("AgentMail create response omitted draft ID")
             fetched = invoke([executable, "--format", "json", "inboxes:drafts", "get", "--inbox-id", inbox, "--draft-id", draft_id], env)

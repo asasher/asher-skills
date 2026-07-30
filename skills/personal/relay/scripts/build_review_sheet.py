@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 
 from relay_common import append_event, build_approval_manifest, canonical_json, instance_root, pretty_json, workflow_event
+from validate_relay_bag import validate, validate_against_instance
 
 
 def sheet(manifest: dict, run: Path) -> str:
@@ -45,6 +46,10 @@ def main() -> int:
     args = parser.parse_args()
     try:
         repo, run = args.repository_root.resolve(), args.run.resolve()
+        bag = json.loads((run / "bag.json").read_text(encoding="utf-8"))
+        errors = validate(bag) + validate_against_instance(bag, repo)
+        if errors:
+            raise ValueError("; ".join(errors))
         manifest = build_approval_manifest(repo, run)
         (run / "approval-manifest.json").write_bytes(pretty_json(manifest))
         (run / "review.html").write_text(sheet(manifest, run), encoding="utf-8")

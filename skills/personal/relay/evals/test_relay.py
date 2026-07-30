@@ -116,6 +116,12 @@ class RelayTests(unittest.TestCase):
         bag["audience_id"] = "external-a"
         bag["project_ids"] = ["project-a"]
         bag["recipients"] = {"to": ["client-a@fixture.invalid"], "cc": ["operator@fixture.invalid"]}
+        bag["subject"] = "external-a update"
+        bag["preheader"] = "Verified update"
+        bag["summary"] = "Summary for external-a."
+        for item in bag["evidence"]:
+            item["project_id"] = "project-a"
+            item["feature"] = "feature-a"
         write_json(run_dir / "bag.json", bag)
         html = "<!doctype html><html><body><h1>Project — delivery update</h1><p>A concise summary of verified client-relevant progress.</p><h2>Shipped</h2><p>Example capability</p><p>The capability is available and verified.</p><h2>Next</h2><p>Next verification</p><p>The team is validating the next workflow.</p><footer>Prepared with AI and reviewed before sending.</footer></body></html>"
         text = "Project — delivery update\n\nA concise summary of verified client-relevant progress.\n\nShipped\nExample capability\nThe capability is available and verified.\n\nNext\nNext verification\nThe team is validating the next workflow.\n\nPrepared with AI and reviewed before sending.\n"
@@ -135,6 +141,21 @@ class RelayTests(unittest.TestCase):
         bin_dir = root / "bin"
         bin_dir.mkdir(exist_ok=True)
         log = root / "agentmail-argv.jsonl"
+        http_log = root / "agentmail-http.jsonl"
+        sitecustomize = bin_dir / "sitecustomize.py"
+        sitecustomize.write_text(
+            "import json,os,urllib.request\n"
+            "class Response:\n"
+            " def __enter__(self): return self\n"
+            " def __exit__(self,*args): return False\n"
+            " def read(self): return json.dumps({'draft_id':'draft_fixture'}).encode()\n"
+            "def fake_urlopen(request,timeout=60):\n"
+            " payload=json.loads(request.data.decode())\n"
+            " with open(os.environ['FAKE_AGENTMAIL_HTTP_LOG'],'a',encoding='utf-8') as h:h.write(json.dumps({'url':request.full_url,'payload':payload})+'\\n')\n"
+            " return Response()\n"
+            "urllib.request.urlopen=fake_urlopen\n",
+            encoding="utf-8",
+        )
         fake = bin_dir / "agentmail"
         fake.write_text(
             "#!/usr/bin/env python3\n"
@@ -142,10 +163,11 @@ class RelayTests(unittest.TestCase):
             "args=sys.argv[1:]\n"
             "with open(os.environ['FAKE_AGENTMAIL_LOG'],'a',encoding='utf-8') as h:h.write(json.dumps(args)+'\\n')\n"
             "run=os.environ['FAKE_RUN']; bag=json.load(open(run+'/bag.json'))\n"
-            "if 'create' in args: print(json.dumps({'draft_id':'draft_fixture'}))\n"
+            "if 'create' in args: print(json.dumps({'error':'unsupported create flags'})); sys.exit(2)\n"
+            "elif 'list' in args: print(json.dumps({'drafts':[]}))\n"
             "elif 'get' in args:\n"
             " html=open(run+'/rendered-email.html','rb').read(); text=open(run+'/rendered-email.txt','rb').read()\n"
-            " print(json.dumps({'draft':{'id':'draft_fixture','subject':bag['subject'],'from':bag['sender'],'to':bag['recipients']['to'],'cc':bag['recipients']['cc'],'html_sha256':hashlib.sha256(html).hexdigest(),'text_sha256':hashlib.sha256(text).hexdigest()}}))\n"
+            " print(json.dumps({'draft':{'id':'draft_fixture','subject':bag['subject'],'to':bag['recipients']['to'],'cc':bag['recipients']['cc'],'html_sha256':hashlib.sha256(html).hexdigest(),'text_sha256':hashlib.sha256(text).hexdigest()}}))\n"
             "elif 'send' in args:\n"
             " marker=os.environ['FAKE_SENT_MARKER']\n"
             " if os.path.exists(marker): print(json.dumps({'error':'draft already consumed'})); sys.exit(9)\n"
@@ -156,7 +178,15 @@ class RelayTests(unittest.TestCase):
         )
         fake.chmod(fake.stat().st_mode | stat.S_IXUSR)
         env = dict(os.environ)
-        env.update({"PATH": f"{bin_dir}{os.pathsep}{env.get('PATH','')}", "FAKE_AGENTMAIL_LOG": str(log), "FAKE_RUN": str(run_dir), "FAKE_SENT_MARKER": str(root / "sent.marker"), "RELAY_NOW": "2026-07-16T09:20:00Z"})
+        env.update({
+            "PATH": f"{bin_dir}{os.pathsep}{env.get('PATH','')}",
+            "PYTHONPATH": f"{bin_dir}{os.pathsep}{env.get('PYTHONPATH','')}",
+            "FAKE_AGENTMAIL_LOG": str(log),
+            "FAKE_AGENTMAIL_HTTP_LOG": str(http_log),
+            "FAKE_RUN": str(run_dir),
+            "FAKE_SENT_MARKER": str(root / "sent.marker"),
+            "RELAY_NOW": "2026-07-16T09:20:00Z",
+        })
         env.pop("AGENTMAIL_API_KEY", None)
         return env, log
 
@@ -185,6 +215,7 @@ class RelayTests(unittest.TestCase):
                 (root / "docs" / "editorial.md").parent.mkdir(parents=True, exist_ok=True)
                 (root / "docs" / "editorial.md").write_text("# Editorial\n", encoding="utf-8")
                 (root / "records" / "inbox-export.json").write_text("{}\n", encoding="utf-8")
+                (root / ".agents" / "skills" / "fixture-provider").mkdir(parents=True)
                 discovered = run(str(SETUP), str(root), "--discover")
                 self.assertEqual(discovered.returncode, 0)
                 value = json.loads(discovered.stdout)["discovery"]
@@ -193,6 +224,7 @@ class RelayTests(unittest.TestCase):
                 self.assertIn("tasks.md", value["tracker_candidates"])
                 self.assertIn("docs/editorial.md", value["editorial_candidates"])
                 self.assertIn("records/inbox-export.json", value["mailbox_candidates"])
+                self.assertEqual(value["optional_source_skills"], ["fixture-provider"])
                 self.assertTrue(value["node"]["available"])
                 self.assertTrue(value["npm"]["available"])
                 self.assertNotIn("$(touch never)-secret", discovered.stdout + discovered.stderr)
@@ -261,6 +293,36 @@ class RelayTests(unittest.TestCase):
             for bag in bags.values():
                 path = root / "check.json"; write_json(path, bag)
                 self.assertEqual(run(str(VALIDATE_BAG), str(path)).returncode, 0)
+            same = root / "selected-same"
+            self.assertEqual(run(str(SELECT), str(root), "--evidence", str(source), "--out", str(same), env={**os.environ, "RELAY_NOW": "2026-07-16T09:00:00Z"}).returncode, 0)
+            self.assertEqual(
+                bags["external-a"]["id"],
+                json.loads((same / "external-a" / "bag.json").read_text())["id"],
+            )
+            evidence[0]["detail"] = "Changed recipient-visible content."
+            write_json(source, evidence)
+            changed = root / "selected-changed"
+            self.assertEqual(run(str(SELECT), str(root), "--evidence", str(source), "--out", str(changed), env={**os.environ, "RELAY_NOW": "2026-07-16T09:00:00Z"}).returncode, 0)
+            self.assertNotEqual(
+                bags["external-a"]["id"],
+                json.loads((changed / "external-a" / "bag.json").read_text())["id"],
+            )
+
+    def test_selection_honors_opt_in_carry_forward_without_weakening_watermarks(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); self.make_repo(root)
+            watermark = root / "relay" / "state" / "watermarks.jsonl"
+            watermark.write_text(json.dumps({"audience_id": "external-a", "observed_through": "2026-07-16T08:30:00Z"}) + "\n", encoding="utf-8")
+            evidence = [
+                {"id": "old", "source": "repo-a", "observed_at": "2026-07-16T08:00:00Z", "project_id": "project-a", "feature": "feature-a", "status": "pending", "disclosure": "external", "section": "Shipped", "title": "Old", "detail": "Already covered."},
+                {"id": "open", "source": "repo-a", "observed_at": "2026-07-16T08:01:00Z", "project_id": "project-a", "feature": "feature-a", "status": "pending", "disclosure": "external", "section": "Shipped", "title": "Still open", "detail": "The project contract says to retain this.", "carry_forward": True},
+            ]
+            source = root / "evidence.json"; write_json(source, evidence)
+            out = root / "selected"
+            result = run(str(SELECT), str(root), "--evidence", str(source), "--out", str(out), env={**os.environ, "RELAY_NOW": "2026-07-16T09:00:00Z"})
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            bag = json.loads((out / "external-a" / "bag.json").read_text())
+            self.assertEqual({item["id"] for item in bag["evidence"]}, {"open"})
 
     def test_default_renderer_is_unbranded_compact_and_authors_themes(self) -> None:
         base = (SKILL / "templates" / "instance" / "templates" / "src" / "base.tsx").read_text()
@@ -282,6 +344,17 @@ class RelayTests(unittest.TestCase):
             authorized = run(str(DELIVER), str(root), "--run", str(run_dir))
             self.assertEqual(authorized.returncode, 0, authorized.stdout + authorized.stderr)
             self.assertTrue(json.loads(authorized.stdout)["authorized"])
+
+    def test_review_and_delivery_reject_bags_that_diverge_from_project_bindings(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); self.make_repo(root); run_dir = self.make_run(root)
+            self.mutate_bag(run_dir, "subject", "Unbound subject")
+            review = run(str(BUILD_REVIEW), str(root), "--run", str(run_dir))
+            self.assertNotEqual(review.returncode, 0)
+            self.assertIn("subject does not match audience binding", review.stdout)
+            delivery = run(str(DELIVER), str(root), "--run", str(run_dir))
+            self.assertNotEqual(delivery.returncode, 0)
+            self.assertIn("subject does not match audience binding", delivery.stdout)
 
     def test_each_approved_input_mutation_causes_zero_provider_calls(self) -> None:
         mutations = {
@@ -313,10 +386,12 @@ class RelayTests(unittest.TestCase):
             result = run(str(DELIVER), str(root), "--run", str(run_dir), "--execute", env=env)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             calls = [json.loads(line) for line in log.read_text().splitlines()]
-            self.assertEqual([next(word for word in ("create", "get", "send") if word in call) for call in calls], ["create", "get", "send"])
+            self.assertEqual([next(word for word in ("list", "get", "send") if word in call) for call in calls], ["list", "get", "send"])
             self.assertNotIn(secret, json.dumps(calls) + result.stdout + result.stderr)
-            create = calls[0]
-            self.assertIn("--client-id", create); self.assertIn("--to", create); self.assertIn("--cc", create)
+            request = json.loads((root / "agentmail-http.jsonl").read_text())
+            self.assertEqual(request["payload"]["to"], ["client-a@fixture.invalid"])
+            self.assertEqual(request["payload"]["cc"], ["operator@fixture.invalid"])
+            self.assertIn("/inboxes/inbox_fixture/drafts", request["url"])
             workflow = read_jsonl(root / "relay" / "state" / "workflow.jsonl")
             states = [item["state"] for item in workflow]
             self.assertLess(states.index("draft-created"), states.index("send-submitted")); self.assertLess(states.index("send-submitted"), states.index("sent"))
@@ -355,7 +430,8 @@ class RelayTests(unittest.TestCase):
             second = run(str(DELIVER), str(root), "--run", str(run_dir), "--execute", env=env)
             self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
             calls = [json.loads(line) for line in log.read_text().splitlines()]
-            self.assertEqual(sum("create" in call for call in calls), 1); self.assertEqual(sum("send" in call for call in calls), 1)
+            self.assertEqual(len((root / "agentmail-http.jsonl").read_text().splitlines()), 1)
+            self.assertEqual(sum("send" in call for call in calls), 1)
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory); self.make_repo(root); run_dir = self.make_run(root); env, log = self.fake_agentmail(root, run_dir)
             lost = run(str(DELIVER), str(root), "--run", str(run_dir), "--execute", "--fail-at", "after-send-call", env=env)

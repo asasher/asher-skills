@@ -8,8 +8,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from relay_common import instance_root, load_json, normalize_address, normalize_recipients, now, pretty_json, read_jsonl
-from validate_relay_bag import validate
+from relay_common import canonical_json, instance_root, load_json, normalize_address, normalize_recipients, now, pretty_json, read_jsonl, sha256_bytes
+from validate_relay_bag import validate, validate_against_instance
 
 
 def latest_watermarks(instance: Path) -> dict[str, str]:
@@ -47,7 +47,7 @@ def select(repo: Path, evidence_path: Path, output: Path) -> dict[str, Any]:
                 continue
             if item.get("section") not in sections or item.get("disclosure") not in disclosure:
                 continue
-            if str(item.get("observed_at", "")) <= watermark:
+            if str(item.get("observed_at", "")) <= watermark and item.get("carry_forward") is not True:
                 continue
             selected.append(item)
         if not selected:
@@ -80,14 +80,27 @@ def select(repo: Path, evidence_path: Path, output: Path) -> dict[str, Any]:
             (output / f"{audience_id}.excluded.json").write_bytes(pretty_json(exclusion))
             results.append(exclusion)
             continue
+        generated_at = now()
+        identity = sha256_bytes(canonical_json({
+            "audience_id": audience_id,
+            "kind": audience["message_kind"],
+            "project_ids": sorted(projects),
+            "sender": audience["sender"],
+            "recipients": headers,
+            "subject": audience["subject"],
+            "preheader": audience["preheader"],
+            "summary": audience["summary"],
+            "sections": section_values,
+            "evidence": [{key: fact.get(key) for key in ("id", "source", "observed_at", "status", "project_id", "feature")} for fact in used],
+        }).encode())[:12]
         bag = {
-            "schema_version": 2, "id": f"{audience_id}-{str(now())[:10]}-001", "kind": audience["message_kind"],
-            "generated_at": now(), "subject": audience["subject"], "preheader": audience["preheader"],
+            "schema_version": 2, "id": f"{audience_id}-{generated_at[:10]}-{identity}", "kind": audience["message_kind"],
+            "generated_at": generated_at, "subject": audience["subject"], "preheader": audience["preheader"],
             "audience_id": audience_id, "project_ids": sorted(projects), "sender": audience["sender"],
             "recipients": headers, "summary": audience["summary"], "sections": section_values,
             "evidence": [{key: fact.get(key) for key in ("id", "source", "observed_at", "status", "project_id", "feature")} for fact in used],
         }
-        errors = validate(bag)
+        errors = validate(bag) + validate_against_instance(bag, repo)
         if errors:
             raise ValueError(f"{audience_id}: " + "; ".join(errors))
         target = output / audience_id / "bag.json"

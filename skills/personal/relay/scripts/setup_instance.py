@@ -80,7 +80,11 @@ def discover(repo: Path) -> dict[str, Any]:
     manifests = [name for name in ("package.json", "pyproject.toml", "Cargo.toml", "go.mod") if (repo / name).is_file()]
     repositories = ["."] if (repo / ".git").exists() else []
     repositories.extend(path.parent.relative_to(repo).as_posix() for path in sorted(repo.glob("*/.git")))
-    optional_skills = [name for name in ("manage-tasks", "manage-opportunities") if (repo / ".agents" / "skills" / name).exists()]
+    skills_root = repo / ".agents" / "skills"
+    optional_skills = sorted(
+        path.name for path in skills_root.iterdir()
+        if path.is_dir()
+    )[:100] if skills_root.is_dir() else []
     return {
         "schema_version": 1,
         "repository_root": str(repo),
