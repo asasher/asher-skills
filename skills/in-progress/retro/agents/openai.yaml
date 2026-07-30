@@ -1,0 +1,7 @@
+interface:
+  display_name: "Retro"
+  short_description: "Friction ledger plus periodic retro pass — cluster and triage skill-run friction into local fixes, upstream candidates, and noise; consent-gated, human-approved feedback issues upstream"
+  default_prompt: "Use $retro to run a retro pass over this repo's friction ledger, or $retro note <observation> to record friction."
+
+policy:
+  allow_implicit_invocation: false

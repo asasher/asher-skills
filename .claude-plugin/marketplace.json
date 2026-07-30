@@ -24,7 +24,8 @@
       "description": "Skills under active development — installable knowingly, pending graduation to a permanent category.",
       "category": "in-progress",
       "skills": [
-        "./skills/in-progress/goodwork"
+        "./skills/in-progress/goodwork",
+        "./skills/in-progress/retro"
       ]
     },
     {
