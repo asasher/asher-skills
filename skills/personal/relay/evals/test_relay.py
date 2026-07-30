@@ -132,7 +132,7 @@ class RelayTests(unittest.TestCase):
         result = run(str(BUILD_REVIEW), str(root), "--run", str(run_dir), env={**os.environ, "RELAY_NOW": "2026-07-16T09:00:00Z"})
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         review = run_dir / "review.html"
-        event = {"type": "feedback_submitted", "verdict": "approve", "doc_hash": hashlib.sha256(review.read_bytes()).hexdigest()[:16], "annotations": [], "timestamp": "2026-07-16T09:10:00Z"}
+        event = {"type": "chat_approval", "verdict": "approve", "doc_hash": hashlib.sha256(review.read_bytes()).hexdigest()[:16], "annotations": [], "timestamp": "2026-07-16T09:10:00Z"}
         (run_dir / "review-state").mkdir()
         (run_dir / "review-state" / "events.jsonl").write_text(json.dumps(event) + "\n", encoding="utf-8")
         return run_dir
@@ -196,7 +196,11 @@ class RelayTests(unittest.TestCase):
         paths.extend(path for root in product_roots if root.is_dir() for path in root.rglob("*") if path.is_file() and path.suffix != ".pyc")
         text = "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in paths)
         self.assertIn("name: relay", (SKILL / "SKILL.md").read_text())
-        self.assertIn("requires: [serve-via-tailnet]", (SKILL / "SKILL.md").read_text())
+        self.assertIn("requires: []", (SKILL / "SKILL.md").read_text())
+        # The needle is split so this test file itself stays clean under the same scan.
+        retired_sibling = "serve-via-" + "tailnet"
+        everything = "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in sorted(SKILL.rglob("*")) if path.is_file() and path.suffix != ".pyc")
+        self.assertNotIn(retired_sibling, everything)
         self.assertNotIn("control-plane/communications", text)
         self.assertNotIn("control-plane/relay", text)
         self.assertNotIn("docs/agents/communications", text)
