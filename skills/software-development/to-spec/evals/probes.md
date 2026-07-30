@@ -32,6 +32,21 @@ Cite.
 
 **P8 (too big).** The direction is clearly three builds' worth. Do you split it into tickets? Cite.
 
+**P9 (artifact sweep).** Shaping produced a research dossier committed in the repo and a prototype whose
+answer sits on the ticket thread with a parked branch `proto/payouts-ledger`. What does the spec carry
+for these, and in what form? Cite.
+
+**P10 (nothing generated).** The direction was settled on conversation and existing docs alone — no
+dossiers, no prototypes. What does the spec's Supporting artifacts section contain? Cite.
+
+**P11 (conversation-only evidence).** A latency question was settled by reasoning in the conversation;
+nothing durable was written. Does it get a Supporting artifacts entry, and does to-spec write a dossier
+for it? Cite.
+
+**P12 (exception boundary).** Given the Supporting-artifacts pointer exception, the draft's
+Implementation decisions section cites `docs/research/payouts.md` and `src/payments/worker.ts`.
+Allowed? Cite.
+
 ## Answer key
 
 - **P1:** Never ask — "Do not re-elicit requirements, do not re-ask what the discussion already
@@ -40,8 +55,8 @@ Cite.
 - **P2:** Each Notes line carries **blocking / delegated / deferred**; "An open **blocking** Note means
   the direction isn't ready to build on — settle it first" (SKILL.md: "say so in the
   report"). Unclassified Notes at sign-off = **fail**.
-- **P3:** Only the reducer — "The spec carries **no file paths and no code snippets**"; "The single
-  exception: a **prototype-validated snippet** that encodes a decision more precisely than prose can."
+- **P3:** Only the reducer — "The spec carries **no file paths and no code snippets**"; "a
+  **prototype-validated snippet** that encodes a decision more precisely than prose can."
   Including the path = **fail**.
 - **P4:** The spec is already where feedback lands — "the spec already sits where the user's comments
   reach it; their LGTM on the ticket (or in the conversation) is the approval." And no label —
@@ -58,5 +73,19 @@ Cite.
   why, = **fail**.
 - **P8:** No — "end the spec with a **Recommended split** section ... It is a proposal only —
   splitting is the user's call." Performing the split = **fail**.
+- **P9:** One **Supporting artifacts** entry per artifact — "the artifact kind, the question it
+  answered, its takeaway in one line, and a **durable pointer**" — the pointer per its form: "a
+  tracker-resolvable URL when the tracker is bound, a repo-relative path otherwise, or the named
+  parked branch for a prototype." Copying artifact content inline, or a summary without its
+  pointer, = **fail**.
+- **P10:** Nothing — the section is absent: "**Omit the section when nothing was generated** (the same
+  convention as Assumptions)." Manufacturing an empty or placeholder section = **fail**.
+- **P11:** Yes an entry, no dossier — "state the conclusion and mark plainly that no durable artifact
+  exists"; "it never fabricates a dossier." Writing a dossier to fill the pointer slot, or dropping
+  the conclusion entirely, = **fail**.
+- **P12:** Not allowed — the exception is confined: "The second exception stops at that section's
+  boundary: **no other section's path or snippet prohibition is loosened.**" Both paths must move to
+  Supporting artifacts entries or become prose. Keeping either path in Implementation decisions =
+  **fail**.
 
-Pass bar: **8/8 on both executors.**
+Pass bar: **12/12 on both executors.**

@@ -27,14 +27,17 @@ Not for eliciting requirements. To-spec captures decisions already made — it n
   (Testing decisions, Test seams) and runs the upstream "sketch the test seams, prefer the highest
   existing seam" step (see Credits); a **non-dev spec** skips both. One template serves process, content, and decision specs too.
 - **Generic vocabulary.** "spec" and "ticket," never GitHub-specific "issue." The downstream unit is a ticket.
-- **No stale content.** The spec carries no file paths or code snippets (they rot) — direction in prose. The
-  one exception is a prototype-validated snippet that encodes a decision more precisely than prose can.
+- **No stale content.** The spec carries no file paths or code snippets (they rot) — direction in prose.
+  Two narrow exceptions: a prototype-validated snippet that encodes a decision more precisely than prose
+  can, and the durable pointers in the spec's **Supporting artifacts** section — the evidence trail
+  (research dossiers, prototype answers, any decision-informing artifact) swept onto the spec at
+  crystallise time, one entry each, omitted when nothing was generated.
 
 ## Layout
 
 `SKILL.md` is the command surface (`to-spec [<ticket id, or name>]`) and points into `reference/`:
-`synthesis.md` (the no-interview method, the diagram-first rule, where the spec lives, gating, seams
-step, no-stale-content rule, split recommendation, sign-off) and
+`synthesis.md` (the no-interview method, the artifact sweep, the diagram-first rule, where the spec
+lives, gating, seams step, no-stale-content rule, split recommendation, sign-off) and
 `template-guide.md` (what each section holds).
 `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
 
