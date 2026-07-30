@@ -44,7 +44,8 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
   `docs/agents/probe-evals.md`, graded against the skill's answer key; scenarios live in the skill's
   own `evals/`.
 - Script check: for any changed stdlib-Python script, `python3 -m py_compile <script>` then drive it
-  directly (`--help`, `--sweep`, the real paths) on this machine's Python 3.14. A script *refactor* is
+  directly (`--help`, `--sweep`, the real paths) with the interpreter bare `python3` resolves — the
+  drive itself is the probe. A script *refactor* is
   behavior-preserving only if the same driven paths produce the same output.
 - Catalog gate: `python3 tools/test_catalog.py` (23 tests). This includes the
   marketplace drift gate: `.claude-plugin/marketplace.json` must match the compiled catalog —
@@ -53,13 +54,18 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
 - Site manifest gate: a change touching any SDLC-family skill runs
   `python3 site/check.py` (`site/MAINTENANCE.md`); errors block — **its exit code
   is the verdict; don't pipe it through `tail` in a `&&` chain or the failure is masked.**
-- Gate interpreter: bare `python3` — homebrew 3.14 on this machine, hashlib healthy across algorithms
-  (verified live 2026-07-27, asher-skills#128). Don't reinstate the old `PATH=/usr/bin:$PATH` prefix on
+- Gate interpreter: bare `python3` — the gates need whatever interpreter `python3` resolves, and
+  running them is the probe; the observed version is not a fact this file records. The expensive
+  verified behaviors behind that choice sit under the stamp below.
+
+  <!-- machine-record: machine=Ashers-MacBook-Pro probed=2026-07-27 -->
+  hashlib is healthy across algorithms in the `python3` the gates resolve (verified live,
+  asher-skills#128). Don't reinstate the old `PATH=/usr/bin:$PATH` prefix on
   these gates: it pinned Apple's system python around a since-fixed homebrew hashlib breakage
   (`catalog.py` hashes with sha256; the record is in `relay-workspace/*/grading.md`); the worktree
   sandbox that builds run in refuses that literal shape on a static-verification check, though plain
-  env-assignment prefixes such as `FOO=1 python3` run fine; and `/usr/bin/python3` is 3.9.6, older than
-  the 3.14 the script check above exercises.
+  env-assignment prefixes such as `FOO=1 python3` run fine; and `/usr/bin/python3` is 3.9.6, older
+  than the interpreter the script check above exercises.
 - Staffing eval suite (run from `skills/system/staffing/evals/`): `test_provider_pilot.py`. The guard is
   **harness isolation** — neither compiled path (nor installed mount) may carry an instruction only a
   session of the other harness could act on. The size ratio (each provider ≤ 80% of the unified

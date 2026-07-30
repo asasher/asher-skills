@@ -180,6 +180,15 @@
       }
     },
     {
+      "id": "b-machine-facts",
+      "lane": "setup",
+      "title": "machine-facts",
+      "blurb": "machine-fact classes, one home per fact, stamp + overlay markers, staleness checker",
+      "open": {
+        "file": "skills/software-development/backlog/reference/machine-facts.md"
+      }
+    },
+    {
       "id": "b-tmpl-common",
       "lane": "setup",
       "title": "templates/common",
@@ -307,6 +316,12 @@
       "from": "b-setup",
       "to": "b-tmpl-sw",
       "style": "optional"
+    },
+    {
+      "from": "b-setup",
+      "to": "b-machine-facts",
+      "style": "optional",
+      "label": "classifies machine facts per"
     }
   ]
 }

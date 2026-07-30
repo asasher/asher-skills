@@ -59,7 +59,7 @@
 
 - Auth model: **none for exercising skills** — running a skill against a scenario needs no login. Two credentials support the loop's infrastructure, both already provisioned on this machine:
   - GitHub tracker/PRs: `gh` CLI, authed as `asasher` (keyring). Mints nothing per-run.
-  - Codex executor (gpt-5.6-sol / gpt-5.6-terra): the Codex CLI, authed to its own subscription (`codex --version` → 0.144.1). Billed separately from the session.
+  - Codex executor (gpt-5.6-sol / gpt-5.6-terra): the Codex CLI, authed to its own subscription; billed separately from the session. Liveness is the credential-preflight probe in § Branching & deploys — the capability answering, not a version read; the CLI version exists only as metadata of `staffing.md`'s probe record.
 - How an agent mints a session: n/a — no app session to mint.
 - Test accounts / where credentials live: `gh` keyring and `~/.codex/`; never hardcode, never echo them.
 

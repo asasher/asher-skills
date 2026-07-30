@@ -128,6 +128,11 @@ versions, and every probe returns exactly what the playbook records. What does t
 file, header included? What do the recorded timestamps mean, and why does leaving them untouched not make
 them dishonest? Cite.
 
+**P27 (one home).** `staffing setup` (read `reference/setup.md`) is reconciling a repo whose
+`docs/agents/environment.md` records "`codex --version` → 0.144.1" while the staffing playbook's probe
+record carries a different Codex version. What does setup do about the environment file's line — edit
+it, ignore it, or something else — and which file may record the CLI version at all? Cite.
+
 ## Answer key
 
 - **P1 (ac-1) — note:** the premise once read "global-capable"; that layer was removed, so the probe now
@@ -278,9 +283,18 @@ them dishonest? Cite.
   classification and the byte-identical bullet in `reference/install-and-reconcile.md` § Reconciling an
   existing playbook.
 
+- **P27 (one home):** **Report it as drift, neither edit nor ignore.** The staffing playbook is the
+  sole home — cite `reference/setup.md`: "This playbook is the one home for model and capability
+  reachability — routes, dispatch aliases, effect verdicts — and for the CLI-version metadata stamped
+  on their probes: report any other playbook found restating them as drift."
+  Setup does not fix the environment file itself, because "Setup writes exactly one file: the
+  **project staffing playbook**" (`reference/install-and-reconcile.md` § One layer) — the restatement
+  is reported for its owning setup to resolve. Editing `environment.md` directly, ignoring the
+  restatement because the playbook is right, or recording the version in both files = fail.
+
 ## Scoring
 
-26 probes × 2 executors (one Claude route + one Codex route). A probe passes only with the **correct action AND
+27 probes × 2 executors (one Claude route + one Codex route). A probe passes only with the **correct action AND
 a correct citation**. Ambiguity flags are recorded as findings, not failures — they are the most valuable
 output and should drive wording fixes before ship. Report a verdict table mapping each probe → its criterion
 → pass/fail per executor. Structural criteria are additionally confirmed by file check: ac-1 (frontmatter +
@@ -308,3 +322,4 @@ grep no cross-skill imports), ac-9 (grep finds no `vNN`/version stamp), ac-10 (Y
 | data/doctrine | P20                |
 | variants  | P21                    |
 | aliases   | P22                    |
+| one home  | P27                    |

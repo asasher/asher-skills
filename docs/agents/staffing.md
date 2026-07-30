@@ -11,6 +11,8 @@
 
 ## Probe record — this file is machine-specific
 
+<!-- machine-record: machine=Ashers-MacBook-Pro probed=2026-07-26 -->
+
 | | |
 |---|---|
 | Probed on | `Ashers-MacBook-Pro` — arm64, macOS 26.5.1 |

@@ -18,7 +18,8 @@
 
 ## Parallelism
 
-- Available executor routes and practical worker cap: _<verified routes and cap>_.
+- Executor routes: the staffing playbook's probe record is their one home — point at it here, never
+  restate routes or aliases. Practical worker cap for research fan-out: _<the research-specific cap>_.
 - Serialized source systems or rate limits: _<add, or “none”>_.
 - Project rule for nested fan-out when the caller is already parallel: _<add>_.
 

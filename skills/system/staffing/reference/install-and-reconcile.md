@@ -49,6 +49,8 @@ The playbook is **repo-owned**. Reconcile it clause by clause; never overwrite i
   promoted to verified.
 - A re-run with unchanged reachability leaves the file byte-identical. Evidence timestamps date the
   observation that established each recorded state, so a probe that merely confirms a row writes nothing.
+  The probe record's machine-record stamp line follows the same establishing-observation rule: a
+  confirming re-run rewrites nothing, the stamp included.
 
 A write that cannot be read back changes nothing: fail closed, report the gap, and do not dispatch on a
 roster that was not durably written. Retain recovery bytes until the new playbook passes its probes.

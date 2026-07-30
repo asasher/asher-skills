@@ -1,7 +1,8 @@
 # Backlog — situated dry-run probes
 
-Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **only `SKILL.md` in context**,
-exact-sentence citation per answer. Ambiguity flagged with a citation is valid. Key before runs.
+Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **only `SKILL.md` in context**
+(plus the one bundled reference a probe names), exact-sentence citation per answer. Ambiguity flagged
+with a citation is valid. Key before runs.
 
 ## Scenario
 
@@ -85,6 +86,16 @@ and may a downstream skill request harness-native isolation? Cite.
 thread spawns. What happens to the roles, ownership record, and a worktree containing bootstrap residue?
 Cite.
 
+**P20 (setup, machine-fact classification).** During `backlog setup`, reconciling a repo's
+`docs/agents/environment.md`, you find the line "Codex CLI authed (`codex --version` → 0.145.0)".
+Read `reference/machine-facts.md`. Classify this fact, say what the reconciled playbook carries
+instead, and name the only file that may record the version at all. Cite.
+
+**P21 (build preflight, stale stamp).** `backlog build`'s preflight runs
+`scripts/check-machine-facts.py` and it exits nonzero with `stale docs/agents/staffing.md: recorded
+machine 'Other-Mac' is not this machine 'This-Mac' (probed 2026-07-26)`. What is this finding, and
+what happens before any dispatch? Cite.
+
 ## Answer key
 
 - **P1:** #10–#13 are swept ("tickets carrying **no readiness role** ... and tickets carrying the needs-shaping role") but #13
@@ -166,4 +177,20 @@ Cite.
   preserve the worktree and its ownership record for recovery while restoring the roles." Deleting the
   residue, leaving the batch claimed shaping, or falling back to primary = **fail**.
 
-Pass bar: **20/20 on both executors.**
+- **P20:** Verify-at-use, the default class — "The playbook records the *probe command* — one that
+  exercises the capability itself (`gh auth status`, a bounded executor echo), never a version string
+  standing proxy for it — and never the probe's result." The reconciled line keeps a
+  capability-exercising liveness probe and drops the recorded version; the version's only home is the
+  staffing playbook's probe record, as metadata — "Model and capability reachability — routes,
+  dispatch aliases, effect-probe verdicts — lives only in the staffing playbook's probe record
+  (`docs/agents/staffing.md`), the CLI versions its probes observed riding along as that record's
+  metadata; an environment or platform playbook restating a route, an alias, or a version is drift."
+  Keeping the version in environment.md, moving it to the machine-local overlay, or classifying it an
+  expensive probe cache = **fail**.
+- **P21:** A stale machine-record stamp — the checker's exit is the drift signal, and dispatch waits:
+  "The preflight also runs this skill's `scripts/check-machine-facts.py` against the repo — a stale
+  or missing record is the same drift, fixed by re-running the owning setup before dispatch."
+  Dispatching anyway, treating the finding as advisory, or hand-editing the stamp to match instead of
+  re-running the owning setup = **fail**.
+
+Pass bar: **22/22 on both executors.**

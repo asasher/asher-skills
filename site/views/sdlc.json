@@ -53,6 +53,11 @@
           "path": "reference/setup.md"
         },
         {
+          "group": "Reference",
+          "label": "machine-facts",
+          "path": "reference/machine-facts.md"
+        },
+        {
           "group": "Templates",
           "label": "platform",
           "path": "templates/common/platform.md"
