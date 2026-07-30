@@ -3,11 +3,10 @@ name: merge-changes
 description: Merge review-ready changes on the user's explicit request — the human authorization gate at the end of every change.
 argument-hint: "<PRs, branches, or 'everything review-ready'>"
 user-invocable: true
-disable-model-invocation: true
 metadata:
-  invocation: user
+  invocation: model
   execution: orchestrator
-  requires: []
+  requires: [worktree]
   optional: [watch-until]
 ---
 
@@ -15,9 +14,11 @@ metadata:
 
 Merging is a human-authorized operation. Automated review approval, green checks, `ready-for-agent`, or a
 reviewer's `LGTM` are prerequisites where configured — **they are never authorization to merge**.
-Authorization is the user's explicit merge request: invoking this skill, or naming the changes to merge in
-their own words. Operate only on the changes named or unambiguously included in that request — "merge #51"
-does not license merging its stack-mates.
+Authorization is the user's explicit merge request: invoking this skill, naming the changes to merge in
+their own words, or giving the documented readiness signal after a shaping thread presents the exact
+shaping change request and states that narrow effect. Operate only on the changes named or unambiguously
+included in that request — "merge #51" does not license merging its stack-mates, and shaping readiness
+licenses only the presented shaping change.
 
 Platform verbs (merge, checks-read, PR-read, branch ops) come from the project's `docs/agents/platform.md`
 when present; on a bare GitHub repo, use `gh` directly. Absent any change-review binding, state the gap and
@@ -56,8 +57,9 @@ stop.
    stores) the repo's environment playbook (`docs/agents/environment.md`, when it has one) names, running
    its teardown command from *inside* the working copy — such commands typically resolve their target
    from the working directory, so one run after the working copy is gone, or from the main checkout,
-   reaps the wrong stack or the main one. Next remove the working copy. Only then delete each merged
-   branch, local and remote, per platform policy, and **verify both are gone by querying them** — on
+   reaps the wrong stack or the main one. Next remove the working copy through the `worktree` skill,
+   which refuses dirty or unregistered paths. Only then delete each merged branch, local and remote,
+   per platform policy, and **verify both are gone by querying them** — on
    git, `git branch --list <branch>` and `git ls-remote --heads origin <branch>`, both returning
    nothing — never by trusting the delete commands' own output: a failed branch delete reports on
    stderr, where it is easy to skim past. Report each branch as deleted on the strength of those
@@ -69,3 +71,8 @@ stop.
 - Never force-push over, close, or delete someone else's branch to make a merge work.
 - The whole flow is judgment-light coordination — it stays with this session; delegate nothing but
   mechanical check-watching (via the `watch-until` sibling when installed).
+
+## Dependency surface
+
+- **Sibling (required, by name):** `worktree` for inspected, refusal-aware working-copy teardown.
+- **Sibling (optional, by name):** `watch-until` for mechanical check-watching.

@@ -120,7 +120,7 @@ including one marked `user`.
 | software-development | `handoff` | user | thread |
 | software-development | `implement` | model | thread |
 | software-development | `interview` | model | orchestrator |
-| software-development | `merge-changes` | user | orchestrator |
+| software-development | `merge-changes` | model | orchestrator |
 | software-development | `prototype` | model | orchestrator |
 | software-development | `prove-your-work` | model | thread |
 | software-development | `research` | model | orchestrator |
@@ -134,6 +134,7 @@ including one marked `user`.
 | software-development | `to-thread` | model | orchestrator |
 | software-development | `verify-your-work` | model | thread |
 | software-development | `watch-until` | model | orchestrator |
+| software-development | `worktree` | model | thread |
 | personal | `capture-to-inbox` | model | thread |
 | personal | `learn-anything` | user | thread |
 | personal | `manage-notes` | model | thread |

@@ -28,6 +28,9 @@ missing. Start implementing anyway? Cite.
 **P7 (evidence defect).** While capturing evidence, a screenshot shows the summary rendering wrong.
 The review already converged to LGTM. What happens? Cite.
 
+**P8 (directory continuity).** A verifier offers to create its harness-native worktree, and the
+adversarial fixer offers another. Accept either? Cite.
+
 ## Answer key
 
 - **P1:** "The verifier reports; **this session fixes**: reproduce the finding as a failing check
@@ -47,5 +50,8 @@ The review already converged to LGTM. What happens? Cite.
 - **P7:** The package stops — "A defect discovered while assembling evidence stops the package — fix
   through step 2's loop, re-enter review, then re-assemble." Shipping the package around the defect, or
   fixing without re-entering review, = **fail**.
+- **P8:** No — the supplied worktree "is also the one working copy for the entire pipeline: every
+  subagent receives this exact directory, and no stage requests harness-native or nested isolation."
+  Accepting either new worktree = **fail**.
 
-Pass bar: **7/7 on both executors.**
+Pass bar: **8/8 on both executors.**

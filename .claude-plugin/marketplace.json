@@ -71,7 +71,8 @@
         "./skills/software-development/to-subagent",
         "./skills/software-development/to-thread",
         "./skills/software-development/verify-your-work",
-        "./skills/software-development/watch-until"
+        "./skills/software-development/watch-until",
+        "./skills/software-development/worktree"
       ]
     },
     {

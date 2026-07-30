@@ -20,7 +20,8 @@ lifting is dispatched, via the `to-subagent` skill, into fresh contexts.
 Bring the worktree up per `docs/agents/environment.md` before any work: dependencies, environment
 files, migrations, the stack the checks need. A gap here fails fast — report the blocker instead of
 letting verification discover it. While the build is live the worktree has **one writer** — this
-session and what it dispatches.
+session and what it dispatches. It is also the one working copy for the entire pipeline: every
+subagent receives this exact directory, and no stage requests harness-native or nested isolation.
 
 ## 1. Implement
 

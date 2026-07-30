@@ -18,7 +18,7 @@ Two independent axes, plus exclusions. Readiness decides *whether and who* picks
 - `ready-for-human` — only a human; the agent skips it entirely. Also the abort target for verify caps and environment blockers: the agent hands the issue back with the blocker commented, since a human must look before it can be re-released. Label: **`ready-for-human`** (identity).
 - `needs-info` — parked, waiting on the reporter. Label: **`needs-info`** (identity).
 - `needs-shaping` — parked for strategic shaping: the issue carries product/design/scope decisions that are neither settled nor delegated, or execution invalidated an approved decision. Set by `groom`'s route judgment, by an issue thread's handback, or by a build session that hit the invalidation — a blessed spec contradicted by the code it meets comes back here with the contradiction commented, the named re-entry into shaping; cleared when shaping delivers execution-ready work. Boundary with `needs-info`: there the reporter owes facts; here the product owner owes shaping. Never selectable by `backlog build`. Label: **`needs-shaping`** (renamed from `needs-spec` 2026-07-24, asher-skills#95 — the description already was this role; #92 rode the rename).
-- `shaping` — a shaping thread is attending it. Set by `backlog groom` at dispatch, replacing `needs-shaping`, so a subject never gets two threads; the human in the thread moves it on — forward to `ready-for-agent` when readiness is blessed, back to `needs-shaping` if the thread is abandoned. Label: **`shaping`** (created 2026-07-24).
+- `shaping` — a shaping thread is attending it. Set by `backlog groom` at dispatch, replacing `needs-shaping`, so a subject never gets two threads. A batch advances atomically: after readiness is blessed, every member moves to `ready-for-agent` only after its clean shaping worktree is removed or its shaping change is merged, verified, and cleaned up; abandonment returns the whole batch to `needs-shaping`. Label: **`shaping`** (created 2026-07-24).
 - *(no readiness label)* — not yet groomed; a target for `backlog groom`, not for `backlog build`.
 
 **Closure** — the change request's closing reference (`Closes #N`) closes the ticket on merge; there is no post-build label: **none — direct closure** (no staging branch here; merge to main is final).
@@ -69,6 +69,9 @@ grooming gap, never permission to infer them or default to the orchestrator — 
 ## Readiness decision
 
 - The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. `ready-for-human`, `needs-info`, `needs-shaping`, and exclusion roles need no per-issue confirmation — they ride the groom plan's blanket approval, since every tracker mutation waits for that gate.
+- In a shaping thread, the readiness blessing authorizes only the exact shaping change-request head the
+  thread presented **before** requesting that signal, with the narrow effect explained. It does not
+  authorize a later head, build changes, or unrelated shaping work.
 - Adjust this rule if this team wants more or less agent autonomy (e.g. let the agent auto-bless low-risk bugs).
 - **Work on the loop is dispatchable when it rides the branch → merge → reconcile path.** Since the
   mounts decoupled from the sources (asher-skills#118), a build session reads stable installed copies:

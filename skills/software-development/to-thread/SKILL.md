@@ -1,66 +1,109 @@
 ---
 name: to-thread
-description: Spawn a named, interactive, harness-native background session seeded with a standalone prompt, and tell the user how to attach. Use when a unit of work should continue in its own session that the user attends.
+description: Spawn a named, interactive background session in the outermost harness and tell the user how to attach. Use when a unit of work should continue in its own attended session, including from T3 Code, Claude Code, or Codex.
 argument-hint: "<name — initial prompt>"
 user-invocable: true
 metadata:
   invocation: model
   execution: orchestrator
-  requires: []
+  requires: [worktree]
   optional: []
 ---
 
 # To Thread
 
-Spawn one background session for one unit of work, detached: the spawn returns immediately and the
-session runs under the harness's own supervisor, not under this one. Nothing flows back — the user
-attends the thread. Report status only when asked, via the harness's listing commands.
+Spawn one attended session, detached: creation returns immediately and the outermost interactive
+supervisor owns the session. Nothing flows back — the user attends the thread. Report status only when
+asked, through that supervisor's listing surface.
 
-## The spec of a thread
+## Thread contract
 
-- **Name** — short, human, specific (`shape-142-driver-payouts`, not `session-2`). The name is how the
-  user finds it in a list of twenty.
-- **Prompt** — standalone. The thread sees nothing of this conversation: state the goal, reference
-  material by path or ticket id, say what done looks like, and name any skill the thread should run.
-- **Directory** — the project the work belongs to; the spawn directory is the session's permanent home.
-- **Model, effort, and permission mode** — this session's own, passed explicitly, unless told otherwise.
-- **Isolation** — a thread that will edit a repo this session or another live thread is also editing gets
-  its own worktree.
+- **Name** — short, human, specific (`shape-142-driver-payouts`, not `session-2`).
+- **Prompt** — standalone. The thread sees none of this conversation: state the goal, inputs by path or
+  ticket id, what done looks like, and any skill it should run.
+- **Project and directory** — distinguish the registered project root from the working directory. Run in
+  the supplied directory exactly; do not infer a new worktree from edit intent.
+- **Isolation** — when explicitly requested and no prepared directory was supplied, use the `worktree`
+  skill first and dispatch inside its returned path. The caller is provisional owner until spawn; the
+  spawned thread then owns merge/cleanup, and its standalone prompt says so. Its harness thread record
+  plus the parent dispatch report are the ownership record. Report the path and branch with the thread.
+- **Model and effort** — use this session's current model and effort, passed explicitly. A user-specified
+  override wins. Do not resolve ordinary threads through staffing.
+- **Permission mode** — pass the mode selected for this session explicitly.
+- **Report** — after spawn, give the user the name/id, attachment path, exact directory, and branch,
+  whether the directory was prepared here or supplied by a composing workflow.
+
+## Route by outermost supervisor
+
+Select the interactive control plane from explicit host context before looking at the underlying
+provider:
+
+1. When system/runtime host metadata says this session is running inside T3 Code, T3 is outermost. The
+   product-native `t3-code` MCP toolkit corroborates that context for both Codex and Claude providers;
+   mere installation or reachability of a similarly named MCP server is not an ownership signal.
+   `T3_MCP_BEARER_TOKEN` additionally corroborates T3-hosted Codex but is not universal.
+2. Otherwise a Claude Code session uses Claude's background-session surface.
+3. Otherwise a Codex session uses Codex's resumable-thread surface.
+
+A Codex or Claude provider running inside T3 always creates a T3 thread. Never route by model name.
+
+## T3 Code
+
+Ground truth: T3 Code 0.0.30. This is the latest tested version, not a runtime pin.
+
+Run the bundled helper with the resolved provider, current model, and prepared directory:
+
+    scripts/t3-thread.py --name "<name>" --prompt "<prompt>" \
+      --project-directory <project-root> --directory <directory> --branch <branch> \
+      --provider <codex-or-claude-instance> --model <model> --effort <effort> \
+      --runtime-mode <mode>
+
+The helper discovers the local runtime and installed server CLI, requires a loopback HTTP origin, issues
+a five-minute bearer session, resolves the active project by its registered root, sends `thread.create`
+then `thread.turn.start`, and revokes the session on every exit path. It registers a supplied external
+worktree path and branch; T3 supervises the conversation but does not create or clean the worktree.
+If turn start fails after creation, the helper deletes the partial thread before revoking its
+credential. Creation omits the automatic title seed so the supplied name remains stable.
+
+Tell the user to open the named thread in the T3 project sidebar. A missing local project, unsupported
+command shape, authentication failure, or non-local origin is capability drift: report it and stop
+before falling through to the provider harness. Remote servers and custom T3 homes are unsupported.
 
 ## Claude Code
 
-Ground truth: claude 2.1.216 — recheck `claude --help` if a flag misses.
+Ground truth: claude 2.1.220 — recheck `claude --help` if a flag misses.
 
-    cd <dir> && claude --bg -n "<name>" --model <model> --effort <level> \
-      --permission-mode <mode> [-w] "<prompt>"
+    cd <directory> && claude --bg -n "<name>" --model <model> --effort <level> \
+      --permission-mode <mode> "<prompt>"
 
-Returns immediately, printing `backgrounded · <id> · <name>`. `-w` gives the session its own worktree.
-Tell the user: `claude agents` lists everything (Enter attaches; Space peeks and replies without
-attaching); `claude attach <id>` opens one in this terminal; the session also appears on claude.ai/code
-and in the Claude mobile app.
+The directory is already resolved, so omit Claude's worktree flag. Tell the user: `claude agents` lists
+sessions; `claude attach <id>` attaches; the session also appears on Claude's attended app surfaces.
 
 ## Codex
 
-Ground truth: codex-cli 0.144.5 — recheck `codex --help` if a flag misses. A thread has a UUID and an
-optional name; no flag names it at creation, so create, then name:
+Ground truth: codex-cli 0.144.5 — recheck `codex --help` if a flag misses. A CLI thread has a UUID and
+an optional name:
 
-1. Spawn detached, capturing the id — the first JSONL event is
-   `{"type":"thread.started","thread_id":"<uuid>"}`:
+1. Spawn detached in the resolved directory, capturing the first JSONL `thread.started` id:
 
-       cd <dir> && codex exec --json -s workspace-write -m <model> \
+       cd <directory> && codex exec --json -s <sandbox> -m <model> \
          -c model_reasoning_effort="<effort>" '<prompt>' > <log-file> 2>&1 &
 
-2. Name it: `scripts/name-codex-thread.py <uuid> "<name>"` — a one-shot `codex app-server` JSON-RPC
-   `thread/name/set` call.
-3. Tell the user: `codex resume '<name>'` opens it in a terminal; bare `codex resume` is the picker
-   (`--all --include-non-interactive` widens it to every thread).
+2. Name it with `scripts/name-codex-thread.py <uuid> "<name>"`.
+3. Tell the user: `codex resume '<name>'` opens it; bare `codex resume` is the picker.
 
-Never pass `--ephemeral` — it makes the thread unresumable. Exec-created threads are filtered out of the
-Codex desktop app's default thread list; when the user attends via the app, create app-natively instead —
-app-server `thread/start` → `thread/name/set` → `turn/start` (the prompt goes in the turn) against
-`codex app-server daemon` — and say the thread lives in the app's list.
+Never pass `--ephemeral`; it makes the thread unresumable. When the user attends through the Codex
+desktop app, create app-natively with app-server `thread/start` → `thread/name/set` → `turn/start`
+instead of creating an exec-filtered thread.
 
 ## Degrade
 
-A harness with no attachable background sessions: say so, and hand the user the composed prompt to start
-the session themselves.
+If the detected outermost harness has no attachable session surface, say so and hand the user the
+standalone prompt. A failed T3 route never silently becomes a hidden provider-native thread.
+
+## Dependency surface
+
+- **Bundled:** `scripts/t3-thread.py` (local T3 HTTP dispatch);
+  `scripts/name-codex-thread.py` (Codex post-creation naming).
+- **Sibling (required, by name):** `worktree` — explicit direct isolation; prepared directories from a
+  composing workflow are used as supplied.

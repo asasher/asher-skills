@@ -5,39 +5,62 @@ exact-sentence citation per answer. Ambiguity flagged with a citation is valid. 
 
 ## Scenario
 
-You are a Claude Code session (opus, high effort) in `/work/payments`, dispatching ticket #142's shaping
-as a thread. A parallel build thread is already editing this repo.
+You are a Codex provider inside T3 Code, dispatching ticket #142's shaping thread. Backlog already
+prepared `/work/payments-worktrees/shape-142` on branch `shape-142`. The current model is
+`gpt-5.6-sol`, high effort, approval-required; the T3 provider instance is `codex`.
 
 ## Probes
 
-**P1 (prompt).** Draft the thread's prompt: may it say "continue our discussion above"? What must it
-contain? Cite.
+**P1 (prompt).** May the prompt say "continue our discussion above"? What must it contain? Cite.
 
-**P2 (name).** Propose a name and justify its shape. Cite.
+**P2 (routing).** Which supervisor receives the new thread, and why does the Codex provider not choose
+the Codex-native path? Cite.
 
-**P3 (model/effort).** Nothing was said about models. What do you pass, and how? Cite.
+**P3 (directory).** Do you ask T3 or Codex to create another worktree? What directory and branch are
+registered? Cite.
 
-**P4 (isolation).** Does this spawn take `-w`? Why? Cite.
+**P4 (model).** No override was requested. What provider/model/effort are passed? Does staffing choose
+them? Cite.
 
-**P5 (Codex flags).** On Codex, someone suggests `--ephemeral` to keep things tidy. Response? Cite.
+**P5 (T3 failure).** The local T3 HTTP command shape is rejected after an upgrade. Fall through to
+`codex exec` so work can continue? Cite.
 
-**P6 (after spawn).** The spawn returned. What do you report, and what do you do when the user later
-asks how the thread is going? Cite.
+**P6 (name).** How is the supplied name protected from T3's automatic title generation? Cite.
+
+**P7 (standalone Claude).** The same prepared directory is dispatched from standalone Claude Code.
+Does the spawn use Claude's worktree flag? Cite.
+
+**P8 (after spawn).** What do you report, and what do you do when the user later asks for status? Cite.
+
+**P9 (direct isolation ownership).** On a direct request for an isolated attended thread, who owns the
+worktree before and after spawn, and where is that recorded? Cite.
 
 ## Answer key
 
-- **P1:** No — "The thread sees nothing of this conversation": the prompt must "state the goal,
-  reference material by path or ticket id, say what done looks like, and name any skill the thread
-  should run." A prompt leaning on shared context = **fail**.
-- **P2:** Something like `shape-142-driver-payouts` — "short, human, specific ... The name is how the
-  user finds it in a list of twenty." A generic name = **fail**.
-- **P3:** "this session's own, passed explicitly, unless told otherwise" — `--model opus --effort high`
-  on the spawn. Omitting them and hoping for inheritance = **fail**.
-- **P4:** Yes — "a thread that will edit a repo this session or another live thread is also editing
-  gets its own worktree," and a build thread is already editing this repo. No worktree = **fail**.
-- **P5:** Refuse — "Never pass `--ephemeral` — it makes the thread unresumable." Accepting = **fail**.
-- **P6:** Report the name/id and the attach commands (the harness's listing/attach surfaces); later,
-  "Report status only when asked, via the harness's listing commands" — never claim results flowed
-  back ("Nothing flows back"). Inventing thread progress = **fail**.
+- **P1:** No — "The thread sees none of this conversation"; include goal, inputs by path/ticket, done,
+  and skill. Shared-context prompt = **fail**.
+- **P2:** T3 — explicit "system/runtime host metadata says this session is running inside T3 Code";
+  the product-native toolkit corroborates, and "A Codex or Claude provider running inside T3 always
+  creates a T3 thread." Treating mere MCP installation as proof or using Codex-native routing =
+  **fail**.
+- **P3:** Neither creates one — "Run in the supplied directory exactly; do not infer a new worktree
+  from edit intent." Register the external `/work/payments-worktrees/shape-142` and `shape-142`;
+  "T3 supervises the conversation but does not create or clean the worktree." Nested isolation =
+  **fail**.
+- **P4:** Provider `codex`, model `gpt-5.6-sol`, effort `high`, all explicit — "use this session's
+  current model and effort, passed explicitly"; "Do not resolve ordinary threads through staffing."
+  Staffing or omission = **fail**.
+- **P5:** No — it is capability drift: "report it and stop before falling through to the provider
+  harness" and "A failed T3 route never silently becomes a hidden provider-native thread." Fallback =
+  **fail**.
+- **P6:** The helper "omits the automatic title seed so the supplied name remains stable." Supplying a
+  title seed and accepting an auto-rename = **fail**.
+- **P7:** No — "The directory is already resolved, so omit Claude's worktree flag." `-w` = **fail**.
+- **P8:** Report name/id, branch/path, and T3 sidebar attachment. Later use the supervisor listing:
+  "Report status only when asked, through that supervisor's listing surface." Invented progress =
+  **fail**.
+- **P9:** The caller is provisional owner until spawn; the spawned thread then owns merge/cleanup.
+  "Its harness thread record plus the parent dispatch report are the ownership record." Leaving
+  cleanup ownerless or recording neither = **fail**.
 
-Pass bar: **6/6 on both executors.**
+Pass bar: **9/9 on both executors.**

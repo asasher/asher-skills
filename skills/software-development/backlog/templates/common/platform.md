@@ -32,19 +32,32 @@
 
 ## Version control — working copies and publication
 
-- Binding: _<git | jj (colocated or native) | custom>_.
+- Binding: _<git; jj/custom are unsupported by the bundled Git `worktree` primitive until this project
+  binds an equivalent project-owned prepare/inspect/remove implementation — absent one, record the
+  isolation gap and do not dispatch>_.
 - Verbs:
-  - Create an isolated working copy off the base branch: _<e.g. `git worktree add <path> -b <branch> <base>`; jj: `jj workspace add`>_. The recorded command must create branch and working copy in one step — the primary checkout stays on the base branch and is never switched.
+  - Prepare an isolated working copy off the base branch: the project-owned `worktree` skill — record
+    its repo, base ref, and worktree root bindings here. The primitive creates the branch and working
+    copy in one step, inspects ownership before reuse, and never switches the primary checkout.
   - Name a line of work: _<git: branch, per `environment.md` § Branching; jj: bookmark>_.
   - Sync the base before forking: _<e.g. `git fetch && git update-ref` / pull; local-only repo: none — the tracker commit below is the fork point>_.
   - Publish a line of work: _<e.g. `git push -u origin <branch>`; local-only repo: none — the branch is already visible; jj: `jj git push` or none>_.
-  - Tear down a working copy: _<e.g. `git worktree remove <path>`; jj: `jj workspace forget`>_.
+  - Tear down a working copy: the `worktree` skill after environment teardown; it refuses dirty,
+    unregistered, or primary-checkout paths.
 - Pinned-SHA semantics: _<how a commit is referenced durably for plans and evidence — git/jj: the commit SHA/change-id; note any history-rewrite policy that can orphan pins>_.
 
 ## Harness — how threads are spawned
 
 - Binding: _<e.g. Claude Code | Codex | other — usually the harness the loop runs from; the model roster is owned by the `staffing` skill (see `environment.md` § Staffing delta)>_.
-- Create an issue coordinator with a prompt, working directory, and the route `run` already selected: _<record each effect-verified native or sibling-harness verb. Every sibling-harness CLI runs inside a named watched native wrapper staffed by the cheapest native model allowed by the floor; the label names the external model and task. The wrapper only supervises the bounded process and relays raw output/lifecycle status — teeing raw output to a file and capturing the CLI's resumable session id where it offers one, per the staffing skill's external-worker contract; the parent owns prompt, judgment, and effect verification. Examples: native agent tool with `isolation: worktree`; Claude→Codex bounded `codex exec --cd <worktree> ...`; Codex→Claude bounded `claude -p` with closed stdin and **no `--bare`**>_.
+- Create an issue coordinator with a prompt, working directory, and the route `run` already selected:
+  _<record each effect-verified native or sibling-harness verb. Pass the already-prepared directory
+  exactly; do not request harness-native isolation. Every sibling-harness CLI runs inside a named
+  watched native wrapper staffed by the cheapest native model allowed by the floor; the label names the
+  external model and task. The wrapper only supervises the bounded process and relays raw
+  output/lifecycle status — teeing raw output to a file and capturing the CLI's resumable session id
+  where it offers one, per the staffing skill's external-worker contract; the parent owns prompt,
+  judgment, and effect verification. Examples: Claude→Codex bounded `codex exec --cd <worktree> ...`;
+  Codex→Claude bounded `claude -p` from `<worktree>` with closed stdin and **no `--bare`**>_.
 - Wrapper staffing evidence: _<the native spawn request or returned child metadata that proves the wrapper model. If the harness can neither select nor report it, record floor/cost compliance as unproven while retaining the observable wrapper>_.
 - Directional reachability and fallback: _<record each direction independently plus its successor; a failure removes only that route and may leave an asymmetric graph>_.
 - Route trust: a routine dispatch trusts the recorded effect-verified verb — verification happens at setup, at re-verification, and when a route misbehaves, so dispatch needs no fresh probe session. A route that fails or hangs in use is drift: record the failure class, take the successor, re-verify that direction. Verification probe artifacts are cleaned up as part of the check.
