@@ -4,7 +4,7 @@ description: Relay governed project communications through AgentMail. Use when p
 metadata:
   invocation: model
   execution: thread
-  requires: [serve-via-tailnet]
+  requires: []
   optional: []
   setup: reference/setup.md
 ---
@@ -23,7 +23,7 @@ communications instance.
 | `setup` | Discover the repository, bind local choices, and reconcile the Relay instance | [setup](reference/setup.md) |
 | `project update` / `internal digest` | Select attributable evidence into one bag or exclusion per eligible audience | [selection](reference/selection.md), [bag](reference/relay-bag.md) |
 | `render` | Produce HTML, text, and authored light/dark previews from one bag | [rendering](reference/rich-email-contract.md) |
-| `review` | Build one self-contained review sheet and hand it to `serve-via-tailnet` | [review and approval](reference/review-and-approval.md) |
+| `review` | Build one self-contained review sheet and present it in chat for the user's approval | [review and approval](reference/review-and-approval.md) |
 | `send` | Create, verify, record, and send the exact approved AgentMail draft | [provider](reference/provider-adapter.md) |
 | `reconcile` | Ingest provider facts, resolve ambiguity, and update lifecycle state | [lifecycle](reference/lifecycle-ledgers.md) |
 | `status` | Report pending review, blocked sends, mixed delivery, and replies without mutation | [lifecycle](reference/lifecycle-ledgers.md) |
@@ -42,16 +42,22 @@ render, and present review, but performs zero provider writes until the current 
    audiences.
 4. Render HTML, text, and forced light/dark previews from the same bag, then build the self-contained review
    sheet with `scripts/build_review_sheet.py`.
-5. Invoke `serve-via-tailnet` by name to serve the sheet and await its verdict.
+5. Present the sheet's exact content in chat — per message: sender, To, CC, subject and template identity,
+   the full rendered body, evidence summary, and doc hash, plus the `review.html` path for local viewing —
+   and await the user's explicit in-chat approval. On approval, append a hash-bound `chat_approval` event to
+   the run's `review-state/events.jsonl`.
 6. Deliver with `scripts/agentmail_delivery.py`, which independently re-verifies approval before any provider
    write.
 7. Reconcile provider facts with `scripts/ingest_agentmail_events.py`; report with `scripts/relay_status.py`.
 
 ## Hard boundaries
 
-- Zero provider writes without an approving `serve-via-tailnet` verdict (`approve` / `approve_with_nits`) for the
-  exact current sheet hash. Any change to HTML, text, sender, To, CC, or template identity invalidates
-  authorization: append `superseded`, re-render, and re-review. Content-changing nits are such a change.
+- Zero provider writes without the user's explicit in-chat approval of the exact content to be sent, recorded
+  as a `chat_approval` event (`approve` / `approve_with_nits`) bound to the exact current sheet hash. No magic
+  token is required, but ambiguous or partial responses are not approval; the session may append that event
+  only after such approval of the current sheet. Any change to HTML, text, sender, To, CC, or template
+  identity invalidates authorization: append `superseded`, re-render, and re-review in chat. Content-changing
+  nits are such a change.
 - One deterministic client/draft identity per approved manifest. Retries reuse it; an unresolvable send
   appends `blocked-ambiguous`. Never mint a new identity, resend, or reply automatically.
 - All workflow, per-recipient delivery, reply, and watermark facts are append-only. A watermark advances only
@@ -72,6 +78,7 @@ render, and present review, but performs zero provider writes until the current 
 - **Bundled:** setup, selection, bag, rendering, review, provider, and lifecycle contracts; deterministic
   scripts, instance templates, fixtures, tests, and probes.
 - **Project:** `docs/agents/relay.md`, the repository-root `.env`, and `relay/` only.
-- **Sibling:** required `serve-via-tailnet`, invoked by plain name for presentation, annotations, verdict, and wait.
+- **Sibling:** none. Review presentation, approval, and the recorded approval event all happen in the chat
+  session itself.
 - **Bound sources:** repository paths, commands, connectors, or optional sibling skills recorded by setup;
   none is a universal Relay dependency.
