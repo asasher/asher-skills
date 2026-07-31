@@ -1,6 +1,8 @@
 # Playbook: Environment
 
 > Project playbook for this repo. Shared — read by any stage that builds a branch, runs, or tests the app (`implement`, `verify-your-work`, `prove-your-work`, `diagnosing-bugs`, the change-request step, the `adversarial-review` fixer) and by `backlog build` for the parallelism verdict. Tailor every section to this codebase. `backlog setup` fills the isolation, seed, and parallelism sections from its audit.
+>
+> A fact written back here never records a machine fact: record the probe command, not its result; recorded machine facts go to the gitignored `docs/agents/local/environment.md` overlay (the backlog skill's `machine-facts.md` reference has the classes).
 
 ## Branching & deploys
 

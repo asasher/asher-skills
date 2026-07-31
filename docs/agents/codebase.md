@@ -1,6 +1,8 @@
 # Playbook: Codebase
 
 > Project playbook for this repo — how this codebase is written and checked. Read before editing by whoever builds (`implement`, `tdd`, `diagnosing-bugs`) and consulted by whoever checks (`verify-your-work`, `code-review`). It accretes: a session that learns one of these facts the hard way — a runner trap, a naming rule discovered mid-review, a harness seam — writes it into the matching section as part of its change, so the next session reads it instead of re-deriving it.
+>
+> A fact written back here never records a machine fact: record the probe command, not its result; recorded machine facts go to the gitignored `docs/agents/local/codebase.md` overlay (the backlog skill's `machine-facts.md` reference has the classes).
 
 ## Conventions
 

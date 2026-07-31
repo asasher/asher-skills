@@ -16,5 +16,5 @@
 
 ## Parallelism and presentation
 
-- Use the active staffing route and harness thread cap; serialize writes to shared research artifacts.
-- Present durable findings as repo-local Markdown or HTML and use the global Presentation policy.
+- Executor routes: resolve from the staffing playbook and the machine-local overlay it declares (`docs/agents/staffing.md`) — never restate routes or aliases here. Worker cap: the harness's own thread cap; serialize writes to shared research artifacts.
+- Present durable findings as repo-local Markdown or HTML per `environment.md` § Presenting to the human — on the change request or opened locally; `serve-via-tailnet` only on the user's explicit invocation.

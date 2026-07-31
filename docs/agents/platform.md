@@ -1,6 +1,8 @@
 # Playbook: Platform Bindings
 
 > Project playbook for this repo. Shared — read by every stage that touches the tracker (`backlog groom`, `backlog build`, the `build` sibling's pipeline), proposes or edits a PR (the `build` skill's create-PR step, `adversarial-review`, `prove-your-work`), or creates and publishes working copies (`backlog build` dispatch, `implement`, the `adversarial-review` fixer). The skill's references speak in **role nouns** — issue, label, PR, branch, worktree, push — and this file binds each role to this repo's real platform. Bindings are prose contracts, not adapter code: each verb records the working command (or harness tool call) verified by `backlog setup` — live at binding time, end-to-end when the smoke test runs. A recorded command that no longer exists is drift — re-run `backlog setup`.
+>
+> A binding written back here never records a machine fact: record the verb and its probe command, not observed results; recorded machine facts go to the gitignored `docs/agents/local/platform.md` overlay (the backlog skill's `machine-facts.md` reference has the classes).
 
 ## Tracker — where issues live
 

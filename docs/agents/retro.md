@@ -4,10 +4,10 @@
 
 ## Consent
 
-|                   |                                                |
-| ----------------- | ---------------------------------------------- |
-| Upstream feedback | **enabled**                                    |
-| Decided by / on   | Asher, 2026-07-30 (asher-skills#142 reconcile) |
+|                   |                   |
+| ----------------- | ----------------- |
+| Upstream feedback | **enabled**       |
+| Decided by / on   | Asher, 2026-07-30 |
 
 Enabled means retro passes may **draft and propose** upstream feedback issues. It never means submit: every submission requires the user's approval of the verbatim text, per issue. Filing is pseudonymous, not anonymous — issues are authored by the submitting GitHub account.
 
@@ -18,8 +18,8 @@ Note the standing oddity of this repo: it is its own upstream. An upstream candi
 |  |  |
 | --- | --- |
 | Repo | `asasher/asher-skills` |
-| Label | `feedback` (created 2026-07-30 at setup — it did not pre-exist) |
-| Verb | `gh issue create` (route verified live 2026-07-30: `gh repo view` clean) |
+| Label | `feedback` |
+| Verb | `gh issue create` — liveness probe when consent-enabled filing is on the table: `gh repo view asasher/asher-skills` |
 
 ## Friction ledger
 
