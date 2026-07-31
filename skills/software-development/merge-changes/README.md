@@ -8,7 +8,6 @@ unmerged. A shaping thread's documented readiness signal is also authorization, 
 the exact shaping change request and only for that request. Cleanup tears down the environment, removes the
 working copy through `worktree`, then deletes and verifies the branch.
 
-Born from asher-skills#70 after a run merged four PRs (one before CI was green) on the strength of `LGTM`
-and green checks — which are prerequisites, never authorization.
+`LGTM` and green checks are prerequisites, never authorization.
 
 Install: `npx skills add <repo-url> --skill merge-changes`.

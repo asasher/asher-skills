@@ -49,7 +49,7 @@ Declared `variants/{codex,claude}` overlays supply one active-harness `reference
 duplicating the public identity, dependencies, invocation policy, or setup owner.
 `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
 `variants/*/templates/seed/roster-seed.md` is the per-provider roster seed setup reads when writing a
-project's playbook — data only; the doctrine that was once carried alongside it lives in the references.
+project's playbook — data only; the doctrine lives in the references.
 
 Self-contained at the file level; composes by name. **Sibling dependency: none — staffing is a root
 primitive** (invoked by siblings, depends on none).
