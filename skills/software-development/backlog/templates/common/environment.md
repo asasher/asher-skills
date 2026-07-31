@@ -128,9 +128,10 @@
 
 ## Presenting to the human
 
-> Owned by the **`serve-via-tailnet`** skill (composed by name): how rendered artifacts reach a human
-> who may not be at the machine. Its setup records this repo's surface config here (root path, surface
-> dir, publish/proxy commands); this playbook does not install the surface.
+> No standing presentation surface is bound here. Review happens on the change request bound in
+> `platform.md` § Change review; an artifact that genuinely needs rendering is opened locally or
+> committed and screenshotted onto the change request per `evidence.md`. Where the `serve-via-tailnet`
+> skill is installed, the user may invoke it explicitly on demand.
 
 ## Staffing delta
 
