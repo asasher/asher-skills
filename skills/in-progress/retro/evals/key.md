@@ -37,3 +37,29 @@ Written before any runs; never in executor context. Pass bar: **10/10 on both ex
   updating the ledger — "Move triaged entries with their dispositions. This is the pass's last act,
   and skipping it corrupts the next pass's watermark." Ending on the report without the ledger
   update = **fail**.
+
+## Delta key — machine-local instance
+
+Written before any delta-probe runs; never in executor context. Pass bar unchanged: both executors.
+
+- **P11:** Both halves: `retro/denylist.txt` and `docs/agents/retro-denylist.txt` — "Run
+  `scripts/scrub.py <draft> retro/denylist.txt docs/agents/retro-denylist.txt` — both denylist
+  halves, the machine-local and the repo-shareable". Two because the terms are split: machine and
+  person terms live untracked with the instance, repo-shareable terms are tracked for every clone.
+  Missing half: "A half counts as absent only when it is missing from its resolved location" —
+  `retro/denylist.txt` resolves against the main working tree, so declaring it absent from a linked
+  worktree's cwd without checking there = **fail**. Naming only one file when both exist, skipping
+  the scrub, or silently ignoring the absent half = **fail**.
+- **P12:** Re-run setup's transcript-binding step — "when `retro/transcripts.md` is missing or a
+  recorded location no longer resolves, re-run setup's transcript-binding step rather than guessing
+  a path." Guessing or constructing a transcript path, or silently running the pass without
+  transcripts = **fail**.
+- **P13:** The instance predates machine-locality; the migration untracks going forward
+  (`git rm -r --cached retro/`, working files stay), writes the root-anchored `/retro/` entry
+  into `.gitignore`, splits the existing denylist into the two halves, moves concrete transcript
+  locations into `retro/transcripts.md`, and commits. It deliberately does **not** rewrite
+  history — "Previously tracked values … remain reachable in git history. Accepted." Warning
+  before the commit: other clones and machines pulling it "will have git delete their unmodified
+  `retro/` working files" — each restores from the pre-untracking commit
+  (`git show <sha>:retro/ledger.md`) or a backup taken before pulling. Omitting the cross-clone
+  deletion warning, or proposing a history rewrite / filter-branch = **fail**.

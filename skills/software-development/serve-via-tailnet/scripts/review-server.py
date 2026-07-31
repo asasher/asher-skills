@@ -390,7 +390,7 @@ class ReviewHandler(BaseHTTPRequestHandler):
                 for a in annotations
             ],
             # Client evidence: makes a fabricated verdict (an agent curl posing as
-            # the human) auditable after the fact — see asher-skills#46 Snag 2.
+            # the human) auditable after the fact.
             "client": {
                 "remote_addr": self.client_address[0] if self.client_address else None,
                 "user_agent": self.headers.get("User-Agent"),

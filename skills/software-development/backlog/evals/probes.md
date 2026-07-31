@@ -1,6 +1,8 @@
 # Backlog — situated dry-run probes
 
-Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **only `SKILL.md` in context**, exact-sentence citation per answer. Ambiguity flagged with a citation is valid. Key before runs.
+Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **only `SKILL.md` in context**
+(plus the one bundled reference a probe names), exact-sentence citation per answer. Ambiguity flagged
+with a citation is valid. Key before runs.
 
 ## Scenario
 
@@ -50,6 +52,16 @@ For the teardown probes (P9–P12): git's worktree listing shows, besides the ma
 
 **P19 (prepare failure).** After the batch is marked shaping, worktree bootstrap fails before its thread spawns. What happens to the roles, ownership record, and a worktree containing bootstrap residue? Cite.
 
+**P20 (setup, machine-fact classification).** During `backlog setup`, reconciling a repo's
+`docs/agents/environment.md`, you find the line "Codex CLI authed (`codex --version` → 0.145.0)".
+Read `reference/machine-facts.md`. Classify this fact, say what the reconciled playbook carries
+instead, and name the only file that may record the CLI's version at all. Cite.
+
+**P21 (build preflight, stale stamp).** `backlog build`'s preflight runs
+`scripts/check-machine-facts.py` and it exits nonzero with `stale docs/agents/local/staffing.md:
+recorded machine 'Other-Mac' is not this machine 'This-Mac' (probed 2026-07-26)`. What is this
+finding, and what happens before any dispatch? Cite.
+
 ## Answer key
 
 - **P1:** #10–#13 are swept ("tickets carrying **no readiness role** ... and tickets carrying the needs-shaping role") but #13 is routed, not shaped — "a ticket whose decisions are already settled routes to the ready role". The rest group as subjects {#10,#11} and {#12} ("tickets whose decisions interlock form one **subject**"), batched together or apart by belonging. Nothing spawns or mutates yet — "until they approve, the tracker is untouched and no thread exists." Spawning threads or writing labels before confirmation, or shaping #13, = **fail**.
@@ -76,4 +88,20 @@ For the teardown probes (P9–P12): git's worktree listing shows, besides the ma
 - **P18:** Exactly one worktree covers the whole pipeline; "downstream skills must not create another worktree" and "harness-native worktrees are not requested." Creating review/evidence worktrees or asking the harness to isolate again = **fail**.
 - **P19:** Restore the former roles and record the failure. Preserve the residue-bearing worktree and ownership record for recovery, surfacing its path and blocker — "If prepare or bootstrap left files, preserve the worktree and its ownership record for recovery while restoring the roles." Deleting the residue, leaving the batch claimed shaping, or falling back to primary = **fail**.
 
-Pass bar: **20/20 on both executors.**
+- **P20:** Verify-at-use, the default class — "The playbook records the *probe command* — one that
+  exercises the capability itself (`gh auth status`, a bounded executor echo), never a version string
+  standing proxy for it — and never the probe's result." The reconciled line keeps a
+  capability-exercising liveness probe and drops the recorded version; the version's only home is the
+  staffing overlay's record, as metadata — "Model and capability reachability — routes, dispatch
+  aliases, effect-probe verdicts — lives only in the staffing overlay (`docs/agents/local/staffing.md`,
+  declared by the tracked staffing playbook), the CLI versions its probes observed riding along as
+  that record's metadata; an environment or platform playbook restating a route, an alias, or a
+  version is drift." Keeping the version in environment.md, or moving it to the environment overlay
+  rather than dropping it, = **fail**.
+- **P21:** A stale overlay stamp — the checker's exit is the drift signal, and dispatch waits: "The
+  preflight also runs this skill's `scripts/check-machine-facts.py` against the repo — a machine fact
+  in a tracked file, a missing declared overlay, or a stale overlay stamp is the same drift, fixed by
+  re-running the owning setup before dispatch." Dispatching anyway, treating the finding as advisory,
+  or hand-editing the stamp to match instead of re-running the owning setup = **fail**.
+
+Pass bar: **22/22 on both executors.**

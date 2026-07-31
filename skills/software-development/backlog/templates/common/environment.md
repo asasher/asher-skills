@@ -1,6 +1,20 @@
 # Playbook: Environment
 
-> Project playbook for this repo — the verification-environment contract. Read by any session that builds, runs, or proves the app: build threads, `verify-your-work`, `prove-your-work`, `merge-changes` (cleanup), `backlog build` (isolation and parallelism verdicts), and `backlog groom` (teardown sweep). Tailor every section to this codebase; `setup` fills the isolation, seed, and parallelism sections from its audit. A session that earns a fact this playbook should have carried — a start recipe, an auth path, an admin bootstrap, a deploy constraint — writes it back into the matching section as part of its change, so the next session reads it instead of re-deriving it.
+> Project playbook for this repo — the verification-environment contract. Read by any session that
+> builds, runs, or proves the app: build threads, `verify-your-work`, `prove-your-work`,
+> `merge-changes` (cleanup), `backlog build` (isolation and parallelism verdicts), and `backlog groom`
+> (teardown sweep). Tailor every
+> section to this codebase; `setup` fills the isolation, seed, and parallelism sections from its audit.
+> A session that earns a fact this playbook should have carried — a start recipe, an auth path, an
+> admin bootstrap, a deploy constraint — writes it back into the matching section as part of its change,
+> so the next session reads it instead of re-deriving it.
+>
+> Machine facts follow the discipline bundled with the `backlog` skill — read `reference/machine-facts.md`
+> in its installed package for the classes and marker grammar; absent that skill, leave machine facts
+> unrecorded rather than inventing a form. In short, at accretion and at setup alike: record the probe
+> command, not its result; every recorded machine fact lives in the gitignored
+> `docs/agents/local/environment.md` overlay, regenerated and declared by the owning setup — never in
+> this tracked file.
 
 ## Branching & deploys
 
@@ -50,6 +64,9 @@
 - How an agent mints a session: _<e.g. trigger an OTP → read it from the test inbox → complete login in the browser driver>_.
 - **Session reuse:** mint once per run and persist the browser storage state (_<e.g. `e2e/.auth/state.json`, gitignored>_); every subsequent check loads it instead of re-authenticating.
 - Test accounts / where credentials live: _<env vars or secrets store; never hardcode, never echo `.env`>_.
+- Identity observations ("authed as `<user>`") are machine-local: they go in the
+  `docs/agents/local/environment.md` overlay, never in this tracked file — record here only the
+  liveness probe (e.g. `gh auth status`).
 
 ## Verification data
 
@@ -64,15 +81,30 @@
 > Read by `verify-your-work` (to exercise the app) and `prove-your-work` (to capture proof). One entry per surface. Verification is **code, not improvisation**: a browser check is a script whose run is reproducible, and the scripts accumulate into this repo's end-to-end suite.
 
 - Form factor(s): _<CLI | web | mobile | desktop — list every surface tickets touch>_.
-- Web driver: **Playwright driving Chrome** — the default for every browser-based verification; scripts live in _<e.g. `e2e/`>_ and run with _<e.g. `npx playwright test`>_. New checks are written as specs there, named for the ticket, and left in the tree: today's verification is tomorrow's regression suite. Evidence comes from Playwright's own artifacts — traces, screenshots, video — captured per run into _<artifact dir>_. Setup verifies the browser actually launches headless on this machine; if it cannot, record headed mode here as the fallback. Harness-native browser tools and `agent-browser` are not verification routes — they have proven unreliable; a browser check is a Playwright script or it is a recorded gap.
-- Other surfaces: _<defaults: shell + the CLI entrypoint; a simulator + driver for mobile; desktop only behind a recorded use case AND explicit user approval — absent either, record the surface as a hard verification gap. A driver failure surfaces as a blocker; it never falls back to a less-isolated surface>_.
-- Evidence capture per surface: _<e.g. Playwright trace/screenshots for web; terminal transcripts for CLI; screen recording → GIF for flows the driver can't script>_.
+- Web driver: **Playwright driving Chrome** — the default for every browser-based verification; scripts
+  live in _<e.g. `e2e/`>_ and run with _<e.g. `npx playwright
+  test`>_. New checks are written as specs there, named for the ticket, and left in the tree: today's
+  verification is tomorrow's regression suite. Evidence comes from Playwright's own artifacts — traces,
+  screenshots, video — captured per run into _<artifact dir>_. Setup verifies the browser
+  actually launches headless on this machine; the verdict is a machine fact — it goes in the overlay,
+  with headed mode as the recorded fallback when headless cannot launch.
+  Harness-native browser tools and `agent-browser` are not verification routes — they have proven
+  unreliable; a browser check is a Playwright script or it is a recorded gap.
+- Other surfaces: _<defaults: shell + the CLI entrypoint; a simulator + driver for mobile; desktop only
+  behind a recorded use case AND explicit user approval — absent either, record the surface as a hard
+  verification gap. A driver failure surfaces as a blocker; it never falls back to a less-isolated
+  surface>_.
+- Evidence capture per surface: _<e.g. Playwright trace/screenshots for web; terminal transcripts for
+  CLI; screen recording → GIF for flows the driver can't script>_.
 - Supporting tools: _<e.g. a test email inbox for OTP/magic links; add yours>_.
 - Gaps: _<surfaces the agent cannot drive or capture, and the fallback; or "none">_.
 
 ## Presenting to the human
 
-> Owned by the **`serve-via-tailnet`** skill (composed by name): how rendered artifacts reach a human who may not be at the machine. Its setup records this repo's surface config here (root path, surface dir, publish/proxy commands); this playbook does not install the surface.
+> No standing presentation surface is bound here. Review happens on the change request bound in
+> `platform.md` § Change review; an artifact that genuinely needs rendering is opened locally or
+> committed and screenshotted onto the change request per `evidence.md`. Where the `serve-via-tailnet`
+> skill is installed, the user may invoke it explicitly on demand.
 
 ## Staffing delta
 

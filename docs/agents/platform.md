@@ -44,14 +44,32 @@
 
 ## Harness — how threads are spawned
 
-- Binding: **outermost active harness** — T3 Code, Claude Code, or Codex. The dispatch skill resolves explicit system/runtime host metadata before an embedded Codex/Claude runtime; product-native tools corroborate that host context but their mere installation does not establish ownership. Model staffing per harness is in `environment.md` § Model staffing.
-- Create an interactive issue coordinator with the route already selected and an exact prepared directory: T3 uses `to-thread`'s local authenticated HTTP adapter against the loopback runtime (`thread.create` then `thread.turn.start`, with temporary credentials revoked); Claude and Codex use their native thread/session mechanisms. T3 Code 0.0.30 is the latest effect-verified build as of 2026-07-30, an observation rather than a version pin — dispatch gates on runtime capabilities and fails visibly if they drift. No route requests harness-native worktree isolation.
-- Create a non-interactive coordinator: native subagent dispatch receives the exact prepared worktree. Claude→Codex uses bounded `codex exec --cd <dir>` through its tracked wrapper (raw output teed to a file, resumable session id captured where offered, per the staffing external-worker contract); Codex→Claude uses bounded `claude -p --model <model> '<self-contained prompt>' </dev/null` from the prepared directory and **never `--bare`**. Each command receives the coordinator assignment and upward successor; completion is accepted only after its durable return/effect is verified.
+<!-- machine-local: docs/agents/local/platform.md setup="backlog setup" -->
+
+Machine-verified spawn evidence — which routes have been effect-verified in which child modes — lives
+in the overlay declared above; when it is missing, run `backlog setup`.
+
+- Binding: **outermost active harness** — T3 Code, Claude Code, or Codex. The dispatch skill resolves
+  explicit system/runtime host metadata before an embedded Codex/Claude runtime; product-native tools
+  corroborate that host context but their mere installation does not establish ownership. Model
+  staffing per harness is in `environment.md` § Model staffing.
+- Create an interactive issue coordinator with the route already selected and an exact prepared
+  directory: T3 uses `to-thread`'s local authenticated HTTP adapter against the loopback runtime
+  (`thread.create` then `thread.turn.start`, with temporary credentials revoked); Claude and Codex use
+  their native thread/session mechanisms. Dispatch gates on runtime capabilities and fails visibly if
+  they drift. No route requests harness-native worktree isolation.
+- Create a non-interactive coordinator: native subagent dispatch receives the exact prepared
+  worktree. Claude→Codex uses bounded `codex exec --cd <dir>` through its tracked wrapper (raw output
+  teed to a file, resumable session id captured where offered, per the staffing external-worker
+  contract); Codex→Claude uses bounded `claude -p --model <model> '<self-contained prompt>'
+  </dev/null` from the prepared directory and **never `--bare`**. Each command receives the coordinator
+  assignment and upward successor; completion is accepted only after its durable return/effect is
+  verified.
 - Wrapper staffing evidence: the native Agent tool reports the spawned agent's type and model in its return metadata — that report is the wrapper-model proof. For `codex exec` children there is no native report; floor/cost compliance for the external model is **unproven** beyond the observable wrapper invocation, recorded per the template.
-- Directional reachability and fallback: a failed Codex→Claude invocation removes only that route and applies the successor in `environment.md` § Model staffing; Claude→Codex remains available. No Anthropic-policy or credit monitor gates dispatch. (Recorded machine facts: versioned model aliases are rejected by the installed Claude CLI. Claude→`codex exec` **is** available in unattended children — the earlier "unavailable" record was stale; verified live 2026-07-25 (asher-skills#98) when a native unattended Agent child ran `codex exec -s read-only` for its verification and review passes, and the `backlog build` preflight probe succeeded.)
+- Directional reachability and fallback: a failed Codex→Claude invocation removes only that route and applies the successor in `environment.md` § Model staffing; Claude→Codex remains available. No Anthropic-policy or credit monitor gates dispatch. (Alias acceptance and reachability rows have one home — the staffing overlay's § CLI alias mapping and § Reachability. Platform-binding-specific spawn evidence lives in this playbook's own overlay.)
 - Route trust: a routine dispatch trusts the recorded effect-verified verb — verification happens at setup, at re-verification, and when a route misbehaves, so dispatch needs no fresh probe session. A route that fails or hangs in use is drift: record the failure class, take the successor, re-verify that direction. Verification probe artifacts are cleaned up as part of the check.
 - Can a spawned thread read a skill's bundled references from disk? Yes — under `.claude/skills/<name>/` and `docs/agents/` in the checkout.
-- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; review is tracker-native, so a verdict wait polls the change request thread through the verified `--json` read verbs (§ Change review) — the retired tailnet surface's `review-await.py` block is no longer a wait path (asher-skills#116). Longer watches run per the `watch-until` skill's ladder — a watcher subagent, never the orchestrator inline (applies to both the approval gate and the PR-merge watch).
+- Durable monitor / wakeup for review round-trips: `ScheduleWakeup` / `Monitor` for polling; review is tracker-native, so a verdict wait polls the change request thread through the verified `--json` read verbs (§ Change review) — the retired tailnet surface's `review-await.py` block is no longer a wait path. Longer watches run per the `watch-until` skill's ladder — a watcher subagent, never the orchestrator inline (applies to both the approval gate and the PR-merge watch).
 
 ## The local binding — tracker contract
 

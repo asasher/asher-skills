@@ -15,9 +15,30 @@ When a shaping record exists — `CONTEXT.md` terms, ADRs, decisions recorded on
 - **The decisions taken** — each real choice made, with the constraint that forced it. Capture the decision, not a survey of options that were discussed and dropped.
 - **The user stories** — the actors and what each needs, across the full surface, not just the happy path.
 - **What's out of scope** — anything explicitly excluded, so a later reader's question is answered in place.
+- **The artifacts** — every generated artifact that informed a decision. Research dossiers and prototype
+  answers are the canonical cases, but the rule is the role, not a fixed list — any decision-informing
+  artifact qualifies, whatever its kind. These become **Supporting artifacts** entries (§ Sweep the
+  artifacts).
 - **The unresolved** — anything left open. These become Notes, not questions.
 
 Lean on the codebase/project understanding the conversation built: name the modules, contracts, and architectural calls in prose, but keep to the no-stale-content rule below.
+
+## Sweep the artifacts
+
+Crystallising a subject sweeps its evidence trail onto the spec. Collect every generated artifact that
+informed a decision and give each one entry in the spec's **Supporting artifacts** section
+([template-guide](template-guide.md)): the artifact kind, the question it
+answered, its takeaway in one line, and a **durable pointer** — a tracker-resolvable URL when the
+tracker is bound, a repo-relative path otherwise, or the named parked branch for a prototype. Never copy
+an artifact's content inline — it goes stale against the canonical artifact — and never leave a bare
+summary without its pointer, which breaks the traceability the section exists for.
+
+Evidence that lives only in the conversation still gets an entry: state the conclusion and mark plainly
+that no durable artifact exists. To-spec records where the trail ends; it never fabricates a dossier to
+fill the pointer slot.
+
+The sweep runs identically for every spec — ticket-bound, the no-tracker repo-doc fallback, dev and
+non-dev alike. **Omit the section when nothing was generated** (the same convention as Assumptions).
 
 ## Classify the work — dev or non-dev
 
@@ -40,7 +61,12 @@ When the direction touches an API, schema, or data contract, its surface carries
 
 The spec carries **no file paths and no code snippets.** They rot the moment the codebase moves, and a spec is direction, not implementation — describe the module, the contract, or the shape in prose instead.
 
-The single exception: a **prototype-validated snippet** that encodes a decision more precisely than prose can — a state machine, a reducer, a schema, a type shape. Inline only that decision-rich fragment and note it came from a prototype. Absent that exception, everything is prose.
+Two narrow exceptions, and only these. First, a **prototype-validated snippet** that encodes a decision
+more precisely than prose can — a state machine, a reducer, a schema, a type shape: inline only that
+decision-rich fragment and note it came from a prototype. Second, the **Supporting artifacts** section's
+durable pointers — carrying a pointer to each artifact is that section's whole purpose (§ Sweep the
+artifacts). The second exception stops at that section's boundary: **no other section's path or snippet
+prohibition is loosened.** Absent those two exceptions, everything is prose.
 
 ## Vocabulary
 

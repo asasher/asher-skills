@@ -1,10 +1,11 @@
 ---
 name: serve-via-tailnet
-description: Serve a local HTML artifact over the tailnet so the user can view it from any of their devices — plain, or with an annotation surface that collects comments and a verdict. Use whenever a rendered artifact needs human eyes that aren't at this machine.
+description: Serve a local HTML artifact over the tailnet so the user can view it from any of their devices — plain, or with an annotation surface that collects comments and a verdict. Runs only when the user explicitly invokes it; never the default way to present an artifact.
 argument-hint: "<artifact.html> [--annotate]"
 user-invocable: true
+disable-model-invocation: true
 metadata:
-  invocation: model
+  invocation: user
   execution: orchestrator
   requires: []
   optional: []
@@ -12,7 +13,10 @@ metadata:
 
 # Serve via Tailnet
 
-Expose a local HTML artifact on the tailnet and hand the user its URL. The machine's presentation conventions (the global instruction files' presentation module) record the tailnet root, port ranges, and any reverse-proxy rules — honor them; absent any, bind to the tailscale interface address and report `http://<tailnet-host>:<port>/...`.
+Expose a local HTML artifact on the tailnet and hand the user its URL. The consuming repo's
+`docs/agents/environment.md` records the tailnet root, port ranges, and any reverse-proxy rules where the
+repo has them — honor them; absent any record, bind to the tailscale interface address and report
+`http://<tailnet-host>:<port>/...`.
 
 Serving is **detached**: the server outlives this turn, and the URL is reported with how to stop it.
 

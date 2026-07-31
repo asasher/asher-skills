@@ -14,6 +14,9 @@ Document the exact operations that constitute a complete collection from each bo
 
 Document how source evidence becomes recipient-facing language for each audience, which source mechanics may appear visibly, any local visibility model, and the unresolved evidence classes that may be rechecked and marked for carry-forward.
 
-## Review surface
+## Review and approval
 
-Document repository or environment facts needed to present the annotated `serve-via-tailnet` review surface. Keep delivery blocked when that surface cannot record an exact-hash verdict.
+Approval happens in chat: the session presents each message's exact sender, To, CC, subject and template
+identity, rendered content, evidence summary, and doc hash, plus the local `review.html` path. Document any
+repository facts that affect how content is presented for review. Keep delivery blocked until the run records
+an exact-hash `chat_approval` event.

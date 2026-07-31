@@ -23,16 +23,22 @@ Note the standing oddity of this repo: it is its own upstream. An upstream candi
 
 ## Friction ledger
 
-|          |                                        |
-| -------- | -------------------------------------- |
-| Instance | `retro/` — `ledger.md`, `denylist.txt` |
-| Pass due | 5 open entries, or 3 in one cluster    |
+| | |
+|---|---|
+| Instance | `retro/` — `ledger.md`, `denylist.txt` (machine-local scrub half), `transcripts.md`; machine-local and untracked (`.gitignore` carries `/retro/`) |
+| Shared denylist | `docs/agents/retro-denylist.txt` — tracked; the repo-shareable scrub terms |
+| Pass due | 5 open entries, or 3 in one cluster |
 
 ## Transcript binding
 
-Where each harness keeps this project's run transcripts; a retro pass reads only runs since the last pass. Verified paths, recorded at setup — never guessed.
+The bound harnesses and their concrete verified transcript locations live in the untracked
+`retro/transcripts.md`, written by setup. How each harness stores transcripts:
 
-| harness | location |
-| --- | --- |
-| Claude Code | `~/.claude/projects/-Users-asher-Projects-asher-skills/*.jsonl` — per-project, verified 2026-07-30 (182 files) |
-| Codex | `~/.codex/sessions/<year>/…` — **global, not project-partitioned**; filter to this repo by the cwd each session file records. Verified present 2026-07-30 |
+- **Claude Code** keeps per-project transcripts under
+  `~/.claude/projects/<absolute project path with '/' replaced by '-'>/` as `*.jsonl`.
+- **Codex** keeps sessions globally under `~/.codex/sessions/<year>/…`; filter to this repo by the
+  cwd each session file records.
+
+Locations are verified at use: when `retro/transcripts.md` is missing or a recorded location no
+longer resolves, re-run setup's transcript-binding step rather than guessing. A retro pass reads
+only runs since the last pass.

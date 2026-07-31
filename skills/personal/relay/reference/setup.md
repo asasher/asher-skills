@@ -9,7 +9,9 @@ Setup studies the consumer repository, confirms its choices, and materializes on
 3. Write those non-secret choices to a complete binding JSON shaped by `templates/instance/bindings.json`, then run `python3 scripts/setup_instance.py <repo-root> --binding <binding.json>`.
 4. Create human-readable relationship profiles when needed. Bind the same current profile SHA-256 into its audience and interest manifests; a stale derivative stops selection.
 
-Evidence providers are project data. A binding may name a stable path, command, connector, or optional sibling skill. `serve-via-tailnet` is the only required sibling. Do not make any particular provider, mailbox, tracker, or repository layout universal.
+Evidence providers are project data. A binding may name a stable path, command, connector, or optional sibling
+skill. Relay requires no sibling skill. Do not make any particular provider, mailbox, tracker,
+or repository layout universal.
 
 Write the repository playbook as the adapter between these generic roles and the consumer's reality. It owns the provider-specific operations required for complete evidence gathering, local interpretations of provider states, audience-facing editorial projection, carry-forward classes, and other project-only decisions. Keep exact operational values in audience, interest, binding, policy, and capability JSON; the playbook explains their meaning without duplicating them. Provider compatibility mechanics that apply to every Relay consumer belong in this skill instead.
 

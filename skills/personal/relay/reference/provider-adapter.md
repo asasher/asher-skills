@@ -5,7 +5,7 @@ Use `scripts/agentmail_delivery.py`. It is dry-run unless `--execute` is supplie
 1. validates the Relay instance, protected root credential, and verified sender;
 2. recomputes HTML, text, sender, To, CC, template, and canonical manifest hashes;
 3. verifies the identical manifest is embedded in the self-contained review sheet;
-4. finds an approving `serve-via-tailnet` event whose `doc_hash` matches the current sheet;
+4. finds an approving `chat_approval` event whose `doc_hash` matches the current sheet;
 5. derives `relay-<sha256>` client identity from the approved canonical manifest;
 6. lists existing drafts by deterministic client identity, then creates a missing draft through AgentMail's Drafts API using `to` and `cc` arrays; it rejects multiple matches, verifies subject/sender/To/CC/body hashes, and appends the draft ID to the workflow ledger before send;
 7. appends `send-submitted`, sends only that draft ID, then records the returned message/thread correlation.

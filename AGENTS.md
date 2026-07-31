@@ -29,21 +29,42 @@ Where a skill lives — three distinct places, three terms:
 
 How skills and instructions relate:
 
-- **Sibling skill** — another skill in this repo that a skill relies on by name (§ Conventions: compose-by-name), e.g. `to-spec` presents through the `serve-via-tailnet` sibling. A plain-language runtime pointer resolved by the installed skill set — never a file import.
-- **External requirement** — a skill or Codex plugin relied on by a selected skill whose canonical source lives outside this repo and is declared in that skill source's `metadata.external`. It is not a sibling and is installed only after provenance review and explicit consent. Its consumer-owned record lives in `external-dependencies.lock.json`, separate from Asher-authored skill provenance.
-- **Playbook** — a repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup (e.g. `environment.md`, `platform.md`). Skills speak in role nouns; the playbook binds those roles to this repo's reality. Owned by the repo once written — setups reconcile them, never blindly overwrite.
-- **Global agent instruction files** — the machine-level files a harness loads from the home directory when they exist: `~/.claude/CLAUDE.md` (Claude Code) and `~/.codex/AGENTS.md` (Codex). **Retired on this machine** (asher-skills#114) — staffing, their last content, moved into each repo's own playbook and the files were removed (backups: `evidence/114-global-staffing-retirement/`). Being unversioned and unreviewable, they were never a home for durable knowledge: a fact only they carry is invisible to a fresh clone, a cloud runner, and every diff. A machine truth belongs to the skill that owns it, or to this repo's `environment.md`; nothing goes here — do not recreate these files.
-- **Project agent instruction files** — this repo's `AGENTS.md` (harness-neutral base; Claude Code never reads it natively, so `CLAUDE.md` inlines it via an `@AGENTS.md` import) and `CLAUDE.md` (that import plus Claude Code-specific additions and deltas). They extend and override the global files for work in this repo.
+- **Sibling skill** — another skill in this repo that a skill relies on by name (§ Conventions:
+  compose-by-name), e.g. `implement` routes defects through the `diagnosing-bugs` sibling. A plain-language runtime
+  pointer resolved by the installed skill set — never a file import.
+- **External requirement** — a skill or Codex plugin relied on by a selected skill whose canonical source
+  lives outside this repo and is declared in that skill source's `metadata.external`. It is not a sibling and
+  is installed only after provenance review and explicit consent. Its consumer-owned record lives in
+  `external-dependencies.lock.json`, separate from Asher-authored skill provenance.
+- **Playbook** — a repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup
+  (e.g. `environment.md`, `platform.md`). Skills speak in role nouns; the playbook binds those roles to
+  this repo's reality. Owned by the repo once written — setups reconcile them, never blindly overwrite.
+- **Global agent instruction files** — the machine-level files a harness loads from the home directory when
+  they exist: `~/.claude/CLAUDE.md` (Claude Code) and `~/.codex/AGENTS.md` (Codex). **Retired on this
+  machine** (asher-skills#114) — staffing, their last content, moved into each repo's own playbook and the
+  files were removed (backups: `evidence/114-global-staffing-retirement/`). Being unversioned and
+  unreviewable, they were never a home for durable knowledge: a fact only they carry is invisible to a fresh
+  clone, a cloud runner, and every diff. A machine truth belongs to the skill that owns it, or to this repo's
+  `environment.md`; nothing goes here — do not recreate these files.
+- **Project agent instruction files** — this repo's `AGENTS.md` (harness-neutral base; Claude Code never
+  reads it natively, so `CLAUDE.md` inlines it via an `@AGENTS.md` import) and `CLAUDE.md` (that import
+  plus Claude Code-specific additions and deltas). They extend and override the global files for work in
+  this repo.
 
 Kinds of skill: defined in `CONTEXT.md` (the two axes — primitive/composite/orchestrator and pure/effectful/stateful — the layer law, and the agent-decision/shipped-script split).
 
 ## Staffing
 
-Read `docs/agents/staffing.md` fully before model choice, delegation, child/worktree creation, capability-provider work, watcher assignment, or route-loss fallback. It is the sole authority for this repo: the complete roster, per-harness eligibility and capability bindings, this repo's deltas, and the machine its reachability rows were probed on. Claude Code and Codex sessions read the same file.
+Read `docs/agents/staffing.md` fully before model choice, delegation, child/worktree creation,
+capability-provider work, watcher assignment, or route-loss fallback. It is the sole authority for this repo:
+the complete roster and this repo's deltas, with per-harness eligibility, capability bindings, and
+reachability in the machine-local overlay it declares (`docs/agents/local/staffing.md`). Claude Code and
+Codex sessions read the same files.
 
 Do not resolve from a home-directory roster or from the `staffing` skill's bundled seed. If a machine-level staffing instruction is loaded ahead of this one, it is superseded — the repo's playbook wins.
 
-If that file is missing, or its probe record names a machine other than this one, say so and run `staffing setup` rather than dispatching on rows nobody verified here.
+If the playbook is missing, or its overlay is missing or stamped with a machine other than this one, say so
+and run `staffing setup` rather than dispatching on rows nobody verified here.
 
 ## Context documents
 
@@ -54,11 +75,28 @@ Durable documents carrying this repo's domain and direction — read the one who
 
 ## Conventions
 
-- **Skills are self-contained at the file level.** A skill's files live in its own directory — it never imports another skill's files or a shared library. Installing one skill copies one directory.
-- **Skills compose by name, not by file.** A skill may lean on a sibling skill by referring to it in plain language ("present it via the `serve-via-tailnet` skill") — a runtime pointer resolved by the installed skill set, not a file dependency. Every skill declares its **dependency surface** as three kinds of pointer: _bundled references_ (its own contract, shipped in-directory), _project playbooks_ (repo-specific instructions installed under `docs/agents/`), _sibling skills_ (other Asher-authored skills invoked by name), and declared _external requirements_ (provenance-checked skills or Codex plugins installed by their provider after consent).
-- **Copy a technique; extract a primitive.** A small, local technique is reused by copying its canonical files from the skill that has them and noting the source in the copy's header (e.g. `Adapted from skills/software-development/serve-via-tailnet/scripts/review-server.py`) — improvements flow back to the canonical version deliberately, not automatically. A capability that several skills genuinely share — the review surface, model staffing — is instead extracted into its own skill and referenced by name, never forked into every caller.
-- **Credits live in the README.** Skill content — `SKILL.md`, `reference/`, `templates/`, shipped playbook text — never carries external attribution; each skill's `README.md` (plus `THIRD_PARTY_LICENSES.md` where the license requires it) is the single home for source credits. Internal `Adapted from skills/...` pointers in copied script headers (previous bullet) are provenance plumbing, not credits, and stay.
-- **Composers declare and degrade.** A skill that references siblings names them in its `SKILL.md`; an install carries a skill's sibling closure. Absent a sibling, a skill states the requirement rather than failing silently.
+- **Skills are self-contained at the file level.** A skill's files live in its own directory — it never
+  imports another skill's files or a shared library. Installing one skill copies one directory.
+- **Skills compose by name, not by file.** A skill may lean on a sibling skill by referring to it in plain
+  language ("dispatch it via the `to-subagent` skill") — a runtime pointer resolved by the installed skill
+  set, not a file dependency. Every skill declares its **dependency surface** as three kinds of pointer:
+  *bundled references* (its own contract, shipped in-directory), *project playbooks* (repo-specific
+  instructions installed under `docs/agents/`), *sibling skills* (other Asher-authored skills invoked by
+  name), and declared *external requirements* (provenance-checked skills or Codex plugins installed by their
+  provider after consent).
+- **Copy a technique; extract a primitive.** A small, local technique is reused by copying its canonical
+  files from the skill that has them and noting the source in the copy's header (e.g. `Adapted from
+  skills/software-development/serve-via-tailnet/scripts/review-server.py`) — improvements flow back to the canonical version
+  deliberately, not automatically. A capability that several skills genuinely share — the review surface,
+  model staffing — is instead extracted into its own skill and referenced by name, never forked into every
+  caller.
+- **Credits live in the README.** Skill content — `SKILL.md`, `reference/`, `templates/`, shipped playbook
+  text — never carries external attribution; each skill's `README.md` (plus `THIRD_PARTY_LICENSES.md` where
+  the license requires it) is the single home for source credits. Internal `Adapted from skills/...` pointers
+  in copied script headers (previous bullet) are provenance plumbing, not credits, and stay.
+- **Composers declare and degrade.** A skill that references siblings names them in its `SKILL.md`; an
+  install carries a skill's sibling closure. Absent a sibling, a skill states the requirement rather than
+  failing silently.
 - Scripts are stdlib-only Python 3.
 - **Prose is unwrapped.** Markdown paragraphs and bullets are single lines — no fill-column hard wrapping; let the editor soft-wrap. Enforced by Prettier (`.prettierrc`, exclusions in `.prettierignore`): `npx prettier@3.6.2 --check '**/*.md'` is the gate, `--write` the fix. Installed mounts and workspaces are excluded — mounts are build products refreshed by the reconcile step.
 - Skills that must present well in Codex ship `agents/openai.yaml` (valid YAML naming the skill's interface, with `allow_implicit_invocation` set to match how the skill should trigger).
@@ -92,7 +130,7 @@ These skills are installed for this project — self-hosted from this repo's cat
 | to-thread | Spawns named, attachable sessions through the outermost harness | project |
 | to-subagent | Staffed non-interactive dispatch with a wake path | project |
 | watch-until | Watches a target until a condition holds, then relays | project |
-| serve-via-tailnet | Serves HTML artifacts on the tailnet, optionally annotated with verdicts | project |
+| serve-via-tailnet | Serves HTML artifacts on the tailnet, optionally annotated with verdicts — only on the user's explicit invocation, never as a default presentation path | project |
 | handoff | Compacts the conversation into a handoff document | project |
 | staffing | Owns the model roster; both harnesses resolve it from `docs/agents/staffing.md` (§ Staffing) | project |
 | skill-loop | Iterates a skill through eval → revise cycles | project |

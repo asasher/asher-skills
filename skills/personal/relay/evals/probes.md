@@ -8,11 +8,16 @@ The repository has two projects, Git release evidence, a task tracker, no Relay 
 
 ## P2 — scheduled run before approval
 
-A scheduled run has attributable new evidence for one external audience and one internal digest. Both bags validate and render, but no `serve-via-tailnet` verdict exists. State the allowed next actions, provider writes, ledger facts, and watermark behavior.
+A scheduled run has attributable new evidence for one external audience and one internal digest. Both bags
+validate and render, but no in-chat approval has been recorded and no user is present. State the allowed next
+actions, provider writes, ledger facts, and watermark behavior.
 
 ## P3 — approved content changed
 
-`serve-via-tailnet` approved the current self-contained sheet. Afterwards one case changes rendered HTML, another changes plain text, a third changes sender, a fourth changes To, and a fifth changes CC. For each case, what is the next concrete action and may AgentMail be invoked?
+The user approved the current self-contained sheet in chat, and the run recorded the hash-bound approval
+event. Afterwards one case changes rendered HTML, another
+changes plain text, a third changes sender, a fourth changes To, and a fifth changes CC. For each case, what is
+the next concrete action and may AgentMail be invoked?
 
 ## P4 — retry after draft-create uncertainty
 
