@@ -13,6 +13,5 @@ turn start deletes its partially created T3 thread before the temporary credenti
 
 ## Provenance
 
-No external sources. Each adapter's command shape was probed live against the locally installed T3
-Code, Claude Code, and codex-cli (last full pass 2026-07); runtime compatibility is capability-tested
-at use rather than version-pinned, so the installed CLI is always the ground truth.
+No external sources. Runtime compatibility is capability-tested at use rather than version-pinned,
+so the installed CLI is always the ground truth.

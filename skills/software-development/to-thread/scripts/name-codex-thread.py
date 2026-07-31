@@ -3,9 +3,8 @@
 
 Usage: name-codex-thread.py <thread-uuid> <name>
 
-Verified by live probe against the installed codex-cli; the app-server is
-experimental and may drift between releases. If this fails, leave the thread
-unnamed and hand the user its UUID instead.
+The app-server is experimental and may drift between releases. If this fails,
+leave the thread unnamed and hand the user its UUID instead.
 """
 import json
 import subprocess
