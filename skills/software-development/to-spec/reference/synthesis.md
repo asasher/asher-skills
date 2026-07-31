@@ -45,8 +45,7 @@ that no durable artifact exists. To-spec records where the trail ends; it never 
 fill the pointer slot.
 
 The sweep runs identically for every spec — ticket-bound, the no-tracker repo-doc fallback, dev and
-non-dev alike. **Omit the section when nothing was generated** (the same convention as Assumptions) —
-no manufactured prose.
+non-dev alike. **Omit the section when nothing was generated** (the same convention as Assumptions).
 
 ## Classify the work — dev or non-dev
 
