@@ -131,8 +131,7 @@
 > No standing presentation surface is bound here. Review happens on the change request bound in
 > `platform.md` § Change review; an artifact that genuinely needs rendering is opened locally or
 > committed and screenshotted onto the change request per `evidence.md`. Where the `serve-via-tailnet`
-> skill is installed, the user may invoke it explicitly on demand — it is not the review path and has
-> no standing config in this playbook.
+> skill is installed, the user may invoke it explicitly on demand.
 
 ## Staffing delta
 
