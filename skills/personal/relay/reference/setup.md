@@ -19,7 +19,7 @@ Setup studies the consumer repository, confirms its choices, and materializes on
    audience and interest manifests; a stale derivative stops selection.
 
 Evidence providers are project data. A binding may name a stable path, command, connector, or optional sibling
-skill. `serve-via-tailnet` is the only required sibling. Do not make any particular provider, mailbox, tracker,
+skill. Relay requires no sibling skill. Do not make any particular provider, mailbox, tracker,
 or repository layout universal.
 
 Write the repository playbook as the adapter between these generic roles and the consumer's reality. It owns

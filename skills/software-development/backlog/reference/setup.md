@@ -13,4 +13,12 @@ per-domain pack, `software/` being the shipped default:
 
 Reconcile with what exists — a repo-owned playbook is edited, never blindly overwritten.
 
+Classify every machine fact per [machine facts](machine-facts.md): verify-at-use facts get their probe
+command, not their result; every recorded machine fact goes to the gitignored `docs/agents/local/`
+overlays — one per tracked playbook, regenerated here, opening with its machine-record stamp, with the
+`.gitignore` entry ensured and each overlay declared in its tracked playbook by the machine-local
+pointer marker. A tracked file never records a machine fact.
+
 Verify the label roles exist in the tracker; create missing ones with the user's consent.
+
+Finish by running `scripts/check-machine-facts.py` against the repo and resolving what it names.

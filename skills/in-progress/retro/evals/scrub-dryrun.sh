@@ -47,7 +47,28 @@ EOF
 
 python3 "$SCRUB" "$TMP/clean.md" "$TMP/denylist.txt" >/dev/null 2>&1
 rc=$?
-[ "$rc" -eq 0 ] && ok "clean draft exits 0" || bad "clean draft exits 0 (got $rc)"
+[ "$rc" -eq 0 ] && ok "clean draft exits 0 (single denylist)" || bad "clean draft exits 0 (single denylist, got $rc)"
+
+# Multi-denylist: the scrub takes the machine-local and repo-shareable halves together; a term
+# present only in the second file must still be flagged.
+cat > "$TMP/denylist-shared.txt" <<'EOF'
+# repo-shareable half
+zephyrco
+EOF
+
+cat > "$TMP/dirty2.md" <<'EOF'
+The zephyrco rollout stumbled during groom; Acme saw the same.
+EOF
+
+out2="$(python3 "$SCRUB" "$TMP/dirty2.md" "$TMP/denylist.txt" "$TMP/denylist-shared.txt" 2>/dev/null)"
+rc=$?
+[ "$rc" -eq 1 ] && ok "two denylists: dirty draft exits 1" || bad "two denylists: dirty draft exits 1 (got $rc)"
+grep -q "denylist: zephyrco" <<<"$out2" && ok "term only in second denylist flagged" || bad "term only in second denylist flagged"
+grep -q "denylist: Acme" <<<"$out2" && ok "term in first denylist still flagged" || bad "term in first denylist still flagged"
+
+python3 "$SCRUB" "$TMP/clean.md" "$TMP/denylist.txt" "$TMP/denylist-shared.txt" >/dev/null 2>&1
+rc=$?
+[ "$rc" -eq 0 ] && ok "clean draft exits 0 (two denylists)" || bad "clean draft exits 0 (two denylists, got $rc)"
 
 if [ "$fail" -ne 0 ]; then
   echo "scrub-dryrun: FAIL" >&2

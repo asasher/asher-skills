@@ -26,6 +26,7 @@ INGEST = SCRIPTS / "ingest_agentmail_events.py"
 STATUS = SCRIPTS / "relay_status.py"
 PROVISION = SCRIPTS / "provision_agentmail_key.py"
 FIXTURE = SKILL / "templates" / "instance" / "templates" / "fixtures" / "project-update.json"
+APPROVAL_EVENT_ID = "chat_20260716T091000Z_9f3a"
 
 
 def run(*args: str, env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
@@ -132,7 +133,7 @@ class RelayTests(unittest.TestCase):
         result = run(str(BUILD_REVIEW), str(root), "--run", str(run_dir), env={**os.environ, "RELAY_NOW": "2026-07-16T09:00:00Z"})
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         review = run_dir / "review.html"
-        event = {"type": "feedback_submitted", "verdict": "approve", "doc_hash": hashlib.sha256(review.read_bytes()).hexdigest()[:16], "annotations": [], "timestamp": "2026-07-16T09:10:00Z"}
+        event = {"type": "chat_approval", "id": APPROVAL_EVENT_ID, "verdict": "approve", "doc_hash": hashlib.sha256(review.read_bytes()).hexdigest()[:16], "timestamp": "2026-07-16T09:10:00Z"}
         (run_dir / "review-state").mkdir()
         (run_dir / "review-state" / "events.jsonl").write_text(json.dumps(event) + "\n", encoding="utf-8")
         return run_dir
@@ -196,7 +197,12 @@ class RelayTests(unittest.TestCase):
         paths.extend(path for root in product_roots if root.is_dir() for path in root.rglob("*") if path.is_file() and path.suffix != ".pyc")
         text = "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in paths)
         self.assertIn("name: relay", (SKILL / "SKILL.md").read_text())
-        self.assertIn("requires: [serve-via-tailnet]", (SKILL / "SKILL.md").read_text())
+        self.assertIn("requires: []", (SKILL / "SKILL.md").read_text())
+        # Relay declares no sibling, so no shipped file may name another skill as its
+        # delivery or approval surface. Needle split so this file passes its own scan.
+        foreign_skill = "serve-via-" + "tailnet"
+        everything = "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in sorted(SKILL.rglob("*")) if path.is_file() and path.suffix != ".pyc")
+        self.assertNotIn(foreign_skill, everything)
         self.assertNotIn("control-plane/communications", text)
         self.assertNotIn("control-plane/relay", text)
         self.assertNotIn("docs/agents/communications", text)
@@ -395,6 +401,8 @@ class RelayTests(unittest.TestCase):
             workflow = read_jsonl(root / "relay" / "state" / "workflow.jsonl")
             states = [item["state"] for item in workflow]
             self.assertLess(states.index("draft-created"), states.index("send-submitted")); self.assertLess(states.index("send-submitted"), states.index("sent"))
+            reviewed = next(item for item in workflow if item["state"] == "reviewed")
+            self.assertEqual(reviewed.get("review_event_id"), APPROVAL_EVENT_ID)
             delivery = read_jsonl(root / "relay" / "state" / "delivery.jsonl")
             self.assertEqual(len(delivery), 2); self.assertTrue(all(item["state"] == "pending" for item in delivery))
             state_text = "".join(path.read_text() for path in (root / "relay" / "state").glob("*.jsonl"))

@@ -27,15 +27,24 @@ pseudonymous, not anonymous — issues are authored by the submitting GitHub acc
 
 | | |
 |---|---|
-| Instance | `retro/` — `ledger.md`, `denylist.txt` |
+| Instance | `retro/` — `ledger.md`, `denylist.txt` (machine-local scrub half), `transcripts.md`; machine-local and untracked (`.gitignore` carries `/retro/`) |
+| Shared denylist | `docs/agents/retro-denylist.txt` — tracked; the repo-shareable scrub terms |
 | Pass due | 5 open entries, or 3 in one cluster |
 
 ## Transcript binding
 
-Where each harness keeps this project's run transcripts; a retro pass reads only runs since the
-last pass. Verified paths, recorded at setup — never guessed.
-
-| harness | location |
+| | |
 |---|---|
-| Claude Code | _unset_ |
-| Codex | _unset_ |
+| Harnesses bound | _unset — recorded by `retro setup`'s transcript-binding step_ |
+
+How to find each harness's transcripts for this repo — the concrete verified locations live in the
+untracked `retro/transcripts.md`, written by setup:
+
+- **Claude Code** keeps per-project transcripts under
+  `~/.claude/projects/<absolute project path with '/' replaced by '-'>/` as `*.jsonl`.
+- **Codex** keeps sessions globally under `~/.codex/sessions/<year>/…`; filter to this repo by the
+  cwd each session file records.
+
+Locations are verified at use: when `retro/transcripts.md` is missing or a recorded location no
+longer resolves, re-run setup's transcript-binding step rather than guessing. A retro pass reads
+only runs since the last pass.

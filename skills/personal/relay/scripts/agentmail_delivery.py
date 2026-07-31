@@ -119,7 +119,7 @@ def verify_draft(value: dict[str, Any], manifest: dict[str, Any], run: Path) -> 
 def approved_event(run: Path) -> dict[str, Any] | None:
     doc_hash = sha256_file(run / "review.html")[:16]
     events = read_jsonl(run / "review-state" / "events.jsonl")
-    matches = [event for event in events if event.get("type") == "feedback_submitted" and event.get("verdict") in {"approve", "approve_with_nits"} and event.get("doc_hash") == doc_hash]
+    matches = [event for event in events if event.get("type") == "chat_approval" and event.get("verdict") in {"approve", "approve_with_nits"} and event.get("doc_hash") == doc_hash]
     return matches[-1] if matches else None
 
 

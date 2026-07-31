@@ -1,0 +1,7 @@
+# Shared scrub terms for upstream feedback drafts — one per line, case-insensitive substring.
+# The repo-shareable half of retro's denylist: repo/org names, tracker project keys, product and
+# internal codenames — terms every clone of this repo wants scrubbed. The machine and person half
+# lives untracked at retro/denylist.txt. Seeded by retro setup; edit freely, the user owns this list.
+# Note: skill names (backlog, shape, retro, …) are the working vocabulary and must NOT be here.
+asasher
+asher-skills

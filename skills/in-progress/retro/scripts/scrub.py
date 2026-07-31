@@ -7,12 +7,14 @@ A clean exit is necessary for submission, never sufficient: the human approval o
 draft is the gate.
 
 Usage:
-    python3 scrub.py DRAFT DENYLIST [--allow URL_PREFIX]...
+    python3 scrub.py DRAFT DENYLIST [DENYLIST ...] [--allow URL_PREFIX]...
 
-DENYLIST is one term per line; blank lines and #-comments are ignored; matching is
-case-insensitive substring. --allow is repeatable and defaults to the upstream repo's own URL
-space being absent — pass e.g. --allow https://github.com/asasher/asher-skills to permit links
-into the target repo.
+Each DENYLIST is one term per line; blank lines and #-comments are ignored; matching is
+case-insensitive substring. The draft is scanned against the union of every list given — the
+retro skill keeps a machine-local half (`retro/denylist.txt`) and a repo-shareable half
+(`docs/agents/retro-denylist.txt`) and passes both. --allow is repeatable and defaults to the
+upstream repo's own URL space being absent — pass e.g.
+--allow https://github.com/asasher/asher-skills to permit links into the target repo.
 
 Exit 0: no findings. Exit 1: findings, one per line:  <line>:<kind>: <excerpt>
 """
@@ -62,13 +64,17 @@ def scan(text: str, denylist: list[str], allow: list[str]) -> list[tuple[int, st
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("draft", type=Path)
-    parser.add_argument("denylist", type=Path)
+    parser.add_argument("denylists", nargs="+", type=Path, metavar="denylist")
     parser.add_argument("--allow", action="append", default=[], metavar="URL_PREFIX")
     args = parser.parse_args()
 
+    terms: list[str] = []
+    for path in args.denylists:
+        terms.extend(load_denylist(path))
+
     findings = scan(
         args.draft.read_text(encoding="utf-8"),
-        load_denylist(args.denylist),
+        terms,
         args.allow,
     )
     for lineno, kind, excerpt in findings:

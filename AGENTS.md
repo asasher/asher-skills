@@ -56,7 +56,7 @@ Where a skill lives — three distinct places, three terms:
 How skills and instructions relate:
 
 - **Sibling skill** — another skill in this repo that a skill relies on by name (§ Conventions:
-  compose-by-name), e.g. `to-spec` presents through the `serve-via-tailnet` sibling. A plain-language runtime
+  compose-by-name), e.g. `implement` routes defects through the `diagnosing-bugs` sibling. A plain-language runtime
   pointer resolved by the installed skill set — never a file import.
 - **External requirement** — a skill or Codex plugin relied on by a selected skill whose canonical source
   lives outside this repo and is declared in that skill source's `metadata.external`. It is not a sibling and
@@ -84,14 +84,15 @@ pure/effectful/stateful — the layer law, and the agent-decision/shipped-script
 
 Read `docs/agents/staffing.md` fully before model choice, delegation, child/worktree creation,
 capability-provider work, watcher assignment, or route-loss fallback. It is the sole authority for this repo:
-the complete roster, per-harness eligibility and capability bindings, this repo's deltas, and the machine its
-reachability rows were probed on. Claude Code and Codex sessions read the same file.
+the complete roster and this repo's deltas, with per-harness eligibility, capability bindings, and
+reachability in the machine-local overlay it declares (`docs/agents/local/staffing.md`). Claude Code and
+Codex sessions read the same files.
 
 Do not resolve from a home-directory roster or from the `staffing` skill's bundled seed. If a machine-level
 staffing instruction is loaded ahead of this one, it is superseded — the repo's playbook wins.
 
-If that file is missing, or its probe record names a machine other than this one, say so and run
-`staffing setup` rather than dispatching on rows nobody verified here.
+If the playbook is missing, or its overlay is missing or stamped with a machine other than this one, say so
+and run `staffing setup` rather than dispatching on rows nobody verified here.
 
 ## Context documents
 
@@ -107,7 +108,7 @@ Durable documents carrying this repo's domain and direction — read the one who
 - **Skills are self-contained at the file level.** A skill's files live in its own directory — it never
   imports another skill's files or a shared library. Installing one skill copies one directory.
 - **Skills compose by name, not by file.** A skill may lean on a sibling skill by referring to it in plain
-  language ("present it via the `serve-via-tailnet` skill") — a runtime pointer resolved by the installed skill
+  language ("dispatch it via the `to-subagent` skill") — a runtime pointer resolved by the installed skill
   set, not a file dependency. Every skill declares its **dependency surface** as three kinds of pointer:
   *bundled references* (its own contract, shipped in-directory), *project playbooks* (repo-specific
   instructions installed under `docs/agents/`), *sibling skills* (other Asher-authored skills invoked by
@@ -167,7 +168,7 @@ the refresh command below in the main checkout after a merge that touches `skill
 | to-thread | Spawns named, attachable sessions through the outermost harness | project |
 | to-subagent | Staffed non-interactive dispatch with a wake path | project |
 | watch-until | Watches a target until a condition holds, then relays | project |
-| serve-via-tailnet | Serves HTML artifacts on the tailnet, optionally annotated with verdicts | project |
+| serve-via-tailnet | Serves HTML artifacts on the tailnet, optionally annotated with verdicts — only on the user's explicit invocation, never as a default presentation path | project |
 | handoff | Compacts the conversation into a handoff document | project |
 | staffing | Owns the model roster; both harnesses resolve it from `docs/agents/staffing.md` (§ Staffing) | project |
 | skill-loop | Iterates a skill through eval → revise cycles | project |

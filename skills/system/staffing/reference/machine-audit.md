@@ -25,8 +25,10 @@ record the results:
    below, plus the native wrapper label/model evidence where a wrapper carried the probe. A failure removes
    this direction only. Real invocation behavior is the operational signal.
 2. **Which sibling harness CLIs are installed?** Probe `codex --version` and `claude --version`, then retain
-   only the routes step 1 actually exercised. Presence alone is not reachability. Record the versions — they
-   are part of what makes a recorded route trustworthy on this machine and stale on another.
+   only the routes step 1 actually exercised. Presence alone is not reachability. Record the versions as the
+   probe record's metadata — part of what makes a recorded route trustworthy on this machine and stale on
+   another, and the cue to re-probe after an upgrade — never as facts of their own that anything resolves
+   against.
 3. **Which dispatch aliases does each CLI actually accept?** Roster names are not dispatch aliases. Probe the
    name that would be passed to the CLI's model argument for every row that could cross a harness boundary,
    and record the mapping with the CLI version that produced it. A name no probe accepted must never be
@@ -76,7 +78,13 @@ Each classification carries five evidence fields, all resolvable from its row: t
 the timestamp, the command shape used, the result or failure class, and the recorded successor for that
 direction. Where one audit run established every row, the machine, CLI versions, and date may live once in
 the probe record the rows sit under; a row probed at any other time carries its own values inline, so the
-shared record never misdescribes it.
+shared record never misdescribes it. The record, rows included, lives in the repo's gitignored
+machine-local overlay (`docs/agents/local/staffing.md`), never the tracked playbook; its
+machine-readable form is the stamp line
+`<!-- machine-record: machine=<short hostname> probed=<YYYY-MM-DD> -->` at its head — what a mechanical
+staleness check parses where a repo's installed skill set ships one. The machine value is the stable
+short hostname as a single whitespace-free token — the segment before the first dot, on macOS the
+local host name (`scutil --get LocalHostName`) — compared case-insensitively.
 
 Timestamps date the observation that **established** the recorded state, not the latest run that confirmed
 it: a re-probe that finds a row exactly as recorded writes nothing. That is what keeps a re-run with

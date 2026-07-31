@@ -28,9 +28,9 @@ question asked.
   (deriving a short kebab-case name from the decided direction). With no tracker bound, fall back to a
   repo doc at `docs/specs/<name>.md`.
 
-Load [synthesis](reference/synthesis.md) for the method (what to mine, the no-interview rule, dev-vs-non-dev
-gating, the no-stale-content rule, sign-off) and [template-guide](reference/template-guide.md) for what goes
-in each section.
+Load [synthesis](reference/synthesis.md) for the method (what to mine, the artifact sweep, the
+no-interview rule, dev-vs-non-dev gating, the no-stale-content rule, sign-off) and
+[template-guide](reference/template-guide.md) for what goes in each section.
 
 ## How a spec gets written
 
@@ -38,8 +38,9 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
 
 1. **Mine, don't ask.** Read the conversation and the codebase/project understanding it built. Start from
    the interview record when one exists (synthesis § What to mine). Extract the problem, the decided
-   solution, the decisions taken and the constraints that forced them. Anything left undecided becomes a
-   line in **Notes**, never a question back to the user.
+   solution, the decisions taken and the constraints that forced them. Sweep every generated artifact
+   that informed a decision into a **Supporting artifacts** entry (synthesis § Sweep the artifacts).
+   Anything left undecided becomes a line in **Notes**, never a question back to the user.
 2. **Classify the work — dev or non-dev.** Our work isn't all software. A **dev spec** keeps the dev-only
    sections (Testing decisions, Test seams) and runs the seams step below; a **non-dev spec** skips both and
    uses only the core sections.
@@ -70,8 +71,8 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
 - **The artifact lives on the ticket** — body canonical, diagram first, comments as the revision trail.
   The repo doc at `docs/specs/<name>.md` — the same diagram-first body — is the fallback
   home when no tracker is bound.
-- **No file paths or code snippets** — sole exception the prototype-validated snippet (synthesis § No stale
-  content).
+- **No file paths or code snippets** — the only exceptions the prototype-validated snippet and the
+  **Supporting artifacts** section's durable pointers (synthesis § No stale content).
 - **Adaptable to non-dev work.** The dev-only sections are optional; a spec for a process, a piece of content,
   or a decision uses the core sections alone.
 
