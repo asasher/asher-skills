@@ -124,13 +124,13 @@ support a rule — "this CLI rejects versioned names, accepts bare ones" — doe
 sibling CLI? Cite.
 
 **P26 (issue 59, idempotent re-run).** `staffing setup` re-runs on the same machine with unchanged CLI
-versions, and every probe returns exactly what the playbook records. What does the re-run change in the
-file, header included? What do the recorded timestamps mean, and why does leaving them untouched not make
-them dishonest? Cite.
+versions, and every probe returns exactly what is recorded. What does the re-run change in the files,
+stamp included? What do the recorded timestamps mean, and why does leaving them untouched not make them
+dishonest? Cite.
 
 **P27 (one home).** `staffing setup` (read `reference/setup.md`) is reconciling a repo whose
-`docs/agents/environment.md` records "`codex --version` → 9.9.9" while the staffing playbook's probe
-record carries a different Codex version. What does setup do about the environment file's line — edit
+`docs/agents/environment.md` records "`codex --version` → 9.9.9" while the staffing probe record
+carries a different Codex version. What does setup do about the environment file's line — edit
 it, ignore it, or something else — and which file may record the CLI version at all? Cite.
 
 ## Answer key
@@ -274,19 +274,19 @@ it, ignore it, or something else — and which file may record the CLI version a
   rule needs its own probes. Cite `reference/machine-audit.md` (audit step 3) or the alias bullet in
   `reference/install-and-reconcile.md` § Reconciling an existing playbook. Recording the roster name as the
   alias, or extending one CLI's rule to the other = fail.
-- **P26 (issue 59):** **Nothing** — the file is byte-identical, header included ("a run that confirms
-  every recorded fact rewrites nothing, header included", `reference/setup.md`). Timestamps date the
+- **P26 (issue 59):** **Nothing** — both files are byte-identical, stamp included ("a run that confirms
+  every recorded fact rewrites nothing, stamp included", `reference/setup.md`). Timestamps date the
   observation that **established** each recorded state, not the latest run that confirmed it, so a probe
   that finds a row exactly as recorded writes nothing; the rows stay honest because any change in what a
   probe observes is written as fresh evidence with its own date. Refreshing a "last confirmed" date — on a
-  row or the header, turning every re-run into a diff — = fail. Cite `reference/machine-audit.md` § Route
+  row or the stamp, turning every re-run into a diff — = fail. Cite `reference/machine-audit.md` § Route
   classification and the byte-identical bullet in `reference/install-and-reconcile.md` § Reconciling an
   existing playbook.
 
-- **P27 (one home):** **Report it as drift, neither edit nor ignore.** The staffing playbook is the
-  sole home — cite `reference/setup.md`: "This playbook is the one home for model and capability
-  reachability — routes, dispatch aliases, effect verdicts — and for the CLI-version metadata stamped
-  on their probes: report any other playbook found restating them as drift."
+- **P27 (one home):** **Report it as drift, neither edit nor ignore.** The staffing overlay is the
+  sole home — cite `reference/setup.md`: "The overlay is the one home for model and capability
+  reachability — routes, dispatch aliases, effect verdicts — and for the CLI-version metadata riding
+  their probes: report any other playbook found restating them as drift."
   Setup does not fix the environment file itself — its writes are the staffing playbook (and the
   trigger section of the agent instruction file, step 4), never a foreign playbook — so the
   restatement is reported for its owning setup to resolve. Editing `environment.md` directly,

@@ -55,14 +55,11 @@ probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
   `python3 site/check.py` (`site/MAINTENANCE.md`); errors block — **its exit code
   is the verdict; don't pipe it through `tail` in a `&&` chain or the failure is masked.**
 - Gate interpreter: bare `python3` — the gates need whatever interpreter `python3` resolves, and
-  running them is the probe; the observed version is not a fact this file records. The expensive
-  verified behaviors behind that choice sit under the stamp below.
+  running them is the probe; the observed version is not a fact this file records.
 
-  <!-- machine-record: machine=Ashers-MacBook-Pro probed=2026-07-27 -->
-  hashlib is healthy across algorithms in the `python3` the gates resolve. Don't prefix these gates
-  with `PATH=/usr/bin:$PATH`: the worktree sandbox that builds run in refuses that literal shape on
-  a static-verification check (plain env-assignment prefixes such as `FOO=1 python3` run fine), and
-  Apple's system python is older than the interpreter the script check above exercises.
+  <!-- machine-local: docs/agents/local/codebase.md setup="backlog setup" -->
+  Machine-verified interpreter and sandbox behaviors — hashlib health, command shapes the worktree
+  sandbox refuses — live in the overlay declared above; when it is missing, run `backlog setup`.
 - Staffing eval suite (run from `skills/system/staffing/evals/`): `test_provider_pilot.py`. The guard is
   **harness isolation** — neither compiled path (nor installed mount) may carry an instruction only a
   session of the other harness could act on. The size ratio (each provider ≤ 80% of the unified

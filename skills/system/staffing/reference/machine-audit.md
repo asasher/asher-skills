@@ -78,7 +78,9 @@ Each classification carries five evidence fields, all resolvable from its row: t
 the timestamp, the command shape used, the result or failure class, and the recorded successor for that
 direction. Where one audit run established every row, the machine, CLI versions, and date may live once in
 the probe record the rows sit under; a row probed at any other time carries its own values inline, so the
-shared record never misdescribes it. The shared record's machine-readable form is the stamp line
+shared record never misdescribes it. The record, rows included, lives in the repo's gitignored
+machine-local overlay (`docs/agents/local/staffing.md`), never the tracked playbook; its
+machine-readable form is the stamp line
 `<!-- machine-record: machine=<short hostname> probed=<YYYY-MM-DD> -->` at its head — what a mechanical
 staleness check parses where a repo's installed skill set ships one. The machine value is the stable
 short hostname as a single whitespace-free token — the segment before the first dot, on macOS the

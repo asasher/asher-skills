@@ -4,12 +4,12 @@
 >
 > Machine facts follow the discipline bundled with the `backlog` skill — read `reference/machine-facts.md`
 > in its installed package for the classes and marker grammar; absent that skill, leave machine facts
-> unrecorded rather than inventing a form. In short: record probe commands, not their results; a fact
-> only this machine can answer lives in the gitignored `docs/agents/local/platform.md` overlay,
-> regenerated and declared by setup; a tracked probe result sits under a `machine-record` stamp. Model
-> and capability reachability — routes, dispatch aliases, effect verdicts — has one home, the staffing
-> playbook's probe record, CLI versions riding it only as stamped metadata; this file points there
-> rather than restating any of it.
+> unrecorded rather than inventing a form. In short: record probe commands, not their results; every
+> recorded machine fact lives in the gitignored `docs/agents/local/platform.md` overlay, regenerated
+> and declared by setup — never in this tracked file. Model and capability reachability — routes,
+> dispatch aliases, effect verdicts — has one home, the staffing overlay
+> (`docs/agents/local/staffing.md`), CLI versions riding it only as its record's metadata; this file
+> points there rather than restating any of it.
 
 ## Tracker — where issues live
 

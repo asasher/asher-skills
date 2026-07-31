@@ -12,9 +12,9 @@
 > Machine facts follow the discipline bundled with the `backlog` skill — read `reference/machine-facts.md`
 > in its installed package for the classes and marker grammar; absent that skill, leave machine facts
 > unrecorded rather than inventing a form. In short, at accretion and at setup alike: record the probe
-> command, not its result; a fact only this machine can answer lives in the gitignored
-> `docs/agents/local/environment.md` overlay, regenerated and declared by the owning setup; a tracked
-> probe result sits under a `machine-record` stamp.
+> command, not its result; every recorded machine fact lives in the gitignored
+> `docs/agents/local/environment.md` overlay, regenerated and declared by the owning setup — never in
+> this tracked file.
 
 ## Branching & deploys
 
@@ -124,8 +124,8 @@
   test`>_. New checks are written as specs there, named for the ticket, and left in the tree: today's
   verification is tomorrow's regression suite. Evidence comes from Playwright's own artifacts — traces,
   screenshots, video — captured per run into _<artifact dir>_. Setup verifies the browser
-  actually launches headless on this machine; the verdict is an expensive probe result, recorded under
-  a `machine-record` stamp — with headed mode as the recorded fallback when headless cannot launch.
+  actually launches headless on this machine; the verdict is a machine fact — it goes in the overlay,
+  with headed mode as the recorded fallback when headless cannot launch.
   Harness-native browser tools and `agent-browser` are not verification routes — they have proven
   unreliable; a browser check is a Playwright script or it is a recorded gap.
 - Other surfaces: _<defaults: shell + the CLI entrypoint; a simulator + driver for mobile; desktop only

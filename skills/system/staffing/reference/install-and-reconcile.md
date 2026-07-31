@@ -2,14 +2,15 @@
 
 ## One layer
 
-Setup writes exactly one file: the **project staffing playbook**, under the repo's agent-docs directory. It is
-the sole runtime authority. There is no home-directory module, no pointer section in a global agent
-instruction file, and no base-plus-delta overlay to resolve.
+Setup writes the **project staffing playbook**, under the repo's agent-docs directory, and the gitignored
+machine-local overlay it declares. Together they are the sole runtime authority. There is no home-directory
+module and no pointer section in a global agent instruction file.
 
-The playbook contains the reachable model rows, per-harness eligibility, named capability providers and
-fallbacks, pins, floor, succession, directional reachability with its probe evidence, and the probe record
-naming the machine and CLI versions. Doctrine stays in this skill's references; a playbook that restates a
-ranking rule or a command shape has copied something that will drift.
+The playbook carries the judgment rows, pins, floor, succession, and project deltas; its overlay carries
+everything machine-probed — per-harness eligibility, named capability providers and fallbacks, directional
+reachability with its probe evidence, and the probe record naming the machine and CLI versions. Doctrine
+stays in this skill's references; a playbook that restates a ranking rule or a command shape has copied
+something that will drift.
 
 The bundled roster **seed** supplies starting values for the judgment numbers — cost, intelligence, taste,
 effort — because those cannot be probed. It is read once, at setup, and never at resolution time. Everything

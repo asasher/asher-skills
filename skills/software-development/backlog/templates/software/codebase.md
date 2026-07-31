@@ -10,9 +10,9 @@
 > Machine facts follow the discipline bundled with the `backlog` skill — read `reference/machine-facts.md`
 > in its installed package for the classes and marker grammar; absent that skill, leave machine facts
 > unrecorded rather than inventing a form. In short, at accretion and at setup alike: record the probe
-> command, not its result; a fact only this machine can answer lives in the gitignored
-> `docs/agents/local/codebase.md` overlay, regenerated and declared by the owning setup; a tracked
-> probe result sits under a `machine-record` stamp.
+> command, not its result; every recorded machine fact lives in the gitignored
+> `docs/agents/local/codebase.md` overlay, regenerated and declared by the owning setup — never in
+> this tracked file.
 
 ## Conventions
 
@@ -33,7 +33,7 @@
 - Interpreter/runner facts: a requirement the code imposes ("Python 3.10+") is a project fact — state
   it as the requirement. What this machine has installed is verify-at-use, the gate run itself the
   probe — never record the observed version. An expensive verified behavior — a sandbox refusal
-  class, a runner quirk proven live — is recorded under a `machine-record` stamp.
+  class, a runner quirk proven live — is still a machine fact: it lives in the overlay.
 
 ## Testing patterns
 

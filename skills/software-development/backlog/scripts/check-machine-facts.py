@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
-"""Check machine-fact records under docs/agents/ against the current machine.
+"""Check the machine-fact rule under docs/agents/ against the current machine.
 
-Scans every Markdown file under <root>/docs/agents/ (the gitignored local/
-overlays included, when present) for the two markers the machine-facts
-convention defines (reference/machine-facts.md):
+The rule (reference/machine-facts.md): a tracked file never records a machine
+fact; recorded machine facts live only in the gitignored docs/agents/local/
+overlays, each opening with a machine-record stamp. Two markers exist:
 
     <!-- machine-record: machine=<hostname> probed=<YYYY-MM-DD> -->
     <!-- machine-local: docs/agents/local/<name>.md setup="<skill> setup" -->
 
-Findings — a machine-record naming another machine, a declared machine-local
-overlay whose file is absent, or a marker matching the comment prefix but not
-the grammar — print one per line on stdout. Exit 1 when any finding exists,
-0 when none. No stored state: the scan is the whole verdict.
+Findings, one per line on stdout:
+  - a machine-record stamp in a tracked (non-overlay) file — machine facts
+    belong in the overlay
+  - a declared machine-local overlay whose file is absent
+  - an overlay whose first marker is missing or names another machine
+  - a marker matching the comment prefix but not the grammar
+
+Exit 1 when any finding exists, 0 when none. No stored state: the scan is the
+whole verdict.
 
 A marker counts only when the comment opens the line (leading whitespace
 aside): prose quoting a marker mid-sentence is ignored rather than reported
@@ -66,8 +71,11 @@ def scan(root, machine):
     agents_dir = root / "docs" / "agents"
     if not agents_dir.is_dir():
         return findings
+    local_dir = agents_dir / "local"
     for path in sorted(agents_dir.rglob("*.md")):
         rel = path.relative_to(root)
+        is_overlay = local_dir in path.parents
+        saw_stamp = False
         for lineno, line in enumerate(
             path.read_text(encoding="utf-8", errors="replace").splitlines(), 1
         ):
@@ -77,11 +85,18 @@ def scan(root, machine):
             record = RECORD_RE.match(stripped)
             if record:
                 recorded, probed = record.groups()
-                if normalize(recorded) != normalize(machine):
+                if not is_overlay:
+                    findings.append(
+                        f"tracked {rel}:{lineno}: machine-record stamp in a "
+                        f"tracked file — machine facts live in the "
+                        f"docs/agents/local/ overlay"
+                    )
+                elif normalize(recorded) != normalize(machine):
                     findings.append(
                         f"stale {rel}: recorded machine '{recorded}' is not "
                         f"this machine '{machine}' (probed {probed})"
                     )
+                saw_stamp = True
                 continue
             local = LOCAL_RE.match(stripped)
             if local:
@@ -93,12 +108,17 @@ def scan(root, machine):
                     )
                 continue
             findings.append(f"malformed {rel}:{lineno}: {stripped}")
+        if is_overlay and not saw_stamp:
+            findings.append(
+                f"unstamped {rel}: overlay carries no machine-record stamp "
+                f"— re-run the owning setup"
+            )
     return findings
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Check docs/agents/ machine-fact records against the current machine."
+        description="Check the docs/agents/ machine-fact rule against the current machine."
     )
     parser.add_argument(
         "--root",

@@ -93,8 +93,8 @@ ids given.
 Preflight once per run: the platform verbs and credentials the builds will lean on answer a cheap live
 read — a dead one is drift, fixed by re-running `backlog setup` before any dispatch spends a build
 discovering it. The preflight also runs this skill's `scripts/check-machine-facts.py` against the
-repo — a stale stamped record or a missing declared overlay is the same drift, fixed by re-running
-the owning setup before dispatch. For each ticket: mark it building per the label roles — a dispatched ticket must never
+repo — a machine fact in a tracked file, a missing declared overlay, or a stale overlay stamp is the
+same drift, fixed by re-running the owning setup before dispatch. For each ticket: mark it building per the label roles — a dispatched ticket must never
 dispatch twice, and the claim comment carries this runner's identity per the policy's § Building
 hygiene — prepare its worktree via the `worktree` skill, update the claim with its base, branch, path,
 and this dispatcher as cleanup owner, then dispatch the `build` skill on it via the `to-subagent`

@@ -92,9 +92,9 @@ Read `reference/machine-facts.md`. Classify this fact, say what the reconciled p
 instead, and name the only file that may record the CLI's version at all. Cite.
 
 **P21 (build preflight, stale stamp).** `backlog build`'s preflight runs
-`scripts/check-machine-facts.py` and it exits nonzero with `stale docs/agents/staffing.md: recorded
-machine 'Other-Mac' is not this machine 'This-Mac' (probed 2026-07-26)`. What is this finding, and
-what happens before any dispatch? Cite.
+`scripts/check-machine-facts.py` and it exits nonzero with `stale docs/agents/local/staffing.md:
+recorded machine 'Other-Mac' is not this machine 'This-Mac' (probed 2026-07-26)`. What is this
+finding, and what happens before any dispatch? Cite.
 
 ## Answer key
 
@@ -181,16 +181,16 @@ what happens before any dispatch? Cite.
   exercises the capability itself (`gh auth status`, a bounded executor echo), never a version string
   standing proxy for it — and never the probe's result." The reconciled line keeps a
   capability-exercising liveness probe and drops the recorded version; the version's only home is the
-  staffing playbook's probe record, as metadata — "Model and capability reachability — routes,
-  dispatch aliases, effect-probe verdicts — lives only in the staffing playbook's probe record
-  (`docs/agents/staffing.md`), the CLI versions its probes observed riding along as that record's
-  metadata; an environment or platform playbook restating a route, an alias, or a version is drift."
-  Keeping the version in environment.md, moving it to the machine-local overlay, or classifying it an
-  expensive probe cache = **fail**.
-- **P21:** A stale machine-record stamp — the checker's exit is the drift signal, and dispatch waits:
-  "The preflight also runs this skill's `scripts/check-machine-facts.py` against the repo — a stale
-  stamped record or a missing declared overlay is the same drift, fixed by re-running the owning
-  setup before dispatch." Dispatching anyway, treating the finding as advisory, or hand-editing the
-  stamp to match instead of re-running the owning setup = **fail**.
+  staffing overlay's record, as metadata — "Model and capability reachability — routes, dispatch
+  aliases, effect-probe verdicts — lives only in the staffing overlay (`docs/agents/local/staffing.md`,
+  declared by the tracked staffing playbook), the CLI versions its probes observed riding along as
+  that record's metadata; an environment or platform playbook restating a route, an alias, or a
+  version is drift." Keeping the version in environment.md, or moving it to the environment overlay
+  rather than dropping it, = **fail**.
+- **P21:** A stale overlay stamp — the checker's exit is the drift signal, and dispatch waits: "The
+  preflight also runs this skill's `scripts/check-machine-facts.py` against the repo — a machine fact
+  in a tracked file, a missing declared overlay, or a stale overlay stamp is the same drift, fixed by
+  re-running the owning setup before dispatch." Dispatching anyway, treating the finding as advisory,
+  or hand-editing the stamp to match instead of re-running the owning setup = **fail**.
 
 Pass bar: **22/22 on both executors.**
