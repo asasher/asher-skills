@@ -39,7 +39,7 @@ landing in the same session, so the finding survives.
 
 | | |
 |---|---|
-| Harnesses bound | Claude Code, Codex — bound at setup 2026-07-30 (asher-skills#147 moved the locations into the instance) |
+| Harnesses bound | Claude Code, Codex |
 
 How to find each harness's transcripts for this repo — the concrete verified locations live in the
 untracked `retro/transcripts.md`, written by setup:

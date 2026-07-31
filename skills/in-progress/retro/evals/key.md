@@ -38,10 +38,9 @@ Written before any runs; never in executor context. Pass bar: **10/10 on both ex
   and skipping it corrupts the next pass's watermark." Ending on the report without the ledger
   update = **fail**.
 
-## Delta key — machine-local instance (2026-07-31)
+## Delta key — machine-local instance
 
-Written before any delta-probe runs (one later tighten, noted in P11's entry); never in executor
-context. Pass bar unchanged: both executors.
+Written before any delta-probe runs; never in executor context. Pass bar unchanged: both executors.
 
 - **P11:** Both halves: `retro/denylist.txt` and `docs/agents/retro-denylist.txt` — "Run
   `scripts/scrub.py <draft> retro/denylist.txt docs/agents/retro-denylist.txt` — both denylist
@@ -50,11 +49,7 @@ context. Pass bar unchanged: both executors.
   Missing half: "A half counts as absent only when it is missing from its resolved location" —
   `retro/denylist.txt` resolves against the main working tree, so declaring it absent from a linked
   worktree's cwd without checking there = **fail**. Naming only one file when both exist, skipping
-  the scrub, or silently ignoring the absent half = **fail**. *Provenance:* the resolved-location
-  criterion, quoting the SKILL.md sentence above, was tightened 2026-07-31 during #158 review —
-  after the initial 6/6 runs, which covered the pre-tighten criterion; re-run dual-executor at head
-  01c3ed1: pass on both (gpt-5.6-sol via `codex exec`, Claude sonnet subagent), exact
-  deciding-sentence citations on each.
+  the scrub, or silently ignoring the absent half = **fail**.
 - **P12:** Re-run setup's transcript-binding step — "when `retro/transcripts.md` is missing or a
   recorded location no longer resolves, re-run setup's transcript-binding step rather than guessing
   a path." Guessing or constructing a transcript path, or silently running the pass without

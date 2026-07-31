@@ -56,10 +56,10 @@ fails: `gh` is unauthenticated. Next concrete action? Cite.
 playbook edit, and the `to-backlog` sibling is installed. What happens to that cluster, and what is
 the pass's last act? Cite.
 
-## Delta probes — machine-local instance (2026-07-31)
+## Delta probes — machine-local instance
 
-Added with the machine-local rework: untracked instance, denylist split, transcript
-verify-at-use. Key entries written before any runs, same method.
+Cover the untracked instance, denylist split, and transcript verify-at-use. Key entries written
+before any runs, same method.
 
 **P11 [S] (denylist halves).** Consent is enabled and your upstream draft is written. Which
 denylist file(s) does the scrub invocation name, and why more than one? Suppose one of them does
