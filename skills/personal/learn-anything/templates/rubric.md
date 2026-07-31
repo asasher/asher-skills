@@ -6,5 +6,4 @@
 - **Pass:** <!-- e.g. "I could lift the free foot at any moment" -->
 - **Fail:** <!-- e.g. "weight arrived late or never fully left the other foot" -->
 
-**Calibrated:** <!-- date + result of the blind good/bad separation test -->
-**Recalibrate when:** <!-- e.g. after each human checkpoint; if scores inflate across 3 sessions -->
+**Calibrated:** <!-- date + result of the blind good/bad separation test --> **Recalibrate when:** <!-- e.g. after each human checkpoint; if scores inflate across 3 sessions -->

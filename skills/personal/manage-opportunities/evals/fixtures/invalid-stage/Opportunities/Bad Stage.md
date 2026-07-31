@@ -7,6 +7,7 @@ owner: "[[Owner]]"
 stage: delivering
 opened: 2026-07-01
 ---
+
 # Bad Stage
 
 Invalid stage fixture.

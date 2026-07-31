@@ -1,93 +1,50 @@
 # To-Spec — situated dry-run probes
 
-Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **`SKILL.md` +
-`reference/synthesis.md` in context**, exact-sentence citation per answer. Ambiguity flagged with a
-citation is valid. Key before runs.
+Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **`SKILL.md` + `reference/synthesis.md` in context**, exact-sentence citation per answer. Ambiguity flagged with a citation is valid. Key before runs.
 
 ## Scenario
 
-A long design conversation settled a driver-payout direction. Retry policy was discussed but never
-decided. The user is AFK. A live tracker is bound; no ticket exists for this direction yet. You are
-running `to-spec payouts`.
+A long design conversation settled a driver-payout direction. Retry policy was discussed but never decided. The user is AFK. A live tracker is bound; no ticket exists for this direction yet. You are running `to-spec payouts`.
 
 ## Probes
 
 **P1 (no interview).** Retry policy is undecided. Ask the user, or something else? Cite.
 
-**P2 (classification).** How must every Notes line be marked before sign-off, and what does an open
-blocking Note mean? Cite.
+**P2 (classification).** How must every Notes line be marked before sign-off, and what does an open blocking Note mean? Cite.
 
-**P3 (stale content).** The conversation named `src/payments/worker.ts` and a prototype-validated
-reducer snippet. Which may appear in the spec? Cite.
+**P3 (stale content).** The conversation named `src/payments/worker.ts` and a prototype-validated reducer snippet. Which may appear in the spec? Cite.
 
-**P4 (AFK sign-off).** How is approval sought while the user is AFK, and does to-spec apply a
-readiness label on their LGTM? Cite.
+**P4 (AFK sign-off).** How is approval sought while the user is AFK, and does to-spec apply a readiness label on their LGTM? Cite.
 
 **P5 (home & revision).** Where does the spec land, and what accompanies a later revision? Cite.
 
 **P6 (vocabulary).** The draft says "split this into GitHub issues." Fix it and cite the rule.
 
-**P7 (diagram first).** What is the first thing in the spec body, and in what form on this tracker?
-Cite.
+**P7 (diagram first).** What is the first thing in the spec body, and in what form on this tracker? Cite.
 
 **P8 (too big).** The direction is clearly three builds' worth. Do you split it into tickets? Cite.
 
-**P9 (artifact sweep).** Shaping produced a research dossier committed in the repo and a prototype whose
-answer sits on the ticket thread with a parked branch `proto/payouts-ledger`. What does the spec carry
-for these, and in what form? Cite.
+**P9 (artifact sweep).** Shaping produced a research dossier committed in the repo and a prototype whose answer sits on the ticket thread with a parked branch `proto/payouts-ledger`. What does the spec carry for these, and in what form? Cite.
 
-**P10 (nothing generated).** The direction was settled on conversation and existing docs alone — no
-dossiers, no prototypes. What does the spec's Supporting artifacts section contain? Cite.
+**P10 (nothing generated).** The direction was settled on conversation and existing docs alone — no dossiers, no prototypes. What does the spec's Supporting artifacts section contain? Cite.
 
-**P11 (conversation-only evidence).** A latency question was settled by reasoning in the conversation;
-nothing durable was written. Does it get a Supporting artifacts entry, and does to-spec write a dossier
-for it? Cite.
+**P11 (conversation-only evidence).** A latency question was settled by reasoning in the conversation; nothing durable was written. Does it get a Supporting artifacts entry, and does to-spec write a dossier for it? Cite.
 
-**P12 (exception boundary).** Given the Supporting-artifacts pointer exception, the draft's
-Implementation decisions section cites `docs/research/payouts.md` and `src/payments/worker.ts`.
-Allowed? Cite.
+**P12 (exception boundary).** Given the Supporting-artifacts pointer exception, the draft's Implementation decisions section cites `docs/research/payouts.md` and `src/payments/worker.ts`. Allowed? Cite.
 
 ## Answer key
 
-- **P1:** Never ask — "Do not re-elicit requirements, do not re-ask what the discussion already
-  settled, and do not stop and wait on the user"; the undecided item becomes a Notes line: "record it
-  as a line in the spec's Notes." Asking = **fail**.
-- **P2:** Each Notes line carries **blocking / delegated / deferred**; "An open **blocking** Note means
-  the direction isn't ready to build on — settle it first" (SKILL.md: "say so in the
-  report"). Unclassified Notes at sign-off = **fail**.
-- **P3:** Only the reducer — "The spec carries **no file paths and no code snippets**"; "a
-  **prototype-validated snippet** that encodes a decision more precisely than prose can."
-  Including the path = **fail**.
-- **P4:** The spec is already where feedback lands — "the spec already sits where the user's comments
-  reach it; their LGTM on the ticket (or in the conversation) is the approval." And no label —
-  "To-spec applies no readiness label." Seeking approval anywhere but where the spec already sits —
-  serving it on a separate surface, or re-asking in another channel — or stamping readiness on LGTM,
-  = **fail**.
-- **P5:** On the ticket — "**The ticket body is canonical** ... **create the ticket**" (no ticket
-  exists here). Revisions: "Every revision rewrites the body in place and posts a **short comment
-  noting what changed**." A repo doc while a tracker is bound, or revisions as new full-spec comments,
-  = **fail**.
-- **P6:** "Split this into tickets" — "Never call the downstream unit an 'issue' — that's one tracker's
-  word." Keeping "issues" = **fail**.
-- **P7:** A diagram — "Every spec **opens with a diagram** of the moving parts — before any prose";
-  "On a tracker that renders it, a fenced `mermaid` block." Prose first, or no diagram without saying
-  why, = **fail**.
-- **P8:** No — "end the spec with a **Recommended split** section ... It is a proposal only —
-  splitting is the user's call." Performing the split = **fail**.
-- **P9:** One **Supporting artifacts** entry per artifact — "the artifact kind, the question it
-  answered, its takeaway in one line, and a **durable pointer**" — the pointer per its form: "a
-  tracker-resolvable URL when the tracker is bound, a repo-relative path otherwise, or the named
-  parked branch for a prototype." Copying artifact content inline, or a summary without its
-  pointer, = **fail**.
-- **P10:** Nothing — the section is absent: "**Omit the section when nothing was generated** (the same
-  convention as Assumptions)". Manufacturing an empty or placeholder section = **fail**.
-- **P11:** Yes an entry, no dossier — "state the conclusion and mark plainly that no durable artifact
-  exists"; "it never fabricates a dossier". Writing a dossier to fill the pointer slot, or dropping
-  the conclusion entirely, = **fail**.
-- **P12:** Not allowed — the exception is confined: "The second exception stops at that section's
-  boundary: **no other section's path or snippet prohibition is loosened.**" The dossier path
-  `docs/research/payouts.md` moves to a Supporting artifacts entry; the source path
-  `src/payments/worker.ts` is no generated artifact, so its only remedy is prose. Keeping either path
-  in Implementation decisions = **fail**.
+- **P1:** Never ask — "Do not re-elicit requirements, do not re-ask what the discussion already settled, and do not stop and wait on the user"; the undecided item becomes a Notes line: "record it as a line in the spec's Notes." Asking = **fail**.
+- **P2:** Each Notes line carries **blocking / delegated / deferred**; "An open **blocking** Note means the direction isn't ready to build on — settle it first" (SKILL.md: "say so in the report"). Unclassified Notes at sign-off = **fail**.
+- **P3:** Only the reducer — "The spec carries **no file paths and no code snippets**"; "a **prototype-validated snippet** that encodes a decision more precisely than prose can." Including the path = **fail**.
+- **P4:** The spec is already where feedback lands — "the spec already sits where the user's comments reach it; their LGTM on the ticket (or in the conversation) is the approval." And no label — "To-spec applies no readiness label." Seeking approval anywhere but where the spec already sits — serving it on a separate surface, or re-asking in another channel — or stamping readiness on LGTM, = **fail**.
+- **P5:** On the ticket — "**The ticket body is canonical** ... **create the ticket**" (no ticket exists here). Revisions: "Every revision rewrites the body in place and posts a **short comment noting what changed**." A repo doc while a tracker is bound, or revisions as new full-spec comments, = **fail**.
+- **P6:** "Split this into tickets" — "Never call the downstream unit an 'issue' — that's one tracker's word." Keeping "issues" = **fail**.
+- **P7:** A diagram — "Every spec **opens with a diagram** of the moving parts — before any prose"; "On a tracker that renders it, a fenced `mermaid` block." Prose first, or no diagram without saying why, = **fail**.
+- **P8:** No — "end the spec with a **Recommended split** section ... It is a proposal only — splitting is the user's call." Performing the split = **fail**.
+- **P9:** One **Supporting artifacts** entry per artifact — "the artifact kind, the question it answered, its takeaway in one line, and a **durable pointer**" — the pointer per its form: "a tracker-resolvable URL when the tracker is bound, a repo-relative path otherwise, or the named parked branch for a prototype." Copying artifact content inline, or a summary without its pointer, = **fail**.
+- **P10:** Nothing — the section is absent: "**Omit the section when nothing was generated** (the same convention as Assumptions)". Manufacturing an empty or placeholder section = **fail**.
+- **P11:** Yes an entry, no dossier — "state the conclusion and mark plainly that no durable artifact exists"; "it never fabricates a dossier". Writing a dossier to fill the pointer slot, or dropping the conclusion entirely, = **fail**.
+- **P12:** Not allowed — the exception is confined: "The second exception stops at that section's boundary: **no other section's path or snippet prohibition is loosened.**" The dossier path `docs/research/payouts.md` moves to a Supporting artifacts entry; the source path `src/payments/worker.ts` is no generated artifact, so its only remedy is prose. Keeping either path in Implementation decisions = **fail**.
 
 Pass bar: **12/12 on both executors.**

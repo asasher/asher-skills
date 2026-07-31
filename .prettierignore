@@ -1,0 +1,7 @@
+.agents/
+.claude/
+*-workspace/
+docs/agents/local/
+retro/
+plans/
+evidence/

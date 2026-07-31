@@ -7,20 +7,11 @@ Use `scripts/agentmail_delivery.py`. It is dry-run unless `--execute` is supplie
 3. verifies the identical manifest is embedded in the self-contained review sheet;
 4. finds an approving `chat_approval` event whose `doc_hash` matches the current sheet;
 5. derives `relay-<sha256>` client identity from the approved canonical manifest;
-6. lists existing drafts by deterministic client identity, then creates a missing draft through AgentMail's
-   Drafts API using `to` and `cc` arrays; it rejects multiple matches, verifies subject/sender/To/CC/body
-   hashes, and appends the draft ID to the workflow ledger before send;
+6. lists existing drafts by deterministic client identity, then creates a missing draft through AgentMail's Drafts API using `to` and `cc` arrays; it rejects multiple matches, verifies subject/sender/To/CC/body hashes, and appends the draft ID to the workflow ledger before send;
 7. appends `send-submitted`, sends only that draft ID, then records the returned message/thread correlation.
 
-The credential enters only the child process environment. Addresses and body content are required provider
-arguments, but the key is never argv. Keep provider debug output off and redact failures.
+The credential enters only the child process environment. Addresses and body content are required provider arguments, but the key is never argv. Keep provider debug output off and redact failures.
 
-On retry, derive the same client ID and read append-only workflow state. A known draft ID is reused; otherwise,
-list by client identity before creating. A create timeout repeats only this deterministic lookup/create path.
-Once send submission may have reached the provider, perform unique reconciliation by
-client/draft/message correlation. If uniqueness is unavailable, append
-`blocked-ambiguous`; never create a new identity or resend automatically.
+On retry, derive the same client ID and read append-only workflow state. A known draft ID is reused; otherwise, list by client identity before creating. A create timeout repeats only this deterministic lookup/create path. Once send submission may have reached the provider, perform unique reconciliation by client/draft/message correlation. If uniqueness is unavailable, append `blocked-ambiguous`; never create a new identity or resend automatically.
 
-No provider write may occur before exact approval. Any mismatch appends `superseded` and exits before invoking
-AgentMail. Unknown permission names, provider version, or custom-domain status likewise keep live delivery
-blocked while local selection, rendering, and review continue.
+No provider write may occur before exact approval. Any mismatch appends `superseded` and exits before invoking AgentMail. Unknown permission names, provider version, or custom-domain status likewise keep live delivery blocked while local selection, rendering, and review continue.

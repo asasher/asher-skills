@@ -56,8 +56,7 @@ When `--generate` is used, `source` is an object:
 - `asset` is relative to the output directory.
 - `size` is the exported asset size in pixels.
 - `anchor` is a pixel coordinate in the exported asset; `pivot` is normalized engine-friendly form.
-- `css.background-position` is `-sheet_rect.x px -sheet_rect.y px` for using the original sheet as a CSS
-  sprite with `width` and `height`.
+- `css.background-position` is `-sheet_rect.x px -sheet_rect.y px` for using the original sheet as a CSS sprite with `width` and `height`.
 - `frame` mirrors `sheet_rect` for TexturePacker/Phaser-style atlas consumers.
 
 For `--format both`, the manifest's `asset` points at the PNG and the WebP sibling is written beside it.

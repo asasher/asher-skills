@@ -23,29 +23,22 @@
 
 ## Worktree isolation
 
-> Set by `setup`'s isolation audit; project-owned lifecycle superseded harness-native creation on
-> 2026-07-30 (asher-skills#136).
+> Set by `setup`'s isolation audit; project-owned lifecycle superseded harness-native creation on 2026-07-30 (asher-skills#136).
 
 - Regime: **local-isolatable** — skills are files + stdlib-Python scripts with no shared runtime state, so a `git worktree` is a complete isolated copy. No derived env, no ports to remap.
-- Working-copy ownership: prepare, inspect, and remove through the project-owned `worktree` skill,
-  rooted at `../asher-skills-worktrees`; dispatchers pass that exact directory and never request a
-  harness-native worktree.
-- How to bring up an **isolated** stack for one worktree: nothing beyond the prepared working copy;
-  there is no app stack to stand up. The primary checkout is not a build fallback.
+- Working-copy ownership: prepare, inspect, and remove through the project-owned `worktree` skill, rooted at `../asher-skills-worktrees`; dispatchers pass that exact directory and never request a harness-native worktree.
+- How to bring up an **isolated** stack for one worktree: nothing beyond the prepared working copy; there is no app stack to stand up. The primary checkout is not a build fallback.
 - **Enumeration**: the lifecycle discovers live worktrees via `git worktree list` plus branch/change-request state — never a directory scan — so harness-placed trees cannot become an invisible accumulation surface.
-- **Teardown**: nothing to tear down beyond removing the worktree — no derived env, ports, or services
-  to reap. The `worktree` skill performs guarded removal and preserves the branch for the caller's
-  subsequent branch cleanup. The skill-common teardown lifecycle — abort path, sweep, ownership per
-  path — is asher-skills#83's deliverable.
+- **Teardown**: nothing to tear down beyond removing the worktree — no derived env, ports, or services to reap. The `worktree` skill performs guarded removal and preserves the branch for the caller's subsequent branch cleanup. The skill-common teardown lifecycle — abort path, sweep, ownership per path — is asher-skills#83's deliverable.
 - **Shared-singleton list** — there is no code-level shared runtime (no DB, no ports, no shared build cache; each skill is files + stdlib scripts), so the code isolates completely. The only remaining singleton is loop infrastructure, handled without serializing code work:
 
   | Singleton | Collision mode | Locally isolatable? |
-  |-----------|----------------|---------------------|
+  | --- | --- | --- |
   | GitHub tracker | one issue graph | no — but serialized main-branch writes handle it |
 
   (There is no review-surface singleton: review is tracker-native, on each change request — per-ticket by construction, so concurrent reviews share nothing. The tailnet surface that once held this role is retired; § Presenting, asher-skills#116.)
 
-  The tracker does not collide with worktrees editing skill files, so it does not force serialized *verification* of the code.
+  The tracker does not collide with worktrees editing skill files, so it does not force serialized _verification_ of the code.
 
   One row is standing in every multi-worktree repo: the parent `.git` itself. Concurrent git operations from parallel worktrees can collide on its locks (`index.lock`, ref locks) — a lock error is contention, so wait and retry briefly; a lock that outlives the retry with no live git process behind it is a crashed operation's leftover, and only then safe to remove.
 
@@ -62,27 +55,20 @@
   - Codex executor (gpt-5.6-sol / gpt-5.6-terra): the Codex CLI, authed to its own subscription; billed separately from the session. Liveness is the credential-preflight probe in § Branching & deploys — the capability answering, not a version read; the CLI version exists only as metadata of the staffing overlay's probe record.
 
   <!-- machine-local: docs/agents/local/environment.md setup="backlog setup" -->
-  Identity observations and other machine-only auth facts live in the overlay declared above; when it
-  is missing, run `backlog setup`.
+
+  Identity observations and other machine-only auth facts live in the overlay declared above; when it is missing, run `backlog setup`.
+
 - How an agent mints a session: n/a — no app session to mint.
 - Test accounts / where credentials live: `gh` keyring and `~/.codex/`; never hardcode, never echo them.
 
 ## Verification data
 
-- Standing accounts/tenants and permissions: local filesystem fixtures plus the authenticated GitHub repo
-  with issue/PR read-write access; no product test tenant or second application user is required here.
-- Per-issue fixture naming: `VERIFY-<issue>-<purpose>` under a temporary directory or the owning
-  `<skill>-workspace/`; never share a mutable fixture across issue runs.
-- Scale: use generated temporary skill trees for catalog/closure tests and temporary state/surface roots for
-  review lifecycle tests.
-- Approved synthetic substitutes: situated prompt fixtures may exercise skill decisions because this repo has
-  no product runtime; they do not substitute for live GitHub API behavior or script lifecycle/process checks.
-- Lifetime/cleanup: the owning test retains fixtures through its final assertion/evidence capture, then
-  removes only its own temporary root.
-- **Per-ticket-disposable stores** — what a single ticket may reset or wipe wholesale: the ticket's own
-  worktree, and its `VERIFY-<issue>-*` fixtures and temporary roots. (A leftover
-  `~/.backlog/surface/asher-skills/<issue>/` entry from the retired review surface is also the ticket's to
-  remove.) Everything else is shared, and destructive verbs stop at this line.
+- Standing accounts/tenants and permissions: local filesystem fixtures plus the authenticated GitHub repo with issue/PR read-write access; no product test tenant or second application user is required here.
+- Per-issue fixture naming: `VERIFY-<issue>-<purpose>` under a temporary directory or the owning `<skill>-workspace/`; never share a mutable fixture across issue runs.
+- Scale: use generated temporary skill trees for catalog/closure tests and temporary state/surface roots for review lifecycle tests.
+- Approved synthetic substitutes: situated prompt fixtures may exercise skill decisions because this repo has no product runtime; they do not substitute for live GitHub API behavior or script lifecycle/process checks.
+- Lifetime/cleanup: the owning test retains fixtures through its final assertion/evidence capture, then removes only its own temporary root.
+- **Per-ticket-disposable stores** — what a single ticket may reset or wipe wholesale: the ticket's own worktree, and its `VERIFY-<issue>-*` fixtures and temporary roots. (A leftover `~/.backlog/surface/asher-skills/<issue>/` entry from the retired review surface is also the ticket's to remove.) Everything else is shared, and destructive verbs stop at this line.
 
 ## Driving behavior & capturing evidence
 
@@ -101,36 +87,17 @@
 
 ## Presenting to the human
 
-> **The tailnet HTML review surface is retired** (Asher, 2026-07-26, asher-skills#116). Review is
-> **tracker-native**: each build's review happens on its own change request — the PR thread bound in
-> `platform.md` § Change review — which is per-ticket by construction, so concurrent reviews need no shared
-> surface, no cap, and nothing to keep alive. Spec sign-off lives on the ticket; prototype feedback arrives
-> in chat. Do not publish reviews to the tailnet, stand up review servers, or proxy review ports for the loop.
+> **The tailnet HTML review surface is retired** (Asher, 2026-07-26, asher-skills#116). Review is **tracker-native**: each build's review happens on its own change request — the PR thread bound in `platform.md` § Change review — which is per-ticket by construction, so concurrent reviews need no shared surface, no cap, and nothing to keep alive. Spec sign-off lives on the ticket; prototype feedback arrives in chat. Do not publish reviews to the tailnet, stand up review servers, or proxy review ports for the loop.
 
-- Artifacts that genuinely need rendering (a plan or prototype HTML a human should eyeball) are a separate
-  concern with **no standing surface bound here**: open them locally with `open <file>`, or commit and
-  screenshot them onto the change request per `evidence.md`. The `serve-via-tailnet` skill remains installed
-  and may be invoked explicitly on demand, but it is not the review path and has no standing config in this
-  playbook.
-- Residual machine facts from the retired surface: the LaunchAgent `com.asher.backlog-surface` still serves
-  `~/.backlog/surface` on port 8377 locally (the port remains taken); any leftover `tailscale serve` handler
-  under `/asher-skills/...` is an orphan — `tailscale serve status` lists live handlers, and
-  `tailscale serve --set-path <path> off` reaps one.
-- Keep-awake: **none** (setup choice, reconfirmed at retirement) — harnesses hold sleep assertions during
-  active runs, and with review on the tracker the loop leaves nothing AFK depending on this machine being
-  awake. The one exception is an explicitly-invoked `serve-via-tailnet` session, which serves from this
-  machine — an AFK review over it may find the machine asleep; revisit if that bites.
+- Artifacts that genuinely need rendering (a plan or prototype HTML a human should eyeball) are a separate concern with **no standing surface bound here**: open them locally with `open <file>`, or commit and screenshot them onto the change request per `evidence.md`. The `serve-via-tailnet` skill remains installed and may be invoked explicitly on demand, but it is not the review path and has no standing config in this playbook.
+- Residual machine facts from the retired surface: the LaunchAgent `com.asher.backlog-surface` still serves `~/.backlog/surface` on port 8377 locally (the port remains taken); any leftover `tailscale serve` handler under `/asher-skills/...` is an orphan — `tailscale serve status` lists live handlers, and `tailscale serve --set-path <path> off` reaps one.
+- Keep-awake: **none** (setup choice, reconfirmed at retirement) — harnesses hold sleep assertions during active runs, and with review on the tracker the loop leaves nothing AFK depending on this machine being awake. The one exception is an explicitly-invoked `serve-via-tailnet` session, which serves from this machine — an AFK review over it may find the machine asleep; revisit if that bites.
 
 ## Model staffing
 
-Read `staffing.md` — the sole authority for this repo's roster, carrying the model rows, per-harness
-eligibility and capability bindings, pins, floor, succession, and the probed reachability rows with the
-machine and CLI versions behind them. Its § Repo deltas holds this repo's only two overrides: skill design
-remains orchestration-grade, and probe evals use the dual-executor contract in `docs/agents/probe-evals.md`.
-There is no project floor, capability-provider, or succession override.
+Read `staffing.md` — the sole authority for this repo's roster, carrying the model rows, per-harness eligibility and capability bindings, pins, floor, succession, and the probed reachability rows with the machine and CLI versions behind them. Its § Repo deltas holds this repo's only two overrides: skill design remains orchestration-grade, and probe evals use the dual-executor contract in `docs/agents/probe-evals.md`. There is no project floor, capability-provider, or succession override.
 
-There is no machine-level staffing module to resolve first. A playbook whose probe record names a different
-machine is stale — re-run `staffing setup` rather than dispatching on it.
+There is no machine-level staffing module to resolve first. A playbook whose probe record names a different machine is stale — re-run `staffing setup` rather than dispatching on it.
 
 ## Parallelism verdict
 

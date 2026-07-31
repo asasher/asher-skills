@@ -1,14 +1,8 @@
 # Playbook: Environment
 
-> Project playbook for a skill-authoring repo. Shared — read by any backlog subskill that builds, runs, or
-> verifies a skill. There is no assumed app or software stack: exercising a skill means running a situated
-> probe through an executor harness. `setup` fills the isolation, seed, and parallelism sections from its audit.
+> Project playbook for a skill-authoring repo. Shared — read by any backlog subskill that builds, runs, or verifies a skill. There is no assumed app or software stack: exercising a skill means running a situated probe through an executor harness. `setup` fills the isolation, seed, and parallelism sections from its audit.
 >
-> Machine facts follow the discipline bundled with the `backlog` skill — read `reference/machine-facts.md`
-> in its installed package for the classes and marker grammar; absent that skill, leave machine facts
-> unrecorded rather than inventing a form. In short: record the probe command, not its result; every
-> recorded machine fact lives in the gitignored `docs/agents/local/environment.md` overlay,
-> regenerated and declared by the owning setup — never in this tracked file.
+> Machine facts follow the discipline bundled with the `backlog` skill — read `reference/machine-facts.md` in its installed package for the classes and marker grammar; absent that skill, leave machine facts unrecorded rather than inventing a form. In short: record the probe command, not its result; every recorded machine fact lives in the gitignored `docs/agents/local/environment.md` overlay, regenerated and declared by the owning setup — never in this tracked file.
 
 ## Branching & deploys
 
@@ -26,8 +20,7 @@
 ## Worktree isolation
 
 - Regime: **local-isolatable** — checked-in skill files and stdlib-only scripts are isolated by the worktree unless the repository records an external shared resource below.
-- Working-copy ownership: project-owned `worktree` skill; dispatch receives the prepared directory and
-  never asks a harness for native isolation.
+- Working-copy ownership: project-owned `worktree` skill; dispatch receives the prepared directory and never asks a harness for native isolation.
 - How to create an isolated skill run for one worktree: _<run the executor with that worktree's skill source and eval scenario>_.
 - Shared-singleton list: _<external executor session, cache, publishing target, or account; otherwise “none — files and scripts are worktree-local”>_.
 
@@ -43,9 +36,7 @@
 - Auth model: _<executor login or token, or “none”>_.
 - How an agent mints an executor session: _<start a fresh in-session or CLI executor without sharing mutable context>_.
 - Test accounts / where credentials live: _<environment or secrets store; never hardcode or echo secrets>_.
-- Identity observations ("authed as `<user>`") are machine-local: they go in the
-  `docs/agents/local/environment.md` overlay, never in this tracked file — record here only the
-  liveness probe.
+- Identity observations ("authed as `<user>`") are machine-local: they go in the `docs/agents/local/environment.md` overlay, never in this tracked file — record here only the liveness probe.
 
 ## Driving behavior & capturing evidence
 
@@ -57,10 +48,7 @@
 
 ## Presenting to the human
 
-> No standing presentation surface is bound here. Review happens on the change request bound in
-> `platform.md` § Change review; an artifact that genuinely needs rendering is opened locally or
-> committed and screenshotted onto the change request per `evidence.md`. Where the `serve-via-tailnet`
-> skill is installed, the user may invoke it explicitly on demand.
+> No standing presentation surface is bound here. Review happens on the change request bound in `platform.md` § Change review; an artifact that genuinely needs rendering is opened locally or committed and screenshotted onto the change request per `evidence.md`. Where the `serve-via-tailnet` skill is installed, the user may invoke it explicitly on demand.
 
 ## Model staffing
 

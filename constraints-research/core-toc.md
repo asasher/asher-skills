@@ -213,8 +213,8 @@ LeanProduction describes DBR as synchronizing production to the constraint while
 
 ## Sources
 
-- Eliyahu M. Goldratt & Jeff Cox, *The Goal: A Process of Ongoing Improvement*, North River Press; public chapter summary via TOC Institute. ([tocinstitute.org](https://www.tocinstitute.org/the-goal-summary.html))
-- James F. Cox III & John G. Schleier, eds., *Theory of Constraints Handbook*, McGraw-Hill, 2010.
+- Eliyahu M. Goldratt & Jeff Cox, _The Goal: A Process of Ongoing Improvement_, North River Press; public chapter summary via TOC Institute. ([tocinstitute.org](https://www.tocinstitute.org/the-goal-summary.html))
+- James F. Cox III & John G. Schleier, eds., _Theory of Constraints Handbook_, McGraw-Hill, 2010.
 - TOC Institute, “The Five Focusing Steps (POOGI).” ([tocinstitute.org](https://www.tocinstitute.org/five-focusing-steps.html))
 - TOC Institute, “Definition of Constraint.” ([tocinstitute.org](https://www.tocinstitute.org/constraint-definition.html))
 - TOC Institute, “What is the Goal of Business?” ([tocinstitute.org](https://www.tocinstitute.org/what-is-the-goal.html))

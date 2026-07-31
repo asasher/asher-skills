@@ -10,20 +10,16 @@ metadata:
 
 # Manage Notes
 
-`Notes/` is durable, interlinked knowledge. Raw captures belong in `Inbox/`; cited local sources belong in
-`Attachments/`; working documents belong with their Project or Opportunity. This skill owns Note Shape and
-four commands. It delegates task handling and entity shapes to their owning sibling skills.
+`Notes/` is durable, interlinked knowledge. Raw captures belong in `Inbox/`; cited local sources belong in `Attachments/`; working documents belong with their Project or Opportunity. This skill owns Note Shape and four commands. It delegates task handling and entity shapes to their owning sibling skills.
 
 ## Commands
 
 - **Intake** - pull configured capture sources into `Inbox/`. Load [capture sources](reference/capture-sources.md).
-- **Ingest** - drain every inbox item into a note, task, attachment, or `GRAVEYARD.md` decision. Load
-  [ingest](reference/ingest.md).
+- **Ingest** - drain every inbox item into a note, task, attachment, or `GRAVEYARD.md` decision. Load [ingest](reference/ingest.md).
 - **Query** - answer from workspace records and cite them. Load [query and lint](reference/query-lint.md).
 - **Lint** - report wiki health; mutate only after confirmation. Load [query and lint](reference/query-lint.md).
 
-Infer the command from the request. Intake only fills the inbox; Ingest empties it. Never merge those cadences
-implicitly.
+Infer the command from the request. Intake only fills the inbox; Ingest empties it. Never merge those cadences implicitly.
 
 ## Note Shape
 
@@ -39,18 +35,13 @@ tags: [lowercase, topic, words]
 ---
 ```
 
-Omit `source` only when none exists. The body has an H1, one-line framing, and useful headings. Link related
-notes and entity records explicitly. A hub maps a topic with one orienting line per note; every note is
-reachable from a hub within two hops.
+Omit `source` only when none exists. The body has an H1, one-line framing, and useful headings. Link related notes and entity records explicitly. A hub maps a topic with one orienting line per note; every note is reachable from a hub within two hops.
 
 ## Boundaries
 
 - Invoke required `manage-tasks` for task relay and Project Note Shape.
-- Invoke optional `manage-opportunities` for Opportunity Note Shape or lifecycle. Query may read Opportunity
-  records without it; Lint reports Opportunity shape as unchecked when the sibling is absent rather than
-  inventing a schema.
-- Capture mechanisms, credentials, paths, and archive behavior come only from the project's
-  `docs/agents/capture-sources.md`. The bundled skill defines roles, never personal machine bindings.
+- Invoke optional `manage-opportunities` for Opportunity Note Shape or lifecycle. Query may read Opportunity records without it; Lint reports Opportunity shape as unchecked when the sibling is absent rather than inventing a schema.
+- Capture mechanisms, credentials, paths, and archive behavior come only from the project's `docs/agents/capture-sources.md`. The bundled skill defines roles, never personal machine bindings.
 
 ## Dependency surface
 

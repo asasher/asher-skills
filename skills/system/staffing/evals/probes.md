@@ -1,324 +1,120 @@
 # Staffing — situated dry-run probes
 
-Method: situated probes against the actual deployment targets — an Opus subagent (via the Agent tool) and
-`codex exec --sandbox read-only` — with `SKILL.md` in context, plus the one `reference/` file named by the
-probe when it names one (probes that test whether a reference stands alone withhold `SKILL.md`). Require the
-executor to **cite the file and the exact sentence** that decided each answer, and to **flag ambiguity as a
-valid answer** — flagged ambiguities are findings to feed back into the wording, not failures. Grade
-pass/fail against the key. **The answer key is written before any runs** and graded against the plan's
-acceptance criteria (`plans/1-extract-staffing.html`, ids ac-1..ac-11) — the plan is the source of truth; do
-not grade against looser criteria.
+Method: situated probes against the actual deployment targets — an Opus subagent (via the Agent tool) and `codex exec --sandbox read-only` — with `SKILL.md` in context, plus the one `reference/` file named by the probe when it names one (probes that test whether a reference stands alone withhold `SKILL.md`). Require the executor to **cite the file and the exact sentence** that decided each answer, and to **flag ambiguity as a valid answer** — flagged ambiguities are findings to feed back into the wording, not failures. Grade pass/fail against the key. **The answer key is written before any runs** and graded against the plan's acceptance criteria (`plans/1-extract-staffing.html`, ids ac-1..ac-11) — the plan is the source of truth; do not grade against looser criteria.
 
-P1–P14 protect ac-1..ac-11; each later probe names its subject in its own header, and the criterion
-coverage map at the end of this file is the index.
+P1–P14 protect ac-1..ac-11; each later probe names its subject in its own header, and the criterion coverage map at the end of this file is the index.
 
 ## Probes
 
-**P1 (ac-1).** Read `skills/system/staffing/SKILL.md`. Does its frontmatter identify it as an invocable,
-per-provider-compiled staffing primitive, and do any of the skill's files import or read another skill's
-files, or read any path outside the repo? Cite what you checked.
+**P1 (ac-1).** Read `skills/system/staffing/SKILL.md`. Does its frontmatter identify it as an invocable, per-provider-compiled staffing primitive, and do any of the skill's files import or read another skill's files, or read any path outside the repo? Cite what you checked.
 
-**P2 (ac-2).** A composer skill wants to depend on `staffing`. From `SKILL.md`, list the three kinds of
-dependency pointer the skill declares, and state exactly what it says about sibling skills.
+**P2 (ac-2).** A composer skill wants to depend on `staffing`. From `SKILL.md`, list the three kinds of dependency pointer the skill declares, and state exactly what it says about sibling skills.
 
-**P3 (ac-3).** A ui change is ready but the model that fills the **ui builder** role cannot be reached from
-the current harness. Who takes the change? Give the concrete rule and cite it.
+**P3 (ac-3).** A ui change is ready but the model that fills the **ui builder** role cannot be reached from the current harness. Who takes the change? Give the concrete rule and cite it.
 
-**P4 (ac-4).** You must route a task that drives a real browser (navigate, click, scrape a page). Walk the
-resolution and name, by their location, each structure you consult and in what order. Which structure
-decides the browser requirement, and where does the `intelligence > taste > cost` tie-break enter?
+**P4 (ac-4).** You must route a task that drives a real browser (navigate, click, scrape a page). Walk the resolution and name, by their location, each structure you consult and in what order. Which structure decides the browser requirement, and where does the `intelligence > taste > cost` tie-break enter?
 
-**P5 (ac-5).** "Who should do a large mechanical find-and-replace across the whole codebase?" Give the model
-and the exact basis for the choice. Is this a ranking derivation or something else?
+**P5 (ac-5).** "Who should do a large mechanical find-and-replace across the whole codebase?" Give the model and the exact basis for the choice. Is this a ranking derivation or something else?
 
-**P6 (ac-4, explanatory).** A teammate proposes adding a `browser-use` column (values yes/no) directly to the
-rankings table to simplify things. Per the skill, is that allowed, and what specifically goes wrong if you
-do it? Cite the sentence.
+**P6 (ac-4, explanatory).** A teammate proposes adding a `browser-use` column (values yes/no) directly to the rankings table to simplify things. Per the skill, is that allowed, and what specifically goes wrong if you do it? Cite the sentence.
 
-**P7 (ac-6).** You are installing `staffing` on a **fresh machine that has no Codex CLI and a different model
-lineup** than any example in the skill. Following the audit procedure, outline the table you would write and
-say where its cost/intelligence/taste numbers come from. May you ship the five-model gpt-5.6-sol/gpt-5.6-terra/sonnet-5/…
-table as the roster? Cite the rule.
+**P7 (ac-6).** You are installing `staffing` on a **fresh machine that has no Codex CLI and a different model lineup** than any example in the skill. Following the audit procedure, outline the table you would write and say where its cost/intelligence/taste numbers come from. May you ship the five-model gpt-5.6-sol/gpt-5.6-terra/sonnet-5/… table as the roster? Cite the rule.
 
-**P8 (ac-6).** In `reference/machine-audit.md`, what status does the five-model table (gpt-5.6-sol,
-gpt-5.6-terra, sonnet-5, opus-5, fable-5) have? Quote the label the file gives it.
+**P8 (ac-6).** In `reference/machine-audit.md`, what status does the five-model table (gpt-5.6-sol, gpt-5.6-terra, sonnet-5, opus-5, fable-5) have? Quote the label the file gives it.
 
-**P9 (ac-7).** A project wants everything the seed suggests **except a higher floor**. What does its staffing
-playbook contain — the raised floor alone, or the whole roster? Cite the rule, and say what resolution reads
-at dispatch time.
+**P9 (ac-7).** A project wants everything the seed suggests **except a higher floor**. What does its staffing playbook contain — the raised floor alone, or the whole roster? Cite the rule, and say what resolution reads at dispatch time.
 
-**P10 (sole authority).** You are asked to staff a subagent in a repo that has **no** staffing playbook. The
-skill's bundled seed is right there in the installed package and contains a complete roster. What do you do?
-Cite the rule.
+**P10 (sole authority).** You are asked to staff a subagent in a repo that has **no** staffing playbook. The skill's bundled seed is right there in the installed package and contains a complete roster. What do you do? Cite the rule.
 
-**P11 (staleness).** A repo's staffing playbook records a full roster, but its probe record names a different
-machine and an older CLI version than the one you are running on. May you dispatch a cross-harness worker from
-it? What specifically do you do first, and why is this worse than finding no playbook at all?
+**P11 (staleness).** A repo's staffing playbook records a full roster, but its probe record names a different machine and an older CLI version than the one you are running on. May you dispatch a cross-harness worker from it? What specifically do you do first, and why is this worse than finding no playbook at all?
 
-**P12 (ac-9).** A user re-invokes `reconcile`. The playbook lists a model this harness can no longer reach,
-and its recorded alias mapping contradicts what a fresh probe returns. How does the skill detect and report
-this, does it rely on a version stamp to notice, and may it silently apply the fresh values? Cite the
-mechanism.
+**P12 (ac-9).** A user re-invokes `reconcile`. The playbook lists a model this harness can no longer reach, and its recorded alias mapping contradicts what a fresh probe returns. How does the skill detect and report this, does it rely on a version stamp to notice, and may it silently apply the fresh values? Cite the mechanism.
 
-**P13 (ac-10).** Read `skills/system/staffing/agents/openai.yaml`. Is it well-formed per
-`AGENTS.md` § Conventions (the `agents/openai.yaml` rule), and does `allow_implicit_invocation` agree with
-the canonical `metadata.invocation` declaration? State the value and why it is right.
+**P13 (ac-10).** Read `skills/system/staffing/agents/openai.yaml`. Is it well-formed per `AGENTS.md` § Conventions (the `agents/openai.yaml` rule), and does `allow_implicit_invocation` agree with the canonical `metadata.invocation` declaration? State the value and why it is right.
 
-**P14 (ac-4).** A task needs **user-facing onboarding copy and a public API surface designed** — no browser
-or other capability required. Walk the resolution order and name, by location, each structure and gate you
-consult and in what order. Suppose the roster's highest-intelligence reachable model sits at taste 5 while a
-lower-intelligence model clears taste ≥ 7: which one gets the work, and at exactly which step is the taste-5
-model removed from contention? Does the `intelligence > taste > cost` tie-break ever get to reconsider it?
+**P14 (ac-4).** A task needs **user-facing onboarding copy and a public API surface designed** — no browser or other capability required. Walk the resolution order and name, by location, each structure and gate you consult and in what order. Suppose the roster's highest-intelligence reachable model sits at taste 5 while a lower-intelligence model clears taste ≥ 7: which one gets the work, and at exactly which step is the taste-5 model removed from contention? Does the `intelligence > taste > cost` tie-break ever get to reconsider it?
 
-**P15 (setup).** Invoke `staffing setup` in a repo whose playbook already exists and carries owner-tuned
-judgment numbers. Which bundled reference owns the behaviour, which rows may setup replace, which must
-survive untouched, and what happens on a re-run when reachability has not changed?
+**P15 (setup).** Invoke `staffing setup` in a repo whose playbook already exists and carries owner-tuned judgment numbers. Which bundled reference owns the behaviour, which rows may setup replace, which must survive untouched, and what happens on a re-run when reachability has not changed?
 
-**P16 (cross-harness dispatch).** From a Codex parent, dispatch one bounded task to the Claude sibling harness. Give the
-command shape, forbidden flag, required return/effect checks, and whether vendor-policy polling is a
-precondition.
+**P16 (cross-harness dispatch).** From a Codex parent, dispatch one bounded task to the Claude sibling harness. Give the command shape, forbidden flag, required return/effect checks, and whether vendor-policy polling is a precondition.
 
-**P17 (reachability fallback).** Codex→Claude fails while Claude→Codex is healthy. What reachability state and fallback
-does staffing record? Must it disable both directions?
+**P17 (reachability fallback).** Codex→Claude fails while Claude→Codex is healthy. What reachability state and fallback does staffing record? Must it disable both directions?
 
-**P18 (coordinator routing).** Route two issue-coordinator requests. Both include work type, surface, required
-capabilities, class/reason, and known uncertainty. The first is `routine`; the second is
-`orchestrator-required` for a named product decision. State the candidate set and resolution order for each.
-Does routine mean cheapest reachable model?
+**P18 (coordinator routing).** Route two issue-coordinator requests. Both include work type, surface, required capabilities, class/reason, and known uncertainty. The first is `routine`; the second is `orchestrator-required` for a named product decision. State the candidate set and resolution order for each. Does routine mean cheapest reachable model?
 
-**P19 (worker ownership).** From each provider package, route one cross-harness worker. Who owns prompt/judgment/effect
-verification, what may the native wrapper do, how is it named/staffed/bounded, and what remains unproven when
-native spawn cannot select or report its model?
+**P19 (worker ownership).** From each provider package, route one cross-harness worker. Who owns prompt/judgment/effect verification, what may the native wrapper do, how is it named/staffed/bounded, and what remains unproven when native spawn cannot select or report its model?
 
-**P20 (data vs doctrine).** You are writing a project's staffing playbook. For each of these, say whether it
-belongs in the playbook or in the skill, and where: the model rows; the rule that ranking is
-`intelligence > taste > cost`; which harness may coordinate; the `codex exec` command shape; the succession
-chain; the rule that watchers only wait and relay.
+**P20 (data vs doctrine).** You are writing a project's staffing playbook. For each of these, say whether it belongs in the playbook or in the skill, and where: the model rows; the rule that ranking is `intelligence > taste > cost`; which harness may coordinate; the `codex exec` command shape; the succession chain; the rule that watchers only wait and relay.
 
-**P21 (provider pilot).** Compare staffing's current unified reconcile load with each compiled provider load.
-Does each clear 20%, and does either loaded path contain a conditional branch intended only for the other
-harness? Use the checked-in structural test as evidence.
+**P21 (provider pilot).** Compare staffing's current unified reconcile load with each compiled provider load. Does each clear 20%, and does either loaded path contain a conditional branch intended only for the other harness? Use the checked-in structural test as evidence.
 
-**P22 (alias crossing).** The roster row reads `sonnet-5`. You are a Codex parent about to dispatch a bounded
-Claude worker and must fill in the CLI's model argument. What do you pass, where does that answer come from,
-and what happens if you pass the roster name verbatim? Is the answer a memorised pair or a rule?
+**P22 (alias crossing).** The roster row reads `sonnet-5`. You are a Codex parent about to dispatch a bounded Claude worker and must fill in the CLI's model argument. What do you pass, where does that answer come from, and what happens if you pass the roster name verbatim? Is the answer a memorised pair or a rule?
 
-**P23 (three-state classification).** `staffing setup` is auditing a machine that runs both
-harnesses. The Codex CLI is installed and `codex --version` succeeds, but the owner has said Codex dispatch
-stays off this quarter for cost. On the same machine, the Codex→Claude probe failed last month with a
-permission denial. What state does setup record for each direction, where does each state's information come
-from, and how does a later reader tell the cost-disabled direction from the broken one without re-probing?
-On a re-run, does setup dispatch a probe down the disabled direction, and can a successful probe ever flip
-it to effect-verified? If not a probe, what can lift the disable? Cite.
+**P23 (three-state classification).** `staffing setup` is auditing a machine that runs both harnesses. The Codex CLI is installed and `codex --version` succeeds, but the owner has said Codex dispatch stays off this quarter for cost. On the same machine, the Codex→Claude probe failed last month with a permission denial. What state does setup record for each direction, where does each state's information come from, and how does a later reader tell the cost-disabled direction from the broken one without re-probing? On a re-run, does setup dispatch a probe down the disabled direction, and can a successful probe ever flip it to effect-verified? If not a probe, what can lift the disable? Cite.
 
-**P24 (recorded-state conflict).** A repo's playbook records the Codex→Claude direction as
-**unavailable**, failure class "alias rejected", probed against an older Claude CLI. Your fresh audit's
-bounded effect probe on that direction **succeeds** at write class. What does setup write, what does it
-report, and is either silently keeping the recorded row or silently replacing it acceptable? Does the
-direction's route re-enter the resolved roster? Cite.
+**P24 (recorded-state conflict).** A repo's playbook records the Codex→Claude direction as **unavailable**, failure class "alias rejected", probed against an older Claude CLI. Your fresh audit's bounded effect probe on that direction **succeeds** at write class. What does setup write, what does it report, and is either silently keeping the recorded row or silently replacing it acceptable? Does the direction's route re-enter the resolved roster? Cite.
 
-**P25 (alias guard).** Setup is writing the playbook's alias mapping. One roster row's name was
-never passed to any CLI's model argument during this audit, and no retained probe covers it. May that name
-be recorded as a dispatch alias? What does the playbook record for it instead? And when the probes do
-support a rule — "this CLI rejects versioned names, accepts bare ones" — does that rule extend to the
-sibling CLI? Cite.
+**P25 (alias guard).** Setup is writing the playbook's alias mapping. One roster row's name was never passed to any CLI's model argument during this audit, and no retained probe covers it. May that name be recorded as a dispatch alias? What does the playbook record for it instead? And when the probes do support a rule — "this CLI rejects versioned names, accepts bare ones" — does that rule extend to the sibling CLI? Cite.
 
-**P26 (idempotent re-run).** `staffing setup` re-runs on the same machine with unchanged CLI
-versions, and every probe returns exactly what is recorded. What does the re-run change in the files,
-stamp included? What do the recorded timestamps mean, and why does leaving them untouched not make them
-dishonest? Cite.
+**P26 (idempotent re-run).** `staffing setup` re-runs on the same machine with unchanged CLI versions, and every probe returns exactly what is recorded. What does the re-run change in the files, stamp included? What do the recorded timestamps mean, and why does leaving them untouched not make them dishonest? Cite.
 
-**P27 (one home).** `staffing setup` (read `reference/setup.md`) is reconciling a repo whose
-`docs/agents/environment.md` records "`codex --version` → 9.9.9" while the staffing probe record
-carries a different Codex version. What does setup do about the environment file's line — edit
-it, ignore it, or something else — and which file may record the CLI version at all? Cite.
+**P27 (one home).** `staffing setup` (read `reference/setup.md`) is reconciling a repo whose `docs/agents/environment.md` records "`codex --version` → 9.9.9" while the staffing probe record carries a different Codex version. What does setup do about the environment file's line — edit it, ignore it, or something else — and which file may record the CLI version at all? Cite.
 
 ## Answer key
 
-- **P1 (ac-1):** PASS needs `variants` in frontmatter and an explicit finding that no file reads another skill's files or a home-directory path.
-  Frontmatter has `name: staffing`, `user-invocable: true`, and a `description` that reads as
-  a global-capable staffing primitive invoked by name by siblings and directly by users — **pass**. No file
-  imports another skill's files (the dependency surface declares siblings "none — `staffing` is a root
-  primitive"); a grep for cross-skill paths finds none. Claiming a cross-skill import exists = fail.
-- **P2 (ac-2):** The three pointer kinds: **bundled references** (own `reference/` contract), **project
-  playbooks** (installed into the target repo's `docs/agents/`), **sibling skills**. On siblings it must say
-  **"none — `staffing` is a root primitive"** (invoked by siblings, depends on none). Missing any of the
-  three, or getting the sibling answer wrong, = fail.
-- **P3 (ac-3):** The **fallback ladder** governs: the next most capable **reachable** model with sufficient
-  taste for ui work (taste ≥ 7) steps into the ui builder role via the succession line; if the only reachable
-  qualifier is the orchestrator, it takes the ui build itself; if none clears the ui bar, run on the current
-  model in a subagent and **report the staffing gap** — never default it to the backend builder, never skip
-  the change. Cite `reference/roles-and-fallback.md` (worked example / fallback ladder). Handing it to the
-  backend builder or stopping = fail.
-- **P4 (ac-4):** Order is pin → provider/fallback → eligible executor → taste gate → rank. A matching
-  provider pin selects the named effect-verified route. Otherwise the capability-provider registry resolves
-  `browser-use` to its effect-verified primary then recorded fallback; only executors able to operate that
-  route enter the candidate set. `intelligence > taste > cost` ranks those survivors only. Treating browser
-  access as a model boolean or ranking before provider selection = fail.
-- **P5 (ac-5):** The **mechanical/bulk task-type pin** returns the pinned bulk model; resolution **stops at
-  step 1** and skips ranking. It is a **pin**, not a ranking derivation — "a pin short-circuits the ranking."
-  Cite the Pins section / step 1 of the resolution order in `reference/rankings-and-routing.md`. Deriving the
-  answer from the table = fail.
-- **P6 (ac-4):** **Not allowed.** Browser use is an effect supplied by a named harness/tool provider, not a
-  model trait or ranked degree. Resolve provider reachability first, then form the eligible executor set;
-  putting a boolean on model rows invents access when tooling/session state is absent. Cite the provider
-  registry contract. Saying the model column is authoritative = fail.
-- **P7 (ac-6):** Follow the audit: enumerate **this machine's** reachable models as the rows, seed
-  cost/intelligence/taste from the documented default and mark them "tune these", omit the Codex CLI mechanics
-  block (Codex absent), and effect-probe installed tools into a provider registry plus pins. You **may not** ship the
-  five-model table as the roster — it is labeled example output, and the roster is compiled from *this*
-  machine. Cite `reference/machine-audit.md` (the audit procedure / "Never write a seeded default this
-  machine failed to verify"). Reproducing Asher's table as the roster, or inventing reachable models, = fail.
-- **P8 (ac-6):** It is an **example of audit output for one machine — explicitly NOT the shipped/authoritative
-  roster** (the file labels it "Example of audit output (illustrative only — NOT the shipped roster)" and
-  introduces it as "**one machine's audit result**, shown so you know the shape to write"). Calling it the
-  canonical table = fail.
-- **P9 (ac-7):** The playbook contains the **complete roster**, raised floor included — it is the sole
-  authority, and resolution reads it and nothing else. There is no base to delta against: a "deltas only"
-  answer is the *previous* shape and = fail. Cite `SKILL.md` § Where the roster lives and
-  `reference/install-and-reconcile.md` § One layer.
-- **P10 (sole authority):** **Do not resolve from the seed** — its rows are unverified defaults, not this
-  machine's truth, so staffing from them asserts a reachability nobody checked. Report the staffing gap and
-  run `staffing setup`. This is a bar on fabricating a roster, **not** a hard stop: the delegated step still
-  degrades onto the current model in a subagent per `reference/roles-and-fallback.md` ("A missing roster
-  section degrades, it does not hard-stop"). Resolving from the seed or a home-directory path = fail; so does
-  refusing to proceed at all. Cite `SKILL.md` § Where the roster lives.
-- **P11 (staleness):** **No.** The judgment numbers travel between machines; reachability, aliases, and CLI
-  versions do not. Re-run `staffing setup` to re-probe before dispatching, and treat every reachability row as
-  unverified until then. It is worse than an absent playbook because a stale row **resolves cleanly and fails
-  at the moment of use**, so nothing surfaces the problem until a worker is already spent. Dispatching on the
-  foreign rows, or treating the staleness header as advisory, = fail.
-- **P12 (ac-9):** `reconcile` is an **LLM audit**: read the playbook, compare it to a current machine audit,
-  and **report the drift in prose** — here both the unreachable model and the contradicted alias mapping.
-  "That reading is the judgment mechanism" (install-and-reconcile.md § Reconciliation is a prose audit).
-  Crucially it may **not** silently apply the fresh values: a contradiction is reported, since silently
-  preserving a stale row and silently overwriting a fresh one are the same failure from two sides. Answering
-  "compare version numbers", proposing a stamp, or auto-applying = fail.
-- **P13 (ac-10):** Well-formed: `interface.display_name` "Staffing", a one-line `short_description` matching
-  the SKILL.md spirit, a concrete `default_prompt`, and `policy.allow_implicit_invocation: true`. `true`
-  matches `metadata.invocation: model`: a thread may reach for staffing when it encounters a routing choice,
-  independent of whether the caller explicitly named it. Treating execution (`thread`) or global-write
-  capability as a reason to disable ambient invocation, or accepting a mismatch, = fail.
-- **P14 (ac-4):** Order is pin → provider/fallback → eligible executor → taste gate → rank. No pin matches
-  (step 1), and no provider gate triggers (step 2; no browser/computer requirement). At the **taste gate**
-  (step 3), the task is user-facing: filter to **taste ≥ 7**, which **removes the taste-5 model before any
-  ranking**. Only then does step 4 rank the survivors by `intelligence > taste > cost`, so the
-  **lower-intelligence, taste-≥7 model gets the work**; the taste-5 model's higher intelligence is
-  irrelevant because it was already dropped in step 3 and ranking **never resurrects a gated-out model**.
-  The taste ≥ 7 floor is a **hard gate, not a soft default** — cite the taste gate in the resolution order
-  (`reference/rankings-and-routing.md`, step 3) and its "ranking never resurrects a model a gate removed"
-  clause. Answering that the taste-5 model wins on intelligence, treating taste ≥ 7 as a mere tie-break or
-  soft default, or applying the floor only after ranking = fail.
-- **P15 (setup):** PASS only if `SKILL.md` routes setup to `reference/setup.md`; the executor reconciles the
-  playbook **clause by clause** rather than overwriting it; **owner-tuned judgment numbers survive** because
-  setup cannot derive them; audit-derived rows are replaced by what this run probed, with contradictions
-  reported as drift; unverifiable rows are marked, never dropped or promoted; and an unchanged-reachability
-  re-run leaves the file **byte-identical**. Cite `reference/setup.md` and
-  `reference/install-and-reconcile.md` § Reconciling an existing playbook.
-- **P16 (cross-harness dispatch):** PASS only for a watched native wrapper around bounded `claude -p` with no `--bare`,
-  closed stdin, timeout, and raw durable return; the wrapper reports lifecycle and the parent verifies the
-  effect. No vendor-policy or credit monitor is required. Cite the Codex package's `reference/harness.md` and
-  common `reference/install-and-reconcile.md`.
-- **P17 (reachability fallback):** PASS only if the failed Codex→Claude direction becomes unavailable, routing is rerun
-  over remaining candidates, Claude→Codex remains healthy, and the graph is explicitly asymmetric. Cite
-  `reference/roles-and-fallback.md` and `reference/machine-audit.md`.
-- **P18 (coordinator routing):** PASS only if routine begins with the reachable coordinator-eligible set and applies
-  pin → provider/fallback → eligible executor → taste gate → `intelligence > taste > cost`; cost is the final
-  tie-break. `orchestrator-required` returns the orchestrator role at the coordinator pre-gate and records its
-  succession. Missing inputs would be a grooming gap. Cite both routing and roles references.
-- **P19 (worker ownership):** PASS only if the parent owns prompt, judgment, and effect verification; the wrapper is
-  a watched native child labeled with external model/task, staffed by the cheapest native model allowed by
-  the floor, and limited to bounded process supervision plus raw output/lifecycle relay. If spawn cannot
-  accept or report the wrapper model, observability may pass but floor/cost compliance remains red.
-- **P20 (data vs doctrine):** PASS only if the split is clean. **Playbook (data):** model rows; which harness
-  may coordinate; the succession chain. **Skill (doctrine):** `intelligence > taste > cost` and the
-  watchers-only-wait-and-relay rule in `reference/rankings-and-routing.md` / `reference/roles-and-fallback.md`;
-  the `codex exec` command shape in the compiled `reference/harness.md`. The test is machine-variance — a fact
-  that differs per machine is data, a rule identical everywhere is doctrine. Putting a command shape in the
-  playbook, or a succession chain in the skill, = fail.
-- **P21 (provider pilot):** PASS only if the answer treats **harness isolation as the guard** — neither
-  loaded path carries an instruction only a session of the other harness could act on — with the size ratio
-  (each provider at least 20% under the unified both-harness load, derived from the same files, never a
-  frozen byte count) as corroboration that separation happened. There is deliberately **no absolute byte
-  ceiling**: citing one, treating the ratio as a prose budget, or citing a fixed baseline figure = fail.
-  Cite `evals/test_provider_pilot.py`.
-- **P22 (alias crossing):** PASS only if the executor passes **`sonnet`**, not `sonnet-5` — taking it from the
-  playbook's recorded alias mapping, and applying it as a **rule** ("this CLI rejects versioned names, accepts
-  bare names") rather than a memorised pair, so a roster row the probe never covered is still handled. Passing
-  the roster name verbatim yields a route that resolves cleanly and is rejected at invocation. Cite the
-  playbook's alias mapping and the compiled `reference/harness.md` ("a roster name is not a CLI alias").
-- **P23 (three-state classification):** The owner-disabled direction is **intentionally disabled** — an owner decision setup
-  records only from the owner's explicit choice, with the reason and the date it was made, plus the cheap
-  install premise (the CLI version from a no-dispatch version probe). The failed direction is **unavailable**
-  with its captured failure class (permission denied) and recorded successor. A later reader distinguishes
-  them because they are distinct recorded states, each row carrying its own evidence — the reason the
-  classification is three-state rather than boolean. On a re-run setup re-checks only that the CLI is still
-  installed and dispatches nothing down the disabled direction; a successful probe never promotes a disabled
-  row — "the disable lifts only when the owner says so — in setup's interview or by editing the playbook —
-  never from a probe result". Cite `reference/machine-audit.md` § Route classification. Inferring "disabled"
-  from the failure, collapsing the two rows into one state, or letting a probe flip the disabled row = fail;
-  an answer that also names the owner's lift channels is exactly right.
-- **P24 (recorded-state conflict):** Both, explicitly: setup **reports the drift** — recorded unavailable against a fresh
-  success — **and reclassifies** the direction effect-verified with the fresh evidence (CLI version,
-  timestamp, command shape, effect class), so the direction re-enters the resolved roster; a direction that
-  becomes reachable stops being treated as dead. Silently preserving the stale row and silently overwriting
-  it are the same failure seen from two sides. Cite `reference/install-and-reconcile.md` § Reconciling an
-  existing playbook. Reporting without reclassifying, reclassifying without reporting, or either silent
-  path = fail.
-- **P25 (alias guard):** **No.** An alias enters the playbook only from a probe result naming the CLI version
-  that produced it; the unprobed name is recorded as unverified — a gap, never a route — and a roster name
-  is never promoted to a dispatch alias by assumption. Where the probes support a rule, its scope is **per
-  CLI**: one CLI rejecting versioned names says nothing about how the sibling treats them, so the sibling's
-  rule needs its own probes. Cite `reference/machine-audit.md` (audit step 3) or the alias bullet in
-  `reference/install-and-reconcile.md` § Reconciling an existing playbook. Recording the roster name as the
-  alias, or extending one CLI's rule to the other = fail.
-- **P26 (idempotent re-run):** **Nothing** — both files are byte-identical, stamp included ("a run that confirms
-  every recorded fact rewrites nothing, stamp included", `reference/setup.md`). Timestamps date the
-  observation that **established** each recorded state, not the latest run that confirmed it, so a probe
-  that finds a row exactly as recorded writes nothing; the rows stay honest because any change in what a
-  probe observes is written as fresh evidence with its own date. Refreshing a "last confirmed" date — on a
-  row or the stamp, turning every re-run into a diff — = fail. Cite `reference/machine-audit.md` § Route
-  classification and the byte-identical bullet in `reference/install-and-reconcile.md` § Reconciling an
-  existing playbook.
+- **P1 (ac-1):** PASS needs `variants` in frontmatter and an explicit finding that no file reads another skill's files or a home-directory path. Frontmatter has `name: staffing`, `user-invocable: true`, and a `description` that reads as a global-capable staffing primitive invoked by name by siblings and directly by users — **pass**. No file imports another skill's files (the dependency surface declares siblings "none — `staffing` is a root primitive"); a grep for cross-skill paths finds none. Claiming a cross-skill import exists = fail.
+- **P2 (ac-2):** The three pointer kinds: **bundled references** (own `reference/` contract), **project playbooks** (installed into the target repo's `docs/agents/`), **sibling skills**. On siblings it must say **"none — `staffing` is a root primitive"** (invoked by siblings, depends on none). Missing any of the three, or getting the sibling answer wrong, = fail.
+- **P3 (ac-3):** The **fallback ladder** governs: the next most capable **reachable** model with sufficient taste for ui work (taste ≥ 7) steps into the ui builder role via the succession line; if the only reachable qualifier is the orchestrator, it takes the ui build itself; if none clears the ui bar, run on the current model in a subagent and **report the staffing gap** — never default it to the backend builder, never skip the change. Cite `reference/roles-and-fallback.md` (worked example / fallback ladder). Handing it to the backend builder or stopping = fail.
+- **P4 (ac-4):** Order is pin → provider/fallback → eligible executor → taste gate → rank. A matching provider pin selects the named effect-verified route. Otherwise the capability-provider registry resolves `browser-use` to its effect-verified primary then recorded fallback; only executors able to operate that route enter the candidate set. `intelligence > taste > cost` ranks those survivors only. Treating browser access as a model boolean or ranking before provider selection = fail.
+- **P5 (ac-5):** The **mechanical/bulk task-type pin** returns the pinned bulk model; resolution **stops at step 1** and skips ranking. It is a **pin**, not a ranking derivation — "a pin short-circuits the ranking." Cite the Pins section / step 1 of the resolution order in `reference/rankings-and-routing.md`. Deriving the answer from the table = fail.
+- **P6 (ac-4):** **Not allowed.** Browser use is an effect supplied by a named harness/tool provider, not a model trait or ranked degree. Resolve provider reachability first, then form the eligible executor set; putting a boolean on model rows invents access when tooling/session state is absent. Cite the provider registry contract. Saying the model column is authoritative = fail.
+- **P7 (ac-6):** Follow the audit: enumerate **this machine's** reachable models as the rows, seed cost/intelligence/taste from the documented default and mark them "tune these", omit the Codex CLI mechanics block (Codex absent), and effect-probe installed tools into a provider registry plus pins. You **may not** ship the five-model table as the roster — it is labeled example output, and the roster is compiled from _this_ machine. Cite `reference/machine-audit.md` (the audit procedure / "Never write a seeded default this machine failed to verify"). Reproducing Asher's table as the roster, or inventing reachable models, = fail.
+- **P8 (ac-6):** It is an **example of audit output for one machine — explicitly NOT the shipped/authoritative roster** (the file labels it "Example of audit output (illustrative only — NOT the shipped roster)" and introduces it as "**one machine's audit result**, shown so you know the shape to write"). Calling it the canonical table = fail.
+- **P9 (ac-7):** The playbook contains the **complete roster**, raised floor included — it is the sole authority, and resolution reads it and nothing else. There is no base to delta against: a "deltas only" answer is the _previous_ shape and = fail. Cite `SKILL.md` § Where the roster lives and `reference/install-and-reconcile.md` § One layer.
+- **P10 (sole authority):** **Do not resolve from the seed** — its rows are unverified defaults, not this machine's truth, so staffing from them asserts a reachability nobody checked. Report the staffing gap and run `staffing setup`. This is a bar on fabricating a roster, **not** a hard stop: the delegated step still degrades onto the current model in a subagent per `reference/roles-and-fallback.md` ("A missing roster section degrades, it does not hard-stop"). Resolving from the seed or a home-directory path = fail; so does refusing to proceed at all. Cite `SKILL.md` § Where the roster lives.
+- **P11 (staleness):** **No.** The judgment numbers travel between machines; reachability, aliases, and CLI versions do not. Re-run `staffing setup` to re-probe before dispatching, and treat every reachability row as unverified until then. It is worse than an absent playbook because a stale row **resolves cleanly and fails at the moment of use**, so nothing surfaces the problem until a worker is already spent. Dispatching on the foreign rows, or treating the staleness header as advisory, = fail.
+- **P12 (ac-9):** `reconcile` is an **LLM audit**: read the playbook, compare it to a current machine audit, and **report the drift in prose** — here both the unreachable model and the contradicted alias mapping. "That reading is the judgment mechanism" (install-and-reconcile.md § Reconciliation is a prose audit). Crucially it may **not** silently apply the fresh values: a contradiction is reported, since silently preserving a stale row and silently overwriting a fresh one are the same failure from two sides. Answering "compare version numbers", proposing a stamp, or auto-applying = fail.
+- **P13 (ac-10):** Well-formed: `interface.display_name` "Staffing", a one-line `short_description` matching the SKILL.md spirit, a concrete `default_prompt`, and `policy.allow_implicit_invocation: true`. `true` matches `metadata.invocation: model`: a thread may reach for staffing when it encounters a routing choice, independent of whether the caller explicitly named it. Treating execution (`thread`) or global-write capability as a reason to disable ambient invocation, or accepting a mismatch, = fail.
+- **P14 (ac-4):** Order is pin → provider/fallback → eligible executor → taste gate → rank. No pin matches (step 1), and no provider gate triggers (step 2; no browser/computer requirement). At the **taste gate** (step 3), the task is user-facing: filter to **taste ≥ 7**, which **removes the taste-5 model before any ranking**. Only then does step 4 rank the survivors by `intelligence > taste > cost`, so the **lower-intelligence, taste-≥7 model gets the work**; the taste-5 model's higher intelligence is irrelevant because it was already dropped in step 3 and ranking **never resurrects a gated-out model**. The taste ≥ 7 floor is a **hard gate, not a soft default** — cite the taste gate in the resolution order (`reference/rankings-and-routing.md`, step 3) and its "ranking never resurrects a model a gate removed" clause. Answering that the taste-5 model wins on intelligence, treating taste ≥ 7 as a mere tie-break or soft default, or applying the floor only after ranking = fail.
+- **P15 (setup):** PASS only if `SKILL.md` routes setup to `reference/setup.md`; the executor reconciles the playbook **clause by clause** rather than overwriting it; **owner-tuned judgment numbers survive** because setup cannot derive them; audit-derived rows are replaced by what this run probed, with contradictions reported as drift; unverifiable rows are marked, never dropped or promoted; and an unchanged-reachability re-run leaves the file **byte-identical**. Cite `reference/setup.md` and `reference/install-and-reconcile.md` § Reconciling an existing playbook.
+- **P16 (cross-harness dispatch):** PASS only for a watched native wrapper around bounded `claude -p` with no `--bare`, closed stdin, timeout, and raw durable return; the wrapper reports lifecycle and the parent verifies the effect. No vendor-policy or credit monitor is required. Cite the Codex package's `reference/harness.md` and common `reference/install-and-reconcile.md`.
+- **P17 (reachability fallback):** PASS only if the failed Codex→Claude direction becomes unavailable, routing is rerun over remaining candidates, Claude→Codex remains healthy, and the graph is explicitly asymmetric. Cite `reference/roles-and-fallback.md` and `reference/machine-audit.md`.
+- **P18 (coordinator routing):** PASS only if routine begins with the reachable coordinator-eligible set and applies pin → provider/fallback → eligible executor → taste gate → `intelligence > taste > cost`; cost is the final tie-break. `orchestrator-required` returns the orchestrator role at the coordinator pre-gate and records its succession. Missing inputs would be a grooming gap. Cite both routing and roles references.
+- **P19 (worker ownership):** PASS only if the parent owns prompt, judgment, and effect verification; the wrapper is a watched native child labeled with external model/task, staffed by the cheapest native model allowed by the floor, and limited to bounded process supervision plus raw output/lifecycle relay. If spawn cannot accept or report the wrapper model, observability may pass but floor/cost compliance remains red.
+- **P20 (data vs doctrine):** PASS only if the split is clean. **Playbook (data):** model rows; which harness may coordinate; the succession chain. **Skill (doctrine):** `intelligence > taste > cost` and the watchers-only-wait-and-relay rule in `reference/rankings-and-routing.md` / `reference/roles-and-fallback.md`; the `codex exec` command shape in the compiled `reference/harness.md`. The test is machine-variance — a fact that differs per machine is data, a rule identical everywhere is doctrine. Putting a command shape in the playbook, or a succession chain in the skill, = fail.
+- **P21 (provider pilot):** PASS only if the answer treats **harness isolation as the guard** — neither loaded path carries an instruction only a session of the other harness could act on — with the size ratio (each provider at least 20% under the unified both-harness load, derived from the same files, never a frozen byte count) as corroboration that separation happened. There is deliberately **no absolute byte ceiling**: citing one, treating the ratio as a prose budget, or citing a fixed baseline figure = fail. Cite `evals/test_provider_pilot.py`.
+- **P22 (alias crossing):** PASS only if the executor passes **`sonnet`**, not `sonnet-5` — taking it from the playbook's recorded alias mapping, and applying it as a **rule** ("this CLI rejects versioned names, accepts bare names") rather than a memorised pair, so a roster row the probe never covered is still handled. Passing the roster name verbatim yields a route that resolves cleanly and is rejected at invocation. Cite the playbook's alias mapping and the compiled `reference/harness.md` ("a roster name is not a CLI alias").
+- **P23 (three-state classification):** The owner-disabled direction is **intentionally disabled** — an owner decision setup records only from the owner's explicit choice, with the reason and the date it was made, plus the cheap install premise (the CLI version from a no-dispatch version probe). The failed direction is **unavailable** with its captured failure class (permission denied) and recorded successor. A later reader distinguishes them because they are distinct recorded states, each row carrying its own evidence — the reason the classification is three-state rather than boolean. On a re-run setup re-checks only that the CLI is still installed and dispatches nothing down the disabled direction; a successful probe never promotes a disabled row — "the disable lifts only when the owner says so — in setup's interview or by editing the playbook — never from a probe result". Cite `reference/machine-audit.md` § Route classification. Inferring "disabled" from the failure, collapsing the two rows into one state, or letting a probe flip the disabled row = fail; an answer that also names the owner's lift channels is exactly right.
+- **P24 (recorded-state conflict):** Both, explicitly: setup **reports the drift** — recorded unavailable against a fresh success — **and reclassifies** the direction effect-verified with the fresh evidence (CLI version, timestamp, command shape, effect class), so the direction re-enters the resolved roster; a direction that becomes reachable stops being treated as dead. Silently preserving the stale row and silently overwriting it are the same failure seen from two sides. Cite `reference/install-and-reconcile.md` § Reconciling an existing playbook. Reporting without reclassifying, reclassifying without reporting, or either silent path = fail.
+- **P25 (alias guard):** **No.** An alias enters the playbook only from a probe result naming the CLI version that produced it; the unprobed name is recorded as unverified — a gap, never a route — and a roster name is never promoted to a dispatch alias by assumption. Where the probes support a rule, its scope is **per CLI**: one CLI rejecting versioned names says nothing about how the sibling treats them, so the sibling's rule needs its own probes. Cite `reference/machine-audit.md` (audit step 3) or the alias bullet in `reference/install-and-reconcile.md` § Reconciling an existing playbook. Recording the roster name as the alias, or extending one CLI's rule to the other = fail.
+- **P26 (idempotent re-run):** **Nothing** — both files are byte-identical, stamp included ("a run that confirms every recorded fact rewrites nothing, stamp included", `reference/setup.md`). Timestamps date the observation that **established** each recorded state, not the latest run that confirmed it, so a probe that finds a row exactly as recorded writes nothing; the rows stay honest because any change in what a probe observes is written as fresh evidence with its own date. Refreshing a "last confirmed" date — on a row or the stamp, turning every re-run into a diff — = fail. Cite `reference/machine-audit.md` § Route classification and the byte-identical bullet in `reference/install-and-reconcile.md` § Reconciling an existing playbook.
 
-- **P27 (one home):** **Report it as drift, neither edit nor ignore.** The staffing overlay is the
-  sole home — cite `reference/setup.md`: "The overlay is the one home for model and capability
-  reachability — routes, dispatch aliases, effect verdicts — and for the CLI-version metadata riding
-  their probes: report any other playbook found restating them as drift."
-  Setup does not fix the environment file itself — its writes are the staffing playbook (and the
-  trigger section of the agent instruction file, step 4), never a foreign playbook — so the
-  restatement is reported for its owning setup to resolve. Editing `environment.md` directly,
-  ignoring the restatement because the playbook is right, or recording the version in both files
-  = fail.
+- **P27 (one home):** **Report it as drift, neither edit nor ignore.** The staffing overlay is the sole home — cite `reference/setup.md`: "The overlay is the one home for model and capability reachability — routes, dispatch aliases, effect verdicts — and for the CLI-version metadata riding their probes: report any other playbook found restating them as drift." Setup does not fix the environment file itself — its writes are the staffing playbook (and the trigger section of the agent instruction file, step 4), never a foreign playbook — so the restatement is reported for its owning setup to resolve. Editing `environment.md` directly, ignoring the restatement because the playbook is right, or recording the version in both files = fail.
 
 ## Scoring
 
-27 probes × 2 executors (one Claude route + one Codex route). A probe passes only with the **correct action AND
-a correct citation**. Ambiguity flags are recorded as findings, not failures — they are the most valuable
-output and should drive wording fixes before ship. Report a verdict table mapping each probe → its criterion
-→ pass/fail per executor. Structural criteria are additionally confirmed by file check: ac-1 (frontmatter +
-grep no cross-skill imports), ac-9 (grep finds no `vNN`/version stamp), ac-10 (YAML parses).
+27 probes × 2 executors (one Claude route + one Codex route). A probe passes only with the **correct action AND a correct citation**. Ambiguity flags are recorded as findings, not failures — they are the most valuable output and should drive wording fixes before ship. Report a verdict table mapping each probe → its criterion → pass/fail per executor. Structural criteria are additionally confirmed by file check: ac-1 (frontmatter + grep no cross-skill imports), ac-9 (grep finds no `vNN`/version stamp), ac-10 (YAML parses).
 
 ### Criterion coverage map
 
-| criterion | probe(s)              |
-|-----------|-----------------------|
-| ac-1      | P1                    |
-| ac-2      | P2                    |
-| ac-3      | P3                    |
-| ac-4      | P4, P6, P14           |
-| ac-5      | P5                    |
-| ac-6      | P7, P8                |
-| ac-7      | P9                    |
-| ac-8      | P10, P11              |
-| ac-9      | P12                   |
-| ac-10     | P13                   |
-| ac-11     | this file (the eval)  |
-| coordinator routing | P18       |
-| cross-harness dispatch, reachability fallback | P16, P17 |
-| worker ownership | P19          |
-| setup machine audit | P23, P24, P25, P26 |
-| data/doctrine | P20                |
-| variants  | P21                    |
-| aliases   | P22                    |
-| one home  | P27                    |
+| criterion                                     | probe(s)             |
+| --------------------------------------------- | -------------------- |
+| ac-1                                          | P1                   |
+| ac-2                                          | P2                   |
+| ac-3                                          | P3                   |
+| ac-4                                          | P4, P6, P14          |
+| ac-5                                          | P5                   |
+| ac-6                                          | P7, P8               |
+| ac-7                                          | P9                   |
+| ac-8                                          | P10, P11             |
+| ac-9                                          | P12                  |
+| ac-10                                         | P13                  |
+| ac-11                                         | this file (the eval) |
+| coordinator routing                           | P18                  |
+| cross-harness dispatch, reachability fallback | P16, P17             |
+| worker ownership                              | P19                  |
+| setup machine audit                           | P23, P24, P25, P26   |
+| data/doctrine                                 | P20                  |
+| variants                                      | P21                  |
+| aliases                                       | P22                  |
+| one home                                      | P27                  |

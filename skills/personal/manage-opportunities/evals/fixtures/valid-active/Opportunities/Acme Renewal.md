@@ -9,6 +9,7 @@ opened: 2026-07-01
 nextAction: aB3dE
 probability: 40
 ---
+
 # Acme Renewal
 
 Acme is considering a renewal proposal.

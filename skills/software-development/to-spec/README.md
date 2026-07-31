@@ -1,52 +1,31 @@
 # To-Spec
 
-Turns a conversation that already reached a decision into the **spec** it earned: the high-level direction
-document a long design discussion produced but never wrote down. To-spec reads the current conversation and
-the codebase/project understanding built up in it, captures what was **decided**, and lands the spec **on
-the subject's ticket** — body canonical, opening with a diagram, revisions as comments — creating the
-ticket when none exists. Shaping's exit: every settled subject ends here; `to-slices` splits a spec'd
-ticket only when the user approves a recommended split. With no tracker bound, falls back to a
-repo doc at `docs/specs/<name>.md` carrying the same diagram-first body.
+Turns a conversation that already reached a decision into the **spec** it earned: the high-level direction document a long design discussion produced but never wrote down. To-spec reads the current conversation and the codebase/project understanding built up in it, captures what was **decided**, and lands the spec **on the subject's ticket** — body canonical, opening with a diagram, revisions as comments — creating the ticket when none exists. Shaping's exit: every settled subject ends here; `to-slices` splits a spec'd ticket only when the user approves a recommended split. With no tracker bound, falls back to a repo doc at `docs/specs/<name>.md` carrying the same diagram-first body.
 
 ## When to use
 
-- **Closing out a design conversation** — the direction is settled; capture it durably before the thread is
-  gone.
-- **Feeding `to-slices`** — produce the direction document the ticket-cutter consumes (a sibling skill
-  invokes this by name; a user can run it directly).
+- **Closing out a design conversation** — the direction is settled; capture it durably before the thread is gone.
+- **Feeding `to-slices`** — produce the direction document the ticket-cutter consumes (a sibling skill invokes this by name; a user can run it directly).
 
 Not for eliciting requirements. To-spec captures decisions already made — it never interviews.
 
 ## Shape
 
-- **Pure synthesis, no interview.** To-spec mines what's already on the table; it does not re-ask what the
-  conversation settled and does not stall on the user. Undecided points are **flagged in the spec's Notes**,
-  not turned into questions.
+- **Pure synthesis, no interview.** To-spec mines what's already on the table; it does not re-ask what the conversation settled and does not stall on the user. Undecided points are **flagged in the spec's Notes**, not turned into questions.
 - **Vendored local method.** The credits below identify its upstream adaptation.
-- **Dev / non-dev gating.** The skill classifies the work. A **dev spec** keeps the dev-only sections
-  (Testing decisions, Test seams) and runs the upstream "sketch the test seams, prefer the highest
-  existing seam" step (see Credits); a **non-dev spec** skips both. One template serves process, content, and decision specs too.
+- **Dev / non-dev gating.** The skill classifies the work. A **dev spec** keeps the dev-only sections (Testing decisions, Test seams) and runs the upstream "sketch the test seams, prefer the highest existing seam" step (see Credits); a **non-dev spec** skips both. One template serves process, content, and decision specs too.
 - **Generic vocabulary.** "spec" and "ticket," never GitHub-specific "issue." The downstream unit is a ticket.
-- **No stale content.** The spec carries no file paths or code snippets (they rot) — direction in prose.
-  Two narrow exceptions: a prototype-validated snippet that encodes a decision more precisely than prose
-  can, and the durable pointers in the spec's **Supporting artifacts** section — the evidence trail
-  (research dossiers, prototype answers, any decision-informing artifact) swept onto the spec at
-  crystallise time, one entry each, omitted when nothing was generated.
+- **No stale content.** The spec carries no file paths or code snippets (they rot) — direction in prose. Two narrow exceptions: a prototype-validated snippet that encodes a decision more precisely than prose can, and the durable pointers in the spec's **Supporting artifacts** section — the evidence trail (research dossiers, prototype answers, any decision-informing artifact) swept onto the spec at crystallise time, one entry each, omitted when nothing was generated.
 
 ## Layout
 
-`SKILL.md` is the command surface (`to-spec [<ticket id, or name>]`) and points into `reference/`:
-`synthesis.md` (the no-interview method, the artifact sweep, the diagram-first rule, where the spec
-lives, gating, seams step, no-stale-content rule, split recommendation, sign-off) and
-`template-guide.md` (what each section holds).
-`agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
+`SKILL.md` is the command surface (`to-spec [<ticket id, or name>]`) and points into `reference/`: `synthesis.md` (the no-interview method, the artifact sweep, the diagram-first rule, where the spec lives, gating, seams step, no-stale-content rule, split recommendation, sign-off) and `template-guide.md` (what each section holds). `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
 
 Self-contained at the file level; composes by name. To-spec depends on no other skill.
 
 ## Install
 
-`npx skills add <repo-url> --skill to-spec`, then invoke it (`to-spec`) at the end of a design conversation to
-synthesize the decided direction into a spec.
+`npx skills add <repo-url> --skill to-spec`, then invoke it (`to-spec`) at the end of a design conversation to synthesize the decided direction into a spec.
 
 ## Credits
 

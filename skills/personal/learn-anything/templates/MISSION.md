@@ -15,4 +15,4 @@
 <!-- Who can judge this for real (teacher, native speaker, class, jam), and the cadence. These are ground truth. -->
 
 | Date | Who | What they'll judge | Result |
-|---|---|---|---|
+| ---- | --- | ------------------ | ------ |

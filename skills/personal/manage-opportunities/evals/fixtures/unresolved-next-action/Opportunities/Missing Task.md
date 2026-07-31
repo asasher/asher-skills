@@ -8,6 +8,7 @@ stage: discovery
 opened: 2026-07-01
 nextAction: noTask
 ---
+
 # Missing Task
 
 The designated task is absent.

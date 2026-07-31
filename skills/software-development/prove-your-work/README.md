@@ -1,9 +1,6 @@
 # Prove Your Work
 
-Evidence packaging for a finished change: what changed and why, reproducible proof per claim (exact
-commands with trimmed output; screenshots for UI journeys), and named gaps for anything unverified —
-posted on the change request where the merge decision happens. Obligation scales with the decider's
-absence: witnessed-live work compresses, AFK work carries the full package.
+Evidence packaging for a finished change: what changed and why, reproducible proof per claim (exact commands with trimmed output; screenshots for UI journeys), and named gaps for anything unverified — posted on the change request where the merge decision happens. Obligation scales with the decider's absence: witnessed-live work compresses, AFK work carries the full package.
 
 ## When to use
 
@@ -12,8 +9,7 @@ absence: witnessed-live work compresses, AFK work carries the full package.
 ## Dependency surface
 
 - **Bundled:** `SKILL.md` only.
-- **Project:** platform verbs in `docs/agents/platform.md`; format and bar from `docs/agents/evidence.md`;
-  the capture contract from `docs/agents/environment.md` — each when the repo has one.
+- **Project:** platform verbs in `docs/agents/platform.md`; format and bar from `docs/agents/evidence.md`; the capture contract from `docs/agents/environment.md` — each when the repo has one.
 - **Siblings:** none.
 
 ## Provenance

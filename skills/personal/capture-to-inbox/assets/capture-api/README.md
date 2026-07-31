@@ -18,7 +18,6 @@ A dependency-free Node 20 HTTP API for durable, bearer-authenticated capture que
 - `MAX_UPLOAD_MB` - total request-body limit; defaults to `100`.
 - `PORT` - listen port; defaults to `3000`.
 
-Each accepted item is written into a private temporary directory and atomically renamed into the queue. The
-metadata records payload size and SHA-256 so consumers can verify bytes before deleting the remote item.
+Each accepted item is written into a private temporary directory and atomically renamed into the queue. The metadata records payload size and SHA-256 so consumers can verify bytes before deleting the remote item.
 
 Run `npm test` without installing dependencies.

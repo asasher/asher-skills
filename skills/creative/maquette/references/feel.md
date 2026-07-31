@@ -4,12 +4,9 @@ Run this after the journeys work. The goal is predictable, immediate feedback—
 
 ## Interaction audit
 
-- Exercise every control rapidly and by keyboard. State changes remain visible, reversible where expected,
-  and never depend on animation finishing.
-- Frequent actions respond immediately. Use motion only when it explains entry, exit, movement, or state;
-  keep it short and interruptible.
-- Loading reads as intentional: skeleton or progress for reads, immediate pending/success/failure feedback for
-  writes, and no unexplained frozen control.
+- Exercise every control rapidly and by keyboard. State changes remain visible, reversible where expected, and never depend on animation finishing.
+- Frequent actions respond immediately. Use motion only when it explains entry, exit, movement, or state; keep it short and interruptible.
+- Loading reads as intentional: skeleton or progress for reads, immediate pending/success/failure feedback for writes, and no unexplained frozen control.
 - Menus originate near their trigger; dialogs remain spatially stable; exiting is quieter than entering.
 - Updated numbers do not shift surrounding layout. Icons, labels, nested radii, and spacing align optically.
 

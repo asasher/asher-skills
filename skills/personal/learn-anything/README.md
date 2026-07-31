@@ -1,16 +1,10 @@
 # learn-anything
 
-Learn any skill — not just facts. Extended for skills that live in the body: accents, instruments, dance,
-voice acting.
+Learn any skill — not just facts. Extended for skills that live in the body: accents, instruments, dance, voice acting.
 
-The base skill is a knowledge-encoding engine — its atomic unit is the lesson. This skill keeps that as the
-**teacher hat** and adds the **coach hat**, whose atomic unit is the **feedback loop**: target, trap, gap
-measure, drill, progression. The agent works with a competent self-learner to engineer those loops
-(including building the rig — scripts, third-party tools, physical setups), runs live rep-by-rep practice
-sessions, and schedules drills using motor-learning science rather than flashcard intervals.
+The base skill is a knowledge-encoding engine — its atomic unit is the lesson. This skill keeps that as the **teacher hat** and adds the **coach hat**, whose atomic unit is the **feedback loop**: target, trap, gap measure, drill, progression. The agent works with a competent self-learner to engineer those loops (including building the rig — scripts, third-party tools, physical setups), runs live rep-by-rep practice sessions, and schedules drills using motor-learning science rather than flashcard intervals.
 
-Install once per learning workspace. The skill is self-contained: all state lives in the workspace (drill
-specs carry their own scheduling state and revision logs), nothing phones home.
+Install once per learning workspace. The skill is self-contained: all state lives in the workspace (drill specs carry their own scheduling state and revision logs), nothing phones home.
 
 ## Layout
 

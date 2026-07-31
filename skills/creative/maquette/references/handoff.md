@@ -1,11 +1,8 @@
 # Handoff
 
-`HANDOFF.md` is the third artifact: the contract that lets a full-stack agent (or team) implement the real
-product from the repo alone — no access to this conversation, no interpretation required. Write it for a
-competent stranger.
+`HANDOFF.md` is the third artifact: the contract that lets a full-stack agent (or team) implement the real product from the repo alone — no access to this conversation, no interpretation required. Write it for a competent stranger.
 
-Generate it from ground truth, not memory: `lib/schema.ts`, the `lib/api/` surface, `grep -rn "@mock"`,
-`mcp/server.ts`, and `JOURNEYS.md`.
+Generate it from ground truth, not memory: `lib/schema.ts`, the `lib/api/` surface, `grep -rn "@mock"`, `mcp/server.ts`, and `JOURNEYS.md`.
 
 ## HANDOFF.md template
 
@@ -44,9 +41,6 @@ against it screen by screen.
 
 ## Rules
 
-- The mock inventory must be **complete** — an unlisted fake becomes a production surprise. If
-  `grep -c "@mock"` disagrees with the table, fix the table.
-- State what is deliberately absent (no real-time sync, no audit trail, …) so absence reads as a decision,
-  not an oversight.
-- Keep `BRIEF.md`, `JOURNEYS.md`, `DEMO.md`, and `HANDOFF.md` in the repo — the maquette repo is the
-  complete deliverable.
+- The mock inventory must be **complete** — an unlisted fake becomes a production surprise. If `grep -c "@mock"` disagrees with the table, fix the table.
+- State what is deliberately absent (no real-time sync, no audit trail, …) so absence reads as a decision, not an oversight.
+- Keep `BRIEF.md`, `JOURNEYS.md`, `DEMO.md`, and `HANDOFF.md` in the repo — the maquette repo is the complete deliverable.

@@ -1,7 +1,6 @@
 # Reviewer Prompt
 
-Use this prompt when asking a fresh LLM to propose skill improvements. Keep artifact paths intact so the
-applying agent can verify them.
+Use this prompt when asking a fresh LLM to propose skill improvements. Keep artifact paths intact so the applying agent can verify them.
 
 ```text
 You are reviewing one agent skill against eval evidence.

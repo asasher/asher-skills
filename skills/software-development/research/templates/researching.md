@@ -1,7 +1,6 @@
 # Playbook: Research
 
-> Project-specific delta owned by `research setup`. The installed skill owns the research method; keep only
-> this repo's source, storage, privacy, concurrency, and presentation bindings here.
+> Project-specific delta owned by `research setup`. The installed skill owns the research method; keep only this repo's source, storage, privacy, concurrency, and presentation bindings here.
 
 ## Artifact routing
 
@@ -18,9 +17,7 @@
 
 ## Parallelism
 
-- Executor routes (which harnesses and models can carry a research worker): the staffing probe record
-  is their one home — never restate routes or aliases; pointer: _<path, e.g. the staffing playbook and
-  its machine-local overlay>_. Practical worker cap for research fan-out: _<the research-specific cap>_.
+- Executor routes (which harnesses and models can carry a research worker): the staffing probe record is their one home — never restate routes or aliases; pointer: _<path, e.g. the staffing playbook and its machine-local overlay>_. Practical worker cap for research fan-out: _<the research-specific cap>_.
 - Serialized source systems or rate limits: _<add, or “none”>_.
 - Project rule for nested fan-out when the caller is already parallel: _<add>_.
 

@@ -40,7 +40,7 @@ Make every non-constraint serve the constraint:
 Escalate only after exploitation/subordination are visibly exhausted.
 
 | Elevation | Typical Cost | Main Risk |
-|---|---:|---|
+| --- | --: | --- |
 | Overtime / extended hours | low-medium OpEx | fatigue, quality loss |
 | Cross-training / reassignment | medium | ramp time, partial skill |
 | Better tooling / fixtures / automation aid | medium | integration delay |
@@ -142,4 +142,4 @@ Use another lens first when:
 - Keep guardrail metrics: quality, safety, morale, cost, customer trust.
 - Combine methods pragmatically: TOC for focus, A3/PDSA/Kata for learning, Lean/Six Sigma for countermeasures.
 
-Key sources: TOC Institute on focusing steps and constraint management; Deming Institute and IHI on PDSA; Lean Enterprise Institute on A3; Rother/Toyota Kata; Peter Sims’ *Little Bets*; Rahman 1998, Gupta & Snyder 2009, Nave 2002, and Linhares 2009 for review/critique context.
+Key sources: TOC Institute on focusing steps and constraint management; Deming Institute and IHI on PDSA; Lean Enterprise Institute on A3; Rother/Toyota Kata; Peter Sims’ _Little Bets_; Rahman 1998, Gupta & Snyder 2009, Nave 2002, and Linhares 2009 for review/critique context.
