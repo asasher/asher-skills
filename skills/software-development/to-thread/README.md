@@ -13,6 +13,5 @@ turn start deletes its partially created T3 thread before the temporary credenti
 
 ## Provenance
 
-No external sources. T3 Code 0.0.30, Claude Code 2.1.220, and codex-cli 0.144.5 were the latest live
-probes for their respective command shapes; runtime compatibility is capability-tested rather than
-version-pinned.
+No external sources. Runtime compatibility is capability-tested at use rather than version-pinned,
+so the installed CLI is always the ground truth.
