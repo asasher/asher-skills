@@ -36,8 +36,7 @@ A Codex or Claude provider running inside T3 always creates a T3 thread. Never r
 
 ## T3 Code
 
-Ground truth: the installed T3 Code. The helper discovers the local runtime at run time and
-capability-tests the command shape; no version is assumed.
+Ground truth: the installed T3 Code. The helper discovers the local runtime at run time and capability-tests the command shape; no version is assumed.
 
 Run the bundled helper with the resolved provider, current model, and prepared directory:
 
@@ -52,8 +51,7 @@ Tell the user to open the named thread in the T3 project sidebar. A missing loca
 
 ## Claude Code
 
-Ground truth: the installed `claude` — flags drift between releases, so recheck `claude --help` if a
-flag misses.
+Ground truth: the installed `claude` — flags drift between releases, so recheck `claude --help` if a flag misses.
 
     cd <directory> && claude --bg -n "<name>" --model <model> --effort <level> \
       --permission-mode <mode> "<prompt>"
@@ -62,8 +60,7 @@ The directory is already resolved, so omit Claude's worktree flag. Tell the user
 
 ## Codex
 
-Ground truth: the installed `codex` — flags drift between releases, so recheck `codex --help` if a
-flag misses. A CLI thread has a UUID and an optional name:
+Ground truth: the installed `codex` — flags drift between releases, so recheck `codex --help` if a flag misses. A CLI thread has a UUID and an optional name:
 
 1. Spawn detached in the resolved directory, capturing the first JSONL `thread.started` id:
 

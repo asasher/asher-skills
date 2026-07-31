@@ -13,10 +13,7 @@ metadata:
 
 # Serve via Tailnet
 
-Expose a local HTML artifact on the tailnet and hand the user its URL. The consuming repo's
-`docs/agents/environment.md` records the tailnet root, port ranges, and any reverse-proxy rules where the
-repo has them — honor them; absent any record, bind to the tailscale interface address and report
-`http://<tailnet-host>:<port>/...`.
+Expose a local HTML artifact on the tailnet and hand the user its URL. The consuming repo's `docs/agents/environment.md` records the tailnet root, port ranges, and any reverse-proxy rules where the repo has them — honor them; absent any record, bind to the tailscale interface address and report `http://<tailnet-host>:<port>/...`.
 
 Serving is **detached**: the server outlives this turn, and the URL is reported with how to stop it.
 

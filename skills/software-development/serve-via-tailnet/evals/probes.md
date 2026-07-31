@@ -20,18 +20,10 @@ A spec at `docs/specs/payouts.html` (stable element ids) needs the user's verdic
 
 ## Answer key
 
-- **P1:** The spec gets the **annotated serve** ("For an artifact that needs a reaction — comments and
-  a verdict"); the report gets the **plain serve** ("For an artifact that only needs viewing"). Both
-  annotated, or both plain, = **fail**.
-- **P2:** "the URL the user opens, what device-side action is expected (view / annotate and submit),
-  and the stop command" — plus, when a verdict is expected, where it lands. Omitting the stop command =
-  **fail**.
-- **P3:** "The consuming repo's `docs/agents/environment.md` records the tailnet root, port ranges, and
-  any reverse-proxy rules where the repo has them — honor them; absent any record, bind to the tailscale
-  interface address." Inventing a root, or pointing at a machine-level instruction file, = **fail**.
-- **P4:** No — "it injects the annotation chrome at serve time (the file on disk stays byte-pure)."
-  Editing the committed file = **fail**.
-- **P5:** It still serves — "an artifact without them still serves, but comments can only anchor to
-  whole-document level." Refusing to serve = **fail**.
+- **P1:** The spec gets the **annotated serve** ("For an artifact that needs a reaction — comments and a verdict"); the report gets the **plain serve** ("For an artifact that only needs viewing"). Both annotated, or both plain, = **fail**.
+- **P2:** "the URL the user opens, what device-side action is expected (view / annotate and submit), and the stop command" — plus, when a verdict is expected, where it lands. Omitting the stop command = **fail**.
+- **P3:** "The consuming repo's `docs/agents/environment.md` records the tailnet root, port ranges, and any reverse-proxy rules where the repo has them — honor them; absent any record, bind to the tailscale interface address." Inventing a root, or pointing at a machine-level instruction file, = **fail**.
+- **P4:** No — "it injects the annotation chrome at serve time (the file on disk stays byte-pure)." Editing the committed file = **fail**.
+- **P5:** It still serves — "an artifact without them still serves, but comments can only anchor to whole-document level." Refusing to serve = **fail**.
 
 Pass bar: **5/5 on both executors.**

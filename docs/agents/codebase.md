@@ -16,41 +16,21 @@
 
 Run narrowest-first, then broaden by touched surface. This is a skills repo — the primary "test" is a probe eval, not a unit test; there is no npm/lint/typecheck/build pipeline.
 
-- Targeted check (skill behavior): run the changed skill's probe scenarios through an executor per
-  `docs/agents/probe-evals.md`, graded against the skill's answer key; scenarios live in the skill's
-  own `evals/`.
-- Script check: for any changed stdlib-Python script, `python3 -m py_compile <script>` then drive it
-  directly (`--help`, `--sweep`, the real paths) with the interpreter bare `python3` resolves — the
-  drive itself is the probe. A script *refactor* is
-  behavior-preserving only if the same driven paths produce the same output.
-- Catalog gate: `python3 tools/test_catalog.py` (23 tests). This includes the
-  marketplace drift gate: `.claude-plugin/marketplace.json` must match the compiled catalog —
-  standalone check `python3 tools/catalog.py marketplace --check` (non-zero on drift), regenerate
-  with `python3 tools/catalog.py marketplace`.
-- Site manifest gate: a change touching any SDLC-family skill runs
-  `python3 site/check.py` (`site/MAINTENANCE.md`); errors block — **its exit code
-  is the verdict; don't pipe it through `tail` in a `&&` chain or the failure is masked.**
-- Gate interpreter: bare `python3` — the gates need whatever interpreter `python3` resolves, and
-  running them is the probe; the observed version is not a fact this file records.
+- Targeted check (skill behavior): run the changed skill's probe scenarios through an executor per `docs/agents/probe-evals.md`, graded against the skill's answer key; scenarios live in the skill's own `evals/`.
+- Script check: for any changed stdlib-Python script, `python3 -m py_compile <script>` then drive it directly (`--help`, `--sweep`, the real paths) with the interpreter bare `python3` resolves — the drive itself is the probe. A script _refactor_ is behavior-preserving only if the same driven paths produce the same output.
+- Catalog gate: `python3 tools/test_catalog.py` (23 tests). This includes the marketplace drift gate: `.claude-plugin/marketplace.json` must match the compiled catalog — standalone check `python3 tools/catalog.py marketplace --check` (non-zero on drift), regenerate with `python3 tools/catalog.py marketplace`.
+- Markdown format gate: `npx prettier@3.6.2 --check '**/*.md'` — prose is unwrapped (AGENTS.md § Conventions); fix with `--write`.
+- Site manifest gate: a change touching any SDLC-family skill runs `python3 site/check.py` (`site/MAINTENANCE.md`); errors block — **its exit code is the verdict; don't pipe it through `tail` in a `&&` chain or the failure is masked.**
+- Gate interpreter: bare `python3` — the gates need whatever interpreter `python3` resolves, and running them is the probe; the observed version is not a fact this file records.
 
   <!-- machine-local: docs/agents/local/codebase.md setup="backlog setup" -->
-  Machine-verified interpreter and sandbox behaviors — hashlib health, command shapes the worktree
-  sandbox refuses — live in the overlay declared above; when it is missing, run `backlog setup`.
-- Staffing eval suite (run from `skills/system/staffing/evals/`): `test_provider_pilot.py`. The guard is
-  **harness isolation** — neither compiled path (nor installed mount) may carry an instruction only a
-  session of the other harness could act on. The size ratio (each provider ≤ 80% of the unified
-  both-harness load, derived from the same files) is corroboration that separation happened, not a prose
-  budget: there is deliberately no absolute byte ceiling, and a needed sentence is never traded away to
-  satisfy a number.
-- Cold-reader check (pre-review, named): any change shipping audience-facing text — skill prose,
-  templates, docs — gets a subagent with none of the authoring conversation reading the artifact
-  alone, flagging every sentence it cannot ground in the artifact itself; leakage is fixed or
-  explicitly justified before the change is review-ready.
-- Aggregate pre-PR gate: the changed skill's probe eval passes against its answer key, and any changed
-  script compiles and runs; new or reworked skills clear a pre-deployment probe eval before first real
-  use.
-- Runner trap: bare `==` in a zsh command line (e.g. `echo ===`) breaks the whole command — quote it
-  or avoid it.
+
+  Machine-verified interpreter and sandbox behaviors — hashlib health, command shapes the worktree sandbox refuses — live in the overlay declared above; when it is missing, run `backlog setup`.
+
+- Staffing eval suite (run from `skills/system/staffing/evals/`): `test_provider_pilot.py`. The guard is **harness isolation** — neither compiled path (nor installed mount) may carry an instruction only a session of the other harness could act on. The size ratio (each provider ≤ 80% of the unified both-harness load, derived from the same files) is corroboration that separation happened, not a prose budget: there is deliberately no absolute byte ceiling, and a needed sentence is never traded away to satisfy a number.
+- Cold-reader check (pre-review, named): any change shipping audience-facing text — skill prose, templates, docs — gets a subagent with none of the authoring conversation reading the artifact alone, flagging every sentence it cannot ground in the artifact itself; leakage is fixed or explicitly justified before the change is review-ready.
+- Aggregate pre-PR gate: the changed skill's probe eval passes against its answer key, and any changed script compiles and runs; new or reworked skills clear a pre-deployment probe eval before first real use.
+- Runner trap: bare `==` in a zsh command line (e.g. `echo ===`) breaks the whole command — quote it or avoid it.
 
 ## Testing patterns
 

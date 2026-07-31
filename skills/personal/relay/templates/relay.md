@@ -16,7 +16,4 @@ Document how source evidence becomes recipient-facing language for each audience
 
 ## Review and approval
 
-Approval happens in chat: the session presents each message's exact sender, To, CC, subject and template
-identity, rendered content, evidence summary, and doc hash, plus the local `review.html` path. Document any
-repository facts that affect how content is presented for review. Keep delivery blocked until the run records
-an exact-hash `chat_approval` event.
+Approval happens in chat: the session presents each message's exact sender, To, CC, subject and template identity, rendered content, evidence summary, and doc hash, plus the local `review.html` path. Document any repository facts that affect how content is presented for review. Keep delivery blocked until the run records an exact-hash `chat_approval` event.

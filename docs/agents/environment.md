@@ -55,8 +55,9 @@
   - Codex executor (gpt-5.6-sol / gpt-5.6-terra): the Codex CLI, authed to its own subscription; billed separately from the session. Liveness is the credential-preflight probe in § Branching & deploys — the capability answering, not a version read; the CLI version exists only as metadata of the staffing overlay's probe record.
 
   <!-- machine-local: docs/agents/local/environment.md setup="backlog setup" -->
-  Identity observations and other machine-only auth facts live in the overlay declared above; when it
-  is missing, run `backlog setup`.
+
+  Identity observations and other machine-only auth facts live in the overlay declared above; when it is missing, run `backlog setup`.
+
 - How an agent mints a session: n/a — no app session to mint.
 - Test accounts / where credentials live: `gh` keyring and `~/.codex/`; never hardcode, never echo them.
 

@@ -2,15 +2,9 @@
 
 ## One layer
 
-Setup writes the **project staffing playbook**, under the repo's agent-docs directory, and the gitignored
-machine-local overlay it declares. Together they are the sole runtime authority. There is no home-directory
-module and no pointer section in a global agent instruction file.
+Setup writes the **project staffing playbook**, under the repo's agent-docs directory, and the gitignored machine-local overlay it declares. Together they are the sole runtime authority. There is no home-directory module and no pointer section in a global agent instruction file.
 
-The playbook carries the judgment rows, pins, floor, succession, and project deltas; its overlay carries
-everything machine-probed — per-harness eligibility, named capability providers and fallbacks, directional
-reachability with its probe evidence, and the probe record naming the machine and CLI versions. Doctrine
-stays in this skill's references; a playbook that restates a ranking rule or a command shape has copied
-something that will drift.
+The playbook carries the judgment rows, pins, floor, succession, and project deltas; its overlay carries everything machine-probed — per-harness eligibility, named capability providers and fallbacks, directional reachability with its probe evidence, and the probe record naming the machine and CLI versions. Doctrine stays in this skill's references; a playbook that restates a ranking rule or a command shape has copied something that will drift.
 
 The bundled roster **seed** supplies starting values for the judgment numbers — cost, intelligence, taste, effort — because those cannot be probed. It is read once, at setup, and never at resolution time. Everything else in the playbook comes from the audit.
 
@@ -20,34 +14,12 @@ Two layers were the previous shape and the reason this one exists: a base plus s
 
 The playbook is **repo-owned**. Reconcile it clause by clause; never overwrite it wholesale.
 
-- Owner-tuned judgment numbers survive a re-run. They are the values setup cannot derive, so setup does not
-  get to reset them.
-- Audit-derived rows — reachability, aliases, provider bindings, eligibility — are replaced by what this run
-  probed, and a replacement that contradicts what was recorded is **reported as drift**, not applied
-  silently. Silently preserving a stale row and silently overwriting a fresh one are the same failure seen
-  from two sides. Direction states move both ways under this rule: a recorded **unavailable** direction
-  whose fresh effect probe succeeds is reported and reclassified effect-verified with the fresh evidence
-  (the fields the machine audit's § Route classification defines) — a direction that becomes reachable
-  stops being treated as dead, and its routes re-enter the resolved roster — and a recorded
-  **effect-verified** direction whose probe fails is reported and reclassified unavailable with its
-  captured failure class.
-- **Intentionally disabled** rows are owner decisions, not audit output: a re-run confirms the install
-  still exists (a version probe, no dispatch) and leaves the choice standing unless the owner lifts it in
-  that run's interview — a successful probe never promotes one. A vanished install is drift to report:
-  the row is reclassified unavailable with its failure class, retaining the owner's disable decision
-  beside it as a note — not a second state — so a reinstall
-  does not silently re-enable the route. When the install returns, the standing decision puts the row back
-  to intentionally disabled without a new owner interview; the state comes from the retained decision, not
-  from the probe that noticed the reinstall.
-- An alias enters the playbook only from a probe result naming the CLI version that produced it. A roster
-  name is never promoted to a dispatch alias by assumption, and a name no probe ran against is recorded as
-  unverified, never as a route.
-- Rows the audit could not verify are reported as gaps and left marked, never quietly dropped and never
-  promoted to verified.
-- A re-run with unchanged reachability leaves the file byte-identical. Evidence timestamps date the
-  observation that established each recorded state, so a probe that merely confirms a row writes nothing.
-  The probe record's machine-record stamp line follows the same establishing-observation rule: a
-  confirming re-run rewrites nothing, the stamp included.
+- Owner-tuned judgment numbers survive a re-run. They are the values setup cannot derive, so setup does not get to reset them.
+- Audit-derived rows — reachability, aliases, provider bindings, eligibility — are replaced by what this run probed, and a replacement that contradicts what was recorded is **reported as drift**, not applied silently. Silently preserving a stale row and silently overwriting a fresh one are the same failure seen from two sides. Direction states move both ways under this rule: a recorded **unavailable** direction whose fresh effect probe succeeds is reported and reclassified effect-verified with the fresh evidence (the fields the machine audit's § Route classification defines) — a direction that becomes reachable stops being treated as dead, and its routes re-enter the resolved roster — and a recorded **effect-verified** direction whose probe fails is reported and reclassified unavailable with its captured failure class.
+- **Intentionally disabled** rows are owner decisions, not audit output: a re-run confirms the install still exists (a version probe, no dispatch) and leaves the choice standing unless the owner lifts it in that run's interview — a successful probe never promotes one. A vanished install is drift to report: the row is reclassified unavailable with its failure class, retaining the owner's disable decision beside it as a note — not a second state — so a reinstall does not silently re-enable the route. When the install returns, the standing decision puts the row back to intentionally disabled without a new owner interview; the state comes from the retained decision, not from the probe that noticed the reinstall.
+- An alias enters the playbook only from a probe result naming the CLI version that produced it. A roster name is never promoted to a dispatch alias by assumption, and a name no probe ran against is recorded as unverified, never as a route.
+- Rows the audit could not verify are reported as gaps and left marked, never quietly dropped and never promoted to verified.
+- A re-run with unchanged reachability leaves the file byte-identical. Evidence timestamps date the observation that established each recorded state, so a probe that merely confirms a row writes nothing. The probe record's machine-record stamp line follows the same establishing-observation rule: a confirming re-run rewrites nothing, the stamp included.
 
 A write that cannot be read back changes nothing: fail closed, report the gap, and do not dispatch on a roster that was not durably written. Retain recovery bytes until the new playbook passes its probes.
 

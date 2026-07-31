@@ -23,22 +23,17 @@ Note the standing oddity of this repo: it is its own upstream. An upstream candi
 
 ## Friction ledger
 
-| | |
-|---|---|
+|  |  |
+| --- | --- |
 | Instance | `retro/` — `ledger.md`, `denylist.txt` (machine-local scrub half), `transcripts.md`; machine-local and untracked (`.gitignore` carries `/retro/`) |
 | Shared denylist | `docs/agents/retro-denylist.txt` — tracked; the repo-shareable scrub terms |
 | Pass due | 5 open entries, or 3 in one cluster |
 
 ## Transcript binding
 
-The bound harnesses and their concrete verified transcript locations live in the untracked
-`retro/transcripts.md`, written by setup. How each harness stores transcripts:
+The bound harnesses and their concrete verified transcript locations live in the untracked `retro/transcripts.md`, written by setup. How each harness stores transcripts:
 
-- **Claude Code** keeps per-project transcripts under
-  `~/.claude/projects/<absolute project path with '/' replaced by '-'>/` as `*.jsonl`.
-- **Codex** keeps sessions globally under `~/.codex/sessions/<year>/…`; filter to this repo by the
-  cwd each session file records.
+- **Claude Code** keeps per-project transcripts under `~/.claude/projects/<absolute project path with '/' replaced by '-'>/` as `*.jsonl`.
+- **Codex** keeps sessions globally under `~/.codex/sessions/<year>/…`; filter to this repo by the cwd each session file records.
 
-Locations are verified at use: when `retro/transcripts.md` is missing or a recorded location no
-longer resolves, re-run setup's transcript-binding step rather than guessing. A retro pass reads
-only runs since the last pass.
+Locations are verified at use: when `retro/transcripts.md` is missing or a recorded location no longer resolves, re-run setup's transcript-binding step rather than guessing. A retro pass reads only runs since the last pass.

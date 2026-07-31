@@ -8,32 +8,11 @@ The audit is what makes the project playbook trustworthy, so it also records _ho
 
 Read [install-and-reconcile](install-and-reconcile.md) once before probing — the external-worker contract and the reconciliation rules there govern how steps (1), (2), and (4) are judged. Then run these probes and record the results:
 
-1. **Which routes work from this harness?** Enumerate native models, then probe the sibling-harness route
-   defined by the compiled `reference/harness.md`. Run step 2's version probes first: a direction whose CLI
-   is absent is unavailable (CLI absent), with no owner question to ask. For each installed direction, ask
-   the owner before dispatching any probe whether it is deliberately off for cost or policy — that answer
-   classifies the direction intentionally disabled, and no dispatch probe runs down it. Classify each
-   remaining direction into exactly one route state and record its evidence per § Route classification
-   below, plus the native wrapper label/model evidence where a wrapper carried the probe. A failure removes
-   this direction only. Real invocation behavior is the operational signal.
-2. **Which sibling harness CLIs are installed?** Probe `codex --version` and `claude --version`, then retain
-   only the routes step 1 actually exercised. Presence alone is not reachability. Record the versions as the
-   probe record's metadata — part of what makes a recorded route trustworthy on this machine and stale on
-   another, and the cue to re-probe after an upgrade — never as facts of their own that anything resolves
-   against.
-3. **Which dispatch aliases does each CLI actually accept?** Roster names are not dispatch aliases. Probe the
-   name that would be passed to the CLI's model argument for every row that could cross a harness boundary,
-   and record the mapping with the CLI version that produced it. A name no probe accepted must never be
-   written as a verified route — the failure surfaces at the moment of use, long after resolution looked
-   clean — and a name no probe ran against is recorded as unverified, never promoted to a dispatch alias by
-   assumption. Where the results support a rule ("this CLI rejects versioned names, accepts bare ones"), its
-   scope is the CLI whose probes established it: one CLI's rule says nothing about how the sibling treats
-   the same names, so the sibling's rule needs its own probes.
-4. **Does a project staffing playbook already exist?** Read it. It is the reconciliation target, and what it
-   records about a previous machine or CLI version is what a fresh probe is checked against.
-5. **Which waits does each harness track?** Probe the wake mechanisms — background-task completion, subagent
-   completion, monitors, cron — and record which ones re-invoke the session, effect-verified. These become
-   the Wake-paths rows.
+1. **Which routes work from this harness?** Enumerate native models, then probe the sibling-harness route defined by the compiled `reference/harness.md`. Run step 2's version probes first: a direction whose CLI is absent is unavailable (CLI absent), with no owner question to ask. For each installed direction, ask the owner before dispatching any probe whether it is deliberately off for cost or policy — that answer classifies the direction intentionally disabled, and no dispatch probe runs down it. Classify each remaining direction into exactly one route state and record its evidence per § Route classification below, plus the native wrapper label/model evidence where a wrapper carried the probe. A failure removes this direction only. Real invocation behavior is the operational signal.
+2. **Which sibling harness CLIs are installed?** Probe `codex --version` and `claude --version`, then retain only the routes step 1 actually exercised. Presence alone is not reachability. Record the versions as the probe record's metadata — part of what makes a recorded route trustworthy on this machine and stale on another, and the cue to re-probe after an upgrade — never as facts of their own that anything resolves against.
+3. **Which dispatch aliases does each CLI actually accept?** Roster names are not dispatch aliases. Probe the name that would be passed to the CLI's model argument for every row that could cross a harness boundary, and record the mapping with the CLI version that produced it. A name no probe accepted must never be written as a verified route — the failure surfaces at the moment of use, long after resolution looked clean — and a name no probe ran against is recorded as unverified, never promoted to a dispatch alias by assumption. Where the results support a rule ("this CLI rejects versioned names, accepts bare ones"), its scope is the CLI whose probes established it: one CLI's rule says nothing about how the sibling treats the same names, so the sibling's rule needs its own probes.
+4. **Does a project staffing playbook already exist?** Read it. It is the reconciliation target, and what it records about a previous machine or CLI version is what a fresh probe is checked against.
+5. **Which waits does each harness track?** Probe the wake mechanisms — background-task completion, subagent completion, monitors, cron — and record which ones re-invoke the session, effect-verified. These become the Wake-paths rows.
 
 Steps (1)–(5) all feed § Writing the roster from the audit; the judgment numbers cannot be probed — see § The seed (numbers the user tunes).
 
@@ -47,17 +26,7 @@ Every sibling-harness direction the audit records lands in exactly one of three 
 
 The capability-provider registry's route-state field uses these same three state names with the same meaning — only an effect-verified route backs selection, and a probe never promotes a disabled one. Its rows carry the registry's own fields (primary, fallback, eligible executor) rather than this section's five, and its owner questions ride the audit's existing provider-binding interview; the contract below is stated for directions, which carry the cross-harness risk this classification exists for.
 
-Each classification carries five evidence fields, all resolvable from its row: the CLI version observed,
-the timestamp, the command shape used, the result or failure class, and the recorded successor for that
-direction. Where one audit run established every row, the machine, CLI versions, and date may live once in
-the probe record the rows sit under; a row probed at any other time carries its own values inline, so the
-shared record never misdescribes it. The record, rows included, lives in the repo's gitignored
-machine-local overlay (`docs/agents/local/staffing.md`), never the tracked playbook; its
-machine-readable form is the stamp line
-`<!-- machine-record: machine=<short hostname> probed=<YYYY-MM-DD> -->` at its head — what a mechanical
-staleness check parses where a repo's installed skill set ships one. The machine value is the stable
-short hostname as a single whitespace-free token — the segment before the first dot, on macOS the
-local host name (`scutil --get LocalHostName`) — compared case-insensitively.
+Each classification carries five evidence fields, all resolvable from its row: the CLI version observed, the timestamp, the command shape used, the result or failure class, and the recorded successor for that direction. Where one audit run established every row, the machine, CLI versions, and date may live once in the probe record the rows sit under; a row probed at any other time carries its own values inline, so the shared record never misdescribes it. The record, rows included, lives in the repo's gitignored machine-local overlay (`docs/agents/local/staffing.md`), never the tracked playbook; its machine-readable form is the stamp line `<!-- machine-record: machine=<short hostname> probed=<YYYY-MM-DD> -->` at its head — what a mechanical staleness check parses where a repo's installed skill set ships one. The machine value is the stable short hostname as a single whitespace-free token — the segment before the first dot, on macOS the local host name (`scutil --get LocalHostName`) — compared case-insensitively.
 
 Timestamps date the observation that **established** the recorded state, not the latest run that confirmed it: a re-probe that finds a row exactly as recorded writes nothing. That is what keeps a re-run with unchanged reachability byte-identical while every row still says when its fact was observed — any change in what a probe observes is written as fresh evidence with its own date.
 

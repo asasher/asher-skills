@@ -9,5 +9,4 @@ Interactive dispatch adapter for the outermost supervisor. T3-hosted providers c
 
 ## Provenance
 
-No external sources. Runtime compatibility is capability-tested at use rather than version-pinned,
-so the installed CLI is always the ground truth.
+No external sources. Runtime compatibility is capability-tested at use rather than version-pinned, so the installed CLI is always the ground truth.
