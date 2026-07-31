@@ -1,16 +1,13 @@
 # Prompts for Extractable Sheets
 
-Good extraction starts with a boring background and isolated subjects. Use this guidance both when prompting
-an image model yourself and when passing `--generate`, because `--generate` forwards the subject guidance to
-the bundled `codex-imagegen` generator.
+Good extraction starts with a boring background and isolated subjects. Use this guidance both when prompting an image model yourself and when passing `--generate`, because `--generate` forwards the subject guidance to the bundled `codex-imagegen` generator.
 
 ## Grid Sheet Prompt
 
 Ask for:
 
 - A fixed grid: exact rows and columns, equal cell size, no overlaps.
-- A solid flat key background covering the entire image, usually pure magenta `#FF00FF` or pure green
-  `#00FF00`.
+- A solid flat key background covering the entire image, usually pure magenta `#FF00FF` or pure green `#00FF00`.
 - One centered element per cell with transparent-able padding around it.
 - No shadows that touch neighboring cells.
 - No text, labels, checkerboard transparency, gradients, or decorative background elements.
@@ -36,6 +33,4 @@ another object, no pure green inside any bottle
 
 ## Key Choice
 
-Use magenta for green/brown/gray subjects such as foliage, terrain, stone, and wood. Use green only when the
-subjects contain no greens and no green fringe would be plausible. If validation reports key remnants or
-keyed holes, regenerate on the other key color or pass an explicit `--key #RRGGBB`.
+Use magenta for green/brown/gray subjects such as foliage, terrain, stone, and wood. Use green only when the subjects contain no greens and no green fringe would be plausible. If validation reports key remnants or keyed holes, regenerate on the other key color or pass an explicit `--key #RRGGBB`.

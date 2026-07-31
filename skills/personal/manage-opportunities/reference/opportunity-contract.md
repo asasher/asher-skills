@@ -2,8 +2,7 @@
 
 ## Known home
 
-One pursuit has one known home at `Opportunities/<Name>.md`. It remains there in terminal stages so its
-commercial history and links survive promotion.
+One pursuit has one known home at `Opportunities/<Name>.md`. It remains there in terminal stages so its commercial history and links survive promotion.
 
 Required frontmatter:
 
@@ -37,9 +36,7 @@ reviewDate: 2026-09-15
 noDeliveryReason: <why a won pursuit creates no Project>
 ```
 
-`probability` is an optional evidence-backed integer from 0 through 100, not a stage-derived value.
-`nextAction` contains only the task ID, never task text or checkbox markdown. Active stages require it.
-Terminal stages and `dormant` omit it.
+`probability` is an optional evidence-backed integer from 0 through 100, not a stage-derived value. `nextAction` contains only the task ID, never task text or checkbox markdown. Active stages require it. Terminal stages and `dormant` omit it.
 
 Body:
 
@@ -79,21 +76,18 @@ Current scope, pricing state, offer, and explicitly labelled assumptions.
 - [Working folder](...) - pursuit artifacts.
 ```
 
-Keep all level-two sections present, even when they contain a concise `None yet.` marker. This gives the
-validator and humans stable places to inspect.
+Keep all level-two sections present, even when they contain a concise `None yet.` marker. This gives the validator and humans stable places to inspect.
 
 ## Stages and gates
 
-Allowed stages: `lead`, `qualified`, `discovery`, `proposal`, `negotiation`, `closed-won`, `closed-lost`,
-`dormant`.
+Allowed stages: `lead`, `qualified`, `discovery`, `proposal`, `negotiation`, `closed-won`, `closed-lost`, `dormant`.
 
 - `lead` - named prospect/customer, need or signal, and source.
 - `qualified` - plausible problem, owner or sponsor, and reason to pursue.
 - `discovery` - agreed discovery action plus captured requirements or evidence.
 - `proposal` - client-safe proposal exists and a concrete next action is designated.
 - `negotiation` - scope, price, timing, or terms are actively discussed.
-- `closed-won` - explicit acceptance or commitment, `outcomeDate`, and linked Project(s) or
-  `noDeliveryReason`.
+- `closed-won` - explicit acceptance or commitment, `outcomeDate`, and linked Project(s) or `noDeliveryReason`.
 - `closed-lost` - `outcomeDate` and `closeReason`.
 - `dormant` - `dormantReason` and future `reviewDate`.
 

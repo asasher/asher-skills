@@ -12,30 +12,16 @@ metadata:
 
 # Interview
 
-Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**:
-every decision branches into the decisions that hang off it.
+Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
 
-Read what was handed to this session before the first round — provided artifacts are read, not asked
-about.
+Read what was handed to this session before the first round — provided artifacts are read, not asked about.
 
-Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled —
-the questions you can ask now without guessing at answers you haven't heard yet. Ask the whole frontier in
-one round: number each question and give your recommended answer. Then wait for the user's answers before
-the next round.
+Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled — the questions you can ask now without guessing at answers you haven't heard yet. Ask the whole frontier in one round: number each question and give your recommended answer. Then wait for the user's answers before the next round.
 
-Each round the user answers reshapes the tree — settled decisions push the frontier outward and unblock
-questions that depended on them. Recompute the frontier and ask the next round. A question whose answer
-depends on another question still open in this round belongs to a later round, not this one.
+Each round the user answers reshapes the tree — settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a later round, not this one.
 
-Finding **facts** is your job, never the user's. When a frontier question needs a fact from the
-environment (filesystem, tools, docs), dispatch a lookup via the `to-subagent` skill (absent it, look it
-up in-session) — don't ask the user for anything you could look up yourself. Don't block on it: a running
-lookup is an unsettled prerequisite, so only the questions downstream of it wait for the subagent to
-report — ask the rest of the frontier now. The **decisions** are the user's — put each to them and wait.
+Finding **facts** is your job, never the user's. When a frontier question needs a fact from the environment (filesystem, tools, docs), dispatch a lookup via the `to-subagent` skill (absent it, look it up in-session) — don't ask the user for anything you could look up yourself. Don't block on it: a running lookup is an unsettled prerequisite, so only the questions downstream of it wait for the subagent to report — ask the rest of the frontier now. The **decisions** are the user's — put each to them and wait.
 
-An interview also surfaces items that are real work but not this tree's subject — a bug the user
-mentions in passing, an adjacent idea. Offer them to the `to-backlog` skill for capture (absent it, list
-them explicitly at the close) rather than absorbing them into the tree or losing them with the chat.
+An interview also surfaces items that are real work but not this tree's subject — a bug the user mentions in passing, an adjacent idea. Offer them to the `to-backlog` skill for capture (absent it, list them explicitly at the close) rather than absorbing them into the tree or losing them with the chat.
 
-The session is done when the frontier is empty: every branch of the design tree visited, nothing left
-silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
+The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.

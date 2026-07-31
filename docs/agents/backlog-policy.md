@@ -5,11 +5,11 @@
 ## Work domain
 
 - Domain: **skill-authoring** — step playbooks scaffolded from `templates/skill-authoring/` plus the shared `templates/common/` baselines. Recorded 2026-07-27 by `backlog setup`, superseding **software** (recorded 2026-07-11, issue #32) — that pack was the shipped default before a skill-authoring pack existed.
-- Why the switch: the playbooks had already drifted to the new pack's shape and only the record lagged. `environment.md` names its staffing section `## Model staffing`, which is the skill-authoring template's heading — the common/software one is `## Staffing delta` — and `platform.md` cross-references `§ Model staffing` twice. More substantively, the software pack states that an agent-authored probe transcript "is **not** evidence here; it is a greenfield-only fallback", while probe transcripts are this repo's *primary* proof and the skill-authoring pack makes them the default. The repo was operating against a playbook that called its own main evidence a fallback.
+- Why the switch: the playbooks had already drifted to the new pack's shape and only the record lagged. `environment.md` names its staffing section `## Model staffing`, which is the skill-authoring template's heading — the common/software one is `## Staffing delta` — and `platform.md` cross-references `§ Model staffing` twice. More substantively, the software pack states that an agent-authored probe transcript "is **not** evidence here; it is a greenfield-only fallback", while probe transcripts are this repo's _primary_ proof and the skill-authoring pack makes them the default. The repo was operating against a playbook that called its own main evidence a fallback.
 
 ## Label roles
 
-Two independent axes, plus exclusions. Readiness decides *whether and who* picks an issue up; work-type decides *how* the agent works it.
+Two independent axes, plus exclusions. Readiness decides _whether and who_ picks an issue up; work-type decides _how_ the agent works it.
 
 **Readiness / ownership** — map each to this repo's label:
 
@@ -19,7 +19,7 @@ Two independent axes, plus exclusions. Readiness decides *whether and who* picks
 - `needs-info` — parked, waiting on the reporter. Label: **`needs-info`** (identity).
 - `needs-shaping` — parked for strategic shaping: the issue carries product/design/scope decisions that are neither settled nor delegated, or execution invalidated an approved decision. Set by `groom`'s route judgment, by an issue thread's handback, or by a build session that hit the invalidation — a blessed spec contradicted by the code it meets comes back here with the contradiction commented, the named re-entry into shaping; cleared when shaping delivers execution-ready work. Boundary with `needs-info`: there the reporter owes facts; here the product owner owes shaping. Never selectable by `backlog build`. Label: **`needs-shaping`** (renamed from `needs-spec` 2026-07-24, asher-skills#95 — the description already was this role; #92 rode the rename).
 - `shaping` — a shaping thread is attending it. Set by `backlog groom` at dispatch, replacing `needs-shaping`, so a subject never gets two threads. A batch advances atomically: after readiness is blessed, every member moves to `ready-for-agent` only after its clean shaping worktree is removed or its shaping change is merged, verified, and cleaned up; abandonment returns the whole batch to `needs-shaping`. Label: **`shaping`** (created 2026-07-24).
-- *(no readiness label)* — not yet groomed; a target for `backlog groom`, not for `backlog build`.
+- _(no readiness label)_ — not yet groomed; a target for `backlog groom`, not for `backlog build`.
 
 **Closure** — the change request's closing reference (`Closes #N`) closes the ticket on merge; there is no post-build label: **none — direct closure** (no staging branch here; merge to main is final).
 
@@ -34,9 +34,7 @@ Two further lifecycle values appear only where the tracker has no native equival
 - `draft` — produce-and-review branch, for **judgment-terminal** work: produce a novel artifact whose correctness is taste/fit, not a testable spec (a memo, copy, a narrative synthesis, code docs). Enhancement-shaped, but the definition of done is the **human review verdict** at the review gate — there is **no mechanical `verify` pass/fail**. The artifact is **kept** (committed and merged): that is the line against `prototype`, which is throwaway — keep the answer, delete the artifact. Label: **`draft`** (identity).
 - `capstone` — coverage-check branch, set by the `to-slices` skill when it parents a split spec'd ticket over its slices: the ticket holds the spec its children deliver in installments, and stays the shared context they inherit from. Undispatchable while any child is open (§ Dependencies — open children block the parent); when the last child closes it surfaces to `backlog build`, and the dispatched session verifies the delivered children against the spec — filing each gap as a new child, which re-blocks the parent, or closing it on a clean pass. Its spec text is never rewritten. Label: **`capstone`** (identity).
 
-> If the terminal question is what sources establish, use `research`. If sources feed prose judged by voice,
-> persuasion, or fit, use `draft`. If behavior must change, keep the applicable code work-type and invoke
-> research as a substage.
+> If the terminal question is what sources establish, use `research`. If sources feed prose judged by voice, persuasion, or fit, use `draft`. If behavior must change, keep the applicable code work-type and invoke research as a substage.
 
 **Exclusion** — terminal; removed from grooming and from the run queue:
 
@@ -52,14 +50,10 @@ Every `ready-for-agent` issue carries a stable `Dispatch:` block in its body or 
 
 - `surface`: `backend`, `ui`, `mixed`, or `non-code`, plus any required capability.
 - `coordination`: `routine` or `orchestrator-required`.
-- `reason`: one sentence naming why the class applies and any known uncertainty. Routine means the issue is
-  settled enough for a normal coordinator; orchestrator-required is reserved for product judgment, design,
-  hard diagnosis, or another named uncertainty.
-- `route` (enhancements): `route: direct` plus one line on why the strategic decisions are settled or
-  delegated. A `ready-for-agent` enhancement without it is a grooming gap.
+- `reason`: one sentence naming why the class applies and any known uncertainty. Routine means the issue is settled enough for a normal coordinator; orchestrator-required is reserved for product judgment, design, hard diagnosis, or another named uncertainty.
+- `route` (enhancements): `route: direct` plus one line on why the strategic decisions are settled or delegated. A `ready-for-agent` enhancement without it is a grooming gap.
 
-`backlog build` passes these fields to staffing before creating a worktree or child. Missing fields are a
-grooming gap, never permission to infer them or default to the orchestrator — the ticket is skipped.
+`backlog build` passes these fields to staffing before creating a worktree or child. Missing fields are a grooming gap, never permission to infer them or default to the orchestrator — the ticket is skipped.
 
 ## Dependencies
 
@@ -69,20 +63,9 @@ grooming gap, never permission to infer them or default to the orchestrator — 
 ## Readiness decision
 
 - The agent proposes work-type, dispatch metadata, and readiness for every issue during grooming, but applies `ready-for-agent` only to issues the human confirms in the shortlist. `ready-for-human`, `needs-info`, `needs-shaping`, and exclusion roles need no per-issue confirmation — they ride the groom plan's blanket approval, since every tracker mutation waits for that gate.
-- In a shaping thread, the readiness blessing authorizes only the exact shaping change-request head the
-  thread presented **before** requesting that signal, with the narrow effect explained. It does not
-  authorize a later head, build changes, or unrelated shaping work.
+- In a shaping thread, the readiness blessing authorizes only the exact shaping change-request head the thread presented **before** requesting that signal, with the narrow effect explained. It does not authorize a later head, build changes, or unrelated shaping work.
 - Adjust this rule if this team wants more or less agent autonomy (e.g. let the agent auto-bless low-risk bugs).
-- **Work on the loop is dispatchable when it rides the branch → merge → reconcile path.** Since the
-  mounts decoupled from the sources (asher-skills#118), a build session reads stable installed copies:
-  a worktree edit to skill sources, templates, or playbooks changes nothing a running session resolves
-  through until the change merges and the reconcile step is run deliberately in the main checkout. Such
-  issues may be `ready-for-agent`. What remains `ready-for-human` is work that **mutates a live
-  resolution surface in place**, outside that path: the main checkout's playbooks during an active run,
-  the installed mounts themselves, machine-global instruction files, or the reconcile step itself. The
-  test: "does executing this issue rewrite, in place, a surface a concurrently running session resolves
-  through?" Recorded 2026-07-26 (asher-skills#118), narrowing the blanket rule from #107's split — its
-  silent-failure concern is answered by the decoupling, not abandoned.
+- **Work on the loop is dispatchable when it rides the branch → merge → reconcile path.** Since the mounts decoupled from the sources (asher-skills#118), a build session reads stable installed copies: a worktree edit to skill sources, templates, or playbooks changes nothing a running session resolves through until the change merges and the reconcile step is run deliberately in the main checkout. Such issues may be `ready-for-agent`. What remains `ready-for-human` is work that **mutates a live resolution surface in place**, outside that path: the main checkout's playbooks during an active run, the installed mounts themselves, machine-global instruction files, or the reconcile step itself. The test: "does executing this issue rewrite, in place, a surface a concurrently running session resolves through?" Recorded 2026-07-26 (asher-skills#118), narrowing the blanket rule from #107's split — its silent-failure concern is answered by the decoupling, not abandoned.
 
 ## Building hygiene
 

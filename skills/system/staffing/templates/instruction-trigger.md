@@ -7,14 +7,8 @@
 
 ## Staffing
 
-Read `docs/agents/staffing.md` fully before model choice, delegation, child/worktree creation,
-capability-provider work, watcher assignment, or route-loss fallback. It is the sole authority for this
-repo: the complete roster, per-harness eligibility and capability bindings, this repo's deltas, and the
-machine its reachability rows were probed on. Every harness reads this same file.
+Read `docs/agents/staffing.md` fully before model choice, delegation, child/worktree creation, capability-provider work, watcher assignment, or route-loss fallback. It is the sole authority for this repo: the complete roster, per-harness eligibility and capability bindings, this repo's deltas, and the machine its reachability rows were probed on. Every harness reads this same file.
 
-Do not resolve from a home-directory roster or from the `staffing` skill's bundled seed. If a
-machine-level staffing instruction is loaded ahead of this one, it is superseded — the repo's playbook
-wins.
+Do not resolve from a home-directory roster or from the `staffing` skill's bundled seed. If a machine-level staffing instruction is loaded ahead of this one, it is superseded — the repo's playbook wins.
 
-If that file is missing, or its probe record names a machine other than this one, say so and run
-`staffing setup` rather than dispatching on rows nobody verified here.
+If that file is missing, or its probe record names a machine other than this one, say so and run `staffing setup` rather than dispatching on rows nobody verified here.

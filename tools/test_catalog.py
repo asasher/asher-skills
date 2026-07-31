@@ -63,7 +63,8 @@ class CatalogTests(unittest.TestCase):
     def test_root_catalog_matches_readme_roster(self) -> None:
         root = Path(__file__).parents[1]
         graph = catalog.discover(root)
-        readme = (root / "README.md").read_text()
+        # Collapse cell padding so the roster check is formatter-agnostic.
+        readme = re.sub(r" +", " ", (root / "README.md").read_text())
         for skill in graph.values():
             execution = skill.execution + (" (internal provenance hold)" if skill.internal else "")
             row = f"| {skill.category} | `{skill.name}` | {skill.invocation} | {execution} |"

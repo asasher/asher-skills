@@ -11,14 +11,12 @@ metadata:
 
 # Manage Opportunities
 
-Own the Opportunity Note Shape and every material Opportunity mutation. Load [Opportunity contract](reference/opportunity-contract.md)
-for schema and stage gates, then the reference for the selected command. `manage-tasks` remains authoritative
-for task vocabulary, movement, and Project Note Shape.
+Own the Opportunity Note Shape and every material Opportunity mutation. Load [Opportunity contract](reference/opportunity-contract.md) for schema and stage gates, then the reference for the selected command. `manage-tasks` remains authoritative for task vocabulary, movement, and Project Note Shape.
 
 ## Commands
 
 | Command | Result | Reference |
-|---|---|---|
+| --- | --- | --- |
 | `create` / `intake` | Create one evidence-backed pursuit | [lifecycle](reference/lifecycle.md) |
 | `log event` | Append a material interaction, deliverable, or outcome | [lifecycle](reference/lifecycle.md) |
 | `change stage` | Apply one evidence gate and stage transition | [lifecycle](reference/lifecycle.md) |
@@ -28,26 +26,20 @@ for task vocabulary, movement, and Project Note Shape.
 | `query` | Answer from Opportunity records without mutation | [query](reference/query.md) |
 | `setup` | Create or reconcile workspace bindings | [setup](reference/setup.md) |
 
-Infer the command from an unambiguous request; otherwise ask which material mutation is intended. Never infer
-stage movement from artifact existence alone, and never invent missing value, probability, dates, contacts,
-or evidence.
+Infer the command from an unambiguous request; otherwise ask which material mutation is intended. Never infer stage movement from artifact existence alone, and never invent missing value, probability, dates, contacts, or evidence.
 
 ## Invariants
 
 - An Opportunity remains the commercial history after a win; delivery lives in linked Projects.
 - `nextAction` is one task ID whose task exists exactly once in the Opportunity backlog or active `TODO.md`.
-- `workspacePath` may point to pursuit artifacts. It is never repository-triage authority; only a Project
-  `localPath` is.
+- `workspacePath` may point to pursuit artifacts. It is never repository-triage authority; only a Project `localPath` is.
 - Company, Customer, Opportunity, and Project maps are explicit and bidirectional.
-- For a delivery win, `stage: closed-won` is the final write after Project creation, reciprocal links, path
-  ownership, task movement, and validation all succeed.
+- For a delivery win, `stage: closed-won` is the final write after Project creation, reciprocal links, path ownership, task movement, and validation all succeed.
 
-Run `python3 scripts/validate_opportunities.py <workspace-root-or-Opportunities-dir>` after structural
-mutations. A validator failure leaves the operation incomplete and must not be hidden by a stage update.
+Run `python3 scripts/validate_opportunities.py <workspace-root-or-Opportunities-dir>` after structural mutations. A validator failure leaves the operation incomplete and must not be hidden by a stage update.
 
 ## Dependency surface
 
 - **Bundled references:** schema, lifecycle, promotion, query, and setup contracts; stdlib validator.
-- **Project playbook:** optional `docs/agents/opportunities.md`, created or reconciled by setup, binds workspace
-  paths, maps, and local policy.
+- **Project playbook:** optional `docs/agents/opportunities.md`, created or reconciled by setup, binds workspace paths, maps, and local policy.
 - **Sibling skills:** required `manage-tasks`, invoked by name for task movement and Project Note Shape.

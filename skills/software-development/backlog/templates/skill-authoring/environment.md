@@ -1,8 +1,6 @@
 # Playbook: Environment
 
-> Project playbook for a skill-authoring repo. Shared — read by any backlog subskill that builds, runs, or
-> verifies a skill. There is no assumed app or software stack: exercising a skill means running a situated
-> probe through an executor harness. `setup` fills the isolation, seed, and parallelism sections from its audit.
+> Project playbook for a skill-authoring repo. Shared — read by any backlog subskill that builds, runs, or verifies a skill. There is no assumed app or software stack: exercising a skill means running a situated probe through an executor harness. `setup` fills the isolation, seed, and parallelism sections from its audit.
 
 ## Branching & deploys
 
@@ -20,8 +18,7 @@
 ## Worktree isolation
 
 - Regime: **local-isolatable** — checked-in skill files and stdlib-only scripts are isolated by the worktree unless the repository records an external shared resource below.
-- Working-copy ownership: project-owned `worktree` skill; dispatch receives the prepared directory and
-  never asks a harness for native isolation.
+- Working-copy ownership: project-owned `worktree` skill; dispatch receives the prepared directory and never asks a harness for native isolation.
 - How to create an isolated skill run for one worktree: _<run the executor with that worktree's skill source and eval scenario>_.
 - Shared-singleton list: _<external executor session, cache, publishing target, or account; otherwise “none — files and scripts are worktree-local”>_.
 
@@ -48,9 +45,7 @@
 
 ## Presenting to the human
 
-> Owned by the **`serve-via-tailnet`** skill (composed by name): how rendered artifacts reach a human who
-> may not be at the machine. Its setup records this repo's surface config here (root path, surface dir,
-> publish/proxy commands); this playbook does not install the surface.
+> Owned by the **`serve-via-tailnet`** skill (composed by name): how rendered artifacts reach a human who may not be at the machine. Its setup records this repo's surface config here (root path, surface dir, publish/proxy commands); this playbook does not install the surface.
 
 ## Model staffing
 

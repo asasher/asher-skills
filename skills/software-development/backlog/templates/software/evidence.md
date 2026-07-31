@@ -4,7 +4,7 @@
 
 ## What to capture
 
-For a repo with a real running app, evidence is **real check/test output plus artifacts driven through the actual app** — screenshots and recordings of the running surface, terminal transcripts of the real check commands. An agent-authored probe or dry-run transcript that reasons about what *would* happen is **not** evidence here; it is a greenfield-only fallback for a repo that has no runnable surface to drive at all (e.g. a skills/docs repo with no app, no CI, no tests). Where a runnable surface exists, drive it — do not substitute a probe for a screenshot.
+For a repo with a real running app, evidence is **real check/test output plus artifacts driven through the actual app** — screenshots and recordings of the running surface, terminal transcripts of the real check commands. An agent-authored probe or dry-run transcript that reasons about what _would_ happen is **not** evidence here; it is a greenfield-only fallback for a repo that has no runnable surface to drive at all (e.g. a skills/docs repo with no app, no CI, no tests). Where a runnable surface exists, drive it — do not substitute a probe for a screenshot.
 
 Per change type — the shipped baseline; tune to this repo:
 
@@ -14,17 +14,12 @@ Per change type — the shipped baseline; tune to this repo:
 - Data or migration change: the migration/command result plus before/after proof that the affected store is safe.
 - Repo-specific expectations beyond these: _<add yours, or "none">_.
 
-Timing: capture once after adversarial review converges, each artifact mapped to the criterion it
-proves. A prior capture may be reused only when the reviewer confirmed the intervening change was
-styling-only.
+Timing: capture once after adversarial review converges, each artifact mapped to the criterion it proves. A prior capture may be reused only when the reviewer confirmed the intervening change was styling-only.
 
 ## Obligation scales with absence
 
-- **Unattended (AFK) run** — nobody watched, so the PR owes the full package above: every artifact at the
-  final reviewed HEAD, each mapped to the acceptance criterion it proves.
-- **Interactive work the human witnessed live** — the obligation may degrade to the PR body's verification
-  grades (each criterion marked with its grade); note that the human observed the behavior directly. Capture
-  full artifacts anyway when the change is risky or the reviewer isn't the person who watched.
+- **Unattended (AFK) run** — nobody watched, so the PR owes the full package above: every artifact at the final reviewed HEAD, each mapped to the acceptance criterion it proves.
+- **Interactive work the human witnessed live** — the obligation may degrade to the PR body's verification grades (each criterion marked with its grade); note that the human observed the behavior directly. Capture full artifacts anyway when the change is risky or the reviewer isn't the person who watched.
 
 ## Format and storage
 
@@ -42,8 +37,7 @@ The contract is binding-independent: the deliverable is a **ready-to-paste block
 > GitHub renders committed images inline through same-origin `github.com` blob URLs with `?raw=1` — those are not camo-proxied, so they render on public and private repos alike (private: for viewers with repo access). `raw.githubusercontent.com` and `/raw/<sha>/` URLs ARE camo-proxied and 404 on private repos; there is no API or CLI path to the drag-and-drop attachment CDN.
 
 - Push the branch before building the block — the URLs below only resolve for a pushed SHA.
-- Embed form — one line per artifact, wrapped so the inline image click-opens full size:
-  `[![<criterion>](https://github.com/<owner>/<repo>/blob/<commit-sha>/evidence/<slug>/<file>.png?raw=1)](https://github.com/<owner>/<repo>/blob/<commit-sha>/evidence/<slug>/<file>.png)`
+- Embed form — one line per artifact, wrapped so the inline image click-opens full size: `[![<criterion>](https://github.com/<owner>/<repo>/blob/<commit-sha>/evidence/<slug>/<file>.png?raw=1)](https://github.com/<owner>/<repo>/blob/<commit-sha>/evidence/<slug>/<file>.png)`
 - Never `raw.githubusercontent.com`, never `/raw/<sha>/`, never a plain non-embedded link.
 - SHA reachability is the one failure mode: a rebase or force-push orphans the pinned commit and GitHub 404s the blob. Pin to the branch-head SHA at capture time and re-pin after any history rewrite. A broken embed is almost always an orphaned SHA — re-pin it (or use a branch-name ref `.../blob/<branch>/...?raw=1`, which follows head); do not "fix" it by switching to plain links.
 - **Verify mechanically, not by eye** — the agent often cannot view the rendered page (`gh` returns raw markdown, not the render). Before handing the block back, check each artifact: image syntax with a `blob/<commit-sha>/…?raw=1` URL; the SHA is on the remote (`gh api repos/<owner>/<repo>/commits/<sha>` — 404 means unpushed or orphaned); the file exists at that path in that commit (`git cat-file -e <sha>:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4. These checks catch every known failure mode without a browser.
@@ -54,7 +48,7 @@ The contract is binding-independent: the deliverable is a **ready-to-paste block
 The review file (`platform.md` § Change review) lives on the same branch as the artifacts, so embeds are **repo-relative paths** — `![<criterion>](../../evidence/<slug>/<file>.png)` relative to the review file — which render in any markdown viewer and on the presentation surface alike, with no SHA pinning and no proxy pitfalls.
 
 - Mechanical checks before handing the block back: each path resolves from the review file's location at the branch's HEAD (`git cat-file -e HEAD:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4.
-- When the human reviews away from the machine, the evidence step may additionally publish the rendered review file to the presentation surface (`environment.md` § Presenting) — the committed file stays the source of truth, served in place by the `serve-via-tailnet` skill. Publishing must preserve relative-path resolution: expose the review file *with* its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
+- When the human reviews away from the machine, the evidence step may additionally publish the rendered review file to the presentation surface (`environment.md` § Presenting) — the committed file stays the source of truth, served in place by the `serve-via-tailnet` skill. Publishing must preserve relative-path resolution: expose the review file _with_ its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
 
 ### Other bindings
 

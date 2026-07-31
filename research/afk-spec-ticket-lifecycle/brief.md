@@ -2,22 +2,17 @@
 
 ## Question
 
-How should this repository standardize the path from an idea or problem through user interview, optional
-specification, ticket slicing, and AFK backlog execution—while reusing the useful mechanics of Matt Pocock's
-`batch-grill-me`, correcting the unreliable spec/ticket handoffs, and making UX/UI practice a first-class part
-of the lifecycle?
+How should this repository standardize the path from an idea or problem through user interview, optional specification, ticket slicing, and AFK backlog execution—while reusing the useful mechanics of Matt Pocock's `batch-grill-me`, correcting the unreliable spec/ticket handoffs, and making UX/UI practice a first-class part of the lifecycle?
 
 ## Intended use
 
-Inform the next refactors of the interview, `to-spec`, `to-tickets`, and `backlog` skill surfaces. This is a
-design investigation, not an implementation plan and not approval to change those skills.
+Inform the next refactors of the interview, `to-spec`, `to-tickets`, and `backlog` skill surfaces. This is a design investigation, not an implementation plan and not approval to change those skills.
 
 ## Scope
 
 - The current local `to-spec`, `to-tickets`, `backlog`, and `bare-minimum-ux` skill sources.
 - Matt Pocock's current `batch-grill-me`, `grilling`, `to-spec`, and `to-tickets` sources.
-- Primary requirements-elicitation research relevant to interview structure, prompts, follow-ups, prototypes,
-  synthesis, and completion criteria.
+- Primary requirements-elicitation research relevant to interview structure, prompts, follow-ups, prototypes, synthesis, and completion criteria.
 - The current public Impeccable design workflow as a possible external design capability.
 
 ## Exclusions
@@ -31,13 +26,10 @@ design investigation, not an implementation plan and not approval to change thos
 
 - **Strategic decision:** product, user, scope, UX, or cross-ticket judgment that requires explicit authority.
 - **Tactical plan:** implementation choices an executor may make within an approved ticket's delegated authority.
-- **Spec:** an optional durable artifact for decisions shared by multiple tickets or too substantial to live in
-  one ticket.
+- **Spec:** an optional durable artifact for decisions shared by multiple tickets or too substantial to live in one ticket.
 - **Ticket:** the smallest independently executable and verifiable unit placed in the tracker.
-- **Backlog:** the organizational queue and execution orchestrator; not the place where product intent is
-  invented.
-- **Execution-ready:** sufficient authority, context, acceptance, dependencies, and capability bindings exist
-  for AFK execution without an expected human decision.
+- **Backlog:** the organizational queue and execution orchestrator; not the place where product intent is invented.
+- **Execution-ready:** sufficient authority, context, acceptance, dependencies, and capability bindings exist for AFK execution without an expected human decision.
 
 ## As-of boundary
 
@@ -57,6 +49,4 @@ This was a single-coordinator investigation with no parallel shards:
 
 ## Sufficient answer
 
-The answer is sufficient if it identifies the concern boundary, explains why `batch-grill-me` alone cannot
-make specs or tickets reproducible, defines when a spec is optional, defines the admission contract for AFK
-backlog execution, and shows where UX/UI knowledge enters and is verified.
+The answer is sufficient if it identifies the concern boundary, explains why `batch-grill-me` alone cannot make specs or tickets reproducible, defines when a spec is optional, defines the admission contract for AFK backlog execution, and shows where UX/UI knowledge enters and is verified.

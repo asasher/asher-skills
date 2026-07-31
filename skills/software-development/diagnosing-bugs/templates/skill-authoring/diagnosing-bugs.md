@@ -1,7 +1,6 @@
 # Playbook: Diagnosing Bugs
 
-> Skill-authoring project delta owned by `diagnosing-bugs setup`. The installed skill owns the six-phase
-> method; this file keeps only the domain's normal seams and leaves repository-specific values editable.
+> Skill-authoring project delta owned by `diagnosing-bugs setup`. The installed skill owns the six-phase method; this file keeps only the domain's normal seams and leaves repository-specific values editable.
 
 ## This repo
 

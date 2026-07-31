@@ -1,7 +1,6 @@
 # Playbook: Research
 
-> Project-specific delta owned by `research setup`. The installed skill owns the research method; keep only
-> this repo's source, storage, privacy, concurrency, and presentation bindings here.
+> Project-specific delta owned by `research setup`. The installed skill owns the research method; keep only this repo's source, storage, privacy, concurrency, and presentation bindings here.
 
 ## Artifact routing
 
