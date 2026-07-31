@@ -74,19 +74,19 @@ model removed from contention? Does the `intelligence > taste > cost` tie-break 
 judgment numbers. Which bundled reference owns the behaviour, which rows may setup replace, which must
 survive untouched, and what happens on a re-run when reachability has not changed?
 
-**P16 (issue 49).** From a Codex parent, dispatch one bounded task to the Claude sibling harness. Give the
+**P16 (cross-harness dispatch).** From a Codex parent, dispatch one bounded task to the Claude sibling harness. Give the
 command shape, forbidden flag, required return/effect checks, and whether vendor-policy polling is a
 precondition.
 
-**P17 (issue 49).** Codex→Claude fails while Claude→Codex is healthy. What reachability state and fallback
+**P17 (reachability fallback).** Codex→Claude fails while Claude→Codex is healthy. What reachability state and fallback
 does staffing record? Must it disable both directions?
 
-**P18 (issue 48).** Route two issue-coordinator requests. Both include work type, surface, required
+**P18 (coordinator routing).** Route two issue-coordinator requests. Both include work type, surface, required
 capabilities, class/reason, and known uncertainty. The first is `routine`; the second is
 `orchestrator-required` for a named product decision. State the candidate set and resolution order for each.
 Does routine mean cheapest reachable model?
 
-**P19 (issue 60).** From each provider package, route one cross-harness worker. Who owns prompt/judgment/effect
+**P19 (worker ownership).** From each provider package, route one cross-harness worker. Who owns prompt/judgment/effect
 verification, what may the native wrapper do, how is it named/staffed/bounded, and what remains unproven when
 native spawn cannot select or report its model?
 
@@ -103,7 +103,7 @@ harness? Use the checked-in structural test as evidence.
 Claude worker and must fill in the CLI's model argument. What do you pass, where does that answer come from,
 and what happens if you pass the roster name verbatim? Is the answer a memorised pair or a rule?
 
-**P23 (issue 59, three-state classification).** `staffing setup` is auditing a machine that runs both
+**P23 (three-state classification).** `staffing setup` is auditing a machine that runs both
 harnesses. The Codex CLI is installed and `codex --version` succeeds, but the owner has said Codex dispatch
 stays off this quarter for cost. On the same machine, the Codex→Claude probe failed last month with a
 permission denial. What state does setup record for each direction, where does each state's information come
@@ -111,28 +111,26 @@ from, and how does a later reader tell the cost-disabled direction from the brok
 On a re-run, does setup dispatch a probe down the disabled direction, and can a successful probe ever flip
 it to effect-verified? If not a probe, what can lift the disable? Cite.
 
-**P24 (issue 59, recorded-state conflict).** A repo's playbook records the Codex→Claude direction as
+**P24 (recorded-state conflict).** A repo's playbook records the Codex→Claude direction as
 **unavailable**, failure class "alias rejected", probed against an older Claude CLI. Your fresh audit's
 bounded effect probe on that direction **succeeds** at write class. What does setup write, what does it
 report, and is either silently keeping the recorded row or silently replacing it acceptable? Does the
 direction's route re-enter the resolved roster? Cite.
 
-**P25 (issue 59, alias guard).** Setup is writing the playbook's alias mapping. One roster row's name was
+**P25 (alias guard).** Setup is writing the playbook's alias mapping. One roster row's name was
 never passed to any CLI's model argument during this audit, and no retained probe covers it. May that name
 be recorded as a dispatch alias? What does the playbook record for it instead? And when the probes do
 support a rule — "this CLI rejects versioned names, accepts bare ones" — does that rule extend to the
 sibling CLI? Cite.
 
-**P26 (issue 59, idempotent re-run).** `staffing setup` re-runs on the same machine with unchanged CLI
+**P26 (idempotent re-run).** `staffing setup` re-runs on the same machine with unchanged CLI
 versions, and every probe returns exactly what the playbook records. What does the re-run change in the
 file, header included? What do the recorded timestamps mean, and why does leaving them untouched not make
 them dishonest? Cite.
 
 ## Answer key
 
-- **P1 (ac-1) — note:** the premise once read "global-capable"; that layer was removed, so the probe now
-  tests provider compilation and the no-outside-the-repo property instead. PASS needs `variants` in
-  frontmatter and an explicit finding that no file reads another skill's files or a home-directory path.
+- **P1 (ac-1):** PASS needs `variants` in frontmatter and an explicit finding that no file reads another skill's files or a home-directory path.
   Frontmatter has `name: staffing`, `user-invocable: true`, and a `description` that reads as
   a global-capable staffing primitive invoked by name by siblings and directly by users — **pass**. No file
   imports another skill's files (the dependency surface declares siblings "none — `staffing` is a root
@@ -212,18 +210,18 @@ them dishonest? Cite.
   reported as drift; unverifiable rows are marked, never dropped or promoted; and an unchanged-reachability
   re-run leaves the file **byte-identical**. Cite `reference/setup.md` and
   `reference/install-and-reconcile.md` § Reconciling an existing playbook.
-- **P16 (issue 49):** PASS only for a watched native wrapper around bounded `claude -p` with no `--bare`,
+- **P16 (cross-harness dispatch):** PASS only for a watched native wrapper around bounded `claude -p` with no `--bare`,
   closed stdin, timeout, and raw durable return; the wrapper reports lifecycle and the parent verifies the
   effect. No vendor-policy or credit monitor is required. Cite the Codex package's `reference/harness.md` and
   common `reference/install-and-reconcile.md`.
-- **P17 (issue 49):** PASS only if the failed Codex→Claude direction becomes unavailable, routing is rerun
+- **P17 (reachability fallback):** PASS only if the failed Codex→Claude direction becomes unavailable, routing is rerun
   over remaining candidates, Claude→Codex remains healthy, and the graph is explicitly asymmetric. Cite
   `reference/roles-and-fallback.md` and `reference/machine-audit.md`.
-- **P18 (issue 48):** PASS only if routine begins with the reachable coordinator-eligible set and applies
+- **P18 (coordinator routing):** PASS only if routine begins with the reachable coordinator-eligible set and applies
   pin → provider/fallback → eligible executor → taste gate → `intelligence > taste > cost`; cost is the final
   tie-break. `orchestrator-required` returns the orchestrator role at the coordinator pre-gate and records its
   succession. Missing inputs would be a grooming gap. Cite both routing and roles references.
-- **P19 (issue 60):** PASS only if the parent owns prompt, judgment, and effect verification; the wrapper is
+- **P19 (worker ownership):** PASS only if the parent owns prompt, judgment, and effect verification; the wrapper is
   a watched native child labeled with external model/task, staffed by the cheapest native model allowed by
   the floor, and limited to bounded process supervision plus raw output/lifecycle relay. If spawn cannot
   accept or report the wrapper model, observability may pass but floor/cost compliance remains red.
@@ -244,7 +242,7 @@ them dishonest? Cite.
   bare names") rather than a memorised pair, so a roster row the probe never covered is still handled. Passing
   the roster name verbatim yields a route that resolves cleanly and is rejected at invocation. Cite the
   playbook's alias mapping and the compiled `reference/harness.md` ("a roster name is not a CLI alias").
-- **P23 (issue 59):** The owner-disabled direction is **intentionally disabled** — an owner decision setup
+- **P23 (three-state classification):** The owner-disabled direction is **intentionally disabled** — an owner decision setup
   records only from the owner's explicit choice, with the reason and the date it was made, plus the cheap
   install premise (the CLI version from a no-dispatch version probe). The failed direction is **unavailable**
   with its captured failure class (permission denied) and recorded successor. A later reader distinguishes
@@ -255,21 +253,21 @@ them dishonest? Cite.
   never from a probe result". Cite `reference/machine-audit.md` § Route classification. Inferring "disabled"
   from the failure, collapsing the two rows into one state, or letting a probe flip the disabled row = fail;
   an answer that also names the owner's lift channels is exactly right.
-- **P24 (issue 59):** Both, explicitly: setup **reports the drift** — recorded unavailable against a fresh
+- **P24 (recorded-state conflict):** Both, explicitly: setup **reports the drift** — recorded unavailable against a fresh
   success — **and reclassifies** the direction effect-verified with the fresh evidence (CLI version,
   timestamp, command shape, effect class), so the direction re-enters the resolved roster; a direction that
   becomes reachable stops being treated as dead. Silently preserving the stale row and silently overwriting
   it are the same failure seen from two sides. Cite `reference/install-and-reconcile.md` § Reconciling an
   existing playbook. Reporting without reclassifying, reclassifying without reporting, or either silent
   path = fail.
-- **P25 (issue 59):** **No.** An alias enters the playbook only from a probe result naming the CLI version
+- **P25 (alias guard):** **No.** An alias enters the playbook only from a probe result naming the CLI version
   that produced it; the unprobed name is recorded as unverified — a gap, never a route — and a roster name
   is never promoted to a dispatch alias by assumption. Where the probes support a rule, its scope is **per
   CLI**: one CLI rejecting versioned names says nothing about how the sibling treats them, so the sibling's
   rule needs its own probes. Cite `reference/machine-audit.md` (audit step 3) or the alias bullet in
   `reference/install-and-reconcile.md` § Reconciling an existing playbook. Recording the roster name as the
   alias, or extending one CLI's rule to the other = fail.
-- **P26 (issue 59):** **Nothing** — the file is byte-identical, header included ("a run that confirms
+- **P26 (idempotent re-run):** **Nothing** — the file is byte-identical, header included ("a run that confirms
   every recorded fact rewrites nothing, header included", `reference/setup.md`). Timestamps date the
   observation that **established** each recorded state, not the latest run that confirmed it, so a probe
   that finds a row exactly as recorded writes nothing; the rows stay honest because any change in what a
@@ -301,10 +299,10 @@ grep no cross-skill imports), ac-9 (grep finds no `vNN`/version stamp), ac-10 (Y
 | ac-9      | P12                   |
 | ac-10     | P13                   |
 | ac-11     | this file (the eval)  |
-| issue 48  | P18                   |
-| issue 49  | P16, P17              |
-| issue 60  | P19                    |
-| issue 59  | P23, P24, P25, P26     |
+| coordinator routing | P18       |
+| cross-harness dispatch, reachability fallback | P16, P17 |
+| worker ownership | P19          |
+| setup machine audit | P23, P24, P25, P26 |
 | data/doctrine | P20                |
 | variants  | P21                    |
 | aliases   | P22                    |
