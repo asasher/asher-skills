@@ -35,7 +35,7 @@ PREFIX_RE = re.compile(r"^<!--\s*machine-(record|local)\b")
 
 
 def normalize(name):
-    """Short hostname, case-insensitive: 'Ashers-MacBook-Pro.local' -> 'ashers-macbook-pro'."""
+    """Short hostname, case-insensitive: 'Some-Host.local' -> 'some-host'."""
     return name.split(".", 1)[0].lower()
 
 

@@ -129,7 +129,7 @@ file, header included? What do the recorded timestamps mean, and why does leavin
 them dishonest? Cite.
 
 **P27 (one home).** `staffing setup` (read `reference/setup.md`) is reconciling a repo whose
-`docs/agents/environment.md` records "`codex --version` → 0.144.1" while the staffing playbook's probe
+`docs/agents/environment.md` records "`codex --version` → 9.9.9" while the staffing playbook's probe
 record carries a different Codex version. What does setup do about the environment file's line — edit
 it, ignore it, or something else — and which file may record the CLI version at all? Cite.
 
