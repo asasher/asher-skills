@@ -25,8 +25,8 @@ absolute paths, foreign URLs) before a human ever sees the approval ask.
   `retro note <observation>`. Cheap by design; dispatchers and siblings invoke it by name.
 - **Periodically** — the note verb reports when the ledger crosses the pass-due threshold; `retro`
   runs the pass. It opens with findings, never with a bare "any feedback?".
-- **Once per repo** — `retro setup` records consent, upstream target, transcript bindings, and
-  seeds the denylist.
+- **Once per repo** — `retro setup` records consent, upstream target, transcript bindings, seeds
+  the denylist halves, and keeps the instance untracked.
 
 Not for capturing ordinary work items (`to-backlog`), not a general review of the codebase — its
 subject is the skills' own performance in this repo.
@@ -49,8 +49,11 @@ the setup procedure; `templates/retro.md` the playbook it installs to `docs/agen
 `evals/probes.md` + `evals/key.md` the pre-deployment probe eval, `evals/scrub-dryrun.sh` the
 scripted dry-run for the scrub mechanics.
 
-Stateful: the `retro/` instance (ledger + denylist) is consumer-owned resume state — the
-Open/Triaged split is the pass watermark, so a bare `retro` continues with no recap.
+Stateful: the `retro/` instance (ledger, the machine-local denylist half, transcript locations) is
+consumer-owned resume state, **machine-local and untracked** — setup gitignores it, since it
+describes one machine. The repo-shareable denylist half is tracked at
+`docs/agents/retro-denylist.txt`, and the scrub takes both halves. The Open/Triaged split is the
+pass watermark, so a bare `retro` continues with no recap.
 
 ## Install
 
