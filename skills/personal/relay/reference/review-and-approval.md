@@ -17,8 +17,7 @@ partial response is not approval. On approval, append a `chat_approval` event to
 `chat_<UTC compact timestamp>_<4 random hex chars>` (e.g. `chat_20260716T091000Z_9f3a`, via stdlib
 `datetime` and `secrets.token_hex(2)`), unique within the run so the delivery ledger's `reviewed` entry can
 record it as `review_event_id` — the audit join naming exactly which approval event authorized delivery even
-after supersession and re-approval. Appending that event is itself gated: only the user's explicit in-chat
-approval of the exact current sheet permits it. Only
+after supersession and re-approval. Only
 `approve` or `approve_with_nits` for the current document hash can authorize delivery. A nit that changes an
 approved field requires a new render and review; do not treat a prior approval as transferable.
 
