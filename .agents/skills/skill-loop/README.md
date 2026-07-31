@@ -22,6 +22,4 @@ skill-loop skills/creative/shadixfy/SKILL.md shadixfy-workspace
 skill-loop shadixfy "cd shadixfy-workspace && bash scripts/run_all.sh <N>"
 ```
 
-The eval target must document how to run every test case into `iteration-N/`, then grade and aggregate that
-iteration. If the eval command is ambiguous, the skill stops and asks for the exact command rather than
-guessing.
+The eval target must document how to run every test case into `iteration-N/`, then grade and aggregate that iteration. If the eval command is ambiguous, the skill stops and asks for the exact command rather than guessing.

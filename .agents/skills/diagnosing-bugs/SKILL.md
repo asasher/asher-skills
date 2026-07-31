@@ -13,14 +13,11 @@ metadata:
 
 # Diagnosing Bugs
 
-Turn an observed defect into a named root cause and confirmed fix. The red-capable loop is load-bearing;
-everything else consumes it.
+Turn an observed defect into a named root cause and confirmed fix. The red-capable loop is load-bearing; everything else consumes it.
 
 ## Commands
 
-- **`<defect>`** (default) — load [diagnosis](reference/diagnosis.md) and work all six phases. Read
-  `docs/agents/diagnosing-bugs.md` when present for project-specific seams, commands, and known flaky areas;
-  absent it, use the bundled method without inventing repo facts.
+- **`<defect>`** (default) — load [diagnosis](reference/diagnosis.md) and work all six phases. Read `docs/agents/diagnosing-bugs.md` when present for project-specific seams, commands, and known flaky areas; absent it, use the bundled method without inventing repo facts.
 - **`setup`** — load [setup](reference/setup.md) and reconcile only the project diagnosis playbook.
 
 ## Contract
@@ -34,7 +31,5 @@ Input is the reporter's exact observed symptom plus the environment needed to dr
 
 ## Dependency surface
 
-- **Bundled references** — `reference/diagnosis.md` owns the method; `reference/setup.md` owns playbook
-  reconciliation; `templates/diagnosing-bugs.md` is the delta-only playbook seed.
-- **Project playbook** — optional `docs/agents/diagnosing-bugs.md`, owned by the repo after setup and preserved
-  on reconciliation.
+- **Bundled references** — `reference/diagnosis.md` owns the method; `reference/setup.md` owns playbook reconciliation; `templates/diagnosing-bugs.md` is the delta-only playbook seed.
+- **Project playbook** — optional `docs/agents/diagnosing-bugs.md`, owned by the repo after setup and preserved on reconciliation.

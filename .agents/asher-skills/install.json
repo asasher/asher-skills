@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source": "self",
-  "source_revision": "b9a33803ab9c6f73d9a502a3bdc253144a8149f2",
+  "source_revision": "378a6fc5d723309aa0849f06d18d7c692c34f1ee",
   "source_dirty": [],
   "skills": {
     "adversarial-review": {

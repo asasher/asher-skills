@@ -1,7 +1,6 @@
 # Playbook: Diagnosing Bugs
 
-> Project-specific delta for the `diagnosing-bugs` skill. The installed skill owns the six-phase method; keep
-> only this repo's seams, commands, substitutions, and known hazards here.
+> Project-specific delta for the `diagnosing-bugs` skill. The installed skill owns the six-phase method; keep only this repo's seams, commands, substitutions, and known hazards here.
 
 ## This repo
 
