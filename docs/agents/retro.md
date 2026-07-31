@@ -37,12 +37,8 @@ landing in the same session, so the finding survives.
 
 ## Transcript binding
 
-| | |
-|---|---|
-| Harnesses bound | Claude Code, Codex |
-
-How to find each harness's transcripts for this repo — the concrete verified locations live in the
-untracked `retro/transcripts.md`, written by setup:
+The bound harnesses and their concrete verified transcript locations live in the untracked
+`retro/transcripts.md`, written by setup. How each harness stores transcripts:
 
 - **Claude Code** keeps per-project transcripts under
   `~/.claude/projects/<absolute project path with '/' replaced by '-'>/` as `*.jsonl`.
