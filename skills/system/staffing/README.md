@@ -32,12 +32,12 @@ workflow skill, an ad-hoc session, and any harness — not just one dev loop.
   active harness mechanics in the installed tree.
 - **One layer, in the repo.** The project's staffing playbook under `docs/agents/` carries the complete
   roster and is the only thing read at resolution time. The skill's bundled roster is a **seed**, read once
-  at setup and never at runtime. No home-directory module, no base-plus-delta overlay — two layers were the
-  previous shape and the reason this one exists.
-- **The playbook records its own machine.** Judgment numbers travel between machines; reachability, aliases,
-  and CLI versions do not, so a probe record at its head says where the rows came from. A playbook naming a
-  different machine is stale, and stale is worse than absent: it resolves cleanly and fails at the point of
-  use.
+  at setup and never at runtime. No home-directory module: resolution never leaves the repo.
+- **Machine facts live beside the playbook, never in it.** Judgment numbers travel between machines;
+  reachability, aliases, and CLI versions do not, so the machine-probed rows live in a gitignored
+  machine-local overlay the playbook declares, stamped with the machine that probed them. An overlay
+  naming a different machine is stale, and stale is worse than absent: it resolves cleanly and fails at
+  the point of use.
 - **Reconcile by LLM audit** — the shared posture across this repo's operator skills.
 
 ## Layout

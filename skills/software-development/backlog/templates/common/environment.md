@@ -8,6 +8,13 @@
 > A session that earns a fact this playbook should have carried — a start recipe, an auth path, an
 > admin bootstrap, a deploy constraint — writes it back into the matching section as part of its change,
 > so the next session reads it instead of re-deriving it.
+>
+> Machine facts follow the discipline bundled with the `backlog` skill — read `reference/machine-facts.md`
+> in its installed package for the classes and marker grammar; absent that skill, leave machine facts
+> unrecorded rather than inventing a form. In short, at accretion and at setup alike: record the probe
+> command, not its result; every recorded machine fact lives in the gitignored
+> `docs/agents/local/environment.md` overlay, regenerated and declared by the owning setup — never in
+> this tracked file.
 
 ## Branching & deploys
 
@@ -89,6 +96,9 @@
   (_<e.g. `e2e/.auth/state.json`, gitignored>_); every subsequent check loads it instead of
   re-authenticating.
 - Test accounts / where credentials live: _<env vars or secrets store; never hardcode, never echo `.env`>_.
+- Identity observations ("authed as `<user>`") are machine-local: they go in the
+  `docs/agents/local/environment.md` overlay, never in this tracked file — record here only the
+  liveness probe (e.g. `gh auth status`).
 
 ## Verification data
 
@@ -114,7 +124,8 @@
   test`>_. New checks are written as specs there, named for the ticket, and left in the tree: today's
   verification is tomorrow's regression suite. Evidence comes from Playwright's own artifacts — traces,
   screenshots, video — captured per run into _<artifact dir>_. Setup verifies the browser
-  actually launches headless on this machine; if it cannot, record headed mode here as the fallback.
+  actually launches headless on this machine; the verdict is a machine fact — it goes in the overlay,
+  with headed mode as the recorded fallback when headless cannot launch.
   Harness-native browser tools and `agent-browser` are not verification routes — they have proven
   unreliable; a browser check is a Playwright script or it is a recorded gap.
 - Other surfaces: _<defaults: shell + the CLI entrypoint; a simulator + driver for mobile; desktop only

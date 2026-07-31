@@ -1,6 +1,15 @@
 # Playbook: Platform Bindings
 
 > Project playbook for this repo. Shared — read by every stage that touches the tracker (`backlog groom`, `backlog build`, the `build` sibling's pipeline), proposes or edits a PR (the `build` skill's create-PR step, `adversarial-review`, `prove-your-work`), or creates and publishes working copies (`backlog build` dispatch, `implement`, the `adversarial-review` fixer). The skill's references speak in **role nouns** — issue, label, PR, branch, worktree, push — and this file binds each role to this repo's real platform. Bindings are prose contracts, not adapter code: each verb records the working command (or harness tool call) verified by `backlog setup` — live at binding time, end-to-end when the smoke test runs. A recorded command that no longer exists is drift — re-run `backlog setup`.
+>
+> Machine facts follow the discipline bundled with the `backlog` skill — read `reference/machine-facts.md`
+> in its installed package for the classes and marker grammar; absent that skill, leave machine facts
+> unrecorded rather than inventing a form. In short: record probe commands, not their results; every
+> recorded machine fact lives in the gitignored `docs/agents/local/platform.md` overlay, regenerated
+> and declared by setup — never in this tracked file. Model and capability reachability — routes,
+> dispatch aliases, effect verdicts — has one home, the staffing overlay
+> (`docs/agents/local/staffing.md`), CLI versions riding it only as its record's metadata; this file
+> points there rather than restating any of it.
 
 ## Tracker — where issues live
 
@@ -58,8 +67,8 @@
   where it offers one, per the staffing skill's external-worker contract; the parent owns prompt,
   judgment, and effect verification. Examples: Claude→Codex bounded `codex exec --cd <worktree> ...`;
   Codex→Claude bounded `claude -p` from `<worktree>` with closed stdin and **no `--bare`**>_.
-- Wrapper staffing evidence: _<the native spawn request or returned child metadata that proves the wrapper model. If the harness can neither select nor report it, record floor/cost compliance as unproven while retaining the observable wrapper>_.
-- Directional reachability and fallback: _<record each direction independently plus its successor; a failure removes only that route and may leave an asymmetric graph>_.
+- Wrapper staffing evidence: _<the native spawn request or returned child metadata that proves the wrapper model. If the harness can neither select nor report it, record floor/cost compliance as unproven while retaining the observable wrapper — and point at the staffing playbook for the wrapper model's alias and version facts rather than restating them>_.
+- Directional reachability and fallback: reachability rows and dispatch aliases live in the staffing playbook's probe record, CLI versions only as that record's metadata — point there. Record here only what is platform-binding-specific: _<per-direction spawn behavior this binding adds, plus its successor; a failure removes only that route and may leave an asymmetric graph>_.
 - Route trust: a routine dispatch trusts the recorded effect-verified verb — verification happens at setup, at re-verification, and when a route misbehaves, so dispatch needs no fresh probe session. A route that fails or hangs in use is drift: record the failure class, take the successor, re-verify that direction. Verification probe artifacts are cleaned up as part of the check.
 - Can a spawned thread read this skill's bundled references from disk? _<yes at <path>; if no, the dispatcher pastes the reference into the prompt>_.
 - Durable monitor / wakeup for review round-trips: _<the harness mechanism `adversarial-review` may use, or "polling only">_.
