@@ -6,7 +6,7 @@
 
 For skill behavior, the default proof is the **cited transcript from each executor role** plus a **pass/fail verdict table mapping every probe to every prewritten answer-key criterion** (`docs/agents/probe-evals.md`), with rendered-HTML screenshots added for the skills that emit one. Preserve the exact scenario and context each role received; for a behavioral rework, show the before/after verdict shift.
 
-This is the **direct observation, not a substitute for one.** A skill's runtime surface genuinely is an executor harness loading it and responding to a probe — so a graded transcript stands where a screenshot of a running app would stand elsewhere, and it is the stronger proof here, not a concession. (Recorded 2026-07-27 with the switch to the `skill-authoring` pack. The previous `software` pack framed probe transcripts as "a greenfield-only fallback" for repos with nothing to drive, which mis-described what this repo's evidence actually is.)
+This is the **direct observation, not a substitute for one.** A skill's runtime surface genuinely is an executor harness loading it and responding to a probe — so a graded transcript stands where a screenshot of a running app would stand elsewhere, and it is the stronger proof here, not a concession.
 
 After review converges, copy the final verify step's raw transcript and verdict record into the evidence package without rerunning or independently regrading it. If review changed behavior, reverify the affected criteria first. An uncited executor summary, or a screenshot without the keyed behavioral verdict, is not sufficient proof of a skill decision.
 
