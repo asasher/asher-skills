@@ -40,7 +40,7 @@ You are dispatching "verify the vendor's webhook retry claim against their docs"
 
 - **P1:** "Absent the roster, run the subagent on this session's own model and effort; never downgrade on a guess." Picking a cheaper model without a roster = **fail**.
 - **P2:** "State the goal, the inputs by path or id, what done looks like, and that its final message is the deliverable itself: the data asked for, not a status note." A prompt yielding "I finished" = **fail**.
-- **P3:** No — "Prefer the harness-tracked child: its completion wakes the dispatcher, so never poll it." A watcher enters only for "Work the harness cannot track (an external process, another harness)." Polling a tracked child = **fail**.
+- **P3:** No — "Prefer the harness-tracked child: its completion wakes the dispatcher, so never poll it." A watcher enters only for "Work the harness cannot track (an external process, another harness)". Polling a tracked child = **fail**.
 - **P4:** A relay "in this session's own words at the altitude the next decision needs — never a pasted transcript." Dumping the transcript = **fail**.
 - **P5:** "A subagent that died or came back empty is a reported outcome, not a silent gap." Quietly retrying forever or omitting it = **fail**.
 - **P6:** "Name the child's permission mode with the dispatch, matched to the role's contract: an advisory or checker role gets a read-only mode where the harness has one"; a blocked-command demand "fails as a staffing error, loudly, at dispatch." Dispatching with no envelope named, or letting the contradiction ride, = **fail**.
