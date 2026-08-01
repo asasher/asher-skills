@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [worktree]
-  optional: [staffing, watch-until]
+  optional: [staffing]
 ---
 
 # To Subagent
@@ -40,7 +40,7 @@ The wake contract is edge-local: a finishing child reports to its direct parent,
 
 ## Ledger and bounded watch
 
-A parent dispatching in the background records its live children — which units are out, where, due to deliver what — and pairs the wait with a bounded watch on the durable surface (the change-request thread or equivalent), so a lost wake degrades to a poll this parent owns. Nothing escalates upward by default: each level orchestrates its own children. Run the watch via the `watch-until` sibling — target the durable surface, condition on the child's result landing, a timeout at the unit's expected span, relay on trigger; absent that sibling, this parent polls the durable surface itself, bounded, at the cadence the work changes. The never-poll rule covers the tracked child, not the surface — the bounded watch is what catches the wake that never comes.
+A parent dispatching in the background records its live children — which units are out, where, due to deliver what — and pairs the wait with a bounded watch on the durable surface (the change-request thread or equivalent), so a lost wake degrades to a poll this parent owns. Nothing escalates upward by default: each level orchestrates its own children. The watch is this parent's own mechanic, a simple bounded poll: check the durable surface for the child's result at the cadence the work changes, under a timeout at the unit's expected span — the result found is relayed; the timeout expiring marks the child silent past its bound. The never-poll rule covers the tracked child, not the surface — the bounded watch is what catches the wake that never comes.
 
 Every background brief tells the worker to post results to the durable surface as they land, not only in its final message; that posting is what keeps the poll always possible. A wake that never arrives while the poll finds the result posted is a delivered unit, not a route loss; a child the surface shows silent past its bound gets the Recovery audit before anything is re-dispatched.
 
@@ -58,4 +58,3 @@ A worker lost to its harness — a session or usage limit, a route that stops an
 
 - **Sibling (required, by name):** `worktree` — explicit direct isolation; prepared workflow directories are accepted as supplied.
 - **Sibling (optional, by name):** `staffing` — model, effort, and wake-path resolution; succession and route-loss records on worker death.
-- **Sibling (optional, by name):** `watch-until` — the bounded watch on the durable surface behind a background wait; absent it, this parent polls the durable surface itself, bounded, at the cadence the work changes.

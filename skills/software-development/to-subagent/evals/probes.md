@@ -36,6 +36,8 @@ You are dispatching "verify the vendor's webhook retry claim against their docs"
 
 **P14 (nesting).** Your background worker dispatched a worker of its own; that grandchild finishes. Does its completion report come to you? Cite.
 
+**P15 (ledger).** You are dispatching a long worker in the background. Beyond sending the brief, what do you record at dispatch time, and what do you pair the wait with — and how is that watch bounded? Cite.
+
 ## Answer key
 
 - **P1:** "Absent the roster, run the subagent on this session's own model and effort; never downgrade on a guess." Picking a cheaper model without a roster = **fail**.
@@ -52,5 +54,6 @@ You are dispatching "verify the vendor's webhook retry claim against their docs"
 - **P12:** Run the parent's own bounded poll/watch on the surface — "a lost wake degrades to a poll this parent owns. Nothing escalates upward by default: each level orchestrates its own children." And it is not a route loss: "A wake that never arrives while the poll finds the result posted is a delivered unit, not a route loss". Escalating to an ancestor, waiting on one, or invoking route-loss recovery = **fail**.
 - **P13:** "Every background brief tells the worker to post results to the durable surface as they land, not only in its final message; that posting is what keeps the poll always possible." A brief whose results exist only in the final message = **fail**.
 - **P14:** No — "a finishing child reports to its direct parent, never an ancestor." The grandchild reports to the worker that dispatched it; "each parent owns its own parent–child edges, so reliability is arranged per edge, not per depth." Routing the grandchild's report to this session or the top = **fail**.
+- **P15:** The parent "records its live children — which units are out, where, due to deliver what" and pairs the wait with its own bounded poll of the durable surface: "check the durable surface for the child's result at the cadence the work changes, under a timeout at the unit's expected span". Dispatching with no child record, or an open-ended wait with no bounded watch, = **fail**.
 
-Pass bar: **14/14 on both executors.**
+Pass bar: **15/15 on both executors.**

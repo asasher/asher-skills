@@ -11,7 +11,7 @@ Dispatch adapter for non-interactive work: staffs the subagent from the roster (
 
 - **Bundled:** `SKILL.md` and `evals/`.
 - **Sibling (required, by name):** `worktree` — explicit direct isolation.
-- **Siblings (optional, by name):** `staffing` — roster, wake-path ladder, and succession and route-loss records on worker death; absent it, the subagent runs on the dispatching session's model and effort. `watch-until` — the bounded watch on the durable surface behind a background wait; absent it, the parent polls the durable surface itself, bounded.
+- **Siblings (optional, by name):** `staffing` — roster, wake-path ladder, and succession and route-loss records on worker death; absent it, the subagent runs on the dispatching session's model and effort.
 
 ## Provenance
 
