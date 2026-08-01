@@ -70,7 +70,7 @@
 - Scale: use generated temporary skill trees for catalog/closure tests and temporary state/surface roots for review lifecycle tests.
 - Approved synthetic substitutes: situated prompt fixtures may exercise skill decisions because this repo has no product runtime; they do not substitute for live GitHub API behavior or script lifecycle/process checks.
 - Lifetime/cleanup: the owning test retains fixtures through its final assertion/evidence capture, then removes only its own temporary root.
-- **Per-ticket-disposable stores** — what a single ticket may reset or wipe wholesale: the ticket's own worktree, and its `VERIFY-<issue>-*` fixtures and temporary roots. Everything else is shared, and destructive verbs stop at this line.
+- **Per-ticket-disposable stores** — what a single ticket may reset or wipe wholesale: the ticket's own worktree, its `VERIFY-<issue>-*` fixtures and temporary roots, and any per-ticket residue of a retired surface that the overlay declared in § Authenticating names. Everything else is shared, and destructive verbs stop at this line.
 
 ## Driving behavior & capturing evidence
 
