@@ -1,6 +1,6 @@
 # Playbook: Pre-deployment probe evals
 
-> Project playbook for this repo — the check discipline for skill changes, read by `verify-your-work` (it is the recorded check command in `codebase.md` § Checks), `prove-your-work` (the transcript + verdict-table contract), and anyone shipping a new or reworked skill. Formerly the `docs/patterns/` probe-evals pattern doc; promoted to a playbook when that directory was retired.
+> Project playbook for this repo — the check discipline for skill changes, read by `verify-your-work` (it is the recorded check command in `codebase.md` § Checks), `prove-your-work` (the transcript + verdict-table contract), and anyone shipping a new or reworked skill.
 
 ## Problem
 
@@ -15,7 +15,7 @@ Before first deployment or after any substantial rework of a skill — especiall
 
 ## Tier 1: situated dry-run probes
 
-Validated 2026-07-04 (triage skill, 20/20) and reused since (bayes 20/20 before ship; maquette). The rules:
+The rules:
 
 1. **Situated probes, not quiz questions.** "You are at step X, criterion 3 fails — what is your next concrete action?" beats "what does the skill say about X".
 2. **Context fidelity.** Run separate sessions per real deployment context: a command-surface session (SKILL.md in context) vs a dispatched-thread session (only the dispatch prompt, no SKILL.md). This tests whether disclosed references stand alone.
@@ -30,11 +30,11 @@ Canonical written-out example: `skills/creative/maquette/evals/probes.md` (probe
 
 When the skill's risk is in tool mechanics rather than wording, script the whole protocol against a sandbox and assert invariants at every step.
 
-Canonical (from the since-removed `fair-deal` skill, whose `eval/protocol-dryrun.sh` exercised the full two-party negotiation protocol with a bare local repo standing in for the remote and two clones playing the partners; 35 checks covering privacy firewall, turn alternation, shared-state integrity). The pattern stands: scaffold into a fresh `mktemp` dir each run, never touch this repo, exit non-zero on any FAIL.
+Canonical shape: scaffold into a fresh `mktemp` dir each run, never touch this repo, exit non-zero on any FAIL, asserting invariants at every step — e.g. a full two-party protocol dry-run with a bare local repo standing in for the remote, two clones playing the partners, and dozens of checks covering privacy firewall, turn alternation, and shared-state integrity.
 
 ## How to adopt
 
-1. Create `evals/` (or `eval/`) in the skill and ship the assets in-repo — probes, answer key, and any dry-run script live with the skill so reworks re-run them (shadixfy and maquette both do this).
+1. Create `evals/` (or `eval/`) in the skill and ship the assets in-repo — probes, answer key, and any dry-run script live with the skill so reworks re-run them.
 2. Write probes for the moments the skill is most likely to be misread: first user message, an ambiguous user answer, a mid-loop failure, a resume after a gap.
 3. Run Tier 1; fix wording until executors pass; only then spend on a Tier 2 sandbox run if the skill has tool mechanics worth scripting.
 
@@ -46,4 +46,4 @@ Canonical (from the since-removed `fair-deal` skill, whose `eval/protocol-dryrun
 
 ## Instances
 
-triage (method origin), bayes, maquette (Tier 1); fair-deal (Tier 2, skill since removed); shadixfy (`evals/evals.json` harness shipped in-skill); skill-loop consumes these harnesses as its eval input.
+maquette (Tier 1 probes, `skills/creative/maquette/evals/`); shadixfy (`evals/evals.json` harness shipped in-skill); skill-loop consumes these harnesses as its eval input.

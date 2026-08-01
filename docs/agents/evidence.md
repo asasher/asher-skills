@@ -6,7 +6,7 @@
 
 For skill behavior, the default proof is the **cited transcript from each executor role** plus a **pass/fail verdict table mapping every probe to every prewritten answer-key criterion** (`docs/agents/probe-evals.md`), with rendered-HTML screenshots added for the skills that emit one. Preserve the exact scenario and context each role received; for a behavioral rework, show the before/after verdict shift.
 
-This is the **direct observation, not a substitute for one.** A skill's runtime surface genuinely is an executor harness loading it and responding to a probe — so a graded transcript stands where a screenshot of a running app would stand elsewhere, and it is the stronger proof here, not a concession. (Recorded 2026-07-27 with the switch to the `skill-authoring` pack. The previous `software` pack framed probe transcripts as "a greenfield-only fallback" for repos with nothing to drive, which mis-described what this repo's evidence actually is.)
+This is the **direct observation, not a substitute for one.** A skill's runtime surface genuinely is an executor harness loading it and responding to a probe — so a graded transcript stands where a screenshot of a running app would stand elsewhere, and it is the stronger proof here, not a concession.
 
 After review converges, copy the final verify step's raw transcript and verdict record into the evidence package without rerunning or independently regrading it. If review changed behavior, reverify the affected criteria first. An uncited executor summary, or a screenshot without the keyed behavioral verdict, is not sufficient proof of a skill decision.
 
@@ -54,7 +54,7 @@ The contract is binding-independent: the deliverable is a **ready-to-paste block
 The review file (`platform.md` § Change review) lives on the same branch as the artifacts, so embeds are **repo-relative paths** — `![<criterion>](../../evidence/<slug>/<file>.png)` relative to the review file — which render in any markdown viewer, with no SHA pinning and no proxy pitfalls.
 
 - Mechanical checks before handing the block back: each path resolves from the review file's location at the branch's HEAD (`git cat-file -e HEAD:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4.
-- When the human reviews away from the machine, the evidence step may additionally serve the rendered review file over an explicitly-invoked presentation channel (e.g. the `serve-via-tailnet` skill — this repo binds no standing surface; `environment.md` § Presenting records the retirement) — the committed file stays the source of truth. Publishing must preserve relative-path resolution: expose the review file _with_ its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
+- When the human reviews away from the machine, the evidence step may additionally serve the rendered review file over an explicitly-invoked presentation channel (e.g. the `serve-via-tailnet` skill — this repo binds no standing surface; `environment.md` § Presenting has the presentation routes) — the committed file stays the source of truth. Publishing must preserve relative-path resolution: expose the review file _with_ its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
 
 ### Other bindings
 
