@@ -1,0 +1,520 @@
+Reading additional input from stdin...
+OpenAI Codex v0.146.0
+--------
+workdir: /Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal
+model: gpt-5.6-sol
+provider: openai
+approval: on-request
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 019fbd67-1896-7852-a50f-34f2a19ac6cc
+--------
+user
+You are an executor model being evaluated on a skill's doctrine. Work from the repo checkout at the current directory. The skill under test is skills/system/staffing/.
+
+Method:
+- For each probe below, read the exact files it names (paths relative to skills/system/staffing/) plus the fixture, then answer with your next concrete action / conclusion.
+- CITE the file and the exact sentence that decided each answer. An answer without a citation is incomplete.
+- If the doctrine is ambiguous on a point, flagging the ambiguity is a valid answer — say precisely what is ambiguous.
+- Do NOT read skills/system/staffing/evals/probes.md or anything else under evals/ except the named fixture file. Answer only from SKILL.md, the reference/ files each probe names, and the fixture.
+- Answer all six probes, labeled P28..P33.
+
+**P28 (self-heal: transient recovery).** Read `reference/rankings-and-routing.md` and `reference/machine-audit.md`, plus the fixture overlay `evals/fixtures/self-heal-overlay.md`. A dispatch resolution wants the Claude→Codex direction; the scenario clock reads 2026-08-02T10:00Z. What must happen before the row may be passed over? The cheap invocation probe passes, and a fresh `codex --version` returns the same version the row's evidence records. What state is written, with what fields, and may the route back builder work immediately?
+
+**P29 (self-heal: upgrade cue).** Same scenario as P28 against the same fixture, except the fresh version probe returns a newer codex-cli version than the row's evidence. Read `reference/rankings-and-routing.md`. On the passing cheap probe, what state may be restored, and what is required before the route backs builder-role staffing?
+
+**P30 (self-heal: durable not self-healed).** A resolution wants the fixture's Claude→Gemini direction. Read `reference/rankings-and-routing.md` and `reference/machine-audit.md`, plus `evals/fixtures/self-heal-overlay.md`. Does the self-heal path apply to this row? What does the resolution do, and what does recovery require?
+
+**P31 (self-heal: disabled never touched).** A resolution wants the fixture's Codex→Claude direction. Read `reference/rankings-and-routing.md` and `reference/machine-audit.md`, plus `evals/fixtures/self-heal-overlay.md`. May the self-heal path probe this row, and can any probe promote it? What does the resolution do instead?
+
+**P32 (self-heal: reclassify by observation).** The P28 re-probe fails instead of passing. Sub-case (a): the same usage-limit class, naming a reset at 2026-08-09T09:00Z. Sub-case (b): a permission/auth error. Read `reference/rankings-and-routing.md` and `reference/machine-audit.md`, plus `evals/fixtures/self-heal-overlay.md`. What is written in each sub-case, and do repeated transient failures ever escalate the row on their own?
+
+**P33 (self-heal: write authority / route loss).** Mid-run, a worker dispatched down the fixture's Claude→Codex direction dies with a usage-limit error naming a reset time. Read `reference/rankings-and-routing.md` and `evals/fixtures/self-heal-overlay.md`. Who writes the reachability row, in what shape, and is a setup run required?
+2026-08-01T12:58:00.646833Z ERROR codex_rmcp_client::oauth::refresh_transaction: error=failed to refresh OAuth tokens for server metis: OAuth token refresh failed: Server returned error response: invalid_grant: The provided authorization grant (e.g., authorization code, resource owner credentials) or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client. The refresh token is malformed or not valid.
+2026-08-01T12:58:03.868130Z ERROR codex_rmcp_client::oauth::refresh_transaction: error=failed to refresh OAuth tokens for server expo: OAuth token refresh failed: Server returned error response: invalid_grant: Invalid or expired refresh token
+codex
+I’ll treat this as a constrained doctrine probe: I’ll read only the named staffing sources and fixture, then cite the decisive sentences verbatim for P28–P33.
+exec
+/bin/zsh -lc "sed -n '1,260p' skills/system/staffing/SKILL.md" in /Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal
+ succeeded in 0ms:
+---
+name: staffing
+description: Own the model roster for a project. Use to write or reconcile the project's staffing playbook, re-probe reachability after a CLI or machine change, or resolve any "which model should do this?" question — directly or from a sibling skill. Not for running the task itself.
+argument-hint: "[setup | route <task> | reconcile]"
+user-invocable: true
+metadata:
+  invocation: model
+  execution: thread
+  requires: []
+  optional: []
+  setup: reference/setup.md
+  variants: {"claude":"variants/claude","codex":"variants/codex"}
+---
+
+# Staffing
+
+Compiles machine-observed models into one roster of roles, pins, capability providers, rankings, reachability, and successors. It selects a route; it does not run the task or ship a fixed machine roster.
+
+## Commands
+
+- **setup** — load [setup](reference/setup.md); audit reachability and write or reconcile the project's staffing playbook.
+- **route `<task>`** — load [rankings-and-routing](reference/rankings-and-routing.md) and, for roles or route loss, [roles-and-fallback](reference/roles-and-fallback.md).
+- **reconcile** — load [install-and-reconcile](reference/install-and-reconcile.md) and the active provider's [harness mechanics](reference/harness.md); compare installed rules with the current machine and report drift/conflict in prose.
+
+No argument runs setup.
+
+## Resolution
+
+Issue-coordinator callers first supply work type, surface/capabilities, coordination class/reason, and known uncertainty. Missing fields stop dispatch; `orchestrator-required` returns the orchestrator; `routine` uses the reachable coordinator-eligible set. Then:
+
+1. apply a matching task/provider pin, subject to effect verification;
+2. resolve any required effect to a named provider/fallback and filter to eligible executors, then apply the hard taste gate;
+3. rank survivors by `intelligence > taste > cost`;
+4. on route loss, apply the recorded successor and rerun over reachable candidates.
+
+Never rank before gates or choose routine coordination cheapest-first. If no model is reachable, use the current model in a subagent and report the gap; never skip the stage.
+
+## Where the roster lives
+
+**The project's staffing playbook is the sole authority.** Resolution reads it and nothing else. There is one layer, not two: no machine-level module, and no bundled roster consulted at runtime.
+
+The bundled roster is a **seed** — setup reads it once, when writing the playbook, and never again. A seed value that survives into the playbook does so because the audit verified it, not because it shipped.
+
+Absent a project playbook, **never resolve from the seed** and never reach for a home-directory path: its rows are unverified defaults, and staffing from them asserts a reachability nobody checked. That is a bar on _fabricating_ a roster, not a hard stop on the work — degrade as [roles-and-fallback](reference/roles-and-fallback.md) directs, running the delegated step on the current model in a subagent and reporting the staffing gap. Run `staffing setup` to close it.
+
+The playbook carries **data**: model rows, per-harness eligibility and capability bindings, pins, floor, succession, probed reachability, and the machine the probes ran on. It never carries doctrine. Ranking and succession rules live in [rankings-and-routing](reference/rankings-and-routing.md) and [roles-and-fallback](reference/roles-and-fallback.md); harness command shapes, wrapper discipline, and wake mechanics live in the compiled provider's [harness mechanics](reference/harness.md). Those are identical on every machine, so they ship with the skill and are reviewed with it.
+
+One playbook serves every harness — a Codex session and a Claude session read the same file, and facts that differ between them are a column, not a second file. Reachability is directional, and each direction carries one of three recorded states — effect-verified, intentionally disabled, or unavailable with its failure class, named transient or durable. A transient class self-expires: at or past its recorded retry-at the resolver probes it inline and proceeds on the outcome. A failure removes one direction, never both, and only an effect-verified direction backs dispatch.
+
+A playbook whose recorded machine is not this machine is stale. Re-run setup before dispatching rather than trusting rows probed elsewhere.
+
+## Dependency surface
+
+- **Bundled:** setup, audit, routing, roles/fallback, install/reconcile, compiled provider mechanics, the roster seed, and the instruction-trigger template setup installs into the project instruction file.
+- **Project playbooks:** the staffing playbook under the repo's agent-docs directory — the sole runtime authority, written by setup.
+- **Sibling skills:** none — `staffing` is a root primitive. Siblings invoke it; it invokes none, so there is no closure to carry and nothing to degrade when a sibling is absent.
+
+exec
+/bin/zsh -lc 'wc -l skills/system/staffing/reference/rankings-and-routing.md skills/system/staffing/reference/machine-audit.md skills/system/staffing/evals/fixtures/self-heal-overlay.md' in /Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal
+ succeeded in 0ms:
+      75 skills/system/staffing/reference/rankings-and-routing.md
+      96 skills/system/staffing/reference/machine-audit.md
+      11 skills/system/staffing/evals/fixtures/self-heal-overlay.md
+     182 total
+
+exec
+/bin/zsh -lc 'nl -ba skills/system/staffing/reference/rankings-and-routing.md skills/system/staffing/reference/machine-audit.md skills/system/staffing/evals/fixtures/self-heal-overlay.md' in /Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal
+ exited 1 in 0ms:
+usage: nl [-p] [-b type] [-d delim] [-f type] [-h type] [-i incr] [-l num]
+          [-n format] [-s sep] [-v startnum] [-w width] [file]
+
+exec
+/bin/zsh -lc 'nl -ba skills/system/staffing/reference/machine-audit.md' in /Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal
+ succeeded in 0ms:
+     1	# Machine audit — verify the shipped seed against this machine
+     2	
+     3	The skill ships a **roster seed** (model rows, provider bindings, wake paths). The audit's job is to verify each seeded default against the current machine: prune rows the machine cannot reach, surface unsupported provider bindings to the owner and ask what to bind instead, add reachable models the seed omits, probe the dispatch aliases, and hand the judgment numbers to the owner to tune. Never write a seeded default this machine failed to verify.
+     4	
+     5	The audit is what makes the project playbook trustworthy, so it also records _how_ each row was established — command shape, timestamp, result or failure class — and the machine and CLI versions the probes ran on. Those are what let a later reader on a different machine know the rows are not theirs.
+     6	
+     7	## The audit procedure
+     8	
+     9	Read [install-and-reconcile](install-and-reconcile.md) once before probing — the external-worker contract and the reconciliation rules there govern how steps (1), (2), and (4) are judged. Then run these probes and record the results:
+    10	
+    11	1. **Which routes work from this harness?** Enumerate native models, then probe the sibling-harness route defined by the compiled `reference/harness.md`. Run step 2's version probes first: a direction whose CLI is absent is unavailable (CLI absent), with no owner question to ask. For each installed direction, ask the owner before dispatching any probe whether it is deliberately off for cost or policy — that answer classifies the direction intentionally disabled, and no dispatch probe runs down it. Classify each remaining direction into exactly one route state and record its evidence per § Route classification below, plus the native wrapper label/model evidence where a wrapper carried the probe. A failure removes this direction only. Real invocation behavior is the operational signal.
+    12	2. **Which sibling harness CLIs are installed?** Probe `codex --version` and `claude --version`, then retain only the routes step 1 actually exercised. Presence alone is not reachability. Record the versions as the probe record's metadata — part of what makes a recorded route trustworthy on this machine and stale on another, and the cue to re-probe after an upgrade — never as facts of their own that anything resolves against.
+    13	3. **Which dispatch aliases does each CLI actually accept?** Roster names are not dispatch aliases. Probe the name that would be passed to the CLI's model argument for every row that could cross a harness boundary, and record the mapping with the CLI version that produced it. A name no probe accepted must never be written as a verified route — the failure surfaces at the moment of use, long after resolution looked clean — and a name no probe ran against is recorded as unverified, never promoted to a dispatch alias by assumption. Where the results support a rule ("this CLI rejects versioned names, accepts bare ones"), its scope is the CLI whose probes established it: one CLI's rule says nothing about how the sibling treats the same names, so the sibling's rule needs its own probes.
+    14	4. **Does a project staffing playbook already exist?** Read it. It is the reconciliation target, and what it records about a previous machine or CLI version is what a fresh probe is checked against.
+    15	5. **Which waits does each harness track?** Probe the wake mechanisms — background-task completion, subagent completion, monitors, cron — and record which ones re-invoke the session, effect-verified. These become the Wake-paths rows.
+    16	
+    17	Steps (1)–(5) all feed § Writing the roster from the audit; the judgment numbers cannot be probed — see § The seed (numbers the user tunes).
+    18	
+    19	## Route classification — three states, each with its evidence
+    20	
+    21	Every sibling-harness direction the audit records lands in exactly one of three states, and a later reader must be able to tell them apart from the playbook alone, without re-probing. A bare worked/failed record cannot express this: it reads a deliberately disabled route identically to a broken one, and neither reading carries what the successor decision needs.
+    22	
+    23	- **Effect-verified** — a live probe of the role's effect class succeeded, and the row names the class it cleared (write for builders, read for reviewers). Only this state backs dispatch.
+    24	- **Intentionally disabled** — installed, but the owner has chosen not to use it, for cost or policy. This state is an owner decision, never a probe result: setup records it only from the owner's explicit choice, with the reason and the date it was made, and never infers it from a failure. On a re-run setup re-checks only the cheap premise — the CLI is still installed, a version probe with no dispatch — and leaves the choice standing. A disabled row's evidence fields hold the version probe (its command shape and the CLI version it returned), the owner's decision with its reason and date as the result, and the direction's recorded successor like any other row. A successful probe never promotes a disabled row; the disable lifts only when the owner says so — in setup's interview or by editing the playbook — never from a probe result.
+    25	- **Unavailable** — the probe failed, and the row captures the failure class rather than a bare no. The failure class is what the successor decision reads, and it comes from one of two fixed, named sets — the lists are doctrine, and a classifying session never improvises the boundary:
+    26	  - **Transient** — usage limit, rate limit, network failure, timeout: self-expiring constraints. A transient row carries its retry-at machine-readably inside the result/failure-class evidence field as the token `retry-at=<UTC instant, ISO 8601>` — e.g. a result reading `unavailable (usage limit, retry-at=2026-08-05T09:00Z)` — when the failure named a reset; when none was named it carries no token and is probeable immediately. There is no default backoff: the probe is cheap, suppression is only justified by a known reset, and pacing comes from dispatch frequency. A transient write over an established state retains that previously established state and its evidence beside the row — a restoration target, not a second state — so a later healing pass has something to restore. At or past its retry-at a transient row reads as _unverified, probeable_ rather than unavailable — what happens then is the resolver's rule, [rankings-and-routing](rankings-and-routing.md) § Self-heal at the point of use.
+    27	  - **Durable** — CLI absent, alias rejected, permission denied, effect denied: broken until a human decision or a setup re-run.
+    28	
+    29	The transient/durable split is a refinement within the unavailable state, not a fourth state: the classification stays three-state, and the intentionally-disabled state is untouched by it.
+    30	
+    31	The capability-provider registry's route-state field uses these same three state names with the same meaning — only an effect-verified route backs selection, and a probe never promotes a disabled one. Its rows carry the registry's own fields (primary, fallback, eligible executor) rather than this section's five, and its owner questions ride the audit's existing provider-binding interview; the contract below is stated for directions, which carry the cross-harness risk this classification exists for.
+    32	
+    33	Each classification carries five evidence fields, all resolvable from its row: the CLI version observed, the timestamp, the command shape used, the result or failure class, and the recorded successor for that direction. Where one audit run established every row, the machine, CLI versions, and date may live once in the probe record the rows sit under; a row probed at any other time carries its own values inline, so the shared record never misdescribes it. The record, rows included, lives in the repo's gitignored machine-local overlay (`docs/agents/local/staffing.md`), never the tracked playbook; its machine-readable form is the stamp line `<!-- machine-record: machine=<short hostname> probed=<YYYY-MM-DD> -->` at its head — what a mechanical staleness check parses where a repo's installed skill set ships one. The machine value is the stable short hostname as a single whitespace-free token — the segment before the first dot, on macOS the local host name (`scutil --get LocalHostName`) — compared case-insensitively.
+    34	
+    35	Timestamps date the observation that **established** the recorded state, not the latest run that confirmed it: a re-probe that finds a row exactly as recorded writes nothing. That is what keeps a re-run with unchanged reachability byte-identical while every row still says when its fact was observed — any change in what a probe observes is written as fresh evidence with its own date.
+    36	
+    37	## The seed (numbers the user tunes)
+    38	
+    39	Cost/intelligence/taste/effort can't be probed, so their starting values come from the skill's bundled roster seed and **the user edits them to fit their own machine and pricing.** Keep only rows for models the audit found reachable; drop any seed row whose model this machine can't reach, and add a seeded row for any reachable model the seed omits.
+    40	
+    41	The seed is read here and nowhere else. Once the playbook exists it is the authority, and a later resolution that reaches back to the seed has resolved from a file no one reviewed against this machine.
+    42	
+    43	### Example of audit output (illustrative only — NOT the shipped roster)
+    44	
+    45	The following is **one machine's audit result**, shown so you know the shape to write. Reproduce the _shape_, not these values:
+    46	
+    47	```
+    48	# Rankings (higher = better) — SEED VALUES, tune to your machine
+    49	| model         | cost | intelligence | taste | effort |
+    50	|---------------|------|--------------|-------|--------|
+    51	| gpt-5.6-sol   | 4    | 9            | 5     | high   |
+    52	| gpt-5.6-terra | 6    | 5            | 3     | xhigh  |
+    53	| sonnet-5      | 5    | 5            | 5     | high   |
+    54	| opus-5        | 3    | 8            | 8     | high   |
+    55	| fable-5       | 1    | 9            | 9     | high   |
+    56	
+    57	# Capability providers — effect-probed harness/tool routes, never model traits
+    58	| need | primary provider | fallback | eligible executor |
+    59	|------|------------------|----------|-------------------|
+    60	| browser-use | scripted Playwright driving Chrome | `agent-browser` (unreliable — interactive exploration only) · user-session carve-out (chrome provider, per-use consent) | active harness route |
+    61	| computer-use | gated: recorded project use case + explicit user approval, then computer-use provider | none — unmet gate is a hard gap | active Codex route |
+    62	| imagegen | native imagegen provider | repo headless skill | active Codex route |
+    63	
+    64	# Task-pins
+    65	| task type         | pinned model |
+    66	|-------------------|--------------|
+    67	| mechanical / bulk | gpt-5.6-sol  |
+    68	
+    69	# Floor: sonnet-5 (Claude-side) / gpt-5.6-terra (Codex-side). Watcher/cron duty runs at the Floor per
+    70	# harness — a Floor assignment, not a pin (e.g. a sibling skill's watcher dispatches at the Floor).
+    71	
+    72	# Wake paths — cheapest verified wake first; a model watcher only where nothing is tracked
+    73	| harness | tracked wake (no model) | watcher fallback |
+    74	|-------------|-------------------------------------------------------------|--------------------|
+    75	| Claude Code | background tasks / subagent completions / Monitor re-invoke | sonnet-5, low effort |
+    76	| Codex CLI   | none verified                                               | gpt-5.6-terra loop |
+    77	
+    78	# Effort rule: dispatch at the model row's effort value; pure wait/relay and cron duty runs at low
+    79	# regardless of model.
+    80	
+    81	# Reachability (illustrative): one row per direction, e.g. active harness → sibling through the compiled
+    82	# native wrapper. Each row carries its route state — effect-verified (with the effect class cleared),
+    83	# intentionally disabled (with the owner's reason and date), or unavailable (with the failure class) —
+    84	# plus its evidence fields and successor, per § Route classification.
+    85	```
+    86	
+    87	## Writing the roster from the audit
+    88	
+    89	1. Reachable models → rows of the rankings table, each seeded with cost/intelligence/taste and flagged "tune these".
+    90	2. Effect-probed harness skills/plugins/tools → the capability-provider registry, with primary, fallback, eligible executor, and route state (presence alone is insufficient — step 2).
+    91	3. Task/provider pins → the named pin list; carry the mechanical/bulk pin if its worker route is reachable, else leave it for the user to set.
+    92	4. Directional reachability → one row per direction carrying its route state and evidence (§ Route classification). All three states are written — a disabled or unavailable row is what stops a later reader from re-deriving the direction wrongly — but only effect-verified directions back dispatch; never infer symmetry from one working route. Record the probed alias mapping beside them, as a per-CLI rule where the probes support one ("this CLI rejects versioned names, accepts bare names") rather than a list of pairs a future model row would fall outside of.
+    93	5. Coordinator eligibility → among the reachable routes, record which can own a durable issue child and dispatch/escalate its worker stages. Presence or low cost alone does not qualify a route.
+    94	6. Floor → set to the lowest capability class the user wants staffed; default it and tell the user to confirm.
+    95	7. Wake paths → per harness, the effect-verified tracked wake mechanisms (step 5) and the Floor watcher fallback; out-of-band waits (review verdicts, merge watches) hold on the top verified row.
+    96	8. Effort defaults → the per-role effort lever (see [rankings-and-routing](rankings-and-routing.md) § Effort), recorded where the harness exposes it.
+
+exec
+/bin/zsh -lc 'nl -ba skills/system/staffing/reference/rankings-and-routing.md' in /Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal
+ succeeded in 0ms:
+     1	# Rankings, capability providers, pins, and resolution order
+     2	
+     3	Keep three structures separate: a model rankings table, a harness/tool provider registry, and explicit pins. Models supply judgment; installed harnesses, skills, plugins, and machine tools supply effects. Never infer a provider from a model name or treat installation alone as reachability.
+     4	
+     5	## Model rankings
+     6	
+     7	Rankings are higher-is-better and contain exactly:
+     8	
+     9	- **cost** — this machine owner's effective cost;
+    10	- **intelligence** — unsupervised problem difficulty; and
+    11	- **taste** — UI/UX, code/API quality, and copy judgment.
+    12	
+    13	No capability boolean belongs in this table. Rows are models the active harness can actually reach, including effect-verified sibling-harness workers; bounded CLI workers are not coordinator-eligible merely because they are rows.
+    14	
+    15	## Capability-provider registry
+    16	
+    17	Capabilities are named effects routed before model ranking:
+    18	
+    19	| field | meaning |
+    20	| --- | --- |
+    21	| need | `browser-use`, `computer-use`, `imagegen`, or another required effect |
+    22	| primary provider | the skill/plugin/harness/tool that performs it |
+    23	| fallback | the separately effect-probed successor, or `none` |
+    24	| eligible executor | which reachable harness/model route may operate that provider |
+    25	| route state | effect-verified, intentionally disabled, or unavailable with failure class |
+    26	
+    27	For example, ChatGPT-in-Chrome and Computer Use are Codex harness/tool providers, not Terra capabilities; native Imagegen and the repo `codex-imagegen` skill are separate provider routes. Claude Code may dispatch a Codex provider or use a recorded machine fallback, but must not claim the effect as native Claude capability.
+    28	
+    29	Provider selection is a hard gate. Select an effect-verified primary, then its recorded fallback if needed; only after that form the model candidate set from executors eligible to operate the selected route. A missing provider reports a capability gap. Never substitute a different effect or another model.
+    30	
+    31	## Pins
+    32	
+    33	A pin is an explicit routing decision resolved before general ranking:
+    34	
+    35	- a **task pin** binds a task type such as mechanical/bulk work to a worker route;
+    36	- a **provider pin** binds a need to a named provider route and eligible executor.
+    37	
+    38	A matching pin short-circuits the general choice, but it does not manufacture reachability: the named route must still be effect-verified. On route loss, follow its recorded provider/model successor and resolve again (a transiently-down pinned route at or past its retry-at gets the inline probe of § Self-heal at the point of use before its successor is taken).
+    39	
+    40	## Resolution order
+    41	
+    42	**Issue-coordinator pre-gate.** Before child/worktree creation, the caller supplies groomed work type, surface/required effects, coordination class/reason, and known uncertainty. Missing data stops dispatch. `orchestrator-required` returns the orchestrator. `routine` starts from the reachable coordinator-eligible set and continues below; it never means cheapest-first.
+    43	
+    44	1. **Matching task/provider pin?** Select it and stop general ranking, subject to effect verification.
+    45	2. **Required effect?** Resolve need → effect-verified primary provider → recorded fallback. If neither works, report a hard capability gap. Filter to reachable executors eligible to operate the selected provider.
+    46	3. **Taste gate?** For user-facing UI, copy, or API design, remove every model below taste 7. This is a hard gate, not a preference.
+    47	4. **Rank survivors** by `intelligence > taste > cost`: intelligence descending, then taste descending, then cheaper cost. Ranking never resurrects a route removed by provider reachability or taste.
+    48	5. **Fallback.** If the selected route becomes unreachable, apply the recorded provider/model successor and rerun the same order — a transient-unavailable route at or past its retry-at is probed per § Self-heal at the point of use before being passed over. If no model remains reachable, use the current model in a subagent and report the staffing gap; never skip the stage.
+    49	
+    50	### Browser example (illustrative — one machine's audited bindings, not shipped policy)
+    51	
+    52	Resolve `browser-use` to its named primary provider — in this example scripted Playwright driving Chrome, with the machine's `agent-browser` and harness-native web bindings recorded as interactive-exploration fallback only, never the default. If the primary's effect probe fails, that is a tool failure to surface; the only recorded further fallback is the user-session carve-out (ChatGPT-in-Chrome with per-use explicit consent, for test cases that need the user's real signed-in session). Computer Use is not a browser fallback: it is gated behind a recorded project use case plus explicit user approval, and an unmet gate is a hard capability gap. Then form the eligible executor set and rank it. A smarter model that cannot operate either provider never enters the survivor set.
+    53	
+    54	### Mechanical example
+    55	
+    56	A matching mechanical/bulk task pin selects its recorded worker route at step 1. This is a pin, not a ranking derivation.
+    57	
+    58	## Self-heal at the point of use
+    59	
+    60	A transient-unavailable route heals as a side effect of normal resolution, never through a human or a setup run. The class split and the retry-at token are the machine audit's § Route classification; this section is what a resolver does with them. The cheap invocation probe is the read-class probe the compiled harness mechanics already define — a bounded, side-effect-free real invocation down the direction's own route; a text-only transcript check is not it, and the full effect class is not its job.
+    61	
+    62	- **Probe inline, at the point of use.** Whichever resolution first wants a transient row at or past its retry-at — or carrying none — runs the cheap invocation probe right then, before passing over the row: the staffing route command, a dispatcher preflight, a dispatch adapter's staffing step, whichever got there first. It writes the row with the outcome and proceeds on it. Healing never waits for a particular preflight, a human, or a setup run.
+    63	- **A pass restores the prior state.** A passing cheap probe restores the previously established state, effect-verified included, when the CLI version is unchanged and no upgrade cue applies — the limit gated invocation, not effects, so prior effect evidence for the same CLI version still stands. The upgrade cue is orthogonal and always wins: after a CLI upgrade, recovery requires the full effect class before the route backs builder work. A cheap pass under an upgrade cue restores nothing and is not a state of its own: under an upgrade cue, recovery is the full effect-class probe for the role being staffed, run in the same inline act, and the row is written once with that outcome — effect-verified naming the class it cleared on a pass, unavailable with the observed class on a failure. A session that stops short of the effect probe writes nothing: the row keeps reading unverified-probeable, and the next resolution that wants the route picks it up the same way.
+    64	- **A failure reclassifies by observation.** A failed re-probe writes the class actually observed: the same transient class refreshes retry-at and stays transient; a durable class converts the row to durable unavailable. No counters, no auto-escalation — the evidence trail carries observations, not policy state. One carve-out from "writes the row with the outcome": a re-probe whose outcome is exactly what the row records — the same class, no new reset — follows the establishing-observation rule and writes nothing.
+    65	- **Whoever probed writes.** Any session that ran a probe writes the row it probed, carrying the full five evidence fields; setup remains the whole-record regenerator. Recording a mid-run route loss — the loss-recording step the worker-death recovery path names — is this same write, with the observed class and the retry-at when the failure named one. Between same-machine sessions the overlay is last-writer-wins, with no lock: each row write is a whole row carrying its own observation evidence, so whichever write survives is something a session actually observed — acceptable for a machine-local evidence record. The fail-closed rule holds for row writes as for whole-record writes: a write that cannot be read back changes nothing.
+    66	- **The disabled boundary.** The self-heal path never probes an intentionally-disabled row, and a probe never promotes one; the disable lifts only when the owner says so.
+    67	
+    68	## Effort
+    69	
+    70	Where the harness exposes per-dispatch effort, dispatch at the model row's effort value from the rankings table. One exception: pure wait/relay and cron duty runs at **low** regardless of model. Effort never substitutes for a failed taste or capability gate.
+    71	
+    72	## Defaults, not quality waivers
+    73	
+    74	- Escalate to a more capable reachable route without asking when cheaper output misses the bar.
+    75	- Reviews favor high taste/intelligence and may add an independent second model.
+
+exec
+/bin/zsh -lc 'nl -ba skills/system/staffing/evals/fixtures/self-heal-overlay.md' in /Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal
+ succeeded in 0ms:
+     1	# EVAL FIXTURE — synthetic machine-local staffing overlay (probes P28–P33)
+     2	
+     3	**This is a synthetic eval fixture, not a real machine record.** Every machine name, CLI version, date, and state below is invented for the scenarios that read it. Never resolve real staffing from this file, and never reconcile a real playbook against it.
+     4	
+     5	<!-- machine-record: machine=eval-fixture-host probed=2026-07-28 -->
+     6	
+     7	## Directional reachability
+     8	
+     9	- **Claude→Codex** — state: unavailable (usage limit, retry-at=2026-07-30T09:00Z). Evidence: CLI version codex-cli 99.1.0; timestamp 2026-07-28T14:12Z; command shape: bounded write-class effect probe through the watched native wrapper; result: usage-limit error naming a reset at 2026-07-30T09:00Z; successor: native Claude route. Prior recorded state before this failure: effect-verified at write class, established 2026-07-20 against codex-cli 99.1.0. Note: a fresh `codex --version` on this fixture machine returns codex-cli 99.1.0 — unchanged, no upgrade cue.
+    10	- **Claude→Gemini** — state: unavailable (permission denied). Evidence: CLI version gemini-cli 99.2.0; timestamp 2026-07-28T14:15Z; command shape: bounded read-class invocation probe through the watched native wrapper; result: permission denied (credential rejected); successor: native Claude route. Durable class — no retry-at.
+    11	- **Codex→Claude** — state: intentionally disabled. Evidence: CLI version claude-cli 99.3.0 (version probe, no dispatch); timestamp 2026-07-28T14:10Z; command shape: `claude --version`; result: owner decision — reason "cost, this quarter", decided 2026-07-28; successor: native Codex route. CLI installed per the version probe.
+
+codex
+### P28 — transient recovery
+
+Because `2026-08-02T10:00Z` is past `retry-at=2026-07-30T09:00Z`, resolution must run the cheap, bounded read-class invocation probe inline before passing over Claude→Codex.
+
+Decisive sentence: “Whichever resolution first wants a transient row at or past its retry-at — or carrying none — runs the cheap invocation probe right then, before passing over the row.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:62)
+
+Since the probe passes and codex-cli remains `99.1.0`, restore `effect-verified at write class`, based on the retained prior write-class evidence.
+
+Decisive sentence: “A passing cheap probe restores the previously established state, effect-verified included, when the CLI version is unchanged and no upgrade cue applies — the limit gated invocation, not effects, so prior effect evidence for the same CLI version still stands.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:63)
+
+The whole row is written with:
+
+- CLI version: `codex-cli 99.1.0`
+- Timestamp: `2026-08-02T10:00Z`
+- Command shape: the actual bounded, side-effect-free cheap invocation through Claude→Codex
+- Result: pass, restoring the prior `effect-verified (write class)` state and its retained effect evidence
+- Successor: native Claude route
+
+Decisive sentences: “Any session that ran a probe writes the row it probed, carrying the full five evidence fields.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:65) “Each classification carries five evidence fields, all resolvable from its row: the CLI version observed, the timestamp, the command shape used, the result or failure class, and the recorded successor for that direction.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:33)
+
+Yes, the route may immediately back builder work because it has returned to effect-verified write class. “Only this state backs dispatch.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:23)
+
+The named files do not supply the literal compiled-harness command, so only its required command shape—not an exact command string—can be specified.
+
+### P29 — upgrade cue
+
+The cheap pass restores no state because the newer codex-cli version triggers the upgrade cue. In the same inline act, resolution must run the full write-class effect probe required for builder staffing.
+
+Decisive sentence: “A cheap pass under an upgrade cue restores nothing and is not a state of its own: under an upgrade cue, recovery is the full effect-class probe for the role being staffed, run in the same inline act, and the row is written once with that outcome — effect-verified naming the class it cleared on a pass, unavailable with the observed class on a failure.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:63)
+
+Therefore:
+
+- Full write-class probe passes → write `effect-verified (write class)` with the five fresh evidence fields; builder routing may resume.
+- Full probe fails → write unavailable with the actually observed class.
+- The session stops before that probe → write nothing; the row remains unverified-probeable.
+
+Decisive sentence: “A session that stops short of the effect probe writes nothing: the row keeps reading unverified-probeable, and the next resolution that wants the route picks it up the same way.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:63)
+
+### P30 — durable unavailable is not self-healed
+
+No. Claude→Gemini is unavailable with `permission denied`, which is durable, not transient.
+
+Fixture sentence: “Durable class — no retry-at.” [self-heal-overlay.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/evals/fixtures/self-heal-overlay.md:10)
+
+Classification sentence: “Durable — CLI absent, alias rejected, permission denied, effect denied: broken until a human decision or a setup re-run.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:27)
+
+Resolution passes over that direction, applies its recorded successor—native Claude—and reruns the normal resolution order.
+
+Decisive sentence: “If the selected route becomes unreachable, apply the recorded provider/model successor and rerun the same order.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:48)
+
+Recovery requires a human decision/remediation or a setup rerun; inline self-healing cannot recover it.
+
+### P31 — intentionally disabled is untouched
+
+The self-heal path may not probe Codex→Claude, and no successful probe could promote it.
+
+Decisive sentence: “The self-heal path never probes an intentionally-disabled row, and a probe never promotes one; the disable lifts only when the owner says so.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:66)
+
+Resolution treats the direction as unavailable for selection and follows its recorded successor, native Codex. The disable remains until the owner lifts it through setup’s interview or edits the playbook.
+
+Decisive sentence: “A successful probe never promotes a disabled row; the disable lifts only when the owner says so — in setup's interview or by editing the playbook — never from a probe result.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:24)
+
+### P32 — failure reclassifies by observation
+
+**(a) Same usage-limit class with reset `2026-08-09T09:00Z`:**
+
+Write the whole Claude→Codex row as transient unavailable again:
+
+- State/result: `unavailable (usage limit, retry-at=2026-08-09T09:00Z)`
+- CLI version: `codex-cli 99.1.0`
+- Timestamp: `2026-08-02T10:00Z`
+- Command shape: actual failed cheap invocation through Claude→Codex
+- Successor: native Claude
+- Retain the prior effect-verified write-class state and evidence as the restoration target.
+
+Decisive sentences: “The same transient class refreshes retry-at and stays transient.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:64) “A transient write over an established state retains that previously established state and its evidence beside the row — a restoration target, not a second state.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:26)
+
+The no-write carve-out does not apply because the reset is new. It applies only when the outcome is “the same class, no new reset.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:64)
+
+**(b) Permission/auth error:**
+
+Write the whole row as durable unavailable with the observed fixed class `permission denied`, including the fresh CLI version, timestamp, actual command shape, failure result, and native-Claude successor. It no longer receives transient inline retries.
+
+Decisive sentences: “A durable class converts the row to durable unavailable.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:64) “Durable — CLI absent, alias rejected, permission denied, effect denied: broken until a human decision or a setup re-run.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:27)
+
+Repeated transient failures never escalate the row merely by repetition: “No counters, no auto-escalation — the evidence trail carries observations, not policy state.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:64)
+
+### P33 — mid-run route loss
+
+The session handling worker-death recovery—the loss-recording step that observed the failed Claude→Codex dispatch—writes the row. This write is not reserved for setup.
+
+Decisive sentence: “Recording a mid-run route loss — the loss-recording step the worker-death recovery path names — is this same write, with the observed class and the retry-at when the failure named one.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:65)
+
+It writes one whole row shaped as:
+
+- State: transient unavailable
+- CLI version: `codex-cli 99.1.0`
+- Timestamp: the actual worker-failure time
+- Command shape: the failed bounded write-class builder dispatch through the watched native wrapper
+- Result: `unavailable (usage limit, retry-at=<named UTC reset>)`
+- Successor: native Claude
+- Retained restoration target: the prior `effect-verified (write class)` state and evidence
+
+The timestamp cannot be made more specific because P33 supplies no failure clock.
+
+No setup run is required. “A transient-unavailable route heals as a side effect of normal resolution, never through a human or a setup run.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:60)
+tokens used
+30,720
+### P28 — transient recovery
+
+Because `2026-08-02T10:00Z` is past `retry-at=2026-07-30T09:00Z`, resolution must run the cheap, bounded read-class invocation probe inline before passing over Claude→Codex.
+
+Decisive sentence: “Whichever resolution first wants a transient row at or past its retry-at — or carrying none — runs the cheap invocation probe right then, before passing over the row.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:62)
+
+Since the probe passes and codex-cli remains `99.1.0`, restore `effect-verified at write class`, based on the retained prior write-class evidence.
+
+Decisive sentence: “A passing cheap probe restores the previously established state, effect-verified included, when the CLI version is unchanged and no upgrade cue applies — the limit gated invocation, not effects, so prior effect evidence for the same CLI version still stands.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:63)
+
+The whole row is written with:
+
+- CLI version: `codex-cli 99.1.0`
+- Timestamp: `2026-08-02T10:00Z`
+- Command shape: the actual bounded, side-effect-free cheap invocation through Claude→Codex
+- Result: pass, restoring the prior `effect-verified (write class)` state and its retained effect evidence
+- Successor: native Claude route
+
+Decisive sentences: “Any session that ran a probe writes the row it probed, carrying the full five evidence fields.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:65) “Each classification carries five evidence fields, all resolvable from its row: the CLI version observed, the timestamp, the command shape used, the result or failure class, and the recorded successor for that direction.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:33)
+
+Yes, the route may immediately back builder work because it has returned to effect-verified write class. “Only this state backs dispatch.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:23)
+
+The named files do not supply the literal compiled-harness command, so only its required command shape—not an exact command string—can be specified.
+
+### P29 — upgrade cue
+
+The cheap pass restores no state because the newer codex-cli version triggers the upgrade cue. In the same inline act, resolution must run the full write-class effect probe required for builder staffing.
+
+Decisive sentence: “A cheap pass under an upgrade cue restores nothing and is not a state of its own: under an upgrade cue, recovery is the full effect-class probe for the role being staffed, run in the same inline act, and the row is written once with that outcome — effect-verified naming the class it cleared on a pass, unavailable with the observed class on a failure.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:63)
+
+Therefore:
+
+- Full write-class probe passes → write `effect-verified (write class)` with the five fresh evidence fields; builder routing may resume.
+- Full probe fails → write unavailable with the actually observed class.
+- The session stops before that probe → write nothing; the row remains unverified-probeable.
+
+Decisive sentence: “A session that stops short of the effect probe writes nothing: the row keeps reading unverified-probeable, and the next resolution that wants the route picks it up the same way.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:63)
+
+### P30 — durable unavailable is not self-healed
+
+No. Claude→Gemini is unavailable with `permission denied`, which is durable, not transient.
+
+Fixture sentence: “Durable class — no retry-at.” [self-heal-overlay.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/evals/fixtures/self-heal-overlay.md:10)
+
+Classification sentence: “Durable — CLI absent, alias rejected, permission denied, effect denied: broken until a human decision or a setup re-run.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:27)
+
+Resolution passes over that direction, applies its recorded successor—native Claude—and reruns the normal resolution order.
+
+Decisive sentence: “If the selected route becomes unreachable, apply the recorded provider/model successor and rerun the same order.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:48)
+
+Recovery requires a human decision/remediation or a setup rerun; inline self-healing cannot recover it.
+
+### P31 — intentionally disabled is untouched
+
+The self-heal path may not probe Codex→Claude, and no successful probe could promote it.
+
+Decisive sentence: “The self-heal path never probes an intentionally-disabled row, and a probe never promotes one; the disable lifts only when the owner says so.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:66)
+
+Resolution treats the direction as unavailable for selection and follows its recorded successor, native Codex. The disable remains until the owner lifts it through setup’s interview or edits the playbook.
+
+Decisive sentence: “A successful probe never promotes a disabled row; the disable lifts only when the owner says so — in setup's interview or by editing the playbook — never from a probe result.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:24)
+
+### P32 — failure reclassifies by observation
+
+**(a) Same usage-limit class with reset `2026-08-09T09:00Z`:**
+
+Write the whole Claude→Codex row as transient unavailable again:
+
+- State/result: `unavailable (usage limit, retry-at=2026-08-09T09:00Z)`
+- CLI version: `codex-cli 99.1.0`
+- Timestamp: `2026-08-02T10:00Z`
+- Command shape: actual failed cheap invocation through Claude→Codex
+- Successor: native Claude
+- Retain the prior effect-verified write-class state and evidence as the restoration target.
+
+Decisive sentences: “The same transient class refreshes retry-at and stays transient.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:64) “A transient write over an established state retains that previously established state and its evidence beside the row — a restoration target, not a second state.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:26)
+
+The no-write carve-out does not apply because the reset is new. It applies only when the outcome is “the same class, no new reset.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:64)
+
+**(b) Permission/auth error:**
+
+Write the whole row as durable unavailable with the observed fixed class `permission denied`, including the fresh CLI version, timestamp, actual command shape, failure result, and native-Claude successor. It no longer receives transient inline retries.
+
+Decisive sentences: “A durable class converts the row to durable unavailable.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:64) “Durable — CLI absent, alias rejected, permission denied, effect denied: broken until a human decision or a setup re-run.” [machine-audit.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/machine-audit.md:27)
+
+Repeated transient failures never escalate the row merely by repetition: “No counters, no auto-escalation — the evidence trail carries observations, not policy state.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:64)
+
+### P33 — mid-run route loss
+
+The session handling worker-death recovery—the loss-recording step that observed the failed Claude→Codex dispatch—writes the row. This write is not reserved for setup.
+
+Decisive sentence: “Recording a mid-run route loss — the loss-recording step the worker-death recovery path names — is this same write, with the observed class and the retry-at when the failure named one.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:65)
+
+It writes one whole row shaped as:
+
+- State: transient unavailable
+- CLI version: `codex-cli 99.1.0`
+- Timestamp: the actual worker-failure time
+- Command shape: the failed bounded write-class builder dispatch through the watched native wrapper
+- Result: `unavailable (usage limit, retry-at=<named UTC reset>)`
+- Successor: native Claude
+- Retained restoration target: the prior `effect-verified (write class)` state and evidence
+
+The timestamp cannot be made more specific because P33 supplies no failure clock.
+
+No setup run is required. “A transient-unavailable route heals as a side effect of normal resolution, never through a human or a setup run.” [rankings-and-routing.md](/Users/asher/Projects/asher-skills-worktrees/166-staffing-transient-self-heal/skills/system/staffing/reference/rankings-and-routing.md:60)
