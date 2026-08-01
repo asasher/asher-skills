@@ -1,6 +1,6 @@
 # To Subagent
 
-Dispatch adapter for non-interactive work: staffs the subagent from the roster (degrading to the parent's model when no roster is installed), requires a self-contained prompt whose final message is the deliverable, uses the workflow-supplied directory exactly, and wires a wake path so the dispatcher learns of completion without polling. Direct invocation creates a worktree only on an explicit isolation request; composing workflows retain worktree policy and cleanup ownership. One call dispatches one subagent; how many a piece of work needs is the caller's decision.
+Dispatch adapter for non-interactive work: staffs the subagent from the roster (degrading to the parent's model when no roster is installed), requires a self-contained prompt whose final message is the deliverable, uses the workflow-supplied directory exactly, and wires an edge-local wake path — a child reports to its direct parent, never an ancestor, with the return path verified at dispatch and background waits backed by a parent-owned child ledger plus a bounded watch on the durable surface. Direct invocation creates a worktree only on an explicit isolation request; composing workflows retain worktree policy and cleanup ownership. One call dispatches one subagent; how many a piece of work needs is the caller's decision.
 
 ## When to use
 

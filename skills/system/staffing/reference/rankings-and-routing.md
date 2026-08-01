@@ -35,7 +35,7 @@ A pin is an explicit routing decision resolved before general ranking:
 - a **task pin** binds a task type such as mechanical/bulk work to a worker route;
 - a **provider pin** binds a need to a named provider route and eligible executor.
 
-A matching pin short-circuits the general choice, but it does not manufacture reachability: the named route must still be effect-verified. On route loss, follow its recorded provider/model successor and resolve again.
+A matching pin short-circuits the general choice, but it does not manufacture reachability: the named route must still be effect-verified. On route loss, follow its recorded provider/model successor and resolve again (a transiently-down pinned route at or past its retry-at gets the inline probe of § Self-heal at the point of use before its successor is taken).
 
 ## Resolution order
 
@@ -45,7 +45,7 @@ A matching pin short-circuits the general choice, but it does not manufacture re
 2. **Required effect?** Resolve need → effect-verified primary provider → recorded fallback. If neither works, report a hard capability gap. Filter to reachable executors eligible to operate the selected provider.
 3. **Taste gate?** For user-facing UI, copy, or API design, remove every model below taste 7. This is a hard gate, not a preference.
 4. **Rank survivors** by `intelligence > taste > cost`: intelligence descending, then taste descending, then cheaper cost. Ranking never resurrects a route removed by provider reachability or taste.
-5. **Fallback.** If the selected route becomes unreachable, apply the recorded provider/model successor and rerun the same order. If no model remains reachable, use the current model in a subagent and report the staffing gap; never skip the stage.
+5. **Fallback.** If the selected route becomes unreachable, apply the recorded provider/model successor and rerun the same order — a transient-unavailable route at or past its retry-at is probed per § Self-heal at the point of use before being passed over. If no model remains reachable, use the current model in a subagent and report the staffing gap; never skip the stage.
 
 ### Browser example (illustrative — one machine's audited bindings, not shipped policy)
 
@@ -54,6 +54,16 @@ Resolve `browser-use` to its named primary provider — in this example scripted
 ### Mechanical example
 
 A matching mechanical/bulk task pin selects its recorded worker route at step 1. This is a pin, not a ranking derivation.
+
+## Self-heal at the point of use
+
+A transient-unavailable route heals as a side effect of normal resolution, never through a human or a setup run. The class split and the retry-at token are the machine audit's § Route classification; this section is what a resolver does with them. The cheap invocation probe is the read-class probe the compiled harness mechanics already define — a bounded, side-effect-free real invocation down the direction's own route; a text-only transcript check is not it, and the full effect class is not its job.
+
+- **Probe inline, at the point of use.** Whichever resolution first wants a transient row at or past its retry-at — or carrying none — runs the cheap invocation probe right then, before passing over the row: the staffing route command, a dispatcher preflight, a dispatch adapter's staffing step, whichever got there first. It writes the row with the outcome and proceeds on it. Healing never waits for a particular preflight, a human, or a setup run.
+- **A pass restores the prior state.** A passing cheap probe restores the previously established state, effect-verified included, when the CLI version is unchanged and no upgrade cue applies — the limit gated invocation, not effects, so prior effect evidence for the same CLI version still stands. The upgrade cue is orthogonal and always wins: after a CLI upgrade, recovery requires the full effect class before the route backs builder work. A cheap pass under an upgrade cue restores nothing and is not a state of its own: under an upgrade cue, recovery is the full effect-class probe for the role being staffed, run in the same inline act, and the row is written once with that outcome — effect-verified naming the class it cleared on a pass, unavailable with the observed class on a failure. A session that stops short of the effect probe writes nothing: the row keeps reading unverified-probeable, and the next resolution that wants the route picks it up the same way.
+- **A failure reclassifies by observation.** A failed re-probe writes the class actually observed: the same transient class refreshes retry-at and stays transient; a durable class converts the row to durable unavailable. No counters, no auto-escalation — the evidence trail carries observations, not policy state. One carve-out from "writes the row with the outcome": a re-probe whose outcome is exactly what the row records — the same class, no new reset — follows the establishing-observation rule and writes nothing.
+- **Whoever probed writes.** Any session that ran a probe writes the row it probed, carrying the full five evidence fields; setup remains the whole-record regenerator. Recording a mid-run route loss — the loss-recording step the worker-death recovery path names — is this same write, with the observed class and the retry-at when the failure named one. Between same-machine sessions the overlay is last-writer-wins, with no lock: each row write is a whole row carrying its own observation evidence, so whichever write survives is something a session actually observed — acceptable for a machine-local evidence record. The fail-closed rule holds for row writes as for whole-record writes: a write that cannot be read back changes nothing.
+- **The disabled boundary.** The self-heal path never probes an intentionally-disabled row, and a probe never promotes one; the disable lifts only when the owner says so.
 
 ## Effort
 
