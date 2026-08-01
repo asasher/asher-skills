@@ -35,7 +35,7 @@ A pass that has returned is complete: act on its report. No confirmation follows
 
 ## Bounds
 
-An iteration cap (default: three full review passes) and a timeout (named by whoever dispatched the review, defaulting to one hour), both enforced by the driver on the passes it dispatches. On either bound, stop and report the open findings as unresolved — a stuck convergence is a reported outcome, not an endless loop.
+An iteration cap (default: three full review passes) and a timeout (named by whoever dispatched the review, defaulting to one hour), both enforced by the driver on the passes it dispatches. On the timeout, stop and report the open findings as unresolved; at the cap, do the same unless the § Cap exhaustion ruling below authorizes a bounded extension — either way a stuck convergence is a reported outcome, not an endless loop.
 
 The driver names each pass's own bound at its dispatch, and treats a pass that outlives that bound as one that died. A pass that dies without returning is re-dispatched from the change request's persisted state (conduct § Shared rules), picking up at the next expected action.
 
