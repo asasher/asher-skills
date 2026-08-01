@@ -14,6 +14,8 @@ claude -p --model <probed-alias> '<self-contained prompt>' </dev/null
 
 with the permission envelope the playbook's recorded machine policy grants — in the command itself, never in the prompt text — and it **never adds `--bare`**.
 
+The invocation shape is load-bearing, not style. Launch the bounded process in a **foreground** shell — never from a background shell: backgrounded, the exec CLI hangs waiting to read stdin and dies silently with its dispatcher, leaving empty teed output while unrelated stderr noise masks the real cause. Redirect stdin from `/dev/null` or close it outright, and set an explicit timeout generously above the shell tool's default — the default is shorter than a typical bounded worker's runtime, so without the override even a healthy worker is killed mid-task.
+
 `--bare` is not a harmless minimal mode. It forces Anthropic auth to `ANTHROPIC_API_KEY` or `apiKeyHelper` and skips keychain reads, so the child bypasses the machine's OAuth subscription and bills as API credits — paying twice for capacity the subscription already covers. It also skips `CLAUDE.md` auto-discovery, so the child loads none of the target repo's agent instructions, including the staffing playbook pointer: a `--bare` worker resolves unstaffed. Either reason alone is disqualifying.
 
 **A roster name is not a CLI alias.** Pass only a name the alias probe accepted; the playbook records the mapping, and where the probes support a rule ("this CLI rejects versioned names, accepts bare names") apply the rule rather than a memorized pair. Re-probe after any CLI upgrade — an alias set is a property of the installed version, not of the roster.
