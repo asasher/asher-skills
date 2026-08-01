@@ -44,7 +44,9 @@ Report the result in this session's own words at the altitude the next decision 
 
 Before resuming or replacing a dead child, audit what actually happened: the worktree's status, the branch tip, any partial commits — reality outranks the last narrative. Committed work is adopted on its branch, not redone; only the genuinely unfinished part is re-dispatched.
 
+A worker lost to its harness — a session or usage limit, a route that stops answering mid-unit — is a route loss, not a defect in the unit of work. The same audit comes first; then the genuinely unfinished remainder is restaffed onto the roster's succession fallback — resolved via the `staffing` sibling where installed — never the whole unit re-run. Report the route loss so the roster's reachability row for that route gets re-examined; absent the `staffing` sibling, the loss rides the relay as a reported outcome for the owner to act on.
+
 ## Dependency surface
 
 - **Sibling (required, by name):** `worktree` — explicit direct isolation; prepared workflow directories are accepted as supplied.
-- **Sibling (optional, by name):** `staffing` — model, effort, and wake-path resolution.
+- **Sibling (optional, by name):** `staffing` — model, effort, and wake-path resolution; succession and route-loss records on worker death.
