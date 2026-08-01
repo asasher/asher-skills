@@ -38,3 +38,13 @@ A pass that has returned is complete: act on its report. No confirmation follows
 An iteration cap (default: three full review passes) and a timeout (named by whoever dispatched the review, defaulting to one hour), both enforced by the driver on the passes it dispatches. On either bound, stop and report the open findings as unresolved — a stuck convergence is a reported outcome, not an endless loop.
 
 The driver names each pass's own bound at its dispatch, and treats a pass that outlives that bound as one that died. A pass that dies without returning is re-dispatched from the change request's persisted state (conduct § Shared rules), picking up at the next expected action.
+
+## Cap exhaustion
+
+Cap exhaustion on a substantive change is the bound doing its job: it forces an explicit driver ruling instead of an unbounded loop — a reported decision point, not a fault. Exhaustion never lowers the LGTM bar (conduct owns that rule); it puts one of three rulings in front of the driver:
+
+- **Extend** when convergence is visibly progressing — each pass resolves the prior findings and the new ones are fewer or narrower. An extension is a named number of additional passes, recorded in a state comment with its rationale; each further extension takes the same fresh ruling — never an open-ended "keep going".
+- **Stop with findings open** when convergence is not visible — findings holding steady, recurring, or widening — or when the residue needs rework beyond review-scale fixes, such as a change that wants splitting. Report the open findings as unresolved per the bound-stop rule above; the caller owns what happens next.
+- **Surface a product question and stop** when a remaining finding hinges on what the behavior should be — more passes cannot answer it. Route it to a human ruling per conduct's product-semantics ruling.
+
+Whoever dispatches the review may size the cap to the change: the default suits a contained change; a large or multi-surface change warrants naming a larger cap at dispatch rather than planning on extensions.
