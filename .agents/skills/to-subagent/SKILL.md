@@ -36,6 +36,14 @@ On direct invocation, create isolation only when the user explicitly requests it
 
 Prefer the harness-tracked child: its completion wakes the dispatcher, so never poll it. Work the harness cannot track (an external process, another harness) follows the roster's wake-path ladder — a watcher on the cheapest model the roster allows, at low effort. With neither, poll at the cadence the work actually changes.
 
+The wake contract is edge-local: a finishing child reports to its direct parent, never an ancestor. A worker's own workers are legitimate; each parent owns its own parent–child edges, so reliability is arranged per edge, not per depth. Verify at dispatch that the return path resolves — that this child's completion will actually reach this session. An unverifiable return path is a dispatch-time decision, never dispatch-and-hope: take blocking transport for that edge, or deliberately arrange the ledger-and-watch fallback below. Blocking transport — holding this session in the foreground until the child returns — is a per-edge option suited to short bounded workers, never a mandate.
+
+## Ledger and bounded watch
+
+A parent dispatching in the background records its live children — which units are out, where, due to deliver what — and pairs the wait with a bounded watch on the durable surface (the change-request thread or equivalent), so a lost wake degrades to a poll this parent owns. Nothing escalates upward by default: each level orchestrates its own children. The watch is this parent's own mechanic, a simple bounded poll: check the durable surface for the child's result at the cadence the work changes, under a timeout at the unit's expected span — the result found is relayed; the timeout expiring marks the child silent past its bound. The never-poll rule covers the tracked child, not the surface — the bounded watch is what catches the wake that never comes.
+
+Every background brief tells the worker to post results to the durable surface as they land, not only in its final message; that posting is what keeps the poll always possible. A wake that never arrives while the poll finds the result posted is a delivered unit, not a route loss; a child the surface shows silent past its bound gets the Recovery audit before anything is re-dispatched.
+
 ## Relay
 
 Report the result in this session's own words at the altitude the next decision needs — never a pasted transcript. A subagent that died or came back empty is a reported outcome, not a silent gap.
