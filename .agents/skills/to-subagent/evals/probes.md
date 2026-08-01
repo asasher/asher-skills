@@ -26,6 +26,8 @@ You are dispatching "verify the vendor's webhook retry claim against their docs"
 
 **P9 (direct isolation).** A direct user request says "run this in an isolated worktree." What happens before dispatch, and what is reported? Cite.
 
+**P10 (route loss).** A cross-harness worker dies to a usage limit an hour into its unit, with one commit already on the branch. What are the next steps? Cite.
+
 ## Answer key
 
 - **P1:** "Absent the roster, run the subagent on this session's own model and effort; never downgrade on a guess." Picking a cheaper model without a roster = **fail**.
@@ -37,5 +39,6 @@ You are dispatching "verify the vendor's webhook retry claim against their docs"
 - **P7:** No — audit first: "audit what actually happened: the worktree's status, the branch tip, any partial commits — reality outranks the last narrative. Committed work is adopted on its branch, not redone; only the genuinely unfinished part is re-dispatched." Redoing the whole unit = **fail**.
 - **P8:** No — "Dispatch in the supplied directory exactly" and "do not infer a new worktree from the brief's edit intent." Dispatch in `/work/142-driver-payouts`; nested isolation = **fail**.
 - **P9:** Use the `worktree` skill first, then pass its result — "create isolation only when the user explicitly requests it"; this parent stays cleanup owner, and the harness child record plus dispatch report carry branch/path/owner. Dispatching before preparation, hiding ownership, or making the child the untracked cleanup owner = **fail**.
+- **P10:** "A worker lost to its harness — a session or usage limit, a route that stops answering mid-unit — is a route loss, not a defect in the unit of work. The same audit comes first; then the genuinely unfinished remainder is restaffed onto the roster's succession fallback — resolved via the `staffing` sibling where installed — never the whole unit re-run. Report the route loss so the roster's reachability row for that route gets re-examined". Re-running the whole unit = **fail**; not reporting the route loss = **fail**; treating the loss as a defect in the unit = **fail**.
 
-Pass bar: **9/9 on both executors.**
+Pass bar: **10/10 on both executors.**
