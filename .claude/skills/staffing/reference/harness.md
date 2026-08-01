@@ -12,6 +12,8 @@ Claude→Codex work runs only inside a watched Claude wrapper named for the exte
 codex exec --cd <worktree> --sandbox <envelope> '<self-contained prompt>' </dev/null
 ```
 
+The invocation shape is load-bearing, not style. Launch the bounded process in a **foreground** shell — never from a background shell: backgrounded, the exec CLI hangs waiting to read stdin and dies silently with its dispatcher, leaving empty teed output while unrelated stderr noise masks the real cause. Redirect stdin from `/dev/null` or close it outright, and set an explicit timeout generously above the shell tool's default — the default is shorter than a typical bounded worker's runtime, so without the override even a healthy worker is killed mid-task.
+
 The permission envelope comes from the playbook's recorded machine policy — the dispatch command grants it, never the prompt text. **Never use `claude -p` from Claude Code**: the native Agent tool is the Claude-side route, and `claude -p` is the shape a _Codex_ parent uses to reach Claude.
 
 A roster name is not a CLI alias. Where a model name crosses into an executable argument, use the mapping the playbook records from its alias probe; a versioned roster name written straight into a command produces a route that resolves cleanly and fails at the moment of use.
