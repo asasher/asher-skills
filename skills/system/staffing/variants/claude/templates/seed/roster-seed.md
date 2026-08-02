@@ -13,7 +13,7 @@ Seed defaults — setup verifies each row against this machine (unreachable rows
 | gpt-5.6-sol   |    4 |            9 |     5 | high   |
 | gpt-5.6-terra |    6 |            5 |     3 | xhigh  |
 | sonnet-5      |    5 |            5 |     5 | high   |
-| opus-5        |    3 |            8 |     8 | high   |
+| opus-5        |    3 |            7 |     7 | high   |
 | fable-5       |    1 |            9 |     9 | high   |
 
 Coordinator-eligible: fable-5, opus-5, sonnet-5 through native Agent/Workflow children. Floor: sonnet-5 Claude-side / gpt-5.6-terra Codex-side.
