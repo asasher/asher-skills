@@ -36,7 +36,7 @@ A Codex or Claude provider running inside T3 always creates a T3 thread. Never r
 
 ## T3 Code
 
-Ground truth: the installed T3 Code. The helper discovers the local runtime at run time and capability-tests the command shape; no version is assumed.
+Ground truth: the installed T3 Code. The helper discovers the local runtime at run time; the running app's schema is the authority on command shape — a command the app rejects surfaces as a capability-drift report naming the values sent, never a silent retry or fallback.
 
 Run the bundled helper with the resolved provider, current model, and prepared directory:
 
@@ -45,9 +45,11 @@ Run the bundled helper with the resolved provider, current model, and prepared d
       --provider <codex-or-claude-instance> --model <model> --effort <effort> \
       --runtime-mode <mode>
 
-The helper discovers the local runtime and installed server CLI, requires a loopback HTTP origin, issues a five-minute bearer session, resolves the active project by its registered root, sends `thread.create` then `thread.turn.start`, and revokes the session on every exit path. It registers a supplied external worktree path and branch; T3 supervises the conversation but does not create or clean the worktree. If turn start fails after creation, the helper deletes the partial thread before revoking its credential. Creation omits the automatic title seed so the supplied name remains stable.
+The helper discovers the local runtime and installed server CLI, requires a loopback HTTP origin, issues a five-minute bearer session, resolves the active project by its registered root from the lightweight shell snapshot, sends `thread.create` then `thread.turn.start`, and revokes the session on every exit path. It registers a supplied external worktree path and branch; T3 supervises the conversation but does not create or clean the worktree. Creation omits the automatic title seed so the supplied name remains stable.
 
-Tell the user to open the named thread in the T3 project sidebar. A missing local project, unsupported command shape, authentication failure, or non-local origin is capability drift: report it and stop before falling through to the provider harness. Remote servers and custom T3 homes are unsupported.
+`--runtime-mode` takes T3's own runtime modes — currently `approval-required`, `auto-accept-edits`, `auto`, or `full-access` — never a provider sandbox name like `workspace-write`; the app refuses anything outside its schema. A payload the app rejects at schema decode comes back as HTTP 400 with an empty body, and the helper degrades that into a command-shape-drift report: which command was refused, the values it sent, the enum sets the last probed app accepted, and where to re-probe. A rejected create changed nothing, so the helper skips the compensating delete instead of manufacturing a second failure. If turn start fails after creation, the helper deletes the partial thread before revoking its credential; when that delete itself fails, the error names the orphaned thread id and title and tells the user to discard it from the T3 sidebar.
+
+Tell the user to open the named thread in the T3 project sidebar. A missing local project, a command the app's schema refuses, authentication failure, or non-local origin is capability drift: report it and stop before falling through to the provider harness. Remote servers and custom T3 homes are unsupported.
 
 ## Claude Code
 

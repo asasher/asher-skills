@@ -21,6 +21,23 @@ class T3ThreadError(RuntimeError):
     """A user-actionable T3 dispatch failure."""
 
 
+class T3RequestError(T3ThreadError):
+    """An HTTP request the running T3 app refused or failed."""
+
+    def __init__(self, message: str, status: int | None = None, body: str = "") -> None:
+        super().__init__(message)
+        self.status = status
+        self.body = body
+
+
+# Enum values observed in the running app's ThreadCreateCommand schema (last
+# probed: T3 Code (Alpha) 0.0.31, app.asar apps/server/dist/bin.mjs). They are
+# never enforced locally — the running app stays the authority — and exist only
+# to make a schema rejection actionable.
+KNOWN_RUNTIME_MODES = ("approval-required", "auto-accept-edits", "auto", "full-access")
+KNOWN_INTERACTION_MODES = ("default", "plan")
+
+
 class RefuseRedirects(urllib.request.HTTPRedirectHandler):
     """Keep short-lived bearer credentials on the validated origin."""
 
@@ -213,13 +230,18 @@ def http_json(
     )
     try:
         opener = urllib.request.build_opener(RefuseRedirects)
-        with opener.open(request, timeout=10) as response:
+        with opener.open(request, timeout=30) as response:
             value = json.load(response)
     except urllib.error.HTTPError as error:
         if 300 <= error.code < 400:
-            fail(f"T3 refused an HTTP redirect at {path}")
+            raise T3RequestError(f"T3 refused an HTTP redirect at {path}", status=error.code)
         body = error.read().decode(errors="replace").strip()
-        fail(f"{payload.get('type') if payload else path} failed with HTTP {error.code}: {body}")
+        label = payload.get("type") if payload else path
+        raise T3RequestError(
+            f"{label} failed with HTTP {error.code}: {body or 'empty body'}",
+            status=error.code,
+            body=body,
+        )
     except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as error:
         fail(f"T3 request failed at {path}: {error}")
     if not isinstance(value, dict):
@@ -230,7 +252,7 @@ def http_json(
 def resolve_project(snapshot: dict[str, object], project_directory: Path) -> str:
     projects = snapshot.get("projects")
     if not isinstance(projects, list):
-        fail("T3 orchestration snapshot has no projects list")
+        fail("T3 orchestration shell snapshot has no projects list")
     target = project_directory.resolve()
     matches = [
         project
@@ -255,20 +277,59 @@ def command_sequence(response: dict[str, object], command_type: str) -> int:
     return sequence
 
 
+def shape_drift_message(payload: dict[str, object]) -> str:
+    command_type = payload.get("type")
+    sent = {
+        key: value
+        for key, value in payload.items()
+        if key not in {"type", "commandId", "message"}
+    }
+    return (
+        f"T3 rejected the {command_type} command at schema decode (HTTP 400, empty body): "
+        "the command shape this helper sent has drifted from the running T3 Code app. "
+        "The command was refused before it changed anything, so nothing was created and no cleanup is needed. "
+        f"Values sent: {json.dumps(sent, sort_keys=True)}. "
+        f"The last probed app (T3 Code (Alpha) 0.0.31) accepts runtimeMode in {{{', '.join(KNOWN_RUNTIME_MODES)}}} "
+        f"and interactionMode in {{{', '.join(KNOWN_INTERACTION_MODES)}}}, and requires every string field to be "
+        "non-empty after trimming. Re-probe the running app's command schema "
+        "(app.asar: apps/server/dist/bin.mjs, ThreadCreateCommand) and update this helper."
+    )
+
+
+def rejected_without_effect(error: T3ThreadError) -> bool:
+    """True when T3 refused the command outright, so no state can have changed."""
+    return (
+        isinstance(error, T3RequestError)
+        and error.status is not None
+        and 400 <= error.status < 500
+    )
+
+
+def dispatch_command(origin: str, token: str, payload: dict[str, object]) -> int:
+    command_type = str(payload.get("type"))
+    try:
+        response = http_json(origin, token, "POST", "/api/orchestration/dispatch", payload)
+    except T3RequestError as error:
+        if error.status == 400 and not error.body:
+            raise T3RequestError(shape_drift_message(payload), status=400)
+        raise
+    return command_sequence(response, command_type)
+
+
 def delete_thread(origin: str, token: str, thread_id: str) -> int:
     payload: dict[str, object] = {
         "type": "thread.delete",
         "commandId": str(uuid.uuid4()),
         "threadId": thread_id,
     }
-    response = http_json(
-        origin,
-        token,
-        "POST",
-        "/api/orchestration/dispatch",
-        payload,
+    return dispatch_command(origin, token, payload)
+
+
+def orphaned_thread_notice(thread_id: str, name: str, certainty: str) -> str:
+    return (
+        f"thread {thread_id} ({name!r}) {certainty} in the T3 sidebar without a running turn — "
+        "if it appears there, discard it by deleting the thread from the sidebar"
     )
-    return command_sequence(response, "thread.delete")
 
 
 def model_selection(args: argparse.Namespace) -> dict[str, object]:
@@ -288,7 +349,26 @@ def infer_worktree_path(project_directory: Path, directory: Path) -> str | None:
     return None if project == working else str(working)
 
 
+def validate_dispatch_arguments(args: argparse.Namespace) -> None:
+    """Catch blank strings locally so they are not misreported as shape drift."""
+    values = [
+        ("--name", args.name),
+        ("--branch", args.branch),
+        ("--provider", args.provider),
+        ("--model", args.model),
+        ("--effort", args.effort),
+        ("--runtime-mode", args.runtime_mode),
+        ("--interaction-mode", args.interaction_mode),
+    ]
+    if args.service_tier is not None:
+        values.append(("--service-tier", args.service_tier))
+    for label, value in values:
+        if not value.strip():
+            fail(f"{label} must not be blank: T3 rejects empty strings at schema decode")
+
+
 def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str, object]:
+    validate_dispatch_arguments(args)
     project_directory = Path(args.project_directory).expanduser().resolve()
     directory = Path(args.directory).expanduser().resolve()
     if not project_directory.is_dir():
@@ -296,7 +376,7 @@ def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str
     if not directory.is_dir():
         fail(f"thread directory does not exist: {directory}")
 
-    snapshot = http_json(origin, token, "GET", "/api/orchestration/snapshot")
+    snapshot = http_json(origin, token, "GET", "/api/orchestration/shell")
     project_id = resolve_project(snapshot, project_directory)
     thread_id = str(uuid.uuid4())
     created_at = utc_now()
@@ -317,19 +397,19 @@ def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str
         "createdAt": created_at,
     }
     try:
-        create_response = http_json(
-            origin,
-            token,
-            "POST",
-            "/api/orchestration/dispatch",
-            create_payload,
-        )
-        create_sequence = command_sequence(create_response, "thread.create")
+        create_sequence = dispatch_command(origin, token, create_payload)
     except T3ThreadError as create_error:
+        if rejected_without_effect(create_error):
+            # T3 refused the command before applying it: no thread exists, and a
+            # compensating delete of a never-created thread can only fail.
+            raise
         try:
             delete_thread(origin, token, thread_id)
         except T3ThreadError as delete_error:
-            fail(f"{create_error}; ambiguous thread {thread_id} cleanup failed: {delete_error}")
+            fail(
+                f"{create_error}; the compensating thread.delete also failed ({delete_error}); "
+                f"{orphaned_thread_notice(thread_id, args.name, 'may have been left')}"
+            )
         raise create_error
 
     turn_payload: dict[str, object] = {
@@ -348,19 +428,15 @@ def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str
         "createdAt": created_at,
     }
     try:
-        turn_response = http_json(
-            origin,
-            token,
-            "POST",
-            "/api/orchestration/dispatch",
-            turn_payload,
-        )
-        turn_sequence = command_sequence(turn_response, "thread.turn.start")
+        turn_sequence = dispatch_command(origin, token, turn_payload)
     except T3ThreadError as turn_error:
         try:
             delete_thread(origin, token, thread_id)
         except T3ThreadError as delete_error:
-            fail(f"{turn_error}; partial thread {thread_id} cleanup failed: {delete_error}")
+            fail(
+                f"{turn_error}; the partial thread could not be deleted ({delete_error}); "
+                f"{orphaned_thread_notice(thread_id, args.name, 'was created and remains')}"
+            )
         raise turn_error
     return {
         "branch": args.branch,
