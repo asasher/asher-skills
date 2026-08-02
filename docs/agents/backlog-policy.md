@@ -67,6 +67,13 @@ Every `ready-for-agent` issue carries a stable `Dispatch:` block in its body or 
 - Adjust this rule if this team wants more or less agent autonomy (e.g. let the agent auto-bless low-risk bugs).
 - **Work on the loop is dispatchable when it rides the branch → merge → reconcile path.** The mounts are decoupled from the sources, so a build session reads stable installed copies: a worktree edit to skill sources, templates, or playbooks changes nothing a running session resolves through until the change merges and the reconcile step is run deliberately in the main checkout. Such issues may be `ready-for-agent`. What remains `ready-for-human` is work that **mutates a live resolution surface in place**, outside that path: the main checkout's playbooks during an active run, the installed mounts themselves, machine-global instruction files, or the reconcile step itself. The test: "does executing this issue rewrite, in place, a surface a concurrently running session resolves through?"
 
+## Build concurrency
+
+> Read by `backlog build` before dispatch — the owner's burn bound on unattended fan-out. Policy data, set here by choice, never derived from the environment audit.
+
+- **Max concurrent builds**: **uncapped** — this repo's standing choice. Builds here are files-plus-stdlib work with no shared runtime (`environment.md` § Parallelism verdict holds the parallel-safe constraint), sustained burn has not bitten this repo, and the queue-on-refused-spawn rule absorbs whatever the harness declines to run at once. The knob exists so a burn bound is one playbook edit away.
+- The unit is the **build** — one ticket's whole pipeline in its one worktree — never the subagents a build fans out. Under a numeric cap, a ready ticket beyond it waits unclaimed — no `building` label, no claim comment, no worktree — for a slot freed by a completed or aborted build; a **per-run override** may narrow a single run below the recorded value, never widen it.
+
 ## Building hygiene
 
 - Concurrent runners are possible (two machines, two humans, one tracker); `building` is the claim marker, applied optimistically — the build dispatcher accepts the rare duplicate pickup in the window between queue build and marking rather than carrying a lock. It re-reads each issue immediately before marking it and skips any that changed.

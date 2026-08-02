@@ -35,7 +35,7 @@
 
 ## Version control — working copies and publication
 
-- Binding: **git** (GitHub remote `origin`). Parallel-safe verdict with a standing **parallel, uncapped** dispatch preference (`environment.md` § Parallelism verdict) — every ready, unblocked ticket fans out into its own worktree by default; a per-run override narrows to a width or to sequential.
+- Binding: **git** (GitHub remote `origin`). Parallel-safe verdict with a standing **parallel** dispatch preference (`environment.md` § Parallelism verdict), width bounded by the build-concurrency cap in `backlog-policy.md` § Build concurrency (uncapped here) — every ready, unblocked ticket fans out into its own worktree by default; a per-run override narrows to a width or to sequential.
   - Prepare an isolated working copy off the base branch: the project-owned `worktree` skill, rooted at `../asher-skills-worktrees`, with `origin/main` as the base. It creates the branch and working copy in one guarded operation, inspects git's registration before reuse, and never switches the primary checkout.
   - Enumerate live working copies: `git worktree list` plus branch/PR state — never a directory scan (`environment.md` § Worktree isolation).
   - Name a line of work: a git branch, `<issue-number>-<slug>` per `environment.md` § Branching.

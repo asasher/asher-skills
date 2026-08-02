@@ -86,6 +86,7 @@
 > Read by `backlog build` before dispatch.
 
 - Verdict: _<parallel-safe | serialize-verification | sequential>_ — derived from the shared-singleton list above.
+- Width is not this verdict's to set: the owner's cap on concurrent builds is policy data in `backlog-policy.md` § Build concurrency, and the effective dispatch width is the tighter of that cap and whatever this verdict forces.
 - If serialized, why: _<either "user preference — sequential by choice", or name the un-isolated rows that force it>_.
 - Serialized exception lane: _<ticket classes that must serialize even when parallel-safe; or "none">_.
 - **Lane mechanics** — under `serialize-verification`, parallel builds share the singleton through a lock: _<path, e.g. `.backlog-lane.lock` beside the primary checkout>_. Acquire by atomic directory create, writing ticket id and timestamp inside; hold only while the singleton is in use; release by removing the lock **after cleanup proof** — the singleton's ports free, env files restored, processes gone. Contenders wait on the lock, at the cadence the singleton actually turns over. A lock older than _<stale horizon, e.g. 30 min>_ with no activity on its holder's branch may be broken — the taker notes the takeover on the holder's ticket through the platform's comment verb; on a binding that serializes cross-ticket writes (the local binding), the note goes through the build dispatcher.
