@@ -297,14 +297,26 @@ def shape_drift_message(payload: dict[str, object]) -> str:
         else "The command was refused before it was applied and changed nothing on its own."
     )
     schema_name = DRIFT_SCHEMA_NAMES.get(command_type, "the command schemas")
+    # The enum advice only helps for commands that actually send those fields
+    # (thread.create, thread.turn.start); repeating it for e.g. thread.delete
+    # would steer the operator at fields the command never carried.
+    if "runtimeMode" in sent or "interactionMode" in sent:
+        known_shape = (
+            f"The last probed app (T3 Code (Alpha) 0.0.31) accepts runtimeMode in {{{', '.join(KNOWN_RUNTIME_MODES)}}} "
+            f"and interactionMode in {{{', '.join(KNOWN_INTERACTION_MODES)}}}, and requires every string field to be "
+            "non-empty after trimming."
+        )
+    else:
+        known_shape = (
+            "The last probed app (T3 Code (Alpha) 0.0.31) requires every string field to be "
+            "non-empty after trimming."
+        )
     return (
         f"T3 rejected the {command_type} command at schema decode (HTTP 400, empty body): "
         "the command shape this helper sent has drifted from the running T3 Code app. "
         f"{consequence} "
         f"Values sent: {json.dumps(sent, sort_keys=True)}. "
-        f"The last probed app (T3 Code (Alpha) 0.0.31) accepts runtimeMode in {{{', '.join(KNOWN_RUNTIME_MODES)}}} "
-        f"and interactionMode in {{{', '.join(KNOWN_INTERACTION_MODES)}}}, and requires every string field to be "
-        "non-empty after trimming. Re-probe the running app's command schema "
+        f"{known_shape} Re-probe the running app's command schema "
         f"(app.asar: apps/server/dist/bin.mjs, {schema_name}) and update this helper."
     )
 
@@ -338,9 +350,15 @@ def delete_thread(origin: str, token: str, thread_id: str) -> int:
     return dispatch_command(origin, token, payload)
 
 
-def orphaned_thread_notice(thread_id: str, name: str, certainty: str) -> str:
+def orphaned_thread_notice(thread_id: str, name: str, *, created: bool) -> str:
+    """The user-actionable orphan message; `created` says whether the thread definitely exists."""
+    if created:
+        return (
+            f"thread {thread_id} ({name!r}) was created and remains in the T3 sidebar without a running turn — "
+            "discard it by deleting the thread from the sidebar"
+        )
     return (
-        f"thread {thread_id} ({name!r}) {certainty} in the T3 sidebar without a running turn — "
+        f"thread {thread_id} ({name!r}) may have been left in the T3 sidebar without a running turn — "
         "if it appears there, discard it by deleting the thread from the sidebar"
     )
 
@@ -382,7 +400,6 @@ def validate_dispatch_arguments(args: argparse.Namespace) -> None:
 
 
 def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str, object]:
-    validate_dispatch_arguments(args)
     project_directory = Path(args.project_directory).expanduser().resolve()
     directory = Path(args.directory).expanduser().resolve()
     if not project_directory.is_dir():
@@ -422,7 +439,7 @@ def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str
         except T3ThreadError as delete_error:
             fail(
                 f"{create_error}; the compensating thread.delete also failed ({delete_error}); "
-                f"{orphaned_thread_notice(thread_id, args.name, 'may have been left')}"
+                f"{orphaned_thread_notice(thread_id, args.name, created=False)}"
             )
         raise create_error
 
@@ -449,7 +466,7 @@ def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str
         except T3ThreadError as delete_error:
             fail(
                 f"{turn_error}; the partial thread could not be deleted ({delete_error}); "
-                f"{orphaned_thread_notice(thread_id, args.name, 'was created and remains')}"
+                f"{orphaned_thread_notice(thread_id, args.name, created=True)}"
             )
         raise turn_error
     return {
@@ -497,6 +514,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     result_payload: dict[str, object] | None = None
     failure: T3ThreadError | None = None
     try:
+        # Argument-local checks need nothing beyond argparse output: fail them
+        # before discovering the app or issuing a revocable session.
+        validate_dispatch_arguments(args)
         executable = discover_executable(args.t3_executable)
         server_entry = discover_server_entry(executable, args.server_entry)
         origin = local_origin(load_json(runtime_file))
