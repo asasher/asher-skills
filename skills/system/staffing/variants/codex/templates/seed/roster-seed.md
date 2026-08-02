@@ -38,5 +38,7 @@ Seed values — setup keeps only what the audit found reachable.
 
 | harness | tracked wake (preferred, no model) | watcher fallback |
 | --- | --- | --- |
-| Codex (this harness) | none verified by default — setup probes; hold via a watched native subagent loop | Floor model wait/relay loop |
+| Codex (this harness) | none verified by default — setup probes | Floor model wait/relay loop |
 | Claude Code (sibling) | tracked background tasks / subagent completions re-invoke its session | Floor model, low effort |
+
+The watcher column is the last resort, not the first fallback: a harness-native timed wake outranks it wherever a timer facility is verified — rung order in the compiled harness mechanics.

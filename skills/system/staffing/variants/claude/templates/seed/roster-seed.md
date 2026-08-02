@@ -41,3 +41,5 @@ Seed values — setup keeps only what the audit found reachable.
 | --- | --- | --- |
 | Claude Code | background tasks, Agent/Workflow completions, Monitor conditions — completion re-invokes the session | Floor model, low effort |
 | Codex CLI (sibling) | none verified by default — setup probes | Floor model wait/relay loop |
+
+The watcher column is the last resort, not the first fallback: a harness-native timed wake outranks it wherever a timer facility is verified — rung order in the compiled harness mechanics.

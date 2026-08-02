@@ -24,7 +24,7 @@ If native spawn cannot select or report the wrapper model, the route may remain 
 
 ## Wake paths
 
-Codex children are bounded and untracked, so there is no native completion wake to lean on. Hold an out-of-band wait — review verdicts, merge watches — on a watched native subagent loop staffed at the floor, never on the orchestrator itself. Watchers wait and relay only; they carry no judgment.
+Codex children are bounded and untracked, so there is no native completion wake to lean on. Prefer a timed wake over any live watcher: schedule a harness-native timed wake (an automation, cron, a scheduled wakeup) at a guessed completion time — on firing read the wait's durable state, act if it is done or dead, reschedule at a fresh estimate if it is still running; no model sits as an alarm clock. Only where no timer facility is verified, hold the out-of-band wait — review verdicts, merge watches — on a watched native subagent loop staffed at the floor, never on the orchestrator itself. Watchers wait and relay only; they carry no judgment.
 
 Where the sibling harness tracks its own waits, prefer its tracked wake over any watcher model when the wait is running there.
 
