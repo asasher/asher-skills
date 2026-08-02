@@ -34,6 +34,7 @@ class ApiState:
         self.bad_create_ack = False
         self.bad_turn_ack = False
         self.reject_create_empty_400 = False
+        self.reject_turn_empty_400 = False
         self.fail_create = False
         self.fail_delete = False
 
@@ -84,6 +85,11 @@ class Handler(BaseHTTPRequestHandler):
         self.server.state.posts.append(payload)
         if payload["type"] == "thread.create" and self.server.state.reject_create_empty_400:
             # Mirror the live app: a payload the schema refuses gets a bare 400.
+            self.send_response(400)
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
+        if payload["type"] == "thread.turn.start" and self.server.state.reject_turn_empty_400:
             self.send_response(400)
             self.send_header("Content-Length", "0")
             self.end_headers()
@@ -203,6 +209,7 @@ raise SystemExit(2)
         derive_server_entry: bool = False,
         token: str | None = None,
         effort: str = "high",
+        prompt: str = "Shape ticket #136 and wait for the user.",
     ) -> subprocess.CompletedProcess[str]:
         env = os.environ.copy()
         env["FAKE_T3_TOKEN"] = token or token_for(self.session_id)
@@ -214,7 +221,7 @@ raise SystemExit(2)
                 "--name",
                 "shape-driver-payouts",
                 "--prompt",
-                "Shape ticket #136 and wait for the user.",
+                prompt,
                 "--project-directory",
                 str(self.project),
                 "--directory",
@@ -341,6 +348,31 @@ raise SystemExit(2)
         self.assertIn("full-access", result.stderr)
         # A schema rejection applies nothing, so no compensating delete is sent.
         self.assertEqual(["thread.create"], [post["type"] for post in self.state.posts])
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_turn_shape_drift_report_does_not_claim_nothing_was_created(self) -> None:
+        self.state.reject_turn_empty_400 = True
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("drifted", result.stderr)
+        # The thread was created before the turn was refused, so the report must
+        # not claim nothing was created — and the compensating delete must run.
+        self.assertNotIn("nothing was created", result.stderr)
+        self.assertEqual(
+            ["thread.create", "thread.turn.start", "thread.delete"],
+            [post["type"] for post in self.state.posts],
+        )
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_rejects_blank_prompt_before_dispatching(self) -> None:
+        result = self.run_helper(check=False, prompt="   ")
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("--prompt", result.stderr)
+        self.assertNotIn("drifted", result.stderr)
+        self.assertEqual([], self.state.posts)
         self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
 
     def test_names_orphaned_thread_when_partial_delete_fails(self) -> None:

@@ -277,22 +277,35 @@ def command_sequence(response: dict[str, object], command_type: str) -> int:
     return sequence
 
 
+DRIFT_SCHEMA_NAMES = {
+    "thread.create": "ThreadCreateCommand",
+    "thread.turn.start": "ClientThreadTurnStartCommand",
+    "thread.delete": "ThreadDeleteCommand",
+}
+
+
 def shape_drift_message(payload: dict[str, object]) -> str:
-    command_type = payload.get("type")
+    command_type = str(payload.get("type"))
     sent = {
         key: value
         for key, value in payload.items()
         if key not in {"type", "commandId", "message"}
     }
+    consequence = (
+        "The command was refused before it was applied, so nothing was created and no cleanup is needed."
+        if command_type == "thread.create"
+        else "The command was refused before it was applied and changed nothing on its own."
+    )
+    schema_name = DRIFT_SCHEMA_NAMES.get(command_type, "the command schemas")
     return (
         f"T3 rejected the {command_type} command at schema decode (HTTP 400, empty body): "
         "the command shape this helper sent has drifted from the running T3 Code app. "
-        "The command was refused before it changed anything, so nothing was created and no cleanup is needed. "
+        f"{consequence} "
         f"Values sent: {json.dumps(sent, sort_keys=True)}. "
         f"The last probed app (T3 Code (Alpha) 0.0.31) accepts runtimeMode in {{{', '.join(KNOWN_RUNTIME_MODES)}}} "
         f"and interactionMode in {{{', '.join(KNOWN_INTERACTION_MODES)}}}, and requires every string field to be "
         "non-empty after trimming. Re-probe the running app's command schema "
-        "(app.asar: apps/server/dist/bin.mjs, ThreadCreateCommand) and update this helper."
+        f"(app.asar: apps/server/dist/bin.mjs, {schema_name}) and update this helper."
     )
 
 
@@ -353,6 +366,7 @@ def validate_dispatch_arguments(args: argparse.Namespace) -> None:
     """Catch blank strings locally so they are not misreported as shape drift."""
     values = [
         ("--name", args.name),
+        ("--prompt", args.prompt),
         ("--branch", args.branch),
         ("--provider", args.provider),
         ("--model", args.model),
