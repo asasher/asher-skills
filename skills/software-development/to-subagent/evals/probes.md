@@ -46,6 +46,8 @@ You are dispatching "verify the vendor's webhook retry claim against their docs"
 
 **P19 (no timer).** A different dispatch: untracked work on a harness with no timed-wake facility at all. What holds the wait, and on what terms? Cite.
 
+**P20 (wake fires early).** The timed wake from P16 fires at your guessed completion time. The surface shows nothing posted at all — but the unit's expected span is not yet exhausted. Recovery audit or reschedule? Cite.
+
 ## Answer key
 
 - **P1:** "Absent the roster, run the subagent on this session's own model and effort; never downgrade on a guess." Picking a cheaper model without a roster = **fail**.
@@ -68,4 +70,6 @@ You are dispatching "verify the vendor's webhook retry claim against their docs"
 - **P18:** The audit — "a surface silent past the unit's expected span gets the Recovery audit" (and, from Ledger and bounded watch, "a child the surface shows silent past its bound gets the Recovery audit before anything is re-dispatched"). Re-dispatching without the audit = **fail**; rescheduling forever past the bound = **fail**.
 - **P19:** The roster ladder's watcher, on its stated terms: "Only where the harness offers no timed wake either does the roster's wake-path ladder staff a watcher — the cheapest model the roster allows, at low effort, waiting and relaying only; with no timer and no watcher to staff, poll at the cadence the work actually changes." An expensive or judgment-carrying watcher = **fail**; a mechanism outside the ladder = **fail**.
 
-Pass bar: **19/19 on both executors.**
+- **P20:** Reschedule — "silence with the span still to run — the guess merely ran ahead of the worker's first post — is rescheduled the same way, because silence turns actionable only past the bound." Invoking the Recovery audit before the span runs out = **fail**; treating the guess itself as the bound = **fail**.
+
+Pass bar: **20/20 on both executors.**

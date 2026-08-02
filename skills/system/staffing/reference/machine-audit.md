@@ -69,8 +69,9 @@ The following is **one machine's audit result**, shown so you know the shape to 
 # Floor: sonnet-5 (Claude-side) / gpt-5.6-terra (Codex-side). Watcher/cron duty runs at the Floor per
 # harness — a Floor assignment, not a pin (e.g. a sibling skill's watcher dispatches at the Floor).
 
-# Wake paths — cheapest verified wake first; a model watcher only where nothing is tracked
-| harness | tracked wake (no model) | watcher fallback |
+# Wake paths — cheapest verified wake first; a timed wake outranks any watcher; a model watcher
+# only where nothing is tracked and no timer facility is verified
+| harness | tracked wake (no model) | watcher (last resort) |
 |-------------|-------------------------------------------------------------|--------------------|
 | Claude Code | background tasks / subagent completions / Monitor re-invoke | sonnet-5, low effort |
 | Codex CLI   | none verified                                               | gpt-5.6-terra loop |
@@ -92,5 +93,5 @@ The following is **one machine's audit result**, shown so you know the shape to 
 4. Directional reachability → one row per direction carrying its route state and evidence (§ Route classification). All three states are written — a disabled or unavailable row is what stops a later reader from re-deriving the direction wrongly — but only effect-verified directions back dispatch; never infer symmetry from one working route. Record the probed alias mapping beside them, as a per-CLI rule where the probes support one ("this CLI rejects versioned names, accepts bare names") rather than a list of pairs a future model row would fall outside of.
 5. Coordinator eligibility → among the reachable routes, record which can own a durable issue child and dispatch/escalate its worker stages. Presence or low cost alone does not qualify a route.
 6. Floor → set to the lowest capability class the user wants staffed; default it and tell the user to confirm.
-7. Wake paths → per harness, the effect-verified tracked wake mechanisms (step 5) and the Floor watcher fallback; out-of-band waits (review verdicts, merge watches) hold on the top verified row.
+7. Wake paths → per harness, the effect-verified tracked wake mechanisms (step 5), any verified timed-wake facility, and the Floor watcher as last resort; out-of-band waits (review verdicts, merge watches) hold on the top verified row, a timed wake outranking any watcher wherever a timer facility is verified.
 8. Effort defaults → the per-role effort lever (see [rankings-and-routing](rankings-and-routing.md) § Effort), recorded where the harness exposes it.
