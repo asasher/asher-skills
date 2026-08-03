@@ -24,7 +24,7 @@ The native child request or returned metadata must prove the wrapper model. Wher
 
 **Native wake paths are the default — do not poll where the harness tracks.** Tracked background tasks, subagent completions, and Monitor conditions re-invoke the session, so a Claude-led run satisfies the liveness contract natively and must not adopt bounded-polling machinery built for harnesses without wakeups.
 
-Only genuinely untracked waits — fire-and-forget shells, external CI, review verdicts — need an explicit owner, deadline, and wake source. Hold those on the top verified row for the harness running the wait; on Claude Code that is a tracked background process whose verdict-coded exit wakes the session, with no watcher model at all. A model watcher is the last resort, waits and relays only, and never carries judgment.
+Only genuinely untracked waits — fire-and-forget shells, external CI, review verdicts — need an explicit owner, deadline, and wake source. Hold those on the top verified row for the harness running the wait; on Claude Code that is a tracked background process whose verdict-coded exit wakes the session, with no watcher model at all. Where no tracked hold fits, schedule a harness-native timed wake (a scheduled wakeup, an automation, cron) at a guessed completion time — on firing read the wait's durable state, act if it is done or dead, reschedule at a fresh estimate if it is still running. A model watcher is the last resort — staffed only where the harness offers no timer, waits and relays only, and never carries judgment.
 
 ## Cross-harness discipline
 

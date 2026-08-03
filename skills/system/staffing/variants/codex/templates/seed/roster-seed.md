@@ -13,7 +13,7 @@ Seed defaults — setup verifies each row against this machine (unreachable rows
 | gpt-5.6-sol   |    4 |            9 |     5 | high   |
 | gpt-5.6-terra |    6 |            5 |     3 | xhigh  |
 | sonnet-5      |    5 |            5 |     5 | high   |
-| opus-5        |    3 |            8 |     8 | high   |
+| opus-5        |    3 |            7 |     7 | high   |
 
 The Codex models are coordinator-eligible through native agent threads. The Claude rows are bounded worker routes for the audit to effect-verify, not coordinator-eligible until durable child ownership is separately proven. Add a fable-5 row only after its CLI alias and requested effect are verified on this machine. Floor: gpt-5.6-terra for native Codex roles.
 
@@ -36,7 +36,9 @@ Seed values — setup keeps only what the audit found reachable.
 
 ## Wake paths
 
-| harness | tracked wake (preferred, no model) | watcher fallback |
+| harness | tracked wake (preferred, no model) | watcher (last resort) |
 | --- | --- | --- |
-| Codex (this harness) | none verified by default — setup probes; hold via a watched native subagent loop | Floor model wait/relay loop |
+| Codex (this harness) | none verified by default — setup probes | Floor model wait/relay loop |
 | Claude Code (sibling) | tracked background tasks / subagent completions re-invoke its session | Floor model, low effort |
+
+A harness-native timed wake outranks the watcher wherever a timer facility is verified — rung order in the compiled harness mechanics.
