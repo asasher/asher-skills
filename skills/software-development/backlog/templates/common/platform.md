@@ -52,6 +52,7 @@
 - Route trust: a routine dispatch trusts the recorded effect-verified verb — verification happens at setup, at re-verification, and when a route misbehaves, so dispatch needs no fresh probe session. A route that fails or hangs in use is drift: record the failure class, take the successor, re-verify that direction. Verification probe artifacts are cleaned up as part of the check.
 - Can a spawned thread read this skill's bundled references from disk? _<yes at <path>; if no, the dispatcher pastes the reference into the prompt>_.
 - Durable monitor / wakeup for review round-trips: _<the harness mechanism `adversarial-review` may use, or "polling only">_.
+- Usage surface — where each dispatch harness reports how much of its subscription windows is used, read by `backlog build`'s quota gate (`backlog-policy.md` § Quota awareness): _<the live-verified read per harness — e.g. Claude Code: `claude -p /usage` prints each window's used percentage; Codex: a `codex exec` turn's session rollout under `~/.codex/sessions/` records a `token_count` event carrying `rate_limits` with each window's `used_percent`; or **absent** — record the gap explicitly so the gate degrades per policy instead of estimating>_. Record the verb, never a reading: an observed percentage is a moment fact — relayed in run reports and outcomes, recorded in no file, not even the overlay.
 
 ## The local binding — tracker contract
 
