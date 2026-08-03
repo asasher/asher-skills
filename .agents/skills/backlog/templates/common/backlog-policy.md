@@ -69,6 +69,24 @@ Tracker encoding: _<GitHub: a stable `Dispatch:` block in the body or grooming c
 - In a shaping thread, the readiness blessing authorizes only the exact shaping change-request head the thread presented **before** requesting that signal, with the narrow effect explained. It does not authorize a later head, build changes, or unrelated shaping work.
 - Adjust this rule if this team wants more or less agent autonomy (e.g. let the agent auto-bless low-risk bugs).
 
+## Build concurrency
+
+> Read by `backlog build` before dispatch — the owner's burn bound on unattended fan-out. Policy data, set here by choice, never derived from the environment audit.
+
+- **Max concurrent builds** — how many builds this dispatcher may have in flight at once: _<a positive integer, or `uncapped`>_. The unit is the **build** — one ticket's whole pipeline in its one worktree — never the subagents a build fans out; each build staffs its own workers freely. The environment playbook's parallelism verdict records what the repo _can_ sustain; this knob records what the owner _wants_ in flight — the worst-case spend of an unattended run, and how many builds die together when a shared session window caps out. The effective width is the tighter of the two.
+- **Queue semantics** — the cap gates the entire mark-prepare-dispatch sequence: a ready ticket beyond the cap waits unclaimed — no `building` label, no claim comment, no worktree — and enters the sequence when a completed or aborted build frees its slot, so `building` keeps meaning actually in flight. Distinct from a harness-refused spawn, whose claim stands: a cap-queued ticket was never claimed.
+- A **per-run override** may narrow a single run below the recorded value — a width, or fully sequential — never widen it; raising the bound is a playbook edit, not a run flag.
+
+## Quota awareness
+
+> Read by `backlog build` at every claim — the owner's headroom guard on the shared subscription pool, so an unattended run cannot drain the window the week's interactive work lives on. Policy data, set here by choice; where the usage numbers come from is a platform binding (the usage-surface row in `platform.md` § Harness), never this file's to record.
+
+- **Usage threshold** — the used percentage at or past which this dispatcher stops claiming: _<a percent, or `none`>_. It applies to **every window any bound usage surface reports** (session, weekly, per-model weekly, …), across all dispatch harnesses: one tripped window gates claiming, whichever it is. `none` leaves the gate unbound: no quota reading gates claiming and the run relay does not mention quota — while outcome accounting still applies wherever a surface is bound.
+- **Gate semantics** — the gate reads the bound usage surfaces at each entry into the mark-prepare-dispatch sequence: the initial sweep and every completion-wake queue advance. At or past the threshold, no new claims — a ready ticket waits unclaimed, exactly the § Build concurrency queue semantics: no `building` label, no claim comment, no worktree — while in-flight builds run to completion, and the run relay names the tripped window and its reading. The gate is **claim-side only**: cost never keeps work off the right model — quota pressure never downgrades the model for work already claimed, nor for a queued ticket when its claim eventually comes.
+- **The gate bounds claiming, never burn already in flight** — under an uncapped width (§ Build concurrency) one sweep below the threshold can still claim the whole ready queue, and that flight's burn can drain the pool before any re-read sees it. The width cap is the tool for that exposure: an owner who wants the gate to bite mid-run pairs the threshold with a numeric cap.
+- **Unknown is unknown** — a window no bound surface reports is unknown, **never estimated** — not from token counts, not from cost tallies, not from history. When the platform binding records no usage surface for the dispatching harness, or the recorded read fails, the gate is inoperative: dispatch proceeds under § Build concurrency alone, and the run relay says so once — the disclosed degradation, never an invented number and never a silent skip. An owner who wants a bound while flying blind narrows the width cap or uses the per-run override.
+- **Outcome accounting** — each build's outcome relays the readings observed at its claim and at its completion, per reported window (e.g. weekly 31% → 54%). Attribution is honest: that delta is pool movement during the build's flight — shared with concurrent lanes and any interactive use — never presented as the build's exclusive consumption.
+
 ## Building hygiene
 
 - Concurrent runners are possible (two machines, two humans, one tracker); `building` is the claim marker, applied optimistically — the build dispatcher accepts the rare duplicate pickup in the window between queue build and marking rather than carrying a lock.

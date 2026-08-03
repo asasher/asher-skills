@@ -1,6 +1,6 @@
 # Build
 
-One ticket → one review-ready change request in one supplied worktree, with this session as owner and fixer: implement (dispatched), verify-and-fix loop (verifier reports, owner fixes, until clean), change request with the ticket's closing reference, adversarial review to LGTM, evidence package posted. Merging stays a human authorization.
+One ticket → one review-ready change request in one supplied worktree, with this session as owner, fixer, and bookkeeper: implement (dispatched), verify-and-fix loop (verifier reports, owner fixes, until clean), change request with the ticket's closing reference, adversarial review to LGTM, evidence package posted carrying the session's per-stage token ledger. Merging stays a human authorization.
 
 ## When to use
 

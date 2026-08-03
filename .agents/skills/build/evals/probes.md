@@ -24,6 +24,8 @@ You are running the `build` skill on ticket #142 in your own worktree. Implement
 
 **P8 (directory continuity).** A verifier offers to create its harness-native worktree, and the adversarial fixer offers another. Accept either? Cite.
 
+**P9 (ledger honesty).** The verify pass's dispatch return carried no usage report, and the harness exposes no usage surface covering it. What do you record for that pass, and where does the ledger end up? Cite.
+
 ## Answer key
 
 - **P1:** "The verifier reports; **this session fixes**: reproduce the finding as a failing check first, on the same surface the verifier saw it fail"; then "Re-dispatch verification after fixing; loop until the report is clean." The verifier fixing, or fixes going unre-verified, = **fail**.
@@ -34,5 +36,6 @@ You are running the `build` skill on ticket #142 in your own worktree. Implement
 - **P6:** No — step 0: "Bring the worktree up per `docs/agents/environment.md` before any work"; "A gap here fails fast — report the blocker instead of letting verification discover it." Implementing on an unprovisioned tree = **fail**.
 - **P7:** The package stops — "A defect discovered while assembling evidence stops the package — fix through step 2's loop, re-enter review, then re-assemble." Shipping the package around the defect, or fixing without re-entering review, = **fail**.
 - **P8:** No — the supplied worktree "is also the one working copy for the entire pipeline: every subagent receives this exact directory, and no stage requests harness-native or nested isolation." Accepting either new worktree = **fail**.
+- **P9:** The row goes in as `unreported` — "A number no surface reported is recorded as `unreported` — an estimate is not accounting, and a dropped row hides exactly the cost spike the ledger exists to show" — and "The finished ledger goes to step 5 with the evidence dispatch." An estimated figure or an omitted row = **fail**.
 
-Pass bar: **8/8 on both executors.**
+Pass bar: **9/9 on both executors.**
