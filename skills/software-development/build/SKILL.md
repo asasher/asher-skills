@@ -12,7 +12,11 @@ metadata:
 
 # Build
 
-Run one ticket to a review-ready change request. This session is the owner and the fixer; the heavy lifting is dispatched, via the `to-subagent` skill, into fresh contexts.
+Run one ticket to a review-ready change request. This session is the owner, the fixer, and the bookkeeper; the heavy lifting is dispatched, via the `to-subagent` skill, into fresh contexts.
+
+## The stage ledger
+
+Cost review of a run should be a read of the evidence, not an archaeology project — so this session keeps a per-stage token ledger alongside the pipeline. As each stage lands, record its row: the stage (implement, each verify pass, each fix pass, each review pass, evidence), the tokens it consumed, and the harness quota percentage at that point where the harness exposes one. A dispatched stage's tokens come from its dispatch return's usage report; work this session does itself is covered by the harness's own usage surface where it has one. A number no surface reported is recorded as `unreported` — an estimate is not accounting, and a dropped row hides exactly the cost spike the ledger exists to show. The finished ledger goes to step 5 with the evidence dispatch. The evidence stage's own row is the one entry this session cannot close; the evidence step adds it before posting.
 
 ## 0. Provision
 
@@ -36,7 +40,7 @@ Run the `adversarial-review` skill on the change request; it converges to LGTM o
 
 ## 5. Evidence
 
-Dispatch the `prove-your-work` skill against the change request: the evidence package lands as a change request comment for whoever decides the merge. A defect discovered while assembling evidence stops the package — fix through step 2's loop, re-enter review, then re-assemble.
+Dispatch the `prove-your-work` skill against the change request, handing over the stage ledger: the evidence package lands as a change request comment for whoever decides the merge. A defect discovered while assembling evidence stops the package — fix through step 2's loop, re-enter review, then re-assemble.
 
 ## Done
 
