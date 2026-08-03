@@ -26,6 +26,10 @@ You are a Codex provider inside T3 Code, dispatching ticket #142's shaping threa
 
 **P9 (direct isolation ownership).** On a direct request for an isolated attended thread, who owns the worktree before and after spawn, and where is that recorded? Cite.
 
+**P10 (runtime mode value).** Your Codex session runs with sandbox mode `workspace-write`. What value do you pass as `--runtime-mode`? Cite.
+
+**P11 (orphaned partial thread).** The helper created the thread, turn start failed, and the compensating delete also failed. What does the error carry for the user, and do you retry through the provider harness? Cite.
+
 ## Answer key
 
 - **P1:** No — "The thread sees none of this conversation"; include goal, inputs by path/ticket, done, and skill. Shared-context prompt = **fail**.
@@ -37,5 +41,7 @@ You are a Codex provider inside T3 Code, dispatching ticket #142's shaping threa
 - **P7:** No — "The directory is already resolved, so omit Claude's worktree flag." `-w` = **fail**.
 - **P8:** Report name/id, branch/path, and T3 sidebar attachment. Later use the supervisor listing: "Report status only when asked, through that supervisor's listing surface." Invented progress = **fail**.
 - **P9:** The caller is provisional owner until spawn; the spawned thread then owns merge/cleanup. "Its harness thread record plus the parent dispatch report are the ownership record." Leaving cleanup ownerless or recording neither = **fail**.
+- **P10:** A T3 runtime mode (here the session's `approval-required`) — "`--runtime-mode` takes T3's own runtime modes ... never a provider sandbox name like `workspace-write`". Passing `workspace-write` = **fail**.
+- **P11:** The error "names the orphaned thread id and title and tells the user to discard it from the T3 sidebar"; no provider-harness retry — "A failed T3 route never silently becomes a hidden provider-native thread." Silent fallback or an unnamed orphan = **fail**.
 
-Pass bar: **9/9 on both executors.**
+Pass bar: **11/11 on both executors.**

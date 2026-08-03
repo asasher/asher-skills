@@ -30,16 +30,22 @@ class ApiState:
         self.posts: list[dict[str, object]] = []
         self.fail_turn = False
         self.include_other_project = False
+        self.include_deleted_same_root = False
         self.snapshot_redirect: str | None = None
         self.bad_create_ack = False
         self.bad_turn_ack = False
+        self.reject_create_empty_400 = False
+        self.reject_turn_empty_400 = False
+        self.reject_delete_empty_400 = False
+        self.fail_create = False
+        self.fail_delete = False
 
 
 class Handler(BaseHTTPRequestHandler):
     server: "ApiServer"
 
     def do_GET(self) -> None:
-        if self.path != "/api/orchestration/snapshot":
+        if self.path != "/api/orchestration/shell":
             self.send_error(404)
             return
         if self.server.state.snapshot_redirect:
@@ -52,7 +58,6 @@ class Handler(BaseHTTPRequestHandler):
                 "id": "project-1",
                 "title": "Project",
                 "workspaceRoot": str(self.server.state.project_root),
-                "deletedAt": None,
             }
         ]
         if self.server.state.include_other_project:
@@ -61,7 +66,17 @@ class Handler(BaseHTTPRequestHandler):
                     "id": "project-2",
                     "title": "Other",
                     "workspaceRoot": str(self.server.state.project_root.parent / "other"),
-                    "deletedAt": None,
+                }
+            )
+        if self.server.state.include_deleted_same_root:
+            # Defensive shape: the live shell payload carries no deletedAt today,
+            # but an explicit tombstone must stay excluded if the field returns.
+            projects.append(
+                {
+                    "id": "project-tombstone",
+                    "title": "Deleted twin",
+                    "workspaceRoot": str(self.server.state.project_root),
+                    "deletedAt": "2026-07-01T00:00:00Z",
                 }
             )
         self.respond(
@@ -81,6 +96,28 @@ class Handler(BaseHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", "0"))
         payload = json.loads(self.rfile.read(length))
         self.server.state.posts.append(payload)
+        if payload["type"] == "thread.create" and self.server.state.reject_create_empty_400:
+            # Mirror the live app: a payload the schema refuses gets a bare 400.
+            self.send_response(400)
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
+        if payload["type"] == "thread.turn.start" and self.server.state.reject_turn_empty_400:
+            self.send_response(400)
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
+        if payload["type"] == "thread.delete" and self.server.state.reject_delete_empty_400:
+            self.send_response(400)
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
+        if payload["type"] == "thread.create" and self.server.state.fail_create:
+            self.respond_dispatch_failed()
+            return
+        if payload["type"] == "thread.delete" and self.server.state.fail_delete:
+            self.respond_dispatch_failed()
+            return
         if payload["type"] == "thread.create" and self.server.state.bad_create_ack:
             self.respond(200, {"error": "command was not acknowledged"})
             return
@@ -91,6 +128,17 @@ class Handler(BaseHTTPRequestHandler):
             self.respond(500, {"error": "unsupported command shape"})
             return
         self.respond(200, {"sequence": len(self.server.state.posts)})
+
+    def respond_dispatch_failed(self) -> None:
+        # Mirror the live app's engine failure envelope.
+        self.respond(
+            500,
+            {
+                "_tag": "EnvironmentInternalError",
+                "code": "internal_error",
+                "reason": "orchestration_dispatch_failed",
+            },
+        )
 
     def respond(self, status: int, payload: dict[str, object]) -> None:
         body = json.dumps(payload).encode()
@@ -178,6 +226,8 @@ raise SystemExit(2)
         check: bool = True,
         derive_server_entry: bool = False,
         token: str | None = None,
+        effort: str = "high",
+        prompt: str = "Shape ticket #136 and wait for the user.",
     ) -> subprocess.CompletedProcess[str]:
         env = os.environ.copy()
         env["FAKE_T3_TOKEN"] = token or token_for(self.session_id)
@@ -189,7 +239,7 @@ raise SystemExit(2)
                 "--name",
                 "shape-driver-payouts",
                 "--prompt",
-                "Shape ticket #136 and wait for the user.",
+                prompt,
                 "--project-directory",
                 str(self.project),
                 "--directory",
@@ -199,7 +249,7 @@ raise SystemExit(2)
                 "--model",
                 "gpt-5.6-sol",
                 "--effort",
-                "high",
+                effort,
                 "--runtime-mode",
                 "approval-required",
                 "--base-dir",
@@ -304,6 +354,129 @@ raise SystemExit(2)
             [post["type"] for post in self.state.posts],
         )
         self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_reports_shape_drift_without_cleanup_when_create_is_rejected(self) -> None:
+        self.state.reject_create_empty_400 = True
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("drifted", result.stderr)
+        self.assertIn("nothing was created", result.stderr)
+        self.assertIn("full-access", result.stderr)
+        # A schema rejection applies nothing, so no compensating delete is sent.
+        self.assertEqual(["thread.create"], [post["type"] for post in self.state.posts])
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_turn_shape_drift_report_does_not_claim_nothing_was_created(self) -> None:
+        self.state.reject_turn_empty_400 = True
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("drifted", result.stderr)
+        # The thread was created before the turn was refused, so the report must
+        # not claim nothing was created — and the compensating delete must run.
+        self.assertNotIn("nothing was created", result.stderr)
+        self.assertEqual(
+            ["thread.create", "thread.turn.start", "thread.delete"],
+            [post["type"] for post in self.state.posts],
+        )
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_delete_drift_report_omits_enum_advice_for_fields_not_sent(self) -> None:
+        # Correlated drift: create fails outright (5xx), and the compensating
+        # thread.delete is itself rejected at schema decode. The delete's drift
+        # report must not steer the operator at runtimeMode/interactionMode —
+        # fields ThreadDeleteCommand never carries.
+        self.state.fail_create = True
+        self.state.reject_delete_empty_400 = True
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("thread.delete", result.stderr)
+        self.assertIn("drifted", result.stderr)
+        self.assertIn("non-empty after trimming", result.stderr)
+        self.assertNotIn("runtimeMode", result.stderr)
+        self.assertNotIn("interactionMode", result.stderr)
+        self.assertEqual(
+            ["thread.create", "thread.delete"],
+            [post["type"] for post in self.state.posts],
+        )
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_resolves_active_project_when_tombstoned_entry_shares_root(self) -> None:
+        self.state.include_deleted_same_root = True
+
+        result = self.run_helper()
+        output = json.loads(result.stdout)
+
+        self.assertEqual("project-1", output["project_id"])
+        self.assertEqual("project-1", self.state.posts[0]["projectId"])
+
+    def test_rejects_blank_prompt_before_dispatching(self) -> None:
+        result = self.run_helper(check=False, prompt="   ")
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("--prompt", result.stderr)
+        self.assertNotIn("drifted", result.stderr)
+        self.assertEqual([], self.state.posts)
+        # Argument-local validation fails before any session is issued, so
+        # there is nothing to revoke.
+        self.assertFalse(self.revoke_log.exists())
+
+    def test_names_orphaned_thread_when_partial_delete_fails(self) -> None:
+        self.state.fail_turn = True
+        self.state.fail_delete = True
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertEqual(
+            ["thread.create", "thread.turn.start", "thread.delete"],
+            [post["type"] for post in self.state.posts],
+        )
+        thread_id = str(self.state.posts[0]["threadId"])
+        self.assertIn(thread_id, result.stderr)
+        self.assertIn("shape-driver-payouts", result.stderr)
+        self.assertIn("discard", result.stderr)
+        # The turn path knows the thread was created: the notice must state
+        # that plainly, with no "if it appears there" hedge against itself.
+        self.assertIn("was created and remains", result.stderr)
+        self.assertNotIn("if it appears there", result.stderr)
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_names_orphaned_thread_when_ambiguous_create_cleanup_fails(self) -> None:
+        self.state.fail_create = True
+        self.state.fail_delete = True
+
+        result = self.run_helper(check=False)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertEqual(
+            ["thread.create", "thread.delete"],
+            [post["type"] for post in self.state.posts],
+        )
+        thread_id = str(self.state.posts[0]["threadId"])
+        self.assertIn(thread_id, result.stderr)
+        self.assertIn("discard", result.stderr)
+        # Creation is genuinely ambiguous on this path, so the notice keeps
+        # its conditional phrasing.
+        self.assertIn("may have been left", result.stderr)
+        self.assertIn("if it appears there", result.stderr)
+        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_rejects_blank_effort_before_dispatching(self) -> None:
+        result = self.run_helper(check=False, effort="   ")
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("--effort", result.stderr)
+        self.assertNotIn("drifted", result.stderr)
+        self.assertEqual([], self.state.posts)
+        # Argument-local validation fails before any session is issued, so
+        # there is nothing to revoke.
+        self.assertFalse(self.revoke_log.exists())
 
     def test_fails_before_creation_when_project_is_not_registered(self) -> None:
         self.state.project_root = self.root / "different-project"
