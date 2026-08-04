@@ -1,0 +1,7 @@
+interface:
+  display_name: "Writing Technical Docs"
+  short_description: "Write clear, controlled technical prose"
+  default_prompt: "Use $writing-technical-docs to draft or rewrite this technical document for clarity."
+
+policy:
+  allow_implicit_invocation: true
