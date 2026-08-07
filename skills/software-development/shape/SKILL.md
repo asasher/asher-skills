@@ -22,11 +22,11 @@ When backlog supplied a batch worktree, inspect it through the `worktree` skill 
 
 ## One engine per subject
 
-A single subject runs inline. A batch of several runs one engine per subject — merely-related subjects never share one, interlocked tickets always do — each dispatched via the `to-subagent` skill. Engines are non-interactive, so an interview round is a dispatch cycle: each engine reads its subject's record, computes its question frontier, and returns it; this session combines the frontiers into **one round for the user**, questions tagged by subject, then routes the answers back and re-dispatches each engine with its own. An engine whose frontier comes back empty crystallises (below) while its siblings still ask.
+A single subject runs inline. A batch of several runs one engine per subject — merely-related subjects never share one, interlocked tickets always do — each dispatched via the `to-subagent` skill, running the `interview` skill's engine mode. An interview round is then a dispatch cycle: engines return their frontiers per that mode's contract, this session combines the frontiers into **one round for the user**, then routes each subject's answers back into its engine's next dispatch. An engine whose frontier comes back empty crystallises (below) while its siblings still ask.
 
 ## The loop
 
-- Run the `interview` skill on the subject: frontier rounds, recommended answers, facts looked up rather than asked.
+- Run the `interview` skill on the subject — inline for a subject shaped in this session, its engine mode for a dispatched engine.
 - Run the `domain-modeling` skill alongside: terms and ADR-worthy decisions are written the moment they crystallise, per its own contract.
 - A question that needs source-backed investigation goes to the `research` skill; a question paper can't settle goes to the `prototype` skill — each dispatched via the `to-subagent` skill. A dispatched question blocks only what depends on it; results re-enter the frontier as evidence.
 - When the subject is a ticket, record settled decisions on its thread as they land — the thread is the resume state.

@@ -23,4 +23,4 @@ Keep these for a **dev spec**; drop them entirely for a **non-dev spec** (a proc
 
 ## Order and altitude
 
-Sections stay in template order so `to-slices` and any human reader find them in a predictable place. Keep every section at the altitude of **direction**. If a section is drifting into file-by-file implementation detail, pull it back up — the tickets carry that detail, the spec sets the direction they're cut from.
+Sections stay in template order so downstream splitters and any human reader find them in a predictable place. Keep every section at the altitude of **direction**. If a section is drifting into file-by-file implementation detail, pull it back up — the tickets carry that detail, the spec sets the direction they're cut from.

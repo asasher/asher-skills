@@ -67,7 +67,7 @@ Every spec **opens with a diagram** of the moving parts — before any prose. Pi
 
 ## Recommend the split, never perform it
 
-When the decided direction is clearly bigger than one build, end the spec with a **Recommended split** section: the proposed slices in a sentence each, and which edges would block which. It is a proposal only — splitting is the user's call, and executing it belongs to a different move (superseding the ticket with born-shaped children). A spec that fits one build carries no such section.
+When the decided direction is clearly bigger than one build, end the spec with a **Recommended split** section: the proposed slices in a sentence each, and which edges would block which. It is a proposal only — splitting is the user's call, and executing it belongs to a different move (the split that parents the ticket, as `capstone`, over born-shaped child slices). A spec that fits one build carries no such section.
 
 ## Sign-off
 
