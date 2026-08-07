@@ -9,8 +9,8 @@
 - Base branch: **main** — create work branches (and any worktrees) from it, and target PRs at it. Sync it per `platform.md` § Version control before branching.
 - Branch naming: `<issue-number>-<slug>` (e.g. `6-slim-backlog-composer`).
 - What a PR produces: nothing automated — no CI, no preview deploy. Review is human + `adversarial-review`.
-- What a merge produces: nothing automated. Skills are consumed elsewhere via `npx skills add <repo-url> --skill <name>`; a merge just updates `main`. No deploy step, no promotion path.
-- Deploy-target constraints: **n/a** — skills are consumed via `npx skills add`; there is no deploy target.
+- What a merge produces: updated skill sources on `main`, with no automatic deployment or promotion path. Consumers install from GitHub with `npx github:asasher/asher-skills install --skill <name>`; after a merge that touches `skills/`, the main checkout refreshes its installed mounts with `python3 tools/install.py install --self --into .` so later sessions load the merged sources.
+- Deploy-target constraints: **n/a** — the GitHub installer is the distribution path; there is no deploy target.
 - Credential preflight (run before work that will hit either gate): `gh auth status` proves the tracker/PR credential is live; a cheap `codex exec -s read-only --skip-git-repo-check "reply OK"` proves the second-executor route. This is what `backlog build`'s per-run preflight uses.
 
 ## Running locally
