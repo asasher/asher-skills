@@ -27,7 +27,7 @@ Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, again
 
 ## 2. Identify the spec source
 
-In order: ticket references in the commit messages or change request (fetched through the tracker binding in `docs/agents/platform.md`); a path passed as an argument; a spec under `docs/specs/` (or the repo's recorded specs location) matching the branch or feature; else ask. No spec at all: the Spec axis skips and the report says "no spec available".
+In order: ticket references in the commit messages or change request (fetched through the tracker binding in `docs/agents/platform.md`); a path passed as an argument; a spec at the registered specs location — the project instruction file's `## Context documents` index or the repo's `docs/agents/` conventions name it, `docs/specs/` when nothing is recorded — matching the branch or feature; else ask. No spec at all: the Spec axis skips and the report says "no spec available".
 
 ## 3. Identify the standards sources
 

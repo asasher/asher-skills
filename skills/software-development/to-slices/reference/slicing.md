@@ -7,7 +7,7 @@ To-slices' job is to split a decided direction into backlog-ready tickets with b
 To-slices splits a direction someone already decided — and only on the user's explicit call: a spec may _recommend_ a split, but nothing splits until the user approves it. The input comes in one of these forms; all are read the same way — mine the decided direction, the actors, and the full surface:
 
 - **A spec'd ticket** (the primary input) — a ticket whose body carries `to-spec`'s output, diagram first, given by id as the command argument. Read the body and the comment trail (later comments may refine the body's direction — the body is canonical).
-- **A spec document** — the no-tracker fallback at `docs/specs/<name>.html` (a self-contained HTML deliverable; an older `.md` spec reads the same way). A repo may record a different specs location in its `docs/agents/`, honor it when present.
+- **A spec document** — the no-tracker fallback `to-spec` leaves in the repo, resolved through the registered specs location: the project instruction file's `## Context documents` index or the repo's `docs/agents/` conventions name it, `docs/specs/` when nothing is recorded. Read it exactly as a ticket body: diagram first, the document canonical.
 - **A plan document** — a per-ticket design doc. Read it as direction for a single slice's worth of work, or a small cluster.
 - **The raw current conversation** — when no spec or plan was written, mine the conversation and the codebase/project understanding built up in it.
 
