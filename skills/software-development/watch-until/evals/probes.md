@@ -22,7 +22,7 @@ You need to wait on a change request until the reviewer posts LGTM, and separate
 
 - **P1:** Not as stated — the condition must be "decidable from the observation"; restate it observably ("a maintainer comment containing LGTM"). "State it so the watcher can decide it from what it observes." Accepting the vague form = **fail**.
 - **P2:** Yes — conditions may be "a judgment the watcher is equipped to make ('no unaddressed findings remain', 'the iteration cap is reached')." Rejecting judgment conditions outright = **fail**.
-- **P3:** "do nothing — completion wakes you. Polling a tracked child is pure waste." Any polling here = **fail**.
+- **P3:** "do nothing — completion wakes you, per the `to-subagent` sibling's never-poll wake contract." Any polling here = **fail**.
 - **P4:** "Poll from this session, at the cadence the target actually changes — an eight-minute CI run deserves one check near minute eight, not eight one-minute checks." Minute-by-minute polling = **fail**.
 - **P5:** "Quote the triggering observation" and stop — "the watch observes and relays, it never acts on the content." On expiry: "the watch ends and reports **timed out** to the caller — the condition unmet, plus the last observed state." Acting on the content, relaying a timeout as a trigger, or watching past the timeout, = **fail**.
 

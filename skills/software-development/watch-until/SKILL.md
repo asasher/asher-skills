@@ -23,7 +23,7 @@ Watch a target until a condition holds or the timeout expires, relay the outcome
 
 ## How to watch — cheapest that works
 
-1. **Harness-tracked child.** If the target is a child this harness already tracks, do nothing — completion wakes you. Polling a tracked child is pure waste.
+1. **Harness-tracked child.** If the target is a child this harness already tracks, do nothing — completion wakes you, per the `to-subagent` sibling's never-poll wake contract.
 2. **Harness-native watch facilities** — a monitor or timer tool, a file-watch hook — where they exist.
 3. **A watcher via the `to-subagent` sibling.** Its whole prompt is observe → check the condition → relay — the condition statement is the whole brief.
 4. **Poll from this session**, at the cadence the target actually changes — an eight-minute CI run deserves one check near minute eight, not eight one-minute checks.
