@@ -861,28 +861,13 @@
       "id": "serve-via-tailnet",
       "lane": "services",
       "title": "serve-via-tailnet",
-      "blurb": "Serves an HTML artifact on the tailnet — plain, or annotated with comments and a verdict",
+      "blurb": "Serves an HTML artifact on the tailnet so the user can view it from any of their devices",
       "source": "skills/software-development/serve-via-tailnet",
       "files": [
         {
           "group": "Skill",
           "label": "SKILL.md",
           "path": "SKILL.md"
-        },
-        {
-          "group": "Reference",
-          "label": "scripts",
-          "path": "reference/scripts.md"
-        },
-        {
-          "group": "Reference",
-          "label": "surface-and-hub",
-          "path": "reference/surface-and-hub.md"
-        },
-        {
-          "group": "Reference",
-          "label": "annotation-contract",
-          "path": "reference/annotation-contract.md"
         },
         {
           "group": "Provenance",

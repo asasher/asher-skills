@@ -19,7 +19,7 @@
 
 - Start the full dev stack: **n/a** — nothing to boot.
 - To exercise a skill (the equivalent of "running the app"): invoke it in a harness against a scenario. From Claude Code, the `Skill` tool or a subagent that reads the skill's `SKILL.md`; from Codex, per the skill's `agents/openai.yaml`. A "run" is a probe scenario driven through an executor model — see § Driving behavior.
-- Scripts the skills ship (e.g. `scripts/review-server.py`) are stdlib-only Python 3 — run directly with `python3`, no install.
+- Scripts the skills ship (e.g. `scripts/worktree.py`) are stdlib-only Python 3 — run directly with `python3`, no install.
 - Services / ports / URLs: **none** — the loop stands up no servers, only whatever transient port a probe or driven script briefly binds.
 - Headless contract: **no dev stack — nothing to detach.** The loop runs no long-lived processes; a script driven for verification stops with its check.
 
@@ -81,7 +81,7 @@
 - Driver per surface:
   - **In-session executor (Claude):** spawn a subagent (Agent tool, `subagent_type: claude` or `general-purpose`) that reads the target skill's `SKILL.md` and works a probe scenario. This is the primary driver — Opus/Fable in-session.
   - **Independent executor (gpt-5.6-sol):** `codex exec -s read-only --skip-git-repo-check` (or `-s workspace-write` when the run must edit) with a self-contained prompt that points at the skill and scenario. A second, differently-modeled executor per `docs/agents/probe-evals.md`.
-  - Any stdlib script a skill ships (e.g. `review-server.py`) is driven directly with `python3`.
+  - Any stdlib script a skill ships (e.g. `worktree.py`) is driven directly with `python3`.
 - Independent runtime verification: delegate a scenario to `codex exec` for a second executor outside the orchestrator's context (dispatch mechanics in the `staffing` skill's compiled harness-mechanics reference; the roster in `staffing.md`, verified routes in the machine-local overlay it declares). Reading skill files, grading transcripts against an answer key, and running a skill's `scripts/` stay local.
 - Evidence capture per surface: the **eval transcript** (the executor's run) plus a **pass/fail verdict table** mapping each probe to its answer-key criterion. For a skill that produces a visual artifact (e.g. `maquette`, a rendered plan), also a screenshot of the rendered HTML. Terminal transcripts for script behavior.
 - Supporting tools: `docs/agents/probe-evals.md` (the eval harness) and the skill's own `evals/` dir; an artifact a human should eyeball rides the change request (committed and screenshotted per `evidence.md`) or is opened locally (§ Presenting).

@@ -15,7 +15,7 @@ Evidence is proof of a separate checked criterion, not a catch-all for anything 
 Per change type — tuned for a skills repo, where the proof is usually an eval transcript, not a screenshot:
 
 - Skill behavior change (SKILL.md, references, routing): the **probe-eval result** — the executor transcript plus a pass/fail table mapping each probe to its answer-key criterion (`docs/agents/probe-evals.md`). For a reworked skill, show the before/after verdict shift on the scenarios that motivated the change.
-- Script change (stdlib Python): the terminal transcript of `python3 -m py_compile <script>` plus the script driven through the changed path (e.g. `review-server.py --sweep` output).
+- Script change (stdlib Python): the terminal transcript of `python3 -m py_compile <script>` plus the script driven through the changed path (e.g. `worktree.py inspect` output).
 - Skill that renders a visual artifact (`maquette`, a generated plan/prototype HTML): before/after screenshots of the rendered HTML; a short GIF for an interaction flow.
 - Pure docs/prose change: nothing beyond the diff and a note on which contract it satisfies — no artifact.
 - Repo-specific expectations beyond these: an eval transcript is the default proof for anything touching a skill's behavior; a green "it renders" screenshot alone is not enough when the change is about _what the skill decides_.

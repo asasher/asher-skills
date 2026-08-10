@@ -1,7 +1,7 @@
 ---
 name: serve-via-tailnet
-description: Serve a local HTML artifact over the tailnet so the user can view it from any of their devices — plain, or with an annotation surface that collects comments and a verdict. Runs only when the user explicitly invokes it; never the default way to present an artifact.
-argument-hint: "<artifact.html> [--annotate]"
+description: Serve a local HTML artifact over the tailnet so the user can view it from any of their devices. Runs only when the user explicitly invokes it; never the default way to present an artifact.
+argument-hint: "<artifact.html>"
 user-invocable: true
 disable-model-invocation: true
 metadata:
@@ -17,16 +17,10 @@ Expose a local HTML artifact on the tailnet and hand the user its URL. The consu
 
 Serving is **detached**: the server outlives this turn, and the URL is reported with how to stop it.
 
-## Plain serve
+## Serve
 
-For an artifact that only needs viewing: serve the file (or its directory) with a detached stdlib HTTP server on a free port, verify it answers, report the URL. No chrome, no state.
-
-## Annotated serve
-
-For an artifact that needs a reaction — comments and a verdict — serve it through `scripts/review-server.py`: it injects the annotation chrome at serve time (the file on disk stays byte-pure), anchors comments to the artifact's stable element ids, collects batched feedback with one of three verdicts (approve / approve-with-nits / request-changes) bound to the document's content hash, and maintains a per-repo hub of live surfaces. `scripts/review-await.py` blocks until the verdict lands. Contract and CLI: [annotation-contract](reference/annotation-contract.md), [scripts](reference/scripts.md), [surface-and-hub](reference/surface-and-hub.md).
-
-The artifact must give reviewable elements stable ids; an artifact without them still serves, but comments can only anchor to whole-document level.
+Serve the file (or its directory) with a detached stdlib HTTP server on a free port, verify it answers, report the URL. The file is served in place — no chrome, no state, no diverging copy.
 
 ## Report
 
-Whichever mode: the URL the user opens, what device-side action is expected (view / annotate and submit), and the stop command. When a verdict is expected, say where the verdict lands and what happens on each outcome.
+The URL the user opens, and the stop command.
