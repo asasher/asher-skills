@@ -4,9 +4,8 @@ Exposes a local HTML artifact on the tailnet so the user can view it from any of
 
 ## When to use
 
-Only when the user explicitly asks for it — no skill or session routes here by default.
-
-- A rendered artifact (spec, prototype answer sheet, report) needs human eyes on another device.
+- A rendered artifact (spec, prototype answer sheet, report) needs human eyes on another device — on the user's ask, or when the session judges another device is the right surface.
+- Never the default way to present an artifact — repo playbooks name the standing presentation routes.
 
 ## Dependency surface
 

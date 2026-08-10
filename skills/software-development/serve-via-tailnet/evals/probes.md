@@ -4,7 +4,7 @@ Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **`SKILL
 
 ## Scenario
 
-A status report at `docs/reports/payouts.html` needs viewing; the user is on their phone and has explicitly asked for it to be served.
+A status report at `docs/reports/payouts.html` needs viewing; the user is on their phone.
 
 ## Probes
 

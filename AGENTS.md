@@ -92,7 +92,7 @@ These skills are installed for this project — self-hosted from this repo's cat
 | to-thread | Spawns named, attachable sessions through the outermost harness | project |
 | to-subagent | Staffed non-interactive dispatch with a wake path | project |
 | watch-until | Watches a target until a condition holds, then relays | project |
-| serve-via-tailnet | Serves HTML artifacts on the tailnet — only on the user's explicit invocation, never as a default presentation path | project |
+| serve-via-tailnet | Serves HTML artifacts on the tailnet when they need viewing from another device — never the default presentation path | project |
 | handoff | Compacts the conversation into a handoff document | project |
 | staffing | Owns the model roster; both harnesses resolve it from `docs/agents/staffing.md` (§ Staffing) | project |
 | skill-loop | Iterates a skill through eval → revise cycles | project |

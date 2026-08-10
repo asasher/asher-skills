@@ -4,4 +4,4 @@ interface:
   default_prompt: "Use $serve-via-tailnet to serve this artifact for viewing."
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

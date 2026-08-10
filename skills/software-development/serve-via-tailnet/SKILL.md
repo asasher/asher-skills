@@ -1,11 +1,10 @@
 ---
 name: serve-via-tailnet
-description: Serve a local HTML artifact over the tailnet so the user can view it from any of their devices. Runs only when the user explicitly invokes it; never the default way to present an artifact.
+description: Serve a local HTML artifact over the tailnet so the user can view it from any of their devices. Use when a rendered artifact needs human eyes on another device; never the default way to present an artifact.
 argument-hint: "<artifact.html>"
 user-invocable: true
-disable-model-invocation: true
 metadata:
-  invocation: user
+  invocation: model
   execution: orchestrator
   requires: []
   optional: []

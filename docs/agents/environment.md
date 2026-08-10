@@ -91,9 +91,9 @@
 
 > Review is **tracker-native**: each build's review happens on its own change request — the PR thread bound in `platform.md` § Change review — which is per-ticket by construction, so concurrent reviews need no shared surface, no cap, and nothing to keep alive. Spec sign-off lives on the ticket; prototype feedback arrives in chat. Do not publish reviews to the tailnet, stand up review servers, or proxy review ports for the loop.
 
-- Artifacts that genuinely need rendering (a plan or prototype HTML a human should eyeball) are a separate concern with **no standing surface bound here**: open them locally with `open <file>`, or commit and screenshot them onto the change request per `evidence.md`. The `serve-via-tailnet` skill is installed and may be invoked explicitly on demand, but it is not the review path and has no standing config in this playbook.
+- Artifacts that genuinely need rendering (a plan or prototype HTML a human should eyeball) are a separate concern with **no standing surface bound here**: open them locally with `open <file>`, or commit and screenshot them onto the change request per `evidence.md`. The `serve-via-tailnet` skill is installed and may be invoked on demand, but it is not the review path and has no standing config in this playbook.
 - Residual local services, ports, and orphaned `tailscale serve` handlers are machine facts — the overlay declared in § Authenticating records them, along with the probe (`tailscale serve status`) and reap (`tailscale serve --set-path <path> off`) commands for any orphan it names.
-- Keep-awake: **none** (setup choice) — harnesses hold sleep assertions during active runs, and with review on the tracker the loop leaves nothing AFK depending on this machine being awake. The one exception is an explicitly-invoked `serve-via-tailnet` session, which serves from this machine — an AFK review over it may find the machine asleep; revisit if that bites.
+- Keep-awake: **none** (setup choice) — harnesses hold sleep assertions during active runs, and with review on the tracker the loop leaves nothing AFK depending on this machine being awake. The one exception is an active `serve-via-tailnet` session, which serves from this machine — an AFK review over it may find the machine asleep; revisit if that bites.
 
 ## Model staffing
 
