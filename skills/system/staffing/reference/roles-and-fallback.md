@@ -1,33 +1,29 @@
-# Roles and the fallback ladder
+# Roles and fallback
 
-Roles are defined by **workflow stage** and, within build-out, by **work surface**. The roster itself is compiled by [machine-audit](machine-audit.md) and installed per [install-and-reconcile](install-and-reconcile.md); this file defines the roles and succession, machine-generically.
+Roles are defined by **workflow stage** and, within build-out, by **work surface**. A role is a named preset of bars — it tells the caller what to state, and resolution proceeds per [rankings-and-routing](rankings-and-routing.md): filter below the bars, take the cheapest survivor.
 
 One model may fill several roles. **Separation is by thread, not by model:** delegating a role into its own thread is what keeps the orchestrator's context coordinative, even when the same model would nominally do both jobs.
 
-## Roles
+## Roles as bars
 
-- **Orchestrator** — the most capable reachable model. Owns judgment, not production: grooming, dispatch, planning, prototype decisions, hard diagnosis, and every escalation. Do not spend it on routine build-out.
-- **Issue coordinator** — owns one groomed issue's lifecycle and worker handoffs, resolved at dispatch per [rankings-and-routing](rankings-and-routing.md) § Resolution order. The roster's **coordinator-eligible set** contains reachable models at or above the Floor that can own a durable child and dispatch/escalate its worker stages. Record the chosen route and upward successor before creating the worktree or child. Routine work points up to the session orchestrator for new judgment/design/hard diagnosis/an invalidated plan; if the coordinator already is the orchestrator, record the roster's next orchestrator successor and any required human authority.
-- **Builder** — owns production: implement, refactor, and the fix commits the loop surfaces. Routed by the **surface** the change touches:
-  - **backend** — logic, data, APIs, tests. May be an external CLI when the harness can invoke one.
-  - **ui** — components, styling, layout, client-only rendering. Takes a model with strong frontend judgment that clears the routing rules' taste gate. The backend builder never takes ui work unless the roster clears it for it.
-  - **mixed** — split by file where practical (backend files to the backend builder, ui files to the ui builder); when it cannot be split cleanly, the builder owning the larger or riskier surface takes the whole change.
-- **Checker** — owns the capped loops: verify ⇆ fix, evidence capture, and adversarial-review subagents. Checking anything that touches ui must stay on a ui-capable model, because the reviewer must satisfy the full review criteria, frontend included; a backend-only model may check only backend-only work.
-- **Floor** — the minimum capability class the roster names. **Nothing staffs below it, in any role.** The floor is a hard constraint, not a preference; a project override may raise it but never staff beneath it.
+- **Orchestrator** — judgment, not production: grooming, dispatch, planning, prototype decisions, hard diagnosis, and every escalation. High intelligence bar. Do not spend it on routine build-out.
+- **Builder** — production: implement, refactor, and the fix commits the loop surfaces. Bars follow the **surface** the change touches:
+  - **backend** — logic, data, APIs, tests. Intelligence bar sized to the task's difficulty; no taste bar.
+  - **ui** — components, styling, layout, client-only rendering. Carries the hard taste bar for user-facing work; a model below it never takes ui work.
+  - **mixed** — split by file where practical (backend files to the backend route, ui files to the ui route); when it cannot be split cleanly, the whole change takes the stricter surface's bars.
+- **Checker** — verify ⇆ fix loops, evidence capture, and review subagents. Checking anything user-facing carries the same taste bar as building it, because the reviewer must satisfy the full review criteria; a below-bar model may check only work with no user-facing surface.
 
-Fix work surfaced by verify or adversarial review is re-delegated to the builder for its surface — **never patched in the orchestrator's thread.** The orchestrator takes back only escalations flagged non-mechanical.
+Fix work surfaced by verify or review is re-delegated to a builder-bar route for its surface — **never patched in the orchestrator's thread.** The orchestrator takes back only escalations flagged non-mechanical.
 
-## Fallback ladder
+## Fallback
 
-Reachability degrades gracefully; it never silently drops a step.
+There are no succession lists. Fallback is the resolution rule itself: **the next-cheapest survivor above the same bars steps in.**
 
-- **A role's model is unreachable** → the **next most capable reachable model steps into the role**, per the roster's succession line. An orchestrator succession may leave one model both orchestrating and building its surface — acceptable; it is still preferable to stopping.
-- **One sibling harness direction fails** → mark only that route unavailable with its observed failure class — carrying the retry-at when the failure named a reset — the same row write [rankings-and-routing](rankings-and-routing.md) § Self-heal at the point of use defines, then re-run the same pins, gates, and ranking over the remaining reachable candidates. A transient direction re-enters candidacy through the inline probe at or past its retry-at; a durable one stays down until a human decision or setup. Symmetry is a property of two working directions, not an assumption.
-- **No other model is reachable at all** → run the delegated work **on the current model, in a subagent** when the harness allows one, inline only when no subagent is possible. Never skip the step.
-- **A missing roster section degrades, it does not hard-stop.** If the install is incomplete (no staffing section found), staff the fallback above and **report a staffing gap** rather than stopping.
+- **A route fails at the point of use** → warn the user, take the next-cheapest survivor above the bars, continue. The warning is the record; a route failing repeatedly across sessions is retro fodder.
+- **Output misses the bar** → escalate to a more capable survivor without asking.
+- **No model above the bars is reachable** → run the work **on the current model, in a subagent** when the harness allows one, inline only when no subagent is possible, and **report the staffing gap**. Never skip the step, and never quietly ship user-facing work through a model below the taste bar — the gap report is the honesty mechanism.
+- **A missing playbook degrades, it does not hard-stop.** Staff the fallback above, report the staffing gap, and suggest `staffing setup`.
 
-Succession changes _who_ fills a role; it never merges the roles back into one thread.
+## Worked example — the ui route fails
 
-## Worked example — the ui builder is unreachable
-
-A ui change needs the ui builder, but that model cannot be reached from the current harness. Do **not** hand it to the backend builder by default and do **not** stop. Walk the succession line: the next most capable **reachable** model with sufficient taste for ui work (taste ≥ 7, per the routing rules) steps into the ui builder role. If the only reachable model with adequate taste is the orchestrator, it takes the ui build itself (an orchestrator/builder overlap the ladder explicitly allows). If no reachable model clears the ui bar at all, run the ui work on the current model in a subagent and **report the staffing gap** — never ship ui work through a model the roster would not clear for it, and never skip the change.
+A ui change resolves to the cheapest survivor above the taste bar, but that route fails at dispatch. Do **not** hand the work to a below-bar model and do **not** stop. Warn the user, then take the next-cheapest survivor still above the taste bar — even if that is the most expensive model on the roster. If nothing above the bar is reachable, run the ui work on the current model in a subagent and report the staffing gap.

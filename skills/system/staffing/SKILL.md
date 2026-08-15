@@ -1,7 +1,7 @@
 ---
 name: staffing
-description: Own the model roster for a project. Use to write or reconcile the project's staffing playbook, re-probe reachability after a CLI or machine change, or resolve any "which model should do this?" question — directly or from a sibling skill. Not for running the task itself.
-argument-hint: "[setup | route <task> | reconcile]"
+description: Own the model roster and its resolution doctrine for a project. Use to answer any "which model should do this?" question — state the intelligence and taste bars the task needs, drop every model below them, take the cheapest survivor — or to write the project's staffing playbook. Cited by siblings such as to-subagent; not for running the task itself.
+argument-hint: "[setup | route <task>]"
 user-invocable: true
 metadata:
   invocation: model
@@ -9,48 +9,40 @@ metadata:
   requires: []
   optional: []
   setup: reference/setup.md
-  variants: {"claude":"variants/claude","codex":"variants/codex"}
 ---
 
 # Staffing
 
-Compiles machine-observed models into one roster of roles, pins, capability providers, rankings, reachability, and successors. It selects a route; it does not run the task or ship a fixed machine roster.
+A reference skill: the roster and the resolution doctrine, cited by name from siblings (`to-subagent`, dispatchers) and consulted directly. It selects a route; it does not run the task.
 
 ## Commands
 
-- **setup** — load [setup](reference/setup.md); audit reachability and write or reconcile the project's staffing playbook.
-- **route `<task>`** — load [rankings-and-routing](reference/rankings-and-routing.md) and, for roles or route loss, [roles-and-fallback](reference/roles-and-fallback.md).
-- **reconcile** — load [install-and-reconcile](reference/install-and-reconcile.md) and the active provider's [harness mechanics](reference/harness.md); compare installed rules with the current machine and report drift/conflict in prose.
+- **setup** — load [setup](reference/setup.md); fill the playbook template from the seed and a short repo-deltas interview.
+- **route `<task>`** — load [rankings-and-routing](reference/rankings-and-routing.md) and, for role-shaped questions, [roles-and-fallback](reference/roles-and-fallback.md). Cross-harness dispatch shapes are in [harness](reference/harness.md).
 
 No argument runs setup.
 
-## Resolution
+## Resolution — bars, then cheapest
 
-Issue-coordinator callers first supply work type, surface/capabilities, coordination class/reason, and known uncertainty. Missing fields stop dispatch; `orchestrator-required` returns the orchestrator; `routine` uses the reachable coordinator-eligible set. Then:
+The caller states the **intelligence bar** and **taste bar** the task needs; the coordination class and surface from groom's dispatch metadata are the coarse inputs to those bars. Then:
 
-1. apply a matching task/provider pin, subject to effect verification;
-2. resolve any required effect to a named provider/fallback and filter to eligible executors, then apply the hard taste gate;
-3. rank survivors by `intelligence > taste > cost`;
-4. on route loss, apply the recorded successor and rerun over reachable candidates.
+1. a matching pin short-circuits everything below;
+2. a required capability resolves to its declared provider route — a missing provider is a capability gap reported, never substituted;
+3. filter out every model below the bars — the taste bar is hard for user-facing UI, copy, or API design;
+4. take the **cheapest survivor**.
 
-Never rank before gates or choose routine coordination cheapest-first. If no model is reachable, use the current model in a subagent and report the gap; never skip the stage.
+Quality control is escalation, not up-front maximizing: **when cheaper output misses the bar, escalate to a more capable reachable route without asking.** Never rank survivors by capability — a bar either holds or it was stated wrong; restate it and re-resolve.
+
+Checks are runtime-only. Try the route at the point of use; on failure **warn the user, fall back to the next-cheapest survivor, and continue** — the warning is the record. A route failing repeatedly across sessions is retro fodder, not a state machine's job. If no survivor is reachable, run the work on the current model in a subagent and report the staffing gap; never skip the stage.
 
 ## Where the roster lives
 
-**The project's staffing playbook is the sole authority.** Resolution reads it and nothing else. There is one layer, not two: no machine-level module, and no bundled roster consulted at runtime.
+**The project's staffing playbook is the sole authority.** Resolution reads it and nothing else: roster table with judgment numbers, pins, declared capability routes, repo deltas. It records no machine state — no reachability rows, no probe records, no overlay; whether a route works is discovered by using it.
 
-The bundled roster is a **seed** — setup reads it once, when writing the playbook, and never again. A seed value that survives into the playbook does so because the audit verified it, not because it shipped.
-
-Absent a project playbook, **never resolve from the seed** and never reach for a home-directory path: its rows are unverified defaults, and staffing from them asserts a reachability nobody checked. That is a bar on _fabricating_ a roster, not a hard stop on the work — degrade as [roles-and-fallback](reference/roles-and-fallback.md) directs, running the delegated step on the current model in a subagent and reporting the staffing gap. Run `staffing setup` to close it.
-
-The playbook carries **data**: model rows, per-harness eligibility and capability bindings, pins, floor, succession, probed reachability, and the machine the probes ran on. It never carries doctrine. Ranking and succession rules live in [rankings-and-routing](reference/rankings-and-routing.md) and [roles-and-fallback](reference/roles-and-fallback.md); harness command shapes, wrapper discipline, and wake mechanics live in the compiled provider's [harness mechanics](reference/harness.md). Those are identical on every machine, so they ship with the skill and are reviewed with it.
-
-One playbook serves every harness — a Codex session and a Claude session read the same file, and facts that differ between them are a column, not a second file. Reachability is directional, and each direction carries one of three recorded states — effect-verified, intentionally disabled, or unavailable with its failure class, named transient or durable. A transient class self-expires: at or past its recorded retry-at the resolver probes it inline and proceeds on the outcome. A failure removes one direction, never both, and only an effect-verified direction backs dispatch.
-
-A playbook whose recorded machine is not this machine is stale. Re-run setup before dispatching rather than trusting rows probed elsewhere.
+The bundled roster is a **seed** — setup reads it once, when writing the playbook, and never again. Absent a playbook, never resolve from the seed or a home-directory path: degrade as [roles-and-fallback](reference/roles-and-fallback.md) directs and report the gap; run `staffing setup` to close it.
 
 ## Dependency surface
 
-- **Bundled:** setup, audit, routing, roles/fallback, install/reconcile, compiled provider mechanics, the roster seed, and the instruction-trigger template setup installs into the project instruction file.
+- **Bundled:** setup, routing, roles/fallback, harness command shapes, the roster seed, and the instruction-trigger template setup installs into the project instruction file.
 - **Project playbooks:** the staffing playbook under the repo's agent-docs directory — the sole runtime authority, written by setup.
-- **Sibling skills:** none — `staffing` is a root primitive. Siblings invoke it; it invokes none, so there is no closure to carry and nothing to degrade when a sibling is absent.
+- **Sibling skills:** none — `staffing` is a root reference. Siblings cite it; it invokes none, so there is no closure to carry and nothing to degrade when a sibling is absent.

@@ -7,8 +7,8 @@
 
 ## Staffing
 
-Read `docs/agents/staffing.md` fully before model choice, delegation, child/worktree creation, capability-provider work, watcher assignment, or route-loss fallback. It is the sole authority for this repo: the complete roster and this repo's deltas, with per-harness eligibility, capability bindings, and reachability in the machine-local overlay it declares (`docs/agents/local/staffing.md`). Every harness reads these same files.
+Read `docs/agents/staffing.md` fully before model choice, delegation, child/worktree creation, or capability-provider work. It is the sole authority for this repo: the roster table, pins, declared capability routes, and this repo's deltas. Every harness reads this same file. Resolution is the `staffing` skill's doctrine — state the task's bars, drop models below them, take the cheapest survivor; on a route failure warn and fall back.
 
 Do not resolve from a home-directory roster or from the `staffing` skill's bundled seed. If a machine-level staffing instruction is loaded ahead of this one, it is superseded — the repo's playbook wins.
 
-If the playbook is missing, or its overlay is missing or stamped with a machine other than this one, say so and run `staffing setup` rather than dispatching on rows nobody verified here.
+If the playbook is missing, say so and run `staffing setup` rather than inventing a roster.
