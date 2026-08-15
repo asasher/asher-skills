@@ -1,6 +1,6 @@
 interface:
   display_name: "To Subagent"
-  short_description: "Dispatch staffed non-interactive work in an exact supplied directory, with a wake path"
+  short_description: "Dispatch staffed non-interactive work in an exact supplied directory, as a blocking call with a validated deliverable"
   default_prompt: "Use $to-subagent to dispatch this work to a staffed subagent."
 
 policy:

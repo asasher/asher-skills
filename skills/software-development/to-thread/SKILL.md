@@ -7,78 +7,41 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [worktree]
-  optional: []
+  optional: [plain-language]
 ---
 
 # To Thread
 
-Spawn one attended session, detached: creation returns immediately and the outermost interactive supervisor owns the session. Nothing flows back — the user attends the thread. Report status only when asked, through that supervisor's listing surface.
+Spawn one named, interactive session in the outermost harness, verify it is alive, and tell the user how to attach. The outermost interactive supervisor owns the session; nothing flows back to this one — outcomes land in the tracker.
 
-## Thread contract
+## Shared contract — every route
 
 - **Name** — short, human, specific (`shape-142-driver-payouts`, not `session-2`).
 - **Prompt** — standalone. The thread sees none of this conversation: state the goal, inputs by path or ticket id, what done looks like, and any skill it should run.
-- **Project and directory** — distinguish the registered project root from the working directory. Run in the supplied directory exactly; do not infer a new worktree from edit intent.
-- **Isolation** — when explicitly requested and no prepared directory was supplied, use the `worktree` skill first and dispatch inside its returned path. The caller is provisional owner until spawn; the spawned thread then owns merge/cleanup, and its standalone prompt says so. Its harness thread record plus the parent dispatch report are the ownership record. Report the path and branch with the thread.
-- **Model and effort** — use this session's current model and effort, passed explicitly. A user-specified override wins. Do not resolve ordinary threads through staffing.
+- **Directory** — run in the supplied directory exactly; distinguish the registered project root from the working directory; do not infer a new worktree from edit intent. Isolation only when explicitly requested and no prepared directory was supplied: use the `worktree` sibling first and dispatch inside its returned path — the caller is provisional owner until spawn, the spawned thread then owns merge/cleanup, and its standalone prompt says so. Report the path and branch with the thread.
+- **Model and effort** — the dispatching session's current model and effort, passed explicitly. The user never leaves their outermost harness — a thread is the user's own seat continuing elsewhere, so staffing is never consulted for threads; the roster staffs only unattended subagent work. A user-specified override wins.
 - **Permission mode** — pass the mode selected for this session explicitly.
-- **Report** — after spawn, give the user the name/id, attachment path, exact directory, and branch, whether the directory was prepared here or supplied by a composing workflow.
+- **The dispatch declaration** — every spawn opens with a declaration in the transcript, posted before the call goes out: "Dispatching <work> — model <X>, effort <Y>, harness <Z>, deadline <absolute time>." A statement, never a question: the human can interrupt, nobody must approve, and the transcript is the audit trail. User-facing text follows the `plain-language` sibling.
+- **Liveness before success** — a spawn reports success only when the thread is observably alive and attendable, never merely because the create command exited zero. Validate every identifier the route requires before create, or verify the thread's state briefly after start; a spawn that would fail asynchronously inside the app fails here, at the command line, instead. If the outermost harness has no attachable session surface, say so and hand the user the standalone prompt — a failed route never silently becomes a hidden thread elsewhere.
+- **Attach is inspection** — attach-ability exists so the user can look in, not so anyone must attend; threads may run unattended with their outcomes landing in the tracker.
+- **Report** — after a verified spawn, give the user the name/id, the attachment path, the exact directory, and the branch, whether the directory was prepared here or supplied by a composing workflow.
 
-## Route by outermost supervisor
+## Step 1 — detect the outermost harness
 
-Select the interactive control plane from explicit host context before looking at the underlying provider:
+Detect from host context at runtime — never from recorded machine facts, which go stale and vary by machine. When system or runtime host metadata says this session runs inside T3 Code, T3 is outermost; the product-native `t3-code` MCP toolkit corroborates that for both Codex and Claude providers, while mere installation or reachability of a similarly named MCP server is not an ownership signal, and `T3_MCP_BEARER_TOKEN` additionally corroborates T3-hosted Codex but is not universal. Otherwise the provider harness is outermost: distinguish its CLI from its desktop app by how the user is actually attending this session. Never route by model name — a Codex or Claude provider running inside T3 always creates a T3 thread.
 
-1. When system/runtime host metadata says this session is running inside T3 Code, T3 is outermost. The product-native `t3-code` MCP toolkit corroborates that context for both Codex and Claude providers; mere installation or reachability of a similarly named MCP server is not an ownership signal. `T3_MCP_BEARER_TOKEN` additionally corroborates T3-hosted Codex but is not universal.
-2. Otherwise a Claude Code session uses Claude's background-session surface.
-3. Otherwise a Codex session uses Codex's resumable-thread surface.
+When the signals are ambiguous, ask the user which harness is outermost. One question beats a wrong guess that fails asynchronously in an app the user is not watching.
 
-A Codex or Claude provider running inside T3 always creates a T3 thread. Never route by model name.
+## Step 2 — load exactly one route
 
-## T3 Code
-
-Ground truth: the installed T3 Code. The helper discovers the local runtime at run time; the running app's schema is the authority on command shape — a command the app rejects surfaces as a capability-drift report naming the values sent, never a silent retry or fallback.
-
-Run the bundled helper with the resolved provider, current model, and prepared directory:
-
-    scripts/t3-thread.py --name "<name>" --prompt "<prompt>" \
-      --project-directory <project-root> --directory <directory> --branch <branch> \
-      --provider <codex-or-claude-instance> --model <model> --effort <effort> \
-      --runtime-mode <mode>
-
-The helper discovers the local runtime and installed server CLI, requires a loopback HTTP origin, issues a five-minute bearer session, resolves the active project by its registered root from the lightweight shell snapshot, sends `thread.create` then `thread.turn.start`, and revokes the session on every exit path. It registers a supplied external worktree path and branch; T3 supervises the conversation but does not create or clean the worktree. Creation omits the automatic title seed so the supplied name remains stable.
-
-`--runtime-mode` takes T3's own runtime modes — currently `approval-required`, `auto-accept-edits`, `auto`, or `full-access` — never a provider sandbox name like `workspace-write`; the app refuses anything outside its schema. A payload the app rejects at schema decode comes back as HTTP 400 with an empty body, and the helper degrades that into a command-shape-drift report: which command was refused, the values it sent, the enum sets the last probed app accepted when the refused command carries those fields, and where to re-probe. Any create the app refuses outright — any 4xx, the empty-body schema rejection included — was never applied, so the helper skips the compensating delete instead of manufacturing a second failure. If turn start fails after creation, the helper deletes the partial thread before revoking its credential; when that delete itself fails, the error names the orphaned thread id and title and tells the user to discard it from the T3 sidebar.
-
-Tell the user to open the named thread in the T3 project sidebar. A missing local project, a command the app's schema refuses, authentication failure, or non-local origin is capability drift: report it and stop before falling through to the provider harness. Remote servers and custom T3 homes are unsupported.
-
-## Claude Code
-
-Ground truth: the installed `claude` — flags drift between releases, so recheck `claude --help` if a flag misses.
-
-    cd <directory> && claude --bg -n "<name>" --model <model> --effort <level> \
-      --permission-mode <mode> "<prompt>"
-
-The directory is already resolved, so omit Claude's worktree flag. Tell the user: `claude agents` lists sessions; `claude attach <id>` attaches; the session also appears on Claude's attended app surfaces.
-
-## Codex
-
-Ground truth: the installed `codex` — flags drift between releases, so recheck `codex --help` if a flag misses. A CLI thread has a UUID and an optional name:
-
-1. Spawn detached in the resolved directory, capturing the first JSONL `thread.started` id:
-
-   cd <directory> && codex exec --json -s <sandbox> -m <model> \
-    -c model_reasoning_effort="<effort>" '<prompt>' > <log-file> 2>&1 &
-
-2. Name it with `scripts/name-codex-thread.py <uuid> "<name>"`.
-3. Tell the user: `codex resume '<name>'` opens it; bare `codex resume` is the picker.
-
-Never pass `--ephemeral`; it makes the thread unresumable. When the user attends through the Codex desktop app, create app-natively with app-server `thread/start` → `thread/name/set` → `turn/start` instead of creating an exec-filtered thread.
-
-## Degrade
-
-If the detected outermost harness has no attachable session surface, say so and hand the user the standalone prompt. A failed T3 route never silently becomes a hidden provider-native thread.
+- On T3 Code as the outermost harness: read `reference/t3.md`.
+- On Claude Code attended in a terminal: read `reference/claude-cli.md`.
+- On Claude Desktop as the attended surface: read `reference/claude-desktop.md`.
+- On Codex attended in a terminal: read `reference/codex-cli.md`.
+- On the Codex desktop app as the attended surface: read `reference/codex-desktop.md`.
 
 ## Dependency surface
 
-- **Bundled:** `scripts/t3-thread.py` (local T3 HTTP dispatch); `scripts/name-codex-thread.py` (Codex post-creation naming).
+- **Bundled:** `reference/` (the five route files above); `scripts/t3-thread.py` (local T3 HTTP dispatch); `scripts/name-codex-thread.py` (Codex post-creation naming).
 - **Sibling (required, by name):** `worktree` — explicit direct isolation; prepared directories from a composing workflow are used as supplied.
+- **Sibling (optional, by name):** `plain-language` — the standard for the declaration and the report. Absent it, write plainly and say the standard was not loaded.
