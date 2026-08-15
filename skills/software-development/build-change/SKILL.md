@@ -1,5 +1,5 @@
 ---
-name: build
+name: build-change
 description: Take one ready ticket from checkout to a review-ready change request — implement, verify and fix, open the change request, adversarial review, evidence. Use on a single ticket in a session of its own.
 argument-hint: "<ticket id>"
 user-invocable: true

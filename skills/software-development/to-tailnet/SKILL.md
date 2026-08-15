@@ -1,5 +1,5 @@
 ---
-name: serve-via-tailnet
+name: to-tailnet
 description: Serve a local HTML artifact over the tailnet so the user can view it from any of their devices. Use when a rendered artifact needs human eyes on another device; never the default way to present an artifact.
 argument-hint: "<artifact.html>"
 user-invocable: true

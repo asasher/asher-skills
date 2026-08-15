@@ -1,5 +1,5 @@
 ---
-name: merge-changes
+name: merge-change
 description: Merge review-ready changes on the user's explicit request — the human authorization gate at the end of every change.
 argument-hint: "<PRs, branches, or 'everything review-ready'>"
 user-invocable: true
