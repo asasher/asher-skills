@@ -1,8 +1,6 @@
 # Playbook: Environment
 
-> Project playbook for a skill-authoring repo. Shared — read by any backlog subskill that builds, runs, or verifies a skill. There is no assumed app or software stack: exercising a skill means running a situated probe through an executor harness. `setup` fills the isolation, seed, and parallelism sections from its audit.
->
-> Machine facts follow the discipline bundled with the `backlog` skill — read `reference/machine-facts.md` in its installed package for the classes and marker grammar; absent that skill, leave machine facts unrecorded rather than inventing a form. In short: record the probe command, not its result; every recorded machine fact lives in the gitignored `docs/agents/local/environment.md` overlay, regenerated and declared by the owning setup — never in this tracked file.
+> Project playbook for a skill-authoring repo. Shared — read by any backlog subskill that builds, runs, or verifies a skill. There is no assumed app or software stack: exercising a skill means running a situated probe through an executor harness. `setup` fills the agent-readiness section from its certification. Repo facts accrete here; machine state is never recorded — a capability is checked at use, and a failed check warns and names its fallback.
 
 ## Branching & deploys
 
@@ -17,12 +15,22 @@
 - How to exercise a skill: _<executor-harness command or dispatch that runs one situated probe>_.
 - App / stack: **none assumed** — the runtime surface is the executor harness loading the skill and responding to a probe.
 
-## Worktree isolation
+## Agent-readiness
 
-- Regime: **local-isolatable** — checked-in skill files and stdlib-only scripts are isolated by the worktree unless the repository records an external shared resource below.
-- Working-copy ownership: project-owned `worktree` skill; dispatch receives the prepared directory and never asks a harness for native isolation.
-- How to create an isolated skill run for one worktree: _<run the executor with that worktree's skill source and eval scenario>_.
-- Shared-singleton list: _<external executor session, cache, publishing target, or account; otherwise “none — files and scripts are worktree-local”>_.
+> The standard lives in the `agent-ready-codebase` reference skill; this section records this repo's **answers**. `backlog setup` certifies against the checklist — pass, or a punch list of gaps — and `backlog build` dispatches only on a full pass. Working copies always go through the project-owned `worktree` skill; dispatch receives the prepared directory and never asks a harness for native isolation. For a skill-authoring repo, checked-in skill files and stdlib-only scripts are worktree-local by construction — the items below mostly pass for free.
+
+1. **Worktrees** — the `worktree` skill can create, inspect, and remove working copies here: _<pass | gap>_.
+2. **Stack per worktree** — an isolated skill run per worktree: _<pass — run the executor with that worktree's skill source and eval scenario | gap>_.
+3. **Auth per worktree** — an agent can mint an executor session in each copy independently: _<pass | gap>_.
+4. **Seed** — the `evals/` probe scenarios cover what the skills offer, including new behavior: _<pass | gap>_.
+
+**Shared singletons — use ≠ change.** _<external executor session, cache, publishing target, or account; otherwise "none — files and scripts are worktree-local">_. Most rows collide only on change: a ticket that changes a shared resource is marked at the tracker.
+
+| Singleton          | Collides on     | Notes         |
+| ------------------ | --------------- | ------------- |
+| _<row, or "none">_ | _<change only>_ | _<add yours>_ |
+
+**Punch list** — the gaps certification found, each groomable as its own ticket: _<the list, or "none — certified <date>">_.
 
 ## Seed data
 
@@ -36,7 +44,7 @@
 - Auth model: _<executor login or token, or “none”>_.
 - How an agent mints an executor session: _<start a fresh in-session or CLI executor without sharing mutable context>_.
 - Test accounts / where credentials live: _<environment or secrets store; never hardcode or echo secrets>_.
-- Identity observations ("authed as `<user>`") are machine-local: they go in the `docs/agents/local/environment.md` overlay, never in this tracked file — record here only the liveness probe.
+- Record here only the liveness probe — never an observed identity; who is authed is checked at use, not written down.
 
 ## Driving behavior & capturing evidence
 
@@ -48,14 +56,8 @@
 
 ## Presenting to the human
 
-> No standing presentation surface is bound here. Review happens on the change request bound in `platform.md` § Change review; an artifact that genuinely needs rendering is opened locally or committed and screenshotted onto the change request per `evidence.md`. Where the `serve-via-tailnet` skill is installed, it may be invoked on demand when the human needs an artifact on another device.
+> No standing presentation surface is bound here. Review happens on the change request bound in `platform.md` § Change review; evidence media uploads via the `to-web` sibling and embeds by URL per `evidence.md`. Where the `to-tailnet` skill is installed, it may be invoked on demand when the human needs an artifact on another device without publishing it.
 
 ## Model staffing
 
 > Owned by the `staffing` skill. Do not bake named models into this baseline.
-
-## Parallelism verdict
-
-- Verdict: _<parallel-safe | serialize-verification>_.
-- If serialized, why: _<user preference or the external singleton that forces it>_.
-- Serialized exception lane: _<shared publishing, mutable external accounts, or “none”>_.

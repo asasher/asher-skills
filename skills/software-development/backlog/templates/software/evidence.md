@@ -1,6 +1,6 @@
 # Playbook: Evidence
 
-> Project playbook for this repo. The `prove-your-work` skill reads this file for what to capture, the format/storage contract, and the presentation contract that makes artifacts render for the human. How to run, seed, and authenticate against the app — and the capture drivers — are in `environment.md`; the review surface this presents to is bound in `platform.md`. The PR body outline that consumes the prepared evidence block is in `change-description.md`. Keep the presentation section for this repo's bound review surface; the others are reference for a rebind.
+> Project playbook for this repo. The `prove-your-work` skill reads this file for what to capture, the format/storage contract, and the presentation contract that makes artifacts render for the human. How to run, seed, and authenticate against the app — and the capture drivers — are in `environment.md`; the review surface this presents to is bound in `platform.md`, and the artifact store media uploads to is bound in `platform.md` § Artifact store. The PR body outline that consumes the prepared evidence block is in `change-description.md`.
 
 ## What to capture
 
@@ -12,6 +12,7 @@ Per change type — the shipped baseline; tune to this repo:
 - UI change: before/after screenshots of the changed surface; a short GIF for flows.
 - Workflow or auth change: an app-level walkthrough naming the account/state used, the expected result, and the observed result.
 - Data or migration change: the migration/command result plus before/after proof that the affected store is safe.
+- One-work scaffolding scripts (per `environment.md` § Driving the app): the script's run and output are captured here before the script is dropped — the evidence package is where a dropped script's proof survives.
 - Repo-specific expectations beyond these: _<add yours, or "none">_.
 
 Timing: capture once after adversarial review converges, each artifact mapped to the criterion it proves. A prior capture may be reused only when the reviewer confirmed the intervening change was styling-only.
@@ -25,31 +26,15 @@ Timing: capture once after adversarial review converges, each artifact mapped to
 
 - Static states: PNG or JPEG screenshots.
 - Flows: record MP4 for local inspection, then convert the seconds that show the criterion (≤ ~10s) to a GIF with a two-pass palette — `ffmpeg -i in.mp4 -filter_complex "fps=12,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse" out.gif` — and keep it well under 10 MB, a common inline-rendering ceiling (it is GitHub's).
-- Commit the PNG/JPEG/GIF artifacts under `evidence/<slug>/` — never the MP4: review surfaces generally cannot render a committed video inline, GitHub not in any form.
-- Name files `c<criterion>-<what-it-shows>.png` — they also render in the change's file view.
+- **Media is never committed to the repo.** Upload every artifact via the `to-web` sibling — the bucket bound in `platform.md` § Artifact store is its permanent home — and embed by the returned URL. The URLs are immutable and unguessable; main carries no media, ever. Absent the `to-web` sibling, say so and stop: state the requirement rather than committing media as a silent fallback.
+- Name uploads so the key says what it proves: `c<criterion>-<what-it-shows>.png`.
 
 ## Presentation — artifacts must render inline
 
-The contract is binding-independent: the deliverable is a **ready-to-paste block** built against the published evidence commit, grouped by the acceptance criterion each artifact proves, every artifact rendering inline where the review happens — a click-through link defeats the evidence. This step is detached from PR creation: the PR body holds an evidence placeholder waiting for it (see `change-description.md`); standalone there may be no PR at all. Commit the artifacts, publish the branch, build the block, verify it mechanically, and hand it back to the invoking thread — do not post, attach, or comment anything from this step. The mechanics below are per review-surface binding.
+The contract is binding-independent: the deliverable is a **ready-to-paste block** grouped by the acceptance criterion each artifact proves, every artifact rendering inline where the review happens — a click-through link defeats the evidence. This step is detached from PR creation: the PR body holds an evidence placeholder waiting for it (see `change-description.md`); standalone there may be no PR at all. Upload the artifacts, build the block, verify it mechanically, and hand it back to the invoking thread — do not post, attach, or comment anything from this step.
 
-### GitHub binding
-
-> GitHub renders committed images inline through same-origin `github.com` blob URLs with `?raw=1` — those are not camo-proxied, so they render on public and private repos alike (private: for viewers with repo access). `raw.githubusercontent.com` and `/raw/<sha>/` URLs ARE camo-proxied and 404 on private repos; there is no API or CLI path to the drag-and-drop attachment CDN.
-
-- Push the branch before building the block — the URLs below only resolve for a pushed SHA.
-- Embed form — one line per artifact, wrapped so the inline image click-opens full size: `[![<criterion>](https://github.com/<owner>/<repo>/blob/<commit-sha>/evidence/<slug>/<file>.png?raw=1)](https://github.com/<owner>/<repo>/blob/<commit-sha>/evidence/<slug>/<file>.png)`
-- Never `raw.githubusercontent.com`, never `/raw/<sha>/`, never a plain non-embedded link.
-- SHA reachability is the one failure mode: a rebase or force-push orphans the pinned commit and GitHub 404s the blob. Pin to the branch-head SHA at capture time and re-pin after any history rewrite. A broken embed is almost always an orphaned SHA — re-pin it (or use a branch-name ref `.../blob/<branch>/...?raw=1`, which follows head); do not "fix" it by switching to plain links.
-- **Verify mechanically, not by eye** — the agent often cannot view the rendered page (`gh` returns raw markdown, not the render). Before handing the block back, check each artifact: image syntax with a `blob/<commit-sha>/…?raw=1` URL; the SHA is on the remote (`gh api repos/<owner>/<repo>/commits/<sha>` — 404 means unpushed or orphaned); the file exists at that path in that commit (`git cat-file -e <sha>:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4. These checks catch every known failure mode without a browser.
-- When `environment.md` names a browser driver that can reach GitHub, the invoking thread additionally eyeballs the rendered PR body after it swaps the block in — this step posts nothing, and the eyeball never substitutes for the mechanical checks.
-
-### Local binding
-
-The review file (`platform.md` § Change review) lives on the same branch as the artifacts, so embeds are **repo-relative paths** — `![<criterion>](../../evidence/<slug>/<file>.png)` relative to the review file — which render in any markdown viewer, with no SHA pinning and no proxy pitfalls.
-
-- Mechanical checks before handing the block back: each path resolves from the review file's location at the branch's HEAD (`git cat-file -e HEAD:evidence/<slug>/<file>`); the extension is PNG/JPEG/GIF, never MP4.
-- When the human reviews away from the machine, the evidence step may additionally serve the rendered review file over an on-demand presentation channel (e.g. the `serve-via-tailnet` skill where installed — no standing surface is bound; `environment.md` § Presenting) — the committed file stays the source of truth. Publishing must preserve relative-path resolution: expose the review file _with_ its `evidence/` tree (publish a directory root, not the lone file), or skip the publish — a page of broken embeds fails the gate.
-
-### Other bindings
-
-Recorded by `backlog setup` when the review surface is neither of the above: the embed form that renders inline there, its known failure modes, and a mechanical check per artifact — verified at setup, per `platform.md` § Custom bindings.
+- Embed form — one line per artifact, wrapped so the inline image click-opens full size: `[![<criterion>](<url>)](<url>)`, where `<url>` is the `to-web` URL.
+- **Verify mechanically, not by eye** — the agent often cannot view the rendered page. Before handing the block back, check each artifact: image markdown syntax; the URL answers (an HTTP `200` with an image content type); the extension is PNG/JPEG/GIF, never MP4 — review surfaces generally cannot render video inline. These checks catch the known failure modes without a browser.
+- When `environment.md` names a browser driver that can reach the review surface, the invoking thread additionally eyeballs the rendered body after it swaps the block in — this step posts nothing, and the eyeball never substitutes for the mechanical checks.
+- Local binding: the review file (`platform.md` § Change review) uses the same URL embeds, which render in any markdown viewer with no repo-relative path plumbing. When the human reviews away from the machine, the `to-tailnet` skill (where installed) may serve the rendered review file on demand — the committed file stays the source of truth.
+- Other bindings: recorded by `backlog setup` when the review surface renders external images differently — the embed form that renders inline there, its known failure modes, and a mechanical check per artifact, verified at setup per `platform.md` § Custom bindings.

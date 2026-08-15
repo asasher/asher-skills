@@ -17,8 +17,8 @@ After review converges, copy the final verify step's raw transcript and verdict 
 
 - Executor runs: _<plain-text or Markdown transcripts stored under the repo's evidence convention>_.
 - Verdicts: a Markdown table with one row per probe criterion and columns for expected result, both executors, citation, and pass/fail.
-- Visual states: PNG/JPEG; interactive flows: a short GIF where supported.
-- File naming and evidence directory: _<add the repo's convention>_.
+- Visual states: PNG/JPEG; interactive flows: a short GIF where supported. **Media is never committed to the repo**: upload it via the `to-web` sibling to the artifact store bound in `platform.md` and embed by the returned URL. Absent that sibling, say so and state the requirement rather than committing media as a silent fallback.
+- Transcript/verdict file naming and location: _<add the repo's convention>_.
 - Secrets and private context: redact credentials and unrelated user data without removing the cited decision needed for grading.
 
 ## Presentation
@@ -27,10 +27,10 @@ The deliverable is a ready-to-review evidence block grouped by acceptance criter
 
 ### GitHub binding
 
-- Store committed transcripts, verdict tables, and rendered artifacts at paths the change review can reach.
-- Verify every referenced file exists in the published revision and every image uses a renderable format.
+- Store committed transcripts and verdict tables at paths the change review can reach; embed media by its `to-web` URL, one `[![<criterion>](<url>)](<url>)` line per artifact.
+- Verify every referenced file exists in the published revision, every media URL answers, and every image uses a renderable format (PNG/JPEG/GIF, never MP4).
 
 ### Local binding
 
-- Use repo-relative links from the review file to transcripts and verdict tables, and repo-relative image embeds.
-- Verify every referenced path exists at the reviewed revision.
+- Use repo-relative links from the review file to transcripts and verdict tables; media embeds use the same `to-web` URLs, which render in any markdown viewer.
+- Verify every referenced path exists at the reviewed revision and every media URL answers.

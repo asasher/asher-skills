@@ -1,18 +1,11 @@
-# Setup — project playbooks
+# Setup — bindings, choices, certification
 
-Install or reconcile the project playbooks from `templates/` — the shared `common/` baselines plus a per-domain pack, `software/` being the shipped default:
+Three jobs, and only three: setup writes **bindings**, **choices**, and **certifications** — never a cache of machine state. Anything a live check can re-derive is checked at use, not recorded. Reconcile with what exists — a repo-owned playbook is edited, never blindly overwritten.
 
-- `docs/agents/platform.md` — platform bindings, with each verb verified live.
-- `docs/agents/backlog-policy.md` — label roles, dependency edges, the readiness decision.
-- `docs/agents/environment.md` — run/seed/check.
-- `docs/agents/codebase.md` — how the code is written and checked: seeded from the repo's own docs, accreting what sessions learn.
-- `docs/agents/evidence.md` — the evidence bar.
-- `docs/agents/change-description.md` — the change-request body outline.
+1. **Bindings** → `docs/agents/platform.md`, from `templates/common/platform.md`: the tracker and its exercised verbs; the change-request verbs, including the `delivered` mechanics for stacked slices; the version-control conventions, including feature branches and the `artifact/<ticket>-<slug>` prefix; and the artifact store — bucket, base URL, credential env-var names, upload command, with visibility fixed as public with unguessable keys (ask the owner for the store facts). Each verb is verified live at binding time; a verb failing later is drift, fixed by re-running this setup.
 
-Reconcile with what exists — a repo-owned playbook is edited, never blindly overwritten.
+2. **Choices** → `docs/agents/backlog-policy.md`, from `templates/common/backlog-policy.md`: the role→label map, the work domain (which resolves the per-domain template pack; `software/` is the shipped default), readiness autonomy, deadline sizing, and the quiet horizon. These are the owner's decisions — asked, never derived. Verify the role labels exist in the tracker; create missing ones with the user's consent. On a color-capable tracker (GitHub), apply the policy playbook's Label colors table with `scripts/reconcile-labels.py` — dry-run first, `--label role=name` for renamed roles, `--create` only under that same consent; it touches role labels only, never neutral ones.
 
-Classify every machine fact per [machine facts](machine-facts.md): verify-at-use facts get their probe command, not their result; every recorded machine fact goes to the gitignored `docs/agents/local/` overlays — one per tracked playbook, regenerated here, opening with its machine-record stamp, with the `.gitignore` entry ensured and each overlay declared in its tracked playbook by the machine-local pointer marker. A tracked file never records a machine fact.
+3. **Certification** → `docs/agents/environment.md`: walk the checklist the `agent-ready-codebase` reference sibling owns — worktrees, stack per worktree, auth per worktree, seed — and write the answers, the shared-singleton table (use vs change), and the punch list into the playbook's agent-readiness section. The verdict is **pass, or a punch list of gaps**; punch-list gaps are groomable tickets, and `backlog build` dispatches only on a full pass. Repeatable on demand — certification is upkeep, not a one-time audit.
 
-Verify the label roles exist in the tracker; create missing ones with the user's consent. On a color-capable tracker (GitHub), apply the policy playbook's Label colors table with `scripts/reconcile-labels.py` — dry-run first, `--label role=name` for renamed roles, `--create` only under that same consent; it touches role labels only, never neutral ones.
-
-Finish by running `scripts/check-machine-facts.py` against the repo and resolving what it names.
+The remaining playbooks install from the same packs and reconcile the same way: `docs/agents/environment.md`'s run/seed/auth sections, `docs/agents/codebase.md` (seeded from the repo's own docs, accreting what sessions learn), `docs/agents/evidence.md`, and `docs/agents/change-description.md`.
