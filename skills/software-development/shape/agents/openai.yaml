@@ -1,6 +1,6 @@
 interface:
   display_name: "Shape"
-  short_description: "Settle a subject's strategic decisions: interview in frontier rounds, model the terms, research and prototype what the conversation can't settle"
+  short_description: "Settle one subject's strategic decisions: interview in frontier rounds, model the terms, research and prototype what the conversation can't settle; exit is a spec blessed at a hash"
   default_prompt: "Use $shape to settle this work's strategic decisions."
 
 policy:

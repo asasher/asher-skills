@@ -1,6 +1,6 @@
 # Domain Modeling
 
-Builds and sharpens the project's domain model _while decisions are being made_: challenges terms against the glossary, sharpens fuzzy language into canonical terms, stress-tests concept boundaries with concrete scenarios, cross-references claims against the code — and writes the results down **the moment they crystallise**: terms into `CONTEXT.md` (a glossary and nothing else), decisions passing the three-gate test (hard to reverse ∧ surprising without context ∧ real trade-off) into one-paragraph ADRs under `docs/adr/`.
+Builds and sharpens the project's domain model _while decisions are being made_: challenges terms against the glossary, sharpens fuzzy language into canonical terms, stress-tests concept boundaries with concrete scenarios, cross-references claims against the code — and writes the results down **the moment they crystallise**. Destination follows the is/will-be test: during shaping, terms and ADR drafts go into the spec's **context delta** (landed on main by the build that makes them true); direct writes to `CONTEXT.md` (a glossary and nothing else) and one-paragraph ADRs under `docs/adr/` remain for facts already true of the code. Decisions pass the three-gate test (hard to reverse ∧ surprising without context ∧ real trade-off) before becoming ADRs.
 
 ## When to use
 

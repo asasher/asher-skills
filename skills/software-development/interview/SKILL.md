@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: []
-  optional: [to-backlog, to-subagent]
+  optional: [plain-language, to-backlog, to-subagent]
 ---
 
 # Interview
@@ -16,7 +16,9 @@ Interview the user relentlessly until you reach a shared understanding. Map this
 
 Read what was handed to this session before the first round — provided artifacts are read, not asked about.
 
-Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled — the questions you can ask now without guessing at answers you haven't heard yet. Ask the whole frontier in one round: number each question and give your recommended answer. Then wait for the user's answers before the next round.
+Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled — the questions you can ask now without guessing at answers you haven't heard yet. Ask the whole frontier in one round, then wait for the user's answers before the next round.
+
+**Question format.** Each question in a round is written as: ❓ then the **bold number** and **bold title**, then the body — multiple-choice options where choices genuinely exist — then ➡️ followed by your recommended answer. The format makes a big round scannable and cuts the user's typing to "1: yes, 2: B, 3: as recommended." User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
 
 Each round the user answers reshapes the tree — settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a later round, not this one.
 
@@ -25,5 +27,3 @@ Finding **facts** is your job, never the user's. When a frontier question needs 
 An interview also surfaces items that are real work but not this tree's subject — a bug the user mentions in passing, an adjacent idea. Offer them to the `to-backlog` skill for capture (absent it, list them explicitly at the close) rather than absorbing them into the tree or losing them with the chat.
 
 The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
-
-**Engine mode** — the same tree without a user in the session. Dispatched non-interactively, the interview reads the handed record, settles what fact-lookups settle, and returns the current frontier as the deliverable: each question numbered, tagged with the subject it belongs to, carrying its recommended answer. Answers arrive with a later dispatch and re-enter the record as settled decisions; the frontier is recomputed exactly as an interactive round would. An empty frontier returned is the engine's done — shared understanding is then the dispatching thread's to confirm with the user, never assumed.

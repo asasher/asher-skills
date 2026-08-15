@@ -17,13 +17,14 @@ Keep every field at the altitude of **direction**: a ticket is pickup-able work,
 
 ## The split draft
 
-One scratch document, drafted before the quiz and revised through it, containing:
+One scratch document, drafted before the confirmation gate and revised through it — a justified recommendation the user edits, containing:
 
-- **Source** — what direction this split came from (the spec'd ticket, a document path, or "this conversation"). Recorded so a reader can trace tickets back. When the source is a spec'd ticket, note that on publish it becomes the **capstone parent**: every ticket below attaches as its child, and it stays undispatchable until they close.
-- **Ordered tickets** — the tickets in **dependency order, blockers first**, each carrying the content above but numbered locally (T1, T2, …) since tracker ids don't exist until publish.
-- **Edge list** — the dependency graph as a compact list (`T2 depends on T1`, `T3 depends on T1`), so the user can eyeball the blocking structure during the quiz. On publish, local Tn labels become tracker ids and each edge is wired per the dependency rule above.
+- **Source** — what direction this split came from: the spec'd ticket **and the blessed spec hash the slices were cut from**, a document path, or "this conversation." Recorded so a reader can trace tickets back, and so a later blessing at a new hash shows the split is stale. When the source is a spec'd ticket, note that on publish it becomes the **`spec` parent**: every ticket below attaches as its child, and it stays undispatchable until every child is closed or delivered.
+- **Landing shape** — the recommendation with its justification: **stacked** (feature branch off main, root commit the context delta, slices PR into it, the parent's PR the feature→main merge) or **direct** (slices PR straight to main, the first carrying the context delta and blocking the rest). See slicing § The landing shape.
+- **Ordered tickets** — the tickets in **dependency order, blockers first**, each carrying the content above plus its **rationale** (one or two sentences: why this boundary, why demoable alone), numbered locally (T1, T2, …) since tracker ids don't exist until publish.
+- **Edge list** — the dependency graph as a compact list (`T2 depends on T1 — the schema T2 reads lands in T1`), **each edge justified in words** so the user can judge the blocking structure, not just see it. On publish, local Tn labels become tracker ids and each edge is wired per the dependency rule above.
 - **Wide-refactor note** — if any part is sequenced expand→migrate→contract, call it out so the user confirms the phasing, not just the granularity.
 
 ## Order and altitude
 
-The draft exists to make the quiz concrete: one artifact, ordered, with the edges visible, that the user approves before anything reaches the tracker.
+The draft exists to make the confirmation gate concrete: one artifact, ordered, with the reasons visible, that the user edits and approves before anything reaches the tracker.
