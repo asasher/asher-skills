@@ -27,6 +27,8 @@ Honor the ticket's authority boundary — what it settles is settled; what it de
 
 **Generated files** are regenerated via the repo's recorded recipe (`docs/agents/codebase.md`), never hand-edited; regeneration drift beyond the ticket's scope is surfaced, not silently retained.
 
+**The spec's context delta** — new `CONTEXT.md` terms, ADR drafts — lands on main with the change that makes it true. An unsplit ticket writes the terms into `CONTEXT.md` and the drafts into `docs/adr/` as part of this change. A stacked slice never lands it: its feature branch already carries the delta as the branch's root commit, and landing it again is drift.
+
 **A failure that predates the change** — proven by running the same check on the base commit, or with the change stashed — is pre-existing: report it and file a ticket so it gets fixed soon, and keep it out of this build's scope. The report is what keeps it from being mistaken for new breakage.
 
 ## Done

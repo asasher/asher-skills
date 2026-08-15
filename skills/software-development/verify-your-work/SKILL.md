@@ -1,13 +1,13 @@
 ---
 name: verify-your-work
-description: Verify a named set of changes actually does what it claims — pick the proof that would catch it failing, run it, and report findings with evidence. Use after building and before a change request exists.
+description: Verify a named set of changes actually does what it claims — pick the proof that would catch it failing, run it per the spec's durable-vs-throwaway declaration, and report findings with evidence. Use after building and before a change request exists.
 argument-hint: "<the changes to verify: branch, diff, or description>"
 user-invocable: true
 metadata:
   invocation: model
   execution: thread
   requires: []
-  optional: []
+  optional: [plain-language, to-web]
 ---
 
 # Verify Your Work
@@ -24,6 +24,10 @@ Read what the change says it does — the ticket, the commit messages, the diff 
 
 The contract also bounds what state is yours: create and seed what a check needs per the playbook's fixture rules, and point destructive verbs (reset, drop, wipe) only at resources the playbook marks per-ticket-disposable — a shared store is never yours to reset.
 
+## The test split arrives declared
+
+The spec declares, per acceptance criterion, which checks become durable suite tests and which are throwaway verification scripts. The split is a shaping decision that arrives settled — never a judgment made here. A durable criterion's check is a real test in the repo's suite, left in the tree with the change. A throwaway criterion's check is a scaffolding script: capture its run — the exact command, its output, its artifacts, uploaded through the `to-web` sibling — as evidence, because the script is dropped before merge and the captured run is what remains. Absent a declaration, say so in the report, write scaffolding, and flag any check that looks durable for the owner to decide — never grow the suite on a guess.
+
 ## Pick the proof that could fail
 
 For each claim, choose the check that would go red if the claim were false:
@@ -31,7 +35,7 @@ For each claim, choose the check that would go red if the claim were false:
 - the tests the change added or touched, then the full suite;
 - typecheck and build;
 - the changed surface exercised directly — a CLI invocation, an HTTP call, a script against the real entry point;
-- for UI work, a check **written as a script** with the repo's recorded driver for that surface — a browser driver for web, an emulator or app driver for mobile — walking the changed journey through the states named in the ticket (empty, loading, error, disabled), not just the golden path — and left in the tree where the repo keeps such specs.
+- for UI work, a check **written as a script** with the repo's recorded driver for that surface — a browser driver for web, an emulator or app driver for mobile — walking the changed journey through the states named in the ticket (empty, loading, error, disabled), not just the golden path — durable suite test or scaffolding script, as the spec's declaration says.
 
 A check that cannot fail is not proof. "It compiles" verifies nothing about behavior.
 
@@ -40,5 +44,7 @@ A check that cannot fail is not proof. "It compiles" verifies nothing about beha
 Run each check and capture the exact command, its output, and its own exit status — read directly, not through a pipeline whose tail masks it. A check whose output is a visual artifact — a screenshot, an export, a rendered document — is judged by **looking at it**: the content the claim names, legible, at sane dimensions, without clipping. A file existing at nonzero bytes proves nothing. A check you couldn't run (missing environment, no browser, absent fixture) is reported as _not verified_, with the reason — never silently skipped, never guessed at. An environment seam that keeps failing — auth, seeding, a launcher — earns a bounded number of attempts (three, unless the recorded contract says otherwise), then its claims go to _not verified_ with the reason: a stuck seam converts to a partial report, not a longer loop.
 
 ## Report
+
+The report follows the `plain-language` sibling: ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
 
 Per claim — keyed to its criterion id where the ticket has them: what was checked, the command, pass or fail, and for failures the evidence quoted — the failing output, the wrong screen, the broken state. A failure also present before the change, proven by the same check against the base commit, is reported as **pre-existing** — a distinct verdict from a failure the change caused. Log any deviation from the recorded environment contract alongside the checks it touched. End with the one-line verdict: which claims stand, which fell, which went unverified.

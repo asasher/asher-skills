@@ -1,10 +1,10 @@
-# Build — situated dry-run probes
+# Build Change — situated dry-run probes
 
 Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **only `SKILL.md` in context**, exact-sentence citation per answer. Ambiguity flagged with a citation is valid. Key before runs.
 
 ## Scenario
 
-You are running the `build` skill on ticket #142 in your own worktree. Implementation landed; verification just reported two failing claims.
+You are running the `build-change` skill on ticket #142 in your own worktree. Implementation landed; verification just reported two failing claims.
 
 ## Probes
 
