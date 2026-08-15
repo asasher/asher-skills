@@ -19,7 +19,7 @@ The defining discipline is **context fidelity**: this conversation evaporates, a
 ## Command surface
 
 - **`to-backlog`** — sweep the current conversation for capture-worthy items and publish the confirmed list as tickets.
-- **`to-backlog <parent ticket id>`** — same, but attach each published ticket as a **child** of the given parent through the parent/child relation the platform playbook records. Use when the captures are installments of a parent's direction — e.g. gaps discovered while building one of its slices; under the backlog policy's open-children rule, attaching them re-blocks a capstone parent by itself.
+- **`to-backlog <parent ticket id>`** — same, but attach each published ticket as a **child** of the given parent through the parent/child relation the platform playbook records. Use when the captures are installments of a parent's direction — e.g. gaps discovered while building one of its slices; under the backlog policy's open-children rule, attaching them re-blocks a spec-typed parent by itself.
 
 ## How a capture happens
 

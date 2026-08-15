@@ -119,7 +119,7 @@ The privacy discipline for anything that leaves the repo. Every layer applies, i
   verbs, phases, role nouns, and the abstract shape of the stumble — never by redacting a transcript
   or ledger entry. You cannot leak what you never included. No repo or product names, no file paths,
   no code, no ticket ids or titles, no business terms. Reproduction steps reference the skill's own
-  abstractions ("a capstone ticket with one open child"), never this repo's instances.
+  abstractions ("a spec-typed ticket with one open child"), never this repo's instances.
 - **Scrubbed mechanically.** Run
   `scripts/scrub.py <draft> retro/denylist.txt docs/agents/retro-denylist.txt` — both denylist
   halves, the machine-local and the repo-shareable — flagging denylist terms, email addresses,

@@ -7,7 +7,7 @@ It is capture, not decomposition: N unrelated undecided things into the intake q
 ## When to use
 
 - **Mid-interview or mid-shaping** — the user names bugs and ideas that aren't this thread's subject; sweep them into the tracker instead of losing them with the chat.
-- **Mid-build** — work surfaces adjacent items (or gaps in a parent's direction); `to-backlog <parent>` attaches them as children of that parent, which under the backlog policy's open-children rule re-blocks a capstone parent automatically.
+- **Mid-build** — work surfaces adjacent items (or gaps in a parent's direction); `to-backlog <parent>` attaches them as children of that parent, which under the backlog policy's open-children rule re-blocks a spec-typed parent automatically.
 - **Any conversation that accumulated work nobody wrote down.**
 
 Not for splitting a spec (`to-slices`), not for routing or readiness (`backlog groom`), not for writing a direction (`to-spec`).

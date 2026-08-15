@@ -17,7 +17,7 @@ The one standard for all user-facing text. This is a reference skill: it defines
 
 1. **Simplified Technical English.** User-facing text follows ASD-STE100 discipline: short sentences, active voice, one idea per sentence, simple words. Say what happens and who does it.
 2. **The dictionary is the project's context files.** STE pairs a small approved general dictionary with your own technical names — `CONTEXT.md` is that technical dictionary. Use its terms exactly; do not coin synonyms for a term it already defines. The `domain-modeling` sibling maintains the dictionary; a term you need that is missing goes there, not into ad-hoc prose.
-3. **No opaque numbers.** Every ticket or PR reference carries its id, its title, and a one-or-two-sentence digest of what it is. Relations are said in words — "#12 (rename capstone) blocks #14 (groom sweep)" — never bare id lists.
+3. **No opaque numbers.** Every ticket or PR reference carries its id, its title, and a one-or-two-sentence digest of what it is. Relations are said in words — "#12 (rename the parent work-type) blocks #14 (the groom sweep)" — never bare id lists.
 
 ## Where it applies
 

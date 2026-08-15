@@ -1,6 +1,6 @@
 # Playbook: Change Description
 
-> Project playbook for this repo. The `build` skill's create-PR step reads this file for the body structure — the PR opens ready for review, targets the base branch, and defers evidence capture until review converges — and where the PR physically lives — GitHub, a committed review file, elsewhere — is in `platform.md` § Change review. Tailor the outline to this team's conventions.
+> Project playbook for this repo. The `build-change` skill's create-PR step reads this file for the body structure — the PR opens ready for review, targets the base branch, and defers evidence capture until review converges — and where the PR physically lives — GitHub, a committed review file, elsewhere — is in `platform.md` § Change review. Tailor the outline to this team's conventions.
 
 ## Body outline
 
