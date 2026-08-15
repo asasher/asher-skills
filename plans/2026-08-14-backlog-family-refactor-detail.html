@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backlog-family refactor — review</title>
+<style>
+  :root {
+    --bg: #faf9f7; --fg: #1a1a1a; --muted: #6b6862; --line: #e2ddd4;
+    --card: #ffffff; --accent: #8a5a2b;
+    --settled-bg: #e6efe2; --settled-fg: #2e5c2e;
+    --open-bg: #fdf0d7; --open-fg: #8a5f00;
+    --del-bg: #f9e4e0; --del-fg: #9c3a2a;
+    --new-bg: #e3ecf5; --new-fg: #2b5379;
+    --done-bg: #e8e6f5; --done-fg: #4b3f8f;
+    --code-bg: #f1efe9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161513; --fg: #e8e5df; --muted: #969289; --line: #35322c;
+      --card: #1e1d1a; --accent: #d0a36a;
+      --settled-bg: #23331f; --settled-fg: #9bc78f;
+      --open-bg: #3a2f14; --open-fg: #e0b558;
+      --del-bg: #3b211c; --del-fg: #e08a76;
+      --new-bg: #1e2c3a; --new-fg: #8ab4dd;
+      --done-bg: #262340; --done-fg: #a99ee0;
+      --code-bg: #26241f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.65 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+  header.doc { border-bottom: 3px double var(--line); padding-bottom: 1.2rem; margin-bottom: 2rem; }
+  h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 .4rem; }
+  .meta { color: var(--muted); font-size: .9rem; font-family: ui-sans-serif, system-ui, sans-serif; }
+  .meta b { color: var(--fg); font-weight: 600; }
+  h2 {
+    font-size: 1.25rem; margin: 2.6rem 0 .8rem; padding-top: 1.2rem;
+    border-top: 1px solid var(--line);
+    font-family: ui-sans-serif, system-ui, sans-serif; font-weight: 700;
+  }
+  h2 .ws { color: var(--muted); font-weight: 400; font-size: .85rem; letter-spacing: .06em; display:block; }
+  h3 { font-size: 1rem; font-family: ui-sans-serif, system-ui, sans-serif; margin: 1.4rem 0 .4rem; }
+  p { margin: .6rem 0; }
+  code, .mono {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .85em; background: var(--code-bg); padding: .1em .35em; border-radius: 4px;
+  }
+  .chip {
+    display: inline-block; font: 600 .68rem/1 ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: .05em; text-transform: uppercase;
+    padding: .28em .6em; border-radius: 999px; vertical-align: 2px; margin-left: .5em;
+  }
+  .settled { background: var(--settled-bg); color: var(--settled-fg); }
+  .open    { background: var(--open-bg);    color: var(--open-fg); }
+  .deleted { background: var(--del-bg);     color: var(--del-fg); }
+  .newthing{ background: var(--new-bg);     color: var(--new-fg); }
+  .done    { background: var(--done-bg);    color: var(--done-fg); }
+  .principles {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: .8rem; margin: 1.4rem 0 0;
+  }
+  .principles div {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: .9rem 1rem; font-size: .92rem;
+  }
+  .principles b { display: block; font-family: ui-sans-serif, system-ui, sans-serif; margin-bottom: .25rem; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .92rem; }
+  th, td { text-align: left; padding: .5rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-family: ui-sans-serif, system-ui, sans-serif; font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 1rem 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .ba > div { padding: .9rem 1.1rem; font-size: .92rem; }
+  .ba .before { background: var(--code-bg); border-right: 1px solid var(--line); }
+  .ba .after  { background: var(--card); }
+  .ba h4 { margin: 0 0 .5rem; font: 700 .75rem/1 ui-sans-serif, system-ui, sans-serif; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+  .ba ul { margin: 0; padding-left: 1.1rem; }
+  .ba li { margin: .3rem 0; }
+  ul.tight { padding-left: 1.2rem; } ul.tight li { margin: .35rem 0; }
+  .del-line { text-decoration: line-through; text-decoration-color: var(--del-fg); text-decoration-thickness: 1.5px; color: var(--muted); }
+  .qbox {
+    background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--open-fg);
+    border-radius: 8px; padding: .8rem 1.1rem; margin: .8rem 0; font-size: .93rem;
+  }
+  .qbox b { font-family: ui-sans-serif, system-ui, sans-serif; }
+  .diagram { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; margin: 1.2rem 0; }
+  .diagram svg { width: 100%; height: auto; display: block; }
+  .toc { columns: 2; column-gap: 2rem; font-size: .92rem; font-family: ui-sans-serif, system-ui, sans-serif; margin: 1rem 0 0; padding-left: 1.2rem; }
+  .toc li { margin: .25rem 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .small { font-size: .85rem; color: var(--muted); }
+  @media (max-width: 640px) { .ba { grid-template-columns: 1fr; } .ba .before { border-right: 0; border-bottom: 1px solid var(--line); } .toc { columns: 1; } }
+</style>
+</head>
+<body>
+<main>
+
+<header class="doc">
+  <h1>Backlog-family refactor — review document</h1>
+  <p class="meta">
+    Branch <b>arch-deepening-strong-seven</b> · 2026-08-14 · status: <b>for review — nothing built</b><br>
+    Synthesized from the brainstorming session. Every item below is a proposal until you bless it.
+    Chips: <span class="chip settled">settled</span> agreed in conversation ·
+    <span class="chip open">open</span> needs your call ·
+    <span class="chip deleted">deleted</span> mechanism removed ·
+    <span class="chip newthing">new</span> mechanism added ·
+    <span class="chip done">done</span> already true, no work.
+  </p>
+</header>
+
+<section>
+  <h2 style="border-top:0; padding-top:0; margin-top:0;">Theses</h2>
+  <div class="principles">
+    <div><b>Pull, not push.</b> No living supervisor. Outcomes land in the tracker; anyone reads them there. "Resume" means "run it again."</div>
+    <div><b>Bars, then cheapest.</b> State the quality a task needs, then take the cheapest model that clears it. Never maximize quality and glance at cost.</div>
+    <div><b>Runtime checks, not recorded state.</b> Try the route. On failure: warn, fall back. No probe ledgers, no overlays, no self-heal state machines.</div>
+    <div><b>Merge up, slice down.</b> Groom absorbs fragments into one shapeable subject; to-slices cuts the blessed spec into buildable slices.</div>
+    <div><b>Branches hold artifacts.</b> Specs, prototypes, dossiers iterate on branches; tickets carry a projection and a commit hash. Main stays clean.</div>
+    <div><b>Plain words, no bare numbers.</b> User-facing text follows ASD-STE100, uses the CONTEXT.md dictionary, and every ticket/PR number carries a description.</div>
+    <div><b>Main carries only what must stay true.</b> Anything with a shelf life — specs, prototypes, dossiers, one-work verification scripts — lives in the tracker or on artifact branches, where expiry is deleting a ref, not a cleanup chore.</div>
+  </div>
+</section>
+
+<section>
+  <h2>Contents</h2>
+  <ol class="toc">
+    <li><a href="#ws1">Backlog: groom</a></li>
+    <li><a href="#ws2">Backlog: build &amp; status</a></li>
+    <li><a href="#ws3">Staffing</a></li>
+    <li><a href="#ws4">Dispatch spine (to-thread / to-subagent)</a></li>
+    <li><a href="#ws5">Artifact branches &amp; canonicality</a></li>
+    <li><a href="#ws6">Environment: parallel-safety checklist</a></li>
+    <li><a href="#ws7">Communication standard</a></li>
+    <li><a href="#ws8">to-slices</a></li>
+    <li><a href="#ws9">Install pipeline: context pointers</a></li>
+    <li><a href="#ws10">Retro</a></li>
+    <li><a href="#ws11">serve-via-tailnet</a></li>
+    <li><a href="#ws12">Setups after the refactor</a></li>
+    <li><a href="#tickets">Ticket disposition</a></li>
+    <li><a href="#questions">Open questions</a></li>
+  </ol>
+</section>
+
+<section>
+  <h2>The shape, before and after</h2>
+  <div class="diagram" aria-label="Before and after architecture">
+    <svg viewBox="0 0 840 330" role="img">
+      <style>
+        .box { fill: none; stroke: currentColor; stroke-width: 1.2; rx: 8; }
+        .lbl { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+        .sub { font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; opacity: .65; }
+        .arr { stroke: currentColor; stroke-width: 1.2; fill: none; marker-end: url(#a); }
+        .dead { stroke-dasharray: 4 4; opacity: .45; }
+        .ttl { font: 700 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; opacity: .55; letter-spacing: .08em; }
+      </style>
+      <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="currentColor"/></marker></defs>
+      <!-- BEFORE -->
+      <text x="20" y="24" class="ttl">BEFORE — SUPERVISED</text>
+      <rect x="20" y="40" width="180" height="52" class="box"/>
+      <text x="32" y="62" class="lbl">backlog session</text>
+      <text x="32" y="80" class="sub">babysits · wakes · caps · quota</text>
+      <rect x="20" y="130" width="84" height="44" class="box"/><text x="30" y="149" class="lbl">build A</text><text x="30" y="165" class="sub">subagent</text>
+      <rect x="116" y="130" width="84" height="44" class="box"/><text x="126" y="149" class="lbl">build B</text><text x="126" y="165" class="sub">subagent</text>
+      <path d="M62,92 L62,130" class="arr"/>
+      <path d="M158,92 L158,130" class="arr"/>
+      <path d="M104,152 C110,110 110,110 62,92" class="arr dead"/>
+      <text x="20" y="205" class="sub">wakes flow back up (fragile: #198, #203)</text>
+      <rect x="20" y="225" width="180" height="44" class="box dead"/>
+      <text x="32" y="244" class="lbl">lane lock · quota gate</text>
+      <text x="32" y="260" class="sub">serialize-verification</text>
+      <!-- divider -->
+      <line x1="280" y1="20" x2="280" y2="310" stroke="currentColor" opacity=".2"/>
+      <!-- AFTER -->
+      <text x="310" y="24" class="ttl">AFTER — PULL</text>
+      <rect x="310" y="40" width="200" height="52" class="box"/>
+      <text x="322" y="62" class="lbl">backlog groom / build</text>
+      <text x="322" y="80" class="sub">route · merge · declare · fan out · exit</text>
+      <rect x="560" y="40" width="250" height="52" class="box"/>
+      <text x="572" y="62" class="lbl">tracker = the ledger</text>
+      <text x="572" y="80" class="sub">claims · outcomes · blessed spec hashes</text>
+      <rect x="310" y="140" width="106" height="48" class="box"/><text x="322" y="160" class="lbl">thread #141</text><text x="322" y="176" class="sub">via to-thread</text>
+      <rect x="428" y="140" width="106" height="48" class="box"/><text x="440" y="160" class="lbl">thread #142</text><text x="440" y="176" class="sub">via to-thread</text>
+      <rect x="546" y="140" width="106" height="48" class="box"/><text x="558" y="160" class="lbl">thread #143</text><text x="558" y="176" class="sub">via to-thread</text>
+      <path d="M380,92 L363,140" class="arr"/>
+      <path d="M410,92 L481,140" class="arr"/>
+      <path d="M440,92 L599,140" class="arr"/>
+      <path d="M416,164 L685,96" class="arr"/>
+      <path d="M534,164 L700,96" class="arr"/>
+      <path d="M652,164 L715,96" class="arr"/>
+      <rect x="310" y="225" width="342" height="52" class="box"/>
+      <text x="322" y="246" class="lbl">inside each thread: build orchestrates stages</text>
+      <text x="322" y="263" class="sub">implement → verify → review → evidence, via to-subagent</text>
+      <rect x="672" y="225" width="138" height="52" class="box"/>
+      <text x="684" y="246" class="lbl">backlog status</text>
+      <text x="684" y="263" class="sub">pure query, any time</text>
+      <path d="M741,225 L741,100" class="arr"/>
+    </svg>
+  </div>
+</section>
+
+<section id="ws1">
+  <h2><span class="ws">Workstream 1</span>Backlog: groom</h2>
+
+  <h3>Merge step <span class="chip settled">settled</span> <span class="chip newthing">new</span></h3>
+  <p>Before any thread exists, groom proposes ticket <b>merges</b>: many small related tickets are absorbed into one shapeable subject. Default is <b>absorption</b> — one ticket carries the merged body; the others close as duplicates pointing at it. The capstone-style parent is reserved for the split that comes <em>after</em> shaping. Merging fragments is safe because slicing exists: the spec re-creates structure on the way out, informed by settled decisions.</p>
+
+  <h3>The batch construct <span class="chip deleted">deleted</span></h3>
+  <p>Batches and subjects were runtime groupings whose value evaporated when the thread ended. Their three jobs go to durable mechanisms: duplicates → merge/close; interlocked decisions → merge, then split post-spec; merely-related → concurrent shaping threads reconcile, which <code>shape</code> already handles. Batch-atomic readiness goes with it: readiness becomes per-subject, bound to a blessed spec hash (WS5).</p>
+
+  <h3>Attention-aware width <span class="chip settled">settled</span></h3>
+  <p>Shaping requires the user's active attention, so groom <b>asks how many threads to start</b> (default 3). The unstarted remainder stays routed in the tracker for the next groom or a "start two more." Width belongs to the bounded resource: build's bounded resource was money (fixed by staffing), shaping's is attention (cannot be fixed).</p>
+
+  <h3>Kept as-is</h3>
+  <p>The chat-readable plan discipline (id + title + digest, relations in words), the confirmation gate before any tracker write, and the teardown sweep — which generalizes into <code>backlog status</code> (WS2).</p>
+</section>
+
+<section id="ws2">
+  <h2><span class="ws">Workstream 2</span>Backlog: build &amp; status</h2>
+
+  <div class="ba">
+    <div class="before">
+      <h4>Before — supervised</h4>
+      <ul>
+        <li>Session babysits the fleet; completions wake it</li>
+        <li>Concurrency cap + queue semantics</li>
+        <li>Quota gate + usage surfaces + outcome accounting</li>
+        <li>serialize-verification + lane lock + stale takeover</li>
+        <li>Rollback / resume-reconcile / deadline recovery prose</li>
+        <li>Builds dispatched as supervised subagents</li>
+      </ul>
+    </div>
+    <div class="after">
+      <h4>After — pull</h4>
+      <ul>
+        <li>One <b>thread per ticket</b> via <code>to-thread</code>; dispatcher exits</li>
+        <li>No cap, no queue — groom's readiness gate is the budget</li>
+        <li>No quota gate — staffing repair removes the cause (#195 closes)</li>
+        <li>Repo is parallel-safe or build does not dispatch (WS6)</li>
+        <li>Re-run <code>backlog build</code>; idempotent — skips live claims</li>
+        <li><b>Dispatch declaration</b> + per-build <b>deadline</b>, stated up front</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Dispatch declaration = the claim <span class="chip settled">settled</span> <span class="chip newthing">new</span></h3>
+  <p>A statement, never a question: <em>"Dispatching #142 — rename capstone to spec — model sonnet-5, effort high, harness Claude Code, deadline 18:30Z."</em> The human can interrupt; nobody must approve. The declaration and the tracker claim are <b>one event with two audiences</b>: the same content is posted as the claim comment — ticket digest, branch, worktree path, model, effort, harness, thread name, dispatcher identity, and the deadline as an <b>absolute timestamp</b> (any machine must be able to rule on it). In the pull model the deadline has nowhere else to live: the supervisor that held it in memory is deleted, and a <code>status</code> query can only report "stalled" from durable state. Lives in the dispatch contracts (<code>to-subagent</code>, <code>to-thread</code>) so every caller gets it.</p>
+
+  <h3><code>backlog status</code> <span class="chip newthing">new</span></h3>
+  <p>A pure query replacing the babysitting loop: tracker claims × live worktrees × change-request state × the deadlines read from the claims. Reports finished, stalled-past-deadline, and orphaned work. Groom's teardown sweep becomes this verb's action arm.</p>
+
+  <h3>Abandonment is derived, never written <span class="chip settled">settled</span></h3>
+  <p>No <code>abandoned</code> label. <code>building</code> + deadline passed + thread not observably alive (dead thread listing, no branch activity) <em>is</em> abandoned — derived at read time by <code>status</code>. Pickup follows sharpened existing rules: <b>audit reality first</b> (a slow build may still be running — liveness decides, not the clock alone); <b>adopt committed work</b> (a reclaim resumes from the branch, never from scratch, so nothing is discarded); another actor's expired claim is the existing lane-takeover-note pattern. The reclaim is a <b>new claim comment superseding the old</b> — the ledger stays event-shaped: claim, outcome, reclaim. The multi-day quiet horizon survives only as backstop for claims that predate deadlines. Guardrail: the tracker records <b>transitions, not telemetry</b> — no heartbeats, no progress comments; liveness is checked at read time.</p>
+
+  <h3>What survives</h3>
+  <p>The per-build <b>deadline</b> (the real runaway protection — the cap never was), abort-path teardown (owned by the thread that owns the worktree), the orphan sweep's quiet horizon, and the label roles.</p>
+
+  <h3><code>capstone</code> → <code>spec</code> <span class="chip settled">settled</span></h3>
+  <p>The work-type renames to the word the system already uses. Guard sentence in the policy: <em>every shaped ticket has a spec; only a split parent has the <code>spec</code> work-type</em> — the label names dispatch behavior (coverage check over children), not artifact presence. Role→label mapping keeps existing consumer repos compatible.</p>
+</section>
+
+<section id="ws3">
+  <h2><span class="ws">Workstream 3</span>Staffing</h2>
+
+  <h3>The defect <span class="chip settled">settled</span></h3>
+  <p>Resolution ranks <code>intelligence &gt; taste &gt; cost</code> descending. Fable-5 tops both axes, so it wins every ranking and cost never breaks a tie — <b>everything defaults to Fable</b>. The succession lists repeat the pattern (orchestrator: fable → opus → sonnet).</p>
+
+  <div class="ba">
+    <div class="before">
+      <h4>Before — maximize, then glance at cost</h4>
+      <ul>
+        <li>Rank survivors by intelligence desc, taste desc, cost last</li>
+        <li>"Routine never means cheapest-first"</li>
+        <li>Machine overlay: probe records, reachability rows, effect classes</li>
+        <li>Self-heal state machine, retry-at tokens, evidence fields</li>
+        <li>Pre-dispatch preflights (<code>check-machine-facts.py</code>, effect probes)</li>
+      </ul>
+    </div>
+    <div class="after">
+      <h4>After — bars, then cheapest</h4>
+      <ul>
+        <li>Caller states the <b>intelligence bar and taste bar</b> the task needs</li>
+        <li>Filter models below the bars; take the <b>cheapest survivor</b></li>
+        <li>Coordination class = the coarse form of the bars</li>
+        <li><b>Runtime checks only:</b> try the route; on failure warn + fall back</li>
+        <li>Overlay, probes, self-heal, machine-audit: <span class="del-line">deleted</span></li>
+        <li>Playbook shrinks to: roster table + pins + repo deltas</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>"Escalate without asking when cheaper output misses the bar" is already in the doctrine — it becomes the center of the design instead of a footnote. Kept: the <b>pins</b> (mechanical → gpt-5.6-sol), the <b>taste gate</b> (now one bar among the bars), and the reliable <b>command shapes</b> for cross-harness dispatch (knowledge earned in #173 — text, not probe state). A route that fails repeatedly across sessions is retro fodder, not a state machine's job.</p>
+  <p class="small">Dissolves with the overlay: #196 (overlays never materialise in worktrees), #205 (one-directional drift rule), most of #199 (preflight halts prescribing unrunnable remedies).</p>
+</section>
+
+<section id="ws4">
+  <h2><span class="ws">Workstream 4</span>Dispatch spine — to-thread / to-subagent</h2>
+
+  <h3>Liveness before success <span class="chip settled">settled</span></h3>
+  <p>The open to-thread defects (#200, #204, #206) share one class: <b>accepted-then-failed</b> — the spawn reports success, the thread is not alive or attendable. In the pull model there is no babysitter to notice, so this becomes a contract requirement: <em>a dispatch is done when the child is observably alive, not when the command exits.</em> Same principle one layer down is #192: <code>to-subagent</code> validates the promised deliverable before accepting a successful exit.</p>
+
+  <ul class="tight">
+    <li><b>Caller-supplied model/effort</b> <span class="chip settled">settled</span> — to-thread accepts an explicit model; backlog build resolves staffing per ticket and passes it (precedent: closed #48).</li>
+    <li><b>Attendance relaxation</b> <span class="chip settled">settled</span> — attach-ability is for <em>inspection</em>, not attendance; outcome lands in the tracker either way.</li>
+    <li><b>Claude Desktop path</b> — #204, evidence gathered: <code>claude --bg</code> then <code>claude://resume</code> import. Two-writers caveat: a <em>running</em> build is inspected via CLI attach; sidebar import is for stopped threads.</li>
+    <li><b>#203 is a prerequisite</b> <span class="chip open">open</span> — build keeps orchestrating stages via to-subagent inside its thread; nested wake routing must be fixed or stages dispatch synchronously (the shape #172 found reliable).</li>
+  </ul>
+</section>
+
+<section id="ws5">
+  <h2><span class="ws">Workstream 5</span>Artifact branches &amp; canonicality</h2>
+
+  <p>Prototypes, research dossiers, and iterating specs live as HTML files on their <b>own branches</b>, never merged to main — <b>version-controlled while they are useful</b>, gone (a deleted ref) when they are not. The ticket carries a <b>projection plus the commit hash</b> it was rendered from, and links the branch. Old specs rot fast and are already reachable from the tracker; main never has to carry or clean them. This refactor's own spec document is the first field test — it lives on this branch.</p>
+
+  <h3>The shaping change request <span class="chip deleted">deleted</span></h3>
+  <p>Shape's only repo write was glossary terms and ADRs, and it forced the whole readiness-gate apparatus: branch-delta comparison, the three-case readiness logic, <code>merge-changes</code> as a required sibling, re-presented heads. All of it existed to land vocabulary <em>before</em> the work. The timing problem dissolves instead:</p>
+  <ul class="tight">
+    <li><b>Main's context files describe the code that is; artifact branches describe the code that will be.</b> A glossary term for an unbuilt feature does not belong on main — it is aspiration, not description.</li>
+    <li>The spec carries a <b>context delta</b> section: new terms, ADR drafts. Agents and issue/PR bodies use that language immediately — it is available from the ticket and the spec branch, which is all "available before work starts" ever required.</li>
+    <li><b>The build lands the delta.</b> An unsplit ticket writes it into <code>CONTEXT.md</code>/ADRs in its own PR; a split spec carries it as the <b>root commit of its feature branch</b>, reaching main atomically at the capstone merge (WS8 § Landing shape). Either way the merge is the moment "will be" becomes "is," and a direction abandoned before building leaves nothing on main to clean up.</li>
+    <li>Shape's readiness gate collapses to one thing: the <b>blessed hash</b>. No shaping branch ever merges; a clean removal is the only teardown.</li>
+  </ul>
+
+  <h3>One-work verification scripts <span class="chip open">open</span></h3>
+  <p>The same rot, different artifact: e2e scripts written to verify one piece of work are not long-standing behavior tests, but today's rule leaves every check in the tree. Proposed classification at the review/evidence stage, mirroring prototype's "keep the answer, delete the scaffolding": a script either asserts <b>durable behavior</b> — it joins the maintained suite — or it is <b>scaffolding</b> — its run and output are captured in the evidence package, and the script is dropped before merge (recoverable from the evidence attachment). You flagged this as unsure; the classification rule is the proposal on the table.</p>
+
+  <h3>Mechanics</h3>
+  <ul class="tight">
+    <li><b>Naming convention</b> <span class="chip open">open</span> — e.g. <code>artifact/&lt;ticket&gt;-&lt;slug&gt;</code>, so every sweep skips these on purpose (they are permanently-unmerged by intent, deletable when spent). The branch ref is also the retention mechanism against GC.</li>
+    <li><b>History shape</b> <span class="chip open">open</span> — orphan branches (no shared history) are worth considering for prototypes: no conflicts, no log pollution.</li>
+    <li><b>Canonicality ADR</b> <span class="chip open">open — needs ADR</span> — the current rule says the ticket body is canonical; this proposal inverts it: the branch file is canonical, the ticket holds a projection. Two canonical homes are not acceptable; this is a settled-decision reversal and gets an ADR.</li>
+    <li><b>Blessed-hash readiness</b> <span class="chip settled">settled</span> — the user's blessing records a <b>commit hash</b>. Any later commit on the spec branch past that hash mechanically invalidates readiness. This absorbs #202 nearly for free.</li>
+  </ul>
+</section>
+
+<section id="ws6">
+  <h2><span class="ws">Workstream 6</span>Environment: the parallel-safety checklist</h2>
+
+  <p>The three-value parallelism verdict (<span class="del-line">parallel-safe | serialize-verification | sequential</span>) becomes a <b>binary gate</b>: the repo passes the checklist, or build does not dispatch. Lane locks, stale takeovers, and the serialized exception lane are deleted. Setup's job changes from deriving a mode to <b>certifying a checklist</b> and reporting the punch list of gaps:</p>
+
+  <ol>
+    <li>Worktrees can be created (the <code>worktree</code> skill works here).</li>
+    <li>A dev stack comes up <b>per worktree</b>.</li>
+    <li>Auth works per worktree.</li>
+    <li>Seed data exists and <b>exercises everything the app offers, including new features</b>.</li>
+  </ol>
+
+  <ul class="tight">
+    <li><b>The seed is a maintained artifact</b> <span class="chip settled">settled</span> — a ticket that adds a feature also extends the seed, in scope. A seed that misses a feature is drift.</li>
+    <li><b>Use ≠ change</b> <span class="chip settled">settled</span> — a genuinely shared resource (e.g. a shared Clerk deployment) serves twenty parallel builds that <em>use</em> it and one at a time that <em>changes</em> it. The rare changer tickets are marked at the tracker (slice differently first; a dependency edge only for true residue). The singleton table's collision-mode column records which relation collides.</li>
+  </ul>
+</section>
+
+<section id="ws7">
+  <h2><span class="ws">Workstream 7</span>Communication standard</h2>
+
+  <p>Three rules for all user-facing text — interview rounds, groom plans, issue and PR bodies, outcome relays, status reports, evidence summaries:</p>
+  <ol>
+    <li><b>ASD-STE100 plain language.</b> A guidance line in each skill; never a skill invocation per question.</li>
+    <li><b>The project's vocabulary comes from the context files.</b> STE is "a small approved dictionary plus your technical names" — <code>CONTEXT.md</code> <em>is</em> the technical-name dictionary, and <code>domain-modeling</code> already maintains it. The two mechanisms compose with no new machinery.</li>
+    <li><b>No opaque numbers.</b> Every ticket or PR reference carries its description; relations are said in words. Already law at groom's gate — promoted to family-wide law, reaching the dispatch declaration, outcome relays, merge reports, and watch relays.</li>
+  </ol>
+  <p><b>Home</b> <span class="chip settled">settled</span> — a small <b>reference-only sibling skill</b> (working name <code>plain-language</code>): the STE discipline, the CONTEXT.md-as-approved-dictionary rule, and the no-opaque-numbers rule in one file. Every user-facing skill names it with a one-line pointer — a pointer, not a duplicate, so the standard has a single source of truth. No playbook and no setup step: the only repo-specific input (the vocabulary) already lives in <code>CONTEXT.md</code>. Optional sibling with standard degradation: absent it, write plainly and say the standard was not loaded.</p>
+</section>
+
+<section id="ws8">
+  <h2><span class="ws">Workstream 8</span>to-slices</h2>
+
+  <p>The confirmation stage already exists (draft → present → approve → publish). The delta is small:</p>
+  <ul class="tight">
+    <li><b>Posture</b> <span class="chip settled">settled</span> — present the split as a <b>recommendation to edit</b>, not a questionnaire. Aligns with interview's recommended-answer discipline and groom's plan gate.</li>
+    <li><b>Justification per slice</b> <span class="chip settled">settled</span> <span class="chip newthing">new</span> — every slice carries one or two sentences of rationale (why this boundary, why demoable alone); every edge is justified in words. The densest consumer of the communication standard.</li>
+    <li>Step 6 picks up the <code>spec</code> rename; the draft states which blessed spec hash the slices were cut from.</li>
+    <li>Unchanged: readiness audit, dependency-ordered publish, readback, explicit-call-only.</li>
+  </ul>
+
+  <h3>Landing shape — a to-slices decision <span class="chip settled">settled</span> <span class="chip newthing">new</span></h3>
+  <p>The split also chooses how the slices land, recommended with justification like every other cut:</p>
+  <ul class="tight">
+    <li><b>Stacked</b> (the default for split specs) — the spec ticket gets a <b>feature branch</b> off main whose <b>root commit is the context delta</b> (CONTEXT.md terms, ADRs, derived from the blessed spec). Slices branch off it and PR into it, inheriting the language from birth. The spec ticket's own PR is the feature→main merge: <b>one ticket, one PR, now universal</b> — and the capstone coverage check becomes the review of exactly that PR. Main receives the vocabulary atomically, when the whole direction becomes true.</li>
+    <li><b>Direct</b> — independent slices PR straight to main; the first slice carries the delta and is wired as a blocker of the rest. Keeps tracer-bullet continuous integration where slices genuinely don't interlock.</li>
+  </ul>
+  <p><b>Costs bound to the stacked shape:</b> integration is deferred (a slice that would invalidate the spec surfaces it at the capstone merge, not on day one); main-drift is resolved by the capstone session merging main into the feature branch before its final PR — mechanical conflicts only, a semantic conflict returns the spec to shaping. The artifact branch stays separate from the feature branch: the spec <em>document</em> never merges; the feature branch carries only code. The ticket links both.</p>
+
+  <h3>Tracking delivered slices — the <code>delivered</code> role <span class="chip settled">settled</span> <span class="chip newthing">new</span></h3>
+  <p>Without it the stacked shape <b>deadlocks</b>: the open-children rule blocks the spec ticket while any child is open, but children only close at the capstone merge, which needs the spec ticket dispatched. The fix is a third visible child state:</p>
+  <ul class="tight">
+    <li><b>Open</b> — not yet delivered; readiness labels say unclaimed vs building.</li>
+    <li><b>Open + <code>delivered</code></b> — its PR merged into the feature branch, awaiting promotion. This is the policy's existing deferred-closure hook (the <code>built</code> placeholder), made mandatory for stacked runs. Applied by <code>merge-changes</code> in the same act as the merge it performs — slice merges stay human-authorized like every merge.</li>
+    <li><b>Closed</b> — promoted to main. Closure is native and atomic: <code>Closes #n</code> fires only on default-branch merges, and the capstone PR targets main — so its body carries one <code>Closes</code> line per slice, and GitHub closes them all at promotion. No manual closes.</li>
+  </ul>
+  <p><b>The dispatch gate refines:</b> the spec ticket becomes dispatchable when every child is <b>closed or delivered</b> — one sentence in the policy's open-children rule, and the deadlock is gone. Honesty on abandonment falls out free: a spec abandoned before promotion leaves its slices open-with-<code>delivered</code>, which is the truth — the work exists on a branch and never shipped. Cosmetic caveat: GitHub's native sub-issue progress counter counts closures, so it undercounts mid-flight; the <code>delivered</code> label is the live signal, and <code>backlog status</code> reads both.</p>
+</section>
+
+<section id="ws9">
+  <h2><span class="ws">Workstream 9</span>Install pipeline: context pointers over per-harness variants</h2>
+
+  <div class="ba">
+    <div class="before">
+      <h4>Before</h4>
+      <ul>
+        <li>Provider variants compiled per harness (staffing per provider)</li>
+        <li>Alias mounts: <code>.claude/skills</code> symlinks vs real copies</li>
+        <li>Custom installer required; <code>npx skills add</code> incompatible (#103)</li>
+      </ul>
+    </div>
+    <div class="after">
+      <h4>After</h4>
+      <ul>
+        <li>One directory per skill, standard layout</li>
+        <li>Harness-specific guidance = <b>context pointers</b>: branch-worded pointers to disclosed reference ("On Codex: …"), per <code>writing-for-agents</code></li>
+        <li>Standard <code>npx skills add</code> becomes viable for most installs</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>The two simplifications compose: <b>staffing was the only compiled variant</b>, and WS3's runtime-only staffing no longer needs per-provider compilation — the variant machinery loses its last customer. Of #103's three blockers, the variant blocker dissolves; the <code>build</code>-directory skip and the no-removal behavior remain upstream <code>npx skills</code> issues (keep a thin installer, or fix upstream). <span class="chip open">open</span>: which of the two.</p>
+  <p class="small">Cost, per writing-for-agents' two-loads frame: harness-specific reference rides in every install but loads only when its pointer fires — disclosed reference, cheap. The win is deleting an entire compiler.</p>
+</section>
+
+<section id="ws10">
+  <h2><span class="ws">Workstream 10</span>Retro: repo-level, tracked</h2>
+
+  <p>Adopts open ticket <b>#197</b>, which argues this exactly: a machine-scoped ledger undercounts recurrence (the strongest upstream signal — the same friction on independent machines — is invisible), pulls entries toward machine-bound wording, and splits a repo's friction across N ledgers.</p>
+  <ul class="tight">
+    <li><b>Tracked ledger in the repo</b> <span class="chip settled">settled</span> — shareable, retro runs from any machine, capture-time pressure toward transferable wording ("blocks when invoked with open stdin" not "hung on my machine").</li>
+    <li><b>Machine-local half</b> <span class="chip open">open</span> — #197 proposes keeping a small gitignored overlay for genuinely machine-bound specifics. Given WS3's overlay deletion elsewhere, decide: keep the split, or go tracked-only with machine details inline and sanitization at the upstream gate as today.</li>
+  </ul>
+</section>
+
+<section id="ws11">
+  <h2><span class="ws">Workstream 11</span>serve-via-tailnet <span class="chip done">done</span></h2>
+  <p>Confirmed already in the target shape (25 lines, commits <code>421c55f</code> and <code>44d570c</code>): tailnet facts from the environment playbook or the tailscale interface, detached stdlib server on a free port, verify it answers, report URL + stop command. The review server and annotated serve are gone. <b>No work in this refactor.</b></p>
+</section>
+
+<section id="ws12">
+  <h2><span class="ws">Workstream 12</span>Setups after the refactor</h2>
+
+  <p>Most setup work built caches, and the refactor's thesis is runtime checks over recorded state — so setups are cut harder than anything else. The surviving principle: <b>setup writes choices, bindings, and certifications — never caches.</b></p>
+
+  <div class="ba">
+    <div class="before">
+      <h4>Dies</h4>
+      <ul>
+        <li>Staffing machine audit: reachability probes, effect classes, overlay + stamp, wake paths, permission envelope, alias map</li>
+        <li>Machine-facts discipline: <code>check-machine-facts.py</code>, overlay markers, stamp checks, build's preflight</li>
+        <li>Usage-surface binding (nothing reads it)</li>
+        <li>Parallelism-verdict derivation, lane-lock config</li>
+      </ul>
+    </div>
+    <div class="after">
+      <h4>Survives — three categories</h4>
+      <ul>
+        <li><b>Bindings</b> (→ <code>platform.md</code>): tracker, review surface, exercised verbs, close-on-merge, the <code>delivered</code> label and feature-branch conventions. Repo data, not machine state; a verb failing at runtime warns and suggests re-binding.</li>
+        <li><b>Policy choices</b> (→ <code>backlog-policy.md</code>): role→label mapping, creating missing labels (a real tracker write), the <code>spec</code> rename, work domain, readiness autonomy. Human decisions.</li>
+        <li><b>Certification</b> (→ <code>environment.md</code>): walk the parallel-safety checklist, report <b>pass or punch list</b>. Repeatable on demand; upkeep rides builds.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p><code>staffing setup</code> shrinks to a template fill: initial roster from the seed plus a repo-deltas interview — no probes, barely a verb. <code>retro setup</code> keeps its human kernel: recording upstream-feedback consent and creating the tracked ledger. The installer's <code>setup_report</code> stays relevant — fewer setups, each smaller and faster.</p>
+</section>
+
+<section id="tickets">
+  <h2>Ticket disposition</h2>
+  <table>
+    <thead><tr><th>Ticket</th><th>Title (short)</th><th>Disposition</th></tr></thead>
+    <tbody>
+      <tr><td>#192</td><td>to-subagent validates the deliverable</td><td><b>Prerequisite</b> — the "liveness before success" principle, worker layer (WS4)</td></tr>
+      <tr><td>#195</td><td>Quota gate fails open silently</td><td><b>Closes superseded</b> — the gate is deleted (WS2)</td></tr>
+      <tr><td>#196</td><td>Overlays never materialise in worktrees</td><td><b>Dissolves</b> — overlays deleted (WS3)</td></tr>
+      <tr><td>#197</td><td>Retro ledger is machine-scoped</td><td><b>Adopted</b> — WS10</td></tr>
+      <tr><td>#198</td><td>Child completions can't wake dispatcher</td><td><b>Dissolves for the dispatcher</b> — pull model; survives as caution for in-thread supervision</td></tr>
+      <tr><td>#199</td><td>Preflight halt prescribes unrunnable remedy</td><td><b>Mostly dissolves</b> — preflights largely deleted (WS3)</td></tr>
+      <tr><td>#200</td><td>T3 route detection fails off macOS bundle</td><td><b>Folds into WS4</b> — liveness verification is the common fix</td></tr>
+      <tr><td>#202</td><td>Spec revision must revoke readiness</td><td><b>Absorbed</b> — blessed-hash mechanism (WS5)</td></tr>
+      <tr><td>#203</td><td>Nested wakes route to root session</td><td><b>Prerequisite</b> — in-build stage dispatch (WS4)</td></tr>
+      <tr><td>#204</td><td>Claude Desktop spawn path</td><td><b>Folds into WS4</b> — resume-import path; two-writers caveat shapes inspection</td></tr>
+      <tr><td>#205</td><td>Drift rule is one-directional</td><td><b>Dissolves</b> — no recorded failure state to grow stale (WS3)</td></tr>
+      <tr><td>#206</td><td>T3 dispatch exits success on invalid instance id</td><td><b>Folds into WS4</b> — validate-before-create / verify-after-start becomes contract</td></tr>
+    </tbody>
+  </table>
+  <p class="small">New work not yet ticketed: the staffing bars-then-cheapest repair (rides this branch — the redesign depends on it) and the redesign spec itself (a document on this branch, per WS5's own pattern).</p>
+</section>
+
+<section id="questions">
+  <h2>Open questions — your calls before building</h2>
+  <div class="qbox"><b>1 · Canonicality ADR.</b> Branch file canonical with ticket projection (reverses the "to-spec's statement is canonical" rule)? This is the load-bearing reversal; everything in WS5 hangs on it.</div>
+  <div class="qbox"><b>2 · Artifact branch convention.</b> Name prefix (<code>artifact/…</code>?) and history shape (orphan branches for prototypes?).</div>
+  <div class="qbox"><b>3 · to-thread model parameter.</b> Caller-supplied model on to-thread, or build resolves staffing and passes it? (Both need to-thread to accept an explicit model; the question is who resolves.)</div>
+  <div class="qbox"><b>4 · #203 fix shape.</b> Repair nested wake routing, or standardize on synchronous stage dispatch inside build (the shape #172 found reliable)?</div>
+  <div class="qbox"><b>5 · Communication standard home — resolved.</b> A reference-only <code>plain-language</code> sibling skill; each user-facing skill carries a one-line pointer to it (WS7).</div>
+  <div class="qbox"><b>6 · Installer fate.</b> Thin wrapper kept for #103's remaining upstream gaps, or fix <code>npx skills</code> upstream and delete ours?</div>
+  <div class="qbox"><b>7 · Retro machine half.</b> Tracked-only ledger, or tracked + small machine overlay per #197's proposal?</div>
+  <div class="qbox"><b>8 · Context-delta carrier for split work — resolved.</b> The stacked landing shape answers it: the feature branch's root commit carries the delta; no slice ever does (WS8 § Landing shape). Residual call: confirm stacked as the default for split specs, direct as the justified exception.</div>
+  <div class="qbox"><b>9 · One-work e2e scripts.</b> Accept the classification rule (durable → suite, scaffolding → evidence-only, dropped before merge), or another shape? You flagged this as genuinely unsettled.</div>
+</section>
+
+<footer style="margin-top:3rem; padding-top:1rem; border-top:3px double var(--line);" class="small">
+  Review document only — no skill text, playbook, or tracker state has been changed. Generated from the 2026-08-14 brainstorming session on branch <span class="mono">arch-deepening-strong-seven</span>.
+</footer>
+
+</main>
+</body>
+</html>

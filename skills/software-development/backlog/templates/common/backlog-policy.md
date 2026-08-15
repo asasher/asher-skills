@@ -57,6 +57,31 @@ Tracker encoding: _<GitHub: a stable `Dispatch:` block in the body or grooming c
 
 **Aliases** — when several existing labels fill one role, one is canonical and every reader treats the others as that role too: _<e.g. `type:bug` and `defect` both → `bug`; or "none">_. Setup reuses existing labels rather than minting duplicates.
 
+## Label colors
+
+On trackers that carry label colors (GitHub), each role label gets the shared scheme below so the same role reads the same everywhere. Color encodes the axis: readiness roles are saturated — a state machine, temperature-coded from parked to flying; work-types are pastel attributes, `bug` and `capstone` the deliberate saturated exceptions; exclusions are grayscale. Trackers without colors (the local binding) skip this section entirely.
+
+The tracker description is the short form applied on the label itself; the role definitions above stay canonical. Apply with the skill's reconcile script — `scripts/reconcile-labels.py --repo <owner/name>`, using `--label role=name` for any renamed role and `--create` only with the user's consent — which touches only role labels and never neutral ones. A repo that wants different colors overrides them here; this table then beats the skill default.
+
+| Role | Color | Tracker description |
+| --- | --- | --- |
+| `needs-shaping` | `#D93F0B` | Parked for strategic shaping: unsettled product/scope decisions; never selectable by backlog build |
+| `shaping` | `#FBCA04` | A shaping thread is attending this issue; set by backlog groom at dispatch |
+| `needs-info` | `#D876E3` | Parked, waiting on the reporter |
+| `ready-for-agent` | `#0E8A16` | Groomed and released: an agent may work it; requires a work-type and dispatch metadata |
+| `ready-for-human` | `#5319E7` | Human-only; agents skip. Also the abort target for verify caps and environment blockers |
+| `building` | `#1D76DB` | Dispatched: a build subagent owns it; cleared on abort or superseded by closure on merge |
+| `bug` | `#D73A4A` | Something isn't working |
+| `enhancement` | `#A2EEEF` | New feature or request |
+| `refactor` | `#C5DEF5` | Work-type: behavior-preserving structure or code improvement |
+| `research` | `#D4C5F9` | Work-type: primary-source research with traceable claims |
+| `draft` | `#FEF2C0` | Work-type: judgment-terminal produce-and-review; done at the human review verdict |
+| `capstone` | `#8250DF` | Work-type: parent of slices; coverage check once children close |
+| `duplicate` | `#CFD3D7` | This issue or pull request already exists |
+| `superseded` | `#BFBFBF` | Replaced by newer work; removed from grooming and the run queue |
+| `invalid` | `#E4E669` | This doesn't seem right |
+| `wontfix` | `#FFFFFF` | This will not be worked on |
+
 ## Dependencies
 
 - How this repo records that one issue is blocked by another, so `backlog build` can skip blocked work: _<prefer the tracker's exercised native relation (GitHub `blocked_by`, Jira `is blocked by`, Linear `blocked-by`) via `platform.md`; local uses `deps:` frontmatter; a tracker without an exercisable native relation names its explicit fallback here>_.

@@ -12,8 +12,10 @@ order:
    pseudonymity part of the ask, not a footnote: content is sanitized, authorship is not.
 
 2. **Record the upstream target.** Repo (default `asasher/asher-skills`), label (default
-   `feedback`), verb (`gh issue create`). When consent is enabled, verify the route with a cheap
-   read (`gh repo view <target>`); a dead route is recorded as a gap in the playbook, not silently
+   `feedback`, color `#BFD4F2` where the tracker carries label colors — retro mints this label
+   itself, outside the backlog skill's role axes, so it ships the color too), verb
+   (`gh issue create`). When consent is enabled, verify the route with a cheap read
+   (`gh repo view <target>`); a dead route is recorded as a gap in the playbook, not silently
    dropped.
 
 3. **Bind the transcripts.** For each harness this repo actually runs under, derive where it keeps
