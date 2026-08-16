@@ -9,7 +9,7 @@ Dispatch adapter for non-interactive work, synchronous only: a dispatch is a blo
 
 ## Dependency surface
 
-Composes with the `worktree` sibling (optionally `staffing` and `plain-language`).
+Composes with the `worktree` sibling (optionally `staffing` and `writing-for-humans`).
 
 ## Provenance
 

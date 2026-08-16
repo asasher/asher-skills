@@ -19,4 +19,4 @@ Merging the change requests that builds produce stays a separate, explicit human
 
 ## Dependency surface
 
-Composes with the `worktree`, `to-thread`, `to-subagent`, `shape`, and `build-change` siblings (optionally `merge-change`, `retro`, `plain-language`, `agent-ready-codebase`, `to-web`), and reads the `docs/agents/` playbooks its `setup` installs and reconciles.
+Composes with the `worktree`, `to-thread`, `to-subagent`, `shape`, and `build-change` siblings (optionally `merge-change`, `retro`, `writing-for-humans`, `agent-ready-codebase`, `to-web`), and reads the `docs/agents/` playbooks its `setup` installs and reconciles.

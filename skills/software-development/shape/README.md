@@ -8,7 +8,7 @@ Settles one subject's strategic decisions — an idea or a ticket — in an inte
 
 ## Dependency surface
 
-Composes with the `interview`, `domain-modeling`, `to-spec`, and `worktree` siblings (optionally `research`, `prototype`, `to-subagent`, `to-slices`, `to-backlog`, `watch-until`, `plain-language`), and reads the repo context files and the `docs/agents/platform.md` bindings.
+Composes with the `interview`, `domain-modeling`, `to-spec`, and `worktree` siblings (optionally `research`, `prototype`, `to-subagent`, `to-slices`, `to-backlog`, `watch-until`, `writing-for-humans`), and reads the repo context files and the `docs/agents/platform.md` bindings.
 
 ## Credits
 

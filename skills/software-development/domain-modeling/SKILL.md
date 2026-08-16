@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: []
-  optional: [plain-language]
+  optional: [writing-for-humans]
 ---
 
 # Domain Modeling
@@ -16,7 +16,7 @@ Actively build and sharpen the project's domain model while designing. This is t
 
 It runs alongside a conversation rather than owning one.
 
-User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
+User-facing text follows the `writing-for-humans` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
 
 ## Where the model lives
 

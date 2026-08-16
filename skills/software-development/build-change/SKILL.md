@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [adversarial-review, implement, prove-your-work, to-subagent, verify-your-work]
-  optional: [diagnosing-bugs, plain-language]
+  optional: [diagnosing-bugs, writing-for-humans]
 ---
 
 # Build Change
@@ -16,7 +16,7 @@ Run one unit of work to a review-ready change request in one worktree. The unit 
 
 **Stage dispatch is synchronous.** Every stage dispatch is a blocking call whose return is the stage's result. Stages that can run at once are several blocking calls in one turn — they run concurrently and return together. Never dispatch a stage to walk away from and get notified later; nothing in this pipeline waits on a wake.
 
-User-facing text — the change request description, reports, tracker comments — follows the `plain-language` sibling: ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
+User-facing text — the change request description, reports, tracker comments — follows the `writing-for-humans` sibling: ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
 
 ## The stage ledger
 

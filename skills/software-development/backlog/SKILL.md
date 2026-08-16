@@ -18,7 +18,7 @@ A dispatcher with no supervisor. Grooming is interactive — judgment behind a c
 
 Nouns are roles: _ticket_, _label_, _change request_ are bound to this repo's real tracker, review surface, and version control by `docs/agents/platform.md`; label roles, dependency edges, deadlines, and readiness by `docs/agents/backlog-policy.md`; the repo's agent-readiness answers by `docs/agents/environment.md`. Missing playbooks: run `backlog setup` first — don't improvise them.
 
-User-facing text follows the `plain-language` sibling — groom plans and status reports are its densest consumers here. Absent that sibling, write plainly and say the standard was not loaded.
+User-facing text follows the `writing-for-humans` sibling — groom plans and status reports are its densest consumers here. Absent that sibling, write plainly and say the standard was not loaded.
 
 **Friction is noted as it happens.** A stumble in this loop — an instruction misread, a confirmation the user had to repeat, a stale playbook row, a workaround that shouldn't have been needed — is recorded the moment it shows via the `retro` sibling's note verb, and a run's end is the sweep for anything unnoted. When the note verb reports a retro pass due, relay that report and stop — running the pass is never this dispatcher's call. Absent the `retro` sibling, friction goes unrecorded: say so once when there was something worth noting, then move on.
 

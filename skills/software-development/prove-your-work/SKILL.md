@@ -7,14 +7,14 @@ metadata:
   invocation: model
   execution: thread
   requires: []
-  optional: [plain-language, to-web]
+  optional: [writing-for-humans, to-web]
 ---
 
 # Prove Your Work
 
 Assemble the evidence package for a finished change. The audience is whoever decides to merge without having watched the work happen: the package must let them decide from the evidence alone.
 
-The package's text follows the `plain-language` sibling: ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
+The package's text follows the `writing-for-humans` sibling: ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
 
 ## What the package carries
 

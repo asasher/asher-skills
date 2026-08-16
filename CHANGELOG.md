@@ -14,7 +14,7 @@ Every installed skill changed. Treat the whole set as new: re-install your set, 
 
 **New:**
 
-- `plain-language` — reference: the communication standard (ASD-STE100, `CONTEXT.md` as the dictionary, no bare ticket/PR numbers).
+- `writing-for-humans` — reference: the communication standard (ASD-STE100, `CONTEXT.md` as the dictionary, no bare ticket/PR numbers).
 - `agent-ready-codebase` — reference: the repo-readiness standard (four-item parallel-safety checklist, use ≠ change) that `backlog setup` certifies against.
 - `to-web` — uploads a file to the bound store, returns a durable hash-keyed URL; evidence media's home, artifacts' preview deploy.
 

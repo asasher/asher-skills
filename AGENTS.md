@@ -31,7 +31,7 @@ Where a skill lives — three distinct places, three terms:
 How skills and instructions relate:
 
 - **Sibling skill** — another skill in this repo that a skill relies on by name (§ Conventions: compose-by-name), e.g. `implement` routes defects through the `diagnosing-bugs` sibling. A plain-language runtime pointer resolved by the installed skill set — never a file import.
-- **Reference skill** — an all-reference sibling cited by name and never run as a workflow: `plain-language` (the communication standard), `agent-ready-codebase` (the repo-readiness standard), `staffing` (the roster and resolution doctrine). Reference skills stay model-invoked with tight descriptions, or siblings cannot cite them.
+- **Reference skill** — an all-reference sibling cited by name and never run as a workflow: `writing-for-humans` (the communication standard), `agent-ready-codebase` (the repo-readiness standard), `staffing` (the roster and resolution doctrine). Reference skills stay model-invoked with tight descriptions, or siblings cannot cite them.
 - **External requirement** — a skill relied on whose canonical source lives outside this repo, declared in the consuming skill source's `metadata.external` and installed only after provenance review and explicit consent. Its consumer-owned record lives in `external-dependencies.lock.json`. The rule: an adapted lift becomes our skill with README credits; an unmodified lift stays an external, never vendored. `writing-for-agents` (mattpocock/skills) is the standing example.
 - **Playbook** — a repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup (e.g. `environment.md`, `platform.md`). Skills speak in role nouns; the playbook binds those roles to this repo's reality. Owned by the repo once written — setups reconcile them, never blindly overwrite.
 - **Global agent instruction files** — retired on this machine (asher-skills#114); do not recreate `~/.claude/CLAUDE.md` or `~/.codex/AGENTS.md`. A machine truth belongs to the skill that owns it or to this repo's `environment.md`.
@@ -45,7 +45,7 @@ Read `docs/agents/staffing.md` before model choice, delegation, or dispatch. It 
 
 Durable documents carrying this repo's domain and direction — read the one whose clause matches the work:
 
-- `CONTEXT.md` — the domain glossary (skill kinds, layer law, shaping vocabulary); read before naming things or when a term of art is ambiguous. It is also the approved technical dictionary of the `plain-language` standard.
+- `CONTEXT.md` — the domain glossary (skill kinds, layer law, shaping vocabulary); read before naming things or when a term of art is ambiguous. It is also the approved technical dictionary of the `writing-for-humans` standard.
 - `docs/adr/` — architecture decision records, sequentially numbered; read before revisiting a settled structural decision, and write one when a hard-to-reverse call would otherwise look arbitrary later.
 
 ## Conventions
@@ -55,7 +55,7 @@ Durable documents carrying this repo's domain and direction — read the one who
 - **Composers declare and degrade.** A skill that references siblings names them in its `SKILL.md`; an install carries a skill's sibling closure. Absent a sibling, a skill states the requirement rather than failing silently.
 - **Copy a technique; extract a primitive.** A small, local technique is reused by copying its canonical files and noting the source in the copy's header — improvements flow back deliberately. A capability several skills genuinely share is extracted into its own skill and referenced by name, never forked into every caller.
 - **Credits live in the README.** Skill content never carries external attribution; each skill's `README.md` (plus `THIRD_PARTY_LICENSES.md` where the license requires it) is the single home for source credits.
-- **User-facing text follows the `plain-language` reference skill** — ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket/PR numbers.
+- **User-facing text follows the `writing-for-humans` reference skill** — ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket/PR numbers.
 - **Main carries only what must stay true.** Anything with a shelf life — specs, prototypes, dossiers, one-work verification scripts, evidence media — lives on `artifact/*` branches, in the tracker, or on the artifact store; never on main.
 - **A merge that changes `skills/` writes its `CHANGELOG.md` entry** naming the changed skills and the setups to re-run — the build lands the delta, applied to this repo itself.
 - Scripts are stdlib-only Python 3.
@@ -93,7 +93,7 @@ These skills are installed for this project — self-hosted from this repo's cat
 | watch-until | Watches a target until a condition holds, then relays | project |
 | to-tailnet | Serves one HTML artifact over the tailnet — the deliberate don't-publish path | project |
 | to-web | Uploads a file to the bound store and returns a durable hash-keyed URL — evidence's home, artifacts' preview deploy | project |
-| plain-language | Reference: the communication standard (ASD-STE100, CONTEXT.md dictionary, no bare numbers) | project |
+| writing-for-humans | Reference: the communication standard (ASD-STE100, CONTEXT.md dictionary, no bare numbers) | project |
 | agent-ready-codebase | Reference: the repo-readiness standard `backlog setup` certifies against | project |
 | staffing | Reference: the roster and bars-then-cheapest resolution doctrine; playbook at `docs/agents/staffing.md` | project |
 | handoff | Compacts the conversation into a handoff document | project |

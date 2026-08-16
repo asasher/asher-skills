@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: thread
   requires: []
-  optional: [plain-language, to-web]
+  optional: [writing-for-humans, to-web]
 ---
 
 # Verify Your Work
@@ -45,6 +45,6 @@ Run each check and capture the exact command, its output, and its own exit statu
 
 ## Report
 
-The report follows the `plain-language` sibling: ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
+The report follows the `writing-for-humans` sibling: ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
 
 Per claim — keyed to its criterion id where the ticket has them: what was checked, the command, pass or fail, and for failures the evidence quoted — the failing output, the wrong screen, the broken state. A failure also present before the change, proven by the same check against the base commit, is reported as **pre-existing** — a distinct verdict from a failure the change caused. Log any deviation from the recorded environment contract alongside the checks it touched. End with the one-line verdict: which claims stand, which fell, which went unverified.

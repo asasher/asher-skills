@@ -79,7 +79,7 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | software-development | `implement`              | model      | composite    |
 | software-development | `interview`              | model      | primitive    |
 | software-development | `merge-change`           | user       | composite    |
-| software-development | `plain-language`         | model      | reference    |
+| software-development | `writing-for-humans`     | model      | reference    |
 | software-development | `prototype`              | model      | composite    |
 | software-development | `prove-your-work`        | model      | composite    |
 | software-development | `research`               | model      | composite    |

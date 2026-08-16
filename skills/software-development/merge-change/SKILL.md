@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [worktree]
-  optional: [plain-language, watch-until]
+  optional: [writing-for-humans, watch-until]
 ---
 
 # Merge Change
@@ -18,7 +18,7 @@ Merging is a human-authorized operation. Automated review approval, green checks
 
 Platform verbs (merge, checks-read, PR-read, branch ops) come from the project's `docs/agents/platform.md` when present; on a bare GitHub repo, use `gh` directly. Absent any change-review binding, state the gap and stop.
 
-Reports follow the `plain-language` sibling: ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
+Reports follow the `writing-for-humans` sibling: ASD-STE100 discipline, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
 
 ## Steps
 

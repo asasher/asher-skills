@@ -8,7 +8,7 @@ Evidence packaging for a finished change: what changed and why, reproducible pro
 
 ## Dependency surface
 
-Composes with the optional `to-web` and `plain-language` siblings; reads the `platform.md`, `evidence.md`, and `environment.md` playbooks under `docs/agents/` when the repo has them.
+Composes with the optional `to-web` and `writing-for-humans` siblings; reads the `platform.md`, `evidence.md`, and `environment.md` playbooks under `docs/agents/` when the repo has them.
 
 ## Provenance
 

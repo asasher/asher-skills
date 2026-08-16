@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [domain-modeling, interview, to-spec, worktree]
-  optional: [plain-language, prototype, research, to-backlog, to-slices, to-subagent, watch-until]
+  optional: [writing-for-humans, prototype, research, to-backlog, to-slices, to-subagent, watch-until]
 ---
 
 # Shape
@@ -16,7 +16,7 @@ Settle **one subject's** strategic decisions, ending in a spec blessed at a comm
 
 A shaping thread **never merges anything.** Its repo output is the artifact branch (`artifact/<ticket>-<slug>`; `artifact/<slug>` when the subject is ticketless), never merged to main; its exit is the user's blessing at a hash; a clean worktree removal is the only teardown. Glossary terms and ADR drafts travel in the spec's **context delta** and reach main only through the build that makes them true — main's context files describe the code that is.
 
-User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
+User-facing text follows the `writing-for-humans` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
 
 ## Intake
 
@@ -34,7 +34,7 @@ When the dispatcher supplied a worktree, inspect it through the `worktree` skill
 
 ## Crystallise — the spec is the exit
 
-When the subject's frontier is empty, run the `to-spec` skill on it — automatically, not on request. Per its contract: the spec is an HTML file on the subject's artifact branch, diagram first, canonical; the ticket gets the **projection** — a plain-language summary, the `to-web` render URL, and the commit hash it was rendered from (to-spec creates the ticket when the subject was only an idea). The spec declares the **context delta** and the **test split**. Posting a spec is a proposal, not a state change — readiness still waits for the user's blessing. A spec may end by recommending a split; executing one via the `to-slices` skill happens only on the user's explicit approval, in a comment or here in the thread.
+When the subject's frontier is empty, run the `to-spec` skill on it — automatically, not on request. Per its contract: the spec is an HTML file on the subject's artifact branch, diagram first, canonical; the ticket gets the **projection** — a writing-for-humans summary, the `to-web` render URL, and the commit hash it was rendered from (to-spec creates the ticket when the subject was only an idea). The spec declares the **context delta** and the **test split**. Posting a spec is a proposal, not a state change — readiness still waits for the user's blessing. A spec may end by recommending a split; executing one via the `to-slices` skill happens only on the user's explicit approval, in a comment or here in the thread.
 
 ## The comment watch
 
@@ -59,5 +59,5 @@ A fresh session on the same subject reads the record — the ticket thread, the 
 ## Dependency surface
 
 - **Siblings (required):** `interview` and `domain-modeling` (§ The loop), `to-spec` (§ Crystallise), `worktree` (§ Intake, § Done). Absent one, state the requirement and stop.
-- **Siblings (optional):** `research`, `prototype`, `to-subagent`, `to-backlog` (§ The loop), `to-slices` (§ Crystallise), `watch-until` (§ The comment watch), `plain-language` (all user-facing text). Absent one, park the affected work as open and say so; never silently skip.
+- **Siblings (optional):** `research`, `prototype`, `to-subagent`, `to-backlog` (§ The loop), `to-slices` (§ Crystallise), `watch-until` (§ The comment watch), `writing-for-humans` (all user-facing text). Absent one, park the affected work as open and say so; never silently skip.
 - **Project surface:** the repo context files and the `## Context documents` index (§ Intake); the tracker and branch bindings in `docs/agents/platform.md` when the subject is a ticket. Absent a tracker, idea shaping still works — the record lives on the artifact branch and in the raising conversation.

@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: []
-  optional: [plain-language, to-backlog, to-subagent]
+  optional: [writing-for-humans, to-backlog, to-subagent]
 ---
 
 # Interview
@@ -18,7 +18,7 @@ Read what was handed to this session before the first round — provided artifac
 
 Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled — the questions you can ask now without guessing at answers you haven't heard yet. Ask the whole frontier in one round, then wait for the user's answers before the next round.
 
-**Question format.** Each question in a round is written as: ❓ then the **bold number** and **bold title**, then the body — multiple-choice options where choices genuinely exist — then ➡️ followed by your recommended answer. The format makes a big round scannable and cuts the user's typing to "1: yes, 2: B, 3: as recommended." User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
+**Question format.** Each question in a round is written as: ❓ then the **bold number** and **bold title**, then the body — multiple-choice options where choices genuinely exist — then ➡️ followed by your recommended answer. The format makes a big round scannable and cuts the user's typing to "1: yes, 2: B, 3: as recommended." User-facing text follows the `writing-for-humans` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
 
 Each round the user answers reshapes the tree — settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a later round, not this one.
 

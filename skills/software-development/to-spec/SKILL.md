@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: thread
   requires: []
-  optional: [plain-language, to-web]
+  optional: [writing-for-humans, to-web]
 ---
 
 # To-Spec
@@ -16,7 +16,7 @@ To-spec owns one move: **take a conversation that already reached a decision and
 
 The defining constraint is **pure synthesis, no interview.** To-spec does not re-elicit requirements, does not re-ask what the conversation already settled, and does not stall waiting on the user. It captures what's decided and **flags what isn't in the spec's Notes** — an open question recorded is worth more here than a question asked.
 
-User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
+User-facing text follows the `writing-for-humans` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
 
 ## Command surface
 
@@ -31,7 +31,7 @@ The full method is in [synthesis](reference/synthesis.md); the shape:
 1. **Mine, don't ask.** Read the conversation and the codebase/project understanding it built. Start from the shaping record when one exists (synthesis § What to mine). Extract the problem, the decided solution, the decisions taken and the constraints that forced them. Sweep every generated artifact that informed a decision into a **Supporting artifacts** entry (synthesis § Sweep the artifacts). Anything left undecided becomes a line in **Notes**, never a question back to the user.
 2. **Classify the work — dev or non-dev.** Our work isn't all software. A **dev spec** keeps the dev-only sections (Testing decisions, Test split, Test seams) and runs the seams step below; a **non-dev spec** skips them and uses only the core sections.
 3. **For dev specs only — sketch the test seams, declare the test split, sweep the contract surface.** Name the public seams the work would be tested at, **prefer the highest existing seam**, declare per acceptance criterion whether it lands as a durable suite test or a throwaway verification script (synthesis § The two declarations), and enumerate the contract decisions hiding as defaults (synthesis § Sweep the contract surface).
-4. **Write the spec to the artifact branch** — one HTML document on `artifact/<ticket>-<slug>` (`artifact/<slug>` when ticketless), **opening with a diagram** of the moving parts (flow, sequence, or state — whichever fits) before any prose, then the template's sections in generic vocabulary. The branch file is **canonical**. Then write the ticket's **projection**: a plain-language summary, the `to-web` render URL (absent that sibling, link the branch file and say the render was not deployed), and the commit hash it was rendered from; post a short comment noting what changed. Ticket reads, comments, creation, and the `artifact/` branch convention follow the tracker and branch bindings in `docs/agents/platform.md`. No ticket yet: create it. No tracker bound: land the projection in the raising conversation (synthesis § Where the spec lives).
+4. **Write the spec to the artifact branch** — one HTML document on `artifact/<ticket>-<slug>` (`artifact/<slug>` when ticketless), **opening with a diagram** of the moving parts (flow, sequence, or state — whichever fits) before any prose, then the template's sections in generic vocabulary. The branch file is **canonical**. Then write the ticket's **projection**: a writing-for-humans summary, the `to-web` render URL (absent that sibling, link the branch file and say the render was not deployed), and the commit hash it was rendered from; post a short comment noting what changed. Ticket reads, comments, creation, and the `artifact/` branch convention follow the tracker and branch bindings in `docs/agents/platform.md`. No ticket yet: create it. No tracker bound: land the projection in the raising conversation (synthesis § Where the spec lives).
 5. **Audit fidelity, then classify the Notes.** Before sign-off, audit in both directions: every material decision from the conversation appears in the spec, and the spec covers the subject ticket's own stated requirements — delivered or explicitly excluded (synthesis § Sign-off). Every Notes line is classified **blocking** (must be settled upstream before tickets), **delegated** (the executor may choose; boundary named), or **deferred** (parked, with a home). A spec with an unclassified material Note is not done; an open blocking Note means the direction isn't ready to build on — say so in the report. A direction too big for one build ends the spec with a **recommended split** — a proposal only; splitting is the user's call.
 6. **Sign-off — the direction's approval gate.** User present: approve inline. AFK: the projection sits on the ticket where comments reach it — the user's LGTM is the approval, and it binds to the **commit hash** the projection carries (synthesis § Sign-off). Any later commit past the blessed hash invalidates the blessing. Readiness labels are not to-spec's to apply.
 

@@ -8,7 +8,7 @@ The verification discipline for freshly built changes: establish the claims (exp
 
 ## Dependency surface
 
-Composes with the optional `to-web` and `plain-language` siblings; reads `docs/agents/environment.md` when present.
+Composes with the optional `to-web` and `writing-for-humans` siblings; reads `docs/agents/environment.md` when present.
 
 ## Provenance
 

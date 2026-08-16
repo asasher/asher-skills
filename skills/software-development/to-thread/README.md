@@ -4,7 +4,7 @@ Interactive dispatch adapter for the outermost harness. The SKILL carries the sh
 
 ## Dependency surface
 
-Composes with the `worktree` sibling (optionally `plain-language`); the five route files and dispatch scripts are bundled.
+Composes with the `worktree` sibling (optionally `writing-for-humans`); the five route files and dispatch scripts are bundled.
 
 ## Provenance
 

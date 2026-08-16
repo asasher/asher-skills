@@ -7,14 +7,14 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: []
-  optional: [plain-language, to-subagent, to-web]
+  optional: [writing-for-humans, to-subagent, to-web]
 ---
 
 # Prototype
 
 Build the smallest throwaway artifact that answers one design question. The answer is durable; the artifact is not.
 
-User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
+User-facing text follows the `writing-for-humans` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
 
 ## Entry
 

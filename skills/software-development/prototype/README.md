@@ -16,7 +16,7 @@ Answers **one design question with a throwaway artifact**, then throws it away â
 
 ## Dependency surface
 
-Composes with the optional `to-subagent`, `to-web`, and `plain-language` siblings.
+Composes with the optional `to-subagent`, `to-web`, and `writing-for-humans` siblings.
 
 ## Credits
 

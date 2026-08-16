@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: thread
   requires: []
-  optional: [plain-language]
+  optional: [writing-for-humans]
 ---
 
 # To-Slices
@@ -16,7 +16,7 @@ To-slices owns one move: **take a decided direction and split it into backlog-re
 
 The defining posture: **recommend with reasons, then let the user edit.** Every slice carries one or two sentences of rationale (why this boundary, why demoable alone), every blocking edge is justified in words, and the recommended **landing shape** is justified too. The user edits the draft; nothing publishes before their approval. Each ticket is a **tracer bullet**, with a **wide-refactor** exception for mechanical, high-blast-radius changes — both defined under § What a ticket is.
 
-User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
+User-facing text follows the `writing-for-humans` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
 
 ## Command surface
 

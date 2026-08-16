@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: []
-  optional: [plain-language, to-subagent, to-web]
+  optional: [writing-for-humans, to-subagent, to-web]
 ---
 
 # Research
@@ -22,4 +22,4 @@ Three rules.
 
 Independent subquestions may run in parallel via the `to-subagent` skill; absent it, read sequentially in-session.
 
-User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
+User-facing text follows the `writing-for-humans` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.

@@ -1,5 +1,5 @@
 ---
-name: plain-language
+name: writing-for-humans
 description: The communication standard for user-facing text — ASD-STE100 plain language, the project's glossary as the approved technical dictionary, and no opaque ticket or PR numbers. Cite it from any skill that writes to a human; read it before writing text a human will read — a question, a plan, an issue or change-request body, a report.
 user-invocable: true
 metadata:
@@ -9,7 +9,7 @@ metadata:
   optional: []
 ---
 
-# Plain language
+# Writing for humans
 
 The one standard for all user-facing text. This is a reference skill: it defines the standard; sibling skills cite it by name and apply it in place.
 

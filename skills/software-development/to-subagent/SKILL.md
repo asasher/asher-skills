@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [worktree]
-  optional: [staffing, plain-language]
+  optional: [staffing, writing-for-humans]
 ---
 
 # To Subagent
@@ -24,7 +24,7 @@ Every dispatch opens with a declaration in the transcript, posted before the cal
 
 > Dispatching <work> — model <X>, effort <Y>, harness <Z>, deadline <absolute time>.
 
-It is a statement, never a question: the human can interrupt it, nobody must approve it, and the transcript is the staffing audit trail. The deadline is an absolute time, not a duration, so anyone reading later can see whether it has passed. User-facing text — here and in every relay and report — follows the `plain-language` sibling; absent it, write plainly and say the standard was not loaded.
+It is a statement, never a question: the human can interrupt it, nobody must approve it, and the transcript is the staffing audit trail. The deadline is an absolute time, not a duration, so anyone reading later can see whether it has passed. User-facing text — here and in every relay and report — follows the `writing-for-humans` sibling; absent it, write plainly and say the standard was not loaded.
 
 ## Staffing
 
@@ -54,7 +54,7 @@ Work sent to another harness runs as a foreground CLI subprocess of this session
 
 ## Relay
 
-Report the result in this session's own words at the altitude the next decision needs — never a pasted transcript. A subagent that died, timed out, or came back empty is a reported outcome, not a silent gap. User-facing text follows the `plain-language` sibling.
+Report the result in this session's own words at the altitude the next decision needs — never a pasted transcript. A subagent that died, timed out, or came back empty is a reported outcome, not a silent gap. User-facing text follows the `writing-for-humans` sibling.
 
 ## Recovery
 
