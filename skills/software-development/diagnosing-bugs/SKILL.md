@@ -18,7 +18,7 @@ Turn an observed defect into a named root cause and confirmed fix. The red-capab
 ## Commands
 
 - **`<defect>`** (default) — load [diagnosis](reference/diagnosis.md) and work all six phases. Read `docs/agents/diagnosing-bugs.md` when present for project-specific seams, commands, and known flaky areas; absent it, use the bundled method without inventing repo facts.
-- **`setup`** — load [setup](reference/setup.md) and reconcile only the project diagnosis playbook.
+- **`setup`** — load [setup](reference/setup.md) and reconcile only the project diagnosis playbook, seeded delta-only from `templates/diagnosing-bugs.md`; the repo owns the playbook after setup, and reconciliation preserves it.
 
 ## Contract
 
@@ -28,8 +28,3 @@ Input is the reporter's exact observed symptom plus the environment needed to dr
 2. the minimal reproduction, ranked hypotheses, and evidence that names the root cause;
 3. the fix, regression proof at the correct seam or an explicit no-seam finding, and the original loop green;
 4. cleanup and project-check results.
-
-## Dependency surface
-
-- **Bundled references** — `reference/diagnosis.md` owns the method; `reference/setup.md` owns playbook reconciliation; `templates/diagnosing-bugs.md` is the delta-only playbook seed.
-- **Project playbook** — optional `docs/agents/diagnosing-bugs.md`, owned by the repo after setup and preserved on reconciliation.

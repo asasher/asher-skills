@@ -15,8 +15,7 @@ Interviews the user relentlessly until shared understanding is real, walking the
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` only.
-- **Siblings (optional, by name):** `to-subagent` — fact lookups; absent it, facts are looked up in-session.
+Composes with the optional `to-subagent` sibling for fact lookups.
 
 ## Provenance
 

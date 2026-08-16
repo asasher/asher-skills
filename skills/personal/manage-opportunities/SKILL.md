@@ -24,7 +24,7 @@ Own the Opportunity Note Shape and every material Opportunity mutation. Load [Op
 | `close` | Close lost or dormant, or record a no-delivery win | [lifecycle](reference/lifecycle.md) |
 | `promote` | Create and validate delivery Project links before winning | [promotion](reference/promotion.md) |
 | `query` | Answer from Opportunity records without mutation | [query](reference/query.md) |
-| `setup` | Create or reconcile workspace bindings | [setup](reference/setup.md) |
+| `setup` | Create or reconcile the workspace bindings playbook `docs/agents/opportunities.md` — paths, maps, and local policy | [setup](reference/setup.md) |
 
 Infer the command from an unambiguous request; otherwise ask which material mutation is intended. Never infer stage movement from artifact existence alone, and never invent missing value, probability, dates, contacts, or evidence.
 
@@ -37,9 +37,3 @@ Infer the command from an unambiguous request; otherwise ask which material muta
 - For a delivery win, `stage: closed-won` is the final write after Project creation, reciprocal links, path ownership, task movement, and validation all succeed.
 
 Run `python3 scripts/validate_opportunities.py <workspace-root-or-Opportunities-dir>` after structural mutations. A validator failure leaves the operation incomplete and must not be hidden by a stage update.
-
-## Dependency surface
-
-- **Bundled references:** schema, lifecycle, promotion, query, and setup contracts; stdlib validator.
-- **Project playbook:** optional `docs/agents/opportunities.md`, created or reconciled by setup, binds workspace paths, maps, and local policy.
-- **Sibling skills:** required `manage-tasks`, invoked by name for task movement and Project Note Shape.

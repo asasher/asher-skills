@@ -46,8 +46,8 @@ report (below), and a pass opens with what it found — never with a bare reques
 - **`retro`** — run a retro pass over the open ledger entries and the transcripts of the runs behind
   them.
 - **`retro setup`** — load [setup](reference/setup.md): record the consent decision, bind the
-  upstream target and transcript locations, seed the denylist halves, install the playbook, and
-  keep the instance untracked.
+  upstream target and transcript locations, seed the denylist halves, install the playbook from
+  [templates/retro.md](templates/retro.md), and keep the instance untracked.
 
 ## The friction ledger
 
@@ -86,7 +86,9 @@ due`. That report is the entire escalation mechanism; whoever sees it decides.
 
 ## The retro pass
 
-1. **Collect.** Read the playbook (`docs/agents/retro.md`), the open ledger entries, and — per the
+1. **Collect.** Read the playbook (`docs/agents/retro.md`) — absent it, only `retro note` works
+   (the ledger needs no bindings); a pass or a submission states the gap and asks for `retro setup`
+   first. Then read the open ledger entries, and — per the
    transcript locations recorded in `retro/transcripts.md` — the transcripts of the runs those
    entries name, plus any runs since the last pass with no entry at all: the user's corrections,
    aborts, and repeated instructions in a transcript are friction nobody noted, and routinely the
@@ -138,15 +140,3 @@ The privacy discipline for anything that leaves the repo. Every layer applies, i
 An approved draft is filed with `gh issue create` against the playbook's upstream target, carrying
 its recorded label (`feedback`). If `gh` is missing or unauthenticated, state the gap and hand the
 user the ready-to-file draft instead of improvising another channel.
-
-## Dependency surface
-
-- **Project playbook** — `docs/agents/retro.md`: the consent decision, upstream target, pass-due
-  threshold, and how to find each harness's transcripts (the verified locations themselves live in
-  the untracked `retro/transcripts.md`). The tracked `docs/agents/retro-denylist.txt` carries the
-  repo-shareable scrub terms. Absent, only `retro note` works (the ledger needs no bindings);
-  a pass or a submission states the gap and asks for `retro setup` first.
-- **Sibling skills** — `to-backlog`, optional, for turning larger local fixes into tracked tickets;
-  absent, the pass lists them for the user instead.
-- **Bundled** — [setup](reference/setup.md), the playbook template ([templates/retro.md](templates/retro.md)),
-  and the scrub script ([scripts/scrub.py](scripts/scrub.py)).

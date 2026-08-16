@@ -4,9 +4,7 @@ Primitive for project-owned Git worktree mechanics. It prepares a branch and wor
 
 ## Dependency surface
 
-- **Bundled:** `scripts/worktree.py`; script and situated evals under `evals/`.
-- **Project playbooks:** platform bindings for base/branch/root and environment bindings for bootstrap and teardown.
-- **Siblings:** none.
+No sibling skills; reads the platform and environment bindings under `docs/agents/`, with the deterministic mechanics bundled in `scripts/worktree.py`.
 
 ## Provenance
 

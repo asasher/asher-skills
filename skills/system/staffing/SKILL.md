@@ -17,7 +17,7 @@ A reference skill: the roster and the resolution doctrine, cited by name from si
 
 ## Commands
 
-- **setup** — load [setup](reference/setup.md); fill the playbook template from the seed and a short repo-deltas interview.
+- **setup** — load [setup](reference/setup.md); fill the playbook template from the bundled roster seed and a short repo-deltas interview, and install the bundled instruction-trigger template into the project instruction file.
 - **route `<task>`** — load [rankings-and-routing](reference/rankings-and-routing.md) and, for role-shaped questions, [roles-and-fallback](reference/roles-and-fallback.md). Cross-harness dispatch shapes are in [harness](reference/harness.md).
 
 No argument runs setup.
@@ -40,9 +40,3 @@ Checks are runtime-only. Try the route at the point of use; on failure **warn th
 **The project's staffing playbook is the sole authority.** Resolution reads it and nothing else: roster table with judgment numbers, pins, declared capability routes, repo deltas. It records no machine state — no reachability rows, no probe records, no overlay; whether a route works is discovered by using it.
 
 The bundled roster is a **seed** — setup reads it once, when writing the playbook, and never again. Absent a playbook, never resolve from the seed or a home-directory path: degrade as [roles-and-fallback](reference/roles-and-fallback.md) directs and report the gap; run `staffing setup` to close it.
-
-## Dependency surface
-
-- **Bundled:** setup, routing, roles/fallback, harness command shapes, the roster seed, and the instruction-trigger template setup installs into the project instruction file.
-- **Project playbooks:** the staffing playbook under the repo's agent-docs directory — the sole runtime authority, written by setup.
-- **Sibling skills:** none — `staffing` is a root reference. Siblings cite it; it invokes none, so there is no closure to carry and nothing to degrade when a sibling is absent.

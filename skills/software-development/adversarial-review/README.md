@@ -8,9 +8,7 @@ Converges a change request to LGTM by alternating bounded reviewer and fixer pas
 
 ## Dependency surface
 
-- **Bundled:** `reference/conduct.md` — both roles' briefs: comment conduct, the LGTM bar, iteration state, the product-semantics ruling.
-- **Siblings (required, by name):** `code-review`, `to-subagent`.
-- **Siblings (optional, by name):** `diagnosing-bugs` — the fixer's route for findings reproducible only at runtime.
+Composes with the `code-review` and `to-subagent` siblings (optionally `diagnosing-bugs`); both roles' briefs are bundled in `reference/conduct.md`.
 
 ## Provenance
 

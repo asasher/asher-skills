@@ -11,7 +11,7 @@ metadata:
 
 # Agent-ready codebase
 
-The standard a repo must meet before parallel agent builds dispatch into it. This is a reference skill: it defines the standard; whatever workflow certifies the repo cites it by name. A project records its checklist answers and punch list in `docs/agents/environment.md`.
+The standard a repo must meet before parallel agent builds dispatch into it. This is a reference skill: it defines the standard; whatever workflow certifies the repo cites it by name. A project records its checklist answers, singleton table, and punch list in `docs/agents/environment.md`, written when the repo is certified.
 
 ## The checklist
 
@@ -29,9 +29,3 @@ Walk the checklist and report either a pass or a punch list of gaps. Punch-list 
 ## Use ≠ change
 
 A genuinely shared resource — one auth tenant, one staging target — serves many parallel builds that **use** it. A ticket that **changes** it is marked at the tracker: slice the work so the change is isolated first; add a dependency edge only for true residue.
-
-## Dependency surface
-
-- **Bundled:** none — this file is the whole standard.
-- **Project playbooks:** `docs/agents/environment.md` carries the repo's checklist answers, singleton table, and punch list, written when the repo is certified.
-- **Siblings:** `worktree` is what checklist item 1 exercises.

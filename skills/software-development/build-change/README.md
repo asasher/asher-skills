@@ -8,10 +8,7 @@ One unit of work â€” a ready ticket, or a spec'd piece of work with no ticket â€
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` only.
-- **Project:** platform verbs in `docs/agents/platform.md`; provisioning and stack facts in `docs/agents/environment.md`.
-- **Siblings (required, by name):** `implement`, `verify-your-work`, `prove-your-work`, `adversarial-review`, `to-subagent`.
-- **Siblings (optional, by name):** `diagnosing-bugs`, `plain-language`.
+Composes with the `implement`, `verify-your-work`, `prove-your-work`, `adversarial-review`, and `to-subagent` siblings (optionally `diagnosing-bugs`, `plain-language`), and reads the `platform.md` and `environment.md` playbooks under `docs/agents/`.
 
 ## Provenance
 

@@ -9,8 +9,7 @@ Waits on external state for cheap: a target, a condition the watcher can decide 
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` only.
-- **Siblings (optional, by name):** `to-subagent` — dispatches the watcher when one is needed; absent it, the session polls at the target's own cadence.
+Composes with the optional `to-subagent` sibling to dispatch a watcher when one is needed.
 
 ## Provenance
 

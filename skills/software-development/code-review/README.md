@@ -8,9 +8,7 @@ Two-axis diff review since a fixed point: **Standards** (documented repo standar
 
 ## Dependency surface
 
-- **Bundled:** `reference/smells.md` (the smell baseline) and `reference/structure.md` (the structural bar), both pasted in full into the Standards brief.
-- **Project:** the tracker binding in `docs/agents/platform.md`, for fetching the originating ticket.
-- **Siblings (optional, by name):** `to-subagent` — axis dispatch; absent it, both axes run in-session sequentially.
+Composes with the optional `to-subagent` sibling for axis dispatch and reads the tracker binding in `docs/agents/platform.md`; the smell baseline and structural bar are bundled under `reference/`.
 
 ## Provenance
 

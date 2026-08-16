@@ -45,9 +45,3 @@ Completion criterion: no deferred task remains in `TODO.md`; every task is in ex
 - `manage-opportunities` owns Opportunity Note Shape, stages, and next-action designation. When installed, invoke it by name for those mutations; when absent, move existing Opportunity tasks but do not invent or reshape Opportunity records.
 - Project repositories own their issue status when their local `backlog` skill and platform playbook say so. Workspace copies are daily reminders, not a second tracker.
 - Do not commit a dirty workspace as a lifecycle precondition. Commit only when the user or the surrounding repository workflow requests one, and never absorb unrelated changes.
-
-## Dependency surface
-
-- **Bundled references:** task vocabulary/movement and Project Note Shape.
-- **Project playbooks:** repository tracker bindings named by each Project's local repository.
-- **Sibling skills:** optional `manage-opportunities`, invoked by name for Opportunity shape and lifecycle.

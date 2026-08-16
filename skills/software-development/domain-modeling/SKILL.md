@@ -16,7 +16,7 @@ Actively build and sharpen the project's domain model while designing. This is t
 
 It runs alongside a conversation rather than owning one.
 
-User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
+User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
 
 ## Where the model lives
 
@@ -50,8 +50,3 @@ Offer an ADR only when **all three** hold:
 3. **A real trade-off** — genuine alternatives existed and one was picked for specific reasons.
 
 Any gate failing → no ADR. During shaping a passing decision becomes an **ADR draft in the context delta**, numbered and landed by the build.
-
-## Dependency surface
-
-- **Bundled:** [context-format](reference/context-format.md), [adr-format](reference/adr-format.md).
-- **Siblings (optional, by name):** `plain-language` (the communication standard — absent it, write plainly and say the standard was not loaded).

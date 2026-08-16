@@ -8,9 +8,7 @@ Evidence packaging for a finished change: what changed and why, reproducible pro
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` only.
-- **Project:** platform verbs in `docs/agents/platform.md`; format and bar from `docs/agents/evidence.md`; the capture contract from `docs/agents/environment.md` — each when the repo has one.
-- **Siblings (optional, by name):** `to-web` for evidence media's durable URLs; `plain-language` for the package's wording.
+Composes with the optional `to-web` and `plain-language` siblings; reads the `platform.md`, `evidence.md`, and `environment.md` playbooks under `docs/agents/` when the repo has them.
 
 ## Provenance
 

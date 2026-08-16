@@ -38,8 +38,3 @@ Reports follow the `plain-language` sibling: ASD-STE100 discipline, `CONTEXT.md`
 - Never merge outside the request's scope.
 - Never force-push over, close, or delete someone else's branch to make a merge work.
 - The whole flow is judgment-light coordination — it stays with this session; delegate nothing but mechanical check-watching (via the `watch-until` sibling when installed).
-
-## Dependency surface
-
-- **Sibling (required, by name):** `worktree` for inspected, refusal-aware working-copy teardown.
-- **Siblings (optional, by name):** `watch-until` for mechanical check-watching; `plain-language` for report wording.

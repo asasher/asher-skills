@@ -16,7 +16,7 @@ To-slices owns one move: **take a decided direction and split it into backlog-re
 
 The defining posture: **recommend with reasons, then let the user edit.** Every slice carries one or two sentences of rationale (why this boundary, why demoable alone), every blocking edge is justified in words, and the recommended **landing shape** is justified too. The user edits the draft; nothing publishes before their approval. Each ticket is a **tracer bullet**, with a **wide-refactor** exception for mechanical, high-blast-radius changes — both defined under § What a ticket is.
 
-User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
+User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
 
 ## Command surface
 
@@ -46,6 +46,4 @@ The full method is in [slicing](reference/slicing.md); the shape:
 
 ## Dependency surface
 
-- **Bundled references** — this skill's own contract, shipped in-directory: [slicing](reference/slicing.md) and [template-guide](reference/template-guide.md). These are the authority; they import no other skill's files.
-- **Siblings (optional, by name)** — `plain-language` (the communication standard — absent it, write plainly and say the standard was not loaded). The `delivered` role on stacked runs is applied at slice-merge time; to-slices publishes the structure that carries it.
-- **Project playbooks** — the repo's conventions, read from `docs/agents/`: the **dependency convention** (`backlog-policy.md` § Dependencies — how a blocking edge is recorded), the **`spec` work-type, `delivered` role, and open-children rule** (`backlog-policy.md` § Label roles), and the **tracker and branch bindings** (`platform.md` — how tickets are created, how a child is attached, the feature-branch convention for stacked landings). Absent a recorded binding, state the gap and ask the user before publishing anything.
+- **Project playbooks** — the repo's conventions, read from `docs/agents/` across the split steps: the **dependency convention** (`backlog-policy.md` § Dependencies — the edge wiring in step 5), the **`spec` work-type, `delivered` role, and open-children rule** (`backlog-policy.md` § Label roles — the parenting in step 7), and the **tracker and branch bindings** (`platform.md` — ticket creation in step 6, the child relation in step 7, the feature-branch convention for stacked landings). Absent a recorded binding, state the gap and ask the user before publishing anything.

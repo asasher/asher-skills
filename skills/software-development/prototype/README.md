@@ -16,8 +16,7 @@ Answers **one design question with a throwaway artifact**, then throws it away â
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` only.
-- **Siblings (optional, by name):** `to-subagent` (build-out dispatch; degrades to building in-session), `to-web` (the render link; degrades to linking the branch file), `plain-language` (the communication standard).
+Composes with the optional `to-subagent`, `to-web`, and `plain-language` siblings.
 
 ## Credits
 

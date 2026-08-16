@@ -19,7 +19,4 @@ Merging the change requests that builds produce stays a separate, explicit human
 
 ## Dependency surface
 
-- **Bundled:** `reference/setup.md` — the setup procedure (declared as `metadata.setup`, so installers report it); `templates/` — the playbook baselines `setup` installs (shared `common/` plus per-domain packs; `software/` is the shipped default); `scripts/reconcile-labels.py` — the label-color reconciler.
-- **Project playbooks:** `docs/agents/platform.md` (platform bindings, verbs verified live, artifact store), `backlog-policy.md` (label roles, dependencies, deadlines, readiness), `environment.md` (run/seed/check plus the agent-readiness answers), `codebase.md` (how the code is written and checked), `evidence.md` (the evidence bar) — owned by the repo once written; `setup` reconciles, never blindly overwrites.
-- **Siblings (required, by name):** `worktree` (prepare, inspect, remove), `to-thread` (shaping and build threads), `to-subagent` (staffed dispatch inside builds), `shape` (what a shaping thread runs), `build-change` (what a build thread runs).
-- **Siblings (optional, by name):** `merge-change` (the human merge gate), `retro` (friction notes), `plain-language` (the user-facing text standard), `agent-ready-codebase` (the readiness standard setup certifies against), `to-web` (evidence media and renders).
+Composes with the `worktree`, `to-thread`, `to-subagent`, `shape`, and `build-change` siblings (optionally `merge-change`, `retro`, `plain-language`, `agent-ready-codebase`, `to-web`), and reads the `docs/agents/` playbooks its `setup` installs and reconciles.

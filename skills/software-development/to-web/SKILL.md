@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: thread
   requires: []
-  optional: []
+  optional: [to-tailnet]
 ---
 
 # To Web
@@ -31,8 +31,3 @@ The store binding lives in `docs/agents/platform.md`: the bucket or store, the p
 ## Verify before reporting
 
 An upload is done when the URL answers, not when the upload command exits: fetch the URL and confirm the response before handing it back. Report each file's URL and the key it lives under.
-
-## Dependency surface
-
-- **Project playbook** — the store binding in `docs/agents/platform.md` (§ artifact store). Absent it, state the gap and stop.
-- **Sibling (optional, by name)** — `to-tailnet`, the deliberate don't-publish alternative for ephemeral, tailnet-only viewing.

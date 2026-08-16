@@ -4,9 +4,7 @@ Interactive dispatch adapter for the outermost harness. The SKILL carries the sh
 
 ## Dependency surface
 
-- **Bundled:** `reference/` (five route files), `scripts/t3-thread.py`, `scripts/name-codex-thread.py`, and `evals/`.
-- **Sibling (required, by name):** `worktree`.
-- **Sibling (optional, by name):** `plain-language` — the standard for the declaration and the report.
+Composes with the `worktree` sibling (optionally `plain-language`); the five route files and dispatch scripts are bundled.
 
 ## Provenance
 

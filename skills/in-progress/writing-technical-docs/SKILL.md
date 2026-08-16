@@ -100,7 +100,3 @@ Read the document once as the target reader. Confirm that the reader can identif
 Return the finished artifact first. Add a short verification note only when assumptions, untested examples, or compliance limits remain.
 
 Completion: the checker has no unresolved applicable errors, every warning was inspected, the reader contract is complete, and all remaining gaps are stated.
-
-## Dependency surface
-
-- **Bundled** — [artifact patterns](reference/artifact-patterns.md), [the ASD-STE100 boundary](reference/asd-ste100.md), and [the mechanical prose checker](scripts/check_prose.py).

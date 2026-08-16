@@ -8,8 +8,7 @@ The red → green loop with the discipline that makes its tests worth keeping: b
 
 ## Dependency surface
 
-- **Bundled:** `reference/tests.md` (good/bad test examples), `reference/mocking.md` (mock only at system boundaries).
-- **Siblings:** none.
+No sibling skills; the test examples and mocking rules are bundled under `reference/`.
 
 ## Provenance
 

@@ -24,7 +24,7 @@ Every dispatch opens with a declaration in the transcript, posted before the cal
 
 > Dispatching <work> — model <X>, effort <Y>, harness <Z>, deadline <absolute time>.
 
-It is a statement, never a question: the human can interrupt it, nobody must approve it, and the transcript is the staffing audit trail. The deadline is an absolute time, not a duration, so anyone reading later can see whether it has passed. User-facing text follows the `plain-language` sibling.
+It is a statement, never a question: the human can interrupt it, nobody must approve it, and the transcript is the staffing audit trail. The deadline is an absolute time, not a duration, so anyone reading later can see whether it has passed. User-facing text — here and in every relay and report — follows the `plain-language` sibling; absent it, write plainly and say the standard was not loaded.
 
 ## Staffing
 
@@ -61,9 +61,3 @@ Report the result in this session's own words at the altitude the next decision 
 Recovery is pull-based: it starts from state this session reads after a blocking call returns bad — a failure, a timeout, a missing deliverable — never from a wake it was owed. Audit reality first: the worktree's status, the branch tip, partial commits, anything posted to the durable surface — reality outranks the worker's last narrative. Committed work is adopted on its branch, not redone; only the genuinely unfinished remainder is re-dispatched, as a fresh blocking call under a fresh declaration.
 
 A worker lost to its harness — a session or usage limit, a route that stops answering mid-unit — is a route loss, not a defect in the unit of work. The same audit comes first; then the unfinished remainder is restaffed onto the roster's succession fallback, resolved via the `staffing` sibling where installed — never the whole unit re-run. Report the route loss so the roster's reachability row gets re-examined; absent the `staffing` sibling, the loss rides the relay as a reported outcome for the owner to act on.
-
-## Dependency surface
-
-- **Sibling (required, by name):** `worktree` — explicit direct isolation; prepared workflow directories are accepted as supplied.
-- **Sibling (optional, by name):** `staffing` — bars-then-cheapest model and effort resolution; succession on route loss. Absent it, the subagent runs on this session's model and effort.
-- **Sibling (optional, by name):** `plain-language` — the standard for the declaration, relays, and reports. Absent it, write plainly and say the standard was not loaded.

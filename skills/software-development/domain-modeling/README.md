@@ -17,8 +17,7 @@ Builds and sharpens the project's domain model _while decisions are being made_:
 
 ## Dependency surface
 
-- **Bundled:** the two format references.
-- **Siblings:** none — callers compose this skill by name.
+No required siblings — callers compose this skill by name; the two format references are bundled.
 
 ## Provenance
 

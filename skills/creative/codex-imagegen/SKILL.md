@@ -22,6 +22,7 @@ metadata:
 - Treat artifacts as immutable. The first output uses the requested name; later writes use monotonic siblings such as `scene.png`, `scene-v2/`, and `scene-v3.png`. Same-stem files and directories form one version family.
 - For transparency, use one flat key color. Prefer magenta for green, brown, or gray subjects; use green only when the subject contains no green.
 - Use the bundled generator rather than constructing a direct `codex exec` command. It owns the required sandbox bypass and transcript extraction mechanics.
+- The bundled scripts require Pillow and NumPy (`requirements.txt`) and generation requires the Codex CLI with an authenticated ChatGPT session; absent either, state the gap and stop.
 
 ## Flat mode
 
@@ -91,10 +92,3 @@ Common failures:
 ## Fallback
 
 Only when `OPENAI_API_KEY` is available and the user explicitly wants the API/CLI route, use [the API-key path](reference/api-key-path.md).
-
-## Dependency surface
-
-- **Bundled:** generator, immutable path allocator, shared keyer, layered compositor, sprite extractor, references, and evals.
-- **Project playbooks:** none.
-- **Sibling skills:** none. Sprite generation calls the bundled generator directly.
-- **External requirements:** Pillow and NumPy from `requirements.txt`; Codex CLI with an authenticated ChatGPT session for generation.

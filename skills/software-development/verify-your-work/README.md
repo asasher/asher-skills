@@ -8,9 +8,7 @@ The verification discipline for freshly built changes: establish the claims (exp
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` only.
-- **Project:** `docs/agents/environment.md` when present — run/seed/auth and the recorded driver per surface.
-- **Siblings (optional, by name):** `to-web` for evidence capture of scaffolding runs; `plain-language` for the report's wording.
+Composes with the optional `to-web` and `plain-language` siblings; reads `docs/agents/environment.md` when present.
 
 ## Provenance
 

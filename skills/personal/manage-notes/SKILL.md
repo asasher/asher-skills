@@ -42,9 +42,3 @@ Omit `source` only when none exists. The body has an H1, one-line framing, and u
 - Invoke required `manage-tasks` for task relay and Project Note Shape.
 - Invoke optional `manage-opportunities` for Opportunity Note Shape or lifecycle. Query may read Opportunity records without it; Lint reports Opportunity shape as unchecked when the sibling is absent rather than inventing a schema.
 - Capture mechanisms, credentials, paths, and archive behavior come only from the project's `docs/agents/capture-sources.md`. The bundled skill defines roles, never personal machine bindings.
-
-## Dependency surface
-
-- **Bundled references:** capture-source role contract, Ingest, Query, and Lint.
-- **Project playbook:** optional `docs/agents/capture-sources.md` binds actual capture mechanisms and ledgers.
-- **Sibling skills:** required `manage-tasks`; optional `manage-opportunities`, both invoked by name.

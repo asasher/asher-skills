@@ -22,9 +22,3 @@ The one standard for all user-facing text. This is a reference skill: it defines
 ## Where it applies
 
 All text a human will read: questions put to the user, plans presented for confirmation, issue and PR bodies, statements of work about to start, relays of another session's outcome, status reports, evidence summaries.
-
-## Dependency surface
-
-- **Bundled:** none — this file is the whole standard.
-- **Project context:** the project's glossary (conventionally `CONTEXT.md`) and its decision records supply the vocabulary; absent a glossary, plain words and inline definitions. No playbook and no setup.
-- **Siblings:** none — this is a root reference; skills that write to a human cite it by name.

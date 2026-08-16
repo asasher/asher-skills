@@ -9,9 +9,7 @@ Dispatch adapter for non-interactive work, synchronous only: a dispatch is a blo
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` and `evals/`.
-- **Sibling (required, by name):** `worktree` — explicit direct isolation.
-- **Siblings (optional, by name):** `staffing` — bars-then-cheapest resolution and succession on route loss; absent it, the subagent runs on the dispatching session's model and effort. `plain-language` — the standard for declarations, relays, and reports.
+Composes with the `worktree` sibling (optionally `staffing` and `plain-language`).
 
 ## Provenance
 

@@ -14,7 +14,7 @@ metadata:
 
 Build the smallest throwaway artifact that answers one design question. The answer is durable; the artifact is not.
 
-User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
+User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
 
 ## Entry
 
@@ -25,7 +25,7 @@ Run on an explicit question; if it is vague, narrow it before building. Framing 
 1. **Question stated.** Record one question and its shape: for logic/falsification, the claim the artifact can falsify; for UI/variants, the alternatives presented and the decision they settle.
 2. **Built and exposed.** Provide one file or URL and visible state. Open rendered artifacts; drive live ones directly. Iterate only to settle the named question.
 3. **Answer captured.** Write the decision, why, and relevant variant captures into the record of the work that raised the question — the ticket, or the raising conversation.
-4. **Cleaned.** Absorb only the validated decision into the record; park the artifact on its artifact branch (`artifact/<ticket>-<slug>`; `artifact/<slug>` when ticketless) with a `to-web` render link in the record, and record the verdict. Nothing throwaway ships.
+4. **Cleaned.** Absorb only the validated decision into the record; park the artifact on its artifact branch (`artifact/<ticket>-<slug>`; `artifact/<slug>` when ticketless) with a `to-web` render link in the record (absent that sibling, link the branch file), and record the verdict. Nothing throwaway ships.
 
 Failure to expose a falsifiable observation — or, for variants, real alternatives a human can react to — returns to gate 1.
 
@@ -46,7 +46,3 @@ The medium need not be code — a rendered document or a hand-driven state table
 ## Afterward
 
 The validated decision is absorbed into the record — which option won and why, variant captures embedded with the winner marked; the prototype itself is never the record. The artifact is parked on its artifact branch, its `to-web` link in the record, the verdict recorded. A winning variant is rebuilt properly; a validated logic module is lifted into real code; the branch is deleted when spent.
-
-## Dependency surface
-
-- **Siblings (optional, by name):** `to-subagent` (build-out dispatch — absent it, build in-session), `to-web` (the render link — absent it, link the branch file), `plain-language` (the communication standard — absent it, write plainly and say the standard was not loaded).

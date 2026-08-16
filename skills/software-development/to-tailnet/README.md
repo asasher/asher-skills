@@ -9,6 +9,4 @@ Exposes a local HTML artifact on the tailnet so the user can view it from any of
 
 ## Dependency surface
 
-- **Bundled:** none.
-- **Project playbooks:** the consuming repo's `docs/agents/environment.md` — tailnet root, ports, proxy rules, where the repo records them.
-- **Siblings:** none.
+No sibling skills; reads the consuming repo's tailnet bindings from `docs/agents/environment.md` where recorded.

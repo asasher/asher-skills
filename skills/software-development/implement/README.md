@@ -8,9 +8,7 @@ Thin routing composite: one ticket in, committed changes out. Defects run throug
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` only.
-- **Project:** `docs/agents/codebase.md` when present — conventions, check commands, generated-artifact recipes.
-- **Siblings (required, by name):** `diagnosing-bugs`, `tdd`.
+Composes with the `diagnosing-bugs` and `tdd` siblings; reads `docs/agents/codebase.md` when present.
 
 ## Provenance
 

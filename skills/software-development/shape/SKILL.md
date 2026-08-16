@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [domain-modeling, interview, to-spec, worktree]
-  optional: [prototype, research, to-backlog, to-slices, to-subagent, watch-until]
+  optional: [plain-language, prototype, research, to-backlog, to-slices, to-subagent, watch-until]
 ---
 
 # Shape
@@ -16,7 +16,7 @@ Settle **one subject's** strategic decisions, ending in a spec blessed at a comm
 
 A shaping thread **never merges anything.** Its repo output is the artifact branch (`artifact/<ticket>-<slug>`; `artifact/<slug>` when the subject is ticketless), never merged to main; its exit is the user's blessing at a hash; a clean worktree removal is the only teardown. Glossary terms and ADR drafts travel in the spec's **context delta** and reach main only through the build that makes them true — main's context files describe the code that is.
 
-User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers.
+User-facing text follows the `plain-language` sibling — ASD-STE100 plain language, `CONTEXT.md` as the dictionary, no bare ticket or PR numbers. Absent it, write plainly and say the standard was not loaded.
 
 ## Intake
 
@@ -28,7 +28,7 @@ When the dispatcher supplied a worktree, inspect it through the `worktree` skill
 
 - Run the `interview` skill on the subject, inline in this thread.
 - Run the `domain-modeling` skill alongside: terms and ADR-worthy decisions crystallise into the spec's **context delta**, per its own contract — never directly onto main during shaping.
-- A question that needs source-backed investigation goes to the `research` skill; a question paper can't settle goes to the `prototype` skill — each dispatched via the `to-subagent` skill. A dispatched question blocks only what depends on it; results re-enter the frontier as evidence, their artifacts landing on artifact branches with links in the record.
+- A question that needs source-backed investigation goes to the `research` skill; a question paper can't settle goes to the `prototype` skill — each dispatched via the `to-subagent` skill (absent it, run them inline). A dispatched question blocks only what depends on it; results re-enter the frontier as evidence, their artifacts landing on artifact branches with links in the record.
 - When the subject is a ticket, record settled decisions on its thread as they land — the thread is the resume state.
 - An item surfacing mid-thread that is real work but not this subject — a bug mentioned in passing, an adjacent idea — is offered to the `to-backlog` skill for capture, not absorbed into the subject or lost with the chat.
 
@@ -38,7 +38,7 @@ When the subject's frontier is empty, run the `to-spec` skill on it — automati
 
 ## The comment watch
 
-Once the spec is published and the user has gone AFK, the thread is not done. Run the `watch-until` skill on the spec'd ticket — condition: a new comment from the user, or an explicit readiness signal ("LGTM", "ready for agent"), in a comment or here in the thread. On a comment: apply the requested tweak as a new commit on the artifact branch, refresh the ticket's projection, reply with what changed, resume watching. The watch carries a timeout; when it reports timed out, surface the open state and stop.
+Once the spec is published and the user has gone AFK, the thread is not done. Run the `watch-until` skill on the spec'd ticket — condition: a new comment from the user, or an explicit readiness signal ("LGTM", "ready for agent"), in a comment or here in the thread. Absent that sibling, say comments need an explicit ping. On a comment: apply the requested tweak as a new commit on the artifact branch, refresh the ticket's projection, reply with what changed, resume watching. The watch carries a timeout; when it reports timed out, surface the open state and stop.
 
 ## Blessed at a hash
 
@@ -58,6 +58,6 @@ A fresh session on the same subject reads the record — the ticket thread, the 
 
 ## Dependency surface
 
-- **Siblings (required, by name):** `interview` (the questioning method), `domain-modeling` (terms and ADR drafts into the context delta), `to-spec` (the crystalliser — the spec is shaping's exit), `worktree` (inspect and remove the supplied isolation). Absent one, state the requirement and stop.
-- **Siblings (optional, by name):** `research` (source-backed questions), `prototype` (probes), `to-subagent` (their dispatch — absent it, run them inline), `to-slices` (the approved split), `to-backlog` (capturing mid-thread items that aren't the subject), `watch-until` (the comment watch — absent it, say comments need an explicit ping). Absent one, park the affected work as open and say so; never silently skip. The `plain-language` sibling sets the register for everything user-facing — absent it, write plainly and say the standard was not loaded.
-- **Project surface:** the repo context files (`CONTEXT.md`, plus `PRODUCT.md`/`DESIGN.md` where they exist); the instruction file's `## Context documents` index; the tracker and branch bindings in `docs/agents/platform.md` when the subject is a ticket. Absent a tracker, idea shaping still works — the record lives on the artifact branch and in the raising conversation.
+- **Siblings (required):** `interview` and `domain-modeling` (§ The loop), `to-spec` (§ Crystallise), `worktree` (§ Intake, § Done). Absent one, state the requirement and stop.
+- **Siblings (optional):** `research`, `prototype`, `to-subagent`, `to-backlog` (§ The loop), `to-slices` (§ Crystallise), `watch-until` (§ The comment watch), `plain-language` (all user-facing text). Absent one, park the affected work as open and say so; never silently skip.
+- **Project surface:** the repo context files and the `## Context documents` index (§ Intake); the tracker and branch bindings in `docs/agents/platform.md` when the subject is a ticket. Absent a tracker, idea shaping still works — the record lives on the artifact branch and in the raising conversation.

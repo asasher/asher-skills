@@ -8,10 +8,7 @@ Settles one subject's strategic decisions — an idea or a ticket — in an inte
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` only.
-- **Siblings (required, by name):** `interview`, `domain-modeling`, `to-spec`, `worktree`.
-- **Siblings (optional, by name):** `research`, `prototype`, `to-subagent` (their dispatch), `to-slices` (the approved split), `to-backlog` (mid-thread capture), `watch-until` (the comment watch), `plain-language` (the communication standard).
-- **Project surface:** the instruction file's `## Context documents` index; the tracker and branch bindings in `docs/agents/platform.md` when the subject is a ticket.
+Composes with the `interview`, `domain-modeling`, `to-spec`, and `worktree` siblings (optionally `research`, `prototype`, `to-subagent`, `to-slices`, `to-backlog`, `watch-until`, `plain-language`), and reads the repo context files and the `docs/agents/platform.md` bindings.
 
 ## Credits
 

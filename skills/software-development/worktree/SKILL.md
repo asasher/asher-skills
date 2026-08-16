@@ -12,7 +12,7 @@ metadata:
 
 # Worktree
 
-Perform one worktree operation. Policy stays with the workflow that selected the operation; this skill owns the fragile Git mechanics. Read the project's version-control and environment bindings before acting. A missing binding uses the repo-adjacent default below, never a harness-private directory.
+Perform one worktree operation. Policy stays with the workflow that selected the operation; this skill owns the fragile Git mechanics. Read the project's version-control and environment bindings before acting — `docs/agents/platform.md` for base, branch, root, publish, and removal bindings; `docs/agents/environment.md` for bootstrap and environment teardown. A missing binding uses the repo-adjacent default below, never a harness-private directory.
 
 ## Prepare
 
@@ -45,8 +45,3 @@ The script refuses symlinked paths, the primary checkout, prunable or identity-m
 ## Failure contract
 
 Stop on ambiguity. Do not add `--force`, delete an unregistered directory, adopt an unowned branch, or turn a dirty-tree refusal into cleanup. Return the diagnostic and the exact path unchanged.
-
-## Dependency surface
-
-- **Bundled:** `scripts/worktree.py` — the deterministic Git operations; `evals/` — real temporary-repo script tests and situated behavior probes.
-- **Project playbooks:** `docs/agents/platform.md` supplies base, branch, root, publish, and removal bindings; `docs/agents/environment.md` supplies bootstrap and environment teardown.
