@@ -1,11 +1,11 @@
 # To-Spec
 
-Turns a conversation that already reached a decision into the **spec** it earned: the high-level direction document a long design discussion produced but never wrote down. To-spec reads the current conversation and the codebase/project understanding built up in it, captures what was **decided**, and writes the spec as an **HTML document on the subject's artifact branch** — canonical, opening with a diagram, revisions as branch commits. The ticket gets the **projection**: a plain-language summary, the `to-web` render URL, and the commit hash it was rendered from — to-spec creates the ticket when none exists; with no tracker bound, the projection lands in the raising conversation. Shaping's exit: every settled subject ends here; `to-slices` splits a spec'd ticket only when the user approves a recommended split.
+Turns a conversation that already reached a decision into the **spec** it earned: the high-level direction document a long design discussion produced but never wrote down. To-spec reads the current conversation and the codebase/project understanding built up in it, captures what was **decided**, and writes the spec as an **HTML document on the subject's artifact branch** — canonical, opening with a diagram, revisions as branch commits. The ticket gets the **projection**: a plain-language summary, the `to-web` render URL, and the commit hash it was rendered from — to-spec creates the ticket when none exists; with no tracker bound, the projection lands in the raising conversation. A settled subject ends here: the spec is the record a decided direction earns, and a spec'd ticket is split only when the user approves a recommended split.
 
 ## When to use
 
 - **Closing out a design conversation** — the direction is settled; capture it durably before the thread is gone.
-- **Feeding `to-slices`** — produce the direction document the ticket-cutter consumes (a sibling skill invokes this by name; a user can run it directly).
+- **Feeding a split** — produce the direction document a later decomposition step consumes (a sibling skill invokes this by name; a user can run it directly).
 
 Not for eliciting requirements. To-spec captures decisions already made — it never interviews.
 

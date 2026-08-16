@@ -1,6 +1,6 @@
 # Staffing
 
-Owns the model roster for a project and the doctrine that resolves it: **which model should run this task?** A reference skill — siblings like `to-subagent` cite it by name; it selects a route and never runs the task.
+Owns the model roster for a project and the doctrine that resolves it: **which model should run this task?** A reference skill — sibling skills cite it by name; it selects a route, and running the task stays with the caller.
 
 ## The doctrine — bars, then cheapest
 

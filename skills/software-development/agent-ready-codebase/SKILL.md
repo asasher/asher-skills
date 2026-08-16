@@ -11,7 +11,7 @@ metadata:
 
 # Agent-ready codebase
 
-The standard a repo must meet before parallel agent builds dispatch into it. This is a reference skill: it defines the standard, it never runs as a workflow. `backlog setup` certifies against it and writes the repo's answers and punch list into `docs/agents/environment.md`.
+The standard a repo must meet before parallel agent builds dispatch into it. This is a reference skill: it defines the standard; whatever workflow certifies the repo cites it by name. A project records its checklist answers and punch list in `docs/agents/environment.md`.
 
 ## The checklist
 
@@ -24,7 +24,7 @@ A repo is agent-ready when all four items pass:
 
 ## Certification
 
-Walk the checklist and report either a pass or a punch list of gaps. Punch-list gaps are groomable tickets. No modes, no lanes: the repo is parallel-safe or it is not ready. Readiness is upkeep, not a one-time audit — re-certify on demand.
+Walk the checklist and report either a pass or a punch list of gaps. Punch-list gaps become tickets in the tracker. No modes, no lanes: the repo is parallel-safe or it is not ready. Readiness is upkeep, not a one-time audit — re-certify on demand.
 
 ## Use ≠ change
 
@@ -33,5 +33,5 @@ A genuinely shared resource — one auth tenant, one staging target — serves m
 ## Dependency surface
 
 - **Bundled:** none — this file is the whole standard.
-- **Project playbooks:** `docs/agents/environment.md` carries the repo's checklist answers, singleton table, and punch list, written by `backlog setup` certification.
-- **Siblings:** `worktree` is what checklist item 1 exercises; `backlog` runs the certification.
+- **Project playbooks:** `docs/agents/environment.md` carries the repo's checklist answers, singleton table, and punch list, written when the repo is certified.
+- **Siblings:** `worktree` is what checklist item 1 exercises.

@@ -1,6 +1,6 @@
 ---
 name: to-web
-description: Upload a file to the project's bound web store and return a durable URL. Use when evidence media (screenshots, video, GIFs) needs a permanent home outside the repo, or when a spec, prototype, or research HTML on an artifact branch needs a viewable render. Not for ephemeral or private viewing — that is the to-tailnet sibling.
+description: Upload a file to the project's bound web store and return a durable URL. Use when evidence media (screenshots, video, GIFs) needs a permanent home outside the repo, or when an HTML artifact on an artifact branch needs a viewable render. Not for ephemeral or private viewing — that is the to-tailnet sibling.
 argument-hint: "<file path(s)> [ticket id]"
 user-invocable: true
 metadata:
@@ -14,10 +14,10 @@ metadata:
 
 Upload one or more files to the bound store and hand back a durable URL per file. This skill does one move; embedding the URLs — in a PR, a ticket projection, a report — stays with the caller.
 
-Two callers, two meanings, one mechanism:
+Two upload meanings, one mechanism:
 
-- **Evidence media** (`prove-your-work` and friends): the store is the file's permanent home. Media is never committed to the repo; the PR embeds by URL.
-- **Artifact renders** (`to-spec`, `prototype`, `research`): the store holds a viewable render of a source that stays version-controlled on its `artifact/*` branch. The render is a preview deployment, keyed by the commit the source was rendered from — a new blessed commit means a new upload and a new URL; old URLs stay true forever.
+- **Evidence media** — a file whose permanent home is the store: media stays out of the repo, and the surface that presents it embeds the URL.
+- **Artifact renders** — a viewable render of a source that stays version-controlled on its `artifact/*` branch. The render is a preview deployment, keyed by the commit the source was rendered from — a new blessed commit means a new upload and a new URL; old URLs stay true forever.
 
 ## Binding
 
@@ -34,5 +34,5 @@ An upload is done when the URL answers, not when the upload command exits: fetch
 
 ## Dependency surface
 
-- **Project playbook** — the store binding in `docs/agents/platform.md` (§ artifact store), written by `backlog setup`. Absent it, state the gap and stop.
+- **Project playbook** — the store binding in `docs/agents/platform.md` (§ artifact store). Absent it, state the gap and stop.
 - **Sibling (optional, by name)** — `to-tailnet`, the deliberate don't-publish alternative for ephemeral, tailnet-only viewing.

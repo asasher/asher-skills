@@ -1,6 +1,6 @@
 ---
 name: staffing
-description: Own the model roster and its resolution doctrine for a project. Use to answer any "which model should do this?" question — state the intelligence and taste bars the task needs, drop every model below them, take the cheapest survivor — or to write the project's staffing playbook. Cited by siblings such as to-subagent; not for running the task itself.
+description: Own the model roster and its resolution doctrine for a project. Use to answer any "which model should do this?" question — state the intelligence and taste bars the task needs, drop every model below them, take the cheapest survivor — or to write the project's staffing playbook. Sibling skills cite it by name; it selects a route, and running the task stays with the caller.
 argument-hint: "[setup | route <task>]"
 user-invocable: true
 metadata:
@@ -13,7 +13,7 @@ metadata:
 
 # Staffing
 
-A reference skill: the roster and the resolution doctrine, cited by name from siblings (`to-subagent`, dispatchers) and consulted directly. It selects a route; it does not run the task.
+A reference skill: the roster and the resolution doctrine, cited by name from sibling skills and consulted directly. It selects a route; running the task stays with the caller.
 
 ## Commands
 
@@ -24,7 +24,7 @@ No argument runs setup.
 
 ## Resolution — bars, then cheapest
 
-The caller states the **intelligence bar** and **taste bar** the task needs; the coordination class and surface from groom's dispatch metadata are the coarse inputs to those bars. Then:
+The caller states the **intelligence bar** and **taste bar** the task needs; the coordination class and surface stated in the dispatch request are the coarse inputs to those bars. Then:
 
 1. a matching pin short-circuits everything below;
 2. a required capability resolves to its declared provider route — a missing provider is a capability gap reported, never substituted;

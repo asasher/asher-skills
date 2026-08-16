@@ -1,12 +1,12 @@
 # Plain language
 
-Reference skill holding the communication standard for user-facing text: ASD-STE100 plain-language discipline, the project's `CONTEXT.md` as the approved technical dictionary, and the no-opaque-numbers rule for ticket and PR references. Every user-facing skill cites it by name so the standard has a single source of truth; it defines, it never runs as a workflow.
+Reference skill holding the communication standard for user-facing text: ASD-STE100 plain-language discipline, the project's `CONTEXT.md` as the approved technical dictionary, and the no-opaque-numbers rule for ticket and PR references. Every user-facing skill cites it by name so the standard has a single source of truth; it defines the standard, and citing skills apply it in place.
 
 ## Dependency surface
 
 - **Bundled:** none — `SKILL.md` is the whole standard.
 - **Project playbooks:** none; the only repo-specific input (the vocabulary) already lives in `CONTEXT.md`.
-- **Siblings:** `domain-modeling` maintains the dictionary.
+- **Siblings:** none — this is a root reference; the dictionary is maintained by the project's dictionary-maintenance practice.
 
 ## Provenance
 

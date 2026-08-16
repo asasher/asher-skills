@@ -22,7 +22,7 @@ User-facing text follows the `plain-language` sibling — ASD-STE100 plain langu
 
 - **`to-slices [<spec'd ticket id or spec path>]`** — split the given direction into tickets. The primary input is a **ticket carrying a spec projection** (the spec read from its artifact branch at the blessed hash); a spec document path is the no-tracker alternate. With no argument, use the current conversation as the direction (or a plan, if one is on the table).
 
-Load [slicing](reference/slicing.md) for the method (what to read, the vertical-slice default, the wide-refactor exception, the justified recommendation, the landing shape, dependency ordering and backlog's edge convention, the readiness default, the no-stale-content rule, parenting the slices) and [template-guide](reference/template-guide.md) for what each ticket carries and what the pre-publish split draft shows the user.
+Load [slicing](reference/slicing.md) for the method (what to read, the vertical-slice default, the wide-refactor exception, the justified recommendation, the landing shape, dependency ordering and the playbook's edge convention, the readiness default, the no-stale-content rule, parenting the slices) and [template-guide](reference/template-guide.md) for what each ticket carries and what the pre-publish split draft shows the user.
 
 ## How a split happens
 
@@ -47,5 +47,5 @@ The full method is in [slicing](reference/slicing.md); the shape:
 ## Dependency surface
 
 - **Bundled references** — this skill's own contract, shipped in-directory: [slicing](reference/slicing.md) and [template-guide](reference/template-guide.md). These are the authority; they import no other skill's files.
-- **Siblings (optional, by name)** — `plain-language` (the communication standard — absent it, write plainly and say the standard was not loaded). The `delivered` role on stacked runs is applied by the `merge-change` sibling at slice-merge time, not by to-slices.
+- **Siblings (optional, by name)** — `plain-language` (the communication standard — absent it, write plainly and say the standard was not loaded). The `delivered` role on stacked runs is applied at slice-merge time; to-slices publishes the structure that carries it.
 - **Project playbooks** — the repo's conventions, read from `docs/agents/`: the **dependency convention** (`backlog-policy.md` § Dependencies — how a blocking edge is recorded), the **`spec` work-type, `delivered` role, and open-children rule** (`backlog-policy.md` § Label roles), and the **tracker and branch bindings** (`platform.md` — how tickets are created, how a child is attached, the feature-branch convention for stacked landings). Absent a recorded binding, state the gap and ask the user before publishing anything.
