@@ -39,6 +39,7 @@
   - Name a line of work: _<git: branch, per `environment.md` § Branching; jj: bookmark>_.
   - Sync the base before forking: _<e.g. `git fetch && git update-ref` / pull; local-only repo: none — the tracker commit below is the fork point>_.
   - Publish a line of work: _<e.g. `git push -u origin <branch>`; local-only repo: none — the branch is already visible; jj: `jj git push` or none>_.
+  - **Push discipline**: commits on work, feature, and artifact branches reach the remote as they land — the remote is the backup, and pushing is not publication (the change request is). Waiting until a change request exists to push is drift from this binding.
   - Tear down a working copy: the `worktree` skill after environment teardown; it refuses dirty, unregistered, or primary-checkout paths.
 - **Feature branches (stacked landing)** — a split spec ticket gets a feature branch off the base branch: _<naming, e.g. `feature/<ticket>-<slug>`>_. Its root commit carries the spec's context delta (`CONTEXT.md` terms, ADRs); slices branch off it and PR into it; the spec ticket's own PR is the feature→base merge.
 - **Artifact branches** — specs, prototypes, and dossiers live on `artifact/<ticket>-<slug>` branches (`artifact/<slug>` when ticketless), plain shared history, **permanently unmerged by intent**: version-controlled while useful, deleted when spent. Every sweep skips the `artifact/` prefix on purpose; the branch ref is also the retention mechanism against GC.

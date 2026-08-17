@@ -7,7 +7,7 @@ metadata:
   invocation: model
   execution: orchestrator
   requires: [domain-modeling, interview, to-spec, worktree]
-  optional: [writing-for-humans, prototype, research, to-backlog, to-slices, to-subagent, watch-until]
+  optional: [outside-in, writing-for-humans, prototype, research, to-backlog, to-slices, to-subagent, watch-until]
 ---
 
 # Shape
@@ -26,7 +26,7 @@ When the dispatcher supplied a worktree, inspect it through the `worktree` skill
 
 ## The loop
 
-- Run the `interview` skill on the subject, inline in this thread.
+- Build the decision tree per the `outside-in` sibling — users, then experience, then system behavior, then implementation; implementation questions enter the frontier only when the behavior governing them is settled — then run the `interview` skill on the subject, inline in this thread. When the experience register's frontier empties, announce the seam: the user continues, or blesses that register and parks the subject for its next shaper. Absent `outside-in`, order the tree by dependency alone and say the standard was not loaded.
 - Run the `domain-modeling` skill alongside: terms and ADR-worthy decisions crystallise into the spec's **context delta**, per its own contract; they reach main only through the build that makes them true — main's context files describe the code that is.
 - A question that needs source-backed investigation goes to the `research` skill; a question paper can't settle goes to the `prototype` skill — each dispatched via the `to-subagent` skill (absent it, run them inline). Absent `research` or `prototype`, park the question as open and say so. A dispatched question blocks only what depends on it; results re-enter the frontier as evidence, their artifacts landing on artifact branches with links in the record.
 - When the subject is a ticket, record settled decisions on its thread as they land.
@@ -42,7 +42,7 @@ Once the spec is published and no blessing has arrived in this thread, run the `
 
 ## Blessed at a hash
 
-The blessing binds to the **artifact-branch commit hash** of the spec the user read. Any later commit past the blessed hash mechanically invalidates readiness; the changed spec needs a fresh blessing at its new hash. Shape executes only the user's explicit calls — the blessing and an approved split — and stamps no lifecycle label of its own.
+The blessing binds to the **artifact-branch commit hash** of the spec the user read, and may be **per register** (the `outside-in` sibling's seam): an experience blessing at one hash, an implementation blessing later at another — the subject stays in shaping until every register it needs is blessed. Any later commit past a blessed hash mechanically invalidates that blessing; the changed spec needs a fresh one at its new hash. Shape executes only the user's explicit calls — the blessing and an approved split — and stamps no lifecycle label of its own.
 
 ## Done
 
