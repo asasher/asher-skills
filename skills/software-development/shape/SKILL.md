@@ -42,7 +42,7 @@ Once the spec is published and no blessing has arrived in this thread, run the `
 
 ## Blessed at a hash
 
-The blessing binds to the **artifact-branch commit hash** of the spec the user read, and may be **per register** (the `experience-first` sibling's seam): an experience blessing at one hash, an implementation blessing later at another — the subject stays in shaping until every register it needs is blessed. Any later commit past a blessed hash mechanically invalidates that blessing; the changed spec needs a fresh one at its new hash. Shape executes only the user's explicit calls — the blessing and an approved split — and stamps no lifecycle label of its own.
+The blessing binds to the **artifact-branch commit hash** of the spec the user read, and may be **per register** (the `experience-first` sibling's seam): an experience blessing at one hash, an implementation blessing later at another — the subject stays in shaping until every register it needs is blessed. A later commit invalidates a blessing only when it **changes the text that blessing covers** — the whole spec for a whole-spec blessing, the register's sections for a register blessing; the mechanical check is a diff between the blessed hash and the head. Changed covered text needs a fresh blessing at its new hash; unchanged text keeps its blessing while other sections move. Shape executes only the user's explicit calls — the blessing and an approved split — and stamps no lifecycle label of its own.
 
 ## Done
 

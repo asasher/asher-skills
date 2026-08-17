@@ -1,6 +1,6 @@
 ---
 name: experience-first
-description: The decision-ordering standard for shaping — users, then experience, then system behavior, then implementation. Cite it when building a shaping decision tree, structuring a spec, or routing a partially shaped ticket to its next shaper.
+description: The decision-ordering standard for shaping — users, then experience, then system behavior, then implementation. Use when building a shaping decision tree, structuring a spec, or routing a partially shaped ticket to its next shaper.
 user-invocable: true
 metadata:
   invocation: model
@@ -46,5 +46,5 @@ In the implementation register, state the recommended design in the spec and sur
 ## Skipping and blessing
 
 - A register whose frontier is empty is skipped, never ceremonially visited. A copy change has no implementation questions; a pure refactor has no experience questions; a settled ticket has neither.
-- Blessing is per register, recorded against the spec's commit hash. A subject stays in shaping until every register it actually needs is blessed; which registers it needs is the routing judgment of whoever grooms it. A commit past a register's blessed hash reopens that register's blessing.
-- Implementation discoveries can invalidate blessed experience — infeasibility is a new commit past the experience blessing, reopening it by the same hash rule.
+- Blessing is per register, recorded against the spec's commit hash. A subject stays in shaping until every register it actually needs is blessed; which registers it needs is the routing judgment of whoever grooms it. A later commit reopens a register's blessing only when it **changes that register's text** — compare the register's sections at the blessed hash and at the head; unchanged text keeps its blessing, so implementation commits stack on top of a blessed experience without disturbing it.
+- Implementation discoveries can invalidate blessed experience — infeasibility forces an edit to approved experience text, and that edit reopens the experience blessing by the same rule. No separate mechanism exists.
