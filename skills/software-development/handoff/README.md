@@ -1,11 +1,11 @@
 # Handoff
 
-Compacts the current conversation into a handoff document in the OS temp directory: what a fresh agent needs to continue, a suggested-skills section, references (never copies) to content already captured in durable artifacts, and sensitive information redacted.
+Compacts the current conversation into a handoff document in the OS temp directory, for a fresh agent to continue from; mechanics in `SKILL.md`.
 
 ## When to use
 
 - Ending a session whose work another session will continue.
-- Feeding a thread or subagent a starting prompt richer than one paragraph.
+- Seeding a `to-thread` or `to-subagent` dispatch with a starting prompt richer than one paragraph.
 
 ## Provenance
 

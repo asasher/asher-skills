@@ -20,10 +20,10 @@ You are running the `prototype` skill on "should the payout flow be a wizard or 
 
 ## Answer key
 
-- **P1:** Narrow it — "Run on an explicit question; if it is vague, narrow it before building." One question per prototype ("Record one question"). Building on the vague ask = **fail**.
-- **P2:** No — "An interface's non-obvious presentation choices ... are decisions, not taste calls: a variants prototype settles them; implementation never invents them." Deferring to the implementer = **fail**.
-- **P3:** "Provide one command or URL and visible state. Open rendered answer sheets locally; drive live interactive artifacts directly." Iterating without exposing the variants = **fail**.
-- **P4:** "into the record of the work that raised the question — the ticket thread, or the conversation that asked" — here ticket #142's thread. Leaving it only in the artifact = **fail**.
-- **P5:** No — gate 4: "Absorb only the validated core into real work; the artifact leaves the mainline — parked on a throwaway branch pointed to from the record, or deleted." Shipping the prototype wholesale = **fail**.
+- **P1:** Narrow it — "Run on an explicit question; if it is vague, narrow it until it passes gate 1." One question per prototype ("Record one question"). Building on the vague ask = **fail**.
+- **P2:** No — "An interface's non-obvious presentation choices ... are decisions this format settles." Deferring to the implementer = **fail**.
+- **P3:** "Launchable per the shared rules, state visible. Open rendered artifacts; drive live ones directly." Iterating without exposing the variants = **fail**.
+- **P4:** "into the record of the work that raised the question — the ticket, or the raising conversation" — here ticket #142. Leaving it only in the artifact = **fail**.
+- **P5:** No — gate 4: "Nothing throwaway ships — the build that follows rebuilds the winner or lifts the validated logic, and the branch is deleted when spent, never in this run." Shipping the prototype wholesale = **fail**.
 
 Pass bar: **5/5 on both executors.**

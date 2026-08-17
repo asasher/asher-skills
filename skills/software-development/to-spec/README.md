@@ -1,6 +1,6 @@
 # To-Spec
 
-Turns a conversation that already reached a decision into the **spec** it earned: the high-level direction document a long design discussion produced but never wrote down. To-spec reads the current conversation and the codebase/project understanding built up in it, captures what was **decided**, and writes the spec as an **HTML document on the subject's artifact branch** — canonical, opening with a diagram, revisions as branch commits. The ticket gets the **projection**: a writing-for-humans summary, the `to-web` render URL, and the commit hash it was rendered from — to-spec creates the ticket when none exists; with no tracker bound, the projection lands in the raising conversation. A settled subject ends here: the spec is the record a decided direction earns, and a spec'd ticket is split only when the user approves a recommended split.
+Turns a conversation that already reached a decision into the **spec** it earned: the high-level direction document a long design discussion produced but never wrote down. To-spec reads what's on the table, captures what was **decided**, and writes the spec as an **HTML document on the subject's artifact branch** — canonical, opening with a diagram, revisions as branch commits. The ticket gets the **projection**: a writing-for-humans summary, the `to-web` render URL, and the commit hash it was rendered from — to-spec creates the ticket when none exists; with no tracker bound, the projection lands in the raising conversation. A settled subject ends here: the spec is the record a decided direction earns, and a spec'd ticket is split only when the user approves a recommended split.
 
 ## When to use
 
@@ -12,15 +12,15 @@ Not for eliciting requirements. To-spec captures decisions already made — it n
 ## Shape
 
 - **Pure synthesis, no interview.** To-spec mines what's already on the table; it does not re-ask what the conversation settled and does not stall on the user. Undecided points are **flagged in the spec's Notes**, not turned into questions.
-- **Branch file canonical, ticket projection.** The spec lives on `artifact/<ticket>-<slug>` (`artifact/<slug>` ticketless); the ticket carries summary, render link, and hash — a stale projection is visible by its hash. Sign-off binds to the hash: a later commit past a blessing invalidates it.
+- **Branch file canonical, ticket projection.** The spec lives on the subject's artifact branch; the ticket carries summary, render URL, and hash — a stale projection is visible by its hash. Sign-off binds to the hash: a later commit past an approval invalidates it.
 - **Two declarations.** The **context delta** (new terms, ADR drafts — landed on main by the build that makes them true) and the **test split** (per acceptance criterion: durable suite test vs throwaway verification script).
-- **Dev / non-dev gating.** The skill classifies the work. A **dev spec** keeps the dev-only sections (Testing decisions, Test split, Test seams) and runs the upstream "sketch the test seams, prefer the highest existing seam" step (see Credits); a **non-dev spec** skips them. One template serves process, content, and decision specs too.
+- **Dev / non-dev gating.** The skill classifies the work. A **dev spec** keeps the dev-only sections (Testing decisions, Test split, Test seams) and runs the borrowed "sketch the test seams, prefer the highest existing seam" step (see Credits); a **non-dev spec** skips them. One template serves process, content, and decision specs too.
 - **Generic vocabulary.** "spec" and "ticket," never GitHub-specific "issue." The downstream unit is a ticket.
 - **No stale content.** The spec carries no file paths or code snippets (they rot) — direction in prose. Two narrow exceptions: a prototype-validated snippet that encodes a decision more precisely than prose can, and the durable pointers in the spec's **Supporting artifacts** section — the evidence trail swept onto the spec at crystallise time, omitted when nothing was generated.
 
 ## Layout
 
-`SKILL.md` is the command surface (`to-spec [<ticket id, or name>]`) and points into `reference/`: `synthesis.md` (the no-interview method, the artifact sweep, the diagram-first rule, where the spec lives, the two declarations, gating, seams step, no-stale-content rule, split recommendation, sign-off) and `template-guide.md` (what each section holds). `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
+`SKILL.md` is the command surface (`to-spec [<ticket id, or name>]`) and points into `reference/`: `synthesis.md` (the method) and `template-guide.md` (what each section holds). `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
 
 Self-contained at the file level; composes by name — `to-web` deploys the render, `writing-for-humans` sets the register; both degrade.
 

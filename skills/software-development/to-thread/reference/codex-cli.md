@@ -19,4 +19,4 @@ The `thread.started` event in the log is the liveness signal: confirm it appeare
 
 ## Report
 
-Tell the user: `codex resume '<name>'` opens it for inspection; bare `codex resume` is the picker. When the user attends through the Codex desktop app instead, use the `codex-desktop.md` route — an exec-created thread is filtered from the app's surface.
+Tell the user: `codex resume '<name>'` opens it for inspection; bare `codex resume` is the picker.

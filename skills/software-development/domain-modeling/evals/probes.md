@@ -20,7 +20,7 @@ You are running `domain-modeling` alongside a design conversation in a repo with
 
 ## Answer key
 
-- **P1:** Write now — "A resolved term goes into `CONTEXT.md` right then" / "Create it when the first term resolves." Batching for later = **fail**.
+- **P1:** Write now — "Terms and drafts land in `CONTEXT.md` or the context delta the moment they crystallise" / "`CONTEXT.md` when the first term resolves." Batching for later = **fail**.
 - **P2:** No ADR — gate 1 (**hard to reverse**) fails: "changing the decision later costs something real" does not hold; "Any gate failing → no ADR." Offering one = **fail**.
 - **P3:** Yes — all three gates hold (lock-in cost, a future reader would wonder, real alternatives). Minimum form: "An ADR can be a single paragraph." Refusing, or demanding a long template, = **fail**.
 - **P4:** No — "`CONTEXT.md` is a glossary and nothing else — no implementation details, no spec content, no scratch notes." Adding it = **fail**.

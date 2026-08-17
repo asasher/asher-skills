@@ -1,6 +1,6 @@
-# CONTEXT.md format
+# Context file formats
 
-## Structure
+## CONTEXT.md structure
 
 ```md
 # {Context Name}
@@ -10,7 +10,7 @@
 ## Language
 
 **Order**:
-{A one or two sentence description of the term}
+A customer's request for specific products, priced at the time it is placed.
 _Avoid_: Purchase, transaction
 
 **Invoice**:
@@ -22,18 +22,15 @@ A person or organization that places orders.
 _Avoid_: Client, buyer, account
 ```
 
-## Rules
+## CONTEXT.md rules
 
+- `CONTEXT.md` is a glossary and nothing else — no implementation details, no spec content, no scratch notes.
 - **Be opinionated.** When multiple words exist for the same concept, pick the best one and list the others under `_Avoid_`.
 - **Keep definitions tight.** One or two sentences max. Define what it IS, not what it does.
 - **Only include terms specific to this project's context.** General programming concepts (timeouts, error types, utility patterns) don't belong even if the project uses them extensively.
 - **Group terms under subheadings** when natural clusters emerge. If all terms belong to a single cohesive area, a flat list is fine.
 
-## Single vs multi-context repos
-
-**Single context (most repos):** One `CONTEXT.md` at the repo root.
-
-**Multiple contexts:** A `CONTEXT-MAP.md` at the repo root lists the contexts, where they live, and how they relate to each other:
+## CONTEXT-MAP.md format
 
 ```md
 # Context Map

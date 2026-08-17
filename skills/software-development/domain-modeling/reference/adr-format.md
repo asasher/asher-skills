@@ -1,6 +1,6 @@
 # ADR Format
 
-ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
+ADRs live in `docs/adr/` with sequential numbering (`0001-slug.md`, `0002-slug.md`): scan for the highest existing number and increment by one.
 
 ## Template
 
@@ -10,19 +10,13 @@ ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slu
 {1-3 sentences: what's the context, what did we decide, and why.}
 ```
 
-That's it. An ADR can be a single paragraph. The value is in recording _that_ a decision was made and _why_ — not in filling out sections.
+An ADR can be a single paragraph: record that a decision was made and why.
 
 ## Optional sections
-
-Only include these when they add genuine value. Most ADRs won't need them.
 
 - **Status** frontmatter (`proposed | accepted | deprecated | superseded by ADR-NNNN`) — useful when decisions are revisited
 - **Considered Options** — only when the rejected alternatives are worth remembering
 - **Consequences** — only when non-obvious downstream effects need to be called out
-
-## Numbering
-
-Scan `docs/adr/` for the highest existing number and increment by one.
 
 ## What qualifies
 

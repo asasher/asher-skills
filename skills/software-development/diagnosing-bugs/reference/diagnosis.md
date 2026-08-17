@@ -1,16 +1,16 @@
 # Diagnosis — six phases
 
-Work the phases in order; skip one only with an explicit justification.
+Work the phases in order; skip one only with the justification recorded in the **durable work record** — the ticket, change request, or other artifact standing as this work's record; absent one, a note committed beside the work.
 
 ## 1. Build a red-capable feedback loop
 
 Spend disproportionate effort on one tight pass/fail signal for the reporter's exact symptom. Try, in rough order: a failing test at the real seam; HTTP or CLI fixture script; headless browser assertion; captured-trace replay; minimal harness; property/fuzz loop; automated bisection; differential old/new comparison.
 
-Tighten the loop like a product: make it faster, assert the precise symptom, and remove nondeterminism by pinning time, randomness, filesystem, and network. For a flaky bug, raise and record the reproduction rate with repetition, stress, or narrowed timing windows until the signal is useful.
+Tighten the loop: make it faster, assert the precise symptom, and remove nondeterminism by pinning time, randomness, filesystem, and network. For a flaky bug, raise and record the reproduction rate with repetition, stress, or narrowed timing windows until the signal is useful.
 
-**Gate:** name one unattended command already run at least once, with captured output, that drives the actual bug path, can go red on this exact symptom and green after the fix, is deterministic enough to trust, and runs in seconds rather than minutes.
+**Gate:** name one unattended command already run at least once, with captured output, that drives the actual bug path, can go red on this exact symptom and green after the fix, is deterministic — or, for a flaky symptom, carries a recorded reproduction rate and the repetition count that makes a red run trustworthy — and runs in seconds rather than minutes.
 
-If no such loop is possible, stop. List what was tried and request the missing reproducing environment, captured artifact, or permission for temporary instrumentation. Do not hypothesize without a loop.
+If no such loop is possible, stop. List what was tried and request the missing reproducing environment, captured artifact, or permission for temporary instrumentation. Hypotheses begin only after a loop goes red.
 
 ## 2. Reproduce and minimise
 
@@ -20,13 +20,13 @@ Run the loop and confirm it shows the reported failure—not a nearby failure. C
 
 ## 3. Rank falsifiable hypotheses
 
-Write 3–5 hypotheses before testing any. Rank them. Each names a prediction: “If X is the cause, changing Y will make the symptom disappear or changing Z will make it worse.” Discard or sharpen any claim without a prediction. Put the ranked list in the **durable work record** — the ticket, change request, or other artifact the invoking context treats as this work's record; absent one, a note committed beside the work — and show it to the user when available; their domain knowledge may re-rank it, but do not block an unattended run.
+Write 3–5 hypotheses before testing any. Rank them. Each names a prediction: “If X is the cause, changing Y will make the symptom disappear or changing Z will make it worse.” Discard or sharpen any claim without a prediction. Put the ranked list in the durable work record; in an attended run, show it to the user — their domain knowledge may re-rank it; in an unattended run, proceed on your own ranking.
 
 **Gate:** every candidate is ranked and falsifiable.
 
 ## 4. Instrument predictions
 
-Test one prediction and change one variable at a time. Prefer a debugger or REPL inspection, then targeted logs only at boundaries that distinguish hypotheses; never log everything and grep. Tag temporary output with a unique prefix such as `[DEBUG-a4f2]`. For performance regressions, establish a timing/profile/query-plan baseline and bisect instead of adding logs.
+Test one prediction and change one variable at a time. Prefer a debugger or REPL inspection, then targeted logs only at boundaries that distinguish hypotheses. Tag temporary output with a unique prefix such as `[DEBUG-a4f2]`. For performance regressions, establish a timing/profile/query-plan baseline and bisect instead of adding logs.
 
 **Gate:** the observations falsify alternatives and name the cause rather than restating the symptom.
 
@@ -45,4 +45,4 @@ If no correct seam exists, record that architectural gap instead of writing a sh
 - Record the confirmed hypothesis/root cause in the durable work record.
 - Report the regression test, or the no-seam gap and its consequence.
 
-**Done:** the reported symptom is green, proof is durable, no debug residue remains, and required checks have not regressed.
+**Gate:** the reported symptom is green, proof is durable, no debug residue remains, and required checks have not regressed.

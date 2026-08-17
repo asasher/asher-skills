@@ -1,6 +1,6 @@
 ---
 name: diagnosing-bugs
-description: Diagnose hard bugs and performance regressions through a tight red-capable feedback loop. Use when a defect is failing, flaky, or slow. Not for speculative cleanup without an observed symptom.
+description: Diagnose defects through a tight red-capable feedback loop. Use on an observed symptom — a failure, a flake, or a slowdown. Not for speculative cleanup.
 argument-hint: "<the observed symptom>"
 user-invocable: true
 metadata:
@@ -13,12 +13,12 @@ metadata:
 
 # Diagnosing Bugs
 
-Turn an observed defect into a named root cause and confirmed fix. The red-capable loop is load-bearing; everything else consumes it.
+Turn an observed defect into a named root cause and confirmed fix. The red-capable loop is load-bearing; every later phase runs against it.
 
 ## Commands
 
-- **`<defect>`** (default) — load [diagnosis](reference/diagnosis.md) and work all six phases. Read `docs/agents/diagnosing-bugs.md` when present for project-specific seams, commands, and known flaky areas; absent it, use the bundled method without inventing repo facts.
-- **`setup`** — load [setup](reference/setup.md) and reconcile only the project diagnosis playbook, seeded delta-only from `templates/diagnosing-bugs.md`; the repo owns the playbook after setup, and reconciliation preserves it.
+- **`<defect>`** (default) — load [diagnosis](reference/diagnosis.md), the six-phase method. Read `docs/agents/diagnosing-bugs.md` when present for known flaky surfaces and debugging seams; absent it, verify any repo command or seam before relying on it.
+- **`setup`** — load [setup](reference/setup.md) and reconcile the project diagnosis playbook, `docs/agents/diagnosing-bugs.md`.
 
 ## Contract
 

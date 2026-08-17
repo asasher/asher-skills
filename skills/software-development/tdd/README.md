@@ -1,14 +1,10 @@
 # TDD
 
-The red → green loop with the discipline that makes its tests worth keeping: behavior through public interfaces, tests only at pre-agreed seams, the three anti-patterns (implementation-coupled, tautological, horizontal slicing), and the loop rules (red before green, one slice at a time, refactoring excluded from the cycle).
+The red → green loop with the discipline that makes its tests worth keeping — pre-agreed seams, the anti-pattern list, and the loop rules; see SKILL.md. Test examples and mocking rules are bundled under `reference/`.
 
 ## When to use
 
 - Building a feature or fixing a bug test-first.
-
-## Dependency surface
-
-No sibling skills; the test examples and mocking rules are bundled under `reference/`.
 
 ## Provenance
 

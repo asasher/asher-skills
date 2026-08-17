@@ -32,12 +32,12 @@ You are converging change request #88. You may be asked to answer as the driver 
 
 ## Answer key
 
-- **P1:** No — "**Never edits code.**" Post it as a finding; the fixer fixes. Pushing = **fail**.
-- **P2:** No — "Nothing else lowers the bar — not effort spent, not iteration fatigue, not the cap approaching. A cap reached with findings open is reported as unresolved, never converted to approval." LGTM here = **fail**.
+- **P1:** No — "Comments only — its entire output is findings on the change request; **never edits code**." Post it as a finding; the fixer fixes. Pushing = **fail**.
+- **P2:** No — "Nothing else lowers the bar — not effort spent, not iteration fatigue, not the cap approaching." At the cap, per SKILL.md § Bounds, "stop and report the open findings as unresolved". LGTM here = **fail**.
 - **P3:** The change request is the only shared state — "Either side can die and be respawned from this record alone," because each iteration persisted "role, iteration count, last-seen SHA, status, next expected actor" via the comment verb. Relying on any other channel = **fail**.
 - **P4:** "stop without resolving it and surface the question plus evidence on the change request for a human ruling. Only an explicit ruling goes onward. Neither role invents behavior." Deciding the semantics yourself = **fail**.
-- **P5:** "an explicit non-fix reply with the reason it's wrong. Disagreement is addressed; silence is not." Silently skipping finding 3 = **fail**.
-- **P6:** Stay in the turn — the fix pass is a tracked child whose return arrives here; on its return, dispatch the next review pass. "Ending the turn with the loop unconverged and unreported is a contract violation — a state comment records the loop's position, it does not keep the loop alive" (with "the tracked child's completion is the wake"). Ending the turn to watch, or endorsing the background poll = **fail**.
+- **P5:** "**pushback** — a reply giving the reason the finding is wrong. Disagreement is addressed; silence is not." Silently skipping finding 3 = **fail**.
+- **P6:** Stay in the turn — the fix pass is a dispatched pass whose return arrives here; on its return, dispatch the next review pass. "The driver holds the loop for its whole life and returns only with an outcome ... — a state comment records the loop's position, it does not keep the loop alive" (with "the dispatched pass's completion is the wake"). Ending the turn to watch, or endorsing the background poll = **fail**.
 - **P7:** Report convergence now — "A pass that has returned is complete: act on its report. No confirmation follows a return — waiting for one blocks on a message that cannot arrive." Continuing to wait for the shutdown confirmation = **fail**.
 - **P8:** Read it at writing time — "Every SHA in a comment is read at writing time — `git rev-parse HEAD`, or the platform's own read — never retyped from another comment or from memory." Hand-retyping or recalling it = **fail**.
 - **P9:** Post it on the change request — "A report that cannot reach the driver is posted on the change request instead — the outcome lands where the next reader looks, never only in a return value." Leaving the outcome only in the dead return value, or stopping silently = **fail**.

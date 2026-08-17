@@ -4,5 +4,5 @@
 
 ## This repo
 
-- Known flaky or model-dependent surfaces: preserve cited transcripts; nondeterministic runs follow the bundled flaky-bug rule. _<add repo-specific surfaces, or "none">_.
+- Known flaky or model-dependent surfaces: _<add repo-specific surfaces with cited transcripts, or "none">_.
 - Debugging seams — how a skill defect goes red here: _<the failing-check seam the repo's eval discipline provides, or "none">_.

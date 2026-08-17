@@ -24,12 +24,12 @@ You are running the `interview` skill. The user opened with: "Here's the vendor'
 
 ## Answer key
 
-- **P1:** Cut — the rate limits are in the provided PDF: "provided artifacts are read, not asked about." Keeping the question = **fail**.
-- **P2:** Cadence, currency, notification — the whole askable frontier; threshold and retry wait: "A question whose answer depends on another question still open in this round belongs to a later round, not this one." Asking all five, or only one, = **fail**.
-- **P3:** The queue library is a fact — "Finding **facts** is your job, never the user's" / "don't ask the user for anything you could look up yourself" (look it up / dispatch a lookup). Instant-vs-batched is a decision — "The **decisions** are the user's — put each to them and wait." Asking the user the fact, or deciding cadence yourself, = **fail**.
-- **P4:** Ask the rest now — "a running lookup is an unsettled prerequisite, so only the questions downstream of it wait for the subagent to report — ask the rest of the frontier now." Blocking the round = **fail**.
+- **P1:** Cut — the rate limits are in the provided PDF: "**Intake first** — read what was handed to this session before the first round." Keeping the question = **fail**.
+- **P2:** Cadence, currency, notification — the whole askable frontier; threshold and retry wait, their prerequisite (cadence) is still open: "The **frontier** is every decision whose prerequisites are already settled." Asking all five, or only one, = **fail**.
+- **P3:** The queue library is a fact — "Finding **facts** is your job, never the user's" (look it up / dispatch a lookup). Instant-vs-batched is a decision — "The **decisions** are the user's — put each to them and wait." Asking the user the fact, or deciding cadence yourself, = **fail**.
+- **P4:** Ask the rest now — "A running lookup is an unsettled prerequisite: only its downstream questions wait for the subagent to report — ask the rest of the frontier now." Blocking the round = **fail**.
 - **P5:** Numbered questions, each with a recommended answer: "number each question and give your recommended answer." Unnumbered or recommendation-free = **fail**.
 - **P6:** "dispatch a lookup via the `to-subagent` skill (absent it, look it up in-session)" — the lookup happens either way; asking the user instead = **fail**.
-- **P7:** No — "Do not act on it until the user confirms you have reached a shared understanding." Acting on frontier-empty alone = **fail**.
+- **P7:** No — "The session is done when the frontier is empty — every assumption surfaced as a decision — and the user confirms shared understanding." Acting on frontier-empty alone = **fail**.
 
 Pass bar: **7/7 on both executors.**

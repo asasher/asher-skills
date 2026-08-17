@@ -19,8 +19,8 @@ You are running the `implement` skill on ticket #142: a payout-summary feature w
 ## Answer key
 
 - **P1:** Defect → "runs through the `diagnosing-bugs` skill"; new behavior → "runs through the `tdd` skill at pre-agreed seams"; tidy-up → fits neither route — flag it, citing the two routes ("A defect — something that should work and doesn't"; "New behavior — a feature, an enhancement"). Doing the tidy-up = **fail**.
-- **P2:** Seams get proposed and recorded first — "the ticket or spec's named seams, or seams proposed and recorded before the first test." Testing at unrecorded seams = **fail**.
-- **P3:** "Run typechecking and the touched test files regularly; run the full suite once at the end — and let each run finish before starting another in the same tree." Skipping the final full suite = **fail**.
+- **P2:** The `tdd` skill confirms seams first — "runs through the `tdd` skill at pre-agreed seams — that skill owns confirming them." Testing at unconfirmed seams = **fail**.
+- **P3:** "Run typechecking and the touched test files before each commit; then the repo's formatter and linter (and dead-export check, where the repo has one) over the touched files; then the full suite once — and let each run finish before starting another in the same tree." Skipping the final full suite = **fail**.
 - **P4:** Batch size only — "what it settles is settled; what it delegates is yours to decide and worth a line in the commit message." Changing cadence = **fail**.
 
 Pass bar: **4/4 on both executors.**

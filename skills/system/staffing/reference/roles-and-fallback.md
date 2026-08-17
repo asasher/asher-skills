@@ -17,13 +17,4 @@ Fix work surfaced by verify or review is re-delegated to a builder-bar route for
 
 ## Fallback
 
-There are no succession lists. Fallback is the resolution rule itself: **the next-cheapest survivor above the same bars steps in.**
-
-- **A route fails at the point of use** → warn the user, take the next-cheapest survivor above the bars, continue. The warning is the record; a route failing repeatedly across sessions is retro fodder.
-- **Output misses the bar** → escalate to a more capable survivor without asking.
-- **No model above the bars is reachable** → run the work **on the current model, in a subagent** when the harness allows one, inline only when no subagent is possible, and **report the staffing gap**. Never skip the step, and never quietly ship user-facing work through a model below the taste bar — the gap report is the honesty mechanism.
-- **A missing playbook degrades, it does not hard-stop.** Staff the fallback above, report the staffing gap, and suggest `staffing setup`.
-
-## Worked example — the ui route fails
-
-A ui change resolves to the cheapest survivor above the taste bar, but that route fails at dispatch. Do **not** hand the work to a below-bar model and do **not** stop. Warn the user, then take the next-cheapest survivor still above the taste bar — even if that is the most expensive model on the roster. If nothing above the bar is reachable, run the ui work on the current model in a subagent and report the staffing gap.
+There are no succession lists. Fallback is the resolution rule itself — try, warn, fall back per [rankings-and-routing](rankings-and-routing.md) § Runtime fallback. A missing playbook degrades, not hard-stops: staff per that section, report the staffing gap, and suggest `staffing setup`.

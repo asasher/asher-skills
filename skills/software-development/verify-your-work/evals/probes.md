@@ -27,10 +27,10 @@ You are verifying branch `142-payout-summary` (a web feature). The repo has `doc
 ## Answer key
 
 - **P1:** No — "**Never fix anything**: a verifier that edits the work stops being a verifier, and the fix belongs to whoever owns the changes." Report with evidence. Fixing = **fail**.
-- **P2:** No — "A check that cannot fail is not proof. 'It compiles' verifies nothing about behavior." Pick a check that goes red if the math is wrong. Accepting boot-up = **fail**.
-- **P3:** "a check **written as a script** with the repo's recorded driver for that surface", "walking the changed journey through the states named in the ticket (empty, loading, error, disabled), not just the golden path — durable suite test or scaffolding script, as the spec's declaration says." Manual clicking or golden-path-only = **fail**.
-- **P4:** "_not verified_, with the reason — never silently skipped, never guessed at." Omitting it or guessing the outcome = **fail**.
-- **P5:** Follow the recorded contract — "Honor it — a verifier that improvises around the recorded contract produces evidence nobody can reproduce." Continuing to improvise = **fail**.
+- **P2:** No — "'It compiles' verifies nothing about behavior." Pick a check that goes red if the math is wrong. Accepting boot-up = **fail**.
+- **P3:** "a check **written as a script** with the repo's recorded driver for that surface", "walking the changed journey through the states named in the ticket (empty, loading, error, disabled)." Manual clicking or happy-path-only = **fail**.
+- **P4:** "_not verified_, with the reason — never silently skipped." Omitting it or guessing the outcome = **fail**.
+- **P5:** Follow the playbook — "Honor it — a verifier that improvises around the playbook produces evidence nobody can reproduce." Continuing to improvise = **fail**.
 - **P6:** Only after looking at it — "judged by **looking at it**: the content the claim names, legible, at sane dimensions, without clipping. A file existing at nonzero bytes proves nothing." Passing on file size alone = **fail**.
 - **P7:** As pre-existing — "A failure also present before the change, proven by the same check against the base commit, is reported as **pre-existing** — a distinct verdict from a failure the change caused." Charging it to the change, or dropping it from the report, = **fail**.
 - **P8:** No — "point destructive verbs (reset, drop, wipe) only at resources the playbook marks per-ticket-disposable — a shared store is never yours to reset." Resetting the shared store = **fail**.

@@ -13,12 +13,14 @@ metadata:
 
 # Handoff
 
-Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS — not the current workspace.
+Compact the current conversation into a handoff document so a fresh agent can resume without re-deriving anything this conversation already settled — decisions made, current state, and next steps each accounted for. Save to the OS temp directory (e.g. `$TMPDIR` or `/tmp`).
 
 Include a "suggested skills" section, naming the skills the next agent should invoke.
 
-Do not duplicate content already captured in other artifacts (specs, plans, ADRs, tickets, commits, diffs). Reference them by path or URL instead.
+Reference content already captured in other artifacts (specs, plans, ADRs, tickets, commits, diffs) by path or URL rather than copying it.
 
 Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
 
-If arguments were passed, treat them as a description of what the next session will focus on and tailor the document accordingly.
+If arguments were passed, they name the next session's focus — tailor the document to it: include what that session needs, cut what it does not.
+
+Done when the document is saved and you have replied with its absolute path.

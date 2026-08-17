@@ -10,7 +10,7 @@ You are dispatching "verify the vendor's webhook retry claim against their docs"
 
 **P1 (staffing degrade).** No roster — which model and effort run the subagent? Cite.
 
-**P2 (prompt).** What must the prompt state about the deliverable, given the subagent sees nothing of this session? Cite.
+**P2 (brief).** What must the brief state about the deliverable, given the subagent sees nothing of this session? Cite.
 
 **P3 (wake).** The harness tracks the child. Do you poll it? And when would a watcher be used instead? Cite.
 
@@ -18,7 +18,7 @@ You are dispatching "verify the vendor's webhook retry claim against their docs"
 
 **P5 (failure).** The subagent dies with no output. What happens? Cite.
 
-**P6 (envelope).** The dispatch is a read-only audit role. What accompanies the prompt, and what happens if the brief demands a command the sandbox blocks? Cite.
+**P6 (envelope).** The dispatch is a read-only audit role. What accompanies the brief, and what happens if the brief demands a command the sandbox blocks? Cite.
 
 **P7 (recovery).** A replacement is needed for the dead subagent from P5, and its worktree turns out to hold two pushed commits. Re-dispatch the whole unit? Cite.
 
@@ -53,13 +53,13 @@ You are dispatching "verify the vendor's webhook retry claim against their docs"
 - **P1:** "Absent the roster, run the subagent on this session's own model and effort; never downgrade on a guess." Picking a cheaper model without a roster = **fail**.
 - **P2:** "State the goal, the inputs by path or id, what done looks like, and that its final message is the deliverable itself: the data asked for, not a status note." A prompt yielding "I finished" = **fail**.
 - **P3:** No — "Prefer the harness-tracked child: its completion wakes the dispatcher, so never poll it." A watcher enters only for untracked work on a harness with no timer: "Only where the harness offers no timed wake either does the roster's wake-path ladder staff a watcher". Polling a tracked child = **fail**; presenting the watcher as the default for any untracked work, skipping the timed-wake rung, = **fail**.
-- **P4:** A relay "in this session's own words at the altitude the next decision needs — never a pasted transcript." Dumping the transcript = **fail**.
-- **P5:** "A subagent that died or came back empty is a reported outcome, not a silent gap." Quietly retrying forever or omitting it = **fail**.
-- **P6:** "Name the child's permission mode with the dispatch, matched to the role's contract: an advisory or checker role gets a read-only mode where the harness has one"; a blocked-command demand "fails as a staffing error, loudly, at dispatch." Dispatching with no envelope named, or letting the contradiction ride, = **fail**.
+- **P4:** A relay of "the outcome (success or failed dispatch), the deliverable's location, and what the next decision must act on — in this session's own words, never a pasted transcript." Dumping the transcript = **fail**.
+- **P5:** "Report the outcome (success or failed dispatch), the deliverable's location, and what the next decision must act on". Quietly retrying forever or omitting it = **fail**.
+- **P6:** "Name the child's envelope — its permission mode — in the dispatch declaration, matched to the role's contract: an advisory or checker role gets a read-only envelope where the harness has one"; a blocked-command demand "fails as a staffing error, loudly, at dispatch." Dispatching with no envelope named, or letting the contradiction ride, = **fail**.
 - **P7:** No — audit first: "audit what actually happened: the worktree's status, the branch tip, any partial commits — reality outranks the last narrative. Committed work is adopted on its branch, not redone; only the genuinely unfinished part is re-dispatched." Redoing the whole unit = **fail**.
 - **P8:** No — "Dispatch in the supplied directory exactly" and "do not infer a new worktree from the brief's edit intent." Dispatch in `/work/142-driver-payouts`; nested isolation = **fail**.
-- **P9:** Use the `worktree` skill first, then pass its result — "create isolation only when the user explicitly requests it"; this parent stays cleanup owner, and the harness child record plus dispatch report carry branch/path/owner. Dispatching before preparation, hiding ownership, or making the child the untracked cleanup owner = **fail**.
-- **P10:** "A worker lost to its harness — a session or usage limit, a route that stops answering mid-unit — is a route loss, not a defect in the unit of work. The same audit comes first; then the genuinely unfinished remainder is restaffed onto the roster's succession fallback — resolved via the `staffing` sibling where installed — never the whole unit re-run. Report the route loss so the roster's reachability row for that route gets re-examined". Re-running the whole unit = **fail**; not reporting the route loss = **fail**; treating the loss as a defect in the unit = **fail**.
+- **P9:** Use the `worktree` skill first, then pass its result — "an explicit isolation request runs the `worktree` skill before dispatch and passes its returned directory"; this parent stays cleanup owner, and the harness child record plus dispatch report carry branch/path/owner. Dispatching before preparation, hiding ownership, or making the child the untracked cleanup owner = **fail**.
+- **P10:** "A worker lost to its harness — a session or usage limit, a route that stops answering mid-unit — is a route loss, not a defect in the unit of work. The same audit comes first; then the unfinished remainder is restaffed onto the next survivor above the same bars, resolved via the `staffing` sibling where installed. Report the route loss so the route gets re-examined". Re-running the whole unit = **fail**; not reporting the route loss = **fail**; treating the loss as a defect in the unit = **fail**.
 - **P11:** No — "An unverifiable return path is a dispatch-time decision, never dispatch-and-hope: take blocking transport for that edge, or deliberately arrange the ledger-and-watch fallback below." Naming one of those two choices = pass; dispatching and hoping = **fail**; presenting blocking transport as required rather than "a per-edge option suited to short bounded workers, never a mandate" = **fail**.
 - **P12:** Run the parent's own bounded poll/watch on the surface — "a lost wake degrades to a poll this parent owns. Nothing escalates upward by default: each level orchestrates its own children." And it is not a route loss: "A wake that never arrives while the poll finds the result posted is a delivered unit, not a route loss". Escalating to an ancestor, waiting on one, or invoking route-loss recovery = **fail**.
 - **P13:** "Every background brief tells the worker to post results to the durable surface as they land, not only in its final message; that posting is what keeps the poll always possible." A brief whose results exist only in the final message = **fail**.

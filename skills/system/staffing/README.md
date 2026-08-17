@@ -4,13 +4,7 @@ Owns the model roster for a project and the doctrine that resolves it: **which m
 
 ## The doctrine — bars, then cheapest
 
-The caller states the intelligence bar and taste bar the task needs (coordination class and surface are the coarse inputs). Resolution filters out every model below the bars and takes the **cheapest survivor**. Quality control is escalation: when cheaper output misses the bar, a more capable route takes the retry without asking. The taste bar for user-facing UI, copy, and API design is hard — no intelligence buys past it.
-
-This replaces the old maximize-quality rule (`intelligence > taste > cost` descending), under which cost was a dead tiebreaker and everything routed to the top model.
-
-## Runtime-only checks
-
-Nothing about reachability is recorded — no probes, no machine overlay, no self-heal state. A route is tried at the point of use; on failure the resolver warns the user, falls back to the next-cheapest survivor above the bars, and continues. The warning is the record; a route failing repeatedly across sessions is retro fodder. What ships as knowledge instead is the reliable cross-harness command shape (foreground CLI subprocess, stdin closed, explicit timeout, output to log) in `reference/harness.md`.
+The caller states the bars the task needs; resolution drops every model below them and takes the **cheapest survivor**, escalating without asking when cheaper output misses the bar. Checks are runtime-only — try, warn, fall back — with nothing about reachability ever recorded; `SKILL.md` states the rule and `reference/rankings-and-routing.md` owns the detail.
 
 ## Shape
 
@@ -26,7 +20,7 @@ Self-contained at the file level; composes by name. **Sibling dependency: none �
 
 ## Install
 
-`npx github:asasher/asher-skills install --skill staffing`, then invoke it (`setup`) to write the playbook for your repo.
+`npx skills add github:asasher/asher-skills --skill staffing`, then invoke it (`setup`) to write the playbook for your repo.
 
 ## Credits
 

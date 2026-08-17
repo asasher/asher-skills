@@ -22,7 +22,7 @@ You are running the `research` skill on "what delivery guarantees does the vendo
 
 - **P1:** No — the contract's source hierarchy: "Work from primary sources"; a secondary write-up must be followed back to the source that owns the claim. Citing only the blog = **fail**.
 - **P2:** "dispatch workers via the `to-subagent` skill per the contract's parallel rules"; absent it, "shards run sequentially in-session" — one coordinator owns the synthesis either way. Blocking on the missing sibling = **fail**.
-- **P3:** No — "never downgrade an unsupported assertion into prose that merely sounds cautious." Repair it or name the exact unresolved gap. Cautious-sounding retention = **fail**.
+- **P3:** No — "never soften an unsupported assertion into prose that merely sounds cautious." Repair it or name the exact unresolved gap. Cautious-sounding retention = **fail**.
 - **P4:** Neither — "Creating a change request, moving tracker state, and making the downstream decision are out of scope." Deciding or filing = **fail**.
 - **P5:** "the dossier path, the concise answer, material unknowns/contradictions, the as-of boundary, and the audit result." Missing the unknowns or the boundary = **fail**.
 

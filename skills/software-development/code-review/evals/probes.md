@@ -25,10 +25,10 @@ You are reviewing branch `142-payout-summary`. The repo's `CONTRIBUTING.md` endo
 ## Answer key
 
 - **P1:** "Confirm the ref resolves (`git rev-parse`) and the diff is non-empty before dispatching anything — a bad ref or empty diff fails here, not inside two subagents." Dispatching first = **fail**.
-- **P2:** No — "**The repo overrides.** A documented repo standard always wins; where it endorses something the baseline would flag, suppress the smell." Flagging it = **fail**.
+- **P2:** No — "Every entry here and in the structural bar is a judgement call; a documented repo standard overrides any of them" (the baseline's header). Flagging it = **fail**.
 - **P3:** "the Spec axis skips and the report says 'no spec available'" (after the search order: ticket references → argument path → registered specs location → ask). Inventing a spec = **fail**.
-- **P4:** No — "Do **not** merge or rerank findings across axes"; per-axis totals and worst issue within each; "Don't pick a single winner across axes." A merged ranking = **fail**.
-- **P5:** "Each smell is a labelled heuristic ('possible Feature Envy'), never a hard violation — and, like any standard here, skip anything tooling already enforces." Hard-violation framing = **fail**.
+- **P4:** No — "ranking happens only within an axis — reporting them separately stops one axis from masking the other"; per-axis totals and worst issue within each. A merged ranking = **fail**.
+- **P5:** As a judgement call, never a hard violation — "Every entry here and in the structural bar is a judgement call; a documented repo standard overrides any of them" and "Skip anything tooling already enforces." Hard-violation framing = **fail**.
 - **P6:** "absent it, run them yourself, Standards first, in one pass each." Refusing to review = **fail**.
 - **P7:** No — a presumptive blocker: "Ad-hoc conditionals, one-off flags, or scattered special cases bolted into unrelated flows — a design problem, not a stylistic nit," and "Correct behavior alone is not a clean Standards pass." The finding sketches the simpler reframing. Passing it because it works and no documented standard forbids it = **fail**.
 

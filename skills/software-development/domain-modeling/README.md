@@ -1,25 +1,17 @@
 # Domain Modeling
 
-Builds and sharpens the project's domain model _while decisions are being made_: challenges terms against the glossary, sharpens fuzzy language into canonical terms, stress-tests concept boundaries with concrete scenarios, cross-references claims against the code — and writes the results down **the moment they crystallise**. Destination follows the is/will-be test: during shaping, terms and ADR drafts go into the spec's **context delta** (landed on main by the build that makes them true); direct writes to `CONTEXT.md` (a glossary and nothing else) and one-paragraph ADRs under `docs/adr/` remain for facts already true of the code. Decisions pass the three-gate test (hard to reverse ∧ surprising without context ∧ real trade-off) before becoming ADRs.
-
-## When to use
-
-- Pinning down domain terminology or a ubiquitous language.
-- Recording an architectural decision worth remembering.
-- A design conversation needs the model maintained while it works.
-- Not for merely _reading_ `CONTEXT.md` — consuming the glossary is a one-line habit any skill can do.
+Builds and sharpens the project's domain model _while decisions are being made_: challenges terms against the glossary, sharpens fuzzy language into canonical terms, stress-tests concept boundaries with concrete scenarios, cross-references claims against the code — and writes the results down **the moment they crystallise**. Destinations (the is/will-be test) and the ADR gates live in `SKILL.md`.
 
 ## Shape
 
 - Single context by default (`CONTEXT.md` + `docs/adr/` at the root); `CONTEXT-MAP.md` for multi-context repos. Files created lazily, on the first real entry.
-- Inline writes, never batched; ADRs offered sparingly, behind all three gates.
 - Formats bundled: `reference/context-format.md`, `reference/adr-format.md`.
 
 ## Dependency surface
 
-No required siblings — callers compose this skill by name; the two format references are bundled.
+No required siblings; optionally composes `writing-for-humans` (the communication standard).
 
 ## Provenance
 
 - **Source:** Matt Pocock's MIT-licensed [`domain-modeling`](https://github.com/mattpocock/skills/blob/9603c1cc8118d08bc1b3bf34cf714f62178dea3b/skills/engineering/domain-modeling/SKILL.md) (adopted nearly wholesale, including the CONTEXT/ADR format references). License in `THIRD_PARTY_LICENSES.md`.
-- **Local changes:** house frontmatter and composition surface (run-alongside framing, named callers); reference filenames lowercased; explicit "glossary and nothing else" boundary retained and promoted.
+- **Local changes:** house frontmatter and composition surface (run-alongside framing, the is/will-be destination routing); reference filenames lowercased; explicit "glossary and nothing else" boundary retained as the first rule in `reference/context-format.md`.

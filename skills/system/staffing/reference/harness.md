@@ -1,6 +1,6 @@
 # Cross-harness command shapes
 
-Knowledge, not probe state: the command shapes that reliably reach a sibling harness, identical on every machine, shipped with the skill and reviewed with it. Nothing here is pre-verified — a route is tried at the point of use, and a failure warns and falls back per [rankings-and-routing](rankings-and-routing.md) § Runtime fallback. Read the section for the harness you are dispatching **from**.
+Knowledge, not probe state: the command shapes that reliably reach a sibling harness, identical on every machine, shipped with the skill and reviewed with it. Nothing here is pre-verified — try, warn, fall back per [rankings-and-routing](rankings-and-routing.md) § Runtime fallback. Read the section for the harness you are dispatching **from**.
 
 ## The shape that works everywhere
 
@@ -8,7 +8,7 @@ Run the sibling CLI as a **foreground subprocess with stdin closed and output to
 
 - **Foreground, never a background shell** — backgrounded, the exec CLI hangs waiting to read stdin and dies silently with its dispatcher, leaving empty teed output while unrelated stderr noise masks the real cause.
 - **Stdin closed** — redirect from `/dev/null` or close it outright.
-- **Explicit generous timeout** — the shell tool's default is shorter than a typical bounded worker's runtime; without the override even a healthy worker is killed mid-task.
+- **Explicit timeout above the work's stated deadline** (the absolute deadline the work was dispatched with, where one exists) — the shell tool's default is never enough; without the override even a healthy worker is killed mid-task.
 - **Tee output to a file as it streams** — the result survives a lost return path. Where the CLI offers a resumable session id, capture it at launch and resume **by id**, never `resume --last` — parallel workers collide on it and can silently resume a sibling's session.
 
 The dispatch runs inside a watched native wrapper named `<external-model>:<task>`. The parent owns the prompt, the judgment, and verifying the deliverable; the wrapper owns only bounded process supervision and raw relay — it is **never repurposed to edit or build**. Staff the wrapper with the cheapest native model, at low effort. Briefs to an external-harness worker speak in goals and file paths — the parent harness's tool idioms stay out. No fire-and-forget shell may own delegated work.
@@ -41,4 +41,4 @@ A roster name is not necessarily a CLI alias — a versioned roster name written
 
 ## Capabilities per harness
 
-A capability the current harness lacks natively — browser control, computer use, image generation — resolves only through a declared provider route in the playbook, which may live on the sibling harness. Never attribute a dispatched provider's effect to the dispatching harness's model, and report a missing provider as a capability gap, never substitute.
+[rankings-and-routing](rankings-and-routing.md) § Declared capability routes owns the rule and the gap-report degradation. The harness delta: a declared route may live on the sibling harness — never attribute the dispatched provider's effect to the dispatching harness's model.

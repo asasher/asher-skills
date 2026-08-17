@@ -1,14 +1,6 @@
 # Adversarial Review
 
-Converges a change request to LGTM by alternating bounded reviewer and fixer passes that share nothing but the change request itself: a reviewer pass (code-review, findings as anchored comments, LGTM when a pass is clean and priors are addressed) and a fixer pass (fix or argue each finding, reply per comment) — sequenced by the session driving the loop, which holds its turn until the loop converges or hits a bound (timeout, iteration cap).
-
-## When to use
-
-- A change request exists and should reach review-ready without a human driving the loop.
-
-## Dependency surface
-
-Composes with the `code-review` and `to-subagent` siblings (optionally `diagnosing-bugs`); both roles' briefs are bundled in `reference/conduct.md`.
+Converges a change request to LGTM by alternating bounded reviewer and fixer passes, sequenced by a driver until convergence or a bound — see SKILL.md. Use once a change request exists and should reach LGTM without a human driving the loop.
 
 ## Provenance
 

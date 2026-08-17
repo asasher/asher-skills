@@ -29,14 +29,15 @@ SCHEME = {
     "needs-info": ("D876E3", "Parked, waiting on the reporter"),
     "ready-for-agent": ("0E8A16", "Groomed and released: an agent may work it; requires a work-type and dispatch metadata"),
     "ready-for-human": ("5319E7", "Human-only; agents skip. Also the abort target for verify caps and environment blockers"),
-    "building": ("1D76DB", "Dispatched: a build subagent owns it; cleared on abort or superseded by closure on merge"),
-    # Work-type — pastel attributes; bug and capstone are the saturated exceptions.
+    "building": ("1D76DB", "Claimed: a build thread owns it; the claim comment is the dispatch declaration with its deadline"),
+    "delivered": ("008672", "Merged into its feature branch, awaiting promotion; closed natively by the promotion PR's Closes lines"),
+    # Work-type — pastel attributes; bug and spec are the saturated exceptions.
     "bug": ("D73A4A", "Something isn't working"),
     "enhancement": ("A2EEEF", "New feature or request"),
     "refactor": ("C5DEF5", "Work-type: behavior-preserving structure or code improvement"),
     "research": ("D4C5F9", "Work-type: primary-source research with traceable claims"),
     "draft": ("FEF2C0", "Work-type: judgment-terminal produce-and-review; done at the human review verdict"),
-    "capstone": ("8250DF", "Work-type: parent of slices; coverage check once children close"),
+    "spec": ("8250DF", "Work-type: parent of slices; coverage check once children are closed or delivered"),
     # Exclusions — grayscale, terminal.
     "duplicate": ("CFD3D7", "This issue or pull request already exists"),
     "superseded": ("BFBFBF", "Replaced by newer work; removed from grooming and the run queue"),

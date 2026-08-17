@@ -26,13 +26,13 @@ The user approved the split recommended by ticket #42's spec, and you are runnin
 
 ## Answer key
 
-- **P1:** Recut — that's the horizontal anti-pattern: "A horizontal ticket can't be demoed alone"; the default is the tracer bullet, "a **narrow-but-complete path through every layer**." Keeping it = **fail**.
+- **P1:** Recut — that's the horizontal anti-pattern: "A horizontal ticket can't be demoed alone"; the default is the tracer-bullet slice, "a **narrow-but-complete path through every layer**." Keeping it = **fail**.
 - **P2:** Expand → migrate-in-batches → contract; trigger is "**both** conditions: the change is _mechanical_ ... **and** _high blast radius_." Forcing it into one vertical slice = **fail**.
 - **P3:** No — "**nothing publishes before it is approved**"; the quiz on granularity and blocking edges comes first. Publishing unapproved = **fail**.
 - **P4:** "state the gap and ask the user how to proceed — a backlog needs a tracker, so publishing waits on that decision." Writing local ticket files while unbound = **fail**.
-- **P5:** No — "Do **not** auto-apply the readiness role on a fresh split"; note the option, apply only if the user asks. Auto-labelling = **fail**.
-- **P6:** "dependency order — blockers first" (ids must exist before dependents reference them), and each edge "exactly as the repo's dependency playbook records it" — here the native `blocked_by` relation. Inventing a different edge style = **fail**.
-- **P7:** Parented, not superseded — "Attach every slice as a child ... through the parent/child relation the platform playbook records" and "Convert the parent to the `capstone` work-type"; what blocks it is the relation itself — "the backlog policy's open-children rule reads it ... no per-slice blocking edges are wired for this"; the direction survives untouched — "The parent's spec text is never edited." Superseding it, closing it silently, wiring blocked-by edges to every slice, or rewriting its body, = **fail**.
-- **P8:** No — "To-slices runs only on the user's explicit call — recommending a split is someone else's move; performing one is never self-initiated." Splitting unprompted = **fail**.
+- **P5:** No — "Leave the readiness role unset on a fresh split"; note the option, apply only if the user asks. Auto-labelling = **fail**.
+- **P6:** "dependency order — blockers first" (ids must exist before dependents reference them), and each edge "exactly as the dependency convention the repo's playbook records" — here the native `blocked_by` relation. Inventing a different edge style = **fail**.
+- **P7:** Parented, not superseded — "Attach every slice as a child ... through the parent/child relation the platform playbook records" and "Convert the parent to the `spec` work-type"; what blocks it is the relation itself — "the backlog policy's open-children rule reads it ... no per-slice blocking edges are wired for this"; the direction survives untouched — "Never modify the spec text." Superseding it, closing it silently, wiring blocked-by edges to every slice, or rewriting its body, = **fail**.
+- **P8:** No — "To-slices runs only on the user's explicit call — a spec may _recommend_ a split, but nothing splits until the user approves it." Splitting unprompted = **fail**.
 
 Pass bar: **8/8 on both executors.**

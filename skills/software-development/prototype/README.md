@@ -1,18 +1,18 @@
 # Prototype
 
-Answers **one design question with a throwaway artifact**, then throws it away — the answer is the only deliverable. Usable anywhere, not only in dev: settle a state model, a layout, a UI, or a document direction with real alternatives instead of argument. Keep the answer, delete the artifact.
+Answers **one design question with a throwaway artifact** — the answer is the only deliverable. Usable anywhere, not only in dev: settle a state model, a layout, a UI, or a document direction with real alternatives instead of argument.
 
 ## When to use
 
 - **A design question blocks progress** — more than one plausible state model, data shape, or layout survives discussion and the choice is expensive to reverse; or there is visual uncertainty with no settled design.
-- **You need to see alternatives, not describe them** — genuinely different variants a human can react to beats a paragraph of trade-offs.
-- **Not for building the real thing** — a prototype answers the question that unblocks the build; it is not the build.
+- **You need to see alternatives, not describe them** — structurally different variants a human can react to beats a paragraph of trade-offs.
+- **Not for building the real thing** — a prototype answers the question that unblocks the build.
 
 ## Shape
 
-- **Two default formats.** A _logic_ question gets one double-clickable self-contained HTML file — free-play controls plus tabbed guided walkthroughs, full relevant state visible after every action. A _UI/variants_ question gets multiple genuinely different variants on one route with a simple switcher. A _falsification_ entry probes an unfamiliar mechanism claim on the real runtime path.
+- **Formats.** A _logic_ question gets one double-clickable self-contained HTML file — free-play controls plus tabbed guided walkthroughs, full relevant state visible after every action. A _mechanism claim_ gets the smallest runtime-real probe that can make it fail. A _UI/variants_ question gets multiple structurally different variants on one route with a simple switcher.
 - **Shared rules.** Disposable and labeled as such; effortless to launch; in-memory state; no polish, no tests.
-- **Four gates.** Question stated → built & exposed → answer captured → cleaned. The validated decision is absorbed into the record (ticket or conversation); the artifact parks on its artifact branch with a render link; the prototype is never the record and nothing throwaway ships.
+- **Four gates.** Question stated → built & exposed → decision captured → cleaned. The decision is written into the record (ticket or conversation); the artifact parks on its artifact branch with a render link; the prototype is never the record and nothing throwaway ships.
 
 ## Dependency surface
 

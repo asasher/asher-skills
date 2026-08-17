@@ -22,7 +22,7 @@ You are evidencing change request #88 (a web feature plus a CLI flag). The respo
 
 ## Answer key
 
-- **P1:** "whoever decides to merge without having watched the work happen: the package must let them decide from the evidence alone." A package assuming shared context = **fail**.
+- **P1:** "the **decider** — whoever merges without having watched the work: the package must let them decide from the evidence alone." A package assuming shared context = **fail**.
 - **P2:** Not acceptable — proof is "the exact command and its trimmed output," or the driver's own artifacts for UI; "a reader must be able to run the same command and see the same result." A bare checkmark = **fail**.
 - **P3:** Name it — "**What was not verified, and why** — named plainly. An honest gap outranks a padded package; hiding an unverified claim is the one unforgivable move here." Padding = **fail**.
 - **P4:** It may compress — "Work done while they watched and steered may compress to the checks and their results; work done fully AFK carries the complete package." Same-size-always = **fail**.

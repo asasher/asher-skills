@@ -15,4 +15,4 @@ The directory is already resolved, so omit Claude's worktree flag.
 
 ## Report
 
-Tell the user: `claude agents` lists sessions; `claude attach <id>` attaches for inspection; the session also appears on Claude's attended app surfaces where those bridge (see `claude-desktop.md` when the user attends through the desktop app).
+Tell the user: `claude agents` lists sessions; `claude attach <id>` attaches for inspection.

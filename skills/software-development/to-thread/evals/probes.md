@@ -33,15 +33,15 @@ You are a Codex provider inside T3 Code, dispatching ticket #142's shaping threa
 ## Answer key
 
 - **P1:** No — "The thread sees none of this conversation"; include goal, inputs by path/ticket, done, and skill. Shared-context prompt = **fail**.
-- **P2:** T3 — explicit "system/runtime host metadata says this session is running inside T3 Code"; the product-native toolkit corroborates, and "A Codex or Claude provider running inside T3 always creates a T3 thread." Treating mere MCP installation as proof or using Codex-native routing = **fail**.
-- **P3:** Neither creates one — "Run in the supplied directory exactly; do not infer a new worktree from edit intent." Register the external `/work/payments-worktrees/shape-142` and `shape-142`; "T3 supervises the conversation but does not create or clean the worktree." Nested isolation = **fail**.
-- **P4:** Provider `codex`, model `gpt-5.6-sol`, effort `high`, all explicit — "use this session's current model and effort, passed explicitly"; "Do not resolve ordinary threads through staffing." Staffing or omission = **fail**.
-- **P5:** No — it is capability drift: "report it and stop before falling through to the provider harness" and "A failed T3 route never silently becomes a hidden provider-native thread." Fallback = **fail**.
+- **P2:** T3 — explicit "System or runtime host metadata says this session runs inside T3 Code"; a call to the `t3-code` MCP server "reports this session's own tab or session context", and "a Codex or Claude provider running inside T3 always creates a T3 thread." Treating mere MCP installation as proof or using Codex-native routing = **fail**.
+- **P3:** Neither creates one — "run in the supplied directory exactly." Register the external `/work/payments-worktrees/shape-142` and `shape-142`; "T3 supervises the conversation but does not create or clean the worktree." Nested isolation = **fail**.
+- **P4:** Provider `codex`, model `gpt-5.6-sol`, effort `high`, all explicit — "the dispatching session's current model and effort, passed explicitly"; "staffing is never consulted for threads." Staffing or omission = **fail**.
+- **P5:** No — it is capability drift: "report it and stop before falling through to the provider harness." Fallback = **fail**.
 - **P6:** The helper "omits the automatic title seed so the supplied name remains stable." Supplying a title seed and accepting an auto-rename = **fail**.
 - **P7:** No — "The directory is already resolved, so omit Claude's worktree flag." `-w` = **fail**.
-- **P8:** Report name/id, branch/path, and T3 sidebar attachment. Later use the supervisor listing: "Report status only when asked, through that supervisor's listing surface." Invented progress = **fail**.
-- **P9:** The caller is provisional owner until spawn; the spawned thread then owns merge/cleanup. "Its harness thread record plus the parent dispatch report are the ownership record." Leaving cleanup ownerless or recording neither = **fail**.
+- **P8:** Report per the shared contract: "give the user the name/id, the attachment path, the exact directory, and the branch." For later status, point at the attach surface: "attach-ability exists so the user can look in." Invented progress = **fail**.
+- **P9:** "The caller is provisional owner until spawn, the spawned thread then owns merge/cleanup, and its standalone prompt says so." Leaving cleanup ownerless or the prompt silent on ownership = **fail**.
 - **P10:** A T3 runtime mode (here the session's `approval-required`) — "`--runtime-mode` takes T3's own runtime modes ... never a provider sandbox name like `workspace-write`". Passing `workspace-write` = **fail**.
-- **P11:** The error "names the orphaned thread id and title and tells the user to discard it from the T3 sidebar"; no provider-harness retry — "A failed T3 route never silently becomes a hidden provider-native thread." Silent fallback or an unnamed orphan = **fail**.
+- **P11:** The error "names the orphaned thread id and title and tells the user to discard it from the T3 sidebar"; no provider-harness retry — "report it and stop before falling through to the provider harness." Silent fallback or an unnamed orphan = **fail**.
 
 Pass bar: **11/11 on both executors.**

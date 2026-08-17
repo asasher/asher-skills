@@ -6,25 +6,23 @@
 
 ## Models
 
-Higher is better on every column; a higher cost score means cheaper to run. Effort is the model's default dispatch level where the harness exposes one.
+Higher is better on every column; a higher affordability score means cheaper to run. Effort is the model's default dispatch level where the harness exposes one.
 
-| model         | cost | intelligence | taste | effort |
-| ------------- | ---: | -----------: | ----: | ------ |
-| gpt-5.6-sol   |    4 |            9 |     5 | high   |
-| gpt-5.6-terra |    6 |            5 |     3 | xhigh  |
-| sonnet-5      |    5 |            5 |     5 | high   |
-| opus-5        |    3 |            7 |     7 | high   |
-| fable-5       |    1 |            9 |     9 | high   |
+| model         | affordability | intelligence | taste | effort |
+| ------------- | ------------: | -----------: | ----: | ------ |
+| gpt-5.6-sol   |             4 |            9 |     5 | high   |
+| gpt-5.6-terra |             6 |            5 |     3 | xhigh  |
+| sonnet-5      |             5 |            5 |     5 | high   |
+| opus-5        |             3 |            7 |     7 | high   |
+| fable-5       |             1 |            9 |     9 | high   |
 
-Default taste bar for user-facing UI, copy, or API design: taste ≥ 7 on this scale — a hard bar, not a preference.
+Default taste bar for user-facing UI, copy, or API design: taste ≥ 7 on this scale.
 
 ## Pins
 
 - mechanical / bulk → gpt-5.6-sol through the sibling CLI worker route.
 
 ## Capability routes
-
-Declared routes tried at use — a route that fails warns and falls back to its declared fallback; a missing provider is a capability gap reported, never substituted.
 
 | need | route (default declaration) | fallback / hard edge |
 | --- | --- | --- |

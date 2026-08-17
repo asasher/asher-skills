@@ -1,10 +1,10 @@
 # Prove Your Work
 
-Evidence packaging for a finished change: what changed and why, reproducible proof per claim (exact commands with trimmed output; screenshots for UI journeys), the runs of dropped scaffolding scripts, the per-stage token cost of producing it, and named gaps for anything unverified — posted on the change request where the merge decision happens. Evidence media is never committed: it uploads through `to-web` and embeds by URL — images and GIFs inline, videos as links. Obligation scales with the decider's absence: witnessed-live work compresses, AFK work carries the full package.
+Evidence packaging for a finished change, posted on the change request where the merge decision happens. Evidence media uploads through `to-web` and embeds by URL instead of entering the repo; SKILL.md holds the package contents and the bar each part must meet.
 
 ## When to use
 
-- A change request is review-ready and the person merging won't have watched the work.
+- A change request is review-ready and the decider won't have watched the work.
 
 ## Dependency surface
 
