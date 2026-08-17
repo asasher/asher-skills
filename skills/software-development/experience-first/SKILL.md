@@ -1,5 +1,5 @@
 ---
-name: outside-in
+name: experience-first
 description: The decision-ordering standard for shaping — users, then experience, then system behavior, then implementation. Cite it when building a shaping decision tree, structuring a spec, or routing a partially shaped ticket to its next shaper.
 user-invocable: true
 metadata:
@@ -9,7 +9,7 @@ metadata:
   optional: []
 ---
 
-# Outside-in
+# Experience-first
 
 The order shaping decisions are settled in: what the system looks like from outside before how it is built inside. This is a reference skill: it defines the standard; sibling skills cite it by name and apply it in place.
 
@@ -22,7 +22,7 @@ An operator, an admin, an API consumer, the support person reading logs — each
 
 ## The gradient
 
-Work the registers as a gradient, outside-in:
+Work the registers as a gradient, from the outside in:
 
 1. **Users** — select the affected user types from the project's user-type roster (a repo context-file fact, maintained like any glossary term; a change that invents a new type extends the roster through the context delta). The roster makes selection a checklist where recall would forget someone.
 2. **Experience** — per affected type: what changes in what they see, touch, and do.
