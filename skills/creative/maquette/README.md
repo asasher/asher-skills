@@ -21,5 +21,5 @@ Build a sellable, high-fidelity, browser-only prototype of a greenfield product 
 ## Credits
 
 - **Relationship:** original synthesis with an internal extraction.
-- **Internal source:** `references/ux-rules.md` distills this repository's `bare-minimum-ux` policy; authority remains with that skill and the copy is reconciled deliberately.
+- **Internal source:** `references/ux-rules.md` distills this repository's `bare-minimum-design` policy; authority remains with that skill and the copy is reconciled deliberately.
 - **Local changes:** the 2026-07 provenance audit replaced earlier third-party-derived feel/web-quality prose with a clean, outcome-based checklist. No external skill text is shipped by this skill.

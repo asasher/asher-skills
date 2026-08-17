@@ -24,7 +24,7 @@ An operator, an admin, an API consumer, the support person reading logs — each
 
 Work the registers as a gradient, from the outside in:
 
-1. **Users** — select the affected user types from the project's user-type roster (a repo context-file fact, maintained like any glossary term; a change that invents a new type extends the roster through the context delta). The roster makes selection a checklist where recall would forget someone.
+1. **Users** — select the affected user types from the roster in the project's `PRODUCT.md` (§ PRODUCT.md below; a change that invents a new type extends the roster through the context delta). The roster makes selection a checklist where recall would forget someone.
 2. **Experience** — per affected type: what changes in what they see, touch, and do.
 3. **System behavior** — observable behavior no single type owns.
 4. **Implementation** — schema, modules, interfaces.
@@ -42,6 +42,10 @@ When the experience register's frontier empties, say so: "Experience is settled 
 ## Recommend, don't ask
 
 In the implementation register, state the recommended design in the spec and surface only genuine forks — two defensible designs with real trade-offs — as questions. A design with one good answer is a spec statement the technical reviewer can veto, not a question that costs a round.
+
+## PRODUCT.md — the strategy file this standard owns
+
+The user-type roster lives in `PRODUCT.md` at the repo root — the strategy file: who the product serves (the roster, one entry per type with situation and job), what it is, why it wins, its operating context, constraints, brand commitments, evidence on hand with absences stated, and accessibility needs. Strictly no visuals — colors, fonts, and pixel values belong to the project's design file. Create it lazily from the shipped [skeleton](templates/PRODUCT.md) the first time a shaping session needs the roster, and register its line in the project instruction file's `## Context documents` index at creation. Roster and strategy changes land through the context delta like any glossary term.
 
 ## Skipping and blessing
 

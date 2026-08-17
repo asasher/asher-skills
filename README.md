@@ -60,7 +60,7 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | -------------------- | ------------------------ | ---------- | ------------ |
 | system               | `skill-loop`             | user       | orchestrator |
 | system               | `staffing`               | model      | reference    |
-| creative             | `bare-minimum-ux`        | model      | primitive    |
+| creative             | `bare-minimum-design`    | model      | reference    |
 | creative             | `codex-imagegen`         | model      | primitive    |
 | creative             | `maquette`               | model      | primitive    |
 | creative             | `shadixfy`               | model      | primitive    |
