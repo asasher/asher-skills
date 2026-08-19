@@ -1,6 +1,6 @@
 # Asher Skills
 
-A collection of skills by Asher. Skills are organized into families; skills within a family usually require repo-specific setup. This repo both authors skills and has skills installed into it, so the bare word "skill" is ambiguous — the packaging terms below say which copy you mean.
+A collection of skills by Asher. Skills are organized into families with main focus being the software development lifecycle skills.
 
 ## Language
 
@@ -10,7 +10,7 @@ A collection of skills by Asher. Skills are organized into families; skills with
 
 **Primitive skill**: The bottom of the composition axis, and **sealed**: it names no other skill and never addresses "the caller" — its text reads complete to an agent that knows nothing about what composed it. It reads what is handed to it plus the environment (repo playbooks are environment, project instruction files, not caller), and classifies what it cannot settle instead of naming who settles it. Example: `domain-modeling`. _Avoid_: a primitive that names a sibling, an upper layer, or "whoever composed this" — all three break the seal.
 
-**Composite skill**: Composes named lower-layer skills by plain-language reference, declares them in its dependency surface, and degrades explicitly when one is absent. All composition knowledge lives here: the composite knows its parts' contracts, the parts know nothing back. Example: `shape` (composes `interview` and `domain-modeling`, dispatching `research` and `prototype` through `to-subagent`). Even a thin edge makes a composite: `interview` names only `to-subagent` for fact lookups, and that one edge moves it off the primitive rung.
+**Composite skill**: Composes named lower-layer skills by their name, declares them in its dependency surface, and degrades explicitly when one is absent. All composition knowledge lives here: the composite knows its parts' contracts, the parts know nothing back. Example: `shape` (composes `interview` and `domain-modeling`, dispatching `research` and `prototype` through `to-subagent`). Even a thin edge makes a composite: `interview` names only `to-subagent` for fact lookups, and that one edge moves it off the primitive rung.
 
 **Orchestrator skill**: Runs a loop over many units of work, owning dispatch and lifecycle state. A **dispatcher** is the thin case: it fans units out and exits — outcomes land on the tracker (the run ledger), and a later `status` read derives liveness instead of a supervising session holding it. Human-in-the-loop work goes to threads the user attends (`to-thread` — no result flows back); autonomous work goes to threads too, unattended, each unit's stages running as blocking `to-subagent` calls inside its thread. Examples: `backlog groom` (a `shape` thread per subject), `backlog build` (a `build-change` thread per ready ticket — the dispatch declaration posted as the claim, then exit).
 
