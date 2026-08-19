@@ -125,4 +125,4 @@ Other people's skills I install alongside these. They come from their own repos,
 | `btca-local` | [davis7dotsh/better-context](https://github.com/davis7dotsh/better-context) |
 | `liteparse` | [run-llama/llamaparse-agent-skills](https://github.com/run-llama/llamaparse-agent-skills) |
 
-An external skill that an authored skill actually depends on is a different thing — it is declared in that skill's `metadata.external`, installed only after provenance review and explicit consent, and recorded in `external-dependencies.lock.json`. See `AGENTS.md` § Vocabulary.
+An external skill that an authored skill actually depends on is a different thing — it is declared in that skill's `metadata.external`, installed only after provenance review and explicit consent, and recorded in `external-dependencies.lock.json`. See `CONTEXT.md`.

@@ -50,15 +50,9 @@ A collection of skills by Asher. Skills are organized into families; skills with
 
 **Skill workspace**: `<name>-workspace/` at the repo root — the author-side space for the work _around_ a skill: evals, research, drafts, scratch artifacts. The shipped files live in the source; the workspace is never part of an install.
 
-**Installed skill package**: The replaceable copy of a skill source a harness loads, installed with `npx skills add`. A build product: an edit made in place is lost on the next refresh — the change belongs in the skill source, merged and reconciled from the changelog.
+**Installed skill package**: The replaceable copy of a skill source a harness loads, installed with `npx skills add` — mounted at `.agents/skills/<name>` (always a real copied directory), with harness paths such as `.claude/skills/<name>` symlinked to it; no per-provider variants. A build product: an edit made in place is lost on the next refresh — the change belongs in the skill source, merged and reconciled from the changelog.
 
-**Primary installed skill mount**: `.agents/skills/<name>`, always a real copied directory.
-
-**Alias installed skill mount**: A harness path such as `.claude/skills/<name>`, a symlink to the primary. No per-provider variants: one source, one package, harness-specific guidance as context pointers inside the skill text.
-
-**Skill instance**: The consumer-owned project materialization an installed package creates or maintains — an editable directory of scaffold, configuration, state, and artifacts. Project material, not a mount or a workspace; a package reinstall preserves it.
-
-**Skill state**: The mutable data of a skill instance: checkpoints, queues, decisions, resume artifacts.
+**Skill instance**: The project-owned materialization an installed package creates or maintains — an editable directory of scaffold, configuration, and artifacts, including the skill's mutable data: checkpoints, queues, decisions, resume artifacts. Project material, not a mount or a workspace; a package reinstall preserves it.
 
 **Sibling skill**: Another skill in this repo relied on by name — a plain-language runtime pointer resolved by the installed skill set, never a file import. Example: `implement` routes defects through the `diagnosing-bugs` sibling.
 
