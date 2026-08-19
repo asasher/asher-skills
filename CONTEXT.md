@@ -1,8 +1,14 @@
-# Context — domain glossary
+# Asher Skills
 
-Terms of art for this repo's domain: designing and shipping agent skills. Kept per the `domain-modeling` skill's context format — a glossary and nothing else. Repo layout and install vocabulary stay in `AGENTS.md` § Vocabulary.
+A collection of skills by Asher. Skills are organized into families; skills within a family usually require repo-specific setup. This repo both authors skills and has skills installed into it, so the bare word "skill" is ambiguous — the packaging terms below say which copy you mean.
 
-**Primitive skill**: The bottom of the composition axis, and **sealed**: it names no other skill and never addresses "the caller" — its text reads complete to an agent that knows nothing about what composed it. It reads what is handed to it plus the environment (repo playbooks are environment, not caller), and classifies what it cannot settle instead of naming who settles it. Example: `domain-modeling`. _Avoid_: a primitive that names a sibling, an upper layer, or "whoever composed this" — all three break the seal.
+## Language
+
+**Project**: The repo a skill is installed into and runs in — the bare word in skill prose, and the only project a sealed skill can name, since an install carries no authoring context. This repo is itself a project for the skills installed into it. _Avoid_: consumer project, host repo.
+
+**Authoring repo**: This repository, where skill sources live and every install derives from. Its own docs say "this repo"; "authoring repo" is the name when the dual role needs distinguishing — authoring a skill vs running one. _Avoid_: this project, skills repo.
+
+**Primitive skill**: The bottom of the composition axis, and **sealed**: it names no other skill and never addresses "the caller" — its text reads complete to an agent that knows nothing about what composed it. It reads what is handed to it plus the environment (repo playbooks are environment, project instruction files, not caller), and classifies what it cannot settle instead of naming who settles it. Example: `domain-modeling`. _Avoid_: a primitive that names a sibling, an upper layer, or "whoever composed this" — all three break the seal.
 
 **Composite skill**: Composes named lower-layer skills by plain-language reference, declares them in its dependency surface, and degrades explicitly when one is absent. All composition knowledge lives here: the composite knows its parts' contracts, the parts know nothing back. Example: `shape` (composes `interview` and `domain-modeling`, dispatching `research` and `prototype` through `to-subagent`). Even a thin edge makes a composite: `interview` names only `to-subagent` for fact lookups, and that one edge moves it off the primitive rung.
 
@@ -39,3 +45,27 @@ Terms of art for this repo's domain: designing and shipping agent skills. Kept p
 **Shaping registers**: The `experience-first` standard's two decision layers, worked as a gradient: the **experience register** (affected user types selected from the project's user-type roster, each type's experience, system behavior no type owns) above the **implementation register** (schema, modules, interfaces — recommended, with only genuine forks asked). The **seam** between them is a named handoff point; blessing is per register against the spec's commit hash; a register with an empty frontier is skipped.
 
 **needs-shaping**: The tracker label role marking work whose strategic decisions are unsettled — cleared when shaping delivers execution-ready work. Boundary with `needs-info`: there the reporter owes facts; here the product owner owes shaping.
+
+**Skill source**: `skills/<category>/<name>/` — the canonical skill this repo exists to publish. All authoring happens here; every install derives from it.
+
+**Skill workspace**: `<name>-workspace/` at the repo root — the author-side space for the work _around_ a skill: evals, research, drafts, scratch artifacts. The shipped files live in the source; the workspace is never part of an install.
+
+**Installed skill package**: The replaceable copy of a skill source a harness loads, installed with `npx skills add`. A build product: an edit made in place is lost on the next refresh — the change belongs in the skill source, merged and reconciled from the changelog.
+
+**Primary installed skill mount**: `.agents/skills/<name>`, always a real copied directory.
+
+**Alias installed skill mount**: A harness path such as `.claude/skills/<name>`, a symlink to the primary. No per-provider variants: one source, one package, harness-specific guidance as context pointers inside the skill text.
+
+**Skill instance**: The consumer-owned project materialization an installed package creates or maintains — an editable directory of scaffold, configuration, state, and artifacts. Project material, not a mount or a workspace; a package reinstall preserves it.
+
+**Skill state**: The mutable data of a skill instance: checkpoints, queues, decisions, resume artifacts.
+
+**Sibling skill**: Another skill in this repo relied on by name — a plain-language runtime pointer resolved by the installed skill set, never a file import. Example: `implement` routes defects through the `diagnosing-bugs` sibling.
+
+**Reference skill**: An all-reference sibling cited by name and never run as a workflow: `writing-for-humans` (communication), `agent-ready-codebase` (repo readiness), `experience-first` (shaping decision order), `staffing` (roster and resolution). A reference skill stays model-invoked with a tight description, or siblings cannot cite it.
+
+**External requirement**: A relied-on skill whose canonical source lives outside this repo — declared in the consumer's `metadata.external`, installed only after provenance review and explicit consent, recorded in `external-dependencies.lock.json`. An adapted lift becomes our skill with README credits; an unmodified lift stays an external, never vendored. Standing example: `writing-for-agents` (mattpocock/skills).
+
+**Playbook**: A repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup (e.g. `environment.md`, `platform.md`). Skills speak in role nouns; the playbook binds those roles to this repo. Repo-owned once written — setups reconcile it, never overwrite it.
+
+**Agent instruction files**: This repo's `AGENTS.md` (the harness-neutral base) and `CLAUDE.md` (an `@AGENTS.md` import plus Claude Code deltas — Claude Code never reads `AGENTS.md` on its own). Global instruction files (`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`) are retired on this machine (asher-skills#114); a machine truth belongs to the skill that owns it or to `docs/agents/environment.md`.
