@@ -2,10 +2,7 @@
 name: adversarial-review
 description: Converge a change request to LGTM through alternating reviewer and fixer passes. Use once a change request exists and needs review pressure without a human in the loop.
 argument-hint: "<change request>"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: orchestrator
   requires: [code-review, to-subagent]
   optional: [diagnosing-bugs]
 ---

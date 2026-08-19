@@ -1,11 +1,6 @@
 ---
 name: codex-imagegen
 description: Generate or extract versioned raster assets through Codex's built-in image tool. Use when the user wants one raster asset with optional transparency, an asset-first layered scene with independently animatable objects, or named sprites split from a sheet.
-metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
 ---
 
 # Codex Imagegen

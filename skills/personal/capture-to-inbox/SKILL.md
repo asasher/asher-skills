@@ -2,10 +2,6 @@
 name: capture-to-inbox
 description: Capture shared text, links, and files through a project-bound queue, then drain them safely into Inbox. Use when a capture queue should be set up or reconciled, when queued captures should be previewed or drained, or when another skill needs the capture-to-Inbox intake capability.
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
   setup: reference/setup.md
   external: [{"name":"shortcuts-playground","kind":"codex-plugin","source":"https://github.com/viticci/shortcuts-playground-plugin","capability":"build-apple-shortcuts","version":"1.2.x"}]
 ---

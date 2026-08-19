@@ -2,11 +2,7 @@
 name: worktree
 description: Prepare, inspect, and remove project-owned Git worktrees. Use when work needs deterministic isolation, an existing worktree's registration and state must be validated, or cleanup must preserve dirty work.
 argument-hint: "<prepare | inspect | remove> <branch or path>"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
   optional:
     - docs/agents/platform.md
     - docs/agents/environment.md

@@ -2,10 +2,7 @@
 name: to-subagent
 description: Dispatch one unit of non-interactive work to a subagent as a blocking call. Use whenever work should run outside this session without the user attending it.
 argument-hint: "<the unit of work to dispatch>"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: orchestrator
   requires: [worktree]
   optional: [staffing, writing-for-humans]
 ---

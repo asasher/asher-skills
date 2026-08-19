@@ -2,11 +2,7 @@
 name: to-spec
 description: Turn a settled conversation or shaping record into a spec on the subject's artifact branch; the ticket gets a projection. Creates the ticket when none exists. Pure synthesis, no interview.
 argument-hint: "[<ticket id, or a name for the spec>]"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
   optional: [experience-first, writing-for-humans, to-web]
 ---
 

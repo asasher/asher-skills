@@ -1,18 +1,19 @@
 ---
 name: shape
-description: Shape one subject — an idea or ticket — until it carries a spec blessed at a commit hash. Use when work needs shaping before anything builds on it, or to resume a shaping thread on its subject's record.
-argument-hint: "<idea or ticket id>"
-user-invocable: true
+description: Shape one ticket, until it carries a spec. Use when work needs shaping before anything builds on it, or to resume a shaping thread on its subject's record.
+argument-hint: "<ticket id>"
 metadata:
-  invocation: model
-  execution: orchestrator
   requires: [domain-modeling, interview, to-spec, worktree]
   optional: [experience-first, writing-for-humans, prototype, research, to-backlog, to-slices, to-subagent, watch-until]
 ---
 
 # Shape
 
-Settle **one subject's** strategic decisions — one subject per thread — ending in a spec blessed at a commit hash. A **stateful orchestrator**: everything it settles lands in the **record** — the ticket thread and the spec on its artifact branch.
+Use `interview` skill with `experience-first` and `domain-modeling` disciplines.
+
+For changes to repos context files
+
+Settle **one ticket's** strategic decisions — one subject per thread — ending in a spec blessed at a commit hash. A **stateful orchestrator**: everything it settles lands in the **record** — the ticket thread and the spec on its artifact branch.
 
 A shaping thread **never merges anything.** Its repo output is artifact branches (`artifact/<ticket>-<slug>`; `artifact/<slug>` when the subject is ticketless); a clean worktree removal is the only teardown.
 

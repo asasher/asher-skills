@@ -2,11 +2,7 @@
 name: to-backlog
 description: Capture the loose items a conversation has surfaced — bugs, enhancement ideas, follow-ups — as minimal work-typed tickets in the bound tracker. Optionally attaches the captured tickets as children of a named parent ticket. Not for decomposing a decided direction — that's to-slices.
 argument-hint: "[<parent ticket id to attach captured tickets under>]"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
   optional: [to-slices]
 ---
 

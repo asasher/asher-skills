@@ -2,12 +2,6 @@
 name: tdd
 description: Test-driven development. Use when building features or fixing bugs test-first, when "red-green" is mentioned, or when integration tests are wanted.
 argument-hint: "[the behavior to build test-first]"
-user-invocable: true
-metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
 ---
 
 # Test-Driven Development

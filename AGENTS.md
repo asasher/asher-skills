@@ -9,4 +9,4 @@ Read these files when needed:
 - Run `bun format:fix` after significant edits
 - Push early and often
 - [SKILL-MECHANICS](./docs/agents/SKILL-MECHANICS.md) apply when authoring a skill
-- When using a skill authored in this repo we don't install it but use it directly from the `skills/` repo. We only install skills into this repo that are external and useful.
+- When using a skill authored in this authoring repo we don't install it but use it directly from the `skills/` repo. We only install skills into this repo that are external and useful.

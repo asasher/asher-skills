@@ -2,11 +2,7 @@
 name: prototype
 description: Answer one design question with a throwaway artifact. Use to settle a state model, UI, document direction, or an unproven mechanism claim — any question paper can't settle. Not for building the real thing.
 argument-hint: "<design question>"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: orchestrator
-  requires: []
   optional: [writing-for-humans, to-subagent, to-web]
 ---
 

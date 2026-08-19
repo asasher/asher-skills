@@ -2,13 +2,7 @@
 name: handoff
 description: Compact the current conversation into a handoff document for another agent to pick up.
 argument-hint: "[what the next session will be used for]"
-user-invocable: true
 disable-model-invocation: true
-metadata:
-  invocation: user
-  execution: thread
-  requires: []
-  optional: []
 ---
 
 # Handoff

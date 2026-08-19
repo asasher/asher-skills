@@ -2,10 +2,7 @@
 name: to-web
 description: Upload files to the project's bound store and return a durable URL per file. Use when evidence media needs a permanent home outside the repo, or when an HTML artifact on an artifact branch needs a viewable render. Private one-off viewing is the to-tailnet sibling.
 argument-hint: "<file path(s)> [ticket id]"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: thread
   requires: [docs/agents/platform.md]
   optional: [to-tailnet]
 ---

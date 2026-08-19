@@ -1,0 +1,7 @@
+interface:
+  display_name: "Learn Anything"
+  short_description: "Teach and coach any skill — decompose it, engineer honest feedback loops, run rep-by-rep practice sessions, schedule drills"
+  default_prompt: "Use $learn-anything to coach me through learning this skill."
+
+policy:
+  allow_implicit_invocation: false

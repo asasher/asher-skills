@@ -1,0 +1,7 @@
+interface:
+  display_name: "Agent-Ready Codebase"
+  short_description: "Reference: the repo-readiness standard for parallel agent builds — the certification checklist and the use-versus-change rule"
+  default_prompt: "Use $agent-ready-codebase when certifying a repo or judging build readiness."
+
+policy:
+  allow_implicit_invocation: true

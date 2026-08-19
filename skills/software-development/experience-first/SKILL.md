@@ -1,33 +1,37 @@
 ---
 name: experience-first
-description: The decision-ordering standard for shaping — users, then experience, then system behavior, then implementation. Use when building a shaping decision tree, structuring a spec, or routing a partially shaped ticket to its next shaper.
-user-invocable: true
-metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
+description: Use when shaping, designing or implementing any change to the system, product decision, ux or feature-scope trade-off. Chose user delight over implementation convenience.
 ---
 
 # Experience-first
 
-The order shaping decisions are settled in: what the system looks like from outside before how it is built inside. This is a reference skill: it defines the standard; sibling skills cite it by name and apply it in place.
+The product is the experience. Every technical decision either helps or hurts it. When implementation convenience conflicts with user delight, choose delight.
+
+- Say no to 1,000 things (every feature, control, and option must earn its place)
+- Ship less, ship better (polished experience with three features beats rough one with ten)
+- Prototype before committing (design decisions are cheaper in throwaway HTML than production code)
+- Sweat the details (transitions, alignment, spacing, feedback, error states)
+- Tighten the core loop (every feature should serve the central workflow or get out of the way)
+
+The user is whoever consumes the work. For a UI that is the end user. For a library or an internal API it is the colleague who imports it. The engineer who maintains the code next is a user too. Weigh their experience the same way, and explain impact from their seat.
+
+Foundations should serve the experience, not the other way around. Foundational thinking governs the sequence of work; this principle governs the target.
+
+Design from outside-in, starting from the users' experience first.
 
 ## The two registers
 
-- **Experience register** — everything observable from outside the system: who the users are, what each affected user sees, touches, and does, and the system's behavior that no single user owns (background jobs, retention, side effects). Settled by product judgment; prototyped heavily.
-- **Implementation register** — how it is achieved: schema, module architecture, interface design. Settled by technical judgment, and often derivable: once behavior is settled there is frequently one good design.
-
-An operator, an admin, an API consumer, the support person reading logs — each is a user type, not a special case.
+- **Experience register** — what users are there, how do they currently experience and interact with the product and how will their observable experience be different after this change. This also applies to system behaviors that users don't directly interact with but experience the effects of (background jobs, retention, side effects etc).
+- **Implementation register** — how it is achieved: seams, schema, module architecture, interface design. Settled by technical judgment, and often derivable: once behavior is settled there is frequently one good design.
 
 ## The gradient
 
 Work the registers as a gradient, from the outside in:
 
-1. **Users** — select the affected user types from the roster in the project's `PRODUCT.md` (§ PRODUCT.md below; a change that invents a new type extends the roster through the context delta). The roster makes selection a checklist where recall would forget someone.
-2. **Experience** — per affected type: what changes in what they see, touch, and do.
-3. **System behavior** — observable behavior no single type owns.
-4. **Implementation** — schema, modules, interfaces.
+1. **Users** — select the affected user types from the roster in the project's `PRODUCT.md`, if we need a new type of user record it there as well. If no `PRODUCT.md` exists create it lazily using [PRODUCT-FORMAT](./PRODUCT-FORMAT.md).
+2. **Experience** — per affected type: what changes in what they see, touch, and do and experience.
+3. **System behavior** — observable behavior that is shared across users or is only experienced indirectly.
+4. **Implementation** — seams, schema, modules, interfaces etc
 
 ## The tree law
 
@@ -37,15 +41,11 @@ Answers may arrive out of register — a product answer that names a widget is a
 
 ## The seam
 
-When the experience register's frontier empties, say so: "Experience is settled — implementation is next. This is a handoff point." The user continues in the same sitting, or blesses the experience register and parks the subject for another shaper. One thread, one skill, a named pause — never a separate stage.
+When the experience register's frontier empties, say so: "Experience is settled — implementation is next. This is a handoff point." The user continues in the same sitting, or blesses the experience register and parks the subject for another shaper.
 
 ## Recommend, don't ask
 
 In the implementation register, state the recommended design in the spec and surface only genuine forks — two defensible designs with real trade-offs — as questions. A design with one good answer is a spec statement the technical reviewer can veto, not a question that costs a round.
-
-## PRODUCT.md — the strategy file this standard owns
-
-The user-type roster lives in `PRODUCT.md` at the repo root — the strategy file: who the product serves (the roster, one entry per type with situation and job), what it is, why it wins, its operating context, constraints, brand commitments, evidence on hand with absences stated, and accessibility needs. Strictly no visuals — colors, fonts, and pixel values belong to the project's design file. Create it lazily from the shipped [skeleton](templates/PRODUCT.md) the first time a shaping session needs the roster, and register its line in the project instruction file's `## Context documents` index at creation. Roster and strategy changes land through the context delta like any glossary term.
 
 ## Skipping and blessing
 

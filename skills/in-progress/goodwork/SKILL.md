@@ -3,10 +3,7 @@ name: goodwork
 description: Define what good work means for a person through an interview, build their professional profile, and run a chat-driven job search from it — opportunities in one JSON file, one board for the picture.
 argument-hint: "[command] [detail]"
 metadata:
-  invocation: model
-  execution: thread
   requires: [interview]
-  optional: []
 ---
 
 Good Work defines what good work is for this person, then runs the search to find it. Everything happens in chat; state lives in two files; one HTML board shows the picture. Load the narrow reference file for the task at hand.

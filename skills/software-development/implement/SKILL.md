@@ -2,12 +2,8 @@
 name: implement
 description: Implement one ticket or spec'd work in the current checkout. Routes defects to diagnosing-bugs and new behavior to tdd; commits to the current branch.
 argument-hint: "<ticket id or spec reference>"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: thread
   requires: [diagnosing-bugs, tdd]
-  optional: []
 ---
 
 # Implement

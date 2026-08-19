@@ -7,7 +7,7 @@ Ground truth: the installed `codex` — flags drift between releases, so recheck
 1. Spawn detached in the resolved directory, capturing the first JSONL `thread.started` id:
 
    cd <directory> && codex exec --json -s <sandbox> -m <model> \
-    -c model_reasoning_effort="<effort>" '<prompt>' > <log-file> 2>&1 &
+   -c model_reasoning_effort="<effort>" '<prompt>' > <log-file> 2>&1 &
 
 2. Name it with `scripts/name-codex-thread.py <uuid> "<name>"`.
 

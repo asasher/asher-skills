@@ -1,0 +1,7 @@
+interface:
+  display_name: "Writing for Humans"
+  short_description: "Reference: the communication standard for user-facing text — ASD-STE100, the project CONTEXT.md dictionary, no bare ticket or PR numbers"
+  default_prompt: "Use $writing-for-humans when writing user-facing text."
+
+policy:
+  allow_implicit_invocation: true

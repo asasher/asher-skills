@@ -2,13 +2,7 @@
 name: skill-loop
 description: Run a target skill through eval-driven improvement iterations until no evaluation-backed edits remain.
 argument-hint: "<skill-path-or-name> <eval-path-or-command> [--max N]"
-user-invocable: true
 disable-model-invocation: true
-metadata:
-  invocation: user
-  execution: orchestrator
-  requires: []
-  optional: []
 ---
 
 # Skill Loop

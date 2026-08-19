@@ -1,11 +1,6 @@
 ---
 name: bare-minimum-design
 description: Asher's non-negotiable design baseline, and the owner of the project's DESIGN.md — the visual-system file agents read before building UI. Use when building or reviewing user-facing UI, or when a durable visual decision needs its home.
-metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
 ---
 
 # Bare minimum design

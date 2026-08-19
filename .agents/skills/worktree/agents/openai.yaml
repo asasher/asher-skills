@@ -1,7 +1,0 @@
-interface:
-  display_name: "Worktree"
-  short_description: "Prepare, inspect, and safely remove project-owned Git worktrees"
-  default_prompt: "Use $worktree to prepare or reconcile an isolated Git working copy."
-
-policy:
-  allow_implicit_invocation: true

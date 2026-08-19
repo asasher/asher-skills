@@ -1,12 +1,6 @@
 ---
 name: agent-ready-codebase
 description: The repo-readiness standard for parallel agent builds. Cite it when certifying a repo, judging whether a repo may dispatch builds, or deciding whether a ticket uses or changes a shared singleton.
-user-invocable: true
-metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
 ---
 
 # Agent-ready codebase

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Skill Loop"
+  short_description: "Run a target skill through eval-driven improvement iterations until no evaluation-backed edits remain"
+  default_prompt: "Use $skill-loop to iterate on this skill against its evals."
+
+policy:
+  allow_implicit_invocation: false

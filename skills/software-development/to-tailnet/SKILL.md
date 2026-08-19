@@ -2,12 +2,8 @@
 name: to-tailnet
 description: Serve a local HTML artifact over the tailnet so the user can view it from any device — the deliberate don't-publish path beside to-web.
 argument-hint: "<artifact.html>"
-user-invocable: true
 disable-model-invocation: true
 metadata:
-  invocation: user
-  execution: orchestrator
-  requires: []
   optional: [docs/agents/environment.md]
 ---
 

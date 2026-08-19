@@ -1,0 +1,7 @@
+interface:
+  display_name: "To Web"
+  short_description: "Upload files to the project's bound store and return a durable hash-keyed URL per file — evidence media's home, artifacts' preview deploy"
+  default_prompt: "Use $to-web to give this file a durable URL."
+
+policy:
+  allow_implicit_invocation: true

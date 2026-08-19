@@ -2,11 +2,8 @@
 name: backlog
 description: The backlog dispatcher — groom routes and fans shaping threads, build claims and fans build threads, status queries the fleet, setup binds and certifies.
 argument-hint: "[groom | build | status | setup] [ticket ids]"
-user-invocable: true
 disable-model-invocation: true
 metadata:
-  invocation: user
-  execution: orchestrator
   requires: [build-change, shape, to-thread, worktree]
   optional: [merge-change, writing-for-humans, retro, agent-ready-codebase, experience-first]
   setup: reference/setup.md

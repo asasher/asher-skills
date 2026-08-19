@@ -14,7 +14,7 @@ A career skill for one person, run from one folder, entirely in chat: interview 
 
 ## Sources
 
-Synthesized from: Designing Your Life & Designing Your New Work Life (Burnett & Evans, Stanford Life Design Lab); Schein's Career Anchors; Holland/RIASEC & O*NET; CliftonStrengths/VIA strengths interviewing; Schwartz values; Self-Determination Theory & flow; Amabile's progress principle; the 80,000 Hours career guide; Cal Newport's *So Good They Can't Ignore You*; Gardner, Csikszentmihalyi & Damon's *Good Work* (the three Es); Wrzesniewski's job crafting; Ibarra's *Working Identity*; ikigai (Kamiya, with the Venn-diagram caveat); Sparketype; Hendricks' Zone of Genius; Perell's personal monopoly; Kleon's *Show Your Work*; Vassallo's small bets; Dik & Duffy's calling research; *Never Search Alone* (Terry); *The 2-Hour Job Search* (Dalton); *What Color Is Your Parachute?\* (Bolles); weak-ties and referral evidence.
+Synthesized from: Designing Your Life & Designing Your New Work Life (Burnett & Evans, Stanford Life Design Lab); Schein's Career Anchors; Holland/RIASEC & O*NET; CliftonStrengths/VIA strengths interviewing; Schwartz values; Self-Determination Theory & flow; Amabile's progress principle; the 80,000 Hours career guide; Cal Newport's _So Good They Can't Ignore You_; Gardner, Csikszentmihalyi & Damon's _Good Work_ (the three Es); Wrzesniewski's job crafting; Ibarra's _Working Identity_; ikigai (Kamiya, with the Venn-diagram caveat); Sparketype; Hendricks' Zone of Genius; Perell's personal monopoly; Kleon's _Show Your Work_; Vassallo's small bets; Dik & Duffy's calling research; _Never Search Alone_ (Terry); _The 2-Hour Job Search_ (Dalton); *What Color Is Your Parachute?\* (Bolles); weak-ties and referral evidence.
 
 ## Credits
 

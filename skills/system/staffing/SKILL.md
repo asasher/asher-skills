@@ -2,12 +2,7 @@
 name: staffing
 description: Own a project's model roster and resolution doctrine. Use for any "which model should do this?" question — bars, then cheapest — or to write the staffing playbook.
 argument-hint: "[setup | route <task>]"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
   setup: reference/setup.md
 ---
 

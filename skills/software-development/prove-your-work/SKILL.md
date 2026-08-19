@@ -2,11 +2,7 @@
 name: prove-your-work
 description: Assemble the evidence that a change works and post it where the merge decision happens. Use when a change request is ready and the decider won't be watching the work live.
 argument-hint: "<the change request or branch to evidence>"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
   optional: [writing-for-humans, to-web]
 ---
 

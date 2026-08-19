@@ -1,0 +1,7 @@
+interface:
+  display_name: "Shadixfy"
+  short_description: "Pin generated frontend UI to the shadcn/ui visual language and tokens, stripping the default AI aesthetic"
+  default_prompt: "Use $shadixfy when generating or restyling frontend UI."
+
+policy:
+  allow_implicit_invocation: true

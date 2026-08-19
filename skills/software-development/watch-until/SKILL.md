@@ -2,11 +2,7 @@
 name: watch-until
 description: Watch a target until a condition holds or its timeout expires, then relay the outcome. Use when the session must wait on external state.
 argument-hint: "<target, condition, timeout, and what to relay on trigger>"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: orchestrator
-  requires: []
   optional: [to-subagent]
 ---
 

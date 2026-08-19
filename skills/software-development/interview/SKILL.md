@@ -2,11 +2,7 @@
 name: interview
 description: Interview the user about an idea or problem until shared understanding is real. Use to elicit and settle the decisions behind new work.
 argument-hint: "<idea, problem, or reference to intake material>"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: orchestrator
-  requires: []
   optional: [writing-for-humans, to-backlog, to-subagent]
 ---
 

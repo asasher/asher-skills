@@ -2,10 +2,6 @@
 name: relay
 description: Relay governed project communications through AgentMail. Use when preparing project updates or internal digests from bound evidence, reviewing exact email content and recipients, sending an approved AgentMail draft directly, reconciling delivery or replies, or resuming Relay state.
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
   setup: reference/setup.md
 ---
 

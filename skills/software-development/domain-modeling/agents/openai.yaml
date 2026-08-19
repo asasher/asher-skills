@@ -1,7 +1,3 @@
 interface:
   display_name: "Domain Modeling"
-  short_description: "Sharpen the project's domain model as decisions land — terms and ADR drafts into the spec's context delta during shaping, direct CONTEXT.md/ADR writes for what the code already is"
-  default_prompt: "Use $domain-modeling to pin down this terminology or record this decision."
-
-policy:
-  allow_implicit_invocation: true
+  short_description: "Build and sharpen a domain model"

@@ -2,12 +2,7 @@
 name: diagnosing-bugs
 description: Diagnose defects through a tight red-capable feedback loop. Use on an observed symptom — a failure, a flake, or a slowdown. Not for speculative cleanup.
 argument-hint: "<the observed symptom>"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
   setup: reference/setup.md
 ---
 
