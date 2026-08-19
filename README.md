@@ -92,6 +92,7 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | software-development | `to-subagent`            | model      | composite    |
 | software-development | `to-tailnet`             | user       | primitive    |
 | software-development | `to-thread`              | model      | primitive    |
+| software-development | `to-branch`              | model      | primitive    |
 | software-development | `to-web`                 | model      | primitive    |
 | software-development | `verify-your-work`       | model      | primitive    |
 | software-development | `watch-until`            | model      | primitive    |

@@ -33,12 +33,9 @@ Our work isn't all software, so the template flexes. Before writing, decide what
 
 If a spec is mostly non-dev but has one testable surface, keep the dev-only sections and scope them to that surface — the gate is "does it apply," not "is the whole thing code."
 
-## The two declarations
+## The test split
 
-Every spec carries two declarations downstream work executes:
-
-- **Context delta** — the new glossary terms and ADR drafts this direction introduces. Main's context files describe the code that **is**; a term for an unbuilt feature is aspiration, so it rides here instead, available to every reader from the ticket and the branch. The build that makes the direction true lands the delta on main (`CONTEXT.md`, `docs/adr/`). Omit the section when the direction introduces no terms and no ADR-worthy decisions.
-- **Test split** (dev specs only) — per acceptance criterion, by its AC id: a **durable suite test** (the behavior is long-standing; the test joins the maintained suite) or a **throwaway verification script** (proves this work once; its run is captured as evidence and the script is dropped before merge). The split is a shaping decision — verification executes the declaration, it never re-judges it.
+A dev spec declares, per acceptance criterion by its AC id: a **durable suite test** (the behavior is long-standing; the test joins the maintained suite) or a **throwaway verification script** (proves this work once; its run is captured as evidence and the script is dropped before merge). The split is a shaping decision — verification executes the declaration, it never re-judges it. (Glossary terms and ADRs need no declaration: shaping commits them directly on the ticket's work branch, and the build's change request carries them to main.)
 
 ## Dev specs only — sketch the test seams
 

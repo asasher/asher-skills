@@ -41,7 +41,7 @@
   - Publish a line of work: _<e.g. `git push -u origin <branch>`; local-only repo: none — the branch is already visible; jj: `jj git push` or none>_.
   - **Push discipline**: commits on work, feature, and artifact branches reach the remote as they land — the remote is the backup, and pushing is not publication (the change request is). Waiting until a change request exists to push is drift from this binding.
   - Tear down a working copy: the `worktree` skill after environment teardown; it refuses dirty, unregistered, or primary-checkout paths.
-- **Feature branches (stacked landing)** — a split spec ticket gets a feature branch off the base branch: _<naming, e.g. `feature/<ticket>-<slug>`>_. Its root commit carries the spec's context delta (`CONTEXT.md` terms, ADRs); slices branch off it and PR into it; the spec ticket's own PR is the feature→base merge.
+- **Feature branches (stacked landing)** — a split spec ticket's work branch becomes its feature branch: _<naming, e.g. `<ticket>-<slug>`>_. Its shaping commits carry the `CONTEXT.md` terms and ADRs; slices branch off it and PR into it; the spec ticket's own PR is the feature→base merge.
 - **Artifact branches** — specs, prototypes, and dossiers live on `artifact/<ticket>-<slug>` branches (`artifact/<slug>` when ticketless), plain shared history, **permanently unmerged by intent**: version-controlled while useful, deleted when spent. Every sweep skips the `artifact/` prefix on purpose; the branch ref is also the retention mechanism against GC.
 - Pinned-SHA semantics: _<how a commit is referenced durably for plans, evidence, and blessed spec hashes — git/jj: the commit SHA/change-id; note any history-rewrite policy that can orphan pins>_.
 

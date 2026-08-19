@@ -23,10 +23,10 @@ Honor the ticket's authority boundary — what it settles is settled; what it de
 
 **Generated files** are regenerated via the repo's recorded recipe (`docs/agents/codebase.md`), never hand-edited; regeneration drift beyond the ticket's scope is surfaced.
 
-**The spec's context delta** — new `CONTEXT.md` terms, ADR drafts — lands on main with the change that makes it true. An unsplit ticket writes the terms into `CONTEXT.md` and the drafts into `docs/adr/` as part of this change. On a stacked slice the delta already sits at the feature branch's root commit — leave it there; landing it again duplicates it.
+**Context files arrive already committed.** Shaping writes `CONTEXT.md` terms and ADRs on the ticket's work branch, so this change inherits them — never re-land them. Work that was never shaped (ticketless spec'd work, a term this change itself makes real) writes them directly via the `domain-modeling` skill as part of the change.
 
 **A failure that predates the change** — proven by running the same check on the base commit, or with the change stashed — is pre-existing: file it as a ticket and keep it out of this change's scope — the filed ticket is what keeps it from being read as new breakage.
 
 ## Done
 
-The typecheck passes, the recorded format, lint, and dead-export checks (where the repo has them) pass clean, the full suite passes — apart from failures proven pre-existing and filed as tickets — the spec's context delta is landed where this ticket owns it, and the changes are committed to the current branch with messages that say why.
+The typecheck passes, the recorded format, lint, and dead-export checks (where the repo has them) pass clean, the full suite passes — apart from failures proven pre-existing and filed as tickets — and the changes are committed to the current branch with messages that say why.
