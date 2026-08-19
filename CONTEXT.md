@@ -32,7 +32,7 @@ A collection of skills by Asher. Skills are organized into families with main fo
 
 **Reference skill**: An all-reference sibling cited by name and never run as a workflow: `writing-for-humans` (communication), `agent-ready-codebase` (repo readiness), `experience-first` (shaping decision order), `staffing` (roster and resolution). A reference skill stays model-invoked with a tight description, or siblings cannot cite it.
 
-**External skill**: A relied-on skill whose canonical source lives outside this repo — declared in the consuming skill's `metadata.external`, installed only after provenance review and explicit consent, recorded in `external-dependencies.lock.json`. An adapted lift becomes our skill with README credits; an unmodified lift stays an external, never vendored. Standing example: `writing-for-agents` (mattpocock/skills). _Avoid_: external requirement.
+**External skill**: A skill whose canonical source lives outside this repo, installed as a package for authoring-side use only. The family ships from this repo: an external skill our skills need is brought in — copied wholesale or rewritten as our own version, with README credits — pinning the version we reviewed rather than an evolving copy upstream controls. Standing example: `writing-for-agents` (mattpocock/skills). _Avoid_: external requirement.
 
 **Playbook**: A repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup (e.g. `environment.md`, `platform.md`). Skills speak in role nouns; the playbook binds those roles to this repo. Repo-owned once written — setups reconcile it, never overwrite it.
 

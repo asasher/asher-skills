@@ -97,7 +97,6 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | software-development | `verify-your-work`       | model      | primitive    |
 | software-development | `watch-until`            | model      | primitive    |
 | software-development | `worktree`               | model      | primitive    |
-| personal             | `capture-to-inbox`       | model      | primitive    |
 | personal             | `learn-anything`         | user       | primitive    |
 | personal             | `manage-notes`           | model      | primitive    |
 | personal             | `manage-opportunities`   | model      | primitive    |
@@ -126,4 +125,4 @@ Other people's skills I install alongside these. They come from their own repos,
 | `btca-local` | [davis7dotsh/better-context](https://github.com/davis7dotsh/better-context) |
 | `liteparse` | [run-llama/llamaparse-agent-skills](https://github.com/run-llama/llamaparse-agent-skills) |
 
-An external skill that an authored skill actually depends on is a different thing — it is declared in that skill's `metadata.external`, installed only after provenance review and explicit consent, and recorded in `external-dependencies.lock.json`. See `CONTEXT.md`.
+An external skill that an authored skill needs is a different thing — it ships from this repo: copied wholesale or rewritten as our own version, with credits in that skill's README. This pins the version we reviewed, not a copy that upstream controls. See `CONTEXT.md`.
