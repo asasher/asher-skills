@@ -10,3 +10,4 @@ Read these files when needed:
 - Push early and often
 - [SKILL-MECHANICS](./docs/agents/SKILL-MECHANICS.md) apply when authoring a skill
 - When using a skill authored in this authoring repo we don't install it but use it directly from the `skills/` repo. We only install skills into this repo that are external and useful.
+- The skill family ships from this repo: an external skill our skills depend on gets brought in — copied wholesale with credits, or rewritten as our own version — pinning the version we reviewed rather than an evolving copy upstream controls.
