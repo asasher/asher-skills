@@ -16,12 +16,6 @@ A collection of skills by Asher. Skills are organized into families; skills with
 
 **Dispatch adapter**: A thin composite owning _how_ work is dispatched, not what the work is: `to-thread` spawns named, interactive sessions the user attends through the outermost dispatching harness; `to-subagent` issues blocking calls to non-interactive subagents that return the result, deliverable validated before acceptance. Both consume an exact supplied directory without adding harness-native isolation. On direct invocation, an explicit isolation request composes the `worktree` primitive before dispatch; workflow-owned isolation arrives already prepared. `to-subagent` may additionally compose `staffing` for model and effort resolution. Every other skill reaches subagent dispatch solely by saying "via `to-subagent`".
 
-**Worktree primitive**: The project-owned mechanical boundary for prepare, inspect, and remove. It creates one branch and working copy from a named base without switching or updating the primary checkout, treats git's worktree registration as ownership truth, and refuses ambiguous reuse or dirty removal. Orchestrators decide _when_ workflow-owned isolation is required and pass the resulting directory to dispatch adapters. A direct adapter treats the user's explicit isolation request as its policy input and composes this primitive; harnesses do not create another worktree.
-
-**Layer law**: A skill may name only skills at layers below its own — and a primitive names none at all. A lower-layer skill naming an upper one is a leaky abstraction; the fix is moving the reference up, never documenting it in place.
-
-**Redundant negation**: A prohibition on behavior no reader would otherwise assume ("this skill writes no durable artifacts"). It is noise and a leakage tell — meaningful only to an author remembering a design where the behavior existed. A prohibition earns its place only against demonstrated drift ("never modify the source spec" stays; "records nothing durable" goes).
-
 **Pure skill**: The bottom of the persistence axis: writes nothing durable — its output lives in the conversation and whatever the composer captures. Example: `interview`.
 
 **Effectful skill**: Writes durable artifacts (documents, tickets, code) but keeps no resume state of its own. Example: `to-slices`.
@@ -58,7 +52,7 @@ A collection of skills by Asher. Skills are organized into families; skills with
 
 **Reference skill**: An all-reference sibling cited by name and never run as a workflow: `writing-for-humans` (communication), `agent-ready-codebase` (repo readiness), `experience-first` (shaping decision order), `staffing` (roster and resolution). A reference skill stays model-invoked with a tight description, or siblings cannot cite it.
 
-**External requirement**: A relied-on skill whose canonical source lives outside this repo — declared in the consumer's `metadata.external`, installed only after provenance review and explicit consent, recorded in `external-dependencies.lock.json`. An adapted lift becomes our skill with README credits; an unmodified lift stays an external, never vendored. Standing example: `writing-for-agents` (mattpocock/skills).
+**External skill**: A relied-on skill whose canonical source lives outside this repo — declared in the consuming skill's `metadata.external`, installed only after provenance review and explicit consent, recorded in `external-dependencies.lock.json`. An adapted lift becomes our skill with README credits; an unmodified lift stays an external, never vendored. Standing example: `writing-for-agents` (mattpocock/skills). _Avoid_: external requirement.
 
 **Playbook**: A repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup (e.g. `environment.md`, `platform.md`). Skills speak in role nouns; the playbook binds those roles to this repo. Repo-owned once written — setups reconcile it, never overwrite it.
 
