@@ -197,7 +197,7 @@ class RelayTests(unittest.TestCase):
         paths.extend(path for root in product_roots if root.is_dir() for path in root.rglob("*") if path.is_file() and path.suffix != ".pyc")
         text = "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in paths)
         self.assertIn("name: relay", (SKILL / "SKILL.md").read_text())
-        self.assertIn("requires: []", (SKILL / "SKILL.md").read_text())
+        self.assertNotIn("requires:", (SKILL / "SKILL.md").read_text())
         # Relay declares no sibling, so no shipped file may name another skill as its
         # delivery or approval surface. Needle split so this file passes its own scan.
         foreign_skill = "serve-via-" + "tailnet"
