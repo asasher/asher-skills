@@ -1,6 +1,6 @@
 ---
 name: to-thread
-description: Spawn a named session in the outermost harness. Use when a unit of work should continue in its own attended session — from T3 Code, Claude Code, or Codex.
+description: Spawn a named session in the outermost harness. Use when a unit of work should continue in its own attended session from T3 Code, Claude Code, or Codex.
 argument-hint: "<name — initial prompt>"
 metadata:
   requires: [worktree]
@@ -9,7 +9,7 @@ metadata:
 
 # To Thread
 
-Spawn one named, interactive session in the outermost harness, verify it is alive, and tell the user how to attach. The outermost harness owns the session; nothing flows back to this one — outcomes land in the tracker.
+Spawn one named, interactive session in the outermost harness, verify it is alive, and tell the user how to attach. The outermost harness owns the session; nothing flows back to this one, outcomes land in the tracker.
 
 ## Shared contract — every route
 

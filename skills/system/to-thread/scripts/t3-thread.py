@@ -37,6 +37,12 @@ class T3RequestError(T3ThreadError):
 KNOWN_RUNTIME_MODES = ("approval-required", "auto-accept-edits", "auto", "full-access")
 KNOWN_INTERACTION_MODES = ("default", "plan")
 
+# Effort option ids the provider drivers honor (probed 2026-08-24, T3 Code
+# (Alpha) 0.0.33). The app accepts any option id at schema decode and each
+# driver ignores ids it does not read, so a wrong id fails nowhere — the
+# thread silently runs at the driver's default effort.
+EFFORT_OPTION_IDS = {"claudeAgent": "effort", "codex": "reasoningEffort"}
+
 
 class RefuseRedirects(urllib.request.HTTPRedirectHandler):
     """Keep short-lived bearer credentials on the validated origin."""
@@ -363,8 +369,21 @@ def orphaned_thread_notice(thread_id: str, name: str, *, created: bool) -> str:
     )
 
 
+def effort_option_id(args: argparse.Namespace) -> str:
+    if args.effort_option_id:
+        return args.effort_option_id
+    option_id = EFFORT_OPTION_IDS.get(args.provider)
+    if option_id is None:
+        fail(
+            f"no known effort option id for provider instance {args.provider!r}: "
+            'pass --effort-option-id explicitly (claudeAgent-driver instances read "effort", '
+            'codex-driver instances read "reasoningEffort")'
+        )
+    return option_id
+
+
 def model_selection(args: argparse.Namespace) -> dict[str, object]:
-    options: list[dict[str, str]] = [{"id": "reasoningEffort", "value": args.effort}]
+    options: list[dict[str, str]] = [{"id": effort_option_id(args), "value": args.effort}]
     if args.service_tier:
         options.append({"id": "serviceTier", "value": args.service_tier})
     return {
@@ -394,9 +413,14 @@ def validate_dispatch_arguments(args: argparse.Namespace) -> None:
     ]
     if args.service_tier is not None:
         values.append(("--service-tier", args.service_tier))
+    if args.effort_option_id is not None:
+        values.append(("--effort-option-id", args.effort_option_id))
     for label, value in values:
         if not value.strip():
             fail(f"{label} must not be blank: T3 rejects empty strings at schema decode")
+    # Resolve the effort option id here so an unmappable provider instance
+    # fails before a session is issued, not after the thread is created.
+    effort_option_id(args)
 
 
 def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str, object]:
@@ -492,6 +516,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--provider", default="codex")
     result.add_argument("--model", required=True)
     result.add_argument("--effort", required=True)
+    result.add_argument("--effort-option-id")
     result.add_argument("--service-tier")
     result.add_argument("--runtime-mode", required=True)
     result.add_argument("--interaction-mode", default="default")

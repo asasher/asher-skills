@@ -227,6 +227,8 @@ raise SystemExit(2)
         derive_server_entry: bool = False,
         token: str | None = None,
         effort: str = "high",
+        provider: str | None = None,
+        effort_option_id: str | None = None,
         prompt: str = "Shape ticket #136 and wait for the user.",
     ) -> subprocess.CompletedProcess[str]:
         env = os.environ.copy()
@@ -259,6 +261,10 @@ raise SystemExit(2)
                 "--t3-executable",
                 str(self.fake_app_cli if derive_server_entry else self.fake_cli),
             ]
+        if provider is not None:
+            command.extend(["--provider", provider])
+        if effort_option_id is not None:
+            command.extend(["--effort-option-id", effort_option_id])
         if not derive_server_entry:
             command.extend(["--server-entry", str(self.server_entry)])
         result = subprocess.run(
@@ -466,6 +472,41 @@ raise SystemExit(2)
         self.assertIn("may have been left", result.stderr)
         self.assertIn("if it appears there", result.stderr)
         self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_sends_the_effort_option_id_each_driver_reads(self) -> None:
+        # The drivers ignore option ids they do not read, so a mis-labeled
+        # effort silently runs the thread at the default: the id must match
+        # the driver, not be one constant for every provider.
+        self.run_helper(provider="claudeAgent")
+        self.assertEqual(
+            [{"id": "effort", "value": "high"}],
+            self.state.posts[0]["modelSelection"]["options"],
+        )
+
+        self.state.posts.clear()
+        self.run_helper(provider="codex")
+        self.assertEqual(
+            [{"id": "reasoningEffort", "value": "high"}],
+            self.state.posts[0]["modelSelection"]["options"],
+        )
+
+    def test_fails_before_dispatch_for_unmappable_provider_instance(self) -> None:
+        result = self.run_helper(check=False, provider="codex-personal")
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("--effort-option-id", result.stderr)
+        self.assertEqual([], self.state.posts)
+        # Argument-local validation fails before any session is issued, so
+        # there is nothing to revoke.
+        self.assertFalse(self.revoke_log.exists())
+
+    def test_explicit_effort_option_id_covers_renamed_instances(self) -> None:
+        self.run_helper(provider="codex-personal", effort_option_id="reasoningEffort")
+
+        self.assertEqual(
+            [{"id": "reasoningEffort", "value": "high"}],
+            self.state.posts[0]["modelSelection"]["options"],
+        )
 
     def test_rejects_blank_effort_before_dispatching(self) -> None:
         result = self.run_helper(check=False, effort="   ")
