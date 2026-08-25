@@ -1,6 +1,6 @@
 interface:
   display_name: "To Subagent"
-  short_description: "Dispatch staffed non-interactive work in an exact supplied directory, as a blocking call with a validated deliverable"
+  short_description: "Dispatch one checked task in the supplied directory"
   default_prompt: "Use $to-subagent to dispatch this work to a staffed subagent."
 
 policy:

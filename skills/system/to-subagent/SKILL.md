@@ -3,27 +3,15 @@ name: to-subagent
 description: Dispatch one unit of non-interactive work to a subagent as a blocking call. Use whenever work should run outside this session without the user attending it.
 argument-hint: "<the unit of work to dispatch>"
 metadata:
-  requires: []
   optional: [staffing]
 ---
 
 # To Subagent
 
-Dispatch one unit of non-interactive work to another agent, validate its deliverable, and relay the result.
+Dispatch one unit of non-interactive work as a blocking call. Give the subagent one self-contained brief: objective, required inputs, exact supplied directory, constraints, checkable completion condition, and promised deliverable. It sees none of this conversation.
 
-Use this when parallelizing work, isolating large payloads (e.g verbose outputs, screenshots, processing large documents, research etc) to preserve context etc.
+Use `staffing` when available to select the model, effort, harness, and execution method; otherwise choose and disclose them. Pass the supplied directory exactly. The workflow that prepared it owns isolation and worktree lifecycle.
 
-Use `staffing` (when available) to select the dispatch fields; otherwise pick them and inform the user before dispatch.
+For a cross-harness call, wait for the process and close stdin (`</dev/null`); an open pipe can keep the harness waiting for EOF. Enforce a caller-supplied deadline as the process timeout.
 
-| staffing field | harness argument                                  |
-| -------------- | ------------------------------------------------- |
-| model          | model argument, unchanged                         |
-| effort         | effort argument, unchanged; omit when unspecified |
-| harness        | executable route                                  |
-| execution      | additional dispatch method                        |
-
-Treat the fields as separate values. For example, model `fable-5` with effort `high` becomes model argument `fable-5` and effort argument `high`.
-
-For cross-harness models, shell out to the appropriate harness and monitor the dispatch. Close stdin on the shell-out (`</dev/null`): a backgrounded harness sees an open pipe that never delivers EOF and waits on it indefinitely.
-
-Report the outcome (success or failed dispatch), the deliverable's location, and what the next decision must act on, in your own words.
+On return, compare the promised deliverable with the completion condition. Process success without the promised result is failure. Preserve caller-requested deliverables unchanged; summarize only the outcome and implications in the parent's words.

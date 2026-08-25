@@ -29,6 +29,6 @@ For every returned dossier or prototype, publish the artifact to its own `artifa
 
 Record settled decisions on the ticket as they land. Offer work outside this ticket to `to-backlog`.
 
-When the design frontier is empty, run `to-spec` inline so it can synthesize the ticket record and current conversation. Publish the returned HTML spec through the same `to-branch` then `to-web` sequence and write its projection to the ticket. After the user approves that published revision, record the approved commit hash and mark the ticket `ready-for-agent`.
+When the design frontier is empty, run `to-spec` inline so it can synthesize the ticket record and current conversation. For a revision, also pass the previous approved spec so its acceptance-criterion identifiers remain stable. If synthesis returns a blocking Note, record it on the ticket and reopen that part of the design frontier. Otherwise, publish the returned HTML spec through the same `to-branch` then `to-web` sequence and write its projection to the ticket. After the user approves that published revision, record the approved commit hash and mark the ticket `ready-for-agent`.
 
 Before pausing or completing, push the ticket branch and record every open frontier item on the ticket.

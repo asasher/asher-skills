@@ -5,10 +5,11 @@ Synthesizes a conversation or shaping record that already reached a decision int
 ## Shape
 
 - Pure synthesis, no interview. Undecided points become classified Notes.
-- Every spec opens with a diagram and follows one template for dev and non-dev work.
-- Dev specs declare test seams and the durable-test or throwaway-script split.
-- The spec carries no file paths or code snippets except a prototype-validated decision fragment and durable pointers in Supporting artifacts.
-- A direction too large for one build ends with a recommended split; it does not create tickets.
+- The latest explicit ruling wins; discarded and superseded material stays out.
+- Sections follow the shaping order: users and experience before shared behavior and implementation.
+- The spec records the settled test contract and split, and adds a diagram only when it materially helps.
+- Stable acceptance-criterion identifiers, Notes classifications, supporting-artifact traceability, and the two-way fidelity audit remain downstream contracts.
+- A recommended split appears only when shaping already settled one.
 
 ## Credits
 

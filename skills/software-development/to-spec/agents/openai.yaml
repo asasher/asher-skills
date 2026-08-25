@@ -1,6 +1,6 @@
 interface:
   display_name: "To-Spec"
-  short_description: "Synthesize a settled direction into one HTML spec without interviewing"
+  short_description: "Synthesize a settled direction into one HTML spec"
   default_prompt: "Use $to-spec to synthesize this settled direction into an HTML spec."
 
 policy:

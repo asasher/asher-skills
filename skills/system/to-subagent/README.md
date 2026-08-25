@@ -1,10 +1,10 @@
 # To Subagent
 
-Synchronous dispatch adapter for non-interactive work: one blocking call dispatches one subagent, and how many a piece of work needs is the caller's decision. `SKILL.md` carries the contract.
+Synchronous dispatch adapter for non-interactive work. One blocking call gives one subagent a self-contained brief in the exact supplied directory, then validates the promised deliverable. Isolation and worktree lifecycle belong to the composing workflow.
 
 ## When to use
 
-- Any skill or session needs work done outside its own context — a lookup, a probe, a verification pass, an implementation — without the user attending it.
+- A skill or session needs one checked unit of work completed outside its own context without the user attending it.
 - It is the single sanctioned route to staffed dispatch: other skills say "via `to-subagent`".
 
 ## Provenance

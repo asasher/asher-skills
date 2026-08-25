@@ -22,7 +22,7 @@ You are shaping ticket 142, "driver payouts." An earlier session settled the aff
 
 **P7.** Shaping changes `CONTEXT.md`. Which branch carries it, when is it pushed, and which session opens the change request?
 
-**P8.** The design frontier empties. Where does `to-spec` run, and when may the ticket become `ready-for-agent`?
+**P8.** The design frontier empties during a spec revision. What does `to-spec` receive, what happens if it returns a blocking Note, and when may the ticket become `ready-for-agent`?
 
 **P9.** The user parks the ticket at the experience handoff. What must be durable before the session stops?
 
@@ -37,7 +37,7 @@ You are shaping ticket 142, "driver payouts." An earlier session settled the aff
 - **P5:** Dispatch `research` and `prototype` via `to-subagent`, "each fresh subagent one question and only the context it needs." A question "blocks only the decisions that depend on it."
 - **P6:** Shape uses `to-branch`, then `to-web`, then adds "a ticket projection with the question, concise result, durable URL, and commit hash."
 - **P7:** Commit and push the context change on the ticket work branch as it lands. "The later build continues on it and opens the ticket's single change request."
-- **P8:** Run `to-spec` inline, publish through `to-branch` then `to-web`, and write the projection. Only "After the user approves that published revision" may shape record the hash and mark the ticket ready.
+- **P8:** Run `to-spec` inline with the previous approved spec. A blocking Note is recorded on the ticket and reopens that part of the design frontier. Otherwise publish through `to-branch` then `to-web` and write the projection. Only "After the user approves that published revision" may shape record the hash and mark the ticket ready.
 - **P9:** "Push the ticket branch and record every open frontier item on the ticket."
 - **P10:** "Offer work outside this ticket to `to-backlog`."
 
