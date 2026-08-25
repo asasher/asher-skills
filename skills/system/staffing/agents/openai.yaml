@@ -1,7 +1,7 @@
 interface:
   display_name: "Staffing"
-  short_description: "Own the model roster — state the bars a task needs, take the cheapest model that clears them"
-  default_prompt: "Use $staffing to state this task's intelligence and taste bars and resolve the cheapest model route that clears them."
+  short_description: "Choose model, effort, route, and execution method"
+  default_prompt: "Use $staffing to choose the model, effort, route, and execution method for this task."
 
 policy:
   allow_implicit_invocation: true
