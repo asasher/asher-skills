@@ -35,7 +35,7 @@ If a spec is mostly non-dev but has one testable surface, keep the dev-only sect
 
 ## The test split
 
-A dev spec declares, per acceptance criterion by its AC id: a **durable suite test** (the behavior is long-standing; the test joins the maintained suite) or a **throwaway verification script** (proves this work once; its run is captured as evidence and the script is dropped before merge). The split is a shaping decision — verification executes the declaration, it never re-judges it. (Glossary terms and ADRs need no declaration: shaping commits them directly on the ticket's work branch, and the build's change request carries them to main.)
+A dev spec declares, per acceptance criterion by its AC id: a **durable suite test** (the behavior is long-standing; the test joins the maintained suite) or a **throwaway verification script** (proves this work once; its run is captured as evidence and the script is dropped before merge). The split is a shaping decision; verification executes the declaration and never re-judges it.
 
 ## Dev specs only — sketch the test seams
 
@@ -59,24 +59,12 @@ Speak generically. A **spec** is the direction document, split downstream into *
 
 Every spec **opens with a diagram** of the moving parts — before any prose. Pick the form that fits the direction: a flow of the pieces, a sequence of the actors, a state machine of the lifecycle — rendered inline in the HTML (an SVG or equivalent that displays without a build step). The diagram is the review affordance — a reader should grasp the shape of the direction before reading a sentence. A direction too small to diagram is the only exception; say so in a line where the diagram would be.
 
-## Where the spec lives
-
-**The artifact branch file is canonical.** The spec is one self-contained HTML document, named for the subject, committed to the artifact branch — `artifact/<ticket>-<slug>` (`artifact/<slug>` when ticketless), plain shared history, never merged to main, deleted when spent. Every revision is a commit on that branch.
-
-**The ticket holds a projection.** Given a ticket id, write onto that ticket: a writing-for-humans summary of the direction, the `to-web` render URL (absent that sibling, link the branch file and say the render was not deployed), and the **commit hash** the render was made from — a stale projection is visible by its hash lagging the branch. Each revision refreshes the projection (re-render, new hash) and posts a **short comment noting what changed** — the comments are the notification trail. Given no ticket but a bound tracker (`docs/agents/platform.md`), **create the ticket** — titled from a short kebab-case slug for the decided direction (the command argument, or derived from the solution when omitted) — and give it the projection.
-
-**No tracker bound** — the branch and document are written the same way, and the projection (summary, render URL, hash) lands in the raising conversation. A later capture of the subject as a ticket adopts the links.
-
 ## Recommend the split, never perform it
 
 When the decided direction is clearly bigger than one build, end the spec with a **Recommended split** section: the proposed slices in a sentence each, and which edges would block which. It is a proposal only — splitting is the user's call, and executing it belongs to a different move (the split that parents the ticket, as the `spec` work-type, over born-shaped child slices). A spec that fits one build carries no such section.
 
-## Sign-off
+## Fidelity audit
 
-The spec's approval is the **direction's gate.** Before presenting: run the **fidelity audit**, in both directions. Conversation → spec: every material decision from the conversation appears in the spec, and every Notes line carries its blocking / delegated / deferred classification ([template-guide](template-guide.md) § Notes). Spec → source: read the subject ticket's own stated requirements back against the finished spec — a requirement the ticket states that the spec neither delivers nor explicitly excludes is a fidelity failure, even when the conversation never raised it. An open **blocking** Note means the direction isn't ready to build on — say so plainly when presenting for sign-off.
+Run the audit in both directions. Conversation and shaping record to spec: every material decision appears in the spec, and every Notes line carries its blocking, delegated, or deferred classification ([template-guide](template-guide.md) § Notes). Spec to source: read the source record's requirements back against the finished spec. A requirement the source states that the spec neither delivers nor explicitly excludes is a fidelity failure, even when the conversation never raised it.
 
-- **User present** — take approval inline, in the conversation, recording the approval and its commit hash. This is the default path.
-- **User AFK, projection on a ticket** — the projection already sits where the user's comments reach it; their LGTM on the ticket (or in the conversation) is the approval, binding to the carried hash — the LGTM arrives later; no waiting or polling. To-spec applies no readiness label — that decision travels by the tracker's label roles and belongs to whoever executes the user's call.
-- **No tracker** — approval arrives in conversation when the user returns. Skipping sign-off still leaves a valid spec in place.
-
-**Approval binds to a commit hash.** The user approves the spec they read, and the projection names the hash it was rendered from — so the approval records that hash; the user just says LGTM. Any later commit on the artifact branch past the approved hash mechanically invalidates the approval: the changed spec needs a fresh approval at its new hash.
+An open **blocking** Note means the direction is not ready to build on. Return that state with the spec instead of treating the synthesis as complete.

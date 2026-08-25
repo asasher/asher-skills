@@ -1,50 +1,44 @@
-# Shape — situated dry-run probes
+# Shape probes
 
-Pre-deployment probes per `docs/agents/probe-evals.md`: both executors, **only `SKILL.md` in context**, exact-sentence citation per answer. Ambiguity flagged with a citation is valid. Key before runs.
+Pre-deployment probes with only `SKILL.md` in context. Require an exact citation for each answer.
 
 ## Scenario
 
-You are running the `shape` skill in a thread on a batch: ticket #142 ("driver payouts — needs shaping") with ticket #147 grouped in (its decisions interlock), plus ticket #150 ("csv export — needs shaping"), unrelated to payouts. The repo has `CONTEXT.md`, a `## Context documents` index, and a bound tracker.
+You are shaping ticket 142, "driver payouts." An earlier session settled the affected users and left open experience questions on the ticket. The ticket work branch exists remotely, but this machine has no worktree for it.
 
 ## Probes
 
-**P1 (intake).** What do you read before the first question? Cite.
+**P1.** What provides continuity, and what happens to the worktree?
 
-**P2 (dispatch).** The frontier includes "what does the vendor's settlement API actually guarantee?" (needs sources) and "should the payout screen be a wizard or one form?" (paper can't settle). Where does each go, and what happens to the rest of the frontier meanwhile? Cite.
+**P2.** What do you read before asking questions, and which questions do you avoid?
 
-**P3 (labels).** Mid-session the shaping feels done to you and the tickets look ready. Do you mark them ready-for-agent? Cite.
+**P3.** In what order do you work the design tree?
 
-**P4 (record).** The cadence decision just settled in round 2. When and where is it recorded? Cite.
+**P4.** What happens when users, experience, and system behavior are settled?
 
-**P5 (crystallise).** The payouts subject's frontier is empty. What happens next without being asked, and what still waits on the user? Cite.
+**P5.** A vendor guarantee needs sources and a payout layout needs a working comparison. Where does each go, and what may continue meanwhile?
 
-**P6 (resume).** A fresh session opens on #142 tomorrow. What does it read, and what must it not do? Cite.
+**P6.** A research subagent returns a dossier. Who publishes it, in what order, and what reaches the ticket?
 
-**P7 (degrade).** The `prototype` skill is not installed and the wizard-vs-form question is open. What happens to that question? Cite.
+**P7.** Shaping changes `CONTEXT.md`. Which branch carries it, when is it pushed, and which session opens the change request?
 
-**P8 (comment watch).** Every batch spec has landed and the user went AFK. Later they comment on #150, "add the retry cadence to the spec", and later still "LGTM — whole batch ready for agent." What happens at each event? Cite.
+**P8.** The design frontier empties. Where does `to-spec` run, and when may the ticket become `ready-for-agent`?
 
-**P9 (engines).** The batch holds three tickets. How many engines run, via what, and how do interview questions reach the user? Cite.
+**P9.** The user parks the ticket at the experience handoff. What must be durable before the session stops?
 
-**P10 (changed batch branch).** Before asking for readiness, the supplied batch branch contains an ADR change. What must shape do and present? The user then says "whole batch ready for agent" without any later repository changes. When do #142, #147, and #150 become ready, and what merge scope did the signal authorize? Cite.
-
-**P11 (failed shaping merge).** The shaping change conflicts semantically with a different shaping change that landed first. What happens to this batch, its worktree, and its labels? Cite.
-
-**P12 (non-retroactive signal).** The user signals whole-batch readiness, but a repository tweak made after the last presented shaping head means the current head was never shown to them. Merge it? Cite.
+**P10.** An unrelated CSV-export idea appears. What happens to it?
 
 ## Answer key
 
-- **P1:** The ticket threads and linked artifacts (both tickets — one subject), plus "the project instruction file's `## Context documents` index and the documents whose clauses match." Skipping the index = **fail**.
-- **P2:** Sources → `research` skill; paper-unsettleable → `prototype` skill — "each dispatched via the `to-subagent` skill. A dispatched question blocks only what depends on it." The rest of the frontier proceeds. Blocking everything, or asking the user the vendor fact, = **fail**.
-- **P3:** No — "Shape executes only the user's explicit calls — the blessing and an approved split — and stamps no lifecycle label of its own." Applying it from your own read of readiness = **fail**.
-- **P4:** On the ticket thread, as it lands — "record settled decisions on its thread as they land." Batching to the end = **fail**.
-- **P5:** Crystallise unprompted — "When the subject's frontier is empty, run the `to-spec` skill on it automatically." Still waiting on the user: readiness ("readiness still waits for the user's blessing") and any split ("only on the user's explicit approval"). Asking permission to write the spec, applying readiness, or running to-slices unprompted = **fail**.
-- **P6:** "reads the record at its head plus the repo context files, recomputes the frontier from what is still open, and re-asks nothing the record answers." Re-asking settled decisions = **fail**.
-- **P7:** "park the question as open and say so." Silently dropping it, or improvising a prototype without the skill, = **fail**.
-- **P8:** The thread is watching — "run the `watch-until` skill on the spec'd ticket — condition: a new comment from the user on the ticket." On the comment: "apply the requested tweak to the ticket or spec, reply with what changed, resume watching." On the signal, note the blessed revisions, then execute the clean or changed worktree lifecycle before applying batch-atomic readiness. A subject-scoped signal only blesses that subject and keeps watching. Ignoring the comment, treating one subject's signal as batch-wide, or labeling before the branch lifecycle completes = **fail**.
-- **P9:** Two engines — "merely-related subjects never share one, interlocked tickets always do": {#142,#147} is one subject, #150 another — "each dispatched via the `to-subagent` skill, running the `interview` skill's engine mode." Rounds are dispatch cycles: "this session combines the frontiers into **one round for the user**, then routes each subject's answers back into its engine's next dispatch." Three engines, one engine for all, or per-subject rounds fired at the user separately, = **fail**.
-- **P10:** Before readiness, commit the ADR, open the shaping change request, and present its exact identity, head, and scope with the signal's narrow effect. The later signal authorizes "**that shaping change only**"; invoke `merge-changes`, and make all three tickets ready only after verified merge and cleanup. Opening/presenting the request only after the signal, merging unrelated work, or labeling a subset early = **fail**.
-- **P11:** Stop for the user — "a semantic conflict returns to the user and leaves the entire batch shaping." Preserve the worktree for recovery; no ticket becomes ready. Guessing the resolution, deleting the worktree, or partially advancing labels = **fail**.
-- **P12:** Do not merge. "If a repository delta has no presented change request at its current head, present or update it now and resume watching. The earlier signal is not retroactive merge authorization." Treating the earlier blessing as covering the new head = **fail**.
+- **P1:** "The branch carries continuity across sessions and machines; the worktree may be reused or recreated." Use `worktree` to prepare or inspect the worktree on that branch.
+- **P2:** Read "the ticket, its linked artifacts, the project instruction file, and the project context files" and "Re-ask nothing the record settles."
+- **P3:** Users, experience, system behavior, implementation. "Settle every decision at one level before opening the next."
+- **P4:** Say, "Experience is settled. Implementation is next. This is a handoff point." The user may continue or park the ticket.
+- **P5:** Dispatch `research` and `prototype` via `to-subagent`, "each fresh subagent one question and only the context it needs." A question "blocks only the decisions that depend on it."
+- **P6:** Shape uses `to-branch`, then `to-web`, then adds "a ticket projection with the question, concise result, durable URL, and commit hash."
+- **P7:** Commit and push the context change on the ticket work branch as it lands. "The later build continues on it and opens the ticket's single change request."
+- **P8:** Run `to-spec` inline, publish through `to-branch` then `to-web`, and write the projection. Only "After the user approves that published revision" may shape record the hash and mark the ticket ready.
+- **P9:** "Push the ticket branch and record every open frontier item on the ticket."
+- **P10:** "Offer work outside this ticket to `to-backlog`."
 
-Pass bar: **12/12 on both executors.**
+Pass bar: ten of ten on both executors.

@@ -18,7 +18,7 @@ A collection of skills by Asher. Skills are organized into families with main fo
 
 **Stateful skill**: The top of the persistence axis — pure (writes nothing durable, e.g. `interview`) → effectful (durable artifacts, no resume state, e.g. `to-slices`) → stateful: its durable artifacts double as resume state, so a bare invocation reads them and continues exactly where the last session stopped — no human recap. State lives with the work, never in chat context or memory files; a session's last act is updating it. Examples: `backlog`, `shape`. Stateful skills get extra probe-eval attention on the resume-after-a-gap path, since mistakes compound across sessions.
 
-**Repo context files**: The repo-owned strategic context a shaping session reads at intake, three files with three owners: `CONTEXT.md` (the domain glossary — `domain-modeling`), `PRODUCT.md` (strategy and the user-type roster — `experience-first`), `DESIGN.md` (the visual system — `bare-minimum-design`). Each is one line in the project instruction file's `## Context documents` index; creation and skeleton mechanics live with the owner skill. They carry domain and direction; playbooks under `docs/agents/` carry operational bindings — a shaping decision consults the former, a build step the latter.
+**Repo context files**: The repo-owned strategic context a shaping session reads at intake, three files with three owners: `CONTEXT.md` (the domain glossary — `domain-modeling`), `PRODUCT.md` (strategy and the user-type roster — `shape`), `DESIGN.md` (the visual system — `bare-minimum-design`). Each is one line in the project instruction file's `## Context documents` index; creation and skeleton mechanics live with the owner skill. They carry domain and direction; playbooks under `docs/agents/` carry operational bindings — a shaping decision consults the former, a build step the latter.
 
 **Skill source**: `skills/<category>/<name>/` — the canonical skill this repo exists to publish. All authoring happens here; every install derives from it.
 
@@ -30,7 +30,7 @@ A collection of skills by Asher. Skills are organized into families with main fo
 
 **Sibling skill**: Another skill in this repo relied on by name — a plain-language runtime pointer resolved by the installed skill set, never a file import. Example: `implement` routes defects through the `diagnosing-bugs` sibling.
 
-**Reference skill**: An all-reference sibling cited by name and never run as a workflow: `writing-for-humans` (communication), `agent-ready-codebase` (repo readiness), `experience-first` (shaping decision order), `staffing` (roster and resolution). A reference skill stays model-invoked with a tight description, or siblings cannot cite it.
+**Reference skill**: An all-reference sibling cited by name and never run as a workflow: `writing-for-humans` (communication), `agent-ready-codebase` (repo readiness), `principle-experience-first` (shaping target), `staffing` (roster and resolution). A reference skill stays model-invoked with a tight description, or siblings cannot cite it.
 
 **External skill**: A skill whose canonical source lives outside this repo, installed as a package for authoring-side use only. The family ships from this repo: an external skill our skills need is brought in — copied wholesale or rewritten as our own version, with README credits — pinning the version we reviewed rather than an evolving copy upstream controls. Standing example: `writing-for-agents` (mattpocock/skills). _Avoid_: external requirement.
 

@@ -12,11 +12,11 @@ Answers **one design question with a throwaway artifact** — the answer is the 
 
 - **Formats.** A _logic_ question gets one double-clickable self-contained HTML file — free-play controls plus tabbed guided walkthroughs, full relevant state visible after every action. A _mechanism claim_ gets the smallest runtime-real probe that can make it fail. A _UI/variants_ question gets multiple structurally different variants on one route with a simple switcher.
 - **Shared rules.** Disposable and labeled as such; effortless to launch; in-memory state; no polish, no tests.
-- **Four gates.** Question stated → built & exposed → decision captured → cleaned. The decision is written into the record (ticket or conversation); the artifact parks on its artifact branch with a render link; the prototype is never the record and nothing throwaway ships.
+- **Three gates.** State the question, build and expose the artifact, then return its path and result. Nothing throwaway ships.
 
 ## Dependency surface
 
-Composes with the optional `to-subagent`, `to-web`, and `writing-for-humans` siblings.
+Uses the optional `writing-for-humans` sibling.
 
 ## Credits
 
