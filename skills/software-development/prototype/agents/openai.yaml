@@ -1,7 +1,7 @@
 interface:
   display_name: "Prototype"
-  short_description: "Answer one design question with a throwaway artifact"
-  default_prompt: "Use $prototype to settle this design question with a throwaway artifact."
+  short_description: "Answer one design question with a disposable artifact"
+  default_prompt: "Use $prototype to settle this design question with a disposable artifact."
 
 policy:
   allow_implicit_invocation: true

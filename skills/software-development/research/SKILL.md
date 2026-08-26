@@ -1,6 +1,6 @@
 ---
 name: research
-description: Research one decision-relevant question from primary sources and produce a cited, auditable HTML dossier. Use to establish current facts or fact-check a claim, not to decide what to do.
+description: Research one decision-relevant question from primary sources and produce a cited, auditable HTML dossier. Use to establish source-backed facts or fact-check a claim, not to decide what to do.
 metadata:
   optional: [diagram-design, writing-for-humans]
 ---
