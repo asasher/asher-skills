@@ -1,7 +1,6 @@
 ---
 name: retro
 description: Turn the friction of working with skills into fixes — an always-on local ledger any session appends to the moment a skill run stumbles, and a periodic retro pass that clusters entries with their run transcripts and triages them into local fixes, upstream candidates, and noise. With the repo's recorded consent, a recurring skill defect becomes a sanitized, human-approved feedback issue on the skill's source repo. Use retro note to record friction as it happens, retro to run the pass, retro setup to bind consent and targets. Not for capturing ordinary work items — that's to-backlog.
-argument-hint: "[note <observation> | setup]"
 metadata:
   optional: [to-backlog]
   setup: reference/setup.md

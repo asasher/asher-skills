@@ -1,7 +1,6 @@
 ---
 name: merge-change
 description: Merge review-ready changes on the user's explicit request — the human authorization gate.
-argument-hint: "<change requests, branches, or 'everything review-ready'>"
 metadata:
   requires: [worktree]
   optional: [writing-for-humans, watch-until]

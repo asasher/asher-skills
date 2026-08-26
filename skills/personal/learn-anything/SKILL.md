@@ -1,7 +1,6 @@
 ---
 name: learn-anything
 description: Teach + coach any skill — decompose it, engineer honest feedback loops, run rep-by-rep practice sessions, schedule drills.
-argument-hint: "[setup \"<mission>\"] | [loop] | [session] | [teach \"<topic>\"] | [status]"
 disable-model-invocation: true
 ---
 

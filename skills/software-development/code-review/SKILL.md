@@ -1,7 +1,6 @@
 ---
 name: code-review
 description: Two-axis review of the changes since a base ref — Standards and Spec. Use to review a branch, a change request, or work-in-progress changes.
-argument-hint: "<base ref, change request, or spec path; nothing for the current branch>"
 metadata:
   optional: [to-subagent]
 ---

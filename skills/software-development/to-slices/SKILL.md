@@ -1,7 +1,6 @@
 ---
 name: to-slices
 description: Split a decided direction — a spec'd ticket, a spec or plan document, or the current conversation — into backlog-ready tracer-bullet tickets with blocking edges. Runs only on the user's explicit call. Not for writing the direction itself.
-argument-hint: "[<spec'd ticket id or spec path, or nothing to use the conversation>]"
 metadata:
   optional: [writing-for-humans]
 ---

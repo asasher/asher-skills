@@ -1,7 +1,6 @@
 ---
 name: dissolve
 description: Dissolve a malformed question via two-agent debate — taboo the loaded word, unbundle the sub-questions — instead of answering it.
-argument-hint: "[debate \"<question>\"] | [new \"<question>\"] | [resume] | [list]"
 disable-model-invocation: true
 ---
 

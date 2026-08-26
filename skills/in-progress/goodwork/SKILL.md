@@ -1,7 +1,6 @@
 ---
 name: goodwork
 description: Define what good work means for a person through an interview, build their professional profile, and run a chat-driven job search from it — opportunities in one JSON file, one board for the picture.
-argument-hint: "[command] [detail]"
 metadata:
   requires: [interview]
 ---

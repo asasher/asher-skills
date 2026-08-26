@@ -1,7 +1,6 @@
 ---
 name: verify-your-work
 description: Verify a named set of changes does what it claims and report findings with evidence. Use after building and before a change request exists.
-argument-hint: "<the changes to verify: branch, diff, or description>"
 metadata:
   optional: [writing-for-humans, to-web]
 ---

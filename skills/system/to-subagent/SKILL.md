@@ -1,7 +1,6 @@
 ---
 name: to-subagent
 description: Dispatch one unit of non-interactive work to a subagent as a blocking call. Use whenever work should run outside this session without the user attending it.
-argument-hint: "<the unit of work to dispatch>"
 metadata:
   optional: [staffing]
 ---

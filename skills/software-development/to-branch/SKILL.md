@@ -1,7 +1,6 @@
 ---
 name: to-branch
 description: Commit files to a branch without visiting it — no checkout, no worktree switch — and return the commit hash. Use when publishing an artifact (a spec, prototype, or dossier) to its artifact branch from a worktree that must stay on its own branch.
-argument-hint: "<branch> <file[:dest]>... -m <message>"
 metadata:
   requires: []
   optional: []

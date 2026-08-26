@@ -1,7 +1,6 @@
 ---
 name: shape
 description: Shape one ticket into a spec. Use before implementation or to resume shaping from the ticket record.
-argument-hint: "<ticket id>"
 metadata:
   requires: [domain-modeling, interview, principle-codebase-design, principle-experience-first, principle-type-system-discipline, prototype, research, to-backlog, to-branch, to-spec, to-subagent, to-web, worktree, writing-for-humans]
   optional: [typescript-best-practices]

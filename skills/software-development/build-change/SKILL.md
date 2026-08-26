@@ -1,7 +1,6 @@
 ---
 name: build-change
 description: Take one unit of work — a ready ticket, or a spec'd piece of work with no ticket — to a review-ready change request. Use in a session of its own.
-argument-hint: "<ticket id or spec reference>"
 metadata:
   requires: [adversarial-review, implement, prove-your-work, to-subagent, verify-your-work]
   optional: [diagnosing-bugs, writing-for-humans]

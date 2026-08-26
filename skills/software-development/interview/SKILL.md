@@ -1,7 +1,6 @@
 ---
 name: interview
 description: Interview the user about an idea or problem until shared understanding is real. Use to elicit and settle the decisions behind new work.
-argument-hint: "<idea, problem, or reference to intake material>"
 metadata:
   optional: [writing-for-humans, to-backlog, to-subagent]
 ---

@@ -1,7 +1,6 @@
 ---
 name: to-spec
 description: Synthesize a settled record into one self-contained HTML spec. Use after the decisions are made. Pure synthesis, no interview or publication.
-argument-hint: "[<settled record or subject>]"
 metadata:
   optional: [diagram-design, writing-for-humans]
 ---

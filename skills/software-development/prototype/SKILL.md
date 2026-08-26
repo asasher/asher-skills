@@ -1,7 +1,6 @@
 ---
 name: prototype
 description: Answer one design question with a throwaway artifact. Use to settle a state model, UI, document direction, or unproven mechanism claim that reasoning alone cannot settle. Not for building the real thing.
-argument-hint: "<design question>"
 metadata:
   optional: [writing-for-humans]
 ---

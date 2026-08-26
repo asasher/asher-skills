@@ -1,7 +1,6 @@
 ---
 name: diagnosing-bugs
 description: Diagnose defects through a tight red-capable feedback loop. Use on an observed symptom — a failure, a flake, or a slowdown. Not for speculative cleanup.
-argument-hint: "<the observed symptom>"
 metadata:
   setup: reference/setup.md
 ---

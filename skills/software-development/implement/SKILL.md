@@ -1,7 +1,6 @@
 ---
 name: implement
 description: Implement one ticket or spec'd work in the current checkout. Routes defects to diagnosing-bugs and new behavior to tdd; commits to the current branch.
-argument-hint: "<ticket id or spec reference>"
 metadata:
   requires: [diagnosing-bugs, principle-codebase-design, principle-type-system-discipline, tdd]
   optional: [typescript-best-practices]

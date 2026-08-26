@@ -1,7 +1,6 @@
 ---
 name: bayes
 description: Work a big uncertain question honestly — Bayesian updating across sessions, with the agent carrying the discipline and the math.
-argument-hint: "[new \"<question>\"] | [resume] | [list] | [frame|hunt|update|check|resolve] | [log \"<claim>\" <p%> <date>]"
 disable-model-invocation: true
 ---
 
