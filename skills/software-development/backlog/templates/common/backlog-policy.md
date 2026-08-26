@@ -2,13 +2,6 @@
 
 > Project playbook for this repo. Read by `backlog groom` (to route, merge, and dispatch shaping), `backlog build` (to select and claim ready work), `backlog status` (to rule on claims and deadlines), and build threads (to route on work-type). The skill reasons in **roles**; map this tracker's actual label names to each role below so the wording can differ per repo. On the local tracker binding (`platform.md`) the mapping is the identity — roles are the frontmatter values verbatim.
 
-## Work domain
-
-- Domain: _<software | skill-authoring | writing | research | ops | general>_.
-- Chosen at `backlog setup`, this is the kind of work this repo's backlog tracks; setup resolves which template pack fills each playbook.
-- Absent this section (an install from before domain packs existed), the domain is `software`.
-- When the chosen domain's pack was not yet shipped at install time, or a shipped pack omitted a required step, those step playbooks are `software` baselines standing in, each flagged in its own header as a code-flavored stand-in to tailor.
-
 ## Label roles
 
 Two independent axes, plus exclusions. Readiness decides _whether and who_ picks an issue up; work-type decides _how_ the agent works it.

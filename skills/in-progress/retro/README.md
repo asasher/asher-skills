@@ -7,9 +7,7 @@ any session appends via `retro note` the moment a stumble happens) and periodica
 pass**: cluster the open entries with the run transcripts behind them, triage every cluster into
 **local fix** / **upstream candidate** / **noise**, and turn the result into work.
 
-> Pre-deployment evals pass (2026-07-30): Tier 1 situated probes **10/10 on both executors** (Claude
-> sonnet subagent in-session + gpt-5.6-sol via `codex exec --sandbox read-only`, key written before
-> runs); Tier 2 scrub dry-run **9/9 checks** (`evals/scrub-dryrun.sh`).
+> The scrub dry-run passes **9/9 checks** (`evals/scrub-dryrun.sh`).
 
 The upstream half is the rare edge, and consent-gated twice: a setup-time decision (default
 **disabled**) governs whether passes may even *propose* feedback issues on the skill source repo,
@@ -45,9 +43,8 @@ subject is the skills' own performance in this repo.
 
 `SKILL.md` is the contract — ledger format, the pass, the upstream gate. `reference/setup.md` is
 the setup procedure; `templates/retro.md` the playbook it installs to `docs/agents/retro.md`;
-`scripts/scrub.py` the mechanical leak scan; `agents/openai.yaml` the Codex manifest;
-`evals/probes.md` + `evals/key.md` the pre-deployment probe eval, `evals/scrub-dryrun.sh` the
-scripted dry-run for the scrub mechanics.
+`scripts/scrub.py` the mechanical leak scan; `agents/openai.yaml` the Codex manifest; and
+`evals/scrub-dryrun.sh` the scripted dry-run for the scrub mechanics.
 
 Stateful: the `retro/` instance (ledger, the machine-local denylist half, transcript locations) is
 consumer-owned resume state, **machine-local and untracked** — setup gitignores it, since it

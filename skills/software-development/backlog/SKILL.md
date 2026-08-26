@@ -1,6 +1,6 @@
 ---
 name: backlog
-description: The backlog dispatcher — groom routes and fans shaping threads, build claims and fans build threads, status queries the fleet, setup binds and certifies.
+description: The software backlog dispatcher — groom routes and fans shaping threads, build claims and fans build threads, status queries the fleet, setup binds and certifies.
 disable-model-invocation: true
 metadata:
   requires: [build-change, shape, to-thread, worktree]

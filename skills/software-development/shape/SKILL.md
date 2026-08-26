@@ -12,14 +12,18 @@ Use the `worktree` skill to prepare or inspect a worktree on the ticket's work b
 
 Read the ticket, its linked artifacts, the project instruction file, and the project context files (`CONTEXT.md`, `PRODUCT.md`, `DESIGN.md`, ADRs). Reconstruct the design frontier from the ticket record. Re-ask nothing the record settles.
 
+Separate the desired outcome from proposed solutions and claimed requirements. For each claimed requirement, identify its source and why it exists. Keep explicit decisions in the record settled unless new evidence creates a conflict. Treat inherited process, current structure, and solution language as open design material.
+
 Use `writing-for-humans` for questions and ticket prose. Run `interview` inline, with `principle-experience-first` setting the target and `domain-modeling` tightening the language and recording terms as they settle.
+
+At each level, question, subtract, then simplify. A step, choice, state, rule, or interface earns its place when removing it would worsen an affected user's observable experience or violate a supported constraint.
 
 Work the design tree in order:
 
 1. **Users**: select the affected user types from `PRODUCT.md`. Add a new type there when the work introduces one. If the file does not exist, create it from [PRODUCT-FORMAT](./PRODUCT-FORMAT.md).
-2. **Experience**: settle what changes in what each affected user sees, touches, and does.
-3. **System behavior**: settle observable behavior shared across users or experienced indirectly.
-4. **Implementation**: apply `principle-codebase-design` to settle module ownership, interfaces, seams, and tests at those seams. For a statically typed target, apply `principle-type-system-discipline` to settle domain states, semantic identifiers, authoritative schemas, and parsing at external and network boundaries. For a TypeScript target, also use `typescript-best-practices` when available.
+2. **Experience**: map the affected part of the current core loop. Remove or merge steps, choices, and states that have not earned their place. Then settle what changes in what each affected user sees, touches, and does.
+3. **System behavior**: inspect the current process, states, and rules. Remove or merge behavior that has not earned its place. Then settle observable behavior shared across users or experienced indirectly.
+4. **Implementation**: design the coherent target as if every retained requirement had existed from the first version. Record migration, compatibility, rollout, and temporary-coexistence constraints separately. Apply `principle-codebase-design` to settle module ownership, interfaces, seams, and tests at those seams. For a statically typed target, apply `principle-type-system-discipline` to settle domain states, semantic identifiers, authoritative schemas, and parsing at external and network boundaries. For a TypeScript target, also use `typescript-best-practices` when available.
 
 Settle every decision at one level before opening the next. When users, experience, and system behavior are settled, say: "Experience is settled. Implementation is next. This is a handoff point." The user may continue or park the ticket.
 

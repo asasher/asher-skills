@@ -16,7 +16,7 @@ Build a sellable, high-fidelity, browser-only prototype of a greenfield product 
 
 ## Evals
 
-`evals/probes.md` — situated dry-run probes with an answer key (cheap pre-deployment comprehension check). `evals/build-eval.md` — one full build against a sample brief, graded on dead clicks, data realism, `@mock` coverage, and deliverable completeness.
+`evals/build-eval.md` runs one full build against a sample brief, graded on dead clicks, data realism, `@mock` coverage, and deliverable completeness.
 
 ## Credits
 

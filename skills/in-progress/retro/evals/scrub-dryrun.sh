@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tier 2 scripted dry-run for scripts/scrub.py, per docs/agents/probe-evals.md: fresh mktemp
+# Scripted dry run for scripts/scrub.py in a fresh temporary directory.
 # sandbox, never touches the repo, exit non-zero on any FAIL.
 set -u
 

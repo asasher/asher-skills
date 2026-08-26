@@ -17,7 +17,7 @@ Not for splitting a spec (`to-slices`), not for routing or readiness (grooming),
 
 ## Layout
 
-`SKILL.md` is the whole contract — the command surface (`to-backlog [<parent ticket id>]`), the method, and the capture discipline. `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
+`SKILL.md` is the whole contract — the command surface (`to-backlog [<parent ticket id>]`), the method, and the capture discipline. `agents/openai.yaml` is the Codex manifest.
 
 Self-contained at the file level; composes by name. The **label roles**, **parent/child relation**, and **tracker binding** come from the repo's project playbooks (`backlog-policy.md`, `platform.md`); `to-slices` is named only as the boundary for items that turn out to be decided directions.
 

@@ -1,6 +1,6 @@
 # Backlog
 
-Dispatcher for the tracker, with no supervisor. `groom` routes and merges unrouted and needs-shaping tickets into shapeable subjects and, **after the user confirms the plan**, fans one attended shaping thread per subject, each in its own worktree. `build` claims ready tickets, posts the dispatch declaration as the claim, fans one build thread per ticket, and exits. `status` is the pure query — claims × worktrees × change requests × deadlines → finished, stalled, abandoned, and orphans — with the teardown sweep as its action arm.
+Dispatcher for a software delivery tracker, with no supervisor. `groom` routes and merges unrouted and needs-shaping tickets into shapeable subjects and, **after the user confirms the plan**, fans one attended shaping thread per subject, each in its own worktree. `build` claims ready tickets, posts the dispatch declaration as the claim, fans one build thread per ticket, and exits. `status` is the pure query — claims × worktrees × change requests × deadlines → finished, stalled, abandoned, and orphans — with the teardown sweep as its action arm.
 
 Platform-bound: _ticket_, _label_, and _change request_ are roles, bound per repo by `docs/agents/platform.md` and `backlog-policy.md`.
 

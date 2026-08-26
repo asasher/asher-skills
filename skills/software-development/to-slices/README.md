@@ -18,7 +18,7 @@ Not for writing the direction itself — that's `to-spec`. To-slices consumes a 
 
 ## Layout
 
-`SKILL.md` is the command surface (`to-slices [<spec'd ticket id or spec path>]`) and points into `reference/`: `slicing.md` (the split method) and `template-guide.md` (the ticket contract and the split draft). `agents/openai.yaml` is the Codex manifest. `evals/probes.md` is the pre-deployment probe eval.
+`SKILL.md` is the command surface (`to-slices [<spec'd ticket id or spec path>]`) and points into `reference/`: `slicing.md` (the split method) and `template-guide.md` (the ticket contract and the split draft). `agents/openai.yaml` is the Codex manifest.
 
 Self-contained at the file level; composes by name. **Inputs** — consumes `to-spec`'s output, or a plan document, or a raw conversation — are read as documents, not imported. The **dependency convention**, the **`spec` work-type, `delivered` role, and open-children rule**, and the **tracker and branch bindings** come from the repo's project playbooks (`backlog-policy.md`, `platform.md`): to-slices emits _into_ the convention those playbooks record, and the playbooks are the only convention source it reads — everything else it consumes is the direction it was handed.
 
