@@ -3,7 +3,8 @@ name: implement
 description: Implement one ticket or spec'd work in the current checkout. Routes defects to diagnosing-bugs and new behavior to tdd; commits to the current branch.
 argument-hint: "<ticket id or spec reference>"
 metadata:
-  requires: [diagnosing-bugs, tdd]
+  requires: [diagnosing-bugs, principle-codebase-design, principle-type-system-discipline, tdd]
+  optional: [typescript-best-practices]
 ---
 
 # Implement
@@ -16,6 +17,8 @@ Implement the work described in the ticket or spec handed to this session, in th
 - **New behavior** — a feature, an enhancement — runs through the `tdd` skill at pre-agreed seams — that skill owns confirming them.
 
 ## While building
+
+Apply `principle-codebase-design` when implementation details force a module or seam decision. Keep behavior behind the smallest sufficient interface and test it at that seam. In a statically typed codebase, apply `principle-type-system-discipline` to domain models and external boundaries. For TypeScript and TSX, also use `typescript-best-practices` when available.
 
 Run typechecking and the touched test files before each commit; then the repo's formatter and linter (and dead-export check, where the repo has one) over the touched files; then the full suite once — and let each run finish before starting another in the same tree, since overlapping runs manufacture flaky failures.
 

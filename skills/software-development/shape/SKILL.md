@@ -3,7 +3,8 @@ name: shape
 description: Shape one ticket into a spec. Use before implementation or to resume shaping from the ticket record.
 argument-hint: "<ticket id>"
 metadata:
-  requires: [domain-modeling, interview, principle-experience-first, prototype, research, to-backlog, to-branch, to-spec, to-subagent, to-web, worktree, writing-for-humans]
+  requires: [domain-modeling, interview, principle-codebase-design, principle-experience-first, principle-type-system-discipline, prototype, research, to-backlog, to-branch, to-spec, to-subagent, to-web, worktree, writing-for-humans]
+  optional: [typescript-best-practices]
 ---
 
 # Shape
@@ -19,7 +20,7 @@ Work the design tree in order:
 1. **Users**: select the affected user types from `PRODUCT.md`. Add a new type there when the work introduces one. If the file does not exist, create it from [PRODUCT-FORMAT](./PRODUCT-FORMAT.md).
 2. **Experience**: settle what changes in what each affected user sees, touches, and does.
 3. **System behavior**: settle observable behavior shared across users or experienced indirectly.
-4. **Implementation**: settle seams, schema, modules, and interfaces.
+4. **Implementation**: apply `principle-codebase-design` to settle module ownership, interfaces, seams, and tests at those seams. For a statically typed target, apply `principle-type-system-discipline` to settle domain states, semantic identifiers, authoritative schemas, and parsing at external and network boundaries. For a TypeScript target, also use `typescript-best-practices` when available.
 
 Settle every decision at one level before opening the next. When users, experience, and system behavior are settled, say: "Experience is settled. Implementation is next. This is a handoff point." The user may continue or park the ticket.
 

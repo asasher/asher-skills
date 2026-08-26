@@ -1,0 +1,7 @@
+interface:
+  display_name: "TypeScript Best Practices"
+  short_description: "Apply type discipline in TypeScript code"
+  default_prompt: "Use $typescript-best-practices when designing or editing TypeScript."
+
+policy:
+  allow_implicit_invocation: true

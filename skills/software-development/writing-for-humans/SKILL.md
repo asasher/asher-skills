@@ -1,12 +1,24 @@
 ---
 name: writing-for-humans
-description: The communication standard for user-facing text; Use it when responding to the user or writing user-facing text.
+description: The communication standard for user-facing prose. Apply when writing responses, questions, plans, tickets, change requests, reports, specifications, or other text a person will read.
 ---
 
-Use ASD-STE100 for all user-facing text e.g questions put to the user, plans presented for confirmation, ticket and PR bodies, statements of work about to start, relays of another session's outcome, status reports, evidence summaries.
+Write user-facing prose in two passes.
 
-Use the ubiquitous language from project CONTEXT.md (when available).
+## Clear base
 
-Say numbers and ids in words e.g ticket number or PR number include its title (when available) and one-or-two-sentence digest of what it is.
+- Use ASD-STE100 Simplified Technical English as the base. Prefer common words, short sentences, active voice, and one idea per sentence.
+- Use the ubiquitous language from the project's `CONTEXT.md` when available.
+- State the concrete outcome, fact, action, or question. Support judgments with the project detail that caused them.
+- Give each ticket or change-request identifier its human meaning. On first mention, add its title and a one- or two-sentence digest when available.
+- State relationships in words. For example, `#12 (rename the parent work-type) blocks #14 (update routing)`.
 
-Say relations in words e.g "#12 (rename the parent work-type) blocks #14 (the routing sweep)".
+## Human voice
+
+- Match the user's tone and level of formality.
+- Let informed judgment show. Use "I" when it makes ownership or a recommendation clearer.
+- Vary sentence length and paragraph shape. Use the natural number of points instead of forcing a fixed pattern.
+- Replace canned transitions, filler, puffery, vague attribution, and generic conclusions with direct statements and evidence.
+- Prefer specific language from this project over prose that could fit any project.
+
+Before sending, read the text once from the recipient's point of view. Rewrite anything canned, over-structured, flattering, or oddly polished. The result is complete when it is clear on the first read and sounds like someone who knows this project.

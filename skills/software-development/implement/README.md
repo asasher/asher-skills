@@ -8,7 +8,7 @@ Thin routing composite: one ticket or spec'd work in, committed changes out on t
 
 ## Dependency surface
 
-Routes defects to the `diagnosing-bugs` sibling and new behavior to `tdd`; reads `docs/agents/codebase.md` when present.
+Routes defects to the `diagnosing-bugs` sibling and new behavior to `tdd`. Applies the `principle-codebase-design` and `principle-type-system-discipline` siblings, with `typescript-best-practices` for TypeScript when available. Reads `docs/agents/codebase.md` when present.
 
 ## Provenance
 
