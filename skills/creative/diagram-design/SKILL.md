@@ -1,6 +1,6 @@
 ---
 name: diagram-design
-description: Create branded architecture, IT current-state, flowchart, sequence, state machine, ER/data model, timeline, swimlane, quadrant, radar/spider, polar chart (polar/radial lollipop), loop/flywheel, nested, tree, org chart, layer stack, Venn, pyramid/funnel, treemap, bar, line, Gantt and scatter charts, high-level, process, medallion, data flow, DP integration, DP security matrix, Sankey, fishbone, Wardley map, kanban, user journey, deployment, dependency graph, UML class, story map, or database schema diagrams as standalone HTML/SVG/PNG or inline figures in a self-contained HTML artifact. Redraw .drawio/.drawio.png/.drawio.svg or Mermaid .mmd sources at a chosen size/detail; use a project's DESIGN.md, onboard brand tokens from a website, and add semantic patterns, callouts, accessible motion, or sketchy/hand-drawn styling.
+description: Create branded architecture, IT current-state, flowchart, sequence, state machine, ER/data model, timeline, swimlane, quadrant, radar/spider, polar chart (polar/radial lollipop), loop/flywheel, nested, tree, org chart, layer stack, Venn, pyramid/funnel, treemap, bar, line, Gantt and scatter charts, high-level, process, medallion, data flow, DP integration, DP security matrix, Sankey, fishbone, Wardley map, kanban, user journey, deployment, dependency graph, UML class, story map, or database schema diagrams as standalone HTML/SVG/PNG or inline figures in a self-contained HTML artifact. Redraw .drawio/.drawio.png/.drawio.svg or Mermaid .mmd sources at a chosen size/detail; use a project's DESIGN.md when available and add semantic patterns, callouts, accessible motion, or sketchy/hand-drawn styling.
 ---
 
 # Diagram Design
@@ -11,25 +11,15 @@ Thirty-nine visual types. Semantic patterns describe behavior independently; typ
 
 ---
 
-## 0. First-time setup — style guide gate
+## 0. Resolve the visual system
 
-**Before generating your first diagram in a new project, verify the style guide has been customized.**
+Resolve the effective tokens for each diagram in this order:
 
-Don't silently ship default-skinned diagrams into a branded project.
+1. Apply explicit visual choices from the current request to the roles they name.
+2. When the project root contains `DESIGN.md`, read it and map its visual system through [`references/project-design.md`](references/project-design.md).
+3. Fill the remaining roles from [`references/style-guide.md`](references/style-guide.md), which supplies the shipped defaults.
 
-First check the project root for `DESIGN.md`. When it exists, read it and resolve the effective diagram tokens through [`references/project-design.md`](references/project-design.md). This project-owned visual system takes precedence over `.diagram-design` profiles and the installed style guide. Skip the rest of this setup gate. An explicit user choice for the current diagram takes precedence over `DESIGN.md` only for the value it names.
-
-When `DESIGN.md` does not exist, continue with the profile and style-guide resolution below.
-
-First check the project root for a `.diagram-design` marker and resolve it per [`references/profiles.md`](references/profiles.md). A valid marker whose profile exists selects that file directly and skips this gate; `profile: default` also skips it. A malformed or missing-profile marker follows the visible failure handling in that reference. Never copy a marker-selected profile over the installed working copy.
-
-Open [`references/style-guide.md`](references/style-guide.md) and check the default tokens. If they're still the shipped defaults (paper `#f5f5f5`, ink `#2d3142`, accent `#eb6c36` atomic-tangerine), **pause and ask the user**:
-
-> _"This is your first diagram in this project. The style guide is still at the default (neutral white-smoke + atomic-tangerine). Do you want to customize it to match your brand first? Options: (a) pull from your website URL, (b) extract from an installed skill, (c) extract from a local folder / design-system directory, (d) paste tokens manually, (e) proceed with the default for now, (f) load a saved client profile."_
-
-Then branch per the matching section of [`references/onboarding.md`](references/onboarding.md); for **(f)** follow [`references/profiles.md`](references/profiles.md).
-
-**Once the style guide has been customized** (or the user explicitly opted for default), skip this gate on subsequent runs. A leading profile header names the copied-in active profile. Without a header, any semantic-role value or typography family differing from shipped defaults means **custom-unsaved**: skip the gate and offer to save it as a profile. All-default tokens with no marker/header trigger the gate. At the end of every onboarding method, offer to save the result as a named client profile per `references/profiles.md`.
+Resolution is complete when every color, typography, spacing, and radius role used by the selected diagram has a concrete value.
 
 ---
 
@@ -162,9 +152,9 @@ Type-specific anti-patterns live in each type reference linked in the guide.
 
 ## 5. Design System
 
-**The design system is skinnable.** All colors, typography, and tokens live in a single source of truth — [`references/style-guide.md`](references/style-guide.md). This file describes semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …). The default skin is a cool editorial palette (white-smoke paper, jet-black ink, atomic-tangerine accent, blue-slate muted, silver hairlines); to apply your own brand, either edit `style-guide.md` directly or run the URL-based flow described in [`references/onboarding.md`](references/onboarding.md).
+The effective design system comes from §0. [`references/style-guide.md`](references/style-guide.md) defines the semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …) and supplies their shipped values. A project `DESIGN.md` maps into those roles for the current artifact.
 
-> When specs below or in type references mention "ink", "accent", "muted", etc., look up the current hex value in `style-guide.md`.
+> When specs below or in type references mention "ink", "accent", "muted", etc., use the effective value resolved through §0.
 
 ### Semantic roles (at a glance)
 
@@ -513,7 +503,7 @@ Every diagram ships in three variants (see `assets/`):
 
 **Sketchy variant** (optional, applied to any of the above) — see [primitive-sketchy.md](references/primitive-sketchy.md). SVG turbulence filter wobbles strokes for a hand-drawn feel. Good for essays, not for technical docs.
 
-**Terminal variant** (optional, replaces any of the above) — see [primitive-terminal.md](references/primitive-terminal.md). Start from `assets/template-terminal.html`; terminal examples use the `example-<type>-terminal.html` naming pattern. Charcoal CLI-window chrome, monospace, one red-orange accent. Good for dev-tool posts; not brand-tokenized, so skip it for onboarded output.
+**Terminal variant** (optional, replaces any of the above) — see [primitive-terminal.md](references/primitive-terminal.md). Start from `assets/template-terminal.html`; terminal examples use the `example-<type>-terminal.html` naming pattern. It uses a fixed charcoal CLI-window palette, monospace type, and one red-orange accent. Use it for dev-tool posts. Use the light, dark, or full-editorial variant when the diagram should follow the project's `DESIGN.md`.
 
 **Animation** (optional presentation layer) — see [animation.md](references/animation.md). Modes are `none` (default), `reveal`, `step`, and `loop`; motion never changes the static meaning or raises the complexity budget.
 

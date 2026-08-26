@@ -1,6 +1,6 @@
 # Project DESIGN.md
 
-Use the project's root `DESIGN.md` as the effective visual system for every diagram generated in that project. Resolve it again for every diagram. Do not cache values across projects.
+Use the project's root `DESIGN.md` as the visual system for the current diagram. Resolve it for each artifact.
 
 ## Precedence
 
@@ -8,8 +8,7 @@ Resolve visual choices in this order:
 
 1. An explicit user choice for the current diagram, limited to the value it names.
 2. The project's `DESIGN.md`.
-3. The diagram skill's selected profile or installed style guide.
-4. The shipped default.
+3. The shipped values in `style-guide.md`.
 
 Read both the YAML tokens and the relevant prose sections. A concrete role in the prose, such as a named background or link color, is more specific than a generic YAML token.
 
@@ -33,10 +32,6 @@ Use project typography by semantic role where it is specified. Otherwise use `ty
 
 Use project spacing and radius values where they fit the diagram grammar. Connector clearance, attach-point separation, legibility, contrast, accessibility, and the complexity budget remain hard requirements when a project token would break them.
 
-When `DESIGN.md` leaves a role unspecified, fill only that role from the next source in the precedence list. Do not replace the whole project system because one token is missing.
-
-## Keep ownership clear
-
-Treat `DESIGN.md` as read-only. Do not copy its values into `references/style-guide.md`, create a client profile from it, or write inferred values back to the project. The mapping belongs only to the generated artifact.
+When `DESIGN.md` leaves a role unspecified, fill that role from `style-guide.md`. Keep the resolved mapping with the generated artifact.
 
 Before returning the diagram, verify primary and secondary text contrast against `paper`. Report any project token that required a legibility fallback.

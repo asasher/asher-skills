@@ -12,5 +12,5 @@ Create editorial diagrams as standalone HTML, SVG, or PNG files, or as inline fi
 
 - **Relationship:** vendored with local integration changes.
 - **Source:** Cathryn Lavery's MIT-licensed [`diagram-design`](https://github.com/cathrynlavery/diagram-design/tree/4faae6696c2953b59dee2b89ad89c688f80c3a67/skills/diagram-design), reviewed at commit [`4faae6696c2953b59dee2b89ad89c688f80c3a67`](https://github.com/cathrynlavery/diagram-design/commit/4faae6696c2953b59dee2b89ad89c688f80c3a67), upstream version 2.6.
-- **Local changes:** added project `DESIGN.md` precedence, embedded-figure output, this repository's interface metadata, and sibling composition from `research` and `to-spec`.
+- **Local changes:** resolves each artifact from explicit visual choices, project `DESIGN.md`, and shipped fallbacks; adds embedded-figure output, this repository's interface metadata, and sibling composition from `research` and `to-spec`.
 - **License/notices:** [LICENSE](LICENSE) and [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).

@@ -153,7 +153,7 @@ Default is page 0. When the file has several pages:
 | Unconnected nodes listed | Usually legends, titles, or abandoned boxes. Drop unless the label says otherwise; mention in the ledger if it looked meaningful. |
 | Labels are empty across the board | The source carries meaning in shape and position only. Ask the user what the boxes are — don't invent names. |
 | Source has 40+ nodes | Don't offer `faithful`. Propose overview + per-zone detail up front, before drawing anything. |
-| Source is someone else's branded diagram | Redraw in the _project's_ skin (`style-guide.md`), not the source's. Say so — it's a feature, not a bug. |
+| Source is someone else's branded diagram | Redraw with the effective tokens resolved through SKILL.md §0. Say which visual system supplied them. |
 | CJK / non-Latin labels | Font fallback per [`output-spec.md` §4](output-spec.md). Don't romanize labels. |
 
 ## Anti-patterns
