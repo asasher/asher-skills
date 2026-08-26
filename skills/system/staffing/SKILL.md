@@ -5,9 +5,9 @@ description: Different tasks require different models and how they are used. Use
 
 # Staffing
 
-Pick the type of task and its staffed fields from the table below. Keep the model and effort separate when passing them to the named route.
+Pick the type of task and its staffed fields from the table below. If a task doesn't match any of the listed types, pick the closest and inform the user.
 
-If a route is unavailable report back and stop. Otherwise report the picked model to the user using this format; omit the effort suffix when the roster leaves it unspecified:
+If a route is unavailable report back and stop. Otherwise report the picked model to the user using this format:
 
 ```
 🤖 <codex|claude|image> <model-name>[-<effort>] because <reason>
@@ -22,5 +22,5 @@ If a route is unavailable report back and stop. Otherwise report the picked mode
 | design-heavy implementation, architecture-bearing refactoring, api-design, adversarial-review, complex code-review | claude-opus-5 | high | claude-code | native |
 | research | gpt-5.6-terra | high | codex-cli | native |
 | research-synthesis | claude-fable-5 | high | claude-code | native |
-| browser-use, browser-verification, reproduction | gpt-5.6-terra | medium | codex-cli | scripted Playwright driving Chrome |
-| imagegen | gpt-image-2 | — | image-api | generation or edit endpoint |
+| browser-use, browser-verification, reproduction | gpt-5.6-terra | high | codex-cli | scripted Playwright driving Chrome |
+| imagegen | gpt-image-2 | — | codex-cli | use codex-imagegen skill when available |
