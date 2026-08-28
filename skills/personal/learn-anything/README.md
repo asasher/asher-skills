@@ -23,4 +23,5 @@ Install once per learning workspace. The skill is self-contained: all state live
 - **Source:** Matt Pocock's MIT-licensed [`teach`](https://github.com/mattpocock/skills/blob/04fee67571bc52ac58a0e59fc4924a13f61b50a6/skills/productivity/teach/SKILL.md).
 - **Borrowed:** mission/lesson decomposition and durable learning records.
 - **Local changes:** added embodied-skill coaching, instrumented feedback loops, live sessions, modalities, and drill scheduling.
+- **Science:** `reference/motor-learning.md` summarizes the motor-learning literature: Fitts & Posner's stage model, Ericsson's deliberate practice, and Wulf's attentional-focus research.
 - **License/notices:** [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).

@@ -2,7 +2,7 @@
 
 Spaced retrieval and storage strength are _declarative_-memory science; they cover the teacher hat. Physical skill runs on the motor-learning literature, which sometimes points the opposite way. These are the findings sturdy enough to build protocol on.
 
-## Stages (Fitts & Posner)
+## Stages
 
 **Cognitive → associative → autonomous.** The stage sets the coaching mode; track it per drill.
 
@@ -10,7 +10,7 @@ Spaced retrieval and storage strength are _declarative_-memory science; they cov
 - _Associative:_ the pattern exists; refinement is the work. This is where drills, interleaving, and calibrated gap measures live; most of a workspace's life is here.
 - _Autonomous:_ the skill runs without attention. Feedback thins to sampling; variability and pressure (performance contexts, human checkpoints) become the progression. Beware **overlearning past criterion** in unvaried conditions: it buys robustness cheaply at first, then plateaus; vary instead.
 
-## Deliberate practice (Ericsson)
+## Deliberate practice
 
 Practice counts when it has: a well-defined task, difficulty just past current ability, immediate feedback, and repetition with correction. Hours without those properties correlate with _time spent_, not skill. The five-part loop spec is this list operationalized. The under-quoted half: experts build **mental representations** of the target; hence exemplar study and perception-before-production are practice, not prelude.
 
@@ -26,7 +26,7 @@ Constant feedback becomes a crutch: performance rides the feedback and collapses
 
 Vary the parameters around the target (tempo, key, phrase, word-position, emotional register, floor surface) rather than drilling one frozen rep. Variation builds the _schema_, not the instance, and is the main defense against skills that work in the practice room and nowhere else.
 
-## Attentional focus (Wulf)
+## Attentional focus
 
 External-focus cues (the effect in the world: the click, the back wall, the floor) reliably beat internal-focus cues (the body part) for both performance and retention, across skill levels and domains. This is one of the most replicated results in the field: write cues external-first, always.
 
