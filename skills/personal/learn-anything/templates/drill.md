@@ -14,7 +14,7 @@ status: active          # active | consolidating | maintenance | retired
 
 - **Target:** <!-- which exemplar, exactly (file in exemplars/) -->
 - **Trap:** <!-- how a rep is captured; the rig/ script or physical setup, one command -->
-- **Gap measure:** <!-- how it's scored — and its fidelity label:
+- **Gap measure:** <!-- how it's scored, and its fidelity label:
   machine-objective | agent-perceptual | self-assessment (rubric in rubrics/) | human -->
 - **Drill:** <!-- the micro-task, small enough that one rep can fail for exactly one reason -->
 - **Progression:** <!-- criterion to ratchet, the next variant, and the regression variant -->
@@ -30,5 +30,5 @@ status: active          # active | consolidating | maintenance | retired
 
 ## Revision log
 
-<!-- One line per design change: what about THIS LOOP'S DESIGN was wrong and what changed — not learner
+<!-- One line per design change: what about THIS LOOP'S DESIGN was wrong and what changed, not learner
      progress (that's history/practice-log). Format: - YYYY-MM-DD: <what was wrong> → <what changed> -->

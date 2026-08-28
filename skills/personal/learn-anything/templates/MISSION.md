@@ -4,7 +4,7 @@
 
 ## What good looks like
 
-<!-- Pointers to exemplars/ — the concrete performances this mission is aimed at matching. -->
+<!-- Pointers to exemplars/: the concrete performances this mission is aimed at matching. -->
 
 ## Constraints
 
