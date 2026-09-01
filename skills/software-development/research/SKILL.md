@@ -2,7 +2,7 @@
 name: research
 description: Research one decision-relevant question from primary sources and produce a cited, auditable HTML dossier. Use to establish source-backed facts or fact-check a claim, not to decide what to do.
 metadata:
-  optional: [diagram-design, writing-for-humans]
+  optional: [diagram-design, technical-writing]
 ---
 
 # Research
@@ -15,4 +15,4 @@ metadata:
 
 Return the dossier path, concise answer, material unknowns and contradictions, as-of boundary, and audit result. Leave the downstream decision open.
 
-Use `writing-for-humans` for the dossier and returned prose.
+Use `technical-writing` for the dossier and returned prose.

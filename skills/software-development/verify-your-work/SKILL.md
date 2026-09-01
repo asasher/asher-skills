@@ -2,7 +2,7 @@
 name: verify-your-work
 description: Verify a named set of changes does what it claims and report findings with evidence. Use after building and before a change request exists.
 metadata:
-  optional: [writing-for-humans, to-web]
+  optional: [technical-writing, to-web]
 ---
 
 # Verify Your Work
@@ -40,6 +40,6 @@ Run each check and capture the exact command, its output, and its own exit statu
 
 ## Report
 
-The report follows the `writing-for-humans` sibling; absent it, write plainly and say the standard was not loaded.
+The report follows the `technical-writing` sibling; absent it, write plainly and say the standard was not loaded.
 
 Per claim — keyed to its criterion id where the ticket has them: what was checked, the command, pass or fail, and for failures the evidence quoted — the failing output, the wrong screen, the broken state. A failure also present before the change, proven by the same check against the base commit, is reported as **pre-existing** — a distinct verdict from a failure the change caused. Log any deviation from the environment playbook alongside the checks it touched. End with the one-line verdict: which claims passed, which failed, which are not verified.

@@ -2,7 +2,7 @@
 name: to-slices
 description: Split a decided direction — a spec'd ticket, a spec or plan document, or the current conversation — into backlog-ready tracer-bullet tickets with blocking edges. Runs only on the user's explicit call. Not for writing the direction itself.
 metadata:
-  optional: [writing-for-humans]
+  optional: [technical-writing]
 ---
 
 # To-Slices
@@ -11,7 +11,7 @@ To-slices owns one move: **take a decided direction and split it into backlog-re
 
 The defining posture: **recommend with reasons, then let the user edit.**
 
-User-facing text follows the `writing-for-humans` sibling. Absent it, write plainly and say the standard was not loaded.
+Ticket and split-draft text follows the `technical-writing` sibling. Absent it, write plainly and say the standard was not loaded.
 
 ## Command surface
 

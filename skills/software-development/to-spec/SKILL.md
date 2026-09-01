@@ -2,14 +2,14 @@
 name: to-spec
 description: Synthesize a settled record into one self-contained HTML spec. Use after the decisions are made. Pure synthesis, no interview or publication.
 metadata:
-  optional: [diagram-design, writing-for-humans]
+  optional: [diagram-design, technical-writing]
 ---
 
 # To spec
 
 Turn settled material into the spec it earned. Record choices; make none. Undecided points become Notes, never questions.
 
-Use the `writing-for-humans` skill for the spec.
+Use the `technical-writing` skill for the spec.
 
 1. **Reconcile the record.** Start with the shaping record, then include settled decisions from the current conversation and sweep each decision-informing artifact into Supporting artifacts. The latest explicit ruling wins. Omit superseded requirements, discarded options, and discussion that did not become direction. When revising a spec, read the previous approved revision and preserve each `AC-N` identifier's meaning; amend in place, append, or retire without reusing its identifier.
 2. **Write one self-contained HTML spec** in this order:

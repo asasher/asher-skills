@@ -3,7 +3,7 @@ name: build-change
 description: Take one unit of work — a ready ticket, or a spec'd piece of work with no ticket — to a review-ready change request. Use in a session of its own.
 metadata:
   requires: [adversarial-review, implement, prove-your-work, to-subagent, verify-your-work]
-  optional: [diagnosing-bugs, writing-for-humans]
+  optional: [diagnosing-bugs, technical-writing]
 ---
 
 # Build Change
@@ -12,7 +12,7 @@ Run one unit of work to a review-ready change request in one worktree. The unit 
 
 **Stage dispatch is synchronous.** Every stage dispatch is a blocking call whose return is the stage's result. Stages that can run at once are several blocking calls in one turn — they run concurrently and return together. Never dispatch a stage to walk away from.
 
-User-facing text — the change request description, reports, tracker comments — follows the `writing-for-humans` sibling. Absent it, write plainly and say the standard was not loaded.
+User-facing text — the change request description, reports, tracker comments — follows the `technical-writing` sibling. Absent it, write plainly and say the standard was not loaded.
 
 ## 0. Provision
 

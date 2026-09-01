@@ -5,6 +5,7 @@
 - Run `bun format:fix` after significant edits
 - Push early and often
 - When using a skill authored in this authoring repo we don't install it but use it directly from the `skills/` repo. We only install skills into this repo that are external and useful.
+- Keep the README's Install section in sync with `skills/`: the copy-paste command and the agent prompt list the full shipped family (every skill outside `in-progress`). A skill added, renamed, split, or removed means those lists change in the same change.
 
 Read these files when needed:
 

@@ -4,17 +4,23 @@ Skills that I made or that I like. This is a single repo that I can use to insta
 
 ## Install
 
-Installing is two jobs — mount the skills, then run each one's setup against the repo it landed in — so hand it to an agent. Paste this into whichever coding agent you use, in the repository you want the skills in:
+Installing is two jobs — mount the skills, then run each one's setup against the repo it landed in — so hand it to an agent. The family installs together; this command mounts every shipped skill:
+
+```sh
+npx skills add github:asasher/asher-skills --skill adversarial-review agent-ready-codebase backlog bare-minimum-design bayes build-change code-review codex-imagegen constraints diagnosing-bugs diagram-design dissolve domain-modeling handoff implement interview learn-anything maquette merge-change principle-codebase-design principle-experience-first principle-type-system-discipline prototype prove-your-work relay research shadixfy shape skill-loop staffing tdd technical-writing to-backlog to-branch to-slices to-spec to-subagent to-tailnet to-thread to-web typescript-best-practices unslop verify-your-work watch-until watch-video worktree writing-for-humans
+```
+
+The mount is the easy half; the setups need judgment, so hand the whole job to an agent. Paste this into whichever coding agent you use, in the repository you want the skills in:
 
 ```text
 Install Asher's skills into this repository, and finish the job.
 
-1. From the repository root, run:
-       npx skills add github:asasher/asher-skills --skill backlog build-change staffing
-   That list is a default — if I have named a different set, use mine, and ask me
-   before running anything if you are unsure which skills I want. Each skill's
-   SKILL.md names the sibling skills it composes with; install those too so the
-   set is closed.
+1. From the repository root, run the install command from
+   https://github.com/asasher/asher-skills#install — it mounts the entire
+   family. If I have named a smaller set, use mine instead, and ask me before
+   running anything if you are unsure which skills I want. Each skill's
+   SKILL.md names the sibling skills it composes with; when installing a
+   subset, install those siblings too so the set is closed.
 2. For each installed skill, read its SKILL.md. If it declares a setup, run that
    setup now, in an order that respects who writes what (backlog's setup writes
    the shared playbooks, so it goes first). A setup writes and reconciles this
@@ -96,7 +102,9 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | software-development | `to-thread` | model | primitive |
 | software-development | `to-branch` | model | primitive |
 | software-development | `to-web` | model | primitive |
+| software-development | `technical-writing` | model | reference |
 | software-development | `typescript-best-practices` | model | reference |
+| software-development | `unslop` | model | reference |
 | software-development | `verify-your-work` | model | primitive |
 | software-development | `watch-until` | model | primitive |
 | software-development | `worktree` | model | primitive |
@@ -109,7 +117,6 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | personal | `review-opportunities` | user | primitive |
 | in-progress | `goodwork` | model | primitive |
 | in-progress | `retro` | model | composite |
-| in-progress | `writing-technical-docs` | model | primitive |
 
 ## Skills I Like
 

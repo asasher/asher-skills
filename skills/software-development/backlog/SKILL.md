@@ -4,7 +4,7 @@ description: The software backlog dispatcher — groom routes and fans shaping t
 disable-model-invocation: true
 metadata:
   requires: [build-change, shape, to-thread, worktree]
-  optional: [merge-change, writing-for-humans, retro, agent-ready-codebase]
+  optional: [merge-change, writing-for-humans, technical-writing, retro, agent-ready-codebase]
   setup: reference/setup.md
 ---
 
@@ -14,7 +14,7 @@ A dispatcher with no supervisor; the tracker is the run ledger.
 
 Nouns are roles: _ticket_, _label_, _change request_ are bound to this repo's real tracker, review surface, and version control by `docs/agents/platform.md`; label roles, dependency edges, deadlines, and readiness by `docs/agents/backlog-policy.md`; the repo's agent-readiness answers by `docs/agents/environment.md`. Missing playbooks: run `backlog setup` first — don't improvise them.
 
-User-facing text follows the `writing-for-humans` sibling — groom plans and status reports are its densest consumers here. Absent that sibling, write plainly and say the standard was not loaded.
+Chat text follows the `writing-for-humans` sibling — groom plans and status reports are its densest consumers here. Tracker writes (ticket bodies, merged bodies) follow the `technical-writing` sibling. Absent either sibling, write plainly and say the standard was not loaded.
 
 **Friction is noted as it happens.** A stumble in this loop — an instruction misread, a confirmation the user had to repeat, a stale playbook row, a workaround that shouldn't have been needed — is recorded the moment it shows via the `retro` sibling's note verb, and a run's end is the sweep for anything unnoted. When the note verb reports a retro pass due, relay that report and stop — running the pass is never this dispatcher's call. Absent the `retro` sibling, friction goes unrecorded: say so once when there was something worth noting, then move on.
 

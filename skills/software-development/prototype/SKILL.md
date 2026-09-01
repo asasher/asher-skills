@@ -2,14 +2,14 @@
 name: prototype
 description: Answer one design question with a disposable artifact. Use to settle a state model, UI, document direction, or unproven mechanism claim that reasoning alone cannot settle.
 metadata:
-  optional: [writing-for-humans]
+  optional: [technical-writing]
 ---
 
 # Prototype
 
 Build the smallest disposable artifact that answers one design question.
 
-Use `writing-for-humans` for the artifact and returned prose.
+Use `technical-writing` for the artifact and returned prose.
 
 ## Gates
 

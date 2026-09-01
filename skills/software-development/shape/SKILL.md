@@ -2,7 +2,7 @@
 name: shape
 description: Shape one ticket into a spec. Use before implementation or to resume shaping from the ticket record.
 metadata:
-  requires: [domain-modeling, interview, principle-codebase-design, principle-experience-first, principle-type-system-discipline, prototype, research, to-backlog, to-branch, to-spec, to-subagent, to-web, worktree, writing-for-humans]
+  requires: [domain-modeling, interview, principle-codebase-design, principle-experience-first, principle-type-system-discipline, prototype, research, technical-writing, to-backlog, to-branch, to-spec, to-subagent, to-web, worktree, writing-for-humans]
   optional: [typescript-best-practices]
 ---
 
@@ -14,7 +14,7 @@ Read the ticket, its linked artifacts, the project instruction file, and the pro
 
 Separate the desired outcome from proposed solutions and claimed requirements. For each claimed requirement, identify its source and why it exists. Keep explicit decisions in the record settled unless new evidence creates a conflict. Treat inherited process, current structure, and solution language as open design material.
 
-Use `writing-for-humans` for questions and ticket prose. Run `interview` inline, with `principle-experience-first` setting the target and `domain-modeling` tightening the language and recording terms as they settle.
+Use `writing-for-humans` for questions and `technical-writing` for ticket prose. Run `interview` inline, with `principle-experience-first` setting the target and `domain-modeling` tightening the language and recording terms as they settle.
 
 At each level, question, subtract, then simplify. A step, choice, state, rule, or interface earns its place when removing it would worsen an affected user's observable experience or violate a supported constraint.
 

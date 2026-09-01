@@ -2,14 +2,14 @@
 name: prove-your-work
 description: Assemble the evidence that a change works and post it where the merge decision happens. Use when a change request is ready and the decider won't be watching the work live.
 metadata:
-  optional: [writing-for-humans, to-web]
+  optional: [technical-writing, to-web]
 ---
 
 # Prove Your Work
 
 Assemble the evidence package for a finished change. The audience is the **decider** — whoever merges without having watched the work: the package must let them decide from the evidence alone.
 
-The package's text follows the `writing-for-humans` sibling. Absent it, write plainly and say the standard was not loaded.
+The package's text follows the `technical-writing` sibling. Absent it, write plainly and say the standard was not loaded.
 
 ## What the package carries
 
