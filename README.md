@@ -110,11 +110,7 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | software-development | `worktree` | model | primitive |
 | software-development | `writing-for-humans` | model | reference |
 | personal | `learn-anything` | user | primitive |
-| personal | `manage-notes` | model | primitive |
-| personal | `manage-opportunities` | model | primitive |
-| personal | `manage-tasks` | model | primitive |
 | personal | `relay` | model | primitive |
-| personal | `review-opportunities` | user | primitive |
 | in-progress | `goodwork` | model | primitive |
 | in-progress | `retro` | model | composite |
 
