@@ -5,7 +5,7 @@
 - Run `bun format:fix` after significant edits
 - Push early and often
 - When using a skill authored in this authoring repo we don't install it but use it directly from the `skills/` repo. We only install skills into this repo that are external and useful.
-- Keep the README's Install section in sync with `skills/`: the copy-paste command and the agent prompt list the full shipped family (every skill outside `in-progress`). A skill added, renamed, split, or removed means those lists change in the same change.
+- Keep the README's Install section in sync with `skills/`: the copy-paste command and the agent prompt list the software development lifecycle family and its supporting skills — every skill in `software-development` and `system`, plus siblings in other categories that those skills name (today: `bare-minimum-design`, `diagram-design`). Creative, thinking, and personal skills are the appendix and stay out of the command. A skill added, renamed, split, or removed means the command changes in the same change.
 
 Read these files when needed:
 

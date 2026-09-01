@@ -4,11 +4,13 @@ Skills that I made or that I like. This is a single repo that I can use to insta
 
 ## Install
 
-Installing is two jobs — mount the skills, then run each one's setup against the repo it landed in — so hand it to an agent. The family installs together; this command mounts every shipped skill:
+Installing is two jobs — mount the skills, then run each one's setup against the repo it landed in — so hand it to an agent. The main point of this repository is the software development lifecycle family; it installs together with its supporting skills, and this command mounts all of it:
 
 ```sh
-npx skills add github:asasher/asher-skills --skill adversarial-review agent-ready-codebase backlog bare-minimum-design bayes build-change code-review codex-imagegen constraints diagnosing-bugs diagram-design dissolve domain-modeling handoff implement interview learn-anything maquette merge-change principle-codebase-design principle-experience-first principle-type-system-discipline prototype prove-your-work relay research shadixfy shape skill-loop staffing tdd technical-writing to-backlog to-branch to-slices to-spec to-subagent to-tailnet to-thread to-web typescript-best-practices unslop verify-your-work watch-until watch-video worktree writing-for-humans
+npx skills add github:asasher/asher-skills --skill adversarial-review agent-ready-codebase backlog bare-minimum-design build-change code-review diagnosing-bugs diagram-design domain-modeling handoff implement interview merge-change principle-codebase-design principle-experience-first principle-type-system-discipline prototype prove-your-work research shape skill-loop staffing tdd technical-writing to-backlog to-branch to-slices to-spec to-subagent to-tailnet to-thread to-web typescript-best-practices unslop verify-your-work watch-until worktree writing-for-humans
 ```
+
+The other categories — creative, thinking, personal — are the appendix: browse the catalog and install what you want by name.
 
 The mount is the easy half; the setups need judgment, so hand the whole job to an agent. Paste this into whichever coding agent you use, in the repository you want the skills in:
 
@@ -16,11 +18,12 @@ The mount is the easy half; the setups need judgment, so hand the whole job to a
 Install Asher's skills into this repository, and finish the job.
 
 1. From the repository root, run the install command from
-   https://github.com/asasher/asher-skills#install — it mounts the entire
-   family. If I have named a smaller set, use mine instead, and ask me before
-   running anything if you are unsure which skills I want. Each skill's
-   SKILL.md names the sibling skills it composes with; when installing a
-   subset, install those siblings too so the set is closed.
+   https://github.com/asasher/asher-skills#install — it mounts the software
+   development lifecycle family and its supporting skills. If I have named a
+   different set, use mine instead, and ask me before running anything if you
+   are unsure which skills I want. Each skill's SKILL.md names the sibling
+   skills it composes with; when installing a subset, install those siblings
+   too so the set is closed.
 2. For each installed skill, read its SKILL.md. If it declares a setup, run that
    setup now, in an order that respects who writes what (backlog's setup writes
    the shared playbooks, so it goes first). A setup writes and reconciles this
