@@ -9,6 +9,6 @@
 Read these files when needed:
 
 - [CONTEXT](./CONTEXT.md) is the ubiquitous language for this repo, this is shared vocabulary for you and the user to have a shared understanding as you design and work on this repo.
-- [writing-for-humans](./skills/software-development/writing-for-humans/SKILL.md) for all user facing prose.
+- [unslop](./skills/software-development/unslop/SKILL.md) for all user facing text, [writing-for-humans](./skills/software-development/writing-for-humans/SKILL.md) when replying to a person, and [technical-writing](./skills/software-development/technical-writing/SKILL.md) for specs, tickets, change requests, reports, and documentation.
 - [SKILL-MECHANICS](./docs/agents/SKILL-MECHANICS.md) apply when authoring a skill
-- [GIVING-CREDIT](./docs/agents/GIVING_CREDIT.md) when we re-use or are heavily inspired by external content, we should credit the original source.
+- [GIVING-CREDIT](./docs/agents/GIVING-CREDIT.md) when we re-use or are heavily inspired by external content, we should credit the original source.

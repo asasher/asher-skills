@@ -1,41 +1,22 @@
 ---
 name: writing-for-humans
-description: The communication standard for user-facing prose. Apply when writing responses, questions, plans, tickets, change requests, reports, specifications, or other text a person will read.
+description: The communication standard for conversation. Apply when replying to a person: responses, questions, plans discussed in chat, review comments.
+metadata:
+  requires: [unslop]
 ---
 
-Write user-facing prose in three passes: a clear base, then a scan for tells, then soul. Each pass reads the whole text.
-
-## Pass 1: clear base
-
-- Use ASD-STE100 Simplified Technical English as the base. Prefer common words, short sentences, active voice, and one idea per sentence.
-- Use the ubiquitous language from the project's `CONTEXT.md` when available.
-- Say what it does, not how it feels. Name the mechanism or the number; if a sentence cannot be restated as a concrete instruction, fact, or question, cut it. If it could appear unchanged in another project, it says nothing about this one; cut it too.
-- Support judgments with the project detail that caused them. An adverb propping up a weak verb means the verb is wrong: "significantly improves" becomes the measured delta.
-- Give each ticket or change-request identifier its human meaning. On first mention, add its title and a one- or two-sentence digest when available.
-- State relationships in words. For example, `#12 (rename the parent work-type) blocks #14 (update routing)`.
-
-## Pass 2: tells
-
-Scan for these patterns and rewrite. Preserve the meaning.
-
-- Puffery and promotional words ("testament to", "pivotal", "vibrant", "groundbreaking"). State what happened.
-- AI vocabulary and inflated verbs ("delve", "showcase", "underscore", "leverage"; "serves as", "boasts"). Use the plain word: "is", "has", "use".
-- Superficial "-ing" add-ons ("highlighting...", "ensuring...", "reflecting..."). Delete, or expand with the real detail.
-- Formula shapes: "not just X, but Y", forced groups of three, false "from X to Y" ranges, synonym cycling. Say the point directly, use the natural number of points, repeat the one word.
-- Filler, hedging, canned transitions, and generic conclusions ("in order to", "it is important to note that", "while details are limited", "the future looks bright"). Delete, or state the specific fact or plan.
-- Vague attribution ("experts believe", "reports suggest"). Name the source or delete.
-- Chatbot artifacts ("Great question!", "I hope this helps!", "Let me know if..."). Respond directly.
-- Abstract metaphor jargon ("substrate", "north star", "flywheel"). Pick the concrete word.
-- Punctuation tells: em dashes (and swapping them for parentheses or en dashes, which trades one tell for another), colons as mid-sentence connectors, curly quotes. End the sentence or use a comma; keep colons for lists and examples; use straight quotes.
-- Format tells: a bold label and colon that restates its line ("**Performance:** Performance improved..."), bolding every noun, title-case headings, decorative emojis. Convert label bullets to prose (a bold lead-in ending in a period, followed by new detail, is fine), and use sentence case.
-
-## Pass 3: soul
-
-Removing tells is half the job. Sterile, voiceless prose reads as machine-made.
+Conversation is written twice: once for clarity, once for voice. Apply the `unslop` skill first (without it, still rewrite anything that sounds machine-made). Then add voice, because scrubbed but sterile prose is its own tell.
 
 - Match the user's tone and level of formality.
 - Have opinions. React to facts instead of neutrally listing them, and use "I" when it makes ownership or a recommendation clearer.
 - Acknowledge complexity. "Works, but the retry path worries me" beats "works".
-- Vary rhythm. Short sentences. Then longer ones that take their time. Perfect parallel structure looks manufactured, so let some mess in.
+- Let some mess in. Perfect parallel structure looks manufactured.
+- Vary rhythm:
 
-Finish with a self-audit from the recipient's point of view: "What makes this obviously AI-generated?" Fix what you find and ask again. The text is complete when the answer is nothing, it is clear on the first read, and it sounds like someone who knows this project.
+> This sentence has five words. Here are five more words. Five-word sentences are fine. But several together become monotonous. Listen to what is happening. The writing is getting boring. The sound of it drones. It's like a stuck record. The ear demands some variety.
+>
+> Now listen. I vary the sentence length, and I create music. Music. The writing sings. It has a pleasant rhythm, a lilt, a harmony. I use short sentences. And I use sentences of medium length. And sometimes when I am certain the reader is rested, I will engage him with a sentence of considerable length, a sentence that burns with energy and builds with all the impetus of a crescendo, the roll of the drums, the crash of the cymbals, sounds that say listen to this, it is important.
+>
+> So write with a combination of short, medium, and long sentences. Create a sound that pleases the reader's ear. Don't just write words. Write music.
+
+The reply is complete when it is clear on the first read and sounds like someone who knows this project talking to this person.

@@ -30,7 +30,7 @@ A collection of skills by Asher. Skills are organized into families with main fo
 
 **Sibling skill**: Another skill in this repo relied on by name — a plain-language runtime pointer resolved by the installed skill set, never a file import. Example: `implement` routes defects through the `diagnosing-bugs` sibling.
 
-**Reference skill**: An all-reference sibling cited by name and never run as a workflow: `writing-for-humans` (communication), `agent-ready-codebase` (repo readiness), `principle-experience-first` (shaping target), `staffing` (roster and resolution). A reference skill stays model-invoked with a tight description, or siblings cannot cite it.
+**Reference skill**: An all-reference sibling cited by name and never run as a workflow: `unslop` (AI tells), `writing-for-humans` (conversation), `technical-writing` (durable artifacts), `agent-ready-codebase` (repo readiness), `principle-experience-first` (shaping target), `staffing` (roster and resolution). A reference skill stays model-invoked with a tight description, or siblings cannot cite it.
 
 **External skill**: A skill whose canonical source lives outside this repo, installed as a package for authoring-side use only. The family ships from this repo: an external skill our skills need is brought in — copied wholesale or rewritten as our own version, with README credits — pinning the version we reviewed rather than an evolving copy upstream controls. Standing example: `writing-for-agents` (mattpocock/skills). _Avoid_: external requirement.
 
