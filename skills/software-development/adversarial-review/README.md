@@ -1,6 +1,6 @@
 # Adversarial Review
 
-Converges a change request to LGTM by alternating bounded reviewer and fixer passes, sequenced by a driver until convergence or a bound — see SKILL.md. Use once a change request exists and should reach LGTM without a human driving the loop.
+Converges a PR to LGTM by alternating bounded reviewer and fixer passes, sequenced by a driver until convergence or a bound — see SKILL.md. Use once a PR exists and should reach LGTM without a human driving the loop.
 
 ## Provenance
 

@@ -9,4 +9,4 @@ The red â†’ green loop with the discipline that makes its tests worth keeping â€
 ## Provenance
 
 - **Source:** Matt Pocock's MIT-licensed [`tdd`](https://github.com/mattpocock/skills/tree/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/tdd) (SKILL.md adapted; `tests.md` and `mocking.md` copied). License in `THIRD_PARTY_LICENSES.md`.
-- **Local changes:** seams confirmable against a ticket/spec when no user is present; the refactoring rule no longer routes to a named review skill.
+- **Local changes:** seams confirmable against an issue or spec when no user is present; the refactoring rule no longer routes to a named review skill.

@@ -1,6 +1,6 @@
 ---
 name: technical-writing
-description: The writing standard for durable artifacts. Apply when writing specs, tickets, change requests, reports, or documentation.
+description: The writing standard for durable artifacts. Apply when writing specs, issues, PRs, reports, or documentation.
 metadata:
   requires: [unslop]
 ---
@@ -23,7 +23,7 @@ Apply the `unslop` skill to strip AI patterns (without it, still rewrite anythin
 - One name per concept and one concept per name, taken from the project's `CONTEXT.md` when it exists.
 - Break up noun clusters past three words: "the timeout for the queue retry", not "queue retry timeout configuration value".
 - Give every "it", "this", and "they" one obvious referent; repeat the noun when in doubt.
-- Give each ticket or change-request identifier its human meaning. On first mention, add its title and a one- or two-sentence digest.
+- Give each issue or PR identifier its human meaning. On first mention, add its title and a one- or two-sentence digest.
 - State relationships in words: `#12 (rename the parent work-type) blocks #14 (update routing)`.
 
 ## Paragraphs

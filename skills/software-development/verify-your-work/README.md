@@ -1,14 +1,15 @@
 # Verify Your Work
 
-The verification discipline for freshly built changes: establish the claims (explicit and implicit), pick the proof that would catch each one failing, run it, capture command and output, and report a per-claim verdict with evidence. The spec declares which checks are durable suite tests and which are throwaway scaffolding scripts — a shaping decision the verifier executes, never makes. The verifier never fixes; the fix belongs to whoever owns the changes.
+The verification discipline for freshly built changes and for merged work checked against its spec: establish the claims (explicit and implicit, including that the seed reaches a new feature), pick the proof that would catch each one failing, run it, capture command and output, and report a per-claim verdict with evidence. Checks are guards (durable, in the suite) or throwaway verification scripts (dropped, their run kept as evidence); the spec or the builder declares which. The verifier never fixes; the fix belongs to whoever owns the changes.
 
 ## When to use
 
-- Changes exist and need checking before a change request is created — typically run by a fresh pair of eyes so the builder's assumptions don't verify themselves.
+- Changes exist and need checking before a PR is created, run by a fresh pair of eyes so the builder's assumptions do not verify themselves.
+- A spec issue's children have all merged and the whole needs checking against the spec.
 
 ## Dependency surface
 
-Composes with the optional `to-web` and `writing-for-humans` siblings; reads `docs/agents/environment.md` and `docs/agents/codebase.md` when present.
+Composes with the optional `to-web` and `technical-writing` siblings; reads `docs/agents/environment.md` when present.
 
 ## Provenance
 

@@ -2,18 +2,17 @@
 name: to-thread
 description: Spawn a named session in the outermost harness. Use when a unit of work should continue in its own attended session from T3 Code, Claude Code, or Codex.
 metadata:
-  requires: [worktree]
-  optional: [writing-for-humans]
+  optional: [worktree, writing-for-humans]
 ---
 
 # To Thread
 
-Spawn one named, interactive session in the outermost harness, verify it is alive, and tell the user how to attach. The outermost harness owns the session; nothing flows back to this one, outcomes land in the tracker.
+Spawn one named, interactive session in the outermost harness, verify it is alive, and tell the user how to attach. The outermost harness owns the session; nothing flows back to this one, outcomes land on the issues.
 
 ## Shared contract — every route
 
 - **Name** — short, human, specific (`shape-142-driver-payouts`, not `session-2`).
-- **Prompt** — standalone. The thread sees none of this conversation: state the goal, inputs by path or ticket id, what done looks like, and any skill it should run.
+- **Prompt** — standalone. The thread sees none of this conversation: state the goal, inputs by path or issue id, what done looks like, and any skill it should run.
 - **Directory** — run in the supplied directory exactly. Isolation only when explicitly requested and no prepared directory was supplied: use the `worktree` sibling first and dispatch inside its returned path — the caller is provisional owner until spawn, the spawned thread then owns merge/cleanup, and its standalone prompt says so.
 - **Model and effort** — the dispatching session's current model and effort, passed explicitly. The user never leaves their outermost harness — a thread is the user's own seat continuing elsewhere, so staffing is never consulted for threads; the roster staffs only unattended subagent work. A user-specified override wins.
 - **Permission mode** — pass the mode selected for this session explicitly.

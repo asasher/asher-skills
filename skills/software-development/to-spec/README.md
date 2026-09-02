@@ -1,6 +1,6 @@
 # To spec
 
-Synthesizes a conversation or shaping record that already reached a decision into one self-contained HTML spec. It writes the artifact as untracked scratch and returns its path, summary, Notes, and fidelity result. Interview, publication, ticket projection, and approval stay outside this skill.
+Synthesizes a conversation or shaping record that already reached a decision into one self-contained HTML spec. It writes the artifact as untracked scratch and returns its path, summary, Notes, and fidelity result. Interview, publication, issue projection, and approval stay outside this skill.
 
 ## Shape
 

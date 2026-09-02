@@ -4,11 +4,11 @@ Interviews the user relentlessly until shared understanding is real, walking the
 
 ## When to use
 
-- An idea, problem, PDF, or half-formed direction needs its decisions surfaced and settled before spec, tickets, or a build.
+- An idea, problem, PDF, or half-formed direction needs its decisions surfaced and settled before spec, issues, or a build.
 
 ## Dependency surface
 
-Composes with three optional siblings: `writing-for-humans` for user-facing text, `to-subagent` for fact lookups, and `to-backlog` for off-tree captures.
+Composes with three optional siblings: `writing-for-humans` for user-facing text, `to-subagent` for fact lookups, and `capture` for off-tree items.
 
 ## Provenance
 

@@ -1,6 +1,6 @@
 ---
 name: adversarial-review
-description: Converge a change request to LGTM through alternating reviewer and fixer passes. Use once a change request exists and needs review pressure without a human in the loop.
+description: Converge a PR to LGTM through alternating reviewer and fixer passes. Use once a PR exists and needs review pressure without a human in the loop.
 metadata:
   requires: [code-review, to-subagent]
   optional: [diagnosing-bugs]
@@ -8,7 +8,7 @@ metadata:
 
 # Adversarial Review
 
-Two roles converge on one change request: a reviewer that re-reviews until a pass is clean, and a fixer that addresses findings until LGTM lands. The change request is their only shared state — findings, fixes, and the verdict all live in its comments and commits.
+Two roles converge on one PR: a reviewer that re-reviews until a pass is clean, and a fixer that addresses findings until LGTM lands. The PR is their only shared state — findings, fixes, and the verdict all live in its comments and commits.
 
 The session running this skill is the **driver**. Each role runs as one bounded pass dispatched via the `to-subagent` skill.
 
@@ -33,7 +33,7 @@ A pass that has returned is complete: act on its report. No confirmation follows
 
 An iteration cap (default: three full review passes) and a timeout (named by the caller, defaulting to one hour), both enforced by the driver on the passes it dispatches. The caller may size the cap to the change: the default suits a contained change; a large or multi-surface change warrants naming a larger cap at dispatch rather than planning on extensions. On the timeout, stop and report the open findings as unresolved; at the cap, do the same unless the § Cap exhaustion ruling below authorizes a bounded extension.
 
-The driver names each pass's deadline in its `to-subagent` dispatch, so a pass that outlives it comes back as the dispatch's timeout return, waking the driver. A pass that dies without returning is re-dispatched from the change request's persisted state (conduct § Shared rules), picking up with the next expected actor.
+The driver names each pass's deadline in its `to-subagent` dispatch, so a pass that outlives it comes back as the dispatch's timeout return, waking the driver. A pass that dies without returning is re-dispatched from the PR's persisted state (conduct § Shared rules), picking up with the next expected actor.
 
 ## Cap exhaustion
 

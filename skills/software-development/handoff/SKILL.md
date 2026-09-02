@@ -10,7 +10,7 @@ Compact the current conversation into a handoff document so a fresh agent can re
 
 Include a "suggested skills" section, naming the skills the next agent should invoke.
 
-Reference content already captured in other artifacts (specs, plans, ADRs, tickets, commits, diffs) by path or URL rather than copying it.
+Reference content already captured in other artifacts (specs, plans, ADRs, issues, commits, diffs) by path or URL rather than copying it.
 
 Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
 

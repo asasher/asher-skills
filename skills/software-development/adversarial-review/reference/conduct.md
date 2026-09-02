@@ -1,23 +1,23 @@
 # Reviewer and fixer conduct
 
-The briefs both dispatched roles carry. The change request is the only shared state; these rules are what make that enough.
+The briefs both dispatched roles carry. The PR is the only shared state; these rules are what make that enough.
 
 ## Shared rules
 
-- Before any work: identify the change request, its ticket, branch, current head SHA, and the latest persisted state comment.
+- Before any work: identify the PR, its issue, branch, current head SHA, and the latest persisted state comment.
 - Each dispatch is one bounded pass: do the pass's work, persist state, return the report to the driver. No role watches for the other — the driver sequences the passes.
-- After each pass, persist state on the change request via the platform's comment verb: role, iteration count, last-seen SHA, status, next expected actor. Either side can die and be respawned from this record alone. Every SHA in a comment is read at writing time — `git rev-parse HEAD`, or the platform's own read — never retyped from another comment or from memory.
-- A report that cannot reach the driver is posted on the change request instead — the outcome lands where the next reader looks, never only in a return value.
+- After each pass, persist state on the PR with `gh pr comment`: role, iteration count, last-seen SHA, status, next expected actor. Either side can die and be respawned from this record alone. Every SHA in a comment is read at writing time — `git rev-parse HEAD`, or `gh pr view --json headRefOid` — never retyped from another comment or from memory.
+- A report that cannot reach the driver is posted on the PR instead — the outcome lands where the next reader looks, never only in a return value.
 - The loop's stops — `LGTM`, the iteration cap, the timeout — are the driver's to enforce; a pass ends by returning its report.
 
 ## Reviewer
 
-- Comments only — its entire output is findings on the change request; **never edits code**.
+- Comments only — its entire output is findings on the PR; **never edits code**.
 - Each pass runs the `code-review` skill — both axes — against the current head. Rank findings by severity; every finding carries file, line, and a concrete failure scenario or cost, not a vibe.
 - Comment conduct: one comment per finding, anchored to its location; no restating the diff; judgement calls labelled as judgement calls.
 - **The LGTM bar:** a **clean pass** — no new findings — with every prior finding fixed, its pushback accepted by this pass, or settled by an explicit ruling; a reply alone does not clear a finding. Nothing else lowers the bar — not effort spent, not iteration fatigue, not the cap approaching.
-- **The verdict names its head:** LGTM states the SHA the pass reviewed — the approval covers that head and nothing after it. The platform's required checks are part of the pass: their status at verdict time is stated, and a failing required check holds the LGTM back; a pending one is named so the merge gate knows what it's waiting on.
-- **Product-semantics ruling:** when a finding reveals a real product question — what the behavior _should_ be, not whether the code does it — stop without resolving it and surface the question plus evidence on the change request for a human ruling. Only an explicit ruling goes onward. Neither role invents behavior.
+- **The verdict names its head:** LGTM states the SHA the pass reviewed — the approval covers that head and nothing after it. The PR's required checks (`gh pr checks`) are part of the pass: their status at verdict time is stated, and a failing required check holds the LGTM back; a pending one is named so the merge gate knows what it's waiting on.
+- **Product-semantics ruling:** when a finding reveals a real product question — what the behavior _should_ be, not whether the code does it — stop without resolving it and surface the question plus evidence on the PR for a human ruling. Only an explicit ruling goes onward. Neither role invents behavior.
 
 ## Fixer
 

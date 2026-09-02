@@ -7,7 +7,7 @@ Skills that I made or that I like. This is a single repo that I can use to insta
 Installing is two jobs — mount the skills, then run each one's setup against the repo it landed in — so hand it to an agent. The main point of this repository is the software development lifecycle family; it installs together with its supporting skills, and this command mounts all of it:
 
 ```sh
-npx skills add github:asasher/asher-skills --skill adversarial-review agent-ready-codebase backlog bare-minimum-design build-change code-review diagnosing-bugs diagram-design domain-modeling handoff implement interview merge-change principle-codebase-design principle-experience-first principle-type-system-discipline prototype prove-your-work research shape skill-loop staffing tdd technical-writing to-backlog to-branch to-slices to-spec to-subagent to-tailnet to-thread to-web typescript-best-practices unslop verify-your-work watch-until worktree writing-for-humans
+npx skills add github:asasher/asher-skills --skill adversarial-review agent-ready-codebase backlog bare-minimum-design capture code-review deliver diagnosing-bugs diagram-design domain-modeling handoff implement interview merge principle-codebase-design principle-experience-first principle-type-system-discipline prototype prove-your-work research retro shape staffing tdd technical-writing to-branch to-slices to-spec to-subagent to-thread to-web typescript-best-practices unslop verify-your-work worktree writing-for-humans
 ```
 
 The other categories — creative, thinking, personal — are the appendix: browse the catalog and install what you want by name.
@@ -25,8 +25,9 @@ Install Asher's skills into this repository, and finish the job.
    skills it composes with; when installing a subset, install those siblings
    too so the set is closed.
 2. For each installed skill, read its SKILL.md. If it declares a setup, run that
-   setup now, in an order that respects who writes what (backlog's setup writes
-   the shared playbooks, so it goes first). A setup writes and reconciles this
+   setup now: backlog's setup writes docs/agents/environment.md, certifies the
+   repo against agent-ready-codebase, and creates the labels, so it goes first;
+   retro's setup asks for consent. A setup writes and reconciles this
    repository's playbooks — the files under docs/agents/ the skills read at
    runtime — so work from what this repository actually does, edit an existing
    playbook rather than replacing it, and ask me when a setup needs a decision
@@ -39,7 +40,7 @@ Install Asher's skills into this repository, and finish the job.
    products, and the next install rewrites them.
 ```
 
-The setups are the half that needs judgment: they bind role nouns like _tracker_, _change request_, and _base branch_ to what this particular repository uses, and they sometimes have to ask.
+The setups are the half that needs judgment: they record how this repository runs, seeds, authenticates, and proves itself, and they sometimes have to ask. The platform itself is fixed: GitHub issues and PRs, git, an S3-compatible bucket.
 
 ## Reconcile
 
@@ -63,12 +64,14 @@ There is no first-party installer and no install-state file — the changelog is
 
 ## Catalog
 
-Categories organize source browsing. Skill names, `--skill <name>`, sibling references, and installed directories remain flat and unchanged. Invocation and execution are independent axes. `user` means **explicit-only**: a human, orchestrator, or delegated prompt must name the skill. `model` also permits a working thread to discover the skill when needed. `reference` skills are model-invoked but never run as workflows — siblings cite them by name.
+Categories organize source browsing. Skill names, `--skill <name>`, sibling references, and installed directories remain flat and unchanged. Invocation and execution are independent axes. `user` means **explicit-only**: a human, orchestrator, or delegated prompt must name the skill. `model` also permits a working thread to discover the skill when needed. `reference` skills are model-invoked but never run as workflows — siblings cite them by name, and citing one does not make the citer a composite.
 
 | Category | Skill | Invocation | Kind |
 | --- | --- | --- | --- |
 | system | `skill-loop` | user | orchestrator |
 | system | `staffing` | model | reference |
+| system | `to-subagent` | model | composite |
+| system | `to-thread` | model | composite |
 | creative | `bare-minimum-design` | model | reference |
 | creative | `codex-imagegen` | model | primitive |
 | creative | `diagram-design` | model | primitive |
@@ -81,41 +84,38 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | software-development | `adversarial-review` | model | orchestrator |
 | software-development | `agent-ready-codebase` | model | reference |
 | software-development | `backlog` | user | orchestrator |
-| software-development | `build-change` | model | orchestrator |
-| software-development | `code-review` | model | primitive |
+| software-development | `capture` | model | composite |
+| software-development | `code-review` | model | composite |
+| software-development | `deliver` | model | orchestrator |
 | software-development | `diagnosing-bugs` | model | primitive |
 | software-development | `domain-modeling` | model | primitive |
 | software-development | `handoff` | user | primitive |
 | software-development | `implement` | model | composite |
-| software-development | `interview` | model | primitive |
-| software-development | `merge-change` | user | composite |
+| software-development | `interview` | model | composite |
+| software-development | `merge` | user | composite |
 | software-development | `principle-codebase-design` | model | reference |
 | software-development | `principle-experience-first` | model | reference |
 | software-development | `principle-type-system-discipline` | model | reference |
-| software-development | `prototype` | model | composite |
+| software-development | `prototype` | model | primitive |
 | software-development | `prove-your-work` | model | composite |
 | software-development | `research` | model | composite |
+| software-development | `retro` | model | composite |
 | software-development | `shape` | model | orchestrator |
 | software-development | `tdd` | model | primitive |
-| software-development | `to-backlog` | model | primitive |
+| software-development | `technical-writing` | model | reference |
+| software-development | `to-branch` | model | primitive |
 | software-development | `to-slices` | user | primitive |
 | software-development | `to-spec` | model | composite |
-| software-development | `to-subagent` | model | composite |
-| software-development | `to-tailnet` | user | primitive |
-| software-development | `to-thread` | model | primitive |
-| software-development | `to-branch` | model | primitive |
 | software-development | `to-web` | model | primitive |
-| software-development | `technical-writing` | model | reference |
 | software-development | `typescript-best-practices` | model | reference |
 | software-development | `unslop` | model | reference |
 | software-development | `verify-your-work` | model | primitive |
-| software-development | `watch-until` | model | primitive |
 | software-development | `worktree` | model | primitive |
 | software-development | `writing-for-humans` | model | reference |
 | personal | `learn-anything` | user | primitive |
 | personal | `relay` | model | primitive |
+| personal | `to-tailnet` | user | primitive |
 | in-progress | `goodwork` | model | primitive |
-| in-progress | `retro` | model | composite |
 
 ## Skills I Like
 

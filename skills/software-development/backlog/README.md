@@ -1,22 +1,24 @@
 # Backlog
 
-Dispatcher for a software delivery tracker, with no supervisor. `groom` routes and merges unrouted and needs-shaping tickets into shapeable subjects and, **after the user confirms the plan**, fans one attended shaping thread per subject, each in its own worktree. `build` claims ready tickets, posts the dispatch declaration as the claim, fans one build thread per ticket, and exits. `status` is the pure query — claims × worktrees × change requests × deadlines → finished, stalled, abandoned, and orphans — with the teardown sweep as its action arm.
+Dispatcher for a GitHub-tracked software backlog, with no supervisor. Every verb sweeps the issues for the units it applies to, confirms a plan with the user, and fans one run of a skill per unit: `capture` runs the `capture` skill on the conversation; `groom` routes and merges unrouted issues into subjects and fans one attended `shape` thread per subject; `build` claims ready, unblocked issues and fans one `deliver` thread per issue; `retro` runs the `retro` pass. `status` is the pure query over claims, worktrees, PRs, and deadlines, with the teardown sweep as its action arm; `setup` writes the environment playbook and creates the labels.
 
-Platform-bound: _ticket_, _label_, and _change request_ are roles, bound per repo by `docs/agents/platform.md` and `backlog-policy.md`.
+The verb skills work on one unit each and run on their own. Labels, claims, deadlines, and branch names are fixed in `reference/labels.md`; the repo's own facts live in the one playbook, `docs/agents/environment.md`.
 
 ## Use
 
 ```bash
-backlog groom            # route, merge, confirm — then fan shaping threads
-backlog groom 42 51      # just these tickets
-backlog build            # claim ready tickets, declare, fan build threads, exit
-backlog build 42         # just this ticket
-backlog status           # the pure query over claims, worktrees, and deadlines
-backlog setup            # bindings, choices, agent-readiness certification
+backlog capture          # this conversation's loose items into issues
+backlog groom            # route, merge, confirm, then fan shaping threads
+backlog groom 42 51      # just these issues
+backlog build            # claim ready issues, declare, fan build threads, exit
+backlog build 42         # just this issue
+backlog retro            # the friction pass
+backlog status           # claims × worktrees × PRs × deadlines
+backlog setup            # environment playbook, certification, labels
 ```
 
-Merging the change requests that builds produce stays a separate, explicit human authorization — the `merge-change` skill.
+Merging stays a separate, explicit human authorization: the `merge` skill.
 
 ## Dependency surface
 
-Composes with the `worktree`, `to-thread`, `shape`, and `build-change` siblings (optionally `merge-change`, `retro`, `writing-for-humans`, `agent-ready-codebase`), and reads the `docs/agents/` playbooks its `setup` installs and reconciles.
+Composes with the `capture`, `shape`, `deliver`, `retro`, `to-thread`, and `worktree` siblings (optionally `merge`, `agent-ready-codebase`, `writing-for-humans`, `technical-writing`), and reads the `docs/agents/environment.md` playbook its `setup` installs and reconciles.

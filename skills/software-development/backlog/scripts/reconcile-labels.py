@@ -1,48 +1,32 @@
 #!/usr/bin/env python3
-"""Reconcile role-label colors and descriptions on a color-capable tracker (GitHub).
-
-Applies the backlog skill's shared label scheme — the Label colors table in
-templates/common/backlog-policy.md; a repo's docs/agents/backlog-policy.md may
-override it, and the agent running setup passes those overrides as flags.
-
-Touches only role labels (by default only ones that already exist); every other
-label on the tracker is neutral and never modified. Trackers without label
-colors have nothing to reconcile.
-
+"""Reconcile the backlog family's label colors and descriptions on GitHub.
+Applies the fixed scheme in reference/labels.md. Touches only the family's
+labels (by default only ones that already exist); every other label on the
+repo is never modified.
 Usage:
   reconcile-labels.py [--repo owner/name] [--dry-run] [--create]
                       [--label role=name ...] [--color role=hex ...]
                       [--description role=text ...]
 """
-
 import argparse
 import json
 import subprocess
 import sys
 
-# role -> (color without '#', tracker description). Canonical source: the
-# Label colors table in templates/common/backlog-policy.md — keep in sync.
+# label -> (color without '#', description). Canonical source: the Label
+# colors table in reference/labels.md; keep in sync.
 SCHEME = {
-    # Readiness / ownership — saturated, temperature-coded parked -> flying.
-    "needs-shaping": ("D93F0B", "Parked for strategic shaping: unsettled product/scope decisions; never selectable by backlog build"),
+    # Readiness: saturated, temperature-coded parked -> flying.
+    "needs-shaping": ("D93F0B", "Parked for shaping: unsettled product or scope decisions; never selected by backlog build"),
     "shaping": ("FBCA04", "A shaping thread is attending this issue; set by backlog groom at dispatch"),
     "needs-info": ("D876E3", "Parked, waiting on the reporter"),
-    "ready-for-agent": ("0E8A16", "Groomed and released: an agent may work it; requires a work-type and dispatch metadata"),
-    "ready-for-human": ("5319E7", "Human-only; agents skip. Also the abort target for verify caps and environment blockers"),
+    "ready-for-agent": ("0E8A16", "Released: an agent may work it; requires a work-type"),
+    "ready-for-human": ("5319E7", "Human-only; agents skip. Also the handback target for blockers"),
     "building": ("1D76DB", "Claimed: a build thread owns it; the claim comment is the dispatch declaration with its deadline"),
-    "delivered": ("008672", "Merged into its feature branch, awaiting promotion; closed natively by the promotion PR's Closes lines"),
-    # Work-type — pastel attributes; bug and spec are the saturated exceptions.
+    # Work-type: pastel; bug and spec are the saturated exceptions.
     "bug": ("D73A4A", "Something isn't working"),
     "enhancement": ("A2EEEF", "New feature or request"),
-    "refactor": ("C5DEF5", "Work-type: behavior-preserving structure or code improvement"),
-    "research": ("D4C5F9", "Work-type: primary-source research with traceable claims"),
-    "draft": ("FEF2C0", "Work-type: judgment-terminal produce-and-review; done at the human review verdict"),
-    "spec": ("8250DF", "Work-type: parent of slices; coverage check once children are closed or delivered"),
-    # Exclusions — grayscale, terminal.
-    "duplicate": ("CFD3D7", "This issue or pull request already exists"),
-    "superseded": ("BFBFBF", "Replaced by newer work; removed from grooming and the run queue"),
-    "invalid": ("E4E669", "This doesn't seem right"),
-    "wontfix": ("FFFFFF", "This will not be worked on"),
+    "spec": ("8250DF", "Parent of a split: coverage check and promotion PR once every child is closed"),
 }
 
 
@@ -69,8 +53,8 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="report what would change, change nothing")
     ap.add_argument("--create", action="store_true", help="also create missing role labels (with the user's consent)")
     ap.add_argument("--label", action="append", metavar="ROLE=NAME", help="this repo's label name for a role")
-    ap.add_argument("--color", action="append", metavar="ROLE=HEX", help="repo playbook color override, no '#'")
-    ap.add_argument("--description", action="append", metavar="ROLE=TEXT", help="repo playbook description override")
+    ap.add_argument("--color", action="append", metavar="ROLE=HEX", help="color override, no '#'")
+    ap.add_argument("--description", action="append", metavar="ROLE=TEXT", help="description override")
     args = ap.parse_args()
 
     repo = args.repo or json.loads(run(["gh", "repo", "view", "--json", "nameWithOwner"]).stdout)["nameWithOwner"]

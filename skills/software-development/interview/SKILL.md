@@ -2,7 +2,7 @@
 name: interview
 description: Interview the user about an idea or problem until shared understanding is real. Use to elicit and settle the decisions behind new work.
 metadata:
-  optional: [writing-for-humans, to-backlog, to-subagent]
+  optional: [writing-for-humans, capture, to-subagent]
 ---
 
 # Interview
@@ -17,6 +17,6 @@ Work the tree in **rounds**. The **frontier** is every decision whose prerequisi
 
 Finding **facts** is your job, never the user's. When a frontier question needs a fact from the environment (filesystem, tools, docs), dispatch a lookup via the `to-subagent` skill (absent it, look it up in-session). A running lookup is an unsettled prerequisite: only its downstream questions wait for the subagent to report — ask the rest of the frontier now. The **decisions** are the user's — put each to them and wait.
 
-An interview also surfaces **off-tree** items — real work outside this tree's subject: a bug mentioned in passing, an adjacent idea. Offer them to the `to-backlog` skill for capture (absent it, list them explicitly at the close).
+An interview also surfaces **off-tree** items — real work outside this tree's subject: a bug mentioned in passing, an adjacent idea. Offer them to the `capture` skill (absent it, list them explicitly at the close).
 
 The session is done when the frontier is empty — every assumption surfaced as a decision — and the user confirms shared understanding.

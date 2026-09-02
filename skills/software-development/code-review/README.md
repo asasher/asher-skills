@@ -4,9 +4,9 @@ Two-axis diff review since a base ref: **Standards** (documented repo standards 
 
 ## Dependency surface
 
-Composes with the optional `to-subagent` sibling for axis dispatch and reads the tracker binding in `docs/agents/platform.md`; the smell baseline and structural bar are bundled under `reference/`.
+Composes with the optional `to-subagent` sibling for axis dispatch; reads the issue with `gh` and the spec from the issue's artifact branch at its blessed hash; the smell baseline and structural bar are bundled under `reference/`.
 
 ## Provenance
 
 - **Sources:** Matt Pocock's MIT-licensed [`code-review`](https://github.com/mattpocock/skills/tree/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/code-review) (two-axis structure, smell baseline, aggregation rules); Cursor's MIT-licensed [`thermo-nuclear-code-quality-review`](https://github.com/cursor/plugins/blob/a29f5a8ca161b1de4ffc5484454958bebc04eaa5/cursor-team-kit/skills/thermo-nuclear-code-quality-review/SKILL.md) (the structural bar: ambition directive, presumptive blockers, remedies, weighting, clean-pass criteria). Licenses in `THIRD_PARTY_LICENSES.md`.
-- **Local changes:** dispatch through `to-subagent` with an in-session degrade; base ref defaults to the change request base or merge-base with the default branch; spec discovery reads the repo's `docs/agents/platform.md` binding and registered specs location.
+- **Local changes:** dispatch through `to-subagent` with an in-session degrade; base ref defaults to the PR base or merge-base with the default branch; spec discovery reads the issue's spec projection.

@@ -1,7 +1,7 @@
 interface:
   display_name: "Shape"
-  short_description: "Shape one ticket through interview, isolated research and prototypes, and a published spec"
-  default_prompt: "Use $shape to settle this ticket's decisions and publish its spec."
+  short_description: "Shape one issue through interview, isolated research and prototypes, and a blessed spec, splitting it on approval"
+  default_prompt: "Use $shape to settle this issue's decisions and publish its spec."
 
 policy:
   allow_implicit_invocation: true

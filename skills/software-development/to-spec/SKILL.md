@@ -25,4 +25,4 @@ Use the `technical-writing` skill for the spec.
 5. **Classify Notes.** Mark each unresolved point as **blocking** (shaping must settle it), **delegated** (the executor may choose within a named boundary), or **deferred** (parked with a named home). A blocking Note means the direction is not ready to publish or build.
 6. **Audit fidelity both ways.** Confirm that every current material decision, requirement, exclusion, assumption, and unresolved point is represented, and that every statement in the spec traces to the settled record. Report contradictions or omissions as failures.
 
-Write one untracked scratch file. Return its path, a concise summary, classified Notes, and the fidelity result. Do not publish it or change a ticket.
+Write one untracked scratch file. Return its path, a concise summary, classified Notes, and the fidelity result. Do not publish it or change an issue.

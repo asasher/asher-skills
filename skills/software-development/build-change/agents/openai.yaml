@@ -1,7 +1,0 @@
-interface:
-  display_name: "Build Change"
-  short_description: "One unit of work to a review-ready change request: implement, verify and fix, change request, adversarial review, evidence"
-  default_prompt: "Use $build-change to run this unit of work to a review-ready change request."
-
-policy:
-  allow_implicit_invocation: true

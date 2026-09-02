@@ -1,6 +1,6 @@
 # Diagnosis — six phases
 
-Work the phases in order; skip one only with the justification recorded in the **durable work record** — the ticket, change request, or other artifact standing as this work's record; absent one, a note committed beside the work.
+Work the phases in order; skip one only with the justification recorded in the **durable work record** — the issue, PR, or other artifact standing as this work's record; absent one, a note committed beside the work.
 
 ## 1. Build a red-capable feedback loop
 

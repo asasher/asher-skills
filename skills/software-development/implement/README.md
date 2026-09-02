@@ -1,14 +1,14 @@
 # Implement
 
-Thin routing composite: one ticket or spec'd work in, committed changes out on the current branch.
+Thin routing composite: one issue or spec'd work in, committed changes out on the current branch.
 
 ## When to use
 
-- A single ticket or spec'd work needs building in the current checkout.
+- A single issue or spec'd work needs building in the current checkout.
 
 ## Dependency surface
 
-Routes defects to the `diagnosing-bugs` sibling and new behavior to `tdd`. Applies the `principle-codebase-design` and `principle-type-system-discipline` siblings, with `typescript-best-practices` for TypeScript when available. Reads `docs/agents/codebase.md` when present.
+Routes defects to the `diagnosing-bugs` sibling and new behavior to `tdd`. Applies the `principle-codebase-design` and `principle-type-system-discipline` siblings, with `typescript-best-practices` for TypeScript when available. Reads `docs/agents/environment.md` § Checks when present.
 
 ## Provenance
 

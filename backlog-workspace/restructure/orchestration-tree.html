@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The backlog family, restructured</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #f5f5f5;
+      --color-ink:     #2d3142;
+      --color-muted:   #4f5d75;
+      --color-accent:  #eb6c36;
+      --color-rule:    rgba(45,49,66,0.12);
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Instrument Serif', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle { color: var(--color-muted); font-size: 0.95rem; max-width: 720px; margin-bottom: 2.5rem; line-height: 1.5; }
+    figure { margin-bottom: 3rem; }
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+    }
+    svg { width: 100%; min-width: 900px; display: block; }
+    .cards { display: grid; grid-template-columns: 1.1fr 1fr 0.9fr; gap: 1rem; margin-bottom: 2.5rem; }
+    .card {
+      background: #ffffff;
+      border: 1px solid var(--color-rule);
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+    .card .eyebrow { margin-bottom: 0.75rem; }
+    .card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .card-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-ink); }
+    .card-dot.coral { background: var(--color-accent); }
+    .card-dot.muted { background: var(--color-muted); }
+    .card h3 { font-size: 0.95rem; font-weight: 600; }
+    .card ul { list-style: none; font-size: 0.85rem; line-height: 1.55; color: var(--color-muted); }
+    .card li { margin-bottom: 0.4rem; }
+    .card li code, .subtitle code { font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-ink); }
+    footer {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+      border-top: 1px solid var(--color-rule);
+      padding-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Org chart + trees · Diagram Design</p>
+    <h1>The backlog family, restructured</h1>
+    <p class="subtitle">Three figures. The first shows the orchestration scale: <code>backlog</code> is thin, each verb fans one run of a skill that works on exactly one unit and can be invoked on its own. The next two expand the two verb skills that compose the most, <code>shape</code> and <code>deliver</code>. Names in boxes are installed skill names.</p>
+
+    <!-- ============================== FIGURE 1 ============================== -->
+    <figure>
+      <p class="eyebrow">Figure 1 · Orchestration scale</p>
+      <h2>One orchestrator, one skill per verb</h2>
+      <svg viewBox="0 0 1000 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="orchestration-title orchestration-desc">
+        <title id="orchestration-title">The backlog orchestrator and the skill each verb fans</title>
+        <desc id="orchestration-desc">Org chart showing the backlog orchestrator at the top fanning four verb skills, capture, shape, deliver, and retro, with merge below as a separate human-authorized gate that receives the review-ready PR.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/></marker>
+          <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- connectors first -->
+        <path d="M 500 80 V 128" fill="none" stroke="#4f5d75" stroke-width="1"/>
+        <path d="M 220 128 H 780" fill="none" stroke="#4f5d75" stroke-width="1"/>
+        <path d="M 220 128 A 8 8 0 0 0 212 136 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow)"/>
+        <path d="M 404 128 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow)"/>
+        <path d="M 596 128 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow)"/>
+        <path d="M 780 128 A 8 8 0 0 1 788 136 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow)"/>
+        <path d="M 596 224 V 288" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow)"/>
+        <rect x="604" y="248" width="56" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="608" y="257" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.06em">PR READY</text>
+
+        <!-- callouts -->
+        <text x="36" y="44" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">status and setup stay inside backlog:</text>
+        <text x="36" y="62" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">a query and a playbook writer,</text>
+        <text x="36" y="80" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">not units of work.</text>
+        <text x="700" y="44" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">deliver is a placeholder name:</text>
+        <text x="700" y="62" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">the installer rejects a skill</text>
+        <text x="700" y="80" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">directory named build.</text>
+
+        <!-- root: backlog (focal) -->
+        <rect x="340" y="32" width="320" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="340" y="32" width="320" height="48" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+        <rect x="348" y="38" width="32" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.40)" stroke-width="0.8"/>
+        <text x="364" y="47" fill="rgba(235,108,54,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ORCH</text>
+        <text x="500" y="58" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">backlog</text>
+        <text x="500" y="70" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">capture · groom · build · retro · status · setup</text>
+
+        <!-- tier 1: verb skills -->
+        <!-- capture -->
+        <rect x="132" y="176" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="132" y="176" width="160" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="140" y="182" width="40" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="160" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">capture</text>
+        <text x="212" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">capture</text>
+        <text x="212" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">conversation → tickets</text>
+        <!-- shape -->
+        <rect x="324" y="176" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="324" y="176" width="160" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="332" y="182" width="40" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="352" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">groom</text>
+        <text x="404" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">shape</text>
+        <text x="404" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ticket → blessed spec</text>
+        <!-- deliver -->
+        <rect x="516" y="176" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="516" y="176" width="160" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="524" y="182" width="40" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="544" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">build</text>
+        <text x="596" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">deliver</text>
+        <text x="596" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ticket → review-ready PR</text>
+        <!-- retro -->
+        <rect x="708" y="176" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="708" y="176" width="160" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="716" y="182" width="40" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="736" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">retro</text>
+        <text x="788" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">retro</text>
+        <text x="788" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">friction → fixes</text>
+
+        <!-- gate: merge (security treatment) -->
+        <rect x="516" y="288" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="516" y="288" width="160" height="48" rx="6" fill="rgba(235,108,54,0.05)" stroke="rgba(235,108,54,0.50)" stroke-width="1" stroke-dasharray="4,4"/>
+        <rect x="524" y="294" width="32" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.40)" stroke-width="0.8"/>
+        <text x="540" y="303" fill="rgba(235,108,54,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GATE</text>
+        <text x="596" y="314" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">merge</text>
+        <text x="596" y="326" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">PR → main · human asks</text>
+
+        <!-- legend -->
+        <line x1="30" y1="392" x2="970" y2="392" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <text x="30" y="408" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+        <rect x="110" y="400" width="24" height="12" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+        <text x="142" y="409" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">orchestrator</text>
+        <rect x="290" y="400" width="24" height="12" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="322" y="409" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">verb skill · one unit each</text>
+        <rect x="530" y="400" width="24" height="12" rx="2" fill="rgba(235,108,54,0.05)" stroke="rgba(235,108,54,0.50)" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="562" y="409" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">human gate</text>
+        <text x="700" y="409" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">tag = the backlog verb that fans it</text>
+      </svg>
+    </figure>
+
+    <!-- ============================== FIGURE 2 ============================== -->
+    <figure>
+      <p class="eyebrow">Figure 2 · shape</p>
+      <h2>Shape: one ticket to a blessed spec</h2>
+      <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="shape-tree-title shape-tree-desc">
+        <title id="shape-tree-title">The skills shape composes</title>
+        <desc id="shape-tree-desc">Tree showing shape at the root with four children: interview with domain-modeling run inline, research and prototype dispatched to fresh subagent contexts, to-spec then to-slices run inline, and to-branch with to-web publishing every artifact.</desc>
+        <defs>
+          <marker id="arrow-s" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- connectors -->
+        <path d="M 500 80 V 128" fill="none" stroke="#4f5d75" stroke-width="1"/>
+        <path d="M 160 128 H 840" fill="none" stroke="#4f5d75" stroke-width="1"/>
+        <path d="M 160 128 A 8 8 0 0 0 152 136 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-s)"/>
+        <path d="M 384 128 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-s)"/>
+        <path d="M 616 128 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-s)"/>
+        <path d="M 840 128 A 8 8 0 0 1 848 136 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-s)"/>
+
+        <!-- callouts -->
+        <text x="36" y="44" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">Every artifact is HTML: dossier, prototype, spec.</text>
+        <text x="36" y="62" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">Committed on the ticket's artifact branch, served</text>
+        <text x="36" y="80" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">from the bucket, linked on the ticket.</text>
+        <text x="660" y="44" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">An approved split makes it a spec ticket:</text>
+        <text x="660" y="62" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">children as sub-issues, the spec ticket</text>
+        <text x="660" y="80" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">blocked by each child.</text>
+
+        <!-- root: shape (focal) -->
+        <rect x="400" y="32" width="200" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="400" y="32" width="200" height="48" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+        <rect x="408" y="38" width="32" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.40)" stroke-width="0.8"/>
+        <text x="424" y="47" fill="rgba(235,108,54,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">VERB</text>
+        <text x="500" y="58" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">shape</text>
+        <text x="500" y="70" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">one ticket → blessed spec</text>
+
+        <!-- child 1: interview · domain-modeling (inline) -->
+        <rect x="52" y="176" width="200" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="52" y="176" width="200" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="60" y="182" width="36" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="78" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">INLINE</text>
+        <text x="152" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">interview · domain-modeling</text>
+        <text x="152" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">questions in rounds · terms recorded</text>
+
+        <!-- child 2: research · prototype (subagent) -->
+        <rect x="284" y="176" width="200" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="284" y="176" width="200" height="48" rx="6" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+        <rect x="292" y="182" width="48" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.40)" stroke-width="0.8"/>
+        <text x="316" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SUBAGENT</text>
+        <text x="384" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">research · prototype</text>
+        <text x="384" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">one question each · fresh context</text>
+
+        <!-- child 3: to-spec · to-slices (inline) -->
+        <rect x="516" y="176" width="200" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="516" y="176" width="200" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="524" y="182" width="36" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="542" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">INLINE</text>
+        <text x="616" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">to-spec · to-slices</text>
+        <text x="616" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">the HTML spec, then the split</text>
+
+        <!-- child 4: to-branch · to-web (inline) -->
+        <rect x="748" y="176" width="200" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="748" y="176" width="200" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="756" y="182" width="36" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="774" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">INLINE</text>
+        <text x="848" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">to-branch · to-web</text>
+        <text x="848" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">artifact branch + bucket + ticket</text>
+
+        <!-- legend -->
+        <line x1="30" y1="272" x2="970" y2="272" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <text x="30" y="288" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+        <rect x="110" y="280" width="24" height="12" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+        <text x="142" y="289" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">the skill this figure expands</text>
+        <rect x="350" y="280" width="24" height="12" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="382" y="289" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">runs inline, in this session</text>
+        <rect x="590" y="280" width="24" height="12" rx="2" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="622" y="289" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">fresh context via to-subagent</text>
+      </svg>
+    </figure>
+
+    <!-- ============================== FIGURE 3 ============================== -->
+    <figure>
+      <p class="eyebrow">Figure 3 · deliver</p>
+      <h2>Deliver: one ticket to a review-ready PR</h2>
+      <svg viewBox="0 0 1000 432" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="deliver-tree-title deliver-tree-desc">
+        <title id="deliver-tree-title">The skills deliver composes, in stage order</title>
+        <desc id="deliver-tree-desc">Tree showing deliver at the root with four stages left to right: implement dispatched to a subagent and routing to tdd or diagnosing-bugs, verify-your-work dispatched to a subagent, adversarial-review driven inline with code-review passes in subagents, and prove-your-work dispatched to a subagent and uploading screenshots through to-web.</desc>
+        <defs>
+          <marker id="arrow-d" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- connectors -->
+        <path d="M 500 80 V 128" fill="none" stroke="#4f5d75" stroke-width="1"/>
+        <path d="M 220 128 H 780" fill="none" stroke="#4f5d75" stroke-width="1"/>
+        <path d="M 220 128 A 8 8 0 0 0 212 136 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-d)"/>
+        <path d="M 404 128 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-d)"/>
+        <path d="M 596 128 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-d)"/>
+        <path d="M 780 128 A 8 8 0 0 1 788 136 V 176" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-d)"/>
+        <path d="M 212 224 V 288" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-d)"/>
+        <path d="M 596 224 V 288" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-d)"/>
+        <path d="M 788 224 V 288" fill="none" stroke="#4f5d75" stroke-width="1" marker-end="url(#arrow-d)"/>
+
+        <!-- callouts -->
+        <text x="36" y="44" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">Deliver owns the worktree and fixes what</text>
+        <text x="36" y="62" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">the verifier finds; the heavy lifting</text>
+        <text x="36" y="80" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">runs in fresh contexts.</text>
+        <text x="700" y="44" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">On a spec ticket the same stages run</text>
+        <text x="700" y="62" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">on the spec branch against the merged</text>
+        <text x="700" y="80" fill="#4f5d75" font-size="14" font-family="'Instrument Serif', serif" font-style="italic">children, then open the promotion PR.</text>
+
+        <!-- root: deliver (focal) -->
+        <rect x="420" y="32" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="420" y="32" width="160" height="48" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+        <rect x="428" y="38" width="32" height="12" rx="2" fill="transparent" stroke="rgba(235,108,54,0.40)" stroke-width="0.8"/>
+        <text x="444" y="47" fill="rgba(235,108,54,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">VERB</text>
+        <text x="500" y="58" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">deliver</text>
+        <text x="500" y="70" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">one ticket → review-ready PR</text>
+
+        <!-- tier 1 -->
+        <!-- implement (subagent) -->
+        <rect x="132" y="176" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="132" y="176" width="160" height="48" rx="6" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+        <rect x="140" y="182" width="48" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.40)" stroke-width="0.8"/>
+        <text x="164" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SUBAGENT</text>
+        <text x="212" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">implement</text>
+        <text x="212" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">commits on the branch</text>
+        <!-- verify-your-work (subagent) -->
+        <rect x="324" y="176" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="324" y="176" width="160" height="48" rx="6" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+        <rect x="332" y="182" width="48" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.40)" stroke-width="0.8"/>
+        <text x="356" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SUBAGENT</text>
+        <text x="404" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">verify-your-work</text>
+        <text x="404" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">verdicts, never fixes</text>
+        <!-- adversarial-review (inline driver) -->
+        <rect x="516" y="176" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="516" y="176" width="160" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="524" y="182" width="36" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="542" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">INLINE</text>
+        <text x="596" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">adversarial-review</text>
+        <text x="596" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">driver in session · to LGTM</text>
+        <!-- prove-your-work (subagent) -->
+        <rect x="708" y="176" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="708" y="176" width="160" height="48" rx="6" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+        <rect x="716" y="182" width="48" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.40)" stroke-width="0.8"/>
+        <text x="740" y="191" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SUBAGENT</text>
+        <text x="788" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">prove-your-work</text>
+        <text x="788" y="214" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">evidence on the PR</text>
+
+        <!-- tier 2 -->
+        <!-- tdd · diagnosing-bugs (inline within implement) -->
+        <rect x="132" y="288" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="132" y="288" width="160" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="140" y="294" width="36" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="158" y="303" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ROUTE</text>
+        <text x="212" y="314" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">tdd · diagnosing-bugs</text>
+        <text x="212" y="326" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">new behavior · defect</text>
+        <!-- code-review (passes via subagent) -->
+        <rect x="516" y="288" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="516" y="288" width="160" height="48" rx="6" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+        <rect x="524" y="294" width="48" height="12" rx="2" fill="transparent" stroke="rgba(79,93,117,0.40)" stroke-width="0.8"/>
+        <text x="548" y="303" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SUBAGENT</text>
+        <text x="596" y="314" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">code-review</text>
+        <text x="596" y="326" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">reviewer + fixer passes</text>
+        <!-- to-web (inline within prove) -->
+        <rect x="708" y="288" width="160" height="48" rx="6" fill="#f5f5f5"/>
+        <rect x="708" y="288" width="160" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="716" y="294" width="36" height="12" rx="2" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="734" y="303" fill="rgba(45,49,66,0.80)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">INLINE</text>
+        <text x="788" y="314" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">to-web</text>
+        <text x="788" y="326" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">screenshots → bucket</text>
+
+        <!-- legend -->
+        <line x1="30" y1="384" x2="970" y2="384" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <text x="30" y="400" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+        <rect x="110" y="392" width="24" height="12" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+        <text x="142" y="401" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">the skill this figure expands</text>
+        <rect x="350" y="392" width="24" height="12" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="382" y="401" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">runs inline, in this session</text>
+        <rect x="590" y="392" width="24" height="12" rx="2" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="622" y="401" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">fresh context via to-subagent</text>
+        <text x="830" y="401" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">stages run left to right</text>
+      </svg>
+    </figure>
+
+    <!-- ============================== CARDS ============================== -->
+    <div class="cards">
+      <div class="card">
+        <p class="eyebrow">Cross-cutting · dispatch and isolation</p>
+        <div class="card-header"><span class="card-dot"></span><h3>Adapters every verb reaches by name</h3></div>
+        <ul>
+          <li><code>to-thread</code> spawns an attended session in the outermost harness. <code>groom</code> and <code>build</code> fan one per unit.</li>
+          <li><code>to-subagent</code> is the only route to unattended work: one blocking call, one brief, deliverable checked on return. <code>staffing</code> picks its model.</li>
+          <li><code>worktree</code> gives each unit its own working copy. The dispatcher prepares it, <code>merge</code> removes it.</li>
+          <li><code>handoff</code> stays a standalone user tool: compact this session for the next one.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Cross-cutting · reference skills</p>
+        <div class="card-header"><span class="card-dot muted"></span><h3>Cited by name, never run</h3></div>
+        <ul>
+          <li>Writing: <code>unslop</code>, <code>writing-for-humans</code>, <code>technical-writing</code>.</li>
+          <li>Readiness: <code>agent-ready-codebase</code>, the standard <code>backlog setup</code> certifies against and <code>build</code> gates on.</li>
+          <li>Principles: <code>principle-experience-first</code>, <code>principle-codebase-design</code>, <code>principle-type-system-discipline</code>, with <code>typescript-best-practices</code> for TypeScript.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="eyebrow">What moves</p>
+        <div class="card-header"><span class="card-dot coral"></span><h3>Renames, folds, and exits</h3></div>
+        <ul>
+          <li><code>to-backlog</code> → <code>capture</code>; <code>build-change</code> → <code>deliver</code> (provisional); <code>merge-change</code> → <code>merge</code>.</li>
+          <li><code>watch-until</code> folds into <code>merge</code>. <code>retro</code> joins the family.</li>
+          <li>Out of the install: <code>skill-loop</code> (authoring tooling), <code>to-tailnet</code> (personal).</li>
+          <li>One playbook: <code>docs/agents/environment.md</code>. Platform fixed: GitHub, git, a bucket. Labels fixed: six readiness roles, three work-types.</li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>asher-skills · restructure draft · 2026-09-02 · backlog-workspace/restructure/orchestration-tree.html</footer>
+  </div>
+</body>
+</html>

@@ -15,7 +15,7 @@ Answers **one design question with a disposable artifact**. It can compare alter
 
 ## Dependency surface
 
-Uses the optional `writing-for-humans` sibling.
+Uses the optional `technical-writing` sibling for the artifact and returned prose.
 
 ## Credits
 

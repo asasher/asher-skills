@@ -1,7 +1,7 @@
 interface:
   display_name: "Backlog"
-  short_description: "Groom a software backlog, dispatch shaping and build threads, and report their status"
-  default_prompt: "Use $backlog to triage the open issues in this repo."
+  short_description: "GitHub backlog dispatcher — capture, groom, build, retro, status, setup; each verb sweeps, confirms, and fans one skill run per unit"
+  default_prompt: "Use $backlog <verb> to run one dispatcher verb over this repo's issues."
 
 policy:
   allow_implicit_invocation: false

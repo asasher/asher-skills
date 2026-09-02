@@ -11,4 +11,4 @@ Maps each task type to four separate dispatch fields: model, effort, route, and 
 - **Relationship:** extracted from this repository's `backlog` skill.
 - **Source:** [`6412325`](https://github.com/asasher/asher-skills/commit/6412325).
 - **Authority moved:** roster, role, routing, and fallback policy moved here.
-- **Local changes:** bars-then-cheapest resolution, runtime-only checks, template-fill setup.
+- **Local changes:** slimmed to a roster table; the caller tries the route at runtime and stops on failure.

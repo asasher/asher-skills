@@ -4,7 +4,7 @@ Interactive dispatch adapter for the outermost harness: detects it, loads one of
 
 ## Dependency surface
 
-Composes with the `worktree` sibling (optionally `writing-for-humans`); the five route files and dispatch scripts are bundled.
+Composes with the optional `worktree` and `writing-for-humans` siblings; the five route files and dispatch scripts are bundled.
 
 ## Provenance
 

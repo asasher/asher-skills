@@ -7,7 +7,7 @@ description: Test-driven development. Use when building features or fixing bugs 
 
 TDD is the red → green loop. This skill is the discipline that makes that loop produce tests worth keeping.
 
-Before writing the first test, read `CONTEXT.md` (if it exists) so test names and interface vocabulary match the project's domain language, and respect ADRs in the area you're touching; read `docs/agents/codebase.md` where it exists — test placement, harness wiring, and mock policy live there.
+Before writing the first test, read `CONTEXT.md` (if it exists) so test names and interface vocabulary match the project's domain language, and respect ADRs in the area you're touching; read `docs/agents/environment.md` § Checks where it exists: test placement, harness wiring, and runner traps live there.
 
 ## What a good test is
 
@@ -17,7 +17,7 @@ See [tests](reference/tests.md) for good/bad test examples and [mocking](referen
 
 ## Seams — where tests go
 
-Tests verify behavior at **seams** — the public boundaries where you observe behavior without reaching inside. **Test only at pre-agreed seams.** Before writing any test, write down the seams under test and confirm them — asking the user "which seams should we test?" when present, else against the ticket or spec's named seams. Agreeing the seams up front is how testing effort lands on the critical paths and complex logic instead of every edge case.
+Tests verify behavior at **seams** — the public boundaries where you observe behavior without reaching inside. **Test only at pre-agreed seams.** Before writing any test, write down the seams under test and confirm them — asking the user "which seams should we test?" when present, else against the issue or spec's named seams. Agreeing the seams up front is how testing effort lands on the critical paths and complex logic instead of every edge case.
 
 ## Anti-patterns
 
@@ -31,4 +31,4 @@ Tests verify behavior at **seams** — the public boundaries where you observe b
 - **One cycle at a time.** One seam, one test, one minimal implementation — each test responding to what the last cycle taught you.
 - **Refactor outside the loop.** The red → green cycle builds behavior; restructuring what already passes is separate work, done deliberately or not at all.
 
-The loop ends when every confirmed seam has a passing test for each behavior the ticket, spec, or user named at that seam — and nothing beyond them.
+The loop ends when every confirmed seam has a passing test for each behavior the issue, spec, or user named at that seam — and nothing beyond them.
