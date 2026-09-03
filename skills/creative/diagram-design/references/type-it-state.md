@@ -4,7 +4,7 @@
 
 Use when stakeholders need to see the friction in the current setup — siloed scripts, manual file shuffles, missing version control, single-points-of-failure — and the path from those to a target platform topology.
 
-This type is **parametric** — the inputs schema in §1 drives every coordinate via the formulas in §2. The rule shape mirrors `type-dp-integration.md` (zones + cross-cutting footer bars), `type-process.md` (rounded right-angle connectors), and `type-medallion.md` (per-element `color` override) so the focal rule, color override, dark mode, and reproducibility checklist read identically across types.
+This type is **parametric** — the inputs schema in §1 drives every coordinate via the formulas in §2. The rule shape mirrors `type-dp-integration.md` (zones + cross-cutting footer bars), `type-process.md` (rounded right-angle connectors), and `type-medallion.md` (per-element `color` override) so the focal rule, color override, light mode, and reproducibility checklist read identically across types.
 
 ---
 
@@ -31,7 +31,7 @@ zones:                       # 2..4 zones, ordered along the orientation axis
     components:
       - { id: shared-drive,  name: "Shared Drive",     sub: "No version control · Windows file share", icon: file,      kind: focal }
       - { id: analyst-mach,  name: "Analyst Machines", sub: "SPSS · SAS · Stata · Excel",              icon: desktop }
-      - { id: sql-server,    name: "SQL Server",       sub: "on-premises · core RDBMS",                icon: sqlserver, color: "#7a8c47" }  # custom olive
+      - { id: sql-server,    name: "SQL Server",       sub: "on-premises · core RDBMS",                icon: sqlserver, color: "#9aac67" }  # custom olive
   - name: "DISSEMINATION"
     components:
       - { id: legacy-portal,   name: "LegacyPortal",      sub: "manual bottleneck",     icon: cloud,    kind: focal }
@@ -58,7 +58,7 @@ legend:                       # auto-generated from styles used; user can overri
   - { swatch: dashed,  label: "external" }
   - { swatch: focal,   label: "bottleneck" }
 
-dark: false
+light: false
 ```
 
 **Reserved field semantics:**
@@ -142,9 +142,9 @@ Three visual kinds:
 
 | `kind` | Fill | Stroke | Stroke width | Stroke dash | Name ink | Sub ink |
 | --- | --- | --- | --- | --- | --- | --- |
-| `standard` | `#FFFFFF` | `ink` | 1 | — | `ink` | `muted` |
+| `standard` | `paper-2` | `ink` | 1 | — | `ink` | `muted` |
 | `focal` | `accent @ 0.07` | `accent` | 1.4 | — | `ink` | `accent` (line 1) + `muted` (line 2) |
-| `external` | `#FFFFFF` | `muted` | 1 | `4,3` | `ink` | `muted` |
+| `external` | `paper-2` | `muted` | 1 | `4,3` | `ink` | `muted` |
 
 **Icon placement** (24×24, monochrome via `currentColor` — see `references/primitive-icons.md`):
 
@@ -284,7 +284,7 @@ The label sits **near the source end** of the connector (not at the mid-segment)
 For cross-zone H+Q+V routes the label binds to the **horizontal** segment, since that segment is anchored at the source. Place the label early on that horizontal run — never on the Q-bend or the vertical tail.
 
 - `w = text_w + (icon ? 30 : 12)` — auto-fit.
-- Mask `fill` resolves to `paper` in light mode and `ink` in dark mode. The mask is kept as a safety pad — even though the label no longer sits on the line, it can graze zone backgrounds and component fills, and the mask preserves contrast.
+- Mask `fill` resolves to `paper` by default and `ink` in the light variant (§6). The mask is kept as a safety pad — even though the label no longer sits on the line, it can graze zone backgrounds and component fills, and the mask preserves contrast.
 - `stroke_color` follows §3.4 (text + icon inherit the connector's accent / link / neutral color).
 
 ### 3.6 Z-order
@@ -297,16 +297,16 @@ All connectors (paths + lines + labels) emit BEFORE any component rect, so node 
 
 Per-component, same shape as every other parametric type in this skill.
 
-| Element | Light | Dark |
+| Element | Dark (default) | Light |
 | --- | --- | --- |
-| Container fill | `rgba(C, 0.06)` | `rgba(C_light, 0.10)` |
-| Container stroke | `rgba(C, 0.45)` (width 1) | `rgba(C_light, 0.55)` |
-| Component name text | `C` | `C_light` |
+| Container fill | `rgba(C, 0.10)` | `rgba(C_dark, 0.06)` |
+| Container stroke | `rgba(C, 0.55)` (width 1) | `rgba(C_dark, 0.45)` |
+| Component name text | `C` | `C_dark` |
 | Icon glyph | inherits ink via `currentColor` (unchanged) | inherits ink (unchanged) |
 | Sub-label | muted (unchanged) | muted (unchanged) |
 | Connectors touching this component | **unchanged** — topology-driven | **unchanged** |
 
-`C_light` = the same hex lightened ~15 % for dark-mode contrast (e.g., `#7a8c47` → `#9aac67`, `#b85450` → `#d97a78`).
+`C_dark` = the same hex darkened ~15% for light-paper contrast (e.g., `#9aac67` → `#7a8c47`, `#d97a78` → `#b85450`).
 
 **Rules:**
 
@@ -316,11 +316,11 @@ Per-component, same shape as every other parametric type in this skill.
 
 **Recommended cross-type palette** (same as `type-medallion.md` / `type-process.md` / `type-dp-integration.md` / `type-dp-security-matrix.md`):
 
-- `#b85450` rust-red — security / governance / pain-point that isn't focal
-- `#5a7d9a` slate-blue — observability / quality / monitoring gate
-- `#7a8c47` olive-green — survivor system (the one tool the new platform keeps)
-- `#c9a23a` warm yellow — sandbox / dev / scratch
-- `#8c6d3f` warm-brown — archive / cold / DR
+- `#d97a78` rust-red — security / governance / pain-point that isn't focal
+- `#80a3c0` slate-blue — observability / quality / monitoring gate
+- `#9aac67` olive-green — survivor system (the one tool the new platform keeps)
+- `#efc860` warm yellow — sandbox / dev / scratch
+- `#b29365` warm-brown — archive / cold / DR
 
 ---
 
@@ -335,26 +335,26 @@ If your diagram needs more than 2 focal components, you've collapsed two narrati
 
 ---
 
-## 6. Dark mode
+## 6. Light mode
 
-| Role                      | Light            | Dark                |
-| ------------------------- | ---------------- | ------------------- |
-| paper                     | `paper`          | `ink`               |
-| ink                       | `ink`            | `paper`             |
-| muted                     | `muted`          | `muted`             |
-| accent                    | `accent`         | `accent`            |
-| link                      | `link`           | `link`              |
-| zone background           | `ink @ 0.02`     | `paper @ 0.04`      |
-| zone border               | `ink @ 0.10`     | `paper @ 0.14`      |
-| standard component fill   | `#FFFFFF`        | `paper @ 0.04`      |
-| standard component stroke | `ink`            | `paper @ 0.32`      |
-| focal fill                | `accent @ 0.07`  | `accent @ 0.12`     |
-| focal stroke              | `accent`         | `accent`            |
-| external stroke           | `muted` (dashed) | `muted` (dashed)    |
-| footer fill               | `ink @ 0.03`     | `paper @ 0.05`      |
-| footer stroke             | `ink @ 0.18`     | `paper @ 0.20`      |
-| label mask fill           | `paper`          | `ink`               |
-| custom-color components   | `C`              | `C_light` (≈ +15 %) |
+| Role                      | Dark (default)   | Light              |
+| ------------------------- | ---------------- | ------------------ |
+| paper                     | `paper`          | `ink`              |
+| ink                       | `ink`            | `paper`            |
+| muted                     | `muted`          | `muted`            |
+| accent                    | `accent`         | `accent`           |
+| link                      | `link`           | `link`             |
+| zone background           | `ink @ 0.04`     | `paper @ 0.02`     |
+| zone border               | `ink @ 0.14`     | `paper @ 0.10`     |
+| standard component fill   | `paper-2`        | `paper @ 0.04`     |
+| standard component stroke | `ink`            | `paper @ 0.32`     |
+| focal fill                | `accent @ 0.12`  | `accent @ 0.07`    |
+| focal stroke              | `accent`         | `accent`           |
+| external stroke           | `muted` (dashed) | `muted` (dashed)   |
+| footer fill               | `ink @ 0.05`     | `paper @ 0.03`     |
+| footer stroke             | `ink @ 0.20`     | `paper @ 0.18`     |
+| label mask fill           | `paper`          | `ink`              |
+| custom-color components   | `C`              | `C_dark` (≈ −15 %) |
 
 ---
 
@@ -373,7 +373,7 @@ Before emitting SVG, verify **every** item:
 9. Legend at bottom: hairline separator + one swatch per style actually used.
 10. `arrow-label` for connector labels, `eyebrow` for the page eyebrow and zone labels, `title` for the page title, `node-name` for the subtitle and component names, and `sublabel` for technical sub-labels.
 11. Markers `#arrow` / `#arrow-link` / `#arrow-accent` defined once in `<defs>`; no inline marker definitions.
-12. Dark variant: resolve every semantic token through its dark-mode value; custom colors are lightened ~15 %.
+12. Light variant: resolve every semantic token through its light-mode value; custom colors are darkened ~15 %.
 
 ---
 
@@ -388,7 +388,7 @@ Before emitting SVG, verify **every** item:
 - **Footer bar wired to one component.** Footer = cross-cutting layer-wide concern; a connector from a footer to a specific component is a category error (use `type-dp-integration.md`'s AUTH-line pattern only when the footer service truly authenticates _all_ components, and even then the line lands at the zone bottom edge, not at a specific tool).
 - **> 16 total components or > 5 per zone.** Density cap; split into two diagrams.
 - **Mixing orientations within one diagram.** Pick one — `horizontal` or `vertical` — and apply it to every zone.
-- **Using `kind: focal` to flag every painful thing.** Focal exists for ≤ 2 narrative pain-points; for "this is bad but not headline-bad", use `color: "#b85450"` rust-red instead.
+- **Using `kind: focal` to flag every painful thing.** Focal exists for ≤ 2 narrative pain-points; for "this is bad but not headline-bad", use `color: "#d97a78"` rust-red instead.
 
 ---
 
@@ -423,7 +423,7 @@ zones:
     components:
       - { id: shared-drive,  name: "Shared Drive",     sub: "No version control · Windows file share", icon: file,      kind: focal }
       - { id: analyst-mach,  name: "Analyst Machines", sub: "SPSS · SAS · Stata · Excel",              icon: desktop }
-      - { id: sql-server,    name: "SQL Server",       sub: "on-premises · core RDBMS",                icon: sqlserver, color: "#7a8c47" }
+      - { id: sql-server,    name: "SQL Server",       sub: "on-premises · core RDBMS",                icon: sqlserver, color: "#9aac67" }
   - name: "DISSEMINATION"
     components:
       - { id: legacy-portal,   name: "LegacyPortal",      sub: "manual bottleneck",     icon: cloud,    kind: focal }
@@ -440,7 +440,7 @@ connectors:
   - { from: legacy-portal,    to: natstat-website, label: "WEB",                 style: neutral }
   - { from: natstat-website,  to: ministry,        label: "CSV DL", icon: csv,   style: link, dashed: true }
 
-dark: false
+light: false
 ```
 
 ### 10.1 What this YAML proves
@@ -450,7 +450,7 @@ dark: false
 - `viewBox_h = 52 + 360 + 40 + 24 = 500` (no footer bars) ✓
 - Shared Drive (focal) at zone 2, row 0: `x = 340, y = 80, w = 264, h = 68` (focal stretches to 68 to fit 2-line sub) ✓
 - LegacyPortal (focal) at zone 3, row 0: `x = 704, y = 80, w = 208, h = 60` ✓
-- SQL Server (custom olive) at zone 2, row 2: container fill `rgba(122,140,71,0.06)`, stroke `rgba(122,140,71,0.45)`, name text `#7a8c47` ✓
+- SQL Server (custom olive) at zone 2, row 2: container fill `rgba(154,172,103,0.06)`, stroke `rgba(154,172,103,0.45)`, name text `#9aac67` ✓
 - Connectors 4, 5 (within zone 2) and 7, 8 (within zone 3) are simple vertical `<line>` elements. Cross-zone connectors take rule-compliant routes (see SKILL.md §6 rules 4 & 5):
   - **All three Survey-side → Shared Drive connectors (C1 / C2 / C3) enter Shared Drive's LEFT edge.** A top-edge entry would push the marker body (7 px back along travel, given `refX = 7`) _inside_ the destination box, where the box's paper-fill mask hides it — only a 1-pixel tip would peek above the stroke. Entering the left edge with a right-going path keeps the body outside the box and the arrow visible (~7 px shown to the left of the box edge). The three left-edge attach points are fanned at **y = 108 / 124 / 140** (16-px spacing, well above the 12 px rule-4 minimum).
   - **C1** (Survey → Shared Drive) source y matches landing y: single horizontal `M 252,108 H 340`. No bends needed.

@@ -20,7 +20,7 @@
   2. **Attributes** — one line each, Geist Mono 9px, left-aligned: `+ name: Type`. Visibility markers: `+` public, `-` private, `#` protected.
   3. **Operations** — one line each, Geist Mono 9px, left-aligned: `+ method(arg): Return`. Omit a compartment entirely when a class has no members in it (an interface with no attributes skips that compartment).
 - Attribute/operation lines are a single combined string, not the two-column field/type layout ER uses — that visual distinction keeps the two types from reading the same.
-- Coral (accent) is reserved for the class being implemented or extended (the focal type) — accent-tint fill, accent stroke. Its inbound inheritance/realization edges count as **one** additional accent element (treated as a group), for 2 accent elements total per diagram.
+- Accent (accent) is reserved for the class being implemented or extended (the focal type) — accent-tint fill, accent stroke. Its inbound inheritance/realization edges count as **one** additional accent element (treated as a group), for 2 accent elements total per diagram.
 
 ## Relationship vocabulary
 

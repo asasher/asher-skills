@@ -59,7 +59,7 @@ Three 10px circles, macOS-style. The **1-accent rule caps the color use here too
 
 ## Critical rules
 
-- No pure black (`#000000`) — use `terminal-page` (`#0a0a0a`) / `terminal-paper` (`#141414`). Same rule as the default skin, same reason: true black clips on OLED and in print.
+- Keep the window off pure black — `terminal-page` (`#0a0a0a`) and `terminal-paper` (`#141414`) sit a step above the default skin's `#000000` paper so the window reads as a raised object when embedded.
 - One accent only. If a diagram needs a second focal element, use `terminal-ink` (white) for emphasis via weight/size, not a second color.
 - Background dot-grid pattern (if used) stays `rgba(255,255,255,0.06–0.08)` — barely visible texture, not a visual competitor to the titlebar chrome.
 
@@ -71,6 +71,6 @@ Three 10px circles, macOS-style. The **1-accent rule caps the color use here too
 
 ## When not to use
 
-- Editorial / long-form posts — pair with the default light or full-editorial variant instead.
-- Diagrams that should inherit the project's `DESIGN.md` use the default light, dark, or full-editorial variant.
+- Editorial / long-form posts — pair with the default or full-editorial variant instead.
+- Diagrams that should inherit the project's `DESIGN.md` use the default, light, or full-editorial variant.
 - Any diagram where the audience isn't developer-coded to read `$`/`#`/titlebar-dots as chrome rather than content.

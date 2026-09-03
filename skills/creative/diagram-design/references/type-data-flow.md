@@ -27,7 +27,7 @@ steps:                              # 1..6 columns (left to right)
 nodes:                              # explicit per-cell entries; empty cells render nothing
   - { lane: "ADM", step: 0, title: "Project Setup",   sub: "create · assign roles",     tool: "Platform console" }
   - { lane: "ADM", step: 1, title: "Access Control",  sub: "bucket policies · LDAP",    tool: "MinIO · LDAP console",
-      color: "#b85450" }            # tinted rust-red to flag governance/identity concern
+      color: "#d97a78" }            # tinted rust-red to flag governance/identity concern
   - { lane: "ENG", step: 0, title: "Source Ingest",   sub: "ext. sources → raw",        tool: "NiFi · API · SFTP",
       chips: {in: "WB", out: "DB"} }                    # web payload in, dataset out
   - { lane: "ENG", step: 1, title: "Raw Store",       sub: "raw landing zones",         tool: "MinIO raw",
@@ -52,7 +52,7 @@ arrows:                             # explicit edges; styles bind to topology (s
   - { from: {lane: "SCI", step: 3}, to: {lane: "SCI", step: 4}, style: "muted" }
   - { from: {lane: "SCI", step: 4}, to: {lane: "CON", step: 4}, style: "link" }     # teal: published
 
-dark: false
+light: false
 ```
 
 **Reserved field semantics:**
@@ -203,19 +203,19 @@ Any node, lane, or step may declare an optional `color: "#hex"`. Mirrors high-le
 
 Applied to:
 
-| Element | Light | Dark |
+| Element | Dark (default) | Light |
 | --- | --- | --- |
-| Container fill (`rect`) | `rgba(C, 0.06)` | `rgba(C_light, 0.10)` |
-| Container stroke | `rgba(C, 0.35)` (stroke-width 1) | `rgba(C_light, 0.45)` |
-| Role chip fill | `rgba(C, 0.18)` | `rgba(C_light, 0.22)` |
-| Role chip text | `C` | `C_light` |
-| Title text | `C` | `C_light` |
+| Container fill (`rect`) | `rgba(C, 0.10)` | `rgba(C_dark, 0.06)` |
+| Container stroke | `rgba(C, 0.45)` (stroke-width 1) | `rgba(C_dark, 0.35)` |
+| Role chip fill | `rgba(C, 0.22)` | `rgba(C_dark, 0.18)` |
+| Role chip text | `C` | `C_dark` |
+| Title text | `C` | `C_dark` |
 | Sub-label | **unchanged** (muted) | **unchanged** (muted) |
 | Tool label | **unchanged** (soft) | **unchanged** (soft) |
 | Data-type chips | **unchanged** | **unchanged** |
 | Arrows touching this node | **unchanged** — topology-driven | **unchanged** |
 
-`C_light` = the same hex lightened ~15% for dark-mode contrast (e.g., `#b85450` → `#d97a78`).
+`C_dark` = the same hex darkened ~15% for light-paper contrast (e.g., `#d97a78` → `#b85450`).
 
 ### 4.2 Per-step `color`
 
@@ -236,10 +236,10 @@ Replaces the lane stripe tint with `rgba(C, 0.04)` (only for odd-indexed lanes t
 
 Same palette as high-level / dp-integration so a reader scanning multiple diagrams sees the same colors meaning the same thing:
 
-- `#b85450` rust-red — Security / Identity / Governance (admin nodes, LDAP, access control)
-- `#5a7d9a` slate-blue — Observability / Quality (monitoring, data-quality gates, lineage)
-- `#7a8c47` olive-green — Governance / Lineage (catalog, metadata)
-- `#8c6d3f` warm-brown — Backup / DR / Archive
+- `#d97a78` rust-red — Security / Identity / Governance (admin nodes, LDAP, access control)
+- `#80a3c0` slate-blue — Observability / Quality (monitoring, data-quality gates, lineage)
+- `#9aac67` olive-green — Governance / Lineage (catalog, metadata)
+- `#b29365` warm-brown — Backup / DR / Archive
 
 ---
 
@@ -255,26 +255,26 @@ If zero or >1 of any focal slot are declared, halt and ask the user.
 
 ---
 
-## 6. Dark mode
+## 6. Light mode
 
-| Token                   | Light           | Dark                     |
-| ----------------------- | --------------- | ------------------------ |
-| Paper                   | `paper`         | `ink`                    |
-| Ink                     | `ink`           | `paper`                  |
-| Muted                   | `muted`         | `soft`                   |
-| Soft                    | `soft`          | `rule-solid`             |
-| Accent                  | `accent`        | `accent`                 |
-| Link                    | `link`          | `link`                   |
-| Dot pattern             | `ink @ 0.10`    | `paper @ 0.10`           |
-| Lane tint               | `ink @ 0.018`   | `paper @ 0.025`          |
-| Dividers                | `ink @ 0.12`    | `paper @ 0.12`           |
-| Default chip fill       | `ink @ 0.12`    | `paper @ 0.12`           |
-| Focal chip fill         | `accent @ 0.20` | `accent @ 0.22`          |
-| Default node fill       | `paper`         | `paper @ 0.04`           |
-| Default node stroke     | `ink @ 0.25`    | `paper @ 0.20`           |
-| Focal node fill         | `accent @ 0.07` | `accent @ 0.12`          |
-| Focal node stroke       | `accent`        | `accent`                 |
-| Custom component colors | `C`             | `C_light` (lighten ~15%) |
+| Token                   | Dark (default)  | Light                  |
+| ----------------------- | --------------- | ---------------------- |
+| Paper                   | `paper`         | `ink`                  |
+| Ink                     | `ink`           | `paper`                |
+| Muted                   | `muted`         | `soft`                 |
+| Soft                    | `soft`          | `rule-solid`           |
+| Accent                  | `accent`        | `accent`               |
+| Link                    | `link`          | `link`                 |
+| Dot pattern             | `ink @ 0.10`    | `paper @ 0.10`         |
+| Lane tint               | `ink @ 0.025`   | `paper @ 0.018`        |
+| Dividers                | `ink @ 0.12`    | `paper @ 0.12`         |
+| Default chip fill       | `ink @ 0.12`    | `paper @ 0.12`         |
+| Focal chip fill         | `accent @ 0.22` | `accent @ 0.20`        |
+| Default node fill       | `paper`         | `paper @ 0.04`         |
+| Default node stroke     | `ink @ 0.25`    | `paper @ 0.20`         |
+| Focal node fill         | `accent @ 0.12` | `accent @ 0.07`        |
+| Focal node stroke       | `accent`        | `accent`               |
+| Custom component colors | `C`             | `C_dark` (darken ~15%) |
 
 ---
 
@@ -310,13 +310,13 @@ Either chip may be omitted (e.g., a sink node has only an input chip; a source-o
 
 | Code | Color                  | Meaning                |
 | ---- | ---------------------- | ---------------------- |
-| `WB` | `#6e6479` (mauve)      | Web / Public data      |
-| `DB` | `#5e7a9b` (steel-blue) | Dataset / Raw file     |
-| `TB` | `#b8915a` (amber)      | Table / Analysis-ready |
-| `FL` | `#9c6b50` (sienna)     | File / Report / Export |
-| `LS` | `#4a7c59` (forest)     | Live stream / Event    |
+| `WB` | `#8d8298` (mauve)      | Web / Public data      |
+| `DB` | `#82a0c0` (steel-blue) | Dataset / Raw file     |
+| `TB` | `#d3ad7a` (amber)      | Table / Analysis-ready |
+| `FL` | `#b88670` (sienna)     | File / Report / Export |
+| `LS` | `#70a27f` (forest)     | Live stream / Event    |
 
-Text inside chip: white, `eyebrow` role at 5px, weight 700.
+Text inside chip: paper-colored (`#000000` default, `#ffffff` light), `eyebrow` role at 5px, weight 700.
 
 Data-type chip colors are a **separate semantic axis** from the per-node color override (§4). The chip colors describe _payload format_; the node color override describes _concern type_ (governance, observability, …). Don't conflate them — a node can have both an `out: TB` amber chip and a rust-red border color simultaneously.
 

@@ -30,11 +30,11 @@ nodes:                              # explicit per-cell entries; empty cells ren
   - { lane: "RDE", step: 0,  title: "Survey design",      sub: "questionnaire · sampling", tool: "Excel · CSPro",
       chips: {in: null,  out: "FL"} }              # first step has no input chip
   - { lane: "IT",  step: 1,  title: "Build app",          sub: "form + validation",        tool: "CSPro · scripts",
-      chips: {in: "FL", out: "TB"}, color: "#5a7d9a" }    # slate-blue — data quality concern
+      chips: {in: "FL", out: "TB"}, color: "#80a3c0" }    # slate-blue — data quality concern
   - { lane: "RDE", step: 2,  title: "Pilot test",         sub: "field debug",              tool: "tablet · script",
       chips: {in: "TB", out: "TB"}, focal: true }   # focal node — accent border
   - { lane: "FLD", step: 3,  title: "Train enumerators",  sub: "protocols · safety",       tool: "manual",
-      chips: {in: "TB", out: "LS"}, color: "#b85450" }    # rust-red — governance / training
+      chips: {in: "TB", out: "LS"}, color: "#d97a78" }    # rust-red — governance / training
   # ... etc
 
 arrows:                             # explicit edges; styles bind to topology (see §3)
@@ -44,7 +44,7 @@ arrows:                             # explicit edges; styles bind to topology (s
   - { from: {lane: "RDE", step: 2}, to: {lane: "IT",  step: 1}, style: "trigger" }      # dashed trigger
   # ... etc
 
-dark: false
+light: false
 ```
 
 **Reserved field semantics:**
@@ -105,10 +105,10 @@ legend_row_y     = [legend_y_top + 16, legend_y_top + 37,
 ### 2.1 Background structure
 
 - Paper fill across full viewBox.
-- Dot pattern: 22×22 grid, `circle r=0.8`, `fill rgba(45,49,66,0.10)`. Opacity 0.55.
-- Alternating lane tints: odd-indexed lanes (0, 2, …) receive `rgba(45,49,66,0.018)` fill from `x=140` to `viewBox_w`.
-- Lane dividers: horizontal hairlines at every `lane_y_top(k)` and at `legend_y_top`; stroke `rgba(45,49,66,0.12)` width 0.8.
-- Label column right border: vertical hairline at `x = label_col_w`, stroke `rgba(45,49,66,0.20)` width 1, from `y = header_h` to `y = legend_y_top`.
+- Dot pattern: 22×22 grid, `circle r=0.8`, `fill rgba(237,237,237,0.10)`. Opacity 0.55.
+- Alternating lane tints: odd-indexed lanes (0, 2, …) receive `rgba(237,237,237,0.018)` fill from `x=140` to `viewBox_w`.
+- Lane dividers: horizontal hairlines at every `lane_y_top(k)` and at `legend_y_top`; stroke `rgba(237,237,237,0.12)` width 0.8.
+- Label column right border: vertical hairline at `x = label_col_w`, stroke `rgba(237,237,237,0.20)` width 1, from `y = header_h` to `y = legend_y_top`.
 
 ### 2.2 Step header chip + label
 
@@ -123,16 +123,16 @@ label_anchor     = (step_cx(j), 32)              # 8-px gap below chip
 
 **Chip** (the numbered pill at the top of each column):
 
-- Default fill: `rgba(45,49,66,0.12)`, number text ink.
-- Focal fill: `rgba(235,108,54,0.20)`, number text accent (§5).
+- Default fill: `rgba(237,237,237,0.12)`, number text ink.
+- Focal fill: `rgba(0,112,243,0.20)`, number text accent (§5).
 - Per-step `color` override (§4): replaces the fill with `rgba(C, 0.20)` and the number fill with `C`.
 
 **Label** (the uppercase mono text below the chip):
 
 - Renders `steps[j].label` (uppercased), anchored at `label_anchor`.
 - Font: Geist Mono 6 px, weight 500, `letter-spacing="0.12em"`, `text-anchor="middle"`.
-- Default fill: muted (`#4f5d75` light / `#bfc0c0` dark).
-- Focal fill: accent (`#eb6c36` light / `#f08a59` dark).
+- Default fill: muted (`#a1a1a1` default / `#666666` light).
+- Focal fill: accent (`#0070f3` in both modes).
 - Per-step `color` override: fill = `C` (matches the chip number color).
 - Keep labels short (≤ 9 chars). Long labels truncate; if you need more, abbreviate.
 
@@ -172,20 +172,20 @@ Three styles, bound to topology. Connectors drawn **before** all node rects (z-o
 
 | `style` | Stroke | Width | Dash | Marker | When required |
 | --- | --- | --- | --- | --- | --- |
-| `normal` | `#4f5d75` (muted) | 1.0 | — | `arrow` | Standard data hand-off between steps or actors. Unlabelled. |
-| `focal-in` / `focal-out` | `#eb6c36` (accent) | 1.2 | — | `arrow-accent` | Every edge whose endpoint is the focal node (`focal-in`) or origin is the focal node (`focal-out`). |
-| `trigger` | `#4f5d75` (muted) | 1.0 | `4,3` | `arrow-sm` | Orchestration trigger (scheduler → tool, manual override → upstream step). Unlabelled. |
+| `normal` | `#a1a1a1` (muted) | 1.0 | — | `arrow` | Standard data hand-off between steps or actors. Unlabelled. |
+| `focal-in` / `focal-out` | `#0070f3` (accent) | 1.2 | — | `arrow-accent` | Every edge whose endpoint is the focal node (`focal-in`) or origin is the focal node (`focal-out`). |
+| `trigger` | `#a1a1a1` (muted) | 1.0 | `4,3` | `arrow-sm` | Orchestration trigger (scheduler → tool, manual override → upstream step). Unlabelled. |
 
 **Defs block** (required, three markers):
 
 ```svg
 <defs>
   <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
-    <circle cx="11" cy="11" r="0.8" fill="rgba(45,49,66,0.10)"/>
+    <circle cx="11" cy="11" r="0.8" fill="rgba(237,237,237,0.10)"/>
   </pattern>
-  <marker id="arrow"        markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
-  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/></marker>
-  <marker id="arrow-sm"     markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#4f5d75"/></marker>
+  <marker id="arrow"        markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#a1a1a1"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0070f3"/></marker>
+  <marker id="arrow-sm"     markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#a1a1a1"/></marker>
 </defs>
 ```
 
@@ -231,19 +231,19 @@ Any node, lane, or step accepts an optional `color: "#hex"`. Mirrors `type-data-
 
 Applied to:
 
-| Element | Light | Dark |
+| Element | Dark (default) | Light |
 | --- | --- | --- |
-| Container fill (`rect`) | `rgba(C, 0.06)` | `rgba(C_light, 0.10)` |
-| Container stroke | `rgba(C, 0.35)` (stroke-width 1) | `rgba(C_light, 0.45)` |
-| Role chip fill | `rgba(C, 0.18)` | `rgba(C_light, 0.22)` |
-| Role chip text | `C` | `C_light` |
-| Title text | `C` | `C_light` |
+| Container fill (`rect`) | `rgba(C, 0.10)` | `rgba(C_dark, 0.06)` |
+| Container stroke | `rgba(C, 0.45)` (stroke-width 1) | `rgba(C_dark, 0.35)` |
+| Role chip fill | `rgba(C, 0.22)` | `rgba(C_dark, 0.18)` |
+| Role chip text | `C` | `C_dark` |
+| Title text | `C` | `C_dark` |
 | Sub-label (in → out) | **unchanged** (muted) | **unchanged** (muted) |
 | Tool label | **unchanged** (soft) | **unchanged** (soft) |
 | Data-type chips | **unchanged** | **unchanged** |
 | Arrows touching this node | **unchanged** — topology-driven | **unchanged** |
 
-`C_light` = the same hex lightened ~15% for dark-mode contrast (e.g., `#b85450` → `#d97a78`).
+`C_dark` = the same hex darkened ~15% for light-paper contrast (e.g., `#d97a78` → `#b85450`).
 
 ### 4.2 Per-step `color`
 
@@ -264,10 +264,10 @@ Replaces the lane stripe tint with `rgba(C, 0.04)` and the lane label text fill 
 
 Same palette as `type-high-level.md`, `type-dp-integration.md`, `type-data-flow.md`:
 
-- `#b85450` rust-red — Security / Identity / Governance (access control, training, approvals)
-- `#5a7d9a` slate-blue — Observability / Quality (data quality gates, validation, monitoring)
-- `#7a8c47` olive-green — Data Products / Publication (consumer-ready outputs, releases)
-- `#8c6d3f` warm-brown — Backup / DR / Archive
+- `#d97a78` rust-red — Security / Identity / Governance (access control, training, approvals)
+- `#80a3c0` slate-blue — Observability / Quality (data quality gates, validation, monitoring)
+- `#9aac67` olive-green — Data Products / Publication (consumer-ready outputs, releases)
+- `#b29365` warm-brown — Backup / DR / Archive
 
 ---
 
@@ -283,26 +283,26 @@ If zero or >1 of any focal slot are declared, halt and ask the user.
 
 ---
 
-## 6. Dark mode
+## 6. Light mode
 
-| Token | Light | Dark |
-| --- | --- | --- |
-| Paper | `#f5f5f5` | `#2d3142` |
-| Ink | `#2d3142` | `#f5f5f5` |
-| Muted | `#4f5d75` | `#bfc0c0` |
-| Soft | `#7a8399` | `#8e98ac` |
-| Accent | `#eb6c36` | `#f08a59` |
-| Dot pattern | `rgba(45,49,66,0.10)` | `rgba(245,245,245,0.10)` |
-| Lane tint | `rgba(45,49,66,0.018)` | `rgba(245,245,245,0.025)` |
-| Dividers | `rgba(45,49,66,0.12)` | `rgba(245,245,245,0.12)` |
-| Label col divider | `rgba(45,49,66,0.20)` | `rgba(245,245,245,0.22)` |
-| Default chip fill | `rgba(45,49,66,0.12)` | `rgba(245,245,245,0.12)` |
-| Focal chip fill | `rgba(235,108,54,0.20)` | `rgba(240,138,89,0.22)` |
-| Default node fill | white | `rgba(245,245,245,0.04)` |
-| Default node stroke | `rgba(45,49,66,0.25)` | `rgba(245,245,245,0.20)` |
-| Focal node fill | `rgba(235,108,54,0.08)` | `rgba(240,138,89,0.12)` |
-| Focal node stroke | `#eb6c36` | `#f08a59` |
-| Custom component colors | `C` | `C_light` (lighten ~15%) |
+| Token                   | Dark (default)            | Light                  |
+| ----------------------- | ------------------------- | ---------------------- |
+| Paper                   | `#000000`                 | `#fafafa`              |
+| Ink                     | `#ededed`                 | `#171717`              |
+| Muted                   | `#a1a1a1`                 | `#666666`              |
+| Soft                    | `#878787`                 | `#7d7d7d`              |
+| Accent                  | `#0070f3`                 | `#0070f3`              |
+| Dot pattern             | `rgba(237,237,237,0.10)`  | `rgba(23,23,23,0.10)`  |
+| Lane tint               | `rgba(237,237,237,0.025)` | `rgba(23,23,23,0.018)` |
+| Dividers                | `rgba(237,237,237,0.12)`  | `rgba(23,23,23,0.12)`  |
+| Label col divider       | `rgba(237,237,237,0.22)`  | `rgba(23,23,23,0.20)`  |
+| Default chip fill       | `rgba(237,237,237,0.12)`  | `rgba(23,23,23,0.12)`  |
+| Focal chip fill         | `rgba(0,112,243,0.22)`    | `rgba(0,112,243,0.20)` |
+| Default node fill       | `paper-2`                 | `rgba(23,23,23,0.04)`  |
+| Default node stroke     | `rgba(237,237,237,0.25)`  | `rgba(23,23,23,0.20)`  |
+| Focal node fill         | `rgba(0,112,243,0.12)`    | `rgba(0,112,243,0.08)` |
+| Focal node stroke       | `#0070f3`                 | `#0070f3`              |
+| Custom component colors | `C`                       | `C_dark` (darken ~15%) |
 
 ---
 
@@ -335,16 +335,16 @@ Same catalog as `type-data-flow.md` §8.
 
 ### Chip codes
 
-| Code | Color (light)        | Color (dark) | Meaning                      |
-| ---- | -------------------- | ------------ | ---------------------------- |
-| `LS` | `#7c8f6f` sage       | `#9caf8f`    | List / assignment / task     |
-| `DB` | `#5e7a9b` dusty-blue | `#82a0c0`    | Dataset / tabular records    |
-| `TB` | `#b8915a` mustard    | `#d3ad7a`    | Table (analysis-ready)       |
-| `FL` | `#9c6b50` rust-brown | `#b88670`    | File / document / report     |
-| `WB` | `#6e6479` slate      | `#8d8298`    | Web / press / public release |
-| N/A  | omit chip entirely   | —            | Unknown or not applicable    |
+| Code | Color (default)      | Color (light) | Meaning                      |
+| ---- | -------------------- | ------------- | ---------------------------- |
+| `LS` | `#9caf8f` sage       | `#7c8f6f`     | List / assignment / task     |
+| `DB` | `#82a0c0` dusty-blue | `#5e7a9b`     | Dataset / tabular records    |
+| `TB` | `#d3ad7a` mustard    | `#b8915a`     | Table (analysis-ready)       |
+| `FL` | `#b88670` rust-brown | `#9c6b50`     | File / document / report     |
+| `WB` | `#8d8298` slate      | `#6e6479`     | Web / press / public release |
+| N/A  | omit chip entirely   | —             | Unknown or not applicable    |
 
-Text inside chip: white, font-size 5, weight 700, mono.
+Text inside chip: paper-colored (`#000000` default, `#ffffff` light), font-size 5, weight 700, mono.
 
 Data-type chip colors are a **separate semantic axis** from the per-node color override (§4). Chip colors describe _payload format_; node color describes _concern type_. A node can have both an `out: TB` mustard chip and a rust-red border simultaneously.
 
@@ -429,9 +429,9 @@ nodes:
   - { lane: "FLD", step: 2,  title: "Data Collection",   sub: "→ 10,464 dwellings",
       tool: "Survey Solutions",            chips: {in: "LS", out: "DB"},  focal: true }   # focal node
   - { lane: "SVY", step: 3,  title: "HQ Review",         sub: "Submissions → Approved",
-      tool: "Survey Sol. HQ",              chips: {in: "DB", out: "DB"},  color: "#b85450" }   # rust-red · governance
+      tool: "Survey Sol. HQ",              chips: {in: "DB", out: "DB"},  color: "#d97a78" }   # rust-red · governance
   - { lane: "IT",  step: 4,  title: "Error Checks",      sub: "Approved → Cleaned",
-      tool: "SAS · Scripts",               chips: {in: "DB", out: "DB"},  color: "#5a7d9a" }   # slate-blue · data quality
+      tool: "SAS · Scripts",               chips: {in: "DB", out: "DB"},  color: "#80a3c0" }   # slate-blue · data quality
   - { lane: "RDE", step: 5,  title: "Weight Calculation", sub: "Cleaned → Weighted",
       tool: "SAS",                         chips: null }                                  # 2-line title — chips skipped
   - { lane: "HHU", step: 6,  title: "2° Cleaning",       sub: "Weighted → Analysis",
@@ -441,7 +441,7 @@ nodes:
   - { lane: "CMM", step: 8,  title: "Stats Review",      sub: "Tables → Approved",
       tool: "Internal review",             chips: {in: "FL", out: "FL"} }
   - { lane: "CMM", step: 9,  title: "Public Release",    sub: "Approved → Public",
-      tool: "Press conference",            chips: {in: "FL", out: "WB"}, color: "#7a8c47" }   # olive-green · data products
+      tool: "Press conference",            chips: {in: "FL", out: "WB"}, color: "#9aac67" }   # olive-green · data products
   - { lane: "IT",  step: 10, title: "Upload NatStat / SDMX", sub: "Results → Published",
       tool: "Web · SDMX API",              chips: null }                                  # 2-line title — chips skipped
 
@@ -457,7 +457,7 @@ arrows:
   - { from: {lane: "CMM", step: 8}, to: {lane: "CMM", step: 9},  style: "normal"    }     # same lane
   - { from: {lane: "CMM", step: 9}, to: {lane: "IT",  step: 10}, style: "normal"    }     # upward, skips 4 lanes
 
-dark: false
+light: false
 ```
 
 ### 12.1 What this YAML proves
@@ -485,7 +485,7 @@ To document a different process, change only the value of these inputs:
 - **Colors**: choose `color: "#hex"` on at most 3 nodes (§4 cap). Stick to the recommended palette unless brand demands otherwise.
 - **Arrows**: declare every edge explicitly with `style: normal | focal-in | focal-out | trigger`. The routing rule (§3.1) fills in the geometry.
 
-Everything else — viewBox sizing, chip positions, legend layout, dark-mode token swap — is derivable. The YAML is the **source of truth**; the SVG is one of many possible renderings of it (light/dark/full all derive from the same inputs with different style tokens).
+Everything else — viewBox sizing, chip positions, legend layout, light-mode token swap — is derivable. The YAML is the **source of truth**; the SVG is one of many possible renderings of it (light/dark/full all derive from the same inputs with different style tokens).
 
 ---
 

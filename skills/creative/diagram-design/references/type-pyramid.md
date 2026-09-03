@@ -20,7 +20,7 @@ Don't mix orientations on one diagram.
   - **Side annotation** (right or left) — optional. For funnels: drop-off percentage here (`−40%`).
 - Fill: subtle graded tints OR all paper-2 with hairline dividers (cleaner). Pick one.
 - Stroke: 1px hairline between layers; outer silhouette 1px muted or ink.
-- **Coral on ONE layer only**: apex of pyramid, conversion layer of funnel, or critical bottleneck.
+- **Accent on ONE layer only**: apex of pyramid, conversion layer of funnel, or critical bottleneck.
 - Optional left-margin axis arrow + Geist Mono label (`rarer ↑`, `drop-off ↓`).
 
 ## Anti-patterns
@@ -28,7 +28,7 @@ Don't mix orientations on one diagram.
 - 7+ layers (illegible — compress or split).
 - Pyramid for non-hierarchical data (use a tree or bar chart).
 - Dishonest widths (fake equal spacing when drops are unequal).
-- Coral on the base layer (dilutes the "apex = rare" signal).
+- Accent on the base layer (dilutes the "apex = rare" signal).
 
 ## Examples
 

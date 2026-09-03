@@ -9,10 +9,10 @@
 - **Axis spokes** from center to each outer vertex. `rule-solid` 0.20 opacity. **No arrowheads.**
 - **Axis labels:** one word per spoke (Jobs-minimal). Geist sans 11px weight 600. Place 16px outside the outer ring along the axis vector. Top/bottom = `text-anchor="middle"`; right side = `start`; left side = `end`.
 - **Scale ticks** (e.g. `2 4 6 8 10`) only on the **first (top) axis** — putting numbers on every spoke clutters the chart fast. Geist Mono 8px, `muted`, anchored end at `cx − 6`.
-- **Series polygon:** stroke 1.5px at the series color, fill the same color at `0.18` opacity (`0.22` in dark). Stroke 1.8px on the focal series — a subtle weight bump.
+- **Series polygon:** stroke 1.5px at the series color, fill the same color at `0.22` opacity (`0.18` in the light variant). Stroke 1.8px on the focal series — a subtle weight bump.
 - **Vertex dots:** **only on the focal series**, `r=4` filled with the series color. Non-focal series are stroke-and-fill only. This is the load-bearing rule that keeps the chart readable at 4–5 series.
 - **Drawing order:** dots-pattern bg → grid rings → axis spokes → axis labels → scale ticks → non-focal series (smallest area first) → focal series → focal vertex dots → legend.
-- **Legend:** horizontal strip at the bottom (per the global rule). Swatch is a 16×8 rectangle (matches the polygon stroke+fill, not a circle), then the entity name. ~140px between entries. Optional italic tail on the right with the rationale (`"One coral. Position is the signal — color reserved for the recommended option."`).
+- **Legend:** horizontal strip at the bottom (per the global rule). Swatch is a 16×8 rectangle (matches the polygon stroke+fill, not a circle), then the entity name. ~140px between entries. Optional italic tail on the right with the rationale (`"One accent. Position is the signal — color reserved for the recommended option."`).
 
 ## Math
 
@@ -44,7 +44,7 @@ Series `[9, 8, 9, 9, 9]` on a 0–10 scale becomes:
 
 ```svg
 <polygon points="500,96 622,201 585,356 415,356 363,196"
-         fill="rgba(235,108,54,0.18)" stroke="#eb6c36" stroke-width="1.8"/>
+         fill="rgba(0,112,243,0.18)" stroke="#0070f3" stroke-width="1.8"/>
 ```
 
 Each vertex: `center + (v/10) · (outer_i − center)`, rounded to the nearest pixel.
@@ -53,14 +53,14 @@ Each vertex: `center + (v/10) · (outer_i − center)`, rounded to the nearest p
 
 The skill's "1-focal" rule still holds: `accent` is reserved for the focal series, and a small editorial palette (`series-1` through `series-5`, defined in [`style-guide.md`](style-guide.md)) covers the non-focal series. Don't reach for free-form colors.
 
-| Slot  | Token                   | Light     | Dark      |
-| ----- | ----------------------- | --------- | --------- |
-| Focal | `accent`                | `#eb6c36` | `#f08a59` |
-| 1     | `series-1` (sage)       | `#7c8f6f` | `#9caf8f` |
-| 2     | `series-2` (dusty-blue) | `#5e7a9b` | `#82a0c0` |
-| 3     | `series-3` (mustard)    | `#b8915a` | `#d3ad7a` |
-| 4     | `series-4` (rust-brown) | `#9c6b50` | `#b88670` |
-| 5     | `series-5` (slate)      | `#6e6479` | `#8d8298` |
+| Slot  | Token                   | Dark (default) | Light     |
+| ----- | ----------------------- | -------------- | --------- |
+| Focal | `accent`                | `#0070f3`      | `#0070f3` |
+| 1     | `series-1` (sage)       | `#9caf8f`      | `#7c8f6f` |
+| 2     | `series-2` (dusty-blue) | `#82a0c0`      | `#5e7a9b` |
+| 3     | `series-3` (mustard)    | `#d3ad7a`      | `#b8915a` |
+| 4     | `series-4` (rust-brown) | `#b88670`      | `#9c6b50` |
+| 5     | `series-5` (slate)      | `#8d8298`      | `#6e6479` |
 
 ## Anti-patterns
 

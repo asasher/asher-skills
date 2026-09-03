@@ -15,7 +15,7 @@ Every card renders in exactly one of four states. Document and use all four when
 
 | State | Fill | Stroke | Extra |
 | --- | --- | --- | --- |
-| `default` | white | `ink` | — |
+| `default` | `paper-2` | `ink` | — |
 | `blocked` | `accent @ 0.05` | `accent` (full opacity) dashed `4,4` | 4px `accent` bar on the card's left edge |
 | `waiting / external` | `ink @ 0.02` | `ink @ 0.20` dashed `4,3` | — |
 | `done` | `ink @ 0.05` | `muted` | — |

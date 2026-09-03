@@ -32,7 +32,7 @@ hub_w: 200
 hub_h: 104
 radius: 240
 margin: 64
-dark: false
+light: false
 ```
 
 **Budget (hard):** **5–8 stations plus exactly one hub.** Above 8 stations, split the subject into an overview Loop and one or more detail diagrams. Exactly one hub — a loop with two hubs is two diagrams. At most one station may set `focal: true`; zero is allowed when no editorial gate deserves emphasis.
@@ -144,7 +144,7 @@ Include the full circle extrema `cx +/- R`, `cy +/- R` plus station bounds and m
 | Element | Treatment |
 | --- | --- |
 | Station | Standard node: `paper` fill, `ink` stroke, `radius-md`; name in `node-name`, sublabel in `sublabel` |
-| Hub | The one dark element: `ink` fill, `paper` text; slightly larger than a station |
+| Hub | The one solid element: `ink` fill, `paper` text; slightly larger than a station |
 | Focal station | At most one: `accent-tint` fill, `accent` stroke; station name may use `accent` |
 | Ring flow | Circular `A R R 0 0 1` arcs on the station circle, solid `muted` stroke, default arrowhead at the destination; clockwise only |
 | Write-back spoke | Dashed `soft` stroke at reduced emphasis, `stroke-dasharray="5,4"`, with a `soft` arrowhead |
@@ -169,21 +169,21 @@ SKILL.md §6 applies in full except for the two Loop-specific connector primitiv
 
 ---
 
-## 5. Dark variant — token swap
+## 5. Light variant — token swap
 
 Apply the style-guide inversion rule; do not invent a second palette.
 
-| Role | Light | Dark |
+| Role | Dark (default) | Light |
 | --- | --- | --- |
-| Canvas and station fill | `paper` | dark `paper` |
-| Primary text and station stroke | `ink` | inverted `ink` |
-| Hub fill / hub text | `ink` / `paper` | inverted `ink` / dark `paper` |
-| Ring flow | `muted` | dark `muted` |
-| Write-back spokes and labels | `soft` | dark `soft` |
-| Focal fill / stroke | `accent-tint` / `accent` | dark `accent-tint` / brighter dark `accent` |
+| Canvas and station fill | `paper` | light `paper` |
+| Primary text and station stroke | `ink` | light `ink` |
+| Hub fill / hub text | `ink` / `paper` | light `ink` / light `paper` |
+| Ring flow | `muted` | light `muted` |
+| Write-back spokes and labels | `soft` | light `soft` |
+| Focal fill / stroke | `accent-tint` / `accent` | light `accent-tint` / `accent` |
 | Rule and dot grid | `rule` | inverted `rule` at the same opacity |
 
-The semantic relationship stays unchanged in dark mode: one `ink`-filled hub, one optional `accent` station, neutral solid ring arrows, and lighter dashed write-backs.
+The semantic relationship stays unchanged in light mode: one `ink`-filled hub, one optional `accent` station, neutral solid ring arrows, and lighter dashed write-backs.
 
 ---
 
@@ -195,7 +195,7 @@ The semantic relationship stays unchanged in dark mode: one `ink`-filled hub, on
 4. Every ring marker lands on a station edge, not its center.
 5. Every dashed spoke begins on a station's inner edge and stops `marker_gap` before the hub stroke.
 6. Ring connectors stay outside the hub; spokes do not cross or overlap.
-7. At most one station uses `accent-tint` + `accent`; the hub alone uses the dark `ink` fill.
+7. At most one station uses `accent-tint` + `accent`; the hub alone uses the solid `ink` fill.
 8. Spoke labels, if present, use `arrow-label`, an opaque mask, and a 6–10px gap.
 9. The viewBox includes station boxes, strokes, curves, markers, and margins without clipping.
 

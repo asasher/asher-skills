@@ -9,19 +9,19 @@
 - **Axes:** X at y=420 (baseline), Y at x=80. Both use Geist Mono 8px gridline labels. Gridlines 4–6 per axis at equal intervals.
 - **Point shape:** `<circle>` r=5 for standard points, r=6 for focal. Focal point in `accent` fill. Others in `muted @ 0.20` fill + `muted` stroke.
 - **Labels on points (optional):** Geist Mono 8px next to a point. Use a paper-fill rect mask behind the label. Label at most 2–3 points; not all.
-- **Trend line (optional):** `<line>` from lower-left to upper-right, stroke `rgba(45,49,66,0.25)` dashed 4,3. Never force a perfect fit — only add if the trend is visually obvious.
+- **Trend line (optional):** `<line>` from lower-left to upper-right, stroke `rgba(237,237,237,0.25)` dashed 4,3. Never force a perfect fit — only add if the trend is visually obvious.
 - **Quadrant dividers (optional):** light dashed lines at the median x and y to split into quadrants. Label each quadrant in Geist Mono 8px, muted.
 
 ### Point pattern
 
 ```svg
 <!-- Non-focal point — paper mask + circle -->
-<circle cx="X" cy="Y" r="5" fill="#f5f5f5"/>
-<circle cx="X" cy="Y" r="5" fill="rgba(79,93,117,0.20)" stroke="#4f5d75" stroke-width="1"/>
+<circle cx="X" cy="Y" r="5" fill="#000000"/>
+<circle cx="X" cy="Y" r="5" fill="rgba(161,161,161,0.20)" stroke="#a1a1a1" stroke-width="1"/>
 
 <!-- Focal point -->
-<circle cx="X" cy="Y" r="6" fill="#f5f5f5"/>
-<circle cx="X" cy="Y" r="6" fill="rgba(235,108,54,0.15)" stroke="#eb6c36" stroke-width="1.2"/>
+<circle cx="X" cy="Y" r="6" fill="#000000"/>
+<circle cx="X" cy="Y" r="6" fill="rgba(0,112,243,0.15)" stroke="#0070f3" stroke-width="1.2"/>
 ```
 
 ## Anti-patterns
@@ -54,8 +54,8 @@ Not for: a third value that is really a category (use the focal accent or facet 
 - **One accent bubble, and an `ink` opacity ramp for everything else** — never a hue per item. Every labelled bubble is named where it sits, so hue would re-encode what the labels already carry.
 - **The accent marks the editorially focal item, not the biggest or the worst single number.** In the shipped example it marks the service whose _combination_ is the risk: near-peak volume on the worst error rate.
 - **The ramp runs faintest-on-largest** (0.14 on the largest fill up to 0.35 on the smallest in the shipped example). This is ink-mass compensation, not an encoding: a giant bubble at the same opacity as a small one dominates the page by area alone, so opacity scales down as area scales up and every bubble ends up with comparable visual weight. Tone is **not** a fourth variable — the legend must say which end of the ramp is which, in skin-neutral terms ("faintest fill is the largest bubble" survives both skins; "darkest" ships false on one of them).
-- **Every bubble keeps a `muted` stroke** (6.11:1 on light paper, 7.07:1 on dark) — the fills sit at opacities well under 3:1, so the stroke is what carries WCAG 1.4.11 for the mark's edge. The focal bubble's accent stroke measures 2.86:1 on light paper; as with the focal bar, line and slopegraph, its data is carried redundantly — position, label, and the legend naming it in words — and the accent adds only _which bubble is focal_.
-- **Labels stay `ink` or `muted`**, including the focal one. Accent text at 8px misses AA on light paper.
+- **Every bubble keeps a `muted` stroke** (8.13:1 on the default paper, 5.50:1 on light) — the fills sit at opacities well under 3:1, so the stroke is what carries WCAG 1.4.11 for the mark's edge. The focal bubble's accent stroke measures 4.61:1 on the default paper and 4.36:1 on light; as with the focal bar, line and slopegraph, its data is still carried redundantly — position, label, and the legend naming it in words — and the accent adds only _which bubble is focal_.
+- **Labels stay `ink` or `muted`**, including the focal one. Accent text at 8px misses AA on light paper and only just clears it on the default paper.
 
 #### Honest-data rule
 
@@ -74,16 +74,16 @@ Not for: a third value that is really a category (use the focal accent or facet 
 ```svg
 <!-- A bubble: position from two shared linear scales, area from the size.
      x = 80 + 1.76·ms, y = 420 - 95·pct, r = 1.4·√(req/s) -->
-<circle cx="537.6" cy="154" r="38.6" fill="#f5f5f5"/>
+<circle cx="537.6" cy="154" r="38.6" fill="#000000"/>
 <circle data-name="Payments" data-x="260" data-y="2.8" data-size="760"
         cx="537.6" cy="154" r="38.6"
-        fill="rgba(235,108,54,0.15)" stroke="#eb6c36" stroke-width="1.2"/>
+        fill="rgba(0,112,243,0.15)" stroke="#0070f3" stroke-width="1.2"/>
 
 <!-- Its label, bound to the bubble it names -->
-<text data-name="Payments" data-role="label" x="538" y="108" fill="#2d3142" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">PAYMENTS</text>
+<text data-name="Payments" data-role="label" x="538" y="108" fill="#ededed" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">PAYMENTS</text>
 
 <!-- An axis tick, bound to the number it prints -->
-<text data-tick="x" data-value="300" x="608" y="440" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">300</text>
+<text data-tick="x" data-value="300" x="608" y="440" fill="#a1a1a1" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">300</text>
 ```
 
 What each binding buys, and what it costs to omit:

@@ -31,7 +31,7 @@ Applied to schematics:
 
 - Every node represents a distinct idea. Two nodes that always travel together are one node.
 - Every connection carries information. If the relationship is obvious from layout, remove the line.
-- Coral is **editorial, not a flag.** 1–2 focal nodes per diagram. Using it on 5 nodes erases the signal.
+- Accent is **editorial, not a flag.** 1–2 focal nodes per diagram. Using it on 5 nodes erases the signal.
 - The schematic isn't done when everything is added. It's done when nothing can be removed.
 
 **Target density: 4/10.** Enough to be technically complete. Not so dense it needs a guide. Above 9 nodes, it's probably two diagrams.
@@ -133,7 +133,7 @@ These mark "AI slop" schematics of any type:
 
 | Anti-pattern | Why it fails |
 | --- | --- |
-| Dark mode + cyan/purple glow | Looks "technical" without design decisions |
+| Glow, gradients, or neon halos on the dark paper | Looks "technical" without design decisions; the skin lifts surfaces with hairlines, not light |
 | JetBrains Mono as blanket "dev" font | Mono is for _technical_ content — ports, commands, URLs. Names go in Geist sans. |
 | Identical boxes for every node | Erases hierarchy |
 | Legend floating inside the diagram area | Collides with nodes |
@@ -142,7 +142,7 @@ These mark "AI slop" schematics of any type:
 | 3 equal-width summary cards as default | Generic grid — vary widths |
 | Shadow on any element | Shadows are out. Borders are in. |
 | `rounded-2xl` on boxes | Max radius 6–10px or none |
-| Coral on every "important" node | Coral is 1–2 editorial accents, not a signaling system |
+| Accent on every "important" node | The accent is 1–2 editorial marks, not a signaling system |
 | Reproducing Mermaid's renderer layout | Imports automatic spacing and routing instead of making an editorial layout |
 | Any breach of the six §6 connector rules | Diagonal slants, labels touching their stroke, masks clipped by a later node, overlapping paths, shared attach points, transit behind a non-endpoint box — each is an automatic fail; §6 states them in full |
 
@@ -174,7 +174,7 @@ The effective design system comes from §0. [`references/style-guide.md`](refere
 | Type                     | Fill            | Stroke                       |
 | ------------------------ | --------------- | ---------------------------- |
 | **Focal** (1–2 max)      | `accent-tint`   | `accent`                     |
-| **Backend / API / Step** | white           | `ink`                        |
+| **Backend / API / Step** | `paper-2`       | `ink`                        |
 | **Store / State**        | `ink @ 0.05`    | `muted`                      |
 | **External / Cloud**     | `ink @ 0.03`    | `ink @ 0.30`                 |
 | **Input / User**         | `muted @ 0.10`  | `soft`                       |
@@ -213,7 +213,7 @@ Universal building blocks. Type-specialized primitives (lifeline, activation bar
 **Default: clean paper, no dot pattern.** Single `<rect>` filled with `paper`. Don't wrap the diagram in a secondary container background — the diagram sits directly on the page.
 
 ```svg
-<rect width="100%" height="100%" fill="#f5f5f5"/>
+<rect width="100%" height="100%" fill="#000000"/>
 ```
 
 **Optional: dotted paper variant.** When a long-form editorial diagram benefits from textured ground (essays, hero diagrams on a dedicated page), opt in by adding the `dots` pattern and a second rect:
@@ -221,10 +221,10 @@ Universal building blocks. Type-specialized primitives (lifeline, activation bar
 ```svg
 <defs>
   <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
-    <circle cx="1" cy="1" r="0.9" fill="rgba(45,49,66,0.10)"/>
+    <circle cx="1" cy="1" r="0.9" fill="rgba(237,237,237,0.12)"/>
   </pattern>
 </defs>
-<rect width="100%" height="100%" fill="#f5f5f5"/>
+<rect width="100%" height="100%" fill="#000000"/>
 <rect width="100%" height="100%" fill="url(#dots)" opacity="0.6"/>
 ```
 
@@ -234,21 +234,21 @@ Don't use the dot pattern when the diagram sits inside a product page, slide, or
 
 ```svg
 <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/>
+  <polygon points="0 0, 8 3, 0 6" fill="#a1a1a1"/>
 </marker>
 <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/>
+  <polygon points="0 0, 8 3, 0 6" fill="#0070f3"/>
 </marker>
 <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/>
+  <polygon points="0 0, 8 3, 0 6" fill="#8ab4f8"/>
 </marker>
 ```
 
 | Arrow | Stroke | When |
 | --- | --- | --- |
-| Default | muted `#4f5d75` | Internal, generic |
-| Accent | coral `#eb6c36` | Primary / highlighted / headline |
-| Link-blue | `#2e5aa8` | HTTP/API calls, external systems |
+| Default | muted `#a1a1a1` | Internal, generic |
+| Accent | accent `#0070f3` | Primary / highlighted / headline |
+| Link-blue | `#8ab4f8` | HTTP/API calls, external systems |
 | Dashed | `stroke-dasharray="5,4"` + any color | Optional, passive, return, async |
 
 **Draw arrows before boxes** so z-order puts lines behind nodes.
@@ -283,7 +283,7 @@ These six rules are **non-negotiable**. Run the pre-output checklist (§9) to ve
 
 ```svg
 <!-- 1. Opaque paper mask — prevents arrows bleeding through transparent fills -->
-<rect x="X" y="Y" width="W" height="H" rx="6" fill="#f5f5f5"/>
+<rect x="X" y="Y" width="W" height="H" rx="6" fill="#000000"/>
 <!-- 2. Styled box -->
 <rect x="X" y="Y" width="W" height="H" rx="6" fill="FILL" stroke="STROKE" stroke-width="1"/>
 <!-- 3. Rectangular type tag (rx=2, NOT a pill) -->
@@ -291,10 +291,10 @@ These six rules are **non-negotiable**. Run the pre-output checklist (§9) to ve
 <text x="X+22" y="Y+15" fill="STROKE@0.8" font-size="7" font-family="'Geist Mono', monospace"
       text-anchor="middle" letter-spacing="0.08em">API</text>
 <!-- 4. Node name (Geist sans — human-readable) -->
-<text x="CX" y="CY+2" fill="#2d3142" font-size="12" font-weight="600"
+<text x="CX" y="CY+2" fill="#ededed" font-size="12" font-weight="600"
       font-family="'Geist', sans-serif" text-anchor="middle">Node Name</text>
 <!-- 5. Technical sublabel (Geist Mono) -->
-<text x="CX" y="CY+18" fill="#4f5d75" font-size="9"
+<text x="CX" y="CY+18" fill="#a1a1a1" font-size="9"
       font-family="'Geist Mono', monospace" text-anchor="middle">tech:port</text>
 ```
 
@@ -304,8 +304,8 @@ Every arrow label needs an opaque rect behind it. Without one it bleeds through 
 
 ```svg
 <!-- Mask sits 14px above the arrow (8px text height + 6px gap). Stroke is at ARROW_Y. -->
-<rect x="MID_X-18" y="ARROW_Y-20" width="36" height="12" rx="2" fill="#f5f5f5"/>
-<text x="MID_X" y="ARROW_Y-11" fill="#7a8399" font-size="8"
+<rect x="MID_X-18" y="ARROW_Y-20" width="36" height="12" rx="2" fill="#000000"/>
+<text x="MID_X" y="ARROW_Y-11" fill="#878787" font-size="8"
       font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">WRITE</text>
 ```
 
@@ -322,8 +322,8 @@ Rules:
 
 ```svg
 <line x1="30" y1="LEGEND_Y-8" x2="VIEWBOX_W-30" y2="LEGEND_Y-8"
-      stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
-<text x="30" y="LEGEND_Y+8" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace"
+      stroke="rgba(237,237,237,0.10)" stroke-width="0.8"/>
+<text x="30" y="LEGEND_Y+8" fill="#a1a1a1" font-size="8" font-family="'Geist Mono', monospace"
       letter-spacing="0.14em">LEGEND</text>
 <!-- Items — horizontal row, ~160px apart -->
 ```
@@ -357,7 +357,7 @@ Quick check: if a coordinate ends in 1, 2, 3, 5, 6, 7, 9 — fix it.
 | --- | --- |
 | Max nodes | 9 |
 | Max arrows / transitions | 12 |
-| Max coral elements | 2 |
+| Max accent elements | 2 |
 | Max lifelines (sequence) | 5 |
 | Max combined fragments (sequence) | 1 (default); 2 only if each is single-region `opt`/`loop` |
 | Max `alt` regions (sequence) | 2 |
@@ -415,7 +415,7 @@ Don't use 3 identical generic cards. Vary the treatment:
 <div class="card">
   <p class="eyebrow">SECTION LABEL</p>
   <div class="card-header">
-    <span class="card-dot coral"></span>
+    <span class="card-dot accent"></span>
     <h3>Card Title</h3>
   </div>
   <ul><li>Item</li></ul>
@@ -424,11 +424,11 @@ Don't use 3 identical generic cards. Vary the treatment:
 
 Rules:
 
-- `background: #ffffff` (not paper — slight lift without shadow)
-- `border: 1px solid rgba(45,49,66,0.12)`
+- `background: #0a0a0a` (`paper-2`, not paper — the border carries the lift, no shadow)
+- `border: 1px solid rgba(237,237,237,0.14)`
 - `border-radius: 6px`, `padding: 1.25rem`
 - **No `box-shadow`**
-- Card dots: 7px, `border-radius: 50%` — ink / muted / coral / link / soft variants
+- Card dots: 7px, `border-radius: 50%` — ink / muted / accent / link / soft variants
 
 ---
 
@@ -455,7 +455,7 @@ Run before producing any diagram.
 
 **Signal:**
 
-- [ ] Coral used on ≤2 elements? If more, which actually deserve focal status?
+- [ ] Accent used on ≤2 elements? If more, which actually deserve focal status?
 - [ ] Legend covers every type used — and nothing extra?
 - [ ] Within the type's complexity budget (§7)?
 
@@ -471,7 +471,7 @@ Run before producing any diagram.
 - [ ] **When several connectors enter or exit the same edge of a box, each has its own attach point (≥12px apart)? No connector hides another?**
 - [ ] **No connector passes behind a non-endpoint box, except the unavoidable-intervening-box case (§6 rule 5) — and in that case, the stroke is dashed and the label sits at the visible end?**
 - [ ] **No label mask overlaps a node drawn after it? (Node fill would clip the text — §6 rule 6. From a repository checkout, run `python3 <repo-root>/scripts/verify-geometry.py <file>`.)**
-- [ ] Every arrow label has an opaque `fill="#f5f5f5"` rect behind it?
+- [ ] Every arrow label has an opaque `fill="#000000"` rect behind it?
 - [ ] Legend is a horizontal bottom strip, not floating?
 - [ ] No vertical `writing-mode` text?
 - [ ] `viewBox` expanded for the legend strip (~60px)?
@@ -492,24 +492,24 @@ Run before producing any diagram.
 
 ## 10. Templates & Variants
 
-Every diagram ships in three variants (see `assets/`):
+Every diagram ships in three variants (see `assets/`). The `example-<type>.html` and `example-<type>-dark.html` files predate the current skin: read them for layout, not color.
 
 | Variant | File pattern | When to use |
 | --- | --- | --- |
-| **Minimal light** (default) | `assets/template.html`, `example-<type>.html` | Screenshot-ready. Diagram + title. Warm paper. |
-| **Minimal dark** | `assets/template-dark.html`, `example-<type>-dark.html` | Dark mode sites, slides, high-contrast posts. |
+| **Minimal** (default, dark) | `assets/template.html` | Screenshot-ready. Diagram + title on black paper. |
+| **Minimal light** | `assets/template-light.html` | Print, light-themed docs, and pages that cannot host a dark figure. |
 | **Full editorial** | `assets/template-full.html`, `example-<type>-full.html` | Long-form posts where the diagram is the hero. |
 | **Consultant special** (quadrant only) | `example-quadrant-consultant.html` | BCG/McKinsey-style 2×2 scenario matrix. Clinical sans-serif, white bg, bold blue double-ended axes, named scenario cells. See [type-quadrant.md](references/type-quadrant.md#consultant-special-2x2-scenario-matrix). |
 
 **Sketchy variant** (optional, applied to any of the above) — see [primitive-sketchy.md](references/primitive-sketchy.md). SVG turbulence filter wobbles strokes for a hand-drawn feel. Good for essays, not for technical docs.
 
-**Terminal variant** (optional, replaces any of the above) — see [primitive-terminal.md](references/primitive-terminal.md). Start from `assets/template-terminal.html`; terminal examples use the `example-<type>-terminal.html` naming pattern. It uses a fixed charcoal CLI-window palette, monospace type, and one red-orange accent. Use it for dev-tool posts. Use the light, dark, or full-editorial variant when the diagram should follow the project's `DESIGN.md`.
+**Terminal variant** (optional, replaces any of the above) — see [primitive-terminal.md](references/primitive-terminal.md). Start from `assets/template-terminal.html`; terminal examples use the `example-<type>-terminal.html` naming pattern. It uses a fixed charcoal CLI-window palette, monospace type, and one red-orange accent. Use it for dev-tool posts. Use the default, light, or full-editorial variant when the diagram should follow the project's `DESIGN.md`.
 
 **Animation** (optional presentation layer) — see [animation.md](references/animation.md). Modes are `none` (default), `reveal`, `step`, and `loop`; motion never changes the static meaning or raises the complexity budget.
 
 ### To create a new diagram
 
-1. For standalone output, copy the variant closest to what you want (`assets/template.html` for minimal, `assets/template-full.html` for cards, `assets/template-motion.html` only when motion is requested). For embedded output, start from `references/embedded-output.md` and use the selected variant only as visual reference; do not copy its page wrapper or global styles.
+1. For standalone output, copy the variant closest to what you want (`assets/template.html` for minimal, `assets/template-light.html` for the light variant, `assets/template-full.html` for cards, `assets/template-motion.html` only when motion is requested). For embedded output, start from `references/embedded-output.md` and use the selected variant only as visual reference; do not copy its page wrapper or global styles.
 2. If behavior is load-bearing, choose a semantic pattern; then load the matching type reference linked in the visual-type guide.
 3. Replace the eyebrow, h1, and SVG body. Replace `[diagram-slug]` with the file slug and fill `<title>` / `<desc>`.
 4. If motion is requested, load `animation.md`; otherwise keep mode `none` and no script.
@@ -566,7 +566,7 @@ Every diagram is an accessible figure by default:
 
 1. Its `<svg>` carries `role="img"` and `aria-labelledby` naming the diagram's `<title>` and `<desc>`.
 2. `<title>` is the first child of `<svg>`, before `<defs>`. Assistive technology may ignore a title placed later.
-3. The IDs are prefixed per diagram and variant: `<slug>-title` / `<slug>-desc`, where the slug matches the file (`loop`, `loop-dark`, `loop-full`). Bare `title` / `desc` IDs are banned because two inline diagrams would create duplicate IDs and the second could be announced with the first diagram's name.
+3. The IDs are prefixed per diagram and variant: `<slug>-title` / `<slug>-desc`, where the slug matches the file (`loop`, `loop-light`, `loop-full`). Bare `title` / `desc` IDs are banned because two inline diagrams would create duplicate IDs and the second could be announced with the first diagram's name.
 4. `<title>` is the short name of the subject — roughly the page `<h1>`, and about 60 characters or fewer.
 5. `<desc>` is one sentence stating what the diagram shows in terms a reader needs without the image. Describe the content, not the geometry: “Org chart showing a command center routing work to specialist agents and escalation owners,” not “A box at the top with five boxes below it.” A shape-by-shape narration is worse than no useful description.
 6. Decorative-only SVG, such as the specimen glyphs in `assets/icons.html`, carries `aria-hidden="true"` instead. Giving decorative marks accessible names adds noise.

@@ -4,7 +4,7 @@
 
 Use when stakeholders need to audit _who can do what_ across the platform. Prefer **DP integration** when the question is _who can talk to what_ (topology/protocol) rather than _who can write/read what_ (permissions).
 
-This type is **parametric** — the inputs schema in §1 drives every coordinate via the formulas in §2. The rule shape mirrors `type-medallion.md` / `type-process.md` / `type-data-flow.md` so the focal rule, color override, dark mode, and reproducibility checklist read identically across types.
+This type is **parametric** — the inputs schema in §1 drives every coordinate via the formulas in §2. The rule shape mirrors `type-medallion.md` / `type-process.md` / `type-data-flow.md` so the focal rule, color override, light mode, and reproducibility checklist read identically across types.
 
 ---
 
@@ -56,13 +56,13 @@ cells:                                  # explicit (row, col) entries; omitted �
   # ... rows 6..7 ...
 
 none_label: "No access"                 # default text rendered when a cell is omitted
-dark: false
+light: false
 ```
 
 **Reserved field semantics:**
 
-- `roles[j].name` — primary role label (`node-name` role at 11px, white text on the ink banner)
-- `roles[j].code` — secondary AD-group identifier (`sublabel` role, white text at 0.85 opacity)
+- `roles[j].name` — primary role label (`node-name` role at 11px, paper-colored text on the ink banner)
+- `roles[j].code` — secondary AD-group identifier (`sublabel` role, paper-colored text at 0.85 opacity)
 - `components[i].hint` — optional right-aligned `sublabel` text in the label cell (e.g., `"SSO"`, `"S3 API"`)
 - `cells[k].level` — closed vocabulary `full | rw | read | none`. Drives fill/stroke/text-color per §2.4.
 - `cells[k].value` — free-form display text. Domain-specific labels (`"R/W"`, `"SELECT"`, `"Login"`) work without inventing new levels.
@@ -118,7 +118,7 @@ Solid paper fill across the full viewBox. No dot pattern.
 
 **Component-column header cell:**
 
-- Rect: `(comp_col_x, header_y, comp_col_w, header_h)`, fill white, stroke `ink @ 0.12` 0.8, `rx=6`
+- Rect: `(comp_col_x, header_y, comp_col_w, header_h)`, fill `paper-2`, stroke `ink @ 0.12` 0.8, `rx=6`
 - Two-line label centered at `(comp_col_x + comp_col_w/2, header_y+24)` and `(…, header_y+40)`:
   - Line 1: `"Component"` — `node-name` role at 11px, ink
   - Line 2: `"vs. AD group"` — `sublabel` role, muted
@@ -127,14 +127,14 @@ Solid paper fill across the full viewBox. No dot pattern.
 
 - Rect: `(role_col_x(j), header_y, role_col_w, header_h)`, fill `ink`, `rx=6`
 - Two-line label centered:
-  - Line 1 at `y=92`: `roles[j].name` — `node-name` role at 11px, white
-  - Line 2 at `y=108`: `roles[j].code` — `sublabel` role, white at opacity 0.85
+  - Line 1 at `y=92`: `roles[j].name` — `node-name` role at 11px, paper-colored
+  - Line 2 at `y=108`: `roles[j].code` — `sublabel` role, paper-colored at opacity 0.85
 
 ### 2.3 Data row (`y = row_y(k), h = 36`)
 
 **Component label cell:**
 
-- Rect: `(comp_col_x, row_y(k), comp_col_w, row_h)`, fill white, stroke `ink @ 0.12` 0.8, `rx=4`
+- Rect: `(comp_col_x, row_y(k), comp_col_w, row_h)`, fill `paper-2`, stroke `ink @ 0.12` 0.8, `rx=4`
 - Name at `(comp_col_x + 12, row_y(k) + 22)`: `node-name` role at 11px, ink, left-aligned
 - Hint (if present) at `(comp_col_x + comp_col_w − 12, row_y(k) + 22)`: `sublabel` role, muted, right-aligned
 
@@ -150,7 +150,7 @@ Solid paper fill across the full viewBox. No dot pattern.
 | `level`   | Fill            | Stroke         | Text color | Text weight |
 | --------- | --------------- | -------------- | ---------- | ----------- |
 | `full`    | `ink @ 0.08`    | `ink @ 0.12`   | `ink`      | 600         |
-| `rw`      | `#FFFFFF`       | `ink @ 0.12`   | `ink`      | 400         |
+| `rw`      | `paper-2`       | `ink @ 0.12`   | `ink`      | 400         |
 | `read`    | `muted @ 0.08`  | `ink @ 0.12`   | `muted`    | 400         |
 | `none`    | `paper`         | `ink @ 0.12`   | `soft`     | 400         |
 | **focal** | `accent @ 0.07` | `accent` (1.4) | `accent`   | 600         |
@@ -183,24 +183,24 @@ Three independent override axes — per-cell, per-component (row), per-role (col
 
 Tints a specific intersection cell. Applied to:
 
-| Element | Light | Dark |
+| Element | Dark (default) | Light |
 | --- | --- | --- |
-| Cell fill | `rgba(C, 0.08)` | `rgba(C_light, 0.12)` |
-| Cell stroke | `rgba(C, 0.45)` width 1.0 | `rgba(C_light, 0.55)` width 1.0 |
-| Value text | `C` | `C_light` |
-| Sub text (if present) | `rgba(C, 0.85)` | `rgba(C_light, 0.95)` |
+| Cell fill | `rgba(C, 0.12)` | `rgba(C_dark, 0.08)` |
+| Cell stroke | `rgba(C, 0.55)` width 1.0 | `rgba(C_dark, 0.45)` width 1.0 |
+| Value text | `C` | `C_dark` |
+| Sub text (if present) | `rgba(C, 0.95)` | `rgba(C_dark, 0.85)` |
 
-`C_light` = the same hex lightened ~15% for dark-mode contrast.
+`C_dark` = the same hex darkened ~15% for light-paper contrast.
 
 ### 4.2 Per-component `color` (`components[i].color`)
 
 Tints the row's **label cell only** (left column). The data cells in that row keep their per-cell `level` styling — the row color flags _what_ this component is, not _what permissions live in it_.
 
-| Element | Light | Dark |
+| Element | Dark (default) | Light |
 | --- | --- | --- |
-| Label cell fill | `rgba(C, 0.06)` | `rgba(C_light, 0.10)` |
-| Label cell stroke | `rgba(C, 0.45)` width 0.8 | `rgba(C_light, 0.55)` width 0.8 |
-| Component name | `C` | `C_light` |
+| Label cell fill | `rgba(C, 0.10)` | `rgba(C_dark, 0.06)` |
+| Label cell stroke | `rgba(C, 0.55)` width 0.8 | `rgba(C_dark, 0.45)` width 0.8 |
+| Component name | `C` | `C_dark` |
 | Hint text | unchanged (muted) | unchanged (muted) |
 
 ### 4.3 Per-role `color` (`roles[j].color`)
@@ -210,9 +210,9 @@ Tints the **column banner only** (top row). Cells underneath keep their `level` 
 | Element | Light & Dark (banner is the same in both modes) |
 | --- | --- |
 | Banner fill | `C` |
-| Role name + code text | `#FFFFFF` if `C` is dark (luminance ≤ 0.5), else `ink` |
+| Role name + code text | `#ffffff` if `C` is dark (luminance ≤ 0.5), else `#171717` |
 
-If you pick a mid-luminance hex (e.g., yellow `#c9a23a`), the text auto-flips to ink for contrast. Pair `roles[j].text_color: "#hex"` to override this auto-pick.
+If you pick a light hex (e.g., yellow `#efc860`), the text auto-flips to near-black for contrast. Pair `roles[j].text_color: "#hex"` to override this auto-pick.
 
 ### 4.4 Rules
 
@@ -223,11 +223,11 @@ If you pick a mid-luminance hex (e.g., yellow `#c9a23a`), the text auto-flips to
 
 ### 4.5 Recommended palette (same as the other parametric types)
 
-- `#b85450` rust-red — Security elevation / break-glass / SoX-flagged
-- `#5a7d9a` slate-blue — Quality / monitoring / observability gate
-- `#7a8c47` olive-green — Approved / governance-cleared / publication-ready
-- `#c9a23a` warm yellow — Working / sandbox / data-scientist zone
-- `#8c6d3f` warm-brown — Archive / cold / DR
+- `#d97a78` rust-red — Security elevation / break-glass / SoX-flagged
+- `#80a3c0` slate-blue — Quality / monitoring / observability gate
+- `#9aac67` olive-green — Approved / governance-cleared / publication-ready
+- `#efc860` warm yellow — Working / sandbox / data-scientist zone
+- `#b29365` warm-brown — Archive / cold / DR
 
 ---
 
@@ -243,24 +243,24 @@ If zero or >1 `focal: true` cells are declared, halt and ask the user.
 
 ---
 
-## 6. Dark mode
+## 6. Light mode
 
-| Token                   | Light           | Dark                     |
-| ----------------------- | --------------- | ------------------------ |
-| Paper                   | `paper`         | `ink`                    |
-| Ink                     | `ink`           | `paper`                  |
-| Muted                   | `muted`         | `soft`                   |
-| Soft (no-access text)   | `soft`          | `muted`                  |
-| Accent                  | `accent`        | `accent`                 |
-| Role-banner fill        | `ink`           | `ink`                    |
-| Header / row stroke     | `ink @ 0.12`    | `paper @ 0.18`           |
-| Full / Admin fill       | `ink @ 0.08`    | `paper @ 0.10`           |
-| R/W fill                | `#FFFFFF`       | `paper @ 0.06`           |
-| Read fill               | `muted @ 0.08`  | `soft @ 0.12`            |
-| No-access fill          | `paper`         | `paper @ 0.02`           |
-| Focal fill              | `accent @ 0.07` | `accent @ 0.12`          |
-| Focal stroke            | `accent`        | `accent`                 |
-| Custom component colors | `C`             | `C_light` (lighten ~15%) |
+| Token                   | Dark (default)  | Light                  |
+| ----------------------- | --------------- | ---------------------- |
+| Paper                   | `paper`         | `ink`                  |
+| Ink                     | `ink`           | `paper`                |
+| Muted                   | `muted`         | `soft`                 |
+| Soft (no-access text)   | `soft`          | `muted`                |
+| Accent                  | `accent`        | `accent`               |
+| Role-banner fill        | `ink`           | `ink`                  |
+| Header / row stroke     | `ink @ 0.18`    | `paper @ 0.12`         |
+| Full / Admin fill       | `ink @ 0.10`    | `paper @ 0.08`         |
+| R/W fill                | `paper-2`       | `paper @ 0.06`         |
+| Read fill               | `muted @ 0.12`  | `soft @ 0.08`          |
+| No-access fill          | `paper`         | `paper @ 0.02`         |
+| Focal fill              | `accent @ 0.12` | `accent @ 0.07`        |
+| Focal stroke            | `accent`        | `accent`               |
+| Custom component colors | `C`             | `C_dark` (darken ~15%) |
 
 ---
 
@@ -269,7 +269,7 @@ If zero or >1 `focal: true` cells are declared, halt and ask the user.
 Before emitting SVG, verify **every** item:
 
 1. `viewBox = "0 0 {viewBox_w} {viewBox_h}"` derived via §2 (4 roles × 8 components → 920 × 520).
-2. Header row at `y=72 h=52`. Component header cell white-filled with two-line `Component / vs. AD group` label. Role banners filled `ink` with name + AD-group code in white.
+2. Header row at `y=72 h=52`. Component header cell `paper-2`-filled with two-line `Component / vs. AD group` label. Role banners filled `ink` with name + AD-group code in paper color.
 3. Data rows start at `y=140`, stride 40, height 36. `rows_bottom = 140 + (n_components−1)·40 + 36`.
 4. Component label cell `rx=4`, name left-aligned at `x=24`, optional `hint` right-aligned at `x = comp_col_x + comp_col_w − 12`.
 5. Every value cell `rx=4`, stroke `ink @ 0.12` 0.6, fill + text matching §2.4 for its `level`.
@@ -369,7 +369,7 @@ cells:
   - { row: 7, col: 2, value: "Read",  level: "read" }
   - { row: 7, col: 3, value: "No access", level: "none" }
 
-dark: false
+light: false
 ```
 
 ### 10.1 What this YAML proves

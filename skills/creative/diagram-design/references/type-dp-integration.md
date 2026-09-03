@@ -47,7 +47,7 @@ consumers:                          # right column, 0..6 nodes
 
 footer:                             # 0..N cross-cutting bars stacked below zone (full-canvas width)
   - { name: "Active Directory", icon: key,        subtitle: "LDAP · SSO · group RBAC",
-      color: "#b85450" }            # tinted red to flag the security concern
+      color: "#d97a78" }            # tinted red to flag the security concern
   # additional footer nodes (Observability, Backup, …) stack below this one
 
 internal_connections:               # explicit platform-component edges
@@ -57,8 +57,8 @@ internal_connections:               # explicit platform-component edges
   - { from: "JupyterLab",  to: "Trino",      style: "secondary", dashed: true }
   - { from: "Airflow",     to: ["Apache NiFi", "MinIO", "JupyterLab"], style: "trigger" }
 
-focal_accent: "#eb6c36"             # one color for all focal components (default = SKILL accent)
-dark: false
+focal_accent: "#0070f3"             # one color for all focal components (default = SKILL accent)
+light: false
 ```
 
 **Reserved `kind` values for `platform.rows`:**
@@ -179,7 +179,7 @@ bar_w      = zone_w - 2*zone_pad_x       # 664
 bar_cx     = zone_cx                     # 608
 ```
 
-Bars span the full zone width minus 16-px padding on each side. Bars marked `focal: true` use `bar_h_focal=56` and accent styling (fill `rgba(focal_accent, 0.08)`, stroke `focal_accent`). Non-focal bars use `bar_h_default=44` with muted styling (fill `rgba(45,49,66,0.05)`, stroke `rgba(45,49,66,0.32)`).
+Bars span the full zone width minus 16-px padding on each side. Bars marked `focal: true` use `bar_h_focal=56` and accent styling (fill `rgba(focal_accent, 0.08)`, stroke `focal_accent`). Non-focal bars use `bar_h_default=44` with muted styling (fill `rgba(237,237,237,0.05)`, stroke `rgba(237,237,237,0.32)`).
 
 ### 2.4 Source / consumer placement (side columns)
 
@@ -190,7 +190,7 @@ consumer_y(k)     = source_y(k)                 # mirrored
 consumer_cy(k)    = source_cy(k)
 ```
 
-All side-column nodes use fixed `w=160 h=64`. Same fill / stroke pattern: fill `rgba(79,93,117,0.06)`, stroke `#7a8399`, stroke-width 1.
+All side-column nodes use fixed `w=160 h=64`. Same fill / stroke pattern: fill `rgba(161,161,161,0.06)`, stroke `#878787`, stroke-width 1.
 
 ---
 
@@ -200,21 +200,21 @@ Five styles, bound to topology. Don't let user override style on focal-touching,
 
 | `style` | Stroke | Width | Dash | Marker | When required |
 | --- | --- | --- | --- | --- | --- |
-| `primary` | `#eb6c36` (focal_accent) | 1.4 | — | `arrow-accent` | Every edge whose endpoint is a `focal: true` component. Also every Trino → consumer edge (serve-flow rule). |
-| `secondary` | `#4f5d75` (muted) | 1.2 | — | `arrow` | Default for internal platform-component edges and source → platform edges that don't touch focal. |
-| `federated` | `#2e5aa8` (link-blue) | 1.0 | `4,3` | `arrow-link` | Federation queries (e.g., source DB → Trino). |
-| `trigger` | `#4f5d75` (muted) | 1.0 | `4,3` | `arrow` | Every edge originating from a `kind: bar` component (Airflow drops). Unlabelled. |
-| `auth` | `#eb6c36` | 1.2 | `5,4` | `arrow-accent` | Every edge from a footer node up to the zone bottom edge. **Never to a specific component.** |
+| `primary` | `#0070f3` (focal_accent) | 1.4 | — | `arrow-accent` | Every edge whose endpoint is a `focal: true` component. Also every Trino → consumer edge (serve-flow rule). |
+| `secondary` | `#a1a1a1` (muted) | 1.2 | — | `arrow` | Default for internal platform-component edges and source → platform edges that don't touch focal. |
+| `federated` | `#8ab4f8` (link-blue) | 1.0 | `4,3` | `arrow-link` | Federation queries (e.g., source DB → Trino). |
+| `trigger` | `#a1a1a1` (muted) | 1.0 | `4,3` | `arrow` | Every edge originating from a `kind: bar` component (Airflow drops). Unlabelled. |
+| `auth` | `#0070f3` | 1.2 | `5,4` | `arrow-accent` | Every edge from a footer node up to the zone bottom edge. **Never to a specific component.** |
 
 **Defs block** (required, five markers — exactly):
 
 ```svg
 <defs>
-  <marker id="arrow"        markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
-  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/></marker>
-  <marker id="arrow-link"   markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
-  <marker id="arrow-sm"     markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#4f5d75"/></marker>
-  <marker id="arrow-dim"    markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="rgba(45,49,66,0.45)"/></marker>
+  <marker id="arrow"        markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#a1a1a1"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0070f3"/></marker>
+  <marker id="arrow-link"   markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8ab4f8"/></marker>
+  <marker id="arrow-sm"     markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#a1a1a1"/></marker>
+  <marker id="arrow-dim"    markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="rgba(237,237,237,0.45)"/></marker>
 </defs>
 ```
 
@@ -267,18 +267,18 @@ Any source, consumer, platform component (node or bar), or footer node accepts a
 
 **Where the color is applied** (`C = color`):
 
-| Element | Light | Dark |
+| Element | Dark (default) | Light |
 | --- | --- | --- |
-| Container fill (`rect` body) | `rgba(C, 0.06)` | `rgba(C_light, 0.10)` |
-| Container stroke | `rgba(C, 0.35)` (`stroke-width=1` for nodes, `0.8` for bars) | `rgba(C_light, 0.45)` |
-| Role badge stroke | `rgba(C, 0.40)` | `rgba(C_light, 0.55)` |
-| Role badge text | `rgba(C, 0.85)` | `rgba(C_light, 1.0)` |
-| Icon stroke / fill | `C` | `C_light` |
-| Name text | `C` | `C_light` |
+| Container fill (`rect` body) | `rgba(C, 0.10)` | `rgba(C_dark, 0.06)` |
+| Container stroke | `rgba(C, 0.45)` (`stroke-width=1` for nodes, `0.8` for bars) | `rgba(C_dark, 0.35)` |
+| Role badge stroke | `rgba(C, 0.55)` | `rgba(C_dark, 0.40)` |
+| Role badge text | `rgba(C, 1.0)` | `rgba(C_dark, 0.85)` |
+| Icon stroke / fill | `C` | `C_dark` |
+| Name text | `C` | `C_dark` |
 | Subtitle text | **unchanged** (muted) | **unchanged** (muted) |
 | Connectors touching this component | **unchanged** — topology-driven | **unchanged** |
 
-`C_light` = the same hex lightened ~15% for dark-mode contrast (e.g., `#b85450` → `#d97a78`).
+`C_dark` = the same hex darkened ~15% for light-paper contrast (e.g., `#d97a78` → `#b85450`).
 
 **Rules:**
 
@@ -288,10 +288,10 @@ Any source, consumer, platform component (node or bar), or footer node accepts a
 
 **Semantic palette** (use these unless brand demands otherwise):
 
-- `#b85450` rust-red — Security / Identity (AD, Keycloak, Vault)
-- `#5a7d9a` slate-blue — Observability (Prometheus, Datadog, OpenTelemetry)
-- `#7a8c47` olive-green — Governance / Lineage (OpenMetadata, DataHub)
-- `#8c6d3f` warm-brown — Backup / DR (Velero, Restic)
+- `#d97a78` rust-red — Security / Identity (AD, Keycloak, Vault)
+- `#80a3c0` slate-blue — Observability (Prometheus, Datadog, OpenTelemetry)
+- `#9aac67` olive-green — Governance / Lineage (OpenMetadata, DataHub)
+- `#b29365` warm-brown — Backup / DR (Velero, Restic)
 
 ---
 
@@ -307,23 +307,23 @@ Any source, consumer, platform component (node or bar), or footer node accepts a
 
 ---
 
-## 6. Dark mode
+## 6. Light mode
 
-| Token                   | Light                   | Dark                     |
-| ----------------------- | ----------------------- | ------------------------ |
-| Page paper              | `#f5f5f5`               | `#2d3142`                |
-| Ink                     | `#2d3142`               | `#f5f5f5`                |
-| Muted                   | `#4f5d75`               | `#bfc0c0`                |
-| Accent                  | `#eb6c36`               | `#f08a59`                |
-| Link (federated)        | `#2e5aa8`               | `#6a95d8`                |
-| Side-column fill        | `rgba(79,93,117,0.06)`  | `rgba(245,245,245,0.06)` |
-| Side-column stroke      | `#7a8399`               | `rgba(245,245,245,0.30)` |
-| Zone fill               | `rgba(45,49,66,0.025)`  | `rgba(245,245,245,0.04)` |
-| Zone stroke             | `rgba(45,49,66,0.32)`   | `rgba(245,245,245,0.30)` |
-| Non-focal bar fill      | `rgba(45,49,66,0.05)`   | `rgba(245,245,245,0.06)` |
-| Focal fill              | `rgba(235,108,54,0.08)` | `rgba(240,138,89,0.12)`  |
-| Focal stroke            | `#eb6c36`               | `#f08a59`                |
-| Custom component colors | `C`                     | `C_light` (lighten ~15%) |
+| Token                   | Dark (default)           | Light                  |
+| ----------------------- | ------------------------ | ---------------------- |
+| Page paper              | `#000000`                | `#fafafa`              |
+| Ink                     | `#ededed`                | `#171717`              |
+| Muted                   | `#a1a1a1`                | `#666666`              |
+| Accent                  | `#0070f3`                | `#0070f3`              |
+| Link (federated)        | `#8ab4f8`                | `#2e5aa8`              |
+| Side-column fill        | `rgba(161,161,161,0.06)` | `rgba(23,23,23,0.06)`  |
+| Side-column stroke      | `#878787`                | `rgba(23,23,23,0.30)`  |
+| Zone fill               | `rgba(237,237,237,0.04)` | `rgba(23,23,23,0.025)` |
+| Zone stroke             | `rgba(237,237,237,0.32)` | `rgba(23,23,23,0.30)`  |
+| Non-focal bar fill      | `rgba(237,237,237,0.06)` | `rgba(23,23,23,0.05)`  |
+| Focal fill              | `rgba(0,112,243,0.12)`   | `rgba(0,112,243,0.08)` |
+| Focal stroke            | `#0070f3`                | `#0070f3`              |
+| Custom component colors | `C`                      | `C_dark` (darken ~15%) |
 
 ---
 
@@ -395,7 +395,7 @@ When this gets unwieldy:
 
 - **Sources or consumers as a single collapsed node** when ≥3 distinct items exist — defeats the whole point of this type. Use Architecture or High-level if you want collapsing.
 - **One bus arrow from "sources" to "the platform"** — every wire is labeled with its protocol; this is how integration teams read the diagram.
-- **Per-tool color coding** (teal-NiFi, magenta-MinIO, yellow-Jupyter) inside the zone — collapses hierarchy; only the two focal accents earn coral, plus up to 2 custom colors on cross-cutting components (§4 cap).
+- **Per-tool color coding** (teal-NiFi, magenta-MinIO, yellow-Jupyter) inside the zone — collapses hierarchy; only the two focal accents earn accent, plus up to 2 custom colors on cross-cutting components (§4 cap).
 - **More than 2 focal components** — focal exists to distinguish "platform" from "pile of tools"; >2 erases the signal (same rule as SKILL.md §1).
 - **`color` override on a focal component** — ignored. Focal_accent always wins.
 - **Footer wired to one specific tool** (e.g., AD → Airflow only) — wrong unless that service truly only protects one tool. The default is the layer-wide connection.

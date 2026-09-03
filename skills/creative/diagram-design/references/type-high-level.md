@@ -18,7 +18,7 @@ chevrons:                       # ordered left → right; reserved names auto-pr
   - { name: "Transformation",       columns: 1 }
   - { name: "Visualization",        columns: 1 }
   - { name: "Orchestration",        vertical: true }                     # reserved → pairs with the bar
-  - { name: "Security",             vertical: true, color: "#b85450" }   # tinted to match the Identity bar below
+  - { name: "Security",             vertical: true, color: "#d97a78" }   # tinted to match the Identity bar below
   - { name: "Observability",        vertical: true }                     # reserved → pairs with crosscut #2
 
 sources:                        # external; rendered in the dashed zone on the left
@@ -34,7 +34,7 @@ components:                     # inside the cluster, plus bars and cross-cuttin
   - { name: "Notebooks",  chevron: "Transformation", kind: node,          icon: jupyter,  role: "ANLZ"  }
   - { name: "Superset",   chevron: "Visualization",  kind: node,          icon: superset, role: "DASH" }
   - { name: "Airflow",    chevron: "Orchestration",  kind: bar,           icon: airflow,    subtitle: "Apache Airflow" }
-  - { name: "Identity",   chevron: "Security",       kind: cross-cutting, icon: keycloak,   subtitle: "Keycloak · LDAP · OIDC",     color: "#b85450" }
+  - { name: "Identity",   chevron: "Security",       kind: cross-cutting, icon: keycloak,   subtitle: "Keycloak · LDAP · OIDC",     color: "#d97a78" }
   - { name: "Monitoring", chevron: "Observability",  kind: cross-cutting, icon: prometheus, subtitle: "Prometheus · Grafana · Loki" }
 
 connections:                    # explicit edges; focal-touching ones become accent automatically
@@ -46,7 +46,7 @@ connections:                    # explicit edges; focal-touching ones become acc
   - { from: "Airflow", to: ["NiFi", "Trino", "Notebooks"], style: "trigger" }
 
 focal: "MinIO"                  # exactly one; defaults to first kind=node under "Storage"
-dark: false
+light: false
 ```
 
 **Reserved chevron names** (always vertical, even if `vertical: true` is omitted): `Orchestration`, `Security`, `Observability`, `Governance`, `Backup`.
@@ -112,13 +112,13 @@ chevron_cx(C)      = (x_boundaries[index(C)] + x_boundaries[index(C)+1]) / 2
 - Middle: `(x0,4) (x1-12,4) (x1,18) (x1-12,32) (x0,32) (x0+12,18)`
 - Last (rightmost): `(x0,4) (effective_w,4) (effective_w,32) (x0,32) (x0+12,18)`
 
-Fills alternate `#2d3142` / `#3d4460` (light mode) or `#3d4460` / `#4a5270` (dark mode). Labels: paper-colored mono `font-size=7`, `letter-spacing=0.14em`, `text-anchor=middle`, centered at `chevron_cx, 21`.
+Fills alternate `#ededed` / `#c9c9c9` (default) or `#171717` / `#333333` (light mode). Labels: paper-colored mono `font-size=7`, `letter-spacing=0.14em`, `text-anchor=middle`, centered at `chevron_cx, 21`.
 
-**Color override** (per chevron, both horizontal and vertical): a chevron may declare an optional `color: "#hex"` that replaces the alternation fill for that one chevron. Use it to flag a phase that pairs with a custom-colored component (e.g., `Security` chevron in red when the Identity bar uses `color: "#b85450"`). Rules:
+**Color override** (per chevron, both horizontal and vertical): a chevron may declare an optional `color: "#hex"` that replaces the alternation fill for that one chevron. Use it to flag a phase that pairs with a custom-colored component (e.g., `Security` chevron in red when the Identity bar uses `color: "#d97a78"`). Rules:
 
 - Override applies to the polygon fill only. The label stays paper-colored — never recolor chevron labels.
 - The alternation index doesn't shift; neighboring chevrons keep their natural fill, even if it produces two adjacent same-fill chevrons. Don't try to "fix" this — overrides should be rare (≤ 2 per diagram).
-- In dark mode, use the same hex unless contrast against paper labels suffers; if it does, pick a darker shade for dark mode and document it as a `color_dark` field on that chevron.
+- In light mode, use the same hex unless contrast against paper labels suffers; if it does, pick a darker shade for light mode and document it as a `color_light` field on that chevron.
 - A chevron color override is independent of any paired component's color, but pairing them (same hex on chevron + bar) is the conventional way to make the column "read" as one concern.
 
 ### 2.3 Source zone (dashed, external)
@@ -130,7 +130,7 @@ sources_w          = x_boundaries[1] - 8           # width of the first chevron,
 sources_h          = 336
 ```
 
-Stroke: `rgba(45,49,66,0.20)`, `stroke-width=0.8`, `stroke-dasharray=6,3`, `rx=6`. Zone fill: `rgba(45,49,66,0.02)`.
+Stroke: `rgba(237,237,237,0.20)`, `stroke-width=0.8`, `stroke-dasharray=6,3`, `rx=6`. Zone fill: `rgba(237,237,237,0.02)`.
 
 ### 2.4 Cluster boundary (solid)
 
@@ -141,7 +141,7 @@ cluster_w          = effective_w - cluster_x       # extends to right strip / ca
 cluster_h          = 336
 ```
 
-Stroke: `rgba(45,49,66,0.18)`, `stroke-width=1.2`, `rx=8`. Fill: `rgba(45,49,66,0.02)`. K8s icon + label at `(cluster_x + 16, 352)` (icon) and `(cluster_x + 40, 362)` (text).
+Stroke: `rgba(237,237,237,0.18)`, `stroke-width=1.2`, `rx=8`. Fill: `rgba(237,237,237,0.02)`. K8s icon + label at `(cluster_x + 16, 352)` (icon) and `(cluster_x + 40, 362)` (text).
 
 ### 2.5 Cross-cutting bars (identity, observability, …)
 
@@ -155,7 +155,7 @@ cross_w            = effective_w - 4               # spans body width, stops at 
 cross_h            = 40
 ```
 
-Stroke: `rgba(45,49,66,0.20)`, `stroke-width=0.8`, `rx=6`. Fill: `rgba(45,49,66,0.05)`. Icon at `(16, cross_y(k) + 10)`, name centered at `(effective_w / 2, cross_y(k) + 22)`, subtitle at `(effective_w / 2, cross_y(k) + 34)`.
+Stroke: `rgba(237,237,237,0.20)`, `stroke-width=0.8`, `rx=6`. Fill: `rgba(237,237,237,0.05)`. Icon at `(16, cross_y(k) + 10)`, name centered at `(effective_w / 2, cross_y(k) + 22)`, subtitle at `(effective_w / 2, cross_y(k) + 34)`.
 
 Reserved cross-cutting _concerns_ (informational; user can name the actual bar whatever they want):
 
@@ -176,7 +176,7 @@ bar_w              = cluster_w - 24
 bar_h              = 44
 ```
 
-Stroke: `rgba(45,49,66,0.18)`, `stroke-width=0.8`, `rx=4`. Fill: `rgba(45,49,66,0.05)`. Tool icon at the far right (`bar_x + bar_w - 50, 58`); name centered at `(bar_x + bar_w/2, 71)`; subtitle at `(bar_x + bar_w/2, 84)`.
+Stroke: `rgba(237,237,237,0.18)`, `stroke-width=0.8`, `rx=4`. Fill: `rgba(237,237,237,0.05)`. Tool icon at the far right (`bar_x + bar_w - 50, 58`); name centered at `(bar_x + bar_w/2, 71)`; subtitle at `(bar_x + bar_w/2, 84)`.
 
 ### 2.7 Component nodes (inside cluster)
 
@@ -195,7 +195,7 @@ gap                = 16
 row_top(k)         = first_top_y + k * (node_h + gap)   # k = 0..K-1
 ```
 
-**Focal node:** `fill="rgba(235,108,54,0.08)"`, `stroke="#eb6c36"`, `stroke-width=1.2`. Title text in accent color. All other nodes: white fill, `stroke=rgba(45,49,66,0.25)`, `stroke-width=1`.
+**Focal node:** `fill="rgba(0,112,243,0.08)"`, `stroke="#0070f3"`, `stroke-width=1.2`. Title text in accent color. All other nodes: `paper-2` fill, `stroke=rgba(237,237,237,0.25)`, `stroke-width=1`.
 
 Role badge top-left at `(node_x+8, node_y+6)`, size 12 high. Icon top-right at `(node_x+node_w-32, node_y+6)`, 24×24, monochrome via `currentColor`. Name centered at `(node_cx, node_y+44)` size 11 sans semibold. Subtitle at `(node_cx, node_y+56)` size 8 mono muted.
 
@@ -238,7 +238,7 @@ Adjacent edges share the same y (no gap), like horizontal chevrons share x at th
 - Middle: notch on top, point on bottom — `(strip_x, y0) (strip_x+strip_w/2, y0+12) (strip_x+strip_w, y0) (strip_x+strip_w, y1-12) (strip_x+strip_w/2, y1) (strip_x, y1-12)`
 - Last (bottommost): notch on top, flat bottom — `(strip_x, y0) (strip_x+strip_w/2, y0+12) (strip_x+strip_w, y0) (strip_x+strip_w, y1) (strip_x, y1)`
 
-Fills alternate `#2d3142` / `#3d4460` (same palette as horizontals). Labels: paper-colored mono `font-size=7`, `letter-spacing=0.14em`, **rotated −90°**, anchored at `(strip_x + strip_w/2, (y0+y1)/2)`.
+Fills alternate `#ededed` / `#c9c9c9` (same palette as horizontals). Labels: paper-colored mono `font-size=7`, `letter-spacing=0.14em`, **rotated −90°**, anchored at `(strip_x + strip_w/2, (y0+y1)/2)`.
 
 Vertical chevrons honor the per-chevron `color` override documented in §2.2 — apply the hex to the polygon fill, leave the rotated label paper-colored. Pair the override with the same hex on the chevron's paired bar/crosscut to bind them visually as one concern.
 
@@ -250,19 +250,19 @@ These are non-negotiable. Pick the style **automatically** from the topology —
 
 | `style` | Stroke | Width | Dash | Marker | When required |
 | --- | --- | --- | --- | --- | --- |
-| `primary` | `#eb6c36` | 1.2 | — | `arrow-accent` | Every edge whose endpoint is the `focal` node. |
-| `secondary` | `#4f5d75` | 1.0 | — | `arrow` | Default for source→component and component→component when neither endpoint is focal. |
-| `trigger` | `#4f5d75` | 1.0 | `4,3` | `arrow-sm` | Every edge originating from a `kind: bar` component. |
-| `query` | `rgba(45,49,66,0.30)` | 1.0 | `4,3` | `arrow` | Read-back edges (e.g., focal ↔ Trino). |
+| `primary` | `#0070f3` | 1.2 | — | `arrow-accent` | Every edge whose endpoint is the `focal` node. |
+| `secondary` | `#a1a1a1` | 1.0 | — | `arrow` | Default for source→component and component→component when neither endpoint is focal. |
+| `trigger` | `#a1a1a1` | 1.0 | `4,3` | `arrow-sm` | Every edge originating from a `kind: bar` component. |
+| `query` | `rgba(237,237,237,0.30)` | 1.0 | `4,3` | `arrow` | Read-back edges (e.g., focal ↔ Trino). |
 
 **Defs block** (required, exactly these four markers):
 
 ```svg
 <defs>
-  <marker id="arrow"        markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
-  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/></marker>
-  <marker id="arrow-sm"     markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#4f5d75"/></marker>
-  <marker id="arrow-dim"    markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="rgba(45,49,66,0.45)"/></marker>
+  <marker id="arrow"        markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#a1a1a1"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0070f3"/></marker>
+  <marker id="arrow-sm"     markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#a1a1a1"/></marker>
+  <marker id="arrow-dim"    markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="rgba(237,237,237,0.45)"/></marker>
 </defs>
 ```
 
@@ -295,14 +295,14 @@ A component may declare an optional `color: "#hex"` (CSS color string). The over
 
 **Where the color is applied** (given `C = color`):
 
-| Element | Light mode | Dark mode |
+| Element | Dark (default) | Light |
 | --- | --- | --- |
-| Container fill (`rect` body) | `rgba(C, 0.06)` | `rgba(C, 0.10)` |
-| Container stroke | `rgba(C, 0.35)` (`stroke-width=1` for nodes, `0.8` for bars) | `rgba(C, 0.45)` |
-| Role badge stroke (nodes) | `rgba(C, 0.40)` | `rgba(C, 0.55)` |
-| Role badge text (nodes) | `rgba(C, 0.85)` | `rgba(C, 1.0)` |
-| Icon fill / stroke | `C` | lighten `C` by ~15% (or use `C` if already light) |
-| Name text | `C` | lighten `C` |
+| Container fill (`rect` body) | `rgba(C, 0.10)` | `rgba(C, 0.06)` |
+| Container stroke | `rgba(C, 0.45)` (`stroke-width=1` for nodes, `0.8` for bars) | `rgba(C, 0.35)` |
+| Role badge stroke (nodes) | `rgba(C, 0.55)` | `rgba(C, 0.40)` |
+| Role badge text (nodes) | `rgba(C, 1.0)` | `rgba(C, 0.85)` |
+| Icon fill / stroke | `C` | darken `C` by ~15% (or use `C` if already dark) |
+| Name text | `C` | darken `C` |
 | Subtitle text | **unchanged** (`muted`) | **unchanged** (`muted`) |
 | Connectors touching this component | **unchanged** (still topology-driven) | **unchanged** |
 
@@ -317,10 +317,10 @@ The subtitle stays muted because it's parenthetical metadata — only the primar
 
 **Semantic uses** (recommended):
 
-- `#b85450` (rust-red) — Security / Identity (Keycloak, Vault)
-- `#5a7d9a` (slate-blue) — Observability (Prometheus, Datadog)
-- `#7a8c47` (olive-green) — Governance / Lineage (OpenMetadata)
-- `#8c6d3f` (warm-brown) — Backup / DR
+- `#d97a78` (rust-red) — Security / Identity (Keycloak, Vault)
+- `#80a3c0` (slate-blue) — Observability (Prometheus, Datadog)
+- `#9aac67` (olive-green) — Governance / Lineage (OpenMetadata)
+- `#b29365` (warm-brown) — Backup / DR
 
 Stick to these unless the user's brand demands otherwise. Random hex per component is exactly the failure mode this skill avoids.
 
@@ -398,26 +398,26 @@ The visual contract: the vertical chevron's column visually "owns" the bar/cross
 
 ---
 
-## 6. Dark mode
+## 6. Light mode
 
-When `dark: true`, swap these tokens:
+When `light: true`, swap these tokens:
 
-| Token              | Light                   | Dark                     |
-| ------------------ | ----------------------- | ------------------------ |
-| Page paper         | `#f5f5f5`               | `#1c1f2e`                |
-| Ink                | `#2d3142`               | `#f5f5f5`                |
-| Muted text         | `#4f5d75`               | `rgba(245,245,245,0.65)` |
-| Chevron dark fill  | `#2d3142`               | `#3d4460`                |
-| Chevron light fill | `#3d4460`               | `#4a5270`                |
-| Chevron label      | `#f5f5f5`               | `#f5f5f5` (unchanged)    |
-| Dashed border      | `rgba(45,49,66,0.20)`   | `rgba(245,245,245,0.22)` |
-| Cluster border     | `rgba(45,49,66,0.18)`   | `rgba(245,245,245,0.18)` |
-| Node fill          | white                   | `rgba(245,245,245,0.06)` |
-| Node stroke        | `rgba(45,49,66,0.25)`   | `rgba(245,245,245,0.20)` |
-| Focal fill         | `rgba(235,108,54,0.08)` | `rgba(240,138,89,0.12)`  |
-| Focal stroke       | `#eb6c36`               | `#f08a59`                |
-| Accent connector   | `#eb6c36`               | `#f08a59`                |
-| Dot pattern        | `rgba(45,49,66,0.10)`   | `rgba(245,245,245,0.10)` |
+| Token | Dark (default) | Light |
+| --- | --- | --- |
+| Page paper | `#000000` | `#fafafa` |
+| Ink | `#ededed` | `#171717` |
+| Muted text | `#a1a1a1` | `rgba(23,23,23,0.65)` |
+| Chevron fill A | `#ededed` | `#171717` |
+| Chevron fill B | `#c9c9c9` | `#333333` |
+| Chevron label | `#000000` | `#fafafa` (paper, so the label inverts with the fill) |
+| Dashed border | `rgba(237,237,237,0.22)` | `rgba(23,23,23,0.20)` |
+| Cluster border | `rgba(237,237,237,0.18)` | `rgba(23,23,23,0.18)` |
+| Node fill | `paper-2` | `rgba(23,23,23,0.06)` |
+| Node stroke | `rgba(237,237,237,0.25)` | `rgba(23,23,23,0.20)` |
+| Focal fill | `rgba(0,112,243,0.12)` | `rgba(0,112,243,0.08)` |
+| Focal stroke | `#0070f3` | `#0070f3` |
+| Accent connector | `#0070f3` | `#0070f3` |
+| Dot pattern | `rgba(237,237,237,0.10)` | `rgba(23,23,23,0.10)` |
 
 ---
 

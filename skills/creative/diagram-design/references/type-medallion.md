@@ -21,7 +21,7 @@ tiers:                                # 3..6 tier columns, ordered left → righ
   - { name: "Anonymized", bucket: "anon-bucket",       style: "default",
       fields: { tool: "Trino INSERT",              format: "Iceberg · partitioned", writer: "Data Engineer",
                 example: ["no name · address", "stable household ID"] } }
-  - { name: "Staging",    bucket: "staging-bucket",    style: "default",  color: "#c9a23a",   # warm yellow — analytical working zone
+  - { name: "Staging",    bucket: "staging-bucket",    style: "default",  color: "#efc860",   # warm yellow — analytical working zone
       fields: { tool: "Trino · JupyterHub",        format: "Iceberg · cleaned",     writer: "Data Scientist",
                 example: ["weighted records", "harmonised codings"] } }
   - { name: "Aggregated", bucket: "aggregated-bucket", style: "focal",  focal: true,
@@ -45,7 +45,7 @@ paths:                                # 0..2 write-method cards at the bottom (o
   - { tag: "NOTEBOOK PATH", title: "DuckDB + Python/R in JupyterHub",
       sub: "stats · ML · interactive analysis — row-iterative work" }
 
-dark: false
+light: false
 ```
 
 **Reserved field semantics:**
@@ -146,14 +146,14 @@ Four canonical styles, picked per tier via `tiers[i].style`. Default mapping if 
 
 | `style` | Card fill | Card stroke | Header band fill | Bucket text | Example value text |
 | --- | --- | --- | --- | --- | --- |
-| `outer` | `#FFFFFF` | `muted` 1.0 solid | `muted @ 0.10` | `muted` | `muted` |
-| `default` | `#FFFFFF` | `ink` 1.0 solid | `ink @ 0.06` | `muted` | `muted` |
+| `outer` | `paper-2` | `muted` 1.0 solid | `muted @ 0.10` | `muted` | `muted` |
+| `default` | `paper-2` | `ink` 1.0 solid | `ink @ 0.06` | `muted` | `muted` |
 | `focal` | `accent @ 0.07` | `accent` 1.6 solid | `accent @ 0.14` | `accent` | `accent` |
 | `cold` | `paper-2` | `muted` 1.0 dashed `5,3` | `muted @ 0.18` | `muted` | `muted` |
 
 `rx = 6` on all card rects.
 
-**Focal styling note:** the focal tier's accent treatment cascades — its bucket text and its example-value lines render in accent. Other field values (tool/format/writer) stay muted; only the bucket name and the example payload carry the focal signal so the tier card doesn't fully drown in coral.
+**Focal styling note:** the focal tier's accent treatment cascades — its bucket text and its example-value lines render in accent. Other field values (tool/format/writer) stay muted; only the bucket name and the example payload carry the focal signal so the tier card doesn't fully drown in accent.
 
 ### 2.4 Promotion arcs (over the top of the tiers)
 
@@ -186,7 +186,7 @@ The cubic geometry: anchor y = 80 (tier top), control y = 0 (top of viewBox). Cu
 **Auto-style rules:**
 
 - If `promotions[k].to` references the **focal tier**, the style auto-promotes to `focal` (accent, width 1.6, `arrow-accent` marker).
-- If `promotions[k].to` references a tier with a **`color` override** (§4), the arrow inherits that hex — stroke = `C`, label fill = `C`, marker-end uses a color-matched marker (e.g., `arrow-yellow` for `#c9a23a`). Width stays at 1.4 — the color override is a "concern" signal, not a focal promotion. Lifecycle/dashed arrows keep their dash but adopt the color.
+- If `promotions[k].to` references a tier with a **`color` override** (§4), the arrow inherits that hex — stroke = `C`, label fill = `C`, marker-end uses a color-matched marker (e.g., `arrow-yellow` for `#efc860`). Width stays at 1.4 — the color override is a "concern" signal, not a focal promotion. Lifecycle/dashed arrows keep their dash but adopt the color.
 - Focal wins if both apply (a colored tier marked focal still uses accent).
 
 **Label inside the arc:**
@@ -214,7 +214,7 @@ path_w[1]   = 460
 
 Per-card content:
 
-- Container rect: white fill, `ink @ 0.20` stroke width 1, `rx=6`.
+- Container rect: `paper-2` fill, `ink @ 0.20` stroke width 1, `rx=6`.
 - Tag chip: rect at `(path_x + 8, path_y + 6)`, `h=12 rx=2`, fill transparent, stroke `ink @ 0.30` width 0.8. Tag text centered inside in the `eyebrow` role with letter-spacing 0.08em, ink.
 - Title at `(path_x + 80, path_y + 30)`: `node-name` role at 11px, ink.
 - Sub at `(path_x + 80, path_y + 46)`: `sublabel` role, muted.
@@ -230,7 +230,7 @@ Three styles, bound to topology. Mirror §3 of `type-process.md` so the rule rea
   <marker id="arrow"        markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="{muted}"/></marker>
   <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="{accent}"/></marker>
   <!-- Per-color markers: declare one per custom tier color in use. -->
-  <marker id="arrow-yellow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c9a23a"/></marker>
+  <marker id="arrow-yellow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#efc860"/></marker>
 </defs>
 ```
 
@@ -250,18 +250,18 @@ Any tier or path entry accepts an optional `color: "#hex"`. Mirrors `type-proces
 
 Applied to:
 
-| Element | Light | Dark |
+| Element | Dark (default) | Light |
 | --- | --- | --- |
-| Card fill | `rgba(C, 0.07)` | `rgba(C_light, 0.10)` |
-| Card stroke | `C` (width 1.4) | `C_light` (width 1.4) |
-| Header band fill | `rgba(C, 0.14)` | `rgba(C_light, 0.18)` |
+| Card fill | `rgba(C, 0.10)` | `rgba(C_dark, 0.07)` |
+| Card stroke | `C` (width 1.4) | `C_dark` (width 1.4) |
+| Header band fill | `rgba(C, 0.18)` | `rgba(C_dark, 0.14)` |
 | Title text | ink (unchanged — title stays readable) | ink (unchanged) |
-| Bucket text | `C` | `C_light` |
-| Example values | `C` | `C_light` |
+| Bucket text | `C` | `C_dark` |
+| Example values | `C` | `C_dark` |
 | Field labels / field values | **unchanged** (ink / muted) | **unchanged** |
 | Connectors touching this tier | **unchanged** — topology-driven | **unchanged** |
 
-`C_light` = the same hex lightened ~15% for dark-mode contrast.
+`C_dark` = the same hex darkened ~15% for light-paper contrast.
 
 ### 4.2 Per-path `color`
 
@@ -272,17 +272,17 @@ Replaces the path card's stroke with `rgba(C, 0.45)` and the tag chip stroke wit
 - **Never on focal tiers.** The accent already carries that signal — a `color` on the focal tier is ignored.
 - **Never on the `cold` tier in addition to its dashed treatment.** Pick either dashed-cold or a custom color, not both.
 - **Cap at 2 custom-colored elements** per diagram (tier or path), in addition to the focal tier.
-- **Promotion arrows inherit the target tier's color** (§3 auto-style rule). A `color: "#c9a23a"` on the Staging tier means the CLEAN+WEIGHT arc landing in Staging is also rendered in yellow — connector, label, and arrowhead match. This keeps visual coherence: the colored tier and its incoming flow read as a single "concern" group. Arrows do **not** inherit color from the source tier — only the target — so the arc _out of_ a colored tier reverts to muted (or to the next target's color/style).
+- **Promotion arrows inherit the target tier's color** (§3 auto-style rule). A `color: "#efc860"` on the Staging tier means the CLEAN+WEIGHT arc landing in Staging is also rendered in yellow — connector, label, and arrowhead match. This keeps visual coherence: the colored tier and its incoming flow read as a single "concern" group. Arrows do **not** inherit color from the source tier — only the target — so the arc _out of_ a colored tier reverts to muted (or to the next target's color/style).
 
 ### 4.4 Semantic palette (recommended)
 
 Same palette as the other parametric types so a reader scanning multiple diagrams sees the same colors meaning the same thing:
 
-- `#b85450` rust-red — Security / Identity / Governance (PII-bearing tiers, audit tiers)
-- `#5a7d9a` slate-blue — Observability / Quality (validated tiers, monitored zones)
-- `#7a8c47` olive-green — Data Products / Publication (consumer-facing aggregates, public-release tiers)
-- `#c9a23a` warm yellow / gold — Analytical / Working zones (staging tier, scientist sandbox, intermediate computation surface)
-- `#8c6d3f` warm-brown — Backup / DR / Archive (alternative cold-tier styling)
+- `#d97a78` rust-red — Security / Identity / Governance (PII-bearing tiers, audit tiers)
+- `#80a3c0` slate-blue — Observability / Quality (validated tiers, monitored zones)
+- `#9aac67` olive-green — Data Products / Publication (consumer-facing aggregates, public-release tiers)
+- `#efc860` warm yellow / gold — Analytical / Working zones (staging tier, scientist sandbox, intermediate computation surface)
+- `#b29365` warm-brown — Backup / DR / Archive (alternative cold-tier styling)
 
 ---
 
@@ -301,22 +301,22 @@ If zero or >1 tiers carry `focal: true`, halt and ask the user.
 
 ---
 
-## 6. Dark mode
+## 6. Light mode
 
-| Token                           | Light           | Dark                     |
-| ------------------------------- | --------------- | ------------------------ |
-| Paper                           | `paper`         | `ink`                    |
-| Ink                             | `ink`           | `paper`                  |
-| Muted                           | `muted`         | `soft`                   |
-| Accent                          | `accent`        | `accent`                 |
-| Fog (cold tier fill)            | `paper-2`       | `paper @ 0.06`           |
-| White (default card fill)       | `#FFFFFF`       | `paper @ 0.04`           |
-| Card stroke ink (default style) | `ink`           | `paper @ 0.30`           |
-| Header band ink-tint            | `ink @ 0.06`    | `paper @ 0.08`           |
-| Header band muted-tint          | `muted @ 0.10`  | `soft @ 0.16`            |
-| Header band cold-tint           | `muted @ 0.18`  | `soft @ 0.24`            |
-| Header band accent-tint         | `accent @ 0.14` | `accent @ 0.20`          |
-| Custom component colors         | `C`             | `C_light` (lighten ~15%) |
+| Token                           | Dark (default)  | Light                  |
+| ------------------------------- | --------------- | ---------------------- |
+| Paper                           | `paper`         | `ink`                  |
+| Ink                             | `ink`           | `paper`                |
+| Muted                           | `muted`         | `soft`                 |
+| Accent                          | `accent`        | `accent`               |
+| Fog (cold tier fill)            | `paper-2`       | `paper @ 0.06`         |
+| Raised card fill (default)      | `paper-2`       | `paper @ 0.04`         |
+| Card stroke ink (default style) | `ink`           | `paper @ 0.30`         |
+| Header band ink-tint            | `ink @ 0.08`    | `paper @ 0.06`         |
+| Header band muted-tint          | `muted @ 0.16`  | `soft @ 0.10`          |
+| Header band cold-tint           | `muted @ 0.24`  | `soft @ 0.18`          |
+| Header band accent-tint         | `accent @ 0.20` | `accent @ 0.14`        |
+| Custom component colors         | `C`             | `C_dark` (darken ~15%) |
 
 ---
 
