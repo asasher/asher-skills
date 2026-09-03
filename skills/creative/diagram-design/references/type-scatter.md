@@ -16,12 +16,12 @@
 
 ```svg
 <!-- Non-focal point — paper mask + circle -->
-<circle cx="X" cy="Y" r="5" fill="#000000"/>
+<circle cx="X" cy="Y" r="5" fill="#0a0a0a"/>
 <circle cx="X" cy="Y" r="5" fill="rgba(161,161,161,0.20)" stroke="#a1a1a1" stroke-width="1"/>
 
 <!-- Focal point -->
-<circle cx="X" cy="Y" r="6" fill="#000000"/>
-<circle cx="X" cy="Y" r="6" fill="rgba(0,112,243,0.15)" stroke="#0070f3" stroke-width="1.2"/>
+<circle cx="X" cy="Y" r="6" fill="#0a0a0a"/>
+<circle cx="X" cy="Y" r="6" fill="rgba(82,168,255,0.15)" stroke="#52a8ff" stroke-width="1.2"/>
 ```
 
 ## Anti-patterns
@@ -54,8 +54,8 @@ Not for: a third value that is really a category (use the focal accent or facet 
 - **One accent bubble, and an `ink` opacity ramp for everything else** — never a hue per item. Every labelled bubble is named where it sits, so hue would re-encode what the labels already carry.
 - **The accent marks the editorially focal item, not the biggest or the worst single number.** In the shipped example it marks the service whose _combination_ is the risk: near-peak volume on the worst error rate.
 - **The ramp runs faintest-on-largest** (0.14 on the largest fill up to 0.35 on the smallest in the shipped example). This is ink-mass compensation, not an encoding: a giant bubble at the same opacity as a small one dominates the page by area alone, so opacity scales down as area scales up and every bubble ends up with comparable visual weight. Tone is **not** a fourth variable — the legend must say which end of the ramp is which, in skin-neutral terms ("faintest fill is the largest bubble" survives both skins; "darkest" ships false on one of them).
-- **Every bubble keeps a `muted` stroke** (8.13:1 on the default paper, 5.50:1 on light) — the fills sit at opacities well under 3:1, so the stroke is what carries WCAG 1.4.11 for the mark's edge. The focal bubble's accent stroke measures 4.61:1 on the default paper and 4.36:1 on light; as with the focal bar, line and slopegraph, its data is still carried redundantly — position, label, and the legend naming it in words — and the accent adds only _which bubble is focal_.
-- **Labels stay `ink` or `muted`**, including the focal one. Accent text at 8px misses AA on light paper and only just clears it on the default paper.
+- **Every bubble keeps a `muted` stroke** (7.66:1 on the default paper, 5.50:1 on light) — the fills sit at opacities well under 3:1, so the stroke is what carries WCAG 1.4.11 for the mark's edge. The focal bubble's accent stroke measures 7.92:1 on the default paper and 5.09:1 on light; as with the focal bar, line and slopegraph, its data is still carried redundantly — position, label, and the legend naming it in words — and the accent adds only _which bubble is focal_.
+- **Labels stay `ink` or `muted`**, including the focal one. Accent is reserved for the mark; an accent label is a second accent element and dilutes the focal signal.
 
 #### Honest-data rule
 
@@ -74,10 +74,10 @@ Not for: a third value that is really a category (use the focal accent or facet 
 ```svg
 <!-- A bubble: position from two shared linear scales, area from the size.
      x = 80 + 1.76·ms, y = 420 - 95·pct, r = 1.4·√(req/s) -->
-<circle cx="537.6" cy="154" r="38.6" fill="#000000"/>
+<circle cx="537.6" cy="154" r="38.6" fill="#0a0a0a"/>
 <circle data-name="Payments" data-x="260" data-y="2.8" data-size="760"
         cx="537.6" cy="154" r="38.6"
-        fill="rgba(0,112,243,0.15)" stroke="#0070f3" stroke-width="1.2"/>
+        fill="rgba(82,168,255,0.15)" stroke="#52a8ff" stroke-width="1.2"/>
 
 <!-- Its label, bound to the bubble it names -->
 <text data-name="Payments" data-role="label" x="538" y="108" fill="#ededed" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">PAYMENTS</text>

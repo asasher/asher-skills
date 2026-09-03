@@ -19,14 +19,14 @@
 
 ```svg
 <!-- Opaque paper mask prevents bleed from background -->
-<rect x="X" y="Y" width="W" height="H" fill="#000000"/>
+<rect x="X" y="Y" width="W" height="H" fill="#0a0a0a"/>
 <!-- Bar body -->
 <rect x="X" y="Y" width="W" height="H" fill="rgba(161,161,161,0.15)" stroke="#a1a1a1" stroke-width="1"/>
 <!-- Value label above bar -->
 <text x="X+W/2" y="Y-8" fill="#a1a1a1" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">VALUE</text>
 ```
 
-Focal bar: replace fill with `rgba(0,112,243,0.12)`, stroke with `#0070f3`, label fill with `#0070f3`.
+Focal bar: replace fill with `rgba(82,168,255,0.12)`, stroke with `#52a8ff`, label fill with `#52a8ff`.
 
 ## Anti-patterns
 
@@ -61,7 +61,7 @@ Focal bar: replace fill with `rgba(0,112,243,0.12)`, stroke with `#0070f3`, labe
 - **Axis title:** the value axis carries the family's axis label — Geist Mono 7px muted, `letter-spacing="0.14em"`, centered at x=580, y=456, below the tick labels and clear of the legend rule. A horizontal axis takes the un-rotated form the scatter x-axis uses, not the `rotate(-90 24 230)` form the column charts apply to their y-axis. The category axis needs no title: the row labels name themselves.
 - **Dots:** r=6, positioned by value. Style by _series_: the reference end hollow (paper fill, `muted` stroke 1.5px), the focal end solid `accent` with a 1px `ink` stroke. Both marks therefore have a boundary above 3:1 even though the accent fill is not — see below. Fill weight, not hue, carries the pairing.
 - **Accent marks the series, not a focal row.** The solid dot repeats on every row — the one place this variant departs from the one-accent rule above, because the two ends must be told apart in each pair. Do not additionally accent a "most changed" row; the sort order already carries rank.
-- **Connector:** `rgba(237,237,237,0.55)` 1px, declared before both dots so the dots cap it. It is not the axis hairline: the connector is what says _these two dots are one row_, so it has to clear 3:1 (0.55 gives 5.46:1 on the default paper and 3.94:1 on light; the 0.25 the axis uses gives 1.87:1 and 1.72:1).
+- **Connector:** `rgba(237,237,237,0.55)` 1px, declared before both dots so the dots cap it. It is not the axis hairline: the connector is what says _these two dots are one row_, so it has to clear 3:1 (0.55 gives 5.51:1 on the default paper and 3.94:1 on light; the 0.25 the axis uses gives 2.00:1 and 1.72:1).
 - **Endpoint positions round, they never snap.** `x = 200 + (v − floor) ÷ (ceil − floor) × 760`, with `floor` and `ceil` set by the axis rule below, rounded to the nearest integer pixel — at most 0.5px, below one rendered pixel. Data coordinates are exempt from the 4px grid; snapping them moves the data.
 - **Value labels sit outside the pair, placed by geometry rather than by series.** A focal value _below_ its reference reverses the dots, so derive `x_left = min(x_ref, x_focal)` and `x_right = max(x_ref, x_focal)`: left label right-anchored at `x_left − 12`, right label left-anchored at `x_right + 12`, both baseline `y + 4`, Geist Mono 8px `muted`, each still carrying its own series' value. Keying the offsets to start/end instead puts both labels _inside_ the pair on every decreasing row.
 - **Floor exception.** A value sitting on the domain floor lands its label at x=188, right-anchored on baseline `y + 4` — exactly the category label's anchor and baseline, so the two texts overlap. When `x_left − 12 < 200`, centre that label above its dot at baseline `y − 10` instead.
@@ -69,7 +69,7 @@ Focal bar: replace fill with `rgba(0,112,243,0.12)`, stroke with `#0070f3`, labe
 
 **Why the dots differ by fill, not hue.** The focal bar pattern above (12% tint + accent stroke) does not transfer to a 6px dot: the 12% tint across a 6px-radius disc contributes roughly 14 square pixels of colour, so the mark reads as its stroke alone and the pair separates by hue only. A solid accent dot against a hollow one separates by shape, survives greyscale and colour-vision deficiency, and leaves hue as redundant encoding.
 
-**Non-text contrast: the boundary carries it, not the fill.** Accent on paper measures 4.61:1 on the default skin and 4.36:1 on light, so it clears the 3:1 WCAG 1.4.11 asks of a graphical object — but a tint change or a project `DESIGN.md` can take that away, and shape redundancy does not waive the rule, because the reader still has to see the mark's edge and the line joining the pair. So neither is left to the accent: the solid endpoint takes a 1px `ink` stroke (17.9:1 against paper, 3.89:1 against its own fill) and the connector takes 55% ink in both modes (5.46:1 default, 3.94:1 light). The hollow end already cleared it via its `muted` stroke at 8.13:1 default and 5.50:1 light. Check all four whenever a token moves, so a later tint change cannot quietly drop one under the line. The hollow/solid shape difference stays as redundant encoding for greyscale and colour-vision deficiency — do not collapse the two dots to a single fill.
+**Non-text contrast: the boundary carries it, not the fill.** Accent on paper measures 7.92:1 on the default skin and 5.09:1 on light, so the solid dot's own edge clears the 3:1 WCAG 1.4.11 asks of a graphical object — but a project `DESIGN.md` can swap in an accent that does not, and shape redundancy does not waive the rule, because the reader still has to see the mark's edge and the line joining the pair. So the rule is written for the weaker case: the solid endpoint keeps a 1px `ink` stroke (3.37:1 against its fill on light paper; on the default skin the rim sits at 2.13:1 and the fill's own edge against paper carries the boundary) and the connector takes 55% ink in both modes (5.51:1 default, 3.94:1 light). The hollow end already cleared it via its `muted` stroke at 7.66:1 default and 5.50:1 light. Check all four whenever a token moves, so a later tint change cannot quietly drop one under the line. The hollow/solid shape difference stays as redundant encoding for greyscale and colour-vision deficiency — do not collapse the two dots to a single fill.
 
 **Minimum drawn gap — never clamp it.** Both dots carry `r="6"`; the hollow one paints out to 6.75 because its 1.5px stroke straddles the path, so the marks touch at 12.75px of centre separation and below about 16px the pair reads as one blob — on a 0–100 domain across 760px, a data gap of 2.1 units. Do **not** widen the separation to clear it: moving a dot off its scaled position breaks the shared-scale rule below. Keep the true positions and shrink both marks (r=4 touches at 8.75px), or print the two values and mark the row as too close to resolve.
 
@@ -78,8 +78,8 @@ Focal bar: replace fill with `rgba(0,112,243,0.12)`, stroke with `#0070f3`, labe
 ```svg
 <!-- One row. Connector first so the dots cap it; labels outside the pair. -->
 <line x1="458" y1="96" x2="740" y2="96" stroke="rgba(237,237,237,0.55)" stroke-width="1"/>
-<circle cx="458" cy="96" r="6" fill="#000000" stroke="#a1a1a1" stroke-width="1.5"/>
-<circle cx="740" cy="96" r="6" fill="#0070f3" stroke="#ededed" stroke-width="1"/>
+<circle cx="458" cy="96" r="6" fill="#0a0a0a" stroke="#a1a1a1" stroke-width="1.5"/>
+<circle cx="740" cy="96" r="6" fill="#52a8ff" stroke="#ededed" stroke-width="1"/>
 <text x="446" y="100" fill="#a1a1a1" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end">34</text>
 <text x="752" y="100" fill="#a1a1a1" font-size="8" font-family="'Geist Mono', monospace">71</text>
 <text x="188" y="100" fill="#ededed" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">Platform</text>
@@ -87,7 +87,7 @@ Focal bar: replace fill with `rgba(0,112,243,0.12)`, stroke with `#0070f3`, labe
 
 Values 34 and 71 on a 0–100 domain compute to 458.4 and 739.6, rounded to 458 and 740. Had this row fallen instead, the accent dot would sit on the left; the two anchors stay tied to left and right, and each label carries its own series' value.
 
-**Light variant.** Dots and labels swap as expected — hollow fill `#fafafa` with `#666666` stroke, solid `#0070f3` with a `#171717` stroke, labels `#666666`. **The hairlines must invert too:** gridlines `rgba(23,23,23,0.08)`, axis `rgba(23,23,23,0.25)`, connector `rgba(23,23,23,0.55)` — the connector again heavier than the axis, for the same 3:1 reason, and on light paper 0.55 is the floor (0.40 composites to 2.54:1). `rgba(237,237,237,…)` is near-white at every alpha value, so a connector, gridline, or axis carried over from the default skin composites against light paper at close to 1:1 — the gap encoding and the scale both vanish.
+**Light variant.** Dots and labels swap as expected — hollow fill `#fafafa` with `#666666` stroke, solid `#52a8ff` with a `#171717` stroke, labels `#666666`. **The hairlines must invert too:** gridlines `rgba(23,23,23,0.08)`, axis `rgba(23,23,23,0.25)`, connector `rgba(23,23,23,0.55)` — the connector again heavier than the axis, for the same 3:1 reason, and on light paper 0.55 is the floor (0.40 composites to 2.54:1). `rgba(237,237,237,…)` is near-white at every alpha value, so a connector, gridline, or axis carried over from the default skin composites against light paper at close to 1:1 — the gap encoding and the scale both vanish.
 
 ### Dumbbell honesty rules
 

@@ -19,13 +19,13 @@
 ```svg
 <!-- Focal series -->
 <polyline points="x0,y0 x1,y1 x2,y2 ..."
-          fill="none" stroke="#0070f3" stroke-width="1.8" stroke-linejoin="round"/>
+          fill="none" stroke="#52a8ff" stroke-width="1.8" stroke-linejoin="round"/>
 <!-- Dots at each point (focal only) -->
-<circle cx="x0" cy="y0" r="4" fill="#0070f3"/>
+<circle cx="x0" cy="y0" r="4" fill="#52a8ff"/>
 
 <!-- Non-focal series -->
 <polyline points="x0,y0 x1,y1 ..."
-          fill="none" stroke="#9caf8f" stroke-width="1.2" stroke-linejoin="round"/>
+          fill="none" stroke="#62c073" stroke-width="1.2" stroke-linejoin="round"/>
 ```
 
 ## Anti-patterns
@@ -64,12 +64,12 @@ Not for: three or more states (that is the **line chart** above, or a bump chart
 #### Colour
 
 - **One accent, and an `ink` opacity ramp for everything else** — not the series palette. In a line chart hue is the only way to follow a series across eight x-positions, so `series-1`…`series-4` earn their place. Here every series is named at both ends, so hue would be a second encoding of something the labels already carry, and it would spend the one-accent rule for nothing.
-- **The ramp runs 0.80 → 0.62**, ordered by the left-hand value. The hard floor is **0.47** — that is where an `ink` stroke crosses 3:1 against light paper (0.47 measures 3.10:1, 0.46 measures 2.98:1; on the default black paper the floor is 0.38), and every line in this figure is data, not decoration. The shipped ramp bottoms out at 0.62 (6.84:1 default, 4.96:1 light) rather than hugging the floor, because a ramp whose lightest member is only just legible has no room left to add a series.
+- **The ramp runs 0.80 → 0.62**, ordered by the left-hand value. The hard floor is **0.47** — that is where an `ink` stroke crosses 3:1 against light paper (0.47 measures 3.10:1, 0.46 measures 2.98:1; on the default paper the floor is 0.37), and every line in this figure is data, not decoration. The shipped ramp bottoms out at 0.62 (6.78:1 default, 4.96:1 light) rather than hugging the floor, because a ramp whose lightest member is only just legible has no room left to add a series.
 - **Note what the ramp does not buy you.** It separates the ends of the range, not adjacent members — 0.80 and 0.74 are not distinguishable at 1.2px, as the shipped example shows. It is there to help trace one line through a crossing. It must never be the only way to tell two series apart; that is the labels' job.
 - **The accent marks the editorially focal series, not the best or the biggest.** In the shipped example it marks the one service that got _worse_.
-- **Focus is carried by stroke weight, not tone** — 2.4px focal against 1.2px. Check the token you actually ship: `accent` measures **4.61:1 on the default paper** and 4.36:1 on light, so in both modes the focal line has _less_ contrast than the ink ramp it is meant to dominate, and weight is the only cue that survives both skins and greyscale.
-- **Be honest about what that leaves.** The accent clears WCAG 1.4.11's 3:1 floor for a graphical object on both papers, but a project `DESIGN.md` can swap in an accent that does not, and a heavier stroke does not raise a contrast ratio — it only makes the mark easier to find. So the focal line is built to clear the bar on redundancy rather than on contrast: its position and its two endpoint labels (`ink` at 17.9:1, `muted` at 8.1:1 on the default paper) carry the data, and its accent adds only _which series is focal_, which the legend states in words and the stroke weight repeats. Nothing here rests on the accent alone. This is a property of the accent token, not of this variant — the focal bar, the focal line and the focal treemap cell inherit it too, so a weaker accent is fixed once in style-guide.md.
-- **Labels stay `ink` (names) and `muted` (values) on every series, including the focal one.** Accent text at 9–11px misses AA on light paper (4.36:1) and only just clears it on the default paper (4.61:1). A focal value label in accent is the most common way to make a slopegraph fail contrast while looking deliberate.
+- **Focus is carried by stroke weight, not tone** — 2.4px focal against 1.2px. Check the token you actually ship: `accent` measures **7.92:1 on the default paper** and 5.09:1 on light, which sits inside the ink ramp's own range (10.9:1 down to 6.8:1 default) rather than above it, so weight is the only cue that survives both skins and greyscale.
+- **Be honest about what that leaves.** The accent clears WCAG 1.4.11's 3:1 floor for a graphical object on both papers, but a project `DESIGN.md` can swap in an accent that does not, and a heavier stroke does not raise a contrast ratio — it only makes the mark easier to find. So the focal line is built to clear the bar on redundancy rather than on contrast: its position and its two endpoint labels (`ink` at 16.9:1, `muted` at 7.7:1 on the default paper) carry the data, and its accent adds only _which series is focal_, which the legend states in words and the stroke weight repeats. Nothing here rests on the accent alone. This is a property of the accent token, not of this variant — the focal bar, the focal line and the focal treemap cell inherit it too, so a weaker accent is fixed once in style-guide.md.
+- **Labels stay `ink` (names) and `muted` (values) on every series, including the focal one.** Accent text at 9–11px would pass AA here (7.9:1 default, 5.1:1 light), but a second accent element dilutes the focal signal, and under a project `DESIGN.md` the same label is the most common way to make a slopegraph fail contrast while looking deliberate.
 - **Legend wording must be skin-neutral: "strongest tone", never "darkest".** The ramp is ink-at-opacity, so the top of it is the darkest line on light paper and the _lightest_ on dark. A legend that says "darker is higher" ships false in one of the two variants — and it renders perfectly in both, so only reading the dark file catches it.
 
 #### Honest-data rule
@@ -97,9 +97,9 @@ Not for: three or more states (that is the **line chart** above, or a bump chart
 <!-- A series: the line declares its two values, and each of its four labels
      declares which series and which end it belongs to -->
 <line data-series="Recommender" data-from="238" data-to="431"
-      x1="320" y1="303.5" x2="680" y2="140.5" stroke="#0070f3" stroke-width="2.4"/>
-<circle cx="320" cy="303.5" r="4" fill="#0070f3"/>
-<circle cx="680" cy="140.5" r="4" fill="#0070f3"/>
+      x1="320" y1="303.5" x2="680" y2="140.5" stroke="#52a8ff" stroke-width="2.4"/>
+<circle cx="320" cy="303.5" r="4" fill="#52a8ff"/>
+<circle cx="680" cy="140.5" r="4" fill="#52a8ff"/>
 <text data-series="Recommender" data-end="from" data-role="name" x="272" y="307" fill="#ededed" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">Recommender</text>
 <text data-series="Recommender" data-end="from" x="304" y="307" fill="#a1a1a1" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">238</text>
 <text data-series="Recommender" data-end="to" x="696" y="144" fill="#a1a1a1" font-size="9" font-family="'Geist Mono', monospace">431</text>
@@ -157,7 +157,7 @@ Not for: a single distribution (that is a histogram — one ridge is a ridgeline
 
 #### Colour
 
-The slopegraph's colour section holds here unchanged, with one addition for the fill. One accent on the editorially focal ridge (stroke `accent`, fill the accent at `0.16`), an `ink` opacity ramp for the rest (`0.80 → 0.62`, floor `0.38` on the default paper and `0.47` on light) ordered top row to bottom, and focus carried by stroke weight — 2.4px against 1.2px — rather than tone. Labels stay `ink` (names) and `muted` (ranges) on every ridge including the focal one.
+The slopegraph's colour section holds here unchanged, with one addition for the fill. One accent on the editorially focal ridge (stroke `accent`, fill the accent at `0.16`), an `ink` opacity ramp for the rest (`0.80 → 0.62`, floor `0.37` on the default paper and `0.47` on light) ordered top row to bottom, and focus carried by stroke weight — 2.4px against 1.2px — rather than tone. Labels stay `ink` (names) and `muted` (ranges) on every ridge including the focal one.
 
 - **Fill `ink` at `0.12` on every non-focal ridge**, low enough that two overlapping ridges read as depth rather than as a third tone. This is the one place the type needs a fill at all: the outline alone does not say which side of the curve is mass.
 - **Legend wording stays skin-neutral** — "strongest tone", never "darkest". The ramp is ink-at-opacity, so its top is the darkest line on light paper and the lightest on dark, and a legend that says "darker" ships false in one of the two skins while rendering perfectly in both.
@@ -180,7 +180,7 @@ The binding contract is the slopegraph's, applied to areas: the outline declares
 
 ```svg
 <line data-ridge="checkout-api" data-role="baseline" x1="320" y1="320" x2="680" y2="320" stroke="rgba(237,237,237,0.25)" stroke-width="1"/>
-<path data-ridge="checkout-api" data-baseline="320" data-bins="0,1,6,17,21,14,8,6,7,9,7,4,0" d="M320,320 L350,317.6 L380,305.6 L410,279.2 L440,269.6 L470,286.4 L500,300.8 L530,305.6 L560,303.2 L590,298.4 L620,303.2 L650,310.4 L680,320 Z" fill="rgba(0,112,243,0.16)" stroke="#0070f3" stroke-width="2.4" stroke-linejoin="round"/>
+<path data-ridge="checkout-api" data-baseline="320" data-bins="0,1,6,17,21,14,8,6,7,9,7,4,0" d="M320,320 L350,317.6 L380,305.6 L410,279.2 L440,269.6 L470,286.4 L500,300.8 L530,305.6 L560,303.2 L590,298.4 L620,303.2 L650,310.4 L680,320 Z" fill="rgba(82,168,255,0.16)" stroke="#52a8ff" stroke-width="2.4" stroke-linejoin="round"/>
 <text data-ridge="checkout-api" data-role="name" x="304" y="323.5" fill="#ededed" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">checkout-api</text>
 <text data-ridge="checkout-api" data-role="range" x="696" y="323.5" fill="#a1a1a1" font-size="9" font-family="'Geist Mono', monospace">40–440 ms</text>
 <text data-tick="2" data-bin="240" x="500" y="400" fill="#a1a1a1" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em" text-anchor="middle">240</text>

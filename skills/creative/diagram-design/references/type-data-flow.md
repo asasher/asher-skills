@@ -27,7 +27,7 @@ steps:                              # 1..6 columns (left to right)
 nodes:                              # explicit per-cell entries; empty cells render nothing
   - { lane: "ADM", step: 0, title: "Project Setup",   sub: "create · assign roles",     tool: "Platform console" }
   - { lane: "ADM", step: 1, title: "Access Control",  sub: "bucket policies · LDAP",    tool: "MinIO · LDAP console",
-      color: "#d97a78" }            # tinted rust-red to flag governance/identity concern
+      color: "#ff6166" }            # tinted red to flag governance/identity concern
   - { lane: "ENG", step: 0, title: "Source Ingest",   sub: "ext. sources → raw",        tool: "NiFi · API · SFTP",
       chips: {in: "WB", out: "DB"} }                    # web payload in, dataset out
   - { lane: "ENG", step: 1, title: "Raw Store",       sub: "raw landing zones",         tool: "MinIO raw",
@@ -215,7 +215,7 @@ Applied to:
 | Data-type chips | **unchanged** | **unchanged** |
 | Arrows touching this node | **unchanged** — topology-driven | **unchanged** |
 
-`C_dark` = the same hex darkened ~15% for light-paper contrast (e.g., `#d97a78` → `#b85450`).
+`C_dark` = the same hue at its light-mode step, taken from the light value in the recommended palette (e.g., `#ff6166` → `#cb2a2f`).
 
 ### 4.2 Per-step `color`
 
@@ -236,10 +236,10 @@ Replaces the lane stripe tint with `rgba(C, 0.04)` (only for odd-indexed lanes t
 
 Same palette as high-level / dp-integration so a reader scanning multiple diagrams sees the same colors meaning the same thing:
 
-- `#d97a78` rust-red — Security / Identity / Governance (admin nodes, LDAP, access control)
-- `#80a3c0` slate-blue — Observability / Quality (monitoring, data-quality gates, lineage)
-- `#9aac67` olive-green — Governance / Lineage (catalog, metadata)
-- `#b29365` warm-brown — Backup / DR / Archive
+- `#ff6166` red (light `#cb2a2f`) — Security / Identity / Governance (admin nodes, LDAP, access control)
+- `#0ac7b4` teal (light `#067a6e`) — Observability / Quality (monitoring, data-quality gates, lineage)
+- `#62c073` green (light `#297a3a`) — Governance / Lineage (catalog, metadata)
+- `#ff990a` amber (light `#a35200`) — Backup / DR / Archive
 
 ---
 
@@ -257,24 +257,24 @@ If zero or >1 of any focal slot are declared, halt and ask the user.
 
 ## 6. Light mode
 
-| Token                   | Dark (default)  | Light                  |
-| ----------------------- | --------------- | ---------------------- |
-| Paper                   | `paper`         | `ink`                  |
-| Ink                     | `ink`           | `paper`                |
-| Muted                   | `muted`         | `soft`                 |
-| Soft                    | `soft`          | `rule-solid`           |
-| Accent                  | `accent`        | `accent`               |
-| Link                    | `link`          | `link`                 |
-| Dot pattern             | `ink @ 0.10`    | `paper @ 0.10`         |
-| Lane tint               | `ink @ 0.025`   | `paper @ 0.018`        |
-| Dividers                | `ink @ 0.12`    | `paper @ 0.12`         |
-| Default chip fill       | `ink @ 0.12`    | `paper @ 0.12`         |
-| Focal chip fill         | `accent @ 0.22` | `accent @ 0.20`        |
-| Default node fill       | `paper`         | `paper @ 0.04`         |
-| Default node stroke     | `ink @ 0.25`    | `paper @ 0.20`         |
-| Focal node fill         | `accent @ 0.12` | `accent @ 0.07`        |
-| Focal node stroke       | `accent`        | `accent`               |
-| Custom component colors | `C`             | `C_dark` (darken ~15%) |
+| Token                   | Dark (default)  | Light                      |
+| ----------------------- | --------------- | -------------------------- |
+| Paper                   | `paper`         | `ink`                      |
+| Ink                     | `ink`           | `paper`                    |
+| Muted                   | `muted`         | `soft`                     |
+| Soft                    | `soft`          | `rule-solid`               |
+| Accent                  | `accent`        | `accent`                   |
+| Link                    | `link`          | `link`                     |
+| Dot pattern             | `ink @ 0.10`    | `paper @ 0.10`             |
+| Lane tint               | `ink @ 0.025`   | `paper @ 0.018`            |
+| Dividers                | `ink @ 0.12`    | `paper @ 0.12`             |
+| Default chip fill       | `ink @ 0.12`    | `paper @ 0.12`             |
+| Focal chip fill         | `accent @ 0.22` | `accent @ 0.20`            |
+| Default node fill       | `paper`         | `paper @ 0.04`             |
+| Default node stroke     | `ink @ 0.25`    | `paper @ 0.20`             |
+| Focal node fill         | `accent @ 0.12` | `accent @ 0.07`            |
+| Focal node stroke       | `accent`        | `accent`                   |
+| Custom component colors | `C`             | `C_dark` (light-mode step) |
 
 ---
 
@@ -308,17 +308,17 @@ Either chip may be omitted (e.g., a sink node has only an input chip; a source-o
 
 ### Chip codes
 
-| Code | Color                  | Meaning                |
-| ---- | ---------------------- | ---------------------- |
-| `WB` | `#8d8298` (mauve)      | Web / Public data      |
-| `DB` | `#82a0c0` (steel-blue) | Dataset / Raw file     |
-| `TB` | `#d3ad7a` (amber)      | Table / Analysis-ready |
-| `FL` | `#b88670` (sienna)     | File / Report / Export |
-| `LS` | `#70a27f` (forest)     | Live stream / Event    |
+| Code | Color              | Meaning                |
+| ---- | ------------------ | ---------------------- |
+| `WB` | `#bf7af0` (purple) | Web / Public data      |
+| `DB` | `#0ac7b4` (teal)   | Dataset / Raw file     |
+| `TB` | `#ff990a` (amber)  | Table / Analysis-ready |
+| `FL` | `#f75f8f` (pink)   | File / Report / Export |
+| `LS` | `#62c073` (green)  | Live stream / Event    |
 
-Text inside chip: paper-colored (`#000000` default, `#ffffff` light), `eyebrow` role at 5px, weight 700.
+Text inside chip: paper-colored (`#0a0a0a` default, `#ffffff` light), `eyebrow` role at 5px, weight 600.
 
-Data-type chip colors are a **separate semantic axis** from the per-node color override (§4). The chip colors describe _payload format_; the node color override describes _concern type_ (governance, observability, …). Don't conflate them — a node can have both an `out: TB` amber chip and a rust-red border color simultaneously.
+Data-type chip colors are a **separate semantic axis** from the per-node color override (§4). The chip colors describe _payload format_; the node color override describes _concern type_ (governance, observability, …). Don't conflate them — a node can have both an `out: TB` amber chip and a red border color simultaneously.
 
 ---
 
@@ -369,6 +369,6 @@ Above 4 lanes or 6 steps: split into two diagrams (e.g., ingestion pipeline / an
 - `assets/example-data-flow.html` — minimal light (the platform, 4-role × 5-step: Admin, Engineers, Scientists, Consumers). Gallery default.
 - `assets/example-data-flow-dark.html` — same, dark skin.
 - `assets/example-data-flow-full.html` — same, editorial-card frame.
-- `assets/example-data-flow-extended.html` — exercises §4 color override: Access Control node in rust-red (governance), Clean & Stage node in slate-blue (data quality). Focal accent on Analyze step + Explore & Model node + anon-data arrow unchanged.
+- `assets/example-data-flow-extended.html` — exercises §4 color override: Access Control node in red (governance), Clean & Stage node in teal (data quality). Focal accent on Analyze step + Explore & Model node + anon-data arrow unchanged.
 - `assets/example-data-flow-extended-dark.html` — extended pattern, dark skin.
 - `assets/example-data-flow-extended-full.html` — extended pattern, editorial-card frame.

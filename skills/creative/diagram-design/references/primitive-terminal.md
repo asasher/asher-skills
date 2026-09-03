@@ -59,7 +59,7 @@ Three 10px circles, macOS-style. The **1-accent rule caps the color use here too
 
 ## Critical rules
 
-- Keep the window off pure black — `terminal-page` (`#0a0a0a`) and `terminal-paper` (`#141414`) sit a step above the default skin's `#000000` paper so the window reads as a raised object when embedded.
+- Keep the window off pure black — `terminal-page` (`#0a0a0a`) matches the default skin's paper and `terminal-paper` (`#141414`) sits a step above it, so the window reads as a raised object when embedded.
 - One accent only. If a diagram needs a second focal element, use `terminal-ink` (white) for emphasis via weight/size, not a second color.
 - Background dot-grid pattern (if used) stays `rgba(255,255,255,0.06–0.08)` — barely visible texture, not a visual competitor to the titlebar chrome.
 

@@ -10,7 +10,7 @@
 - Radii: equal when sets are comparable in size; proportional when sets are meaningfully different. Don't fake equal sizes for aesthetics.
 - **Set labels** placed outside the circle, NEVER crossing the stroke. Geist 12–14px 600 for the set name, optional Geist Mono 9px sublabel.
 - **Intersection labels** placed inside the overlap region, Geist 12px 600, centered. For small overlaps, use a leader line to a label in clear space.
-- **Accent accent** on the ONE focal intersection — the "sweet spot". Either accent label stroke OR clipPath-bounded accent fill tint (`rgba(0,112,243,0.10)`).
+- **Accent accent** on the ONE focal intersection — the "sweet spot". Either accent label stroke OR clipPath-bounded accent fill tint (`rgba(82,168,255,0.10)`).
 - Circle centers and radii divisible by 4.
 
 ## Anti-patterns

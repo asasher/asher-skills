@@ -18,7 +18,7 @@ Not for: ranked lists where exact values matter more than proportion (use a **ba
   - small — a 3-letter mono abbreviation, if one reads honestly
   - sliver — **no text.** When the cell is at least 12×12px, use a filled `ink` disc, `r=5`, centred in the cell, carrying a paper-coloured `i`, with the cell's name and share spelled out in the legend. Below 12px on either axis, omit the in-cell mark and identify the sliver by position in the legend; a fixed-size disc must never cross the cell boundary. `scripts/verify-treemap.py` checks marker containment. Resist rotating a label to make it fit: a single sideways word among five upright ones reads as a mistake before it reads as data, and its centring is a trap — `text-anchor="middle"` centres along the _baseline_, which a quarter-turn maps to the cell's long axis, leaving nothing centring the cap-height band across the narrow one.
   - Never shrink a cell to fit its label. The cell size is the data; the label is commentary.
-- **Contrast:** compute the ceiling against the token you actually ship. The 9px value line is `muted`, not `ink`, and `muted` needs a lighter cell than `ink` does: measured against the composited fill, the top of the ramp can go to **0.23 on the default paper and 0.09 on light** before it drops under 4.5:1. (`ink` would tolerate 0.45 and 0.53 — which is exactly the number you will write down if you check the wrong token.) A mid-tone fill — solid accent, or 50% ink — fails against both light and dark text; use the tint-plus-stroke pattern instead. The source line takes `muted` too: `soft` measures 5.85:1 on the default paper but 3.94:1 on light, and never reaches AA anywhere on the light ramp.
+- **Contrast:** compute the ceiling against the token you actually ship. The 9px value line is `muted`, not `ink`, and `muted` needs a lighter cell than `ink` does: measured against the composited fill, the top of the ramp can go to **0.20 on the default paper and 0.09 on light** before it drops under 4.5:1. (`ink` would tolerate 0.42 and 0.53 — which is exactly the number you will write down if you check the wrong token.) A mid-tone fill — solid accent, or 50% ink — fails against both light and dark text; use the tint-plus-stroke pattern instead. The source line takes `muted` too: `soft` measures 5.51:1 on the default paper but 3.94:1 on light, and never reaches AA anywhere on the light ramp.
 - **Legend:** the house block (rule, `LEGEND`, keys), naming the focal cell, the direction of the ink ramp, and any cell carrying an info mark. The source line rides the same row as `LEGEND`, right-aligned in mono 8px, stating what area encodes plus the dataset and its date.
 
 ### Declaring the share
@@ -35,14 +35,14 @@ Without it, a verifier has to infer the intended share from the text inside the 
 
 ```svg
 <!-- Opaque paper mask prevents the dot pattern showing through the tint -->
-<rect x="X" y="Y" width="W" height="H" rx="2" fill="#000000"/>
+<rect x="X" y="Y" width="W" height="H" rx="2" fill="#0a0a0a"/>
 <!-- Cell body -->
 <rect x="X" y="Y" width="W" height="H" rx="2" data-share="18.29" fill="rgba(237,237,237,0.16)" stroke="rgba(237,237,237,0.30)" stroke-width="1"/>
 <text x="X+16" y="Y+28" fill="#ededed" font-size="13" font-weight="600" font-family="'Geist', sans-serif">NAME</text>
 <text x="X+16" y="Y+46" fill="#a1a1a1" font-size="9" font-family="'Geist Mono', monospace">VALUE · SHARE</text>
 ```
 
-Focal cell: replace the fill with `rgba(0,112,243,0.16)` and the stroke with `#0070f3` at 1.5px.
+Focal cell: replace the fill with `rgba(82,168,255,0.16)` and the stroke with `#52a8ff` at 1.5px.
 
 ## Honest-data rule
 

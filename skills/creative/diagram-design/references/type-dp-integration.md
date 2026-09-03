@@ -47,7 +47,7 @@ consumers:                          # right column, 0..6 nodes
 
 footer:                             # 0..N cross-cutting bars stacked below zone (full-canvas width)
   - { name: "Active Directory", icon: key,        subtitle: "LDAP · SSO · group RBAC",
-      color: "#d97a78" }            # tinted red to flag the security concern
+      color: "#ff6166" }            # tinted red to flag the security concern
   # additional footer nodes (Observability, Backup, …) stack below this one
 
 internal_connections:               # explicit platform-component edges
@@ -57,7 +57,7 @@ internal_connections:               # explicit platform-component edges
   - { from: "JupyterLab",  to: "Trino",      style: "secondary", dashed: true }
   - { from: "Airflow",     to: ["Apache NiFi", "MinIO", "JupyterLab"], style: "trigger" }
 
-focal_accent: "#0070f3"             # one color for all focal components (default = SKILL accent)
+focal_accent: "#52a8ff"             # one color for all focal components (default = SKILL accent)
 light: false
 ```
 
@@ -200,19 +200,19 @@ Five styles, bound to topology. Don't let user override style on focal-touching,
 
 | `style` | Stroke | Width | Dash | Marker | When required |
 | --- | --- | --- | --- | --- | --- |
-| `primary` | `#0070f3` (focal_accent) | 1.4 | — | `arrow-accent` | Every edge whose endpoint is a `focal: true` component. Also every Trino → consumer edge (serve-flow rule). |
+| `primary` | `#52a8ff` (focal_accent) | 1.4 | — | `arrow-accent` | Every edge whose endpoint is a `focal: true` component. Also every Trino → consumer edge (serve-flow rule). |
 | `secondary` | `#a1a1a1` (muted) | 1.2 | — | `arrow` | Default for internal platform-component edges and source → platform edges that don't touch focal. |
-| `federated` | `#8ab4f8` (link-blue) | 1.0 | `4,3` | `arrow-link` | Federation queries (e.g., source DB → Trino). |
+| `federated` | `#0072f5` (link-blue) | 1.0 | `4,3` | `arrow-link` | Federation queries (e.g., source DB → Trino). |
 | `trigger` | `#a1a1a1` (muted) | 1.0 | `4,3` | `arrow` | Every edge originating from a `kind: bar` component (Airflow drops). Unlabelled. |
-| `auth` | `#0070f3` | 1.2 | `5,4` | `arrow-accent` | Every edge from a footer node up to the zone bottom edge. **Never to a specific component.** |
+| `auth` | `#52a8ff` | 1.2 | `5,4` | `arrow-accent` | Every edge from a footer node up to the zone bottom edge. **Never to a specific component.** |
 
 **Defs block** (required, five markers — exactly):
 
 ```svg
 <defs>
   <marker id="arrow"        markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#a1a1a1"/></marker>
-  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0070f3"/></marker>
-  <marker id="arrow-link"   markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8ab4f8"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#52a8ff"/></marker>
+  <marker id="arrow-link"   markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0072f5"/></marker>
   <marker id="arrow-sm"     markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#a1a1a1"/></marker>
   <marker id="arrow-dim"    markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="rgba(237,237,237,0.45)"/></marker>
 </defs>
@@ -278,7 +278,7 @@ Any source, consumer, platform component (node or bar), or footer node accepts a
 | Subtitle text | **unchanged** (muted) | **unchanged** (muted) |
 | Connectors touching this component | **unchanged** — topology-driven | **unchanged** |
 
-`C_dark` = the same hex darkened ~15% for light-paper contrast (e.g., `#d97a78` → `#b85450`).
+`C_dark` = the same hue at its light-mode step, taken from the light value in the recommended palette (e.g., `#ff6166` → `#cb2a2f`).
 
 **Rules:**
 
@@ -288,10 +288,10 @@ Any source, consumer, platform component (node or bar), or footer node accepts a
 
 **Semantic palette** (use these unless brand demands otherwise):
 
-- `#d97a78` rust-red — Security / Identity (AD, Keycloak, Vault)
-- `#80a3c0` slate-blue — Observability (Prometheus, Datadog, OpenTelemetry)
-- `#9aac67` olive-green — Governance / Lineage (OpenMetadata, DataHub)
-- `#b29365` warm-brown — Backup / DR (Velero, Restic)
+- `#ff6166` red (light `#cb2a2f`) — Security / Identity (AD, Keycloak, Vault)
+- `#0ac7b4` teal (light `#067a6e`) — Observability (Prometheus, Datadog, OpenTelemetry)
+- `#62c073` green (light `#297a3a`) — Governance / Lineage (OpenMetadata, DataHub)
+- `#ff990a` amber (light `#a35200`) — Backup / DR (Velero, Restic)
 
 ---
 
@@ -309,21 +309,21 @@ Any source, consumer, platform component (node or bar), or footer node accepts a
 
 ## 6. Light mode
 
-| Token                   | Dark (default)           | Light                  |
-| ----------------------- | ------------------------ | ---------------------- |
-| Page paper              | `#000000`                | `#fafafa`              |
-| Ink                     | `#ededed`                | `#171717`              |
-| Muted                   | `#a1a1a1`                | `#666666`              |
-| Accent                  | `#0070f3`                | `#0070f3`              |
-| Link (federated)        | `#8ab4f8`                | `#2e5aa8`              |
-| Side-column fill        | `rgba(161,161,161,0.06)` | `rgba(23,23,23,0.06)`  |
-| Side-column stroke      | `#878787`                | `rgba(23,23,23,0.30)`  |
-| Zone fill               | `rgba(237,237,237,0.04)` | `rgba(23,23,23,0.025)` |
-| Zone stroke             | `rgba(237,237,237,0.32)` | `rgba(23,23,23,0.30)`  |
-| Non-focal bar fill      | `rgba(237,237,237,0.06)` | `rgba(23,23,23,0.05)`  |
-| Focal fill              | `rgba(0,112,243,0.12)`   | `rgba(0,112,243,0.08)` |
-| Focal stroke            | `#0070f3`                | `#0070f3`              |
-| Custom component colors | `C`                      | `C_dark` (darken ~15%) |
+| Token | Dark (default) | Light |
+| --- | --- | --- |
+| Page paper | `#0a0a0a` | `#fafafa` |
+| Ink | `#ededed` | `#171717` |
+| Muted | `#a1a1a1` | `#666666` |
+| Accent | `#52a8ff` | `#0068d6` |
+| Link (federated) | `#0072f5` | `#00254c` |
+| Side-column fill | `rgba(161,161,161,0.06)` | `rgba(23,23,23,0.06)` |
+| Side-column stroke | `#878787` | `rgba(23,23,23,0.30)` |
+| Zone fill | `rgba(237,237,237,0.04)` | `rgba(23,23,23,0.025)` |
+| Zone stroke | `rgba(237,237,237,0.32)` | `rgba(23,23,23,0.30)` |
+| Non-focal bar fill | `rgba(237,237,237,0.06)` | `rgba(23,23,23,0.05)` |
+| Focal fill | `rgba(82,168,255,0.12)` | `rgba(0,104,214,0.08)` |
+| Focal stroke | `#52a8ff` | `#0068d6` |
+| Custom component colors | `C` | `C_dark` (light-mode step) |
 
 ---
 
@@ -410,6 +410,6 @@ When this gets unwieldy:
 - `assets/example-dp-integration.html` — minimal light (1 footer = AD). Gallery default.
 - `assets/example-dp-integration-dark.html` — same, dark skin.
 - `assets/example-dp-integration-full.html` — same, editorial-card frame.
-- `assets/example-dp-integration-extended.html` — exercises §4 color override + multi-footer: AD in rust-red, Observability (Prometheus/Grafana/Loki) in slate-blue. Canvas height grown to fit 2 footer rows.
+- `assets/example-dp-integration-extended.html` — exercises §4 color override + multi-footer: AD in red, Observability (Prometheus/Grafana/Loki) in teal. Canvas height grown to fit 2 footer rows.
 - `assets/example-dp-integration-extended-dark.html` — extended pattern, dark skin.
 - `assets/example-dp-integration-extended-full.html` — extended pattern, editorial-card frame.

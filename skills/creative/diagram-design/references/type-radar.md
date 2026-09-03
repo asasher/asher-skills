@@ -44,7 +44,7 @@ Series `[9, 8, 9, 9, 9]` on a 0–10 scale becomes:
 
 ```svg
 <polygon points="500,96 622,201 585,356 415,356 363,196"
-         fill="rgba(0,112,243,0.18)" stroke="#0070f3" stroke-width="1.8"/>
+         fill="rgba(82,168,255,0.18)" stroke="#52a8ff" stroke-width="1.8"/>
 ```
 
 Each vertex: `center + (v/10) · (outer_i − center)`, rounded to the nearest pixel.
@@ -53,14 +53,14 @@ Each vertex: `center + (v/10) · (outer_i − center)`, rounded to the nearest p
 
 The skill's "1-focal" rule still holds: `accent` is reserved for the focal series, and a small editorial palette (`series-1` through `series-5`, defined in [`style-guide.md`](style-guide.md)) covers the non-focal series. Don't reach for free-form colors.
 
-| Slot  | Token                   | Dark (default) | Light     |
-| ----- | ----------------------- | -------------- | --------- |
-| Focal | `accent`                | `#0070f3`      | `#0070f3` |
-| 1     | `series-1` (sage)       | `#9caf8f`      | `#7c8f6f` |
-| 2     | `series-2` (dusty-blue) | `#82a0c0`      | `#5e7a9b` |
-| 3     | `series-3` (mustard)    | `#d3ad7a`      | `#b8915a` |
-| 4     | `series-4` (rust-brown) | `#b88670`      | `#9c6b50` |
-| 5     | `series-5` (slate)      | `#8d8298`      | `#6e6479` |
+| Slot  | Token               | Dark (default) | Light     |
+| ----- | ------------------- | -------------- | --------- |
+| Focal | `accent`            | `#52a8ff`      | `#0068d6` |
+| 1     | `series-1` (green)  | `#62c073`      | `#297a3a` |
+| 2     | `series-2` (teal)   | `#0ac7b4`      | `#067a6e` |
+| 3     | `series-3` (amber)  | `#ff990a`      | `#a35200` |
+| 4     | `series-4` (pink)   | `#f75f8f`      | `#bd2864` |
+| 5     | `series-5` (purple) | `#bf7af0`      | `#7820bc` |
 
 ## Anti-patterns
 

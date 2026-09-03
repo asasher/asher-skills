@@ -4,7 +4,7 @@ Newest first. Each entry names the changed skills and what a reconcile must do.
 
 ## 2026-09-03 — diagram-design ships a dark default skin
 
-The shipped visual system in `diagram-design` is now dark by default: true-black paper, near-white ink, a neutral gray ramp, and one blue accent, inspired by Vercel's Geist design system. Light is the alternate variant. Project `DESIGN.md` resolution and the resolution order are unchanged.
+The shipped visual system in `diagram-design` is now dark by default, with every value read off Vercel's Geist color scales: near-black paper, a gray-100 raised surface for nodes and cards, gray-alpha hairlines, gray-900/1000 text, the blue-900 text step as the one accent, and blue-700 for link arrows. The series and override palettes use the Geist 900 steps per hue with light-mode counterparts. Light is the alternate variant. Project `DESIGN.md` resolution and the resolution order are unchanged.
 
 - `diagram-design` (changed): `references/style-guide.md` defines the dark column as the default and the light column as the variant; every type reference, primitive, and template carries the new hex values, and the "Dark mode" sections became "Light mode" sections. `assets/template-dark.html` is renamed `assets/template-light.html`; the slug suffix for the variant is `-light`. The semantic override palette lists the dark-legible hexes and light mode darkens them (`C_dark`), reversing the old `C_light` rule. The pre-baked `assets/example-*.html` files keep the upstream skin and are documented as layout references only.
 - Reconcile: a diagram generated under the old skin re-renders with the new tokens; nothing else in the family reads these values.

@@ -46,7 +46,7 @@ Use a rectangular **frame** that spans only the lifelines participating in the b
       fill="rgba(237,237,237,0.02)" stroke="rgba(237,237,237,0.22)" stroke-width="1"/>
 <!-- Operator tab -->
 <rect x="X" y="Y" width="40" height="16" rx="2"
-      fill="#000000" stroke="rgba(237,237,237,0.22)" stroke-width="1"/>
+      fill="#0a0a0a" stroke="rgba(237,237,237,0.22)" stroke-width="1"/>
 <text x="X+20" y="Y+12" fill="#a1a1a1" font-size="8"
       font-family="'Geist Mono', monospace" text-anchor="middle"
       letter-spacing="0.12em">ALT</text>

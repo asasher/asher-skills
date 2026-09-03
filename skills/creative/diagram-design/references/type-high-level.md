@@ -18,7 +18,7 @@ chevrons:                       # ordered left → right; reserved names auto-pr
   - { name: "Transformation",       columns: 1 }
   - { name: "Visualization",        columns: 1 }
   - { name: "Orchestration",        vertical: true }                     # reserved → pairs with the bar
-  - { name: "Security",             vertical: true, color: "#d97a78" }   # tinted to match the Identity bar below
+  - { name: "Security",             vertical: true, color: "#ff6166" }   # tinted to match the Identity bar below
   - { name: "Observability",        vertical: true }                     # reserved → pairs with crosscut #2
 
 sources:                        # external; rendered in the dashed zone on the left
@@ -34,7 +34,7 @@ components:                     # inside the cluster, plus bars and cross-cuttin
   - { name: "Notebooks",  chevron: "Transformation", kind: node,          icon: jupyter,  role: "ANLZ"  }
   - { name: "Superset",   chevron: "Visualization",  kind: node,          icon: superset, role: "DASH" }
   - { name: "Airflow",    chevron: "Orchestration",  kind: bar,           icon: airflow,    subtitle: "Apache Airflow" }
-  - { name: "Identity",   chevron: "Security",       kind: cross-cutting, icon: keycloak,   subtitle: "Keycloak · LDAP · OIDC",     color: "#d97a78" }
+  - { name: "Identity",   chevron: "Security",       kind: cross-cutting, icon: keycloak,   subtitle: "Keycloak · LDAP · OIDC",     color: "#ff6166" }
   - { name: "Monitoring", chevron: "Observability",  kind: cross-cutting, icon: prometheus, subtitle: "Prometheus · Grafana · Loki" }
 
 connections:                    # explicit edges; focal-touching ones become accent automatically
@@ -114,7 +114,7 @@ chevron_cx(C)      = (x_boundaries[index(C)] + x_boundaries[index(C)+1]) / 2
 
 Fills alternate `#ededed` / `#c9c9c9` (default) or `#171717` / `#333333` (light mode). Labels: paper-colored mono `font-size=7`, `letter-spacing=0.14em`, `text-anchor=middle`, centered at `chevron_cx, 21`.
 
-**Color override** (per chevron, both horizontal and vertical): a chevron may declare an optional `color: "#hex"` that replaces the alternation fill for that one chevron. Use it to flag a phase that pairs with a custom-colored component (e.g., `Security` chevron in red when the Identity bar uses `color: "#d97a78"`). Rules:
+**Color override** (per chevron, both horizontal and vertical): a chevron may declare an optional `color: "#hex"` that replaces the alternation fill for that one chevron. Use it to flag a phase that pairs with a custom-colored component (e.g., `Security` chevron in red when the Identity bar uses `color: "#ff6166"`). Rules:
 
 - Override applies to the polygon fill only. The label stays paper-colored — never recolor chevron labels.
 - The alternation index doesn't shift; neighboring chevrons keep their natural fill, even if it produces two adjacent same-fill chevrons. Don't try to "fix" this — overrides should be rare (≤ 2 per diagram).
@@ -195,7 +195,7 @@ gap                = 16
 row_top(k)         = first_top_y + k * (node_h + gap)   # k = 0..K-1
 ```
 
-**Focal node:** `fill="rgba(0,112,243,0.08)"`, `stroke="#0070f3"`, `stroke-width=1.2`. Title text in accent color. All other nodes: `paper-2` fill, `stroke=rgba(237,237,237,0.25)`, `stroke-width=1`.
+**Focal node:** `fill="rgba(82,168,255,0.08)"`, `stroke="#52a8ff"`, `stroke-width=1.2`. Title text in accent color. All other nodes: `paper-2` fill, `stroke=rgba(237,237,237,0.25)`, `stroke-width=1`.
 
 Role badge top-left at `(node_x+8, node_y+6)`, size 12 high. Icon top-right at `(node_x+node_w-32, node_y+6)`, 24×24, monochrome via `currentColor`. Name centered at `(node_cx, node_y+44)` size 11 sans semibold. Subtitle at `(node_cx, node_y+56)` size 8 mono muted.
 
@@ -250,7 +250,7 @@ These are non-negotiable. Pick the style **automatically** from the topology —
 
 | `style` | Stroke | Width | Dash | Marker | When required |
 | --- | --- | --- | --- | --- | --- |
-| `primary` | `#0070f3` | 1.2 | — | `arrow-accent` | Every edge whose endpoint is the `focal` node. |
+| `primary` | `#52a8ff` | 1.2 | — | `arrow-accent` | Every edge whose endpoint is the `focal` node. |
 | `secondary` | `#a1a1a1` | 1.0 | — | `arrow` | Default for source→component and component→component when neither endpoint is focal. |
 | `trigger` | `#a1a1a1` | 1.0 | `4,3` | `arrow-sm` | Every edge originating from a `kind: bar` component. |
 | `query` | `rgba(237,237,237,0.30)` | 1.0 | `4,3` | `arrow` | Read-back edges (e.g., focal ↔ Trino). |
@@ -260,7 +260,7 @@ These are non-negotiable. Pick the style **automatically** from the topology —
 ```svg
 <defs>
   <marker id="arrow"        markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#a1a1a1"/></marker>
-  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0070f3"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#52a8ff"/></marker>
   <marker id="arrow-sm"     markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#a1a1a1"/></marker>
   <marker id="arrow-dim"    markerWidth="8" markerHeight="6" refX="7" refY="3"   orient="auto"><polygon points="0 0, 8 3, 0 6" fill="rgba(237,237,237,0.45)"/></marker>
 </defs>
@@ -301,8 +301,8 @@ A component may declare an optional `color: "#hex"` (CSS color string). The over
 | Container stroke | `rgba(C, 0.45)` (`stroke-width=1` for nodes, `0.8` for bars) | `rgba(C, 0.35)` |
 | Role badge stroke (nodes) | `rgba(C, 0.55)` | `rgba(C, 0.40)` |
 | Role badge text (nodes) | `rgba(C, 1.0)` | `rgba(C, 0.85)` |
-| Icon fill / stroke | `C` | darken `C` by ~15% (or use `C` if already dark) |
-| Name text | `C` | darken `C` |
+| Icon fill / stroke | `C` | `C`'s light-mode step |
+| Name text | `C` | `C`'s light-mode step |
 | Subtitle text | **unchanged** (`muted`) | **unchanged** (`muted`) |
 | Connectors touching this component | **unchanged** (still topology-driven) | **unchanged** |
 
@@ -317,10 +317,10 @@ The subtitle stays muted because it's parenthetical metadata — only the primar
 
 **Semantic uses** (recommended):
 
-- `#d97a78` (rust-red) — Security / Identity (Keycloak, Vault)
-- `#80a3c0` (slate-blue) — Observability (Prometheus, Datadog)
-- `#9aac67` (olive-green) — Governance / Lineage (OpenMetadata)
-- `#b29365` (warm-brown) — Backup / DR
+- `#ff6166` (red) — Security / Identity (Keycloak, Vault)
+- `#0ac7b4` (teal) — Observability (Prometheus, Datadog)
+- `#62c073` (green) — Governance / Lineage (OpenMetadata)
+- `#ff990a` (amber) — Backup / DR
 
 Stick to these unless the user's brand demands otherwise. Random hex per component is exactly the failure mode this skill avoids.
 
@@ -404,19 +404,19 @@ When `light: true`, swap these tokens:
 
 | Token | Dark (default) | Light |
 | --- | --- | --- |
-| Page paper | `#000000` | `#fafafa` |
+| Page paper | `#0a0a0a` | `#fafafa` |
 | Ink | `#ededed` | `#171717` |
 | Muted text | `#a1a1a1` | `rgba(23,23,23,0.65)` |
 | Chevron fill A | `#ededed` | `#171717` |
 | Chevron fill B | `#c9c9c9` | `#333333` |
-| Chevron label | `#000000` | `#fafafa` (paper, so the label inverts with the fill) |
+| Chevron label | `#0a0a0a` | `#fafafa` (paper, so the label inverts with the fill) |
 | Dashed border | `rgba(237,237,237,0.22)` | `rgba(23,23,23,0.20)` |
 | Cluster border | `rgba(237,237,237,0.18)` | `rgba(23,23,23,0.18)` |
 | Node fill | `paper-2` | `rgba(23,23,23,0.06)` |
 | Node stroke | `rgba(237,237,237,0.25)` | `rgba(23,23,23,0.20)` |
-| Focal fill | `rgba(0,112,243,0.12)` | `rgba(0,112,243,0.08)` |
-| Focal stroke | `#0070f3` | `#0070f3` |
-| Accent connector | `#0070f3` | `#0070f3` |
+| Focal fill | `rgba(82,168,255,0.12)` | `rgba(0,104,214,0.08)` |
+| Focal stroke | `#52a8ff` | `#0068d6` |
+| Accent connector | `#52a8ff` | `#0068d6` |
 | Dot pattern | `rgba(237,237,237,0.10)` | `rgba(23,23,23,0.10)` |
 
 ---

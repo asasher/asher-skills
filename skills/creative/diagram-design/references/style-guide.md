@@ -2,7 +2,7 @@
 
 This file defines the diagram's semantic roles and their shipped values. Every type reference uses these role names instead of its own color or typography values.
 
-The shipped skin is dark: true-black paper, near-white ink, a neutral gray scale, and one blue accent. Chrome is carried by hairline borders and type, not by fills or glow. It supplies the complete visual system when the project has no `DESIGN.md` and fills roles that a project visual system leaves unspecified. A light variant is defined alongside it for pages that cannot host a dark figure.
+The shipped skin is dark: near-black paper, a raised gray surface for nodes and cards, near-white ink, a neutral gray ramp, and one blue accent. Chrome is carried by hairline borders and type, not by fills or glow, and every value is a step on a published 10-step scale so a tired reader gets the same contrast ladder on every diagram. It supplies the complete visual system when the project has no `DESIGN.md` and fills roles that a project visual system leaves unspecified. A light variant is defined alongside it for pages that cannot host a dark figure.
 
 ---
 
@@ -10,40 +10,40 @@ The shipped skin is dark: true-black paper, near-white ink, a neutral gray scale
 
 ### Semantic roles
 
-Every token is referred to by **semantic role**, not by its hex value. Type references (`type-*.md`) and SKILL.md say `accent`, not `#0070f3`.
+Every token is referred to by **semantic role**, not by its hex value. Type references (`type-*.md`) and SKILL.md say `accent`, not `#52a8ff`.
 
 | Role | Purpose | Dark (default) | Light |
 | --- | --- | --- | --- |
-| `paper` | Page background, default node fill | `#000000` | `#fafafa` |
-| `paper-2` | Raised surface: container bg, card and backend-node fill | `#0a0a0a` | `#ffffff` |
+| `paper` | Page background | `#0a0a0a` | `#fafafa` |
+| `paper-2` | Raised surface: node, card, and container fill | `#1a1a1a` | `#ffffff` |
 | `ink` | Primary text, primary stroke | `#ededed` | `#171717` |
 | `muted` | Secondary text, default arrow stroke | `#a1a1a1` | `#666666` |
 | `soft` | Sublabels, boundary labels | `#878787` | `#7d7d7d` |
 | `rule` | Hairline borders | `rgba(237,237,237,0.14)` | `rgba(23,23,23,0.08)` |
 | `rule-solid` | Stronger borders, baselines | `#454545` | `#c9c9c9` |
-| `accent` | Focal / 1–2 max per diagram | `#0070f3` | `#0070f3` |
-| `accent-tint` | Fill for accent-bordered boxes | `rgba(0,112,243,0.14)` | `rgba(0,112,243,0.08)` |
-| `link` | HTTP/API calls, external arrows | `#8ab4f8` | `#2e5aa8` |
+| `accent` | Focal / 1–2 max per diagram; strokes and text | `#52a8ff` | `#0068d6` |
+| `accent-tint` | Fill for accent-bordered boxes | `rgba(82,168,255,0.14)` | `rgba(0,104,214,0.08)` |
+| `link` | HTTP/API calls, external arrows | `#0072f5` | `#00254c` |
 
-> **Palette source:** a monochrome gray scale plus one blue. `ink`, `muted`, `soft`, and `rule-solid` are steps on the same neutral ramp; `rule` is ink at opacity; `accent` is the one saturated hue; `link` is the accent's hue at low saturation so HTTP arrows read as a family member of the accent without competing with the focal node. On black, `accent` measures 4.6:1 and `muted` 8.1:1; on light paper they measure 4.4:1 and 5.5:1.
+> **Palette source:** a monochrome gray scale plus one blue, read off a 10-step scale. Steps 1–3 are surfaces (`paper-2`), steps 4–6 borders (`rule`, `rule-solid`), step 9 secondary text (`muted`) and step 10 primary text (`ink`). The accent is the blue scale's _text_ step, not its saturated button-fill step: on the default paper it measures 7.9:1 and `muted` 7.7:1; on light paper 5.1:1 and 5.5:1. `link` is the deeper blue-700 step, so external arrows sit below the focal element in brightness instead of competing with it.
 
 > **Note:** The pre-baked example HTML files in `assets/` were built under an earlier light skin (`example-<type>.html`) and its dark twin (`example-<type>-dark.html`). Use them for layout and rhythm, not for color. New diagrams the skill produces use the tokens above.
 
 ### Inversion rule (dark → light)
 
-Any `rgba(237,237,237, X)` in the default skin becomes `rgba(23,23,23, X)` in light. Same opacities, RGB flipped. Tints on black need more alpha than tints on white: where a table lists both columns, the dark column carries the higher alpha. The accent keeps one hex in both modes.
+Any `rgba(237,237,237, X)` in the default skin becomes `rgba(23,23,23, X)` in light. Same opacities, RGB flipped. Tints on dark paper need more alpha than tints on white: where a table lists both columns, the dark column carries the higher alpha. Chromatic colors do not invert arithmetically; each hue has a dark-mode and a light-mode text step, and the light variant takes the light step.
 
 ### Series palette (multi-series chart types only)
 
-A small set of desaturated, editorial-tone colors for chart types that genuinely need to distinguish multiple overlapping entities (currently: **radar**). The "1-focal" rule still holds — `accent` is reserved for the focal series; the palette below covers the rest.
+Five hues from the same 10-step scales, at their text step, for chart types that genuinely need to distinguish multiple overlapping entities (currently: **radar**). The "1-focal" rule still holds — `accent` is reserved for the focal series; the palette below covers the rest.
 
-| Token      | Dark (default)         | Light     | Notes            |
-| ---------- | ---------------------- | --------- | ---------------- |
-| `series-1` | `#9caf8f` (sage)       | `#7c8f6f` | Non-focal series |
-| `series-2` | `#82a0c0` (dusty-blue) | `#5e7a9b` | Non-focal series |
-| `series-3` | `#d3ad7a` (mustard)    | `#b8915a` | Non-focal series |
-| `series-4` | `#b88670` (rust-brown) | `#9c6b50` | Non-focal series |
-| `series-5` | `#8d8298` (slate)      | `#6e6479` | Non-focal series |
+| Token      | Dark (default)     | Light     | Notes            |
+| ---------- | ------------------ | --------- | ---------------- |
+| `series-1` | `#62c073` (green)  | `#297a3a` | Non-focal series |
+| `series-2` | `#0ac7b4` (teal)   | `#067a6e` | Non-focal series |
+| `series-3` | `#ff990a` (amber)  | `#a35200` | Non-focal series |
+| `series-4` | `#f75f8f` (pink)   | `#bd2864` | Non-focal series |
+| `series-5` | `#bf7af0` (purple) | `#7820bc` | Non-focal series |
 
 Fills sit at `0.22` opacity on dark paper, `0.18` on light; strokes use the full color. **Don't backfill these tokens to non-chart types** — architecture, swimlane, etc. continue to use muted-ink variants. The series palette is opt-in for diagrams where overlapping shapes demand distinguishable color, not a license to add color elsewhere.
 
@@ -124,6 +124,7 @@ Semantic role combinations — reference these by name in type specs.
 - **One accent**: pick one color for `accent`. Two accents erases the focal signal.
 - **No rainbow palette**: if your brand ships 8 colors, pick 3 (paper, ink, accent). The rest become `muted` variants.
 - **Serif + sans + mono**: three families, not more. If brand typography is all sans, keep Instrument Serif for `title` and `callout` anyway — the contrast is load-bearing.
-- **Paper is true black, and the lift is the border**: `paper-2` sits one step above `paper`, so a raised surface reads through its hairline `rule`, not through a fill contrast. No gradients, no glow, no shadow. In the light variant, paper is off-white and `paper-2` is white.
+- **Paper is near-black, never pure black, and the lift is the border**: `paper-2` sits one step above `paper`, so a raised surface reads through its hairline `rule` and a small fill step, not through a jump in contrast. No gradients, no glow, no shadow. In the light variant, paper is off-white and `paper-2` is white.
+- **Easy on tired eyes**: never put pure white on pure black; `ink` on `paper` is 16.9:1 by design, not 21:1. The accent is a text-step blue, not a saturated fill. Hairlines stay at 14% alpha. Reach for `muted` before `ink` on anything that is not a name.
 - **Dot pattern is optional, not default**: the 22×22 dot pattern is an opt-in "dotted paper" variant (good for long-form editorial hero diagrams). The default background is a clean `paper` fill, no pattern. When the pattern is enabled, it should sit at ~10% opacity of `ink` on `paper` — visible but quiet.
 - **Container is clean by default**: the diagram sits directly on the page paper, no secondary container background or border. A framed variant (`paper-2` bg + `rule` border + 8px radius + padding) is available as an opt-in for card-heavy layouts, but don't reach for it by default — the extra chrome fights the figure.

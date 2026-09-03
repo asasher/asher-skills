@@ -190,7 +190,7 @@ Tints a specific intersection cell. Applied to:
 | Value text | `C` | `C_dark` |
 | Sub text (if present) | `rgba(C, 0.95)` | `rgba(C_dark, 0.85)` |
 
-`C_dark` = the same hex darkened ~15% for light-paper contrast.
+`C_dark` = the same hue at its light-mode step, taken from the light value in the recommended palette.
 
 ### 4.2 Per-component `color` (`components[i].color`)
 
@@ -212,7 +212,7 @@ Tints the **column banner only** (top row). Cells underneath keep their `level` 
 | Banner fill | `C` |
 | Role name + code text | `#ffffff` if `C` is dark (luminance ≤ 0.5), else `#171717` |
 
-If you pick a light hex (e.g., yellow `#efc860`), the text auto-flips to near-black for contrast. Pair `roles[j].text_color: "#hex"` to override this auto-pick.
+If you pick a light hex (luminance above 0.5, such as a pale 1000-step tint), the text auto-flips to near-black for contrast. Pair `roles[j].text_color: "#hex"` to override this auto-pick.
 
 ### 4.4 Rules
 
@@ -223,11 +223,11 @@ If you pick a light hex (e.g., yellow `#efc860`), the text auto-flips to near-bl
 
 ### 4.5 Recommended palette (same as the other parametric types)
 
-- `#d97a78` rust-red — Security elevation / break-glass / SoX-flagged
-- `#80a3c0` slate-blue — Quality / monitoring / observability gate
-- `#9aac67` olive-green — Approved / governance-cleared / publication-ready
-- `#efc860` warm yellow — Working / sandbox / data-scientist zone
-- `#b29365` warm-brown — Archive / cold / DR
+- `#ff6166` red (light `#cb2a2f`) — Security elevation / break-glass / SoX-flagged
+- `#0ac7b4` teal (light `#067a6e`) — Quality / monitoring / observability gate
+- `#62c073` green (light `#297a3a`) — Approved / governance-cleared / publication-ready
+- `#bf7af0` purple (light `#7820bc`) — Working / sandbox / data-scientist zone
+- `#ff990a` amber (light `#a35200`) — Archive / cold / DR
 
 ---
 
@@ -245,22 +245,22 @@ If zero or >1 `focal: true` cells are declared, halt and ask the user.
 
 ## 6. Light mode
 
-| Token                   | Dark (default)  | Light                  |
-| ----------------------- | --------------- | ---------------------- |
-| Paper                   | `paper`         | `ink`                  |
-| Ink                     | `ink`           | `paper`                |
-| Muted                   | `muted`         | `soft`                 |
-| Soft (no-access text)   | `soft`          | `muted`                |
-| Accent                  | `accent`        | `accent`               |
-| Role-banner fill        | `ink`           | `ink`                  |
-| Header / row stroke     | `ink @ 0.18`    | `paper @ 0.12`         |
-| Full / Admin fill       | `ink @ 0.10`    | `paper @ 0.08`         |
-| R/W fill                | `paper-2`       | `paper @ 0.06`         |
-| Read fill               | `muted @ 0.12`  | `soft @ 0.08`          |
-| No-access fill          | `paper`         | `paper @ 0.02`         |
-| Focal fill              | `accent @ 0.12` | `accent @ 0.07`        |
-| Focal stroke            | `accent`        | `accent`               |
-| Custom component colors | `C`             | `C_dark` (darken ~15%) |
+| Token                   | Dark (default)  | Light                      |
+| ----------------------- | --------------- | -------------------------- |
+| Paper                   | `paper`         | `ink`                      |
+| Ink                     | `ink`           | `paper`                    |
+| Muted                   | `muted`         | `soft`                     |
+| Soft (no-access text)   | `soft`          | `muted`                    |
+| Accent                  | `accent`        | `accent`                   |
+| Role-banner fill        | `ink`           | `ink`                      |
+| Header / row stroke     | `ink @ 0.18`    | `paper @ 0.12`             |
+| Full / Admin fill       | `ink @ 0.10`    | `paper @ 0.08`             |
+| R/W fill                | `paper-2`       | `paper @ 0.06`             |
+| Read fill               | `muted @ 0.12`  | `soft @ 0.08`              |
+| No-access fill          | `paper`         | `paper @ 0.02`             |
+| Focal fill              | `accent @ 0.12` | `accent @ 0.07`            |
+| Focal stroke            | `accent`        | `accent`                   |
+| Custom component colors | `C`             | `C_dark` (light-mode step) |
 
 ---
 

@@ -31,7 +31,7 @@ zones:                       # 2..4 zones, ordered along the orientation axis
     components:
       - { id: shared-drive,  name: "Shared Drive",     sub: "No version control · Windows file share", icon: file,      kind: focal }
       - { id: analyst-mach,  name: "Analyst Machines", sub: "SPSS · SAS · Stata · Excel",              icon: desktop }
-      - { id: sql-server,    name: "SQL Server",       sub: "on-premises · core RDBMS",                icon: sqlserver, color: "#9aac67" }  # custom olive
+      - { id: sql-server,    name: "SQL Server",       sub: "on-premises · core RDBMS",                icon: sqlserver, color: "#62c073" }  # custom green
   - name: "DISSEMINATION"
     components:
       - { id: legacy-portal,   name: "LegacyPortal",      sub: "manual bottleneck",     icon: cloud,    kind: focal }
@@ -306,7 +306,7 @@ Per-component, same shape as every other parametric type in this skill.
 | Sub-label | muted (unchanged) | muted (unchanged) |
 | Connectors touching this component | **unchanged** — topology-driven | **unchanged** |
 
-`C_dark` = the same hex darkened ~15% for light-paper contrast (e.g., `#9aac67` → `#7a8c47`, `#d97a78` → `#b85450`).
+`C_dark` = the same hue at its light-mode step, taken from the light value in the recommended palette (e.g., `#62c073` → `#297a3a`, `#ff6166` → `#cb2a2f`).
 
 **Rules:**
 
@@ -316,11 +316,11 @@ Per-component, same shape as every other parametric type in this skill.
 
 **Recommended cross-type palette** (same as `type-medallion.md` / `type-process.md` / `type-dp-integration.md` / `type-dp-security-matrix.md`):
 
-- `#d97a78` rust-red — security / governance / pain-point that isn't focal
-- `#80a3c0` slate-blue — observability / quality / monitoring gate
-- `#9aac67` olive-green — survivor system (the one tool the new platform keeps)
-- `#efc860` warm yellow — sandbox / dev / scratch
-- `#b29365` warm-brown — archive / cold / DR
+- `#ff6166` red (light `#cb2a2f`) — security / governance / pain-point that isn't focal
+- `#0ac7b4` teal (light `#067a6e`) — observability / quality / monitoring gate
+- `#62c073` green (light `#297a3a`) — survivor system (the one tool the new platform keeps)
+- `#bf7af0` purple (light `#7820bc`) — sandbox / dev / scratch
+- `#ff990a` amber (light `#a35200`) — archive / cold / DR
 
 ---
 
@@ -337,24 +337,24 @@ If your diagram needs more than 2 focal components, you've collapsed two narrati
 
 ## 6. Light mode
 
-| Role                      | Dark (default)   | Light              |
-| ------------------------- | ---------------- | ------------------ |
-| paper                     | `paper`          | `ink`              |
-| ink                       | `ink`            | `paper`            |
-| muted                     | `muted`          | `muted`            |
-| accent                    | `accent`         | `accent`           |
-| link                      | `link`           | `link`             |
-| zone background           | `ink @ 0.04`     | `paper @ 0.02`     |
-| zone border               | `ink @ 0.14`     | `paper @ 0.10`     |
-| standard component fill   | `paper-2`        | `paper @ 0.04`     |
-| standard component stroke | `ink`            | `paper @ 0.32`     |
-| focal fill                | `accent @ 0.12`  | `accent @ 0.07`    |
-| focal stroke              | `accent`         | `accent`           |
-| external stroke           | `muted` (dashed) | `muted` (dashed)   |
-| footer fill               | `ink @ 0.05`     | `paper @ 0.03`     |
-| footer stroke             | `ink @ 0.20`     | `paper @ 0.18`     |
-| label mask fill           | `paper`          | `ink`              |
-| custom-color components   | `C`              | `C_dark` (≈ −15 %) |
+| Role                      | Dark (default)   | Light                      |
+| ------------------------- | ---------------- | -------------------------- |
+| paper                     | `paper`          | `ink`                      |
+| ink                       | `ink`            | `paper`                    |
+| muted                     | `muted`          | `muted`                    |
+| accent                    | `accent`         | `accent`                   |
+| link                      | `link`           | `link`                     |
+| zone background           | `ink @ 0.04`     | `paper @ 0.02`             |
+| zone border               | `ink @ 0.14`     | `paper @ 0.10`             |
+| standard component fill   | `paper-2`        | `paper @ 0.04`             |
+| standard component stroke | `ink`            | `paper @ 0.32`             |
+| focal fill                | `accent @ 0.12`  | `accent @ 0.07`            |
+| focal stroke              | `accent`         | `accent`                   |
+| external stroke           | `muted` (dashed) | `muted` (dashed)           |
+| footer fill               | `ink @ 0.05`     | `paper @ 0.03`             |
+| footer stroke             | `ink @ 0.20`     | `paper @ 0.18`             |
+| label mask fill           | `paper`          | `ink`                      |
+| custom-color components   | `C`              | `C_dark` (light-mode step) |
 
 ---
 
@@ -373,7 +373,7 @@ Before emitting SVG, verify **every** item:
 9. Legend at bottom: hairline separator + one swatch per style actually used.
 10. `arrow-label` for connector labels, `eyebrow` for the page eyebrow and zone labels, `title` for the page title, `node-name` for the subtitle and component names, and `sublabel` for technical sub-labels.
 11. Markers `#arrow` / `#arrow-link` / `#arrow-accent` defined once in `<defs>`; no inline marker definitions.
-12. Light variant: resolve every semantic token through its light-mode value; custom colors are darkened ~15 %.
+12. Light variant: resolve every semantic token through its light-mode value; custom colors use their light-mode step.
 
 ---
 
@@ -388,7 +388,7 @@ Before emitting SVG, verify **every** item:
 - **Footer bar wired to one component.** Footer = cross-cutting layer-wide concern; a connector from a footer to a specific component is a category error (use `type-dp-integration.md`'s AUTH-line pattern only when the footer service truly authenticates _all_ components, and even then the line lands at the zone bottom edge, not at a specific tool).
 - **> 16 total components or > 5 per zone.** Density cap; split into two diagrams.
 - **Mixing orientations within one diagram.** Pick one — `horizontal` or `vertical` — and apply it to every zone.
-- **Using `kind: focal` to flag every painful thing.** Focal exists for ≤ 2 narrative pain-points; for "this is bad but not headline-bad", use `color: "#d97a78"` rust-red instead.
+- **Using `kind: focal` to flag every painful thing.** Focal exists for ≤ 2 narrative pain-points; for "this is bad but not headline-bad", use `color: "#ff6166"` red instead.
 
 ---
 
@@ -397,7 +397,7 @@ Before emitting SVG, verify **every** item:
 - `assets/example-it-state.html` — minimal light (NatStat canonical: 3 zones, 9 components, 8 connectors, 0 footer bars, SQL Server tinted olive). Gallery default.
 - `assets/example-it-state-dark.html` — same, dark skin.
 - `assets/example-it-state-full.html` — same, editorial-card frame with summary cards.
-- `assets/example-it-state-extended.html` — exercises §4 color override + footer bars: 2 footer bars (Identity Manager + Observability) below the zones, third custom color on Analyst Machines (slate-blue, data-quality concern).
+- `assets/example-it-state-extended.html` — exercises §4 color override + footer bars: 2 footer bars (Identity Manager + Observability) below the zones, third custom color on Analyst Machines (teal, data-quality concern).
 - `assets/example-it-state-extended-dark.html` — extended pattern, dark skin.
 
 ---
@@ -423,7 +423,7 @@ zones:
     components:
       - { id: shared-drive,  name: "Shared Drive",     sub: "No version control · Windows file share", icon: file,      kind: focal }
       - { id: analyst-mach,  name: "Analyst Machines", sub: "SPSS · SAS · Stata · Excel",              icon: desktop }
-      - { id: sql-server,    name: "SQL Server",       sub: "on-premises · core RDBMS",                icon: sqlserver, color: "#9aac67" }
+      - { id: sql-server,    name: "SQL Server",       sub: "on-premises · core RDBMS",                icon: sqlserver, color: "#62c073" }
   - name: "DISSEMINATION"
     components:
       - { id: legacy-portal,   name: "LegacyPortal",      sub: "manual bottleneck",     icon: cloud,    kind: focal }
@@ -450,7 +450,7 @@ light: false
 - `viewBox_h = 52 + 360 + 40 + 24 = 500` (no footer bars) ✓
 - Shared Drive (focal) at zone 2, row 0: `x = 340, y = 80, w = 264, h = 68` (focal stretches to 68 to fit 2-line sub) ✓
 - LegacyPortal (focal) at zone 3, row 0: `x = 704, y = 80, w = 208, h = 60` ✓
-- SQL Server (custom olive) at zone 2, row 2: container fill `rgba(154,172,103,0.06)`, stroke `rgba(154,172,103,0.45)`, name text `#9aac67` ✓
+- SQL Server (custom green) at zone 2, row 2: container fill `rgba(98,192,115,0.06)`, stroke `rgba(98,192,115,0.45)`, name text `#62c073` ✓
 - Connectors 4, 5 (within zone 2) and 7, 8 (within zone 3) are simple vertical `<line>` elements. Cross-zone connectors take rule-compliant routes (see SKILL.md §6 rules 4 & 5):
   - **All three Survey-side → Shared Drive connectors (C1 / C2 / C3) enter Shared Drive's LEFT edge.** A top-edge entry would push the marker body (7 px back along travel, given `refX = 7`) _inside_ the destination box, where the box's paper-fill mask hides it — only a 1-pixel tip would peek above the stroke. Entering the left edge with a right-going path keeps the body outside the box and the arrow visible (~7 px shown to the left of the box edge). The three left-edge attach points are fanned at **y = 108 / 124 / 140** (16-px spacing, well above the 12 px rule-4 minimum).
   - **C1** (Survey → Shared Drive) source y matches landing y: single horizontal `M 252,108 H 340`. No bends needed.

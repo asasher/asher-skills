@@ -213,7 +213,7 @@ Universal building blocks. Type-specialized primitives (lifeline, activation bar
 **Default: clean paper, no dot pattern.** Single `<rect>` filled with `paper`. Don't wrap the diagram in a secondary container background — the diagram sits directly on the page.
 
 ```svg
-<rect width="100%" height="100%" fill="#000000"/>
+<rect width="100%" height="100%" fill="#0a0a0a"/>
 ```
 
 **Optional: dotted paper variant.** When a long-form editorial diagram benefits from textured ground (essays, hero diagrams on a dedicated page), opt in by adding the `dots` pattern and a second rect:
@@ -224,7 +224,7 @@ Universal building blocks. Type-specialized primitives (lifeline, activation bar
     <circle cx="1" cy="1" r="0.9" fill="rgba(237,237,237,0.12)"/>
   </pattern>
 </defs>
-<rect width="100%" height="100%" fill="#000000"/>
+<rect width="100%" height="100%" fill="#0a0a0a"/>
 <rect width="100%" height="100%" fill="url(#dots)" opacity="0.6"/>
 ```
 
@@ -237,18 +237,18 @@ Don't use the dot pattern when the diagram sits inside a product page, slide, or
   <polygon points="0 0, 8 3, 0 6" fill="#a1a1a1"/>
 </marker>
 <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#0070f3"/>
+  <polygon points="0 0, 8 3, 0 6" fill="#52a8ff"/>
 </marker>
 <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#8ab4f8"/>
+  <polygon points="0 0, 8 3, 0 6" fill="#0072f5"/>
 </marker>
 ```
 
 | Arrow | Stroke | When |
 | --- | --- | --- |
 | Default | muted `#a1a1a1` | Internal, generic |
-| Accent | accent `#0070f3` | Primary / highlighted / headline |
-| Link-blue | `#8ab4f8` | HTTP/API calls, external systems |
+| Accent | accent `#52a8ff` | Primary / highlighted / headline |
+| Link-blue | `#0072f5` | HTTP/API calls, external systems |
 | Dashed | `stroke-dasharray="5,4"` + any color | Optional, passive, return, async |
 
 **Draw arrows before boxes** so z-order puts lines behind nodes.
@@ -283,7 +283,7 @@ These six rules are **non-negotiable**. Run the pre-output checklist (§9) to ve
 
 ```svg
 <!-- 1. Opaque paper mask — prevents arrows bleeding through transparent fills -->
-<rect x="X" y="Y" width="W" height="H" rx="6" fill="#000000"/>
+<rect x="X" y="Y" width="W" height="H" rx="6" fill="#0a0a0a"/>
 <!-- 2. Styled box -->
 <rect x="X" y="Y" width="W" height="H" rx="6" fill="FILL" stroke="STROKE" stroke-width="1"/>
 <!-- 3. Rectangular type tag (rx=2, NOT a pill) -->
@@ -304,7 +304,7 @@ Every arrow label needs an opaque rect behind it. Without one it bleeds through 
 
 ```svg
 <!-- Mask sits 14px above the arrow (8px text height + 6px gap). Stroke is at ARROW_Y. -->
-<rect x="MID_X-18" y="ARROW_Y-20" width="36" height="12" rx="2" fill="#000000"/>
+<rect x="MID_X-18" y="ARROW_Y-20" width="36" height="12" rx="2" fill="#0a0a0a"/>
 <text x="MID_X" y="ARROW_Y-11" fill="#878787" font-size="8"
       font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">WRITE</text>
 ```
@@ -424,7 +424,7 @@ Don't use 3 identical generic cards. Vary the treatment:
 
 Rules:
 
-- `background: #0a0a0a` (`paper-2`, not paper — the border carries the lift, no shadow)
+- `background: #1a1a1a` (`paper-2`, not paper — the border carries the lift, no shadow)
 - `border: 1px solid rgba(237,237,237,0.14)`
 - `border-radius: 6px`, `padding: 1.25rem`
 - **No `box-shadow`**
@@ -471,7 +471,7 @@ Run before producing any diagram.
 - [ ] **When several connectors enter or exit the same edge of a box, each has its own attach point (≥12px apart)? No connector hides another?**
 - [ ] **No connector passes behind a non-endpoint box, except the unavoidable-intervening-box case (§6 rule 5) — and in that case, the stroke is dashed and the label sits at the visible end?**
 - [ ] **No label mask overlaps a node drawn after it? (Node fill would clip the text — §6 rule 6. From a repository checkout, run `python3 <repo-root>/scripts/verify-geometry.py <file>`.)**
-- [ ] Every arrow label has an opaque `fill="#000000"` rect behind it?
+- [ ] Every arrow label has an opaque `fill="#0a0a0a"` rect behind it?
 - [ ] Legend is a horizontal bottom strip, not floating?
 - [ ] No vertical `writing-mode` text?
 - [ ] `viewBox` expanded for the legend strip (~60px)?

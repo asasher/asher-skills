@@ -8,11 +8,11 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     :root {
-      --color-paper: #000000;
+      --color-paper: #0a0a0a;
       --color-ink: #ededed;
       --color-muted: #a1a1a1;
       --color-soft: #878787;
-      --color-accent: #0070f3;
+      --color-accent: #52a8ff;
       --color-rule: rgba(237,237,237,0.14);
       --font-sans: 'Geist', system-ui, sans-serif;
       --font-serif: 'Instrument Serif', serif;
@@ -184,7 +184,7 @@
           <polygon points="0 0, 8 3, 0 6" fill="#a1a1a1"/>
         </marker>
       </defs>
-      <rect width="960" height="480" fill="#000000"/>
+      <rect width="960" height="480" fill="#0a0a0a"/>
 
       <!-- Persistent connectors carry the static meaning. -->
       <path d="M248 180 H356" fill="none" stroke="#a1a1a1" marker-end="url(#template-motion-arrow)"/>
@@ -192,23 +192,23 @@
       <path d="M764 232 V328" fill="none" stroke="#a1a1a1" marker-end="url(#template-motion-arrow)"/>
 
       <g data-motion-item data-step="1" aria-label="Step 1: Request received">
-        <rect x="48" y="128" width="200" height="104" rx="8" fill="#000000" stroke="#ededed"/>
+        <rect x="48" y="128" width="200" height="104" rx="8" fill="#0a0a0a" stroke="#ededed"/>
         <text x="148" y="172" text-anchor="middle" fill="#ededed" font-family="Geist, sans-serif" font-size="16" font-weight="600">Request</text>
         <text x="148" y="196" text-anchor="middle" fill="#a1a1a1" font-family="Geist Mono, monospace" font-size="12">fields complete</text>
       </g>
       <g data-motion-item data-step="2" aria-label="Step 2: Policy passed">
-        <rect x="356" y="128" width="200" height="104" rx="8" fill="rgba(0,112,243,0.08)" stroke="#0070f3"/>
+        <rect x="356" y="128" width="200" height="104" rx="8" fill="rgba(82,168,255,0.08)" stroke="#52a8ff"/>
         <text x="456" y="168" text-anchor="middle" fill="#ededed" font-family="Geist, sans-serif" font-size="16" font-weight="600">Policy</text>
         <text x="456" y="196" text-anchor="middle" fill="#a1a1a1" font-family="Geist Mono, monospace" font-size="12">✓ PASS · rule 2</text>
       </g>
       <g data-motion-item data-step="3" aria-label="Step 3: Three items queued">
-        <rect x="664" y="128" width="200" height="104" rx="8" fill="#000000" stroke="#ededed"/>
+        <rect x="664" y="128" width="200" height="104" rx="8" fill="#0a0a0a" stroke="#ededed"/>
         <text x="764" y="164" text-anchor="middle" fill="#ededed" font-family="Geist, sans-serif" font-size="16" font-weight="600">Queue</text>
         <rect x="700" y="184" width="16" height="16" fill="#a1a1a1"/><rect x="724" y="184" width="16" height="16" fill="#a1a1a1"/><rect x="748" y="184" width="16" height="16" fill="#a1a1a1"/>
         <text x="796" y="196" fill="#a1a1a1" font-family="Geist Mono, monospace" font-size="12">3 queued</text>
       </g>
       <g data-motion-item data-step="4" aria-label="Step 4: Audit entry appended">
-        <rect x="664" y="328" width="200" height="88" rx="8" fill="#000000" stroke="#ededed"/>
+        <rect x="664" y="328" width="200" height="88" rx="8" fill="#0a0a0a" stroke="#ededed"/>
         <text x="764" y="364" text-anchor="middle" fill="#ededed" font-family="Geist, sans-serif" font-size="16" font-weight="600">Audit log</text>
         <text x="764" y="388" text-anchor="middle" fill="#a1a1a1" font-family="Geist Mono, monospace" font-size="12">0042 · appended</text>
       </g>
@@ -218,7 +218,7 @@
 
       <!-- Decorative duplicate path and token never carry unique meaning. -->
       <path data-motion-item data-step="2" data-motion-decorative aria-hidden="true" focusable="false" pathLength="1" class="draw-path" d="M248 180 H356"/>
-      <circle data-motion-item data-step="3" data-motion-decorative aria-hidden="true" focusable="false" class="flow-token" cx="556" cy="180" r="6" fill="#0070f3"/>
+      <circle data-motion-item data-step="3" data-motion-decorative aria-hidden="true" focusable="false" class="flow-token" cx="556" cy="180" r="6" fill="#52a8ff"/>
     </svg>
 
     <div data-motion-controls role="group" aria-label="Diagram playback controls">

@@ -23,8 +23,8 @@
 
 <!-- Focal task -->
 <rect x="X_start" y="ROW_Y+8" width="DURATION_PX" height="24" rx="4"
-      fill="rgba(0,112,243,0.12)" stroke="#0070f3" stroke-width="1"/>
-<text x="X_start+8" y="ROW_Y+25" fill="#0070f3" font-size="10" font-weight="600"
+      fill="rgba(82,168,255,0.12)" stroke="#52a8ff" stroke-width="1"/>
+<text x="X_start+8" y="ROW_Y+25" fill="#52a8ff" font-size="10" font-weight="600"
       font-family="'Geist', sans-serif">Key task</text>
 ```
 
