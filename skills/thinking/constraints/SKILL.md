@@ -1,14 +1,7 @@
 ---
 name: constraints
 description: Find and work the one constraint limiting a system, Theory-of-Constraints style, on a shared visual HTML page.
-argument-hint: "[new \"<system>\"] | [resume] | [list] | [map|find|dig|cloud|plan|experiment|review]"
-user-invocable: true
 disable-model-invocation: true
-metadata:
-  invocation: user
-  execution: thread
-  requires: []
-  optional: []
 ---
 
 # Constraints

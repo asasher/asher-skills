@@ -1,27 +1,24 @@
 # Prototype
 
-Answers **one design question with a throwaway artifact**, then throws it away — the answer is the only deliverable. Usable anywhere, not only in dev: settle a state model, a layout, a UI, or a document direction with real alternatives instead of argument. Keep the answer, delete the artifact.
+Answers **one design question with a disposable artifact**. It can compare alternatives or make logic or a mechanism observable. The settled direction or validated behavior becomes a reference for implementation.
 
 ## When to use
 
 - **A design question blocks progress** — more than one plausible state model, data shape, or layout survives discussion and the choice is expensive to reverse; or there is visual uncertainty with no settled design.
-- **You need to see alternatives, not describe them** — three structurally different variants a human can react to beats a paragraph of trade-offs.
-- **Not for building the real thing** — a prototype answers the question that unblocks the build; it is not the build.
+- **You need to see alternatives, not describe them** — structurally different variants a human can react to beats a paragraph of trade-offs.
 
 ## Shape
 
-- **A throwaway artifact, not only code.** Scaffolding built to reach an answer and torn down after — a state-model demo in one shareable HTML file, a page with `?variant=`, a rendered document, a driven scenario.
-- **Question-driven shapes.** _Behavior_ drives the idea through the awkward cases one action at a time; _variants_ puts structurally different alternatives side by side; _falsification_ exposes the claim an artifact can break. An interface's non-obvious presentation choices are decisions a variants prototype settles — implementation never invents them.
-- **Four gates.** Question stated → built & exposed → answer captured → cleaned up. The prototype is never the record, and nothing throwaway ships.
+- **Formats.** Logic questions get self-contained HTML demos over independent logic. Mechanism claims get runtime-real probes. UI questions get structurally different variants in application context. Document and other direction questions get comparable rendered alternatives.
+- **Shared rules.** Disposable and labeled as such; effortless to launch; in-memory state; no polish, no tests.
+- **Three gates.** State the question, build and expose the artifact, then return its path and result.
 
 ## Dependency surface
 
-- **Bundled:** `reference/prototyping.md` — the authoritative technique.
-- **Project:** optional placement delta `docs/agents/prototyping.md` (task runner, routing, where throwaway artifacts live); absent it, a self-contained artifact in a scratch dir.
-- **Siblings (optional, by name):** `to-subagent` (build-out dispatch; degrades to building in-session).
+Uses the optional `technical-writing` sibling for the artifact and returned prose.
 
 ## Credits
 
-- **Relationship:** extracted from this repository's earlier `backlog` skill ([`7f8ca23`](https://github.com/asasher/asher-skills/commit/7f8ca23)).
-- **Technique source:** the two core prototype shapes (shareable logic demo, UI variants on one route) are adapted from Matt Pocock's MIT-licensed [`prototype`](https://github.com/mattpocock/skills/blob/04fee67571bc52ac58a0e59fc4924a13f61b50a6/skills/engineering/prototype/SKILL.md).
+- **Relationship:** extracted from this repository's earlier `backlog` skill.
+- **Technique source:** the logic and UI prototype formats are adapted from Matt Pocock's MIT-licensed [`prototype` skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype).
 - **License/notices:** [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).

@@ -1,0 +1,7 @@
+interface:
+  display_name: "To Branch"
+  short_description: "Commit files to a branch without checking it out and return the commit hash; publishes artifacts to an issue's artifact branch"
+  default_prompt: "Use $to-branch to publish these files to the named branch and return the commit hash."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Merge"
+  short_description: "The human authorization gate: merge the named review-ready PRs one at a time, in dependency order, re-checking CI at merge time"
+  default_prompt: "Merge the review-ready PRs I named, in dependency order; resolve conflicts by documented intent and stop on any spec-versus-spec collision."
+
+policy:
+  allow_implicit_invocation: false

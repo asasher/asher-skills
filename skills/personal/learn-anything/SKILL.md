@@ -1,14 +1,7 @@
 ---
 name: learn-anything
 description: Teach + coach any skill — decompose it, engineer honest feedback loops, run rep-by-rep practice sessions, schedule drills.
-argument-hint: "[setup \"<mission>\"] | [loop] | [session] | [teach \"<topic>\"] | [status]"
-user-invocable: true
 disable-model-invocation: true
-metadata:
-  invocation: user
-  execution: thread
-  requires: []
-  optional: []
 ---
 
 # Learn Anything

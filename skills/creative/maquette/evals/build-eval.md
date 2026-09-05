@@ -1,6 +1,6 @@
 # Maquette — build eval
 
-One full pipeline run against a sample brief, graded on the artifacts. Expensive; run after probes pass. Because the pipeline is interview-gated, the eval harness plays the user: a scripted client persona with an answer sheet, responding in character to intake questions.
+One full pipeline run against a sample brief, graded on the artifacts. Because the pipeline is interview-gated, the eval harness plays the user: a scripted client persona with an answer sheet, responding in character to intake questions.
 
 ## Sample brief (the persona's ground truth)
 

@@ -1,13 +1,6 @@
 ---
 name: watch-video
 description: Watch a video by reading contact sheets — tiled, timestamped frame grids sized for a vision model. Use when the user shares a video, clip, or screen recording and asks anything about its content (what happens, summarize, find a moment, verify a flow or bug on screen), or when another skill needs to understand video.
-argument-hint: "<video file or URL> [question]"
-user-invocable: true
-metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
 ---
 
 # Watch Video

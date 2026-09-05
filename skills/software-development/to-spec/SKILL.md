@@ -1,46 +1,29 @@
 ---
 name: to-spec
-description: Turn a settled conversation or shaping record into a spec on the subject's ticket — body canonical, opening with a diagram; creates the ticket when none exists. Pure synthesis, no interview. Falls back to a repo doc when no tracker is bound.
-argument-hint: "[<ticket id, or a name for the spec>]"
-user-invocable: true
+description: Synthesize a settled record into one self-contained HTML spec. Use after the decisions are made. Pure synthesis, no interview or publication.
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
+  optional: [diagram-design, technical-writing]
 ---
 
-# To-Spec
+# To spec
 
-To-spec owns one move: **take a conversation that already reached a decision and write the spec it earned.** It reads the current conversation and the codebase/project understanding built up in it, captures what was **decided**, and writes a **spec**: the high-level direction document downstream work builds on.
+Turn settled material into the spec it earned. Record choices; make none. Undecided points become Notes, never questions.
 
-The defining constraint is **pure synthesis, no interview.** To-spec does not re-elicit requirements, does not re-ask what the conversation already settled, and does not stall waiting on the user. It captures what's decided and **flags what isn't in the spec's Notes** — an open question recorded is worth more here than a question asked.
+Use the `technical-writing` skill for the spec.
 
-## Command surface
+1. **Reconcile the record.** Start with the shaping record, then include settled decisions from the current conversation and sweep each decision-informing artifact into Supporting artifacts. The latest explicit ruling wins. Omit superseded requirements, discarded options, and discussion that did not become direction. When revising a spec, read the previous approved revision and preserve each `AC-N` identifier's meaning; amend in place, append, or retire without reusing its identifier.
+2. **Write one self-contained HTML spec** in this order:
+   - Problem and decided direction.
+   - Affected users and their changed experience.
+   - Shared system behavior.
+   - Implementation decisions, including the constraint or accepted cost when the record gives one.
+   - Acceptance criteria with stable `AC-N` identifiers and observable pass-or-fail outcomes.
+   - Verification risk and rationale when settled, including the named failure paths and data-safety obligations.
+   - Testing contract when settled: the highest existing public seams and, for each applicable AC, the recorded durable-suite or throwaway-script choice.
+   - Scope and exclusions, assumptions, Supporting artifacts, Notes, and a Recommended split when shaping settled one. Omit empty optional sections.
+3. **Keep the direction durable.** Stay above file-by-file instructions. A concrete path or prototype-validated fragment is allowed only when it is the reliable pointer to an established pattern or a decision that prose cannot preserve. For each Supporting artifact, record its kind, the question it answered, its one-line takeaway, and its durable pointer; state plainly when evidence exists only in the conversation.
+4. **Make review aids earn their space.** Add the smallest useful diagram only when it materially clarifies the direction. Use the `diagram-design` sibling in embedded mode and verify both its fragment and the completed spec. When that sibling is absent, use prose or a table and report the missing diagram support if it materially reduced clarity.
+5. **Classify Notes.** Mark each unresolved point as **blocking** (shaping must settle it), **delegated** (the executor may choose within a named boundary), or **deferred** (parked with a named home). A blocking Note means the direction is not ready to publish or build.
+6. **Audit fidelity both ways.** Confirm that every current material decision, requirement, exclusion, assumption, and unresolved point is represented, and that every statement in the spec traces to the settled record. Report contradictions or omissions as failures.
 
-- **`to-spec [<ticket id, or name>]`** — synthesize the current conversation into a spec and land it on the subject's ticket: given a ticket id, that ticket's body; given none, create the ticket to carry it (deriving a short kebab-case name from the decided direction). With no tracker bound, fall back to a repo doc at `docs/specs/<name>.md`.
-
-Load [synthesis](reference/synthesis.md) for the method (what to mine, the artifact sweep, the no-interview rule, dev-vs-non-dev gating, the no-stale-content rule, sign-off) and [template-guide](reference/template-guide.md) for what goes in each section.
-
-## How a spec gets written
-
-The full method is in [synthesis](reference/synthesis.md); the shape:
-
-1. **Mine, don't ask.** Read the conversation and the codebase/project understanding it built. Start from the interview record when one exists (synthesis § What to mine). Extract the problem, the decided solution, the decisions taken and the constraints that forced them. Sweep every generated artifact that informed a decision into a **Supporting artifacts** entry (synthesis § Sweep the artifacts). Anything left undecided becomes a line in **Notes**, never a question back to the user.
-2. **Classify the work — dev or non-dev.** Our work isn't all software. A **dev spec** keeps the dev-only sections (Testing decisions, Test seams) and runs the seams step below; a **non-dev spec** skips both and uses only the core sections.
-3. **For dev specs only — sketch the test seams and sweep the contract surface.** Name the public seams the work would be tested at, **prefer the highest existing seam**, and enumerate the contract decisions hiding as defaults (synthesis § Sweep the contract surface).
-4. **Write the spec onto the ticket** — the ticket body is canonical, **opening with a diagram** of the moving parts (flow, sequence, or state — whichever fits) before any prose, then the template's sections in generic vocabulary. Rewrite the body in place and post a short comment noting what changed; the comments are the revision trail. No ticket yet: create it. No tracker bound: fall back to `docs/specs/<name>.md` (synthesis § Where the spec lives).
-5. **Audit fidelity, then classify the Notes.** Before sign-off, audit in both directions: every material decision from the conversation appears in the spec, and the spec covers the subject ticket's own stated requirements — delivered or explicitly excluded (synthesis § Sign-off). Every Notes line is classified **blocking** (must be settled upstream before tickets), **delegated** (the executor may choose; boundary named), or **deferred** (parked, with a home). A spec with an unclassified material Note is not done; an open blocking Note means the direction isn't ready to build on — say so in the report. A direction too big for one build ends the spec with a **recommended split** — a proposal only; splitting is the user's call.
-6. **Sign-off — the direction's approval gate.** User present: approve inline. AFK: the spec sits on the ticket where comments reach it — the user's LGTM is the approval, and to-spec records which body revision it covers (synthesis § Sign-off). Readiness labels are not to-spec's to apply.
-
-## What a spec is (and isn't)
-
-- **Generic vocabulary.** A spec describes direction that may later split into **tickets**. Say "spec" and "ticket" — never GitHub-specific "issue." The unit of downstream work is a ticket.
-- **The artifact lives on the ticket** — body canonical, diagram first, comments as the revision trail. The repo doc at `docs/specs/<name>.md` — the same diagram-first body — is the fallback home when no tracker is bound.
-- **No file paths or code snippets** — the only exceptions the prototype-validated snippet and the **Supporting artifacts** section's durable pointers (synthesis § No stale content).
-- **Adaptable to non-dev work.** The dev-only sections are optional; a spec for a process, a piece of content, or a decision uses the core sections alone.
-
-## Dependency surface
-
-- **Bundled references** — this skill's own contract, shipped in-directory: [synthesis](reference/synthesis.md) and [template-guide](reference/template-guide.md). These are the authority.
-- **Project playbooks** — the **tracker binding** in `docs/agents/platform.md` (how a ticket body is read, rewritten, and commented), and the repo's spec conventions for the no-tracker fallback (defaults to `docs/specs/`; a repo may record a different location or naming rule in its `docs/agents/`).
+Write one untracked scratch file. Return its path, a concise summary, classified Notes, and the fidelity result. Do not publish it or change an issue.

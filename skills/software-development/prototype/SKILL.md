@@ -1,36 +1,27 @@
 ---
 name: prototype
-description: Answer one design question with a throwaway artifact — keep the answer, delete the scaffolding. Usable anywhere, not only dev. Use to settle a state model, UI, or document direction with real alternatives — any question paper can't settle. Not for building the real thing.
-argument-hint: "<design question>"
-user-invocable: true
+description: Answer one design question with a disposable artifact. Use to settle a state model, UI, document direction, or unproven mechanism claim that reasoning alone cannot settle.
 metadata:
-  invocation: model
-  execution: orchestrator
-  requires: []
-  optional: [to-subagent]
+  optional: [technical-writing]
 ---
 
 # Prototype
 
-Build the smallest throwaway artifact that answers one design question. The answer is durable; the artifact is not. Load [prototyping](reference/prototyping.md) for the behavior, variants, and falsification shapes, capture, and cleanup. Use optional `docs/agents/prototyping.md` only for repo-specific placement.
+Build the smallest disposable artifact that answers one design question.
 
-## Entry
-
-Run on an explicit question; if it is vague, narrow it before building. Framing and interpretation stay here; build-out may be dispatched via the `to-subagent` skill.
+Use `technical-writing` for the artifact and returned prose.
 
 ## Gates
 
-1. **Question stated.** Record one question and its shape (behavior, variants, or falsification per the reference): for behavior/falsification, the claim the artifact can falsify; for variants, the alternatives presented and the decision they settle.
-2. **Built and exposed.** Provide one command or URL and visible state. Open rendered answer sheets locally; drive live interactive artifacts directly. Iterate only to settle the named question.
-3. **Answer captured.** Write the decision, why, and relevant variant captures into the record of the work that raised the question — the ticket thread, or the conversation that asked.
-4. **Cleaned.** Absorb only the validated core into real work; the artifact leaves the mainline — parked on a throwaway branch pointed to from the record, or deleted.
+1. **State the question.** Record one question and what settles it with the artifact. For logic and mechanism claims, name the claim the artifact can falsify. For UI and other alternatives, name the choices and the decision they settle.
+2. **Build and expose it.** Make the artifact launchable, show its relevant state, and open or drive it directly. Iterate only to settle the stated question.
+3. **Return the result.** Return the artifact path, what it demonstrates, and any choice that still needs human judgment.
 
-An interface's non-obvious presentation choices — the visual hierarchy, which actions are overt, what each journey step shows — are decisions, not taste calls: a variants prototype settles them; implementation never invents them.
+## Formats
 
-Failure to expose a falsifiable observation — or, for variants, real alternatives a human can react to — returns to gate 1. Missing `to-subagent` builds in-session.
+- A logic question gets one double-clickable self-contained HTML file. Keep the logic under test independent from the page and use domain language for controls and displayed state. Provide free-play controls, the full relevant state after every action, and guided walkthroughs for the normal path and awkward or invalid cases that could disprove the model.
+- A mechanism claim gets the smallest runtime-real probe that can make the claim fail. State the predicted observation first and run the probe before any design depends on the claim.
+- A UI question gets three structurally different variants by default and no more than five, on one route with a query-parameter switcher. Prefer an existing page with its real data and surrounding UI; use a new prototype route when no page is a natural host. Vary layout, hierarchy, or primary affordance, not only color or copy.
+- A document or other direction question gets comparable alternatives in the medium that makes their differences easiest to judge. A rendered document or hand-driven state table qualifies when it settles the question.
 
-## Dependency surface
-
-- **Bundled:** `reference/prototyping.md`, the technique.
-- **Project:** optional placement delta `docs/agents/prototyping.md`.
-- **Siblings (optional, by name):** `to-subagent` (build-out dispatch).
+Keep the artifact effortless to launch and in memory unless persistence is the question. Add no polish or tests. Use the settled direction or validated behavior as the reference for implementation.

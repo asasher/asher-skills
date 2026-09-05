@@ -14,7 +14,7 @@ from typing import Any
 from relay_common import atomic_write, dotenv_value, instance_root, load_json, pretty_json, sha256_bytes
 
 TEMPLATE_VERSION = "2.0.0"
-DISCOVERY_EXCLUDED_DIRS = {".git", ".agents", ".claude", "node_modules", "dist", "build", "relay", "capture-to-inbox"}
+DISCOVERY_EXCLUDED_DIRS = {".git", ".agents", ".claude", "node_modules", "dist", "build", "relay"}
 
 
 def candidate_path(target: Path, data: bytes) -> Path:

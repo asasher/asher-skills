@@ -14,13 +14,7 @@ test("user can checkout with valid cart", async () => {
 });
 ```
 
-Characteristics:
-
-- Tests behavior users/callers care about
-- Uses public API only
-- Survives internal refactors
-- Describes WHAT, not HOW
-- One logical assertion per test
+One logical assertion per test.
 
 ## Bad Tests
 
@@ -35,14 +29,7 @@ test("checkout calls paymentService.process", async () => {
 });
 ```
 
-Red flags:
-
-- Mocking internal collaborators
-- Testing private methods
-- Asserting on call counts/order
-- Test breaks when refactoring without behavior change
-- Test name describes HOW not WHAT
-- Verifying through external means instead of interface
+**Side-channel verification** — an example of SKILL.md's side-channel tell:
 
 ```typescript
 // BAD: Bypasses interface to verify
@@ -60,7 +47,12 @@ test("createUser makes user retrievable", async () => {
 });
 ```
 
-**Tautological tests**: Expected value restates the implementation, so the test passes by construction.
+Red flags beyond SKILL.md's implementation-coupled anti-pattern:
+
+- Asserting on call counts/order
+- Test name describes HOW not WHAT
+
+**Tautological tests** — examples of SKILL.md's tautological anti-pattern:
 
 ```typescript
 // BAD: Expected value is recomputed the way the code computes it

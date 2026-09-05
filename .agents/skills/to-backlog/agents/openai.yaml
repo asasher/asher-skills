@@ -1,7 +1,0 @@
-interface:
-  display_name: "To-Backlog"
-  short_description: "Capture the conversation's loose items — bugs, ideas, follow-ups — as minimal work-typed tickets with their chat context; no readiness role, so grooming routes them"
-  default_prompt: "Use $to-backlog to capture the items this conversation has surfaced as tickets in the tracker."
-
-policy:
-  allow_implicit_invocation: false

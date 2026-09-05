@@ -1,18 +1,8 @@
 # Shape
 
-Settles a batch of subjects' strategic decisions — ideas, or tickets grouped into subjects where their decisions interlock — in an interactive session: one engine per subject (parallel sub-agents for a batch), interview rounds combined across subjects and relayed to the user, the domain model written as terms land, and questions the conversation can't settle dispatched out (research for sources, prototype for artifacts). Stateful: the record lives in the ticket thread, `CONTEXT.md`, and ADRs, and a resumed session re-asks nothing the record answers. A settled subject crystallises automatically: to-spec lands the spec on its ticket, diagram first. The thread then watches the spec'd tickets for AFK comments — tweaks applied and replied to — until the user's explicit readiness signal, which it executes; a recommended split runs to-slices only on the user's approval. Shape stamps nothing of its own judgment. For backlog batches, readiness is atomic: a clean shaping worktree and branch are removed before every ticket advances; a changed one becomes an exact-head shaping change request presented before the readiness signal, and the batch advances only after its narrowly authorized merge is verified and cleaned up. Mid-thread items that aren't batch subjects are offered to to-backlog for capture.
-
-## When to use
-
-- Work needs its strategic decisions settled before anything builds on it.
-
-## Dependency surface
-
-- **Bundled:** `SKILL.md` only.
-- **Siblings (required, by name):** `interview`, `domain-modeling`, `to-spec`, `worktree`, `merge-changes`.
-- **Siblings (optional, by name):** `research`, `prototype`, `to-subagent` (their dispatch and the batch's engines), `to-slices` (the approved split), `to-backlog` (mid-thread capture), `watch-until` (the comment watch).
-- **Project surface:** the instruction file's `## Context documents` index; the tracker binding in `docs/agents/platform.md` when the subject is a ticket.
+Shapes one GitHub issue into a blessed spec. The issue's work branch carries project context changes into the later build and its single PR. Research, prototype questions, and settled-record synthesis run in fresh subagents; `shape` commits each artifact to the issue's `artifact/<issue>` branch, publishes the render through `to-web`, and projects each revision onto the issue. Before opening additions, shaping separates the desired outcome from proposed solutions, traces claimed requirements to their sources, and subtracts unsupported steps from the current experience and system behavior. Implementation design describes the coherent target separately from migration and compatibility constraints, then uses the `principle-codebase-design` and `principle-type-system-discipline` siblings, with `typescript-best-practices` for TypeScript targets when available. When the approved spec recommends a split and the user agrees, `shape` runs `to-slices` inline at the close.
 
 ## Credits
 
-The batch-frontier questioning style grew out of Matt Pocock's `batch-grill-me` and `grilling` skills (MIT), via this repo's `interview` skill — see its README for the full lineage.
+- **Relationship:** rewritten synthesis.
+- **Sources:** Jon McNeill's five-step framework in _The Algorithm_; Cursor's [`principle-subtract-before-you-add`](https://github.com/cursor/plugins/blob/45c66fde1f1681a902a30d1ae8bca1cc64465d6e/pstack/skills/principle-subtract-before-you-add/SKILL.md) and [`principle-redesign-from-first-principles`](https://github.com/cursor/plugins/blob/45c66fde1f1681a902a30d1ae8bca1cc64465d6e/pstack/skills/principle-redesign-from-first-principles/SKILL.md).

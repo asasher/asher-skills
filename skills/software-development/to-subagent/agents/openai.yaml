@@ -1,7 +1,0 @@
-interface:
-  display_name: "To Subagent"
-  short_description: "Dispatch staffed non-interactive work in an exact supplied directory, with a wake path"
-  default_prompt: "Use $to-subagent to dispatch this work to a staffed subagent."
-
-policy:
-  allow_implicit_invocation: true

@@ -1,11 +1,6 @@
 ---
 name: shadixfy
 description: Pin generated frontend UI to the shadcn/ui visual language and tokens, stripping the default AI aesthetic. Use whenever generating or restyling any frontend UI.
-metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
 ---
 
 # Shadixfy

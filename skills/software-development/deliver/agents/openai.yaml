@@ -1,0 +1,7 @@
+interface:
+  display_name: "Deliver"
+  short_description: "Resume one unit through implementation, early PR, combined checks, and evidence"
+  default_prompt: "Use $deliver to run this unit of work to a review-ready PR."
+
+policy:
+  allow_implicit_invocation: true

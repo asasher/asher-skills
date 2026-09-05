@@ -1,21 +1,14 @@
 ---
 name: skill-loop
 description: Run a target skill through eval-driven improvement iterations until no evaluation-backed edits remain.
-argument-hint: "<skill-path-or-name> <eval-path-or-command> [--max N]"
-user-invocable: true
 disable-model-invocation: true
-metadata:
-  invocation: user
-  execution: orchestrator
-  requires: []
-  optional: []
 ---
 
 # Skill Loop
 
 A loop improves one target skill against one eval harness. Eval signals are the source of truth; do not edit from taste, hunches, or general skill advice unless the signal points there.
 
-When a signal calls for infrastructure (a review surface, an eval tier, resumable state, harness compat), check the host repo for documented practice before inventing one — a playbook under `docs/agents/` (e.g. a probe-evals playbook), or a sibling skill that already owns the capability — and adopt the canonical implementation it names rather than building from scratch.
+When a signal calls for infrastructure (a review surface, an eval tier, resumable state, harness compat), check the host repo for documented practice before inventing one — a playbook under `docs/agents/`, or a sibling skill that already owns the capability — and adopt the canonical implementation it names rather than building from scratch.
 
 ## Agent execution policy
 

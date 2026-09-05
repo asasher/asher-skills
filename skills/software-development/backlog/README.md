@@ -1,23 +1,24 @@
 # Backlog
 
-Dispatcher for the tracker, with two dispatch shapes. `groom` sweeps no-readiness-role and needs-shaping tickets (a captured ticket arrives work-typed but unrouted), routes the already-settled and parked ones, groups the rest into subjects (interlocked tickets together) and batches (related subjects, one thread's worth), and — **after the user confirms the batch plan** — fans one interactive shaping thread per batch, each seeded to run the `shape` skill, its tickets marked shaping and running in one project-owned worktree. A single batch follows the same threaded path; nothing shapes in the primary checkout. Threads belong to the outermost harness and the user attends, and nothing reports back. `build` fans ready, unblocked tickets with no open children into worktree-isolated **subagents**, each running the `build` skill, marked building so nothing dispatches twice — building is autonomous, so the dispatcher babysits: completion wakes it and it relays each outcome. One project-owned worktree covers a build's implementation, verification, review, fixes, and evidence; the harness does not create another.
+Dispatcher for a GitHub-tracked software backlog, with no supervisor. Every verb sweeps the issues for the units it applies to, confirms a plan with the user, and fans one run of a skill per unit: `capture` runs the `capture` skill on the conversation; `groom` routes and merges unrouted issues into subjects and fans one attended `shape` thread per subject; `build` claims ready, unblocked issues and fans one `deliver` thread per issue; `retro` runs the `retro` pass. `status` is the pure query over claims, worktrees, PRs, and deadlines, with the teardown sweep as its action arm; `setup` writes the environment playbook and creates the labels.
 
-Platform-bound, not bound-to-GitHub: _ticket_, _label_, and _change request_ are roles, bound per repo by `docs/agents/platform.md` and `backlog-policy.md`.
+The verb skills work on one unit each and run on their own. Labels, claims, deadlines, and branch names are fixed in `reference/labels.md`; the repo's own facts live in the one playbook, `docs/agents/environment.md`.
 
 ## Use
 
 ```bash
-backlog groom            # sweep no-readiness-role + needs-shaping tickets into confirmed batches, then threads
-backlog groom 42 51      # just these tickets, grouped if their decisions interlock
-backlog build            # sweep ready, unblocked tickets into supervised build subagents
-backlog build 42         # just this ticket
-backlog setup            # install or reconcile the project playbooks
+backlog capture          # this conversation's loose items into issues
+backlog groom            # route, merge, confirm, then fan shaping threads
+backlog groom 42 51      # just these issues
+backlog build            # claim ready issues, declare, fan build threads, exit
+backlog build 42         # just this issue
+backlog retro            # the friction pass
+backlog status           # claims × worktrees × PRs × deadlines
+backlog setup            # environment playbook, certification, labels
 ```
 
-Merging the change requests that builds produce stays a separate, explicit human authorization — the `merge-changes` skill.
+Merging stays a separate, explicit human authorization: the `merge` skill.
 
 ## Dependency surface
 
-- **Bundled:** `reference/setup.md` — the setup procedure (declared as `metadata.setup`, so installers report it); `templates/` — the playbook baselines `setup` installs (shared `common/` plus per-domain packs; `software/` is the shipped default).
-- **Project playbooks:** `docs/agents/platform.md` (platform bindings, verbs verified live), `backlog-policy.md` (label roles, dependency edges, readiness), `environment.md` (run/seed/check), `codebase.md` (how the code is written and checked), `evidence.md` (the evidence bar) — owned by the repo once written; `setup` reconciles, never blindly overwrites.
-- **Siblings (required, by name):** `worktree` (prepare, inspect, remove), `to-thread` (grooming threads), `to-subagent` (build dispatch), `shape` (what a grooming thread runs), `build` (what a build subagent runs).
+Composes with the `capture`, `shape`, `deliver`, `retro`, `to-thread`, and `worktree` siblings (optionally `merge`, `agent-ready-codebase`, `writing-for-humans`, `technical-writing`), and reads the `docs/agents/environment.md` playbook its `setup` installs and reconciles.

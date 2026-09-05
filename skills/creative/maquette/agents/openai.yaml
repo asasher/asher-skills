@@ -1,0 +1,7 @@
+interface:
+  display_name: "Maquette"
+  short_description: "Build a sellable, browser-only maquette of a greenfield product — every journey clickable, realistic mock data, a handoff contract an agent can implement from"
+  default_prompt: "Use $maquette to build a clickable maquette of this product idea."
+
+policy:
+  allow_implicit_invocation: true

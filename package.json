@@ -3,15 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "description": "Installer entry point for the skills in this repo. Not published — run it straight from GitHub with `npx github:asasher/asher-skills`.",
-  "bin": {
-    "asher-skills": "bin/asher-skills.mjs"
+  "scripts": {
+    "format:fix": "prettier --write \"**/*.md\""
   },
-  "files": [
-    "bin",
-    "tools",
-    "skills"
-  ],
-  "engines": {
-    "node": ">=18"
+  "dependencies": {
+    "prettier": "^3.9.6"
   }
 }

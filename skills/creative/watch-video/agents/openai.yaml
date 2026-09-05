@@ -1,0 +1,7 @@
+interface:
+  display_name: "Watch Video"
+  short_description: "Watch a video by reading contact sheets — tiled, timestamped frame grids sized for a vision model"
+  default_prompt: "Use $watch-video to answer questions about this video's content."
+
+policy:
+  allow_implicit_invocation: true

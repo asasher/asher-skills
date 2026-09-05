@@ -1,7 +1,7 @@
 interface:
   display_name: "To-Slices"
-  short_description: "Split a spec'd ticket (or spec, plan, conversation) into backlog-ready tickets with blocking edges; quiz first, publish blockers-first, parent the capstone over its slices"
-  default_prompt: "Use $to-slices to split this spec'd ticket into backlog-ready tickets with blocking edges."
+  short_description: "Split a spec'd issue (or spec, plan, conversation) into ready tracer-bullet child issues with blocking edges; justified recommendation the user edits before anything publishes"
+  default_prompt: "Use $to-slices to split this spec'd issue into ready child issues with blocking edges."
 
 policy:
   allow_implicit_invocation: false

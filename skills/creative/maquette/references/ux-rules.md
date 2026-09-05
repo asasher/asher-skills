@@ -1,6 +1,6 @@
 # UX rules (Asher's baseline)
 
-<!-- Adapted from the local skills/bare-minimum-ux policy; reconcile deliberately. -->
+<!-- Adapted from the local skills/bare-minimum-design policy; reconcile deliberately. -->
 
 ## Copy
 

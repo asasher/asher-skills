@@ -2,10 +2,6 @@
 name: relay
 description: Relay governed project communications through AgentMail. Use when preparing project updates or internal digests from bound evidence, reviewing exact email content and recipients, sending an approved AgentMail draft directly, reconciling delivery or replies, or resuming Relay state.
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
   setup: reference/setup.md
 ---
 
@@ -46,10 +42,3 @@ Each command's reference owns its detailed contract; load it before acting. A sc
 - Read only `AGENTMAIL_API_KEY` from the repository-root `.env` with a dotenv parser; require the file Git-ignored and mode `0600`. Never source it, print the key, pass it in argv, or persist it under `relay/`.
 - Append the configured operator to CC on external sends unless the named audience explicitly overrides. Header roles are explicit; internal/external labels imply nothing, and the sender is not a recipient unless listed.
 - Setup preserves consumer files and modified templates. Changed package defaults become candidates; conflicts affecting disclosure, recipients, sender, or live delivery stop reconciliation.
-
-## Dependency surface
-
-- **Bundled:** setup, selection, bag, rendering, review, provider, and lifecycle contracts; deterministic scripts, instance templates, fixtures, tests, and probes.
-- **Project:** `docs/agents/relay.md`, the repository-root `.env`, and `relay/` only.
-- **Sibling:** none. Review presentation, approval, and the recorded approval event all happen in the chat session itself.
-- **Bound sources:** repository paths, commands, connectors, or optional sibling skills recorded by setup; none is a universal Relay dependency.

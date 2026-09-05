@@ -1,6 +1,6 @@
 # Smell baseline
 
-A fixed set of Fowler code smells (_Refactoring_, ch. 3) the Standards axis always carries, even when a repo documents nothing. Each reads _what it is_ → _how to fix_; match against the diff. Every entry is a judgement call, and a documented repo standard overrides any of them.
+A fixed set of Fowler code smells (_Refactoring_, ch. 3) the Standards axis always carries, even when a repo documents nothing. Each reads _what it is_ → _how to fix_; match against the diff. These are prompts for judgement; a documented repo standard overrides them. A smell blocks only with a concrete failure scenario or maintenance cost in the changed code. Label other suggestions optional.
 
 - **Mysterious Name** — a function, variable, or type whose name doesn't reveal what it does or holds. → rename it; if no honest name comes, the design's murky.
 - **Duplicated Code** — the same logic shape appears in more than one hunk or file in the change. → extract the shared shape, call it from both.

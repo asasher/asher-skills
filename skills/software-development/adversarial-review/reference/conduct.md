@@ -1,26 +1,26 @@
 # Reviewer and fixer conduct
 
-The briefs both dispatched roles carry. The change request is the only shared state; these rules are what make that enough.
+Each role receives the PR, issue or spec, pinned head and base, run state, pass deadline, and its promised output. The driver sequences writers and persists the combined outcome.
 
 ## Shared rules
 
-- Before any work: identify the change request, its ticket, branch, current head SHA, and the latest recorded reviewer state.
-- Each dispatch is one bounded pass: do the pass's work, persist state, return the report to the driver. No role watches for the other — the driver sequences the passes.
-- After each pass, persist state on the change request via the platform's comment verb: role, iteration count, last-seen SHA, status, next expected actor. Either side can die and be respawned from this record alone. Every SHA in a comment is read at writing time — `git rev-parse HEAD`, or the platform's own read — never retyped from another comment or from memory.
-- A report that cannot reach the driver is posted on the change request instead — the outcome lands where the next reader looks, never only in a return value.
-- The loop's stops — `LGTM`, the iteration cap, the timeout — are the driver's to enforce and report, each an explicitly reported outcome; a pass ends by returning its report.
+- Read the PR's latest run state and verify the supplied refs before working.
+- Complete one bounded pass and return its report. Record findings and fixes on the PR so a replacement worker can continue.
+- Every report names the input head and base and the observed head at return. Resolve these from git and the PR; a changed input yields a stale report, not an approval of the new head.
+- Preserve the pass number and deadline supplied by the driver. A worker restart does not start a new budget.
 
 ## Reviewer
 
-- **Never edits code.**
-- Each pass runs the `code-review` skill — both axes — against the current head. Rank findings by severity; every finding carries file, line, and a concrete failure scenario or cost, not a vibe.
-- Comment conduct: one comment per finding, anchored to its location; no restating the diff; judgement calls labelled as judgement calls.
-- **The LGTM bar:** a full pass yields no new findings **and** every prior finding is fixed or answered. Nothing else lowers the bar — not effort spent, not iteration fatigue, not the cap approaching. A cap reached with findings open is reported as unresolved, never converted to approval.
-- **The verdict names its head:** LGTM states the SHA the pass reviewed — the approval covers that head and nothing after it. The platform's required checks are part of the pass: their status at verdict time is stated, and a failing required check holds the LGTM back; a pending one is named so the merge gate knows what it's waiting on.
-- **Product-semantics ruling:** when a finding reveals a real product question — what the behavior _should_ be, not whether the code does it — stop without resolving it and surface the question plus evidence on the change request for a human ruling. Only an explicit ruling goes onward. Neither role invents behavior.
+- Read and comment only. Run `code-review` against the pinned refs, covering both axes. When behavioral verification runs alongside this pass, leave tests, temporary scripts, and fixtures to that verifier.
+- Each blocking finding names a file and line, the violated requirement or standard, and a concrete failure scenario or maintenance cost. Label judgement calls and optional improvements explicitly.
+- Optional suggestions do not block LGTM. A structural concern blocks only when it demonstrates a concrete cost or regression at the scope of this change. Existing unrelated cleanup is separate work.
+- LGTM requires every blocking finding fixed, accepted as mistaken by this pass, or resolved by an explicit ruling. A fixer's reply alone does not clear it.
+- LGTM names the reviewed head and base. Query required CI for that head: failing checks withhold LGTM; pending checks are disclosed. A code reviewer reports behavioral verification separately and never claims to have run another worker's checks.
+- When a finding depends on deciding what the product should do, return **product question** with the conflicting requirements and evidence. Leave the behavior unchanged until a human rules.
 
 ## Fixer
 
-- Each pass addresses every actionable finding it was dispatched with: a fix commit, or an explicit non-fix reply with the reason it's wrong. Disagreement is addressed; silence is not.
-- A behavior finding is reproduced as a failing check before the fix commit — red first, on the surface where the reviewer saw it. A finding reproducible only at runtime routes through the `diagnosing-bugs` skill rather than a patch argued from the diff; absent that sibling, say so and apply the same discipline in place — reproduce live before fixing.
-- Push, reply to each comment with what was done, persist state, and return the pass report — the driver decides whether a re-review follows.
+- Address every supplied blocking finding through a fix or evidence-backed pushback. Optional suggestions can be deferred without extending the loop.
+- Reproduce a behavior finding as a failing check on the surface where it appeared before fixing. Runtime-only findings and defects that survive a fix pass use `diagnosing-bugs`; absent it, reproduce and diagnose deliberately before another attempt.
+- Run the project's applicable checks after changes, commit, and push. Reply with what changed or why a finding is mistaken, and return the report with the resulting SHA.
+- Remove temporary probe residue while retaining its run outside the tracked tree. Leave a clean checkout for the next checks. The driver orders fresh verification and review; the fixer grants neither verdict.

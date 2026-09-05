@@ -1,0 +1,7 @@
+interface:
+  display_name: "Codebase Design Principle"
+  short_description: "Design deep modules and test behavior at seams"
+  default_prompt: "Use $principle-codebase-design when choosing module interfaces, seams, and test placement."
+
+policy:
+  allow_implicit_invocation: true

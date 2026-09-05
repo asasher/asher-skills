@@ -1,13 +1,8 @@
 ---
 name: maquette
 description: Build a sellable, high-fidelity, browser-only maquette of a greenfield product — every journey clickable, realistic mock data, a live MCP demo surface, and a handoff contract an agent can implement from. Use to pitch a product before it exists. Not for MVPs, real backends, or changes to existing products.
-argument-hint: "[product idea or brief]"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: thread
   requires: [interview]
-  optional: []
 ---
 
 # Maquette

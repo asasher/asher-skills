@@ -1,0 +1,7 @@
+interface:
+  display_name: "Technical Writing"
+  short_description: "Durable artifacts a tired reader gets on the first read"
+  default_prompt: "Use $technical-writing when writing specs, issues, PRs, reports, or documentation."
+
+policy:
+  allow_implicit_invocation: true
