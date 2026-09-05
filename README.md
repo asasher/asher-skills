@@ -7,7 +7,7 @@ Skills that I made or that I like. This is a single repo that I can use to insta
 Installing is two jobs — mount the skills, then run each one's setup against the repo it landed in — so hand it to an agent. The main point of this repository is the software development lifecycle family; it installs together with its supporting skills, and this command mounts all of it:
 
 ```sh
-npx skills add github:asasher/asher-skills --skill adversarial-review agent-ready-codebase backlog bare-minimum-design capture code-review deliver diagnosing-bugs diagram-design domain-modeling handoff implement interview merge principle-codebase-design principle-experience-first principle-type-system-discipline prototype prove-your-work research retro shape staffing tdd technical-writing to-branch to-slices to-spec to-subagent to-thread to-web typescript-best-practices unslop verify-your-work worktree writing-for-humans
+npx skills add github:asasher/asher-skills --skill adversarial-review agent-ready-codebase backlog bare-minimum-design capture code-review deliver diagnosing-bugs diagram-design domain-modeling handoff implement interview merge principle-codebase-design principle-experience-first principle-type-system-discipline prototype prove-your-work research retro shape staffing tdd technical-writing to-branch to-slices to-spec to-subagent to-thread to-web typescript-best-practices unslop verify-your-work writing-for-humans
 ```
 
 The other categories — creative, thinking, personal — are the appendix: browse the catalog and install what you want by name.
@@ -62,6 +62,8 @@ Reconcile Asher's skills in this repository from the changelog.
 
 There is no first-party installer and no install-state file — the changelog is the record, and `npx skills add` is the mount tool.
 
+Read the [visual family guide](docs/software-development.html) and [manual review order](docs/software-development-review.md) for the lifecycle and its supporting skills.
+
 ## Catalog
 
 Categories organize source browsing. Skill names, `--skill <name>`, sibling references, and installed directories remain flat and unchanged. Invocation and execution are independent axes. `user` means **explicit-only**: a human, orchestrator, or delegated prompt must name the skill. `model` also permits a working thread to discover the skill when needed. `reference` skills are model-invoked but never run as workflows — siblings cite them by name, and citing one does not make the citer a composite.
@@ -110,7 +112,6 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | software-development | `typescript-best-practices` | model | reference |
 | software-development | `unslop` | model | reference |
 | software-development | `verify-your-work` | model | primitive |
-| software-development | `worktree` | model | primitive |
 | software-development | `writing-for-humans` | model | reference |
 | personal | `learn-anything` | user | primitive |
 | personal | `relay` | model | primitive |
