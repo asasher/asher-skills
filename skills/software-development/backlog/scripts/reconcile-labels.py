@@ -18,7 +18,7 @@ import sys
 SCHEME = {
     # Readiness: saturated, temperature-coded parked -> flying.
     "needs-shaping": ("D93F0B", "Parked for shaping: unsettled product or scope decisions; never selected by backlog build"),
-    "shaping": ("FBCA04", "A shaping thread is attending this issue; set by backlog groom at dispatch"),
+    "shaping": ("FBCA04", "Shaping or approved split publication owns this issue; builds skip it"),
     "needs-info": ("D876E3", "Parked, waiting on the reporter"),
     "ready-for-agent": ("0E8A16", "Released: an agent may work it; requires a work-type"),
     "ready-for-human": ("5319E7", "Human-only; agents skip. Also the handback target for blockers"),

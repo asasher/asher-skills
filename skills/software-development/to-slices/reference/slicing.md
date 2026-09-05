@@ -39,7 +39,7 @@ Slices of a spec'd issue land **stacked**: the spec issue's work branch is the s
 
 **To-slices recommends; the user edits.** Present the split draft (template-guide § The split draft). The user reacts to reasons, moving a boundary or cutting an edge, and the draft is revised and re-presented until they approve.
 
-**Nothing publishes before approval.** One gate confirms the whole operation, and that approval is also the readiness decision: the slices of an approved spec publish `ready-for-agent`.
+**Nothing publishes before approval.** One gate confirms the whole operation, and that approval is also the readiness decision: the approved slices become `ready-for-agent` after the complete graph passes readback.
 
 ## Order and wire the edges
 
@@ -61,7 +61,9 @@ An issue failing the audit is fixed or dropped, never published thin for groomin
 
 ## Publish
 
-Create the issues with `gh issue create`, blockers first, each with its title, body per template-guide § A single issue, its work-type label (`enhancement` unless the slice is a fix, then `bug`), and `ready-for-agent`. Link each issue to the spec's issue when one exists.
+Before creating children, place an existing split parent in `shaping` and push its work branch so children will inherit the settled context. Create issues with `gh issue create`, blockers first, each with its title, body per template-guide § A single issue, work-type (`enhancement` or `bug`), and `shaping`. Link each issue to the spec's issue when one exists.
+
+Persist the approved draft and draft-to-issue mapping on the parent, or on the first created issue for a split without a parent. Update that mapping as each issue is created. On an interrupted create, inspect GitHub before retrying; adopt the matching issue instead of creating a duplicate. Wire each native blocker after its issue exists. Keep every new issue unreleased until the entire graph and parent relations pass readback.
 
 ## Parent the slices
 
@@ -73,6 +75,12 @@ When the input was a spec'd issue, the slices carry the installments but the par
 - **Post a pointer comment** on the parent linking every child, so anyone landing on it sees the split. Each child links back to the parent (§ Audit, inherited context links).
 
 A source that was not an issue (a spec document, a plan, the conversation) has nothing to parent; skip this step.
+
+## Release after readback
+
+Read back every created issue, work-type, dependency, and parent relation against the approved draft. Verify that the spec branch exists remotely before releasing children that target it. Once the whole graph matches, replace `shaping` with `ready-for-agent` on the children and then the parent. Read the labels back and record completion on the mapping's issue. A release interrupted halfway is safe to resume because all dependencies already exist; preserve labels and claims a builder has since advanced.
+
+An incomplete graph stays `shaping`, with its missing edges and next action recorded. Recovery finishes the existing graph before releasing any remaining issue.
 
 ## No stale content
 

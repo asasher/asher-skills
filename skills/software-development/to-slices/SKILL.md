@@ -26,10 +26,10 @@ The full method is in [slicing](reference/slicing.md); the shape:
 2. **Draft vertical slices, with rationale.** Cut the work into tracer-bullet issues, or, for a wide refactor, into its expand, migrate-in-batches, contract sequence, each slice carrying its rationale (slicing § Draft vertical slices).
 3. **Present the split draft** ([template-guide](reference/template-guide.md) § The split draft), the confirmation gate. The user edits; iterate until they approve.
 4. **Audit each issue**: ready, or not published (slicing § Audit each issue).
-5. **Order and wire the edges**: dependency order, blockers first, each edge a native `blocked_by` (slicing § Order and wire).
-6. **Publish** with `gh issue create`, blockers first, each child `ready-for-agent` with its work-type (slicing § Publish).
+5. **Order the graph**: dependency order, blockers first (slicing § Order and wire).
+6. **Create unreleased issues** with `gh issue create`, blockers first, each child `shaping` with its work-type. Persist the draft-to-issue mapping and wire each `blocked_by` edge (slicing § Publish).
 7. **Parent a split issue over its slices**: sub-issues, the parent's `blocked_by` edges, the `spec` label, the pointer comment (slicing § Parent the slices).
-8. **Readback.** Verify against GitHub: every approved draft maps to exactly one created issue, every wired edge resolves to a real earlier issue, every slice of a split parent reads back as its sub-issue and as its blocker. Fix any miss before reporting the split done.
+8. **Readback.** Verify against GitHub: every approved draft maps to exactly one created issue, every wired edge resolves to a real earlier issue, every slice of a split parent reads back as its sub-issue and as its blocker. Fix any miss, then release the verified graph by replacing `shaping` with `ready-for-agent`. A partial run resumes from the persisted mapping instead of creating duplicate issues.
 
 ## What an issue is (and isn't)
 

@@ -1,41 +1,34 @@
 ---
 name: code-review
-description: Two-axis review of the changes since a base ref — Standards and Spec. Use to review a branch, a PR, or work-in-progress changes.
+description: Review changes against documented standards and their issue or spec. Use for a branch, PR, or work-in-progress diff.
 metadata:
   optional: [to-subagent]
 ---
 
-# Code Review
+# Code review
 
-Two-axis review of the diff between `HEAD` and a base ref:
+Read the change on two axes: **Standards**, whether it meets documented repo rules and the bundled structural guidance; and **Spec**, whether it implements the requested behavior. This is one read-only pass. Return findings; leave fixes to the owner.
 
-- **Standards**: does the code meet the repo's documented standards and the bundled smell baseline and structural bar?
-- **Spec**: does the code faithfully implement the originating issue or spec?
+## 1. Pin the inputs
 
-## 1. Pin the base ref
+Resolve the named PR base or supplied base ref to a SHA, and record the head SHA. Without a named base, use the default branch; ask only when that is ambiguous. Use immutable refs in `git diff <base-sha>...<head-sha>` and `git log <base-sha>..<head-sha> --oneline`. Confirm refs resolve and the diff is nonempty before starting. When reviewing uncommitted work, capture the staged and unstaged diff too, identify that snapshot in the report, and return findings without granting a committed-head approval.
 
-A given PR's base, or whatever ref was named: a commit SHA, branch, tag, `main`. Nothing named: the current branch's merge-base with the default branch; ask only when that is ambiguous.
+Read the issue referenced by the PR or commits with `gh issue view <n> --comments`. When it names a blessed spec, read that revision; for a child, retain its narrower acceptance criteria and their parent mapping. Otherwise use the issue text or the supplied spec. With no source, report the Spec axis as unavailable instead of inventing requirements.
 
-Capture the diff command once: `git diff <base-ref>...HEAD` (three-dot, against the merge-base) and the commit list via `git log <base-ref>..HEAD --oneline`. Confirm the ref resolves (`git rev-parse`) and the diff is non-empty before dispatching anything; a bad ref or empty diff fails here, not inside two subagents.
+## 2. Read the standards
 
-## 2. Identify the spec source
+Read the repo's documented standards and the bundled [smells](reference/smells.md) and [structural bar](reference/structure.md). Skip rules already enforced by tooling. Apply the guidance to changed behavior and structure, respecting the issue's settled decisions and delegated scope.
 
-In order: an issue referenced in the commit messages or PR body, read with `gh issue view <n> --comments`; when its projection comment names a blessed spec hash, read the spec from the `artifact/<issue>` branch at that hash, else the issue text is the spec; a path passed as an argument; else ask. No spec at all: the Spec axis skips and the report says "no spec available".
+## 3. Size the pass
 
-## 3. Identify the standards sources
+For a coherent change that fits one context, review both axes here. Split the axes into concurrent read-only passes via `to-subagent` only when their context or reasoning load warrants it. Absent that sibling, cover both axes in this context and state any coverage limitation. File count alone is not a reason to split. When another worker owns runtime verification, neither this pass nor its axis workers runs tests or mutates fixtures.
 
-Anything in the repo documenting how code should be written (`CODING_STANDARDS.md`, `CONTRIBUTING.md`, `docs/agents/environment.md` § Checks, lint configs' prose). On top of whatever the repo documents, the Standards axis always carries the **smell baseline** in [smells](reference/smells.md) and the **structural bar** in [structure](reference/structure.md). Skip anything tooling already enforces.
+Each axis receives the pinned refs, relevant source material, and the required report format. A Standards worker also receives the bundled guidance; a Spec worker receives the actual spec and slice scope. Keep the briefs self-contained.
 
-## 4. Dispatch both axes
+## 4. Report
 
-Each axis goes via the `to-subagent` skill so each runs in its own clean context; absent it, run them yourself, Standards first, in one pass each.
+Under **Standards**, report documented-standard violations and structural problems with the rule, quoted hunk, and concrete failure scenario or maintenance cost. Under **Spec**, report missing, partial, incorrect, or unrequested behavior, quoting the requirement and its `AC-N` where present.
 
-**Standards brief**: the diff command and commit list; the standards files found; the smell baseline and the structural bar pasted in full (the subagent has no other access to them); report every documented-standard violation (cite the standard), every baseline smell (name it, quote the hunk), and every structural finding (name the blocker, quote the hunk, sketch the simpler reframing), hard violations distinguished from judgement calls. Under 400 words.
+Distinguish **blocking findings** from **optional suggestions**. A preference or alternate design without a demonstrated cost is optional. Do not demand a redesign of settled intent; a contradiction between the spec and a repo standard is one product question for a ruling. Unrelated pre-existing cleanup stays outside the change.
 
-**Spec brief**: the diff command and commit list; the spec's path or fetched content; report (a) requirements missing or partial, (b) behavior nobody asked for, (c) requirements implemented but wrong, quoting the spec line for each, keyed to its acceptance-criterion id (`AC-N`) where the spec carries them. Under 400 words.
-
-## 5. Aggregate
-
-Present the two reports verbatim under `## Standards` and `## Spec` (formatting fixes only); ranking happens only within an axis, so one axis cannot mask the other. End with a one-line summary: total findings per axis and the worst issue within each.
-
-One collision is surfaced instead of reported twice: a spec requirement that contradicts a documented repo standard. Neither axis outranks the other there; present it as a single open question ("the spec asks X; the repo's standard says Y") for whoever owns the review to rule on.
+Keep each axis concise without dropping actionable findings. Preserve separately dispatched reports under their own headings, formatting fixes only. End with blocking and optional counts per axis, any missing review coverage, and the input head and base. Recheck refs before returning; input movement makes the report stale and requires a new pass before approval.

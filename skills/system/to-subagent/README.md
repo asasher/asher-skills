@@ -1,6 +1,6 @@
 # To Subagent
 
-Synchronous dispatch adapter for non-interactive work. One blocking call gives one subagent a self-contained brief in the exact supplied directory, then validates the promised deliverable. Isolation and worktree lifecycle belong to the composing workflow.
+Synchronous dispatch adapter for non-interactive work. One blocking call gives one subagent a self-contained brief in the exact supplied directory, then validates the promised deliverable. Dispatch carries authorized execution permissions and a deadline; timed-out work must be confirmed stopped. A compatible prior worker can resume a fix with new refs and findings. Isolation and worktree lifecycle belong to the composing workflow.
 
 ## When to use
 

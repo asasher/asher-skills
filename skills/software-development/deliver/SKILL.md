@@ -1,63 +1,85 @@
 ---
 name: deliver
-description: Take one unit of work — a ready GitHub issue, or a spec'd piece of work with no issue — to a review-ready PR in one worktree. Use in a session of its own.
+description: Take one unit of work to a review-ready PR in one worktree, or resume it from its issue and PR records.
 metadata:
   requires: [adversarial-review, implement, prove-your-work, to-subagent, verify-your-work]
-  optional: [capture, diagnosing-bugs, technical-writing]
+  optional: [capture, technical-writing]
 ---
 
 # Deliver
 
-Run one unit of work to a review-ready PR in one worktree. The unit is an issue, the normal dispatched path, or a spec'd piece of work with no issue. This session is the owner and the fixer; the heavy lifting is dispatched via the `to-subagent` skill into fresh contexts. Every stage dispatch is a blocking call whose return is the stage's result. Stages that can run at once are several blocking calls in one turn. Never dispatch a stage to walk away from.
+Own one issue or spec'd unit through implementation, convergence, and evidence. Dispatch workers via `to-subagent` as blocking calls in this exact worktree. Keep one writer: implementation and fixes finish before checks start; every check returns before another writer starts. The session coordinates and validates results.
 
-PR text, reports, and issue comments follow the `technical-writing` sibling. Absent it, write plainly and say the standard was not loaded.
+Use `technical-writing` for durable text when available; otherwise write plainly.
 
-## 0. Provision
+## 1. Read and resume
 
-Bring the worktree up per `docs/agents/environment.md`: dependencies, environment files, migrations, the stack the checks need. Done when the playbook's recipes come up green: stack started, seed loaded, a check command exits 0. A gap here fails fast; report the blocker instead of letting verification discover it. While the build is live the worktree has one writer, this session and what it dispatches, and it is the one working copy for the whole pipeline: every subagent receives this exact directory.
+Read `docs/agents/environment.md`, the issue with `gh issue view <n> --comments`, its claim, and any existing PR. A failed issue read is a blocker; a dispatch paraphrase cannot replace it. Without an issue, use the supplied spec and the branch's PR as the record.
 
-## 1. Read the unit
+The unit determines the brief and target:
 
-With an issue, read it with `gh issue view <n> --comments` from this worktree, proving the read works where the work runs. A read that fails is a blocker to report, never a cue to build from the dispatch prompt's paraphrase. The issue is one of four kinds, and the kind decides the rest of the run:
+- **Unshaped issue**: the issue text is the brief. Choose undeclared test seams and the guard/throwaway split within its authority boundary; record the choices in the PR.
+- **Shaped issue**: read the spec at its blessed artifact-branch hash. Check the artifact branch still names that revision; a later revision returns the issue to shaping.
+- **Child of a spec issue**: read the parent's blessed spec, narrowed by the child's acceptance criteria and test contract. Target the spec branch.
+- **Spec issue**: confirm every child closed and inspect its merged PR. A closed child without merged work needs an explicit scope ruling. Use the whole spec as the claims and the spec branch as the work branch. The convergence loop performs the coverage check before promotion.
 
-- **Unshaped**: no spec projection on the issue. The issue text is the brief. The test split (which checks are durable guards, which are throwaway scripts) has not been declared: ask the user when one is attending; when dispatched unattended, decide it and say so in the PR body.
-- **Shaped**: the issue carries a spec projection with a blessed hash. Read the spec from the artifact branch at that hash; it is the brief and declares the test split per acceptance criterion.
-- **Child of a spec issue**: the parent's spec at its blessed hash is the brief, narrowed to this child's slice. The PR targets the spec branch, not the base branch.
-- **Spec issue**: the `spec` label, every child closed. Run § The coverage check instead of § 2.
+All other PRs target the base branch from the playbook. For children and spec issues too, compare the parent's artifact tip with its blessing before building; stale readiness returns to shaping.
 
-Without an issue, the spec handed to this session is the brief.
+Maintain one checkpoint: on the issue before a PR exists, then in the PR body with a pointer from the issue. For issueless work before PR creation, use an untracked scratch checkpoint and report its path. Take the absolute deadline from the claim or supplied brief; absent one, record four hours from the run's start. Record the brief's revision, target, risk, absolute deadline, pass budget consumed, worker resume reference when available, and these stages:
 
-## 2. Implement, verify, fix
+- Implemented at SHA, with check results and the implementer's report.
+- Verified at SHA, with per-criterion verdicts, or the justified light-work omission.
+- Reviewed at SHA and base SHA, with the LGTM report.
+- Evidence at SHA, with the package pointer.
+- Review-ready, or stopped with its reason and next action.
 
-Dispatch the `implement` skill with the brief; the work lands as commits on this checkout's current branch. A change that adds a feature extends the seed in the same change.
+Update the checkpoint after each returned stage and before pausing. On resume, compare it with the local branch, remote head, PR comments, and artifacts. Reuse only results whose inputs still match; missing proof is pending work. Resume at the first incomplete stage, preserving consumed passes and the deadline. A stopped bound or product question remains stopped until its recorded condition is resolved. A stopped bound may resume only through the convergence driver's recorded extension ruling, never by a fresh default budget. Inspect dirty work and ownership before resuming; preserve unexplained changes. Reuse an existing PR instead of opening another.
 
-Then dispatch the `verify-your-work` skill against the changes, fresh eyes. The verifier reports; this session fixes: go red on the finding first, on the surface the verifier saw it fail, then fix. A defect that survives a fix pass routes through the `diagnosing-bugs` skill instead of a second guess; absent that sibling, say so and run a deliberate diagnosis before any second attempt. Re-dispatch verification after fixing; loop until the report is clean.
+## 2. Provision and size the work
 
-## 3. Open the PR
+Bring up or validate the stack using the playbook's recipes: dependencies, environment, migrations, seed, and a relevant check. Reuse an already healthy stack. Report an environment gap before dispatching a builder. Independent source reads may overlap provisioning, but checks wait for a healthy stack.
 
-Before opening, the tree is clean: only the intended changes, tool and probe residue gone, every throwaway verification script dropped, its run kept for the evidence.
+Record what must happen first, any shared mutable state, and whether the unit is still one independently demoable slice. Several layers or disjoint files can belong to one slice. If the work needs multiple independently deliverable slices or contradicts its blessed scope, record the discovery, return the issue to `needs-shaping`, and stop for a revised direction.
 
-Open with `gh pr create`. The target is the base branch from `environment.md`, or the spec branch for a child. The body, in this order:
+Choose verification depth from the actual risk, retaining or increasing the spec's declaration:
 
-- The closing reference `Closes #<issue>` when the PR targets the base branch. A child's PR carries none: `Closes` never fires on a non-default branch, and the `merge` skill closes the child at merge. Without an issue, name the spec and its blessed hash; this PR is the record.
-- **Summary**: what changed and why, in the issue's terms, including any scope discovery.
-- **Changes**: the significant modules with the design reasoning a reviewer needs, not a file list.
-- **Checks run**: each check command from `environment.md` and its result. **CI status**: the merge gate, green or not, disclosed either way.
-- **Verification**: per acceptance criterion, the outcome and which checks are guards versus dropped scripts.
-- **Evidence**: a placeholder, "captured after review converges".
+- **Light**: demonstrably no executable behavior, interface, deployment, permission, or data change. Run the relevant checks and one review context covering both axes. A separate behavioral verifier may be omitted with the reason recorded.
+- **Normal**: behavioral changes require independent behavioral verification and review.
+- **High**: auth, money, destructive data operations, or interactions across surfaces require verification of the affected boundaries and failure paths. Data changes also require a runtime data-safety check.
 
-## 4. Adversarial review
+File count never determines risk. Dispatch read-only exploration only for specific unresolved code questions whose answers the builder needs. Include the returned findings in the implementation brief.
 
-Run the `adversarial-review` skill on the PR; it converges to LGTM or reports unresolved findings. Step 5 starts only at LGTM: fix unresolved findings through step 2's loop and re-run the review until it does.
+## 3. Implement and open the PR
 
-## 5. Evidence
+Dispatch `implement` with the brief, risk, seams, test split, and deadline. Retain its report and resume reference for fixes. For a spec issue whose children already supplied the implementation, proceed from their merged commits instead.
 
-Dispatch the `prove-your-work` skill against the PR: the evidence package lands as a PR comment for whoever decides the merge. A defect discovered while assembling evidence stops the package; fix through step 2's loop, re-enter review, then re-assemble.
+When implementation checks pass, remove probe residue, retain verification runs outside the tracked tree, and push the clean branch. Open the PR now, draft by default unless the playbook records another convention. CI can run while convergence proceeds.
 
-## The coverage check
+The PR body carries:
 
-For a spec issue, the children are merged into the spec branch and this worktree is on it. Dispatch `verify-your-work` with the spec at its blessed hash as the claims: every acceptance criterion against the merged whole, plus the seed reaching every feature the spec added. A small gap is fixed here through step 2's loop. A gap that is a slice of its own is filed via the `capture <spec issue>` skill, which re-blocks the spec issue; report and stop, since the coverage check re-runs when that child closes. On a clean report, open the promotion PR from the spec branch to the base branch with `Closes #<spec issue>`, then run steps 4 and 5.
+- `Closes #<issue>` only when targeting the repository's default branch. For a child targeting a spec branch, name the child without a closing keyword. For a different configured base, record that issue closure must be explicit after merge. Without an issue, identify the supplied spec and its revision when one exists.
+- What changed, why, and any scope discovery or delegated decisions.
+- Risk, test seams, and the per-criterion guard/throwaway split.
+- Check commands and results; required CI status, including pending or failed checks.
+- Verification and evidence pointers, initially pending.
+- The checkpoint from step 1.
 
-## Done
+## 4. Converge
 
-Report the PR as review-ready: its URL and head SHA, the per-criterion verification verdicts, the review's converged outcome, the check commands with their exit codes, deviations from the brief with rationale, and residual risks or named gaps. With an issue, post the same as the claim's outcome comment; that is where the dispatcher and anyone else reads it. Merging waits for explicit human authorization.
+Run `adversarial-review` as the driver in this session. Supply the claims and test contract for behavioral verification, risk, exact directory, implementation report and resume reference, consumed passes, any head-specific verification waivers, and absolute deadline. For a spec issue, limit fixes to small coverage gaps; a missing independently deliverable slice requires a product question. Light work may explicitly omit behavioral verification. Set the total review-pass budget to two for light work and three otherwise unless the work requires another stated budget. One pass is sufficient when it returns clean.
+
+Act on its returned outcome:
+
+- **Converged**: accept only current-head verification and LGTM, then record both in the checkpoint.
+- **Product question**: record it, return the issue to `needs-shaping`, and stop for a ruling.
+- **Stopped at a bound** or **verification incomplete**: persist the reports and remaining work, report the blocker, and stop. Keep the consumed budget; restarting the skill is not an extension.
+
+For a spec issue, verification covers every criterion against the merged whole, including seed reach. A missing slice returns the parent to shaping and stops promotion. Use `capture <parent>` for the gap only when issue publication is already authorized or an attending user confirms it; otherwise persist the proposed gap on the parent for the next shaping session.
+
+## 5. Evidence and completion
+
+Dispatch `prove-your-work` with the converged SHA and verification artifacts. Reuse captures whose code, fixture state, and environment still match. Light work may use a compact package of checks and their results. A newly discovered defect reopens the same convergence run with its remaining budget; a used-up budget remains a stop.
+
+Before reporting review-ready, confirm the remote head and reviewed base still match the accepted reports, the tree is clean, and evidence names that head. A moved head invalidates verification, review, and evidence; a moved base requires renewed integration checks and review. Required CI must be green on the current head; watch pending checks within the remaining deadline. A late CI failure reopens the same convergence run with the failing output and remaining budget; a timeout leaves the PR pending with the reason recorded. Any unverified claim needs an explicit human waiver recorded against this head before it can count as review-ready.
+
+Mark a draft ready only after these gates pass. Report the PR URL and head, verification and review outcomes, check results, evidence, deviations, and residual risks. Post the same outcome on the issue. Merging requires explicit human authorization.

@@ -1,6 +1,6 @@
 # Code Review
 
-Two-axis diff review since a base ref: **Standards** (documented repo standards plus a Fowler smell baseline and a structural bar, repo overriding, everything a judgement call) and **Spec** (missing requirements, scope creep, implemented-but-wrong, each finding quoting the spec line). Axes run as separate subagents, each in its own clean context, and are reported side by side, never merged or reranked.
+Two-axis review against pinned head and base revisions: **Standards** covers documented repo rules and concrete structural costs; **Spec** covers missing, incorrect, or unrequested behavior. A coherent change uses one context for both axes. Larger reasoning loads can split the axes into concurrent read-only subagents. Blocking findings and optional suggestions are reported separately.
 
 ## Dependency surface
 

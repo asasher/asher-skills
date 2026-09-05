@@ -1,6 +1,6 @@
 # Adversarial Review
 
-Converges a PR to LGTM by alternating bounded reviewer and fixer passes, sequenced by a driver until convergence or a bound — see SKILL.md. Use once a PR exists and should reach LGTM without a human driving the loop.
+Converges a PR through a bounded loop with durable pass counts and deadlines. When behavioral claims are supplied, read-only review and verification run together before one fixer addresses both reports. Every fix invalidates both verdicts. Returns convergence, a bound, a product question, or incomplete verification.
 
 ## Provenance
 

@@ -1,6 +1,6 @@
 ---
 name: verify-your-work
-description: Verify a named set of changes does what it claims and report findings with evidence. Use after building and before a PR exists, or to check merged work against its spec.
+description: Verify a named set of changes does what it claims and report findings with evidence. Use after building, during PR convergence, or to check merged work against its spec.
 metadata:
   optional: [technical-writing, to-web]
 ---
@@ -8,6 +8,10 @@ metadata:
 # Verify Your Work
 
 Verify that a named set of changes does what it claims. The deliverable is a findings report. **Never fix anything**: a verifier that edits the work stops being a verifier, and the fix belongs to whoever owns the changes.
+
+## Pin the run
+
+Record the input head SHA, base SHA, spec revision, and relevant environment and fixture state before checking. Use supplied immutable refs when present and confirm the checkout matches the requested head. A concurrent reviewer may read source, but this run owns temporary scripts and runtime fixtures; another worker may not edit code while checks run.
 
 ## Establish the claims
 
@@ -29,7 +33,7 @@ The split arrives declared: the spec says, per acceptance criterion, which kind 
 
 For each claim, choose the check that would go red if the claim were false:
 
-- the tests the change added or touched, then the full suite;
+- the tests the change added or touched, then the full suite for behavioral changes;
 - typecheck and build;
 - the changed surface exercised directly: a CLI invocation, an HTTP call, a script against the real entry point;
 - for UI work, a check written as a script with the repo's recorded driver for that surface (Playwright for web, an emulator or app driver for mobile), walking the changed journey through the states named in the issue (empty, loading, error, disabled).
@@ -38,10 +42,10 @@ For each claim, choose the check that would go red if the claim were false:
 
 ## Run and capture
 
-Run each check and capture the exact command, its output, and its own exit status, read directly, not through a pipeline whose tail masks it. A check whose output is a visual artifact (a screenshot, an export, a rendered document) is judged by looking at it: the content the claim names, legible, at sane dimensions, without clipping. A file existing at nonzero bytes proves nothing. A check you could not run (missing environment, no browser, absent fixture) is reported as _not verified_ with the reason, never silently skipped. An environment seam that keeps failing (auth, seeding, a launcher) earns three attempts, then its claims go to _not verified_ with the reason: a stuck seam converts to a partial report.
+Run each check and capture the exact command, its output, and its own exit status, read directly, not through a pipeline whose tail masks it. Run checks sequentially when they share mutable state. Keep scripts and captures outside the tracked source tree where possible; remove temporary source-tree probes before returning. Preserve the exact script content with its captured run outside the tracked tree so a dropped script remains reproducible. A check whose output is a visual artifact (a screenshot, an export, a rendered document) is judged by looking at it: the content the claim names, legible, at sane dimensions, without clipping. A file existing at nonzero bytes proves nothing. A check you could not run (missing environment, no browser, absent fixture) is reported as _not verified_ with the reason, never silently skipped. An environment seam that keeps failing (auth, seeding, a launcher) earns three attempts, then its claims go to _not verified_ with the reason: a stuck seam converts to a partial report.
 
 ## Report
 
 The report follows the `technical-writing` sibling; absent it, write plainly and say the standard was not loaded.
 
-Per claim, keyed to its criterion id where the issue has them: what was checked, the command, pass or fail, whether the check is a guard or a throwaway script, and for failures the evidence quoted, the failing output, the wrong screen, the broken state. A failure also present before the change, proven by the same check against the base commit, is reported as **pre-existing**, a distinct verdict from a failure the change caused. Log any deviation from the environment playbook alongside the checks it touched. End with the one-line verdict: which claims passed, which failed, which are not verified.
+Per claim, keyed to its criterion id where the issue has them: what was checked, the command, pass or fail, whether the check is a guard or a throwaway script, and for failures the evidence quoted, the failing output, the wrong screen, the broken state. A failure also present before the change, proven by the same check against the base commit, is reported as **pre-existing**, a distinct verdict from a failure the change caused. Log any deviation from the environment playbook alongside the checks it touched. Include artifact paths, the exact content of dropped scripts or a durable pointer to it, and environment and fixture details needed for reuse. Confirm head and base again before returning. A moved input makes the report stale, never a pass for the new revision. End with the input SHAs and which claims passed, failed, were pre-existing, or remain not verified.

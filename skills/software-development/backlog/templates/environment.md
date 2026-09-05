@@ -5,6 +5,7 @@
 ## Branching
 
 - Base branch: _<e.g. `main`>_. Worktrees and work branches fork from it and PRs target it. The primary checkout stays on it; work branches are born inside their worktrees.
+- Initial PR state: _<draft by default; record a different repo convention here>_.
 - What a PR produces: _<e.g. a preview deployment per PR, or nothing>_.
 - What a merge produces: _<e.g. a deployment to staging; the promotion path to production>_.
 - Deploy-target constraints: _<runtime and version, packaging, asset limits; accrete each as discovered>_.
@@ -31,6 +32,8 @@
 2. **Stack per worktree**: each working copy brings up its own dev stack beside the others: _<pass | gap>_.
 3. **Auth per worktree**: an agent can mint a session in each copy independently: _<pass | gap>_.
 4. **Seed**: seed data exists and reaches everything the app offers: _<pass | gap>_.
+
+Concurrent builds: **3** by default; tune to the resources each worktree stack needs. Count existing live builds and unresolved spawn reservations before admitting new work. Machine-local admission mechanism: _<one dispatch owner, or a shared lock and its acquisition/release command>_. Runtime capacity is checked at dispatch, not certified here.
 
 Shared singletons, one row each. Parallel builds may use a singleton; an issue that changes one is sliced so the change lands first.
 

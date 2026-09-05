@@ -11,6 +11,10 @@ Assemble the evidence package for a finished change. The audience is the **decid
 
 The package's text follows the `technical-writing` sibling. Absent it, write plainly and say the standard was not loaded.
 
+## Reuse verified runs
+
+Read the verification report and compare its head, spec revision, environment, and relevant fixture state with this run. Reuse matching commands, outputs, scripts, and captures; inspect visual artifacts even when another worker captured them. Recapture only missing or stale proof. A SHA match alone does not make evidence from a different fixture or environment applicable.
+
 ## What the package carries
 
 - **What changed and why**: one paragraph, in the terms of the issue or spec, naming the head SHA the evidence was captured at. That is how a decider checks the artifacts still describe the code being merged.
@@ -20,7 +24,7 @@ The package's text follows the `technical-writing` sibling. Absent it, write pla
   - A visual artifact goes into the package **looked at**: it shows the content the claim names, legibly and without clipping. Existence is not proof.
   - A destructive data operation (migration, cast, backfill) carries its data-safety argument and the evidence behind it.
   - Proof is reproducible: a reader must be able to run the same command and see the same result.
-- **The runs of dropped throwaway scripts**: a check the spec declared throwaway is deleted before the PR is final. Its run (the exact command, its output, its captured artifacts) lives here, the recoverable record of what it proved.
+- **The runs of dropped throwaway scripts**: a check the spec declared throwaway is deleted before the PR is final. Its exact script content or durable source link, command, output, and captured artifacts live here so the run is reproducible.
 - **What was not verified, and why**, named plainly. An honest gap outranks a padded package; hiding an unverified claim is the one unforgivable move here.
 
 ## Media and format
@@ -35,7 +39,7 @@ A defect discovered while assembling the proof stops the package: report it to w
 
 A capture surface that cannot be reached (an auth-gated preview, a vanished fixture) steps down one rung: capture the same claim on the local stack, labeled as such; failing that too, the claim lands in the not-verified section with the reason.
 
-The package is complete when the what-changed paragraph names the head SHA, every claim has a proof entry or a not-verified line, every embed passed the mechanical check, and every dropped throwaway script's run is recorded.
+Recheck the PR head before posting. If it moved, return stale evidence for re-verification instead of publishing a package for the new code. The package is complete when the what-changed paragraph names the head SHA, every claim has a proof entry or a not-verified line, every embed passed the mechanical check, and every dropped throwaway script's run is recorded.
 
 ## Where it goes
 

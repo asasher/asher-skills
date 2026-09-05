@@ -1,44 +1,36 @@
 ---
 name: adversarial-review
-description: Converge a PR to LGTM through alternating reviewer and fixer passes. Use once a PR exists and needs review pressure without a human in the loop.
+description: Converge a PR through bounded review and fix passes, optionally checking behavioral claims in the same loop. Resume from the PR's persisted state.
 metadata:
   requires: [code-review, to-subagent]
-  optional: [diagnosing-bugs]
+  optional: [diagnosing-bugs, verify-your-work]
 ---
 
-# Adversarial Review
+# Adversarial review
 
-Two roles converge on one PR: a reviewer that re-reviews until a pass is clean, and a fixer that addresses findings until LGTM lands. The PR is their only shared state — findings, fixes, and the verdict all live in its comments and commits.
+Drive one PR to a current-head LGTM or an explicit stop. The PR's comments and commits carry the run state. Dispatch bounded passes via `to-subagent`; keep this session alive until every dispatched pass returns or is confirmed stopped.
 
-The session running this skill is the **driver**. Each role runs as one bounded pass dispatched via the `to-subagent` skill.
+Read [conduct](reference/conduct.md) for reviewer and fixer briefs. With supplied behavioral claims, also dispatch `verify-your-work`. If that sibling is absent, return verification incomplete; a review cannot substitute for behavioral proof. An explicit light-work omission or a standalone review without behavioral claims runs review only and reports that scope.
 
-Both roles' briefs are in [conduct](reference/conduct.md); each dispatch carries it.
+## Resume and bounds
+
+Read the latest run state before dispatch: reviewed head and base, pass count, total budget, absolute deadline, findings, verification reports, and next actor. Initialize missing state with three review passes and a deadline one hour from now, shortened to any supplied earlier deadline. A supplied total budget overrides the default only for a new run; an existing run changes its bound through the extension ruling below. Persist these before starting.
+
+A pass consumes budget when dispatched, including one interrupted before returning. Resume preserves the original deadline and consumed passes. Each dispatch receives the remaining deadline; on timeout, stop the worker and confirm it has stopped before another actor may write.
+
+Cap exhaustion returns **stopped at a bound**. The driver may grant a bounded extension with a recorded ruling naming additional passes and a new deadline if needed, within any outer workflow deadline. Extend only when prior findings are resolving and the remainder is narrower. Widening or recurring findings stop. A product question requires a human ruling before resumption; an extension cannot answer it. Never reset the count by starting another invocation.
 
 ## The loop
 
-Alternate bounded passes until `LGTM` or a bound:
+1. **Pin inputs.** Push intended commits and require a clean tracked tree with local and remote heads equal. Resolve the target branch's current base SHA. Persist both SHAs and the next pass number.
+2. **Check together.** Dispatch one read-only reviewer pass and, when required, one behavioral verifier in the same turn. Give both the pinned head, base, claims, and deadline. The reviewer reads code and checks CI status; it leaves runtime tests to the verifier. The verifier alone owns its temporary scripts, fixtures, and runtime checks. Serialize checks if the environment cannot isolate their mutable state.
+3. **Join and classify.** Wait for both returns before allowing any writer. Compare their input SHAs with the branch and target again. A moved input invalidates the affected verdict; another pass uses the remaining budget. Persist the reports, unresolved findings, and any optional suggestions. A product question returns **product question**. Honor supplied scope limits: a coverage-check gap requiring a new independently deliverable slice is a product question, not a review-scale fix. Missing checks or an inaccessible environment return **verification incomplete** with the affected claims unless a human waiver already names those claims at this head; a proven pre-existing failure is reported separately with its issue, not silently passed.
+4. **Converge or fix.** Add any supplied evidence or late-CI findings to the persisted reports before deciding convergence. With no blocking findings and all required claims verified or explicitly waived at this head, return **converged**, naming head, base, reports, and CI status. Pending CI is disclosed and remains a completion gate for the workflow using this result. With findings open, dispatch one fixer only when the budget and deadline permit a subsequent check pass; otherwise return stopped at a bound. Prefer resuming the implementer with its report; otherwise dispatch a fresh fixer with that report and the persisted findings. Address failures of required CI in the same fix pass. Re-enter step 1 after it returns.
 
-1. **Review pass.** Dispatch the reviewer against the current head (conduct § Reviewer); it returns its verdict — `LGTM` naming the head it covers, or the open findings.
-2. On `LGTM`, the loop is converged: report it, naming the covered head.
-3. **Fix pass.** Dispatch the fixer with the open findings (conduct § Fixer); it returns its pass report.
-4. Review again, from step 1.
+When resuming, honor the recorded next actor: a returned checking pass with unresolved findings resumes at step 4; an interrupted fix is inspected before re-dispatch. A defect found after convergence enters step 4 with its evidence, then invalidates the old convergence. A completed final check pass may still converge when resuming at the cap; exhaustion forbids another pass, not accepting an already persisted valid result.
 
-## Turn discipline
+A fix invalidates both verification and review even when it addresses only one report. An accepted pushback can clear a finding only through a subsequent checking pass. The driver never edits code or accepts its own explanation as a passing verdict.
 
-The driver holds the loop for its whole life and returns only with an outcome: **converged** (`LGTM`, the covered head SHA) or **stopped at a bound** (the open findings and which bound) — a state comment records the loop's position, it does not keep the loop alive. Between dispatching a pass and reading its return there is nothing to watch and no poll to keep alive — the dispatched pass's completion is the wake.
+## Return
 
-A pass that has returned is complete: act on its report. No confirmation follows a return — waiting for one blocks on a message that cannot arrive.
-
-## Bounds
-
-An iteration cap (default: three full review passes) and a timeout (named by the caller, defaulting to one hour), both enforced by the driver on the passes it dispatches. The caller may size the cap to the change: the default suits a contained change; a large or multi-surface change warrants naming a larger cap at dispatch rather than planning on extensions. On the timeout, stop and report the open findings as unresolved; at the cap, do the same unless the § Cap exhaustion ruling below authorizes a bounded extension.
-
-The driver names each pass's deadline in its `to-subagent` dispatch, so a pass that outlives it comes back as the dispatch's timeout return, waking the driver. A pass that dies without returning is re-dispatched from the PR's persisted state (conduct § Shared rules), picking up with the next expected actor.
-
-## Cap exhaustion
-
-Cap exhaustion is the bound doing its job: it forces an explicit driver ruling instead of an unbounded loop — a reported decision point, not a fault. The LGTM bar holds (conduct § Reviewer); exhaustion puts one of three rulings in front of the driver:
-
-- **Extend** when convergence is visibly progressing — each pass resolves the prior findings and the new ones are fewer or narrower. An extension is a named number of additional passes, recorded in a state comment with its rationale; each further extension takes the same fresh ruling — never an open-ended "keep going".
-- **Stop with findings open** when convergence is not visible — findings holding steady, recurring, or widening — or when the residue needs rework beyond review-scale fixes, such as a change that wants splitting. Report the open findings as unresolved per the bound-stop rule above; the caller owns what happens next.
-- **Surface a product question and stop** when a remaining finding hinges on what the behavior should be — more passes cannot answer it. Route it to a human ruling per conduct's product-semantics ruling.
+Persist and return one outcome: **converged**, **stopped at a bound**, **product question**, or **verification incomplete**. Include the head and base, passes consumed and remaining, deadline, report pointers, open findings or unverified claims, and next action. A state comment records progress; the blocking dispatch's return is what wakes this driver.

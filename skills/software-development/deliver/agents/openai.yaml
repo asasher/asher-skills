@@ -1,6 +1,6 @@
 interface:
   display_name: "Deliver"
-  short_description: "One unit of work to a review-ready PR: implement, verify and fix, PR, adversarial review, evidence; the coverage check and promotion PR for a spec issue"
+  short_description: "Resume one unit through implementation, early PR, combined checks, and evidence"
   default_prompt: "Use $deliver to run this unit of work to a review-ready PR."
 
 policy:

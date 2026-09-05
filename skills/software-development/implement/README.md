@@ -8,7 +8,7 @@ Thin routing composite: one issue or spec'd work in, committed changes out on th
 
 ## Dependency surface
 
-Routes defects to the `diagnosing-bugs` sibling and new behavior to `tdd`. Applies the `principle-codebase-design` and `principle-type-system-discipline` siblings, with `typescript-best-practices` for TypeScript when available. Reads `docs/agents/environment.md` § Checks when present.
+Routes defects to the `diagnosing-bugs` sibling and new behavior to `tdd`. Applies the `principle-codebase-design` and `principle-type-system-discipline` siblings, with `typescript-best-practices` for TypeScript when available. Uses `domain-modeling` when unshaped work introduces terms or decisions. Reads `docs/agents/environment.md` § Checks when present. Returns the resulting SHA and implementation report for later fixes.
 
 ## Provenance
 

@@ -2,6 +2,19 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-05 — delivery converges on one revision and resumes from durable state
+
+Delivery opens a PR after implementation and combines behavioral verification with read-only review before one fixer acts. Fixes invalidate both verdicts. The run preserves its pass budget, deadline, and explicit stop outcome across resumption; completion checks review, verification, evidence, and CI against the current revision.
+
+- `deliver`, `adversarial-review`, `code-review`, `verify-your-work`, `prove-your-work` (changed): combined convergence, revision-specific reports and checkpoints, risk-scaled verification and review contexts, optional suggestions that do not block, and reuse of matching evidence with reproducible dropped scripts.
+- `backlog`, `to-slices` (changed): one canonical issue per shaping subject; build capacity counts live workers and unresolved reservations; failed spawns recover without discarding work. Splits persist their issue mapping and finish wiring and readback before publishing readiness.
+- `shape`, `to-spec` (changed): preserve risk and required failure-path checks in the settled spec; dispatch synthesis from the persisted record; allow precise independent research questions early and preserve runtime-real prototype formats.
+- `implement` (changed): declare `domain-modeling`, scale checks to actual effects, and return the implementation context needed by a fixer.
+- `to-subagent`, `staffing` (changed): carry execution permissions and deadlines, confirm cancellation before allowing another writer, resume compatible fix workers, and staff behavioral verification independently from the builder.
+- `merge` (changed): check head and base freshness immediately before each merge, require current verification and evidence, watch required CI, and use `--match-head-commit`. Confirm actual merge before cleanup and close issues explicitly when the configured base is not the default branch.
+
+Reconcile: refresh these skills together. Run `backlog setup` to reconcile the initial PR state, concurrent-build limit, admission mechanism, and the expanded `shaping` label description. Existing runs recover from their issue and PR records; missing revision-specific proof is pending work, and existing stop conditions remain stops. No skills were added or removed; the README install set is unchanged.
+
 ## 2026-09-03 — diagram-design ships a dark default skin
 
 The shipped visual system in `diagram-design` is now dark by default, with every value read off Vercel's Geist color scales: near-black paper, a gray-100 raised surface for nodes and cards, gray-alpha hairlines, gray-900/1000 text, the blue-900 text step as the one accent, and blue-700 for link arrows. The series and override palettes use the Geist 900 steps per hue with light-mode counterparts. Light is the alternate variant. Project `DESIGN.md` resolution and the resolution order are unchanged.

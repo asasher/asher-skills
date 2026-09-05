@@ -8,6 +8,7 @@ This file is the content contract: what a published issue must carry, and what t
 - **Intent**: one or two sentences, what this issue makes possible and why, at the altitude of direction, traceable back to the source spec.
 - **Slice**: the tracer bullet, the one real thing this issue does end to end and how it demos alone. For a wide-refactor issue, name which phase it is (expand, migrate batch N, contract). No file paths or code (slicing § No stale content).
 - **Acceptance criteria**: a numbered list with stable ids `AC-1`, `AC-2`, and so on. Each criterion is one observable outcome a checker can grade pass or fail; together they are what a demo shows. For each, whether its check is a durable guard or a throwaway verification script, carried over from the spec. The ids are the handles the builder, verifier, reviewer, and evidence key their verdicts to, so they stay stable across revisions: amend in place or append; an id, once assigned, keeps its meaning. Numbering is per issue.
+- **Verification risk**: inherit the spec's risk and required failure-path checks, narrowed only with an explicit reason for this slice. Map each local acceptance criterion to the parent criterion it covers.
 - **Work-type**: `enhancement`, or `bug` when the slice is a fix.
 
 Dependencies are wired as native `blocked_by` edges per slicing § Order and wire; the body describes the work, the edges carry the graph.

@@ -7,9 +7,9 @@ The fixed conventions every backlog verb and verb skill shares. They are not con
 One per open issue once groomed; none means "not yet groomed".
 
 - `needs-shaping`: parked for shaping. Product, design, or scope decisions are neither settled nor delegated, or a build found the blessed spec contradicted by the code. Never selected by `backlog build`.
-- `shaping`: a shaping thread is attending it. Set by `backlog groom` at dispatch, so a subject never gets two threads. Cleared when the spec is blessed; abandonment returns it to `needs-shaping`.
+- `shaping`: a shaping thread or an approved split publication owns it. Set at dispatch, or while a split is being wired, so grooming and building both skip it. Cleared when the spec is blessed and any split graph has passed readback; abandonment returns it to `needs-shaping` after recovery.
 - `ready-for-agent`: released. Groom sets it for an issue whose decisions are settled; `shape` sets it when the spec is approved; `to-slices` sets it on the children of an approved split. Requires a work-type.
-- `building`: claimed. A build thread owns it; the claim comment is the dispatch declaration. Set by `backlog build`, replacing `ready-for-agent`. Superseded by closure, by a reclaim comment, or by the human-confirmed orphan reset.
+- `building`: reserved or claimed. The provisional claim reserves capacity until a build thread is verified alive; the claim comment is the dispatch declaration. Set by `backlog build`, replacing `ready-for-agent`. Superseded by closure, by a reclaim comment, or by the human-confirmed orphan reset.
 - `ready-for-human`: only a human may work it. Also the handback target for a build that hits an environment blocker or a verification cap: the comment names why only a human can act on what remains. A blocker a repo change could clear is work, not a handback.
 - `needs-info`: parked, waiting on the reporter.
 
@@ -30,7 +30,7 @@ Applied by `scripts/reconcile-labels.py --repo <owner/name>`, dry-run first, `--
 | Label | Color | Description |
 | --- | --- | --- |
 | `needs-shaping` | `#D93F0B` | Parked for shaping: unsettled product or scope decisions; never selected by backlog build |
-| `shaping` | `#FBCA04` | A shaping thread is attending this issue; set by backlog groom at dispatch |
+| `shaping` | `#FBCA04` | Shaping or approved split publication owns this issue; builds skip it |
 | `needs-info` | `#D876E3` | Parked, waiting on the reporter |
 | `ready-for-agent` | `#0E8A16` | Released: an agent may work it; requires a work-type |
 | `ready-for-human` | `#5319E7` | Human-only; agents skip. Also the handback target for blockers |
@@ -47,10 +47,11 @@ Applied by `scripts/reconcile-labels.py --repo <owner/name>`, dry-run first, `--
 
 ## Claims
 
-The claim comment is the dispatch declaration, one event with two readers: the human reads a statement, the next runner reads the claim. It carries the issue digest, the work branch, the worktree path, the model, effort, and harness, the thread name, the dispatcher's identity, and the deadline as an absolute timestamp.
+The claim comment is the provisional dispatch declaration, one event with two readers: the human reads a statement, the next runner reads the claim. It carries the issue digest, the work branch, the worktree path, the model, effort, and harness, the thread name, the dispatcher's identity, and the deadline as an absolute timestamp.
 
 - Claims are attributed: posted by the runner's own GitHub account, naming the branch. Another actor's claim, even expired, is not yours to clear; a takeover note may still land on the issue.
-- Concurrent runners are possible. `building` is applied optimistically; the rare duplicate pickup in the window between sweep and claim is accepted rather than carrying a lock.
+- Serialize admission for concurrent dispatchers on the same machine through one dispatch owner or a shared lock covering capacity check, claim, and verified spawn. Count live builds and unresolved reservations against the configured limit. Re-read the issue before claiming; a duplicate claim stops before a second worker starts.
+- Record the verified thread id on spawn success. On failure, post a failed-dispatch outcome and release the claim only after the worker is confirmed stopped or never started. A process exit without a liveness result does not release a reservation.
 - A reclaim of your own expired claim is a new claim comment superseding the old, resuming from the branch so nothing is discarded. The ledger stays event-shaped: claim, outcome, reclaim.
 - **Orphan sweep**: a `building` issue whose branch no longer exists, or whose claim has gone quiet past the quiet horizon of seven days, is surfaced by `backlog status` as a candidate reset to `ready-for-agent`. Never silently reset: the branch may hold unmerged work.
 
@@ -62,7 +63,7 @@ Every claim carries a deadline as an absolute timestamp. Size it to the expected
 
 - Groom proposes a route for every swept issue and applies `ready-for-agent` only to issues the human confirms in the plan. Parking and closure roles ride the plan's blanket approval.
 - In a shaping thread the blessing records the commit hash of the spec on the artifact branch; the blessing authorizes exactly that revision. A commit past the blessed hash invalidates readiness: the issue returns to shaping until re-blessed.
-- An approved split blesses its children: they publish `ready-for-agent`.
+- An approved split blesses its children, but they receive `ready-for-agent` only after all issues, parent relations, and blockers have been read back. Partially published splits remain `shaping` for recovery.
 
 ## Branches
 

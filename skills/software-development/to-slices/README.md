@@ -1,6 +1,6 @@
 # To-Slices
 
-Splits a decided direction into ready tracer-bullet GitHub issues with blocking edges, only on the user's explicit call. Its primary input is a spec'd issue (the spec read from the `artifact/<issue>` branch at the blessed hash); it also accepts a spec document, a plan document, or the raw current conversation. It drafts vertical slices and presents the split as a justified recommendation the user edits, then, on approval, publishes the issues in dependency order, blockers first. A split parent becomes the `spec` issue over its slices: each slice a sub-issue and a blocker, so the parent unblocks when the last child closes.
+Splits a decided direction into ready tracer-bullet GitHub issues with blocking edges, only on the user's explicit call. Its primary input is a spec'd issue (the spec read from the `artifact/<issue>` branch at the blessed hash); it also accepts a spec document, a plan document, or the raw current conversation. It drafts vertical slices and presents the split as a justified recommendation the user edits, then, on approval, creates unreleased issues in dependency order, wires and reads back the graph, then releases the issues. The persisted draft-to-issue mapping supports recovery after interruption. A split parent becomes the `spec` issue over its slices: each slice a sub-issue and a blocker, so the parent unblocks when the last child closes.
 
 ## When to use
 
