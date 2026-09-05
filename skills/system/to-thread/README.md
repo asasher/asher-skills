@@ -1,11 +1,9 @@
-# To Thread
+# To thread
 
-Interactive dispatch adapter for the outermost harness: detects it, loads one of five routes (T3 Code, Claude Code CLI, Claude Desktop, Codex CLI, Codex desktop app), and reports success only on liveness. `SKILL.md` carries the shared contract.
+Start one named, attendable session through the outermost harness. For shaping and building, prepare or attach a secondary worktree with native Git first. Preserve the primary checkout and remote branch history. The adapter verifies liveness before reporting success and retains uncertain work for recovery.
 
-## Dependency surface
-
-Composes with the optional `worktree` and `writing-for-humans` siblings; the five route files and dispatch scripts are bundled.
+Five bundled routes cover T3 Code, Claude CLI/Desktop, and Codex CLI/Desktop. `writing-for-humans` is optional; no standalone worktree skill is needed.
 
 ## Provenance
 
-No external sources. Runtime compatibility is capability-tested at use rather than version-pinned, so the installed CLI is always the ground truth.
+No external sources. Runtime capabilities determine route support.

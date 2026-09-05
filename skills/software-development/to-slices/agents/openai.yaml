@@ -1,6 +1,6 @@
 interface:
   display_name: "To-Slices"
-  short_description: "Split a spec'd issue (or spec, plan, conversation) into ready tracer-bullet child issues with blocking edges; justified recommendation the user edits before anything publishes"
+  short_description: "Publish an approved split as ready tickets and dependencies"
   default_prompt: "Use $to-slices to split this spec'd issue into ready child issues with blocking edges."
 
 policy:

@@ -1,6 +1,6 @@
 interface:
   display_name: "Implement"
-  short_description: "Implement one issue: defect → diagnosing-bugs, new behavior → tdd; typecheck and tests along the way, commit to the current branch"
+  short_description: "Implement, check, and push coherent progress in a worktree"
   default_prompt: "Use $implement to build this issue."
 
 policy:

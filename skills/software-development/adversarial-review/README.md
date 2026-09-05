@@ -1,6 +1,6 @@
-# Adversarial Review
+# Adversarial review
 
-Converges a PR through a bounded loop with durable pass counts and deadlines. When behavioral claims are supplied, read-only review and verification run together before one fixer addresses both reports. Every fix invalidates both verdicts. Returns convergence, a bound, a product question, or incomplete verification.
+Owns one bounded verification, independent code review, and owner-fix loop. Routine verification runs with the owner; high-risk verification runs in a separate context. Every fix invalidates both verdicts. Persist pass counts, revisions, deadlines, and stops so interruption cannot reset the budget.
 
 ## Provenance
 

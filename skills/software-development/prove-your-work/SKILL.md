@@ -1,50 +1,33 @@
 ---
 name: prove-your-work
-description: Assemble the evidence that a change works and post it on the PR where the merge decision happens. Use when a PR has converged and the decider won't be watching the work live.
+description: Publish reproducible, current-revision evidence on a PR so a human can review the change without watching the build.
 metadata:
-  optional: [technical-writing, to-web]
+  requires: [to-web]
+  optional: [technical-writing]
 ---
 
-# Prove Your Work
+# Prove your work
 
-Assemble the evidence package for a finished change. The audience is the **decider**, whoever merges without having watched the work: the package must let them decide from the evidence alone.
+Read the accepted verification report. Reuse commands, scripts, outputs, and captures only when head, base, spec revision, environment, and relevant fixtures match. Inspect reused visuals yourself. Recapture missing or stale proof; a defect returns to the existing review loop before packaging continues.
 
-The package's text follows the `technical-writing` sibling. Absent it, write plainly and say the standard was not loaded.
+## Package
 
-## Reuse verified runs
+Use `technical-writing` when available. Include:
 
-Read the verification report and compare its head, spec revision, environment, and relevant fixture state with this run. Reuse matching commands, outputs, scripts, and captures; inspect visual artifacts even when another worker captured them. Recapture only missing or stale proof. A SHA match alone does not make evidence from a different fixture or environment applicable.
+- What changed and why, naming the checked head and base.
+- Every claim or acceptance criterion with its verdict, exact check, useful output, and evidence.
+- Reproduction details, including fixture setup and the exact contents or durable source of removed temporary scripts.
+- Data-safety evidence for destructive operations.
+- Each unverified claim, pre-existing failure, and explicit waiver with its reason.
 
-## What the package carries
+For UI claims, include inspected screenshots of static states and recordings or GIFs when motion or interaction proves the criterion. Images must show the claimed result legibly without clipping. If a preview is unavailable, use a labeled local run; if that too is inaccessible, record the verification gap.
 
-- **What changed and why**: one paragraph, in the terms of the issue or spec, naming the head SHA the evidence was captured at. That is how a decider checks the artifacts still describe the code being merged.
-- **The proof per claim**: each thing the change claims to do, with the check that demonstrated it.
-  - Key each claim to the issue's acceptance-criterion ids where they exist.
-  - The check is the exact command and its trimmed output, or for UI work the artifacts of whatever drives that surface (a Playwright trace, screenshots, a recording; an emulator or app driver's equivalent for mobile) from the scripted check, captured per `docs/agents/environment.md` § Driving the app.
-  - A visual artifact goes into the package **looked at**: it shows the content the claim names, legibly and without clipping. Existence is not proof.
-  - A destructive data operation (migration, cast, backfill) carries its data-safety argument and the evidence behind it.
-  - Proof is reproducible: a reader must be able to run the same command and see the same result.
-- **The runs of dropped throwaway scripts**: a check the spec declared throwaway is deleted before the PR is final. Its exact script content or durable source link, command, output, and captured artifacts live here so the run is reproducible.
-- **What was not verified, and why**, named plainly. An honest gap outranks a padded package; hiding an unverified claim is the one unforgivable move here.
+## Publish
 
-## Media and format
+Upload the HTML report and media through `to-web`. Keep evidence images, screenshots, MP4s, and GIFs out of Git; failed publication leaves the package incomplete. Preserve commands and script text in the published report so temporary branches can later be deleted.
 
-Evidence media lives in the artifact store, never in the repo. Screenshots, videos, and GIFs upload through the `to-web` sibling, which returns a durable hash-keyed URL; absent `to-web`, name the local artifact paths and state the gap. Name each upload so the key says what it proves: `<criterion>-<what-it-shows>.png`.
+Use PNG/JPEG for states. For flows, capture MP4 and make a short GIF when inline playback helps. See [media](reference/media.md) for conversion and embedding. Link videos; embed images and GIFs. Fetch every URL and verify its content type; visually inspect each embed's source.
 
-- Static states: PNG or JPEG. Flows: record MP4 locally, then convert the seconds that show the criterion (about ten at most) to a GIF with a two-pass palette, `ffmpeg -i in.mp4 -filter_complex "fps=12,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse" out.gif`, kept well under GitHub's inline ceiling of 10 MB. Videos link; images and GIFs embed.
-- Embed form, one line per artifact, grouped by the criterion it proves, wrapped so the inline image click-opens full size: `[![AC-n](<url>)](<url>)`.
-- Verify mechanically before posting: each URL answers HTTP 200 with an image content type, and the extension is PNG, JPEG, or GIF, never MP4. The agent often cannot view the rendered page; these checks catch the known failure modes without a browser.
+Recheck the PR head and target base before posting. A moved input needs renewed verification. Post the package as a PR comment and link it from the body, within the task's existing publication authorization.
 
-A defect discovered while assembling the proof stops the package: report it to whoever owns the changes; the package resumes after the fix lands and the change re-enters review.
-
-A capture surface that cannot be reached (an auth-gated preview, a vanished fixture) steps down one rung: capture the same claim on the local stack, labeled as such; failing that too, the claim lands in the not-verified section with the reason.
-
-Recheck the PR head before posting. If it moved, return stale evidence for re-verification instead of publishing a package for the new code. The package is complete when the what-changed paragraph names the head SHA, every claim has a proof entry or a not-verified line, every embed passed the mechanical check, and every dropped throwaway script's run is recorded.
-
-## Where it goes
-
-Post the package as a comment on the PR with `gh pr comment`, and replace the PR body's evidence placeholder with a pointer to it.
-
-## Obligation scales with absence
-
-The less the decider saw, the more the package carries. Work done while they watched and steered may compress to the checks and their results; work done fully unattended carries the complete package: every claim, every command, every gap.
+Complete when every claim has evidence or an explicit gap, every URL works, every visual was inspected, and the package identifies the current revisions. A published gap is not a passing verification verdict.

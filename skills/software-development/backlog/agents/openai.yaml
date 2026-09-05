@@ -1,6 +1,6 @@
 interface:
   display_name: "Backlog"
-  short_description: "GitHub backlog dispatcher — capture, groom, build, retro, status, setup; each verb sweeps, confirms, and fans one skill run per unit"
+  short_description: "Groom all tickets; dispatch builds; inspect PRs and progress"
   default_prompt: "Use $backlog <verb> to run one dispatcher verb over this repo's issues."
 
 policy:

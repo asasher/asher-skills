@@ -1,6 +1,8 @@
 # Shape
 
-Shapes one GitHub issue into a blessed spec. The issue's work branch carries project context changes into the later build and its single PR. Research, prototype questions, and settled-record synthesis run in fresh subagents; `shape` commits each artifact to the issue's `artifact/<issue>` branch, publishes the render through `to-web`, and projects each revision onto the issue. Before opening additions, shaping separates the desired outcome from proposed solutions, traces claimed requirements to their sources, and subtracts unsupported steps from the current experience and system behavior. Implementation design describes the coherent target separately from migration and compatibility constraints, then uses the `principle-codebase-design` and `principle-type-system-discipline` siblings, with `typescript-best-practices` for TypeScript targets when available. When the approved spec recommends a split and the user agrees, `shape` runs `to-slices` inline at the close.
+Shapes one GitHub ticket into an approved spec in a secondary worktree. The pushed work branch carries context decisions into the build. Specs, research, and prototype sources use a temporary artifact branch; published HTML and evidence remain in the bucket.
+
+Interview users, settle behavior and implementation boundaries, and use research or prototypes for unresolved questions. Approve the exact spec revision on the ticket. Split only with the user's approval; release only after the complete graph is verified.
 
 ## Credits
 

@@ -6,8 +6,8 @@ The fixed conventions every backlog verb and verb skill shares. They are not con
 
 One per open issue once groomed; none means "not yet groomed".
 
-- `needs-shaping`: parked for shaping. Product, design, or scope decisions are neither settled nor delegated, or a build found the blessed spec contradicted by the code. Never selected by `backlog build`.
-- `shaping`: a shaping thread or an approved split publication owns it. Set at dispatch, or while a split is being wired, so grooming and building both skip it. Cleared when the spec is blessed and any split graph has passed readback; abandonment returns it to `needs-shaping` after recovery.
+- `needs-shaping`: parked for shaping. Product, design, or scope decisions are neither settled nor delegated, or a build found the approved spec contradicted by the code. Never selected by `backlog build`.
+- `shaping`: a shaping thread or an approved split publication owns it. Set at dispatch, or while a split is being wired, so grooming reads it as active context and building skips it. Cleared when the spec is approved and any split graph has passed readback; abandonment returns it to `needs-shaping` after recovery.
 - `ready-for-agent`: released. Groom sets it for an issue whose decisions are settled; `shape` sets it when the spec is approved; `to-slices` sets it on the children of an approved split. Requires a work-type.
 - `building`: reserved or claimed. The provisional claim reserves capacity until a build thread is verified alive; the claim comment is the dispatch declaration. Set by `backlog build`, replacing `ready-for-agent`. Superseded by closure, by a reclaim comment, or by the human-confirmed orphan reset.
 - `ready-for-human`: only a human may work it. Also the handback target for a build that hits an environment blocker or a verification cap: the comment names why only a human can act on what remains. A blocker a repo change could clear is work, not a handback.
@@ -21,7 +21,7 @@ Required on `ready-for-agent`; decides how `deliver` routes the work.
 - `enhancement`: new or changed behavior. The default for anything that is not a bug.
 - `spec`: a split parent. Set by `to-slices` when an approved spec's split creates children; replaces the previous work-type. The issue holds the spec its children deliver in installments; when the last child closes it unblocks, and `deliver` runs the coverage check and opens the promotion PR. Every shaped issue has a spec; only a split parent carries the `spec` label.
 
-Closure reasons use GitHub's own defaults (`duplicate`, `wontfix`, `invalid`) and are applied at close, never swept.
+Close consolidated or duplicate tickets as `not planned`, with a comment linking the surviving ticket and explaining the disposition. These are closure decisions in the groom plan, not readiness labels.
 
 ## Label colors
 
@@ -62,12 +62,12 @@ Every claim carries a deadline as an absolute timestamp. Size it to the expected
 ## Readiness decision
 
 - Groom proposes a route for every swept issue and applies `ready-for-agent` only to issues the human confirms in the plan. Parking and closure roles ride the plan's blanket approval.
-- In a shaping thread the blessing records the commit hash of the spec on the artifact branch; the blessing authorizes exactly that revision. A commit past the blessed hash invalidates readiness: the issue returns to shaping until re-blessed.
-- An approved split blesses its children, but they receive `ready-for-agent` only after all issues, parent relations, and blockers have been read back. Partially published splits remain `shaping` for recovery.
+- In a shaping thread the approval records the commit hash of the spec on the artifact branch; the approval authorizes exactly that revision. A newer spec revision invalidates readiness; unrelated research or prototype commits do not: the issue returns to shaping until re-approved.
+- An approved split approves its children, but they receive `ready-for-agent` only after all issues, parent relations, and blockers have been read back. Partially published splits remain `shaping` for recovery.
 
 ## Branches
 
 - **Base branch**: recorded in `docs/agents/environment.md` § Branching (usually `main`). Worktrees and work branches fork from it; PRs target it, except a child's PR.
 - **Work branch**: `<issue>-<slug>`, born inside its worktree, never checked out in the primary checkout. Shaping commits context changes on it; the later build continues on it and opens the issue's single PR. Pushed as commits land: the remote is the backup, and pushing is not publication.
 - **Spec branch**: a spec issue's work branch. Children branch from it and PR into it; the spec issue's own PR is the promotion from the spec branch to the base branch, carrying `Closes #<spec issue>`.
-- **Artifact branch**: `artifact/<issue>`, one per issue, holding every research dossier, prototype, and spec revision as commits. Permanently unmerged by intent; the blessed hash pins the spec revision; deleted when the issue closes. Every sweep skips the `artifact/` prefix.
+- **Artifact branch**: `artifact/<issue>`, one per issue, holding every research dossier, prototype, and spec revision as commits. Permanently unmerged by intent; the approved hash pins the spec revision; deleted when the issue closes. Build selection ignores the `artifact/` prefix; status inspects it for recovery and cleanup.

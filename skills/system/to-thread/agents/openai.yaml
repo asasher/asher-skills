@@ -1,6 +1,6 @@
 interface:
   display_name: "To Thread"
-  short_description: "Spawn named sessions through the outer harness, including T3 HTTP, in an exact supplied directory"
+  short_description: "Prepare a worktree and start one attendable thread"
   default_prompt: "Use $to-thread to spawn this work as an attachable background session."
 
 policy:

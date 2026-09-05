@@ -1,37 +1,22 @@
 ---
 name: to-slices
-description: Split a decided direction — an approved spec on a GitHub issue, a spec or plan document, or the current conversation — into ready tracer-bullet child issues with blocking edges. Runs only on the user's explicit call. Not for writing the direction itself.
+description: Split an approved ticket, spec, plan, or settled conversation into ready vertical child tickets and dependencies. Requires the user's explicit split approval.
 disable-model-invocation: true
 metadata:
   optional: [technical-writing]
 ---
 
-# To-Slices
+# To slices
 
-To-slices owns one move: **take a decided direction and split it into ready issues with blocking edges.** It reads a direction, drafts vertical slices, and publishes the approved issues in dependency order. When the direction is a spec'd issue, the split parents it over its slices: each slice a sub-issue, the parent blocked by each, the parent relabeled `spec`. To-slices runs only on the user's explicit call: a spec may recommend a split, but nothing splits until the user approves it.
+Split settled direction; preserve its decisions. Use `technical-writing` when available. A spec recommendation alone does not authorize publication.
 
-The defining posture: **recommend with reasons, then let the user edit.**
+Follow [slicing](reference/slicing.md) and [the content contract](reference/template-guide.md):
 
-Issue and split-draft text follows the `technical-writing` sibling. Absent it, write plainly and say the standard was not loaded.
+1. Read the complete direction and approved revision. Account for every actor, surface, and acceptance criterion.
+2. Draft demoable vertical slices, each sized for one fresh context. Use expand/migrate/contract only for wide mechanical refactors. Explain each boundary and every true blocker.
+3. Present the split, landing branches, and coverage map for approval. Resolve the user's edits before publishing.
+4. Audit every ticket for observable acceptance, inherited context, delegated authority, UI states where applicable, and necessary dependencies. Fix thin tickets before creation.
+5. Persist the approved draft and issue mapping. Create tickets in dependency order, each `shaping` with its work-type. Wire native blockers. A split ticket becomes a `spec` parent, with each child both a sub-issue and blocker; its work branch is their integration base and PR target.
+6. Read back the complete graph and confirm the spec branch is pushed. Only then release children and parent as `ready-for-agent`. Partial publication stays `shaping`; resume the existing mapping and inspect uncertain creates before retrying.
 
-## Command surface
-
-- **`to-slices [<spec'd issue id or spec path>]`**: split the given direction into issues.
-
-## How a split happens
-
-The full method is in [slicing](reference/slicing.md); the shape:
-
-1. **Read the direction** (slicing § Read the direction). Done when you can name every actor, every surface the change touches, and every acceptance criterion the direction settles.
-2. **Draft vertical slices, with rationale.** Cut the work into tracer-bullet issues, or, for a wide refactor, into its expand, migrate-in-batches, contract sequence, each slice carrying its rationale (slicing § Draft vertical slices).
-3. **Present the split draft** ([template-guide](reference/template-guide.md) § The split draft), the confirmation gate. The user edits; iterate until they approve.
-4. **Audit each issue**: ready, or not published (slicing § Audit each issue).
-5. **Order the graph**: dependency order, blockers first (slicing § Order and wire).
-6. **Create unreleased issues** with `gh issue create`, blockers first, each child `shaping` with its work-type. Persist the draft-to-issue mapping and wire each `blocked_by` edge (slicing § Publish).
-7. **Parent a split issue over its slices**: sub-issues, the parent's `blocked_by` edges, the `spec` label, the pointer comment (slicing § Parent the slices).
-8. **Readback.** Verify against GitHub: every approved draft maps to exactly one created issue, every wired edge resolves to a real earlier issue, every slice of a split parent reads back as its sub-issue and as its blocker. Fix any miss, then release the verified graph by replacing `shaping` with `ready-for-agent`. A partial run resumes from the persisted mapping instead of creating duplicate issues.
-
-## What an issue is (and isn't)
-
-- **A tracer bullet, not a task list**: the definition and the wide-refactor exception live in slicing § Draft vertical slices.
-- **No file paths or code snippets**, with the sole exception of a prototype-validated snippet (slicing § No stale content).
+Return ticket links, coverage and dependency mapping, and publication status. Capture missing decisions as blockers rather than quietly designing them during the split.

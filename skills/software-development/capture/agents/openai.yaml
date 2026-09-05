@@ -1,6 +1,6 @@
 interface:
   display_name: "Capture"
-  short_description: "Capture the conversation's loose items — bugs, ideas, follow-ups — as minimal work-typed GitHub issues with their chat context; no readiness label, so grooming routes them"
+  short_description: "Preserve conversation follow-ups as trackable tickets"
   default_prompt: "Use $capture to capture the items this conversation has surfaced as issues."
 
 policy:

@@ -1,11 +1,13 @@
 # Playbook: Environment
 
-> Project playbook for this repo, and the only one the software development lifecycle skills read: how to run, seed, authenticate to, drive, and prove this application, and where its artifacts live. Read by `backlog build` (the agent-readiness gate), `backlog status` (the teardown sweep), `deliver`, `implement`, `tdd`, `verify-your-work`, `prove-your-work`, `merge`, `worktree`, and `to-web`. Tailor every section to this codebase. A session that earns a fact this playbook should have carried (a start recipe, an auth path, a runner trap) writes it into the matching section as part of its change. Repo facts accrete here; machine state is never recorded. A capability is checked at use, and a failed check warns and names its fallback.
+> Project playbook for this repo, and the only one the software development lifecycle skills read: how to run, seed, authenticate to, drive, and prove this application, and where its artifacts live. Read by `backlog build` (the agent-readiness gate), `backlog status` (the teardown sweep), `deliver`, `implement`, `tdd`, `verify-your-work`, `prove-your-work`, `merge`, `to-thread`, and `to-web`. Tailor every section to this codebase. A session that earns a fact this playbook should have carried (a start recipe, an auth path, a runner trap) writes it into the matching section as part of its change. Repo facts accrete here; machine state is never recorded. A capability is checked at use, and a failed check warns and names its fallback.
 
 ## Branching
 
-- Base branch: _<e.g. `main`>_. Worktrees and work branches fork from it and PRs target it. The primary checkout stays on it; work branches are born inside their worktrees.
-- Initial PR state: _<draft by default; record a different repo convention here>_.
+- Base branch: _<e.g. `main`>_. New work branches fork from it and PRs target it; split children branch from and target their parent spec branch. Preserve the primary checkout's current branch.
+- PRs: ordinary PRs after implementation checks, never drafts. Review-readiness requires current proof, independent review, and required CI.
+- Worktree root: _<default sibling `<repo-name>-worktrees/`>_. Existing local and remote ticket branches are resumed here; keep the primary checkout unchanged.
+- Continuity: commit and push coherent progress before handoffs and pauses. Record branch, revision, and next action on the ticket or PR.
 - What a PR produces: _<e.g. a preview deployment per PR, or nothing>_.
 - What a merge produces: _<e.g. a deployment to staging; the promotion path to production>_.
 - Deploy-target constraints: _<runtime and version, packaging, asset limits; accrete each as discovered>_.
@@ -28,10 +30,11 @@
 
 > The standard is the `agent-ready-codebase` reference skill; this section records this repo's answers. `backlog setup` certifies, `backlog build` dispatches only on a full pass. Re-certify on demand.
 
-1. **Worktrees**: the `worktree` skill can create, inspect, and remove working copies here: _<pass | gap>_.
+1. **Worktrees**: native Git can create, attach local/remote branches, and remove secondary working copies without moving the primary checkout: _<pass | gap>_.
 2. **Stack per worktree**: each working copy brings up its own dev stack beside the others: _<pass | gap>_.
 3. **Auth per worktree**: an agent can mint a session in each copy independently: _<pass | gap>_.
 4. **Seed**: seed data exists and reaches everything the app offers: _<pass | gap>_.
+5. **Artifacts**: `to-web` uploads HTML and media to the bucket and fetches verified URLs: _<pass | gap>_.
 
 Concurrent builds: **3** by default; tune to the resources each worktree stack needs. Count existing live builds and unresolved spawn reservations before admitting new work. Machine-local admission mechanism: _<one dispatch owner, or a shared lock and its acquisition/release command>_. Runtime capacity is checked at dispatch, not certified here.
 

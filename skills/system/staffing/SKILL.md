@@ -13,7 +13,7 @@ If a route is unavailable report back and stop. Otherwise report the picked mode
 🤖 <codex|claude|image> <model-name>[-<effort>] because <reason>
 ```
 
-For behavioral verification, use a fresh context independent of the builder. Prefer a different model family: use the behavioral-verification row for a GPT builder, or `gpt-5.6-sol` at high effort via `codex-cli` for a Claude builder. A user-specified model wins; disclose when that removes model-family diversity. The browser-use row supplies a driving method, not the default model for the whole verification verdict.
+When a workflow requests independent behavioral verification, use a fresh context independent of the builder. Prefer a different model family: use the behavioral-verification row for a GPT builder, or `gpt-5.6-sol` at high effort via `codex-cli` for a Claude builder. A user-specified model wins; disclose when that removes model-family diversity. The browser-use row supplies a driving method, not the default model for the whole verification verdict.
 
 ## Roster
 

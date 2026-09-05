@@ -1,51 +1,37 @@
 ---
 name: verify-your-work
-description: Verify a named set of changes does what it claims and report findings with evidence. Use after building, during PR convergence, or to check merged work against its spec.
+description: Verify a change against its claims and report per-claim evidence, after building, during PR review, or after merge.
 metadata:
-  optional: [technical-writing, to-web]
+  optional: [technical-writing]
 ---
 
-# Verify Your Work
+# Verify your work
 
-Verify that a named set of changes does what it claims. The deliverable is a findings report. **Never fix anything**: a verifier that edits the work stops being a verifier, and the fix belongs to whoever owns the changes.
+Perform a checking pass without fixing the change. Return findings before the owner begins any fix, even when both stages run in this session.
 
-## Pin the run
+## Pin and prepare
 
-Record the input head SHA, base SHA, spec revision, and relevant environment and fixture state before checking. Use supplied immutable refs when present and confirm the checkout matches the requested head. A concurrent reviewer may read source, but this run owns temporary scripts and runtime fixtures; another worker may not edit code while checks run.
+Record head, target base, approved spec revision, environment, and fixture state. Confirm the checkout matches the requested head. A reviewer may read source concurrently; nobody edits code or competes for runtime fixtures during this pass.
 
-## Establish the claims
+Read the ticket, approved spec, commits, and diff. List every acceptance criterion plus relevant regression, edge-state, seed-coverage, and data-safety claims. Read `docs/agents/environment.md` for commands, drivers, auth, and disposable fixtures. Without it, disclose the gap and use the repo's documented commands. Reset only stores explicitly marked disposable for this ticket.
 
-Read what the change says it does: the issue, the spec at its blessed hash when the issue has one, the commit messages, the diff itself. Each acceptance criterion (`AC-1`, `AC-2`, …) is a claim. Each claim is a thing that must be demonstrably true, including the implicit ones: nothing that worked before broke; the change behaves at its edges; a change that adds a feature extends the seed so the seed reaches it; a destructive data operation (a migration, a cast, a backfill) loses or mangles no existing data. The list is complete when every acceptance criterion and every implicit claim is a line the report will carry a verdict for.
+## Check each claim
 
-## Read the environment playbook
+Choose proof that would fail if the claim were false:
 
-`docs/agents/environment.md`, when the repo has one, records how to run the stack, seed data, reach a feature, authenticate, which driver exercises each surface, and the check commands with their invocation traps. Honor it; a verifier that improvises around the playbook produces evidence nobody can reproduce. Absent the playbook, say so and verify what the repo's own commands reach.
+- Run touched tests, typecheck/build, and the full suite for behavioral changes.
+- Exercise the real entry point: CLI, HTTP, browser, or the recorded app driver.
+- For UI work, script the changed journey and relevant empty, loading, error, disabled, and responsive states. Drive the app and capture the result.
+- For destructive data changes, verify preservation and failure paths against representative fixtures.
 
-The playbook also bounds what state is yours: create and seed what a check needs per its fixture rules, and point destructive verbs (reset, drop, wipe) only at stores the playbook marks per-issue-disposable. A shared store is never yours to reset.
+Honor each criterion's **guard** (durable suite test) or **temporary check** choice. If undeclared, record the gap, use temporary checks, and flag needed durable coverage for the owner. Compilation alone proves no behavior.
 
-## Two kinds of check
+Capture exact commands, outputs, and their own exit codes. Serialize checks sharing mutable state. Inspect every visual result for the claimed content, legibility, and clipping. Preserve temporary scripts and captures outside tracked source; media never enters Git. Remove source-tree probes after preserving their exact contents with the run.
 
-Every check is one of two kinds. A **guard** is a durable test that protects product behavior: it joins the repo's suite and stays in the tree with the change. A **throwaway verification script** exercises the change for this run and captures screenshots; it is dropped before merge, so its captured run is the evidence, artifacts uploaded through the `to-web` sibling (absent it, say so and keep the run in the report itself).
-
-The split arrives declared: the spec says, per acceptance criterion, which kind its check is. Absent a declaration, the brief says which kind the builder chose; absent that too, say so in the report, write throwaway scripts, and flag any check that looks like a guard for the owner to decide.
-
-## Pick the proof that goes red
-
-For each claim, choose the check that would go red if the claim were false:
-
-- the tests the change added or touched, then the full suite for behavioral changes;
-- typecheck and build;
-- the changed surface exercised directly: a CLI invocation, an HTTP call, a script against the real entry point;
-- for UI work, a check written as a script with the repo's recorded driver for that surface (Playwright for web, an emulator or app driver for mobile), walking the changed journey through the states named in the issue (empty, loading, error, disabled).
-
-"It compiles" verifies nothing about behavior.
-
-## Run and capture
-
-Run each check and capture the exact command, its output, and its own exit status, read directly, not through a pipeline whose tail masks it. Run checks sequentially when they share mutable state. Keep scripts and captures outside the tracked source tree where possible; remove temporary source-tree probes before returning. Preserve the exact script content with its captured run outside the tracked tree so a dropped script remains reproducible. A check whose output is a visual artifact (a screenshot, an export, a rendered document) is judged by looking at it: the content the claim names, legible, at sane dimensions, without clipping. A file existing at nonzero bytes proves nothing. A check you could not run (missing environment, no browser, absent fixture) is reported as _not verified_ with the reason, never silently skipped. An environment seam that keeps failing (auth, seeding, a launcher) earns three attempts, then its claims go to _not verified_ with the reason: a stuck seam converts to a partial report.
+An inaccessible check is **not verified**, with its reason. After three failed attempts at an environment seam, return a partial report for its affected claims. Prove a **pre-existing** failure with the same check against the base in an isolated checkout; distinguish it from a regression.
 
 ## Report
 
-The report follows the `technical-writing` sibling; absent it, write plainly and say the standard was not loaded.
+Use `technical-writing` when available. For every claim, return its id, **passed / failed / pre-existing / not verified**, check kind, command, output or visual evidence, and failure explanation. Include fixture details, playbook deviations, artifact paths, and exact temporary scripts or durable source links so evidence can be reused and published.
 
-Per claim, keyed to its criterion id where the issue has them: what was checked, the command, pass or fail, whether the check is a guard or a throwaway script, and for failures the evidence quoted, the failing output, the wrong screen, the broken state. A failure also present before the change, proven by the same check against the base commit, is reported as **pre-existing**, a distinct verdict from a failure the change caused. Log any deviation from the environment playbook alongside the checks it touched. Include artifact paths, the exact content of dropped scripts or a durable pointer to it, and environment and fixture details needed for reuse. Confirm head and base again before returning. A moved input makes the report stale, never a pass for the new revision. End with the input SHAs and which claims passed, failed, were pre-existing, or remain not verified.
+Recheck head and base. Moved inputs make the report stale. End with the revisions, verdict totals, and unresolved claims; never turn missing proof into a pass.

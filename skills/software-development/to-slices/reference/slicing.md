@@ -4,7 +4,7 @@
 
 To-slices splits a direction someone already decided. The input comes in one of these forms; all are read the same way: mine the decided direction, the actors, and the full surface.
 
-- **A spec'd issue** (the primary input): an issue whose projection comment carries the spec's summary, render URL, and blessed commit hash, given by id. Read the spec from the `artifact/<issue>` branch **at the blessed hash** (`git show <hash>:<path>`), the canonical direction, plus the issue's comment trail for refinements the user made after the projection.
+- **A spec'd issue** (the primary input): an issue whose projection comment carries the spec's summary, render URL, and approved commit hash, given by id. Read the spec from the `artifact/<issue>` branch **at the approved hash** (`git show <hash>:<path>`), the canonical direction, plus the issue's comment trail for refinements the user made after the projection.
 - **A spec document**: a spec file given by path. Read it exactly as the branch file.
 - **A plan document**: a per-issue design doc. Read it as direction for a single slice's worth of work, or a small cluster.
 - **The raw current conversation**: when no spec or plan was written, mine the conversation and the codebase understanding built up in it.
@@ -52,7 +52,7 @@ Wire each dependency as a native `blocked_by` edge: resolve the blocker's databa
 Before publishing, audit every approved issue. Each must carry:
 
 - **Observable acceptance**: criteria a verifier can exercise, not vibes.
-- **Inherited context links**: the spec (its issue and blessed hash) and the decisions the slice relies on; a fresh context window must reach everything it needs from the issue alone.
+- **Inherited context links**: the spec (its issue and approved hash) and the decisions the slice relies on; a fresh context window must reach everything it needs from the issue alone.
 - **An authority boundary**: what the executor may decide versus what is settled and must not be re-decided.
 - **UX context, for UI surfaces**: the register, the key states (empty, loading, error, disabled, responsive), and links to `PRODUCT.md` and `DESIGN.md` where they exist.
 - **True blocking edges only**: an edge that merely sequences convenience is not a blocker.

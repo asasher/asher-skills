@@ -2,6 +2,17 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-05 — ticket-based shaping and a simpler build owner
+
+Groom reads all open tickets before consolidation and routing. Shape works on one ticket and records an **approved spec**. Shaping and builds preserve the primary checkout, attach existing local or remote branches in secondary worktrees, and push coherent progress for recovery on another machine.
+
+- Rewritten: `backlog`, `shape`, `deliver`, `implement`, `adversarial-review`, `agent-ready-codebase`, `merge`, `retro`, `capture`, `to-slices`, `verify-your-work`, `prove-your-work`, `to-web`, and `to-thread`.
+- Supporting contracts aligned: `code-review`, `to-spec`, `to-branch`, `to-subagent`, and `staffing`. Routine stages run inline with the owner; code review is independent, and high-risk work gets independent behavioral verification. Ordinary PRs open after implementation checks, never as drafts. `merge review` shortlists open PRs without merging.
+- Removed: `worktree`. Native Git preparation lives in `to-thread`; merge owns safe cleanup. Published HTML and evidence remain after temporary branches are deleted. `to-web` and a demonstrated artifact bucket are required; evidence media never enters Git.
+- Added human documentation: the visual family guide and ordered source review. Skill evals have not been added or run for this rewrite.
+
+Reconcile: refresh the lifecycle family and its supporting skills together using the current README install command. Remove the installed `worktree` mount and harness links; preserve actual working copies and branches. Re-run `backlog setup` to certify artifact uploads and reconcile ordinary PR creation, branch recovery, and worktree conventions. Existing approved specs keep their recorded revisions; only a newer spec needs new approval. Preserve ongoing claims and review budgets.
+
 ## 2026-09-05 — delivery converges on one revision and resumes from durable state
 
 Delivery opens a PR after implementation and combines behavioral verification with read-only review before one fixer acts. Fixes invalidate both verdicts. The run preserves its pass budget, deadline, and explicit stop outcome across resumption; completion checks review, verification, evidence, and CI against the current revision.

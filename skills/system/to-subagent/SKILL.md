@@ -13,7 +13,7 @@ Use `staffing` when available to choose the model, effort, harness, and executio
 
 Carry the execution permissions in the dispatch configuration: the session's authorized mode and tool restrictions, with read-only access for read-only work where supported. A prompt cannot grant filesystem or tool permissions. Before a cross-harness builder starts, validate that its configured route can write a disposable probe in the supplied directory, then remove the probe. A denied capability returns a blocker; never broaden permissions to bypass it.
 
-Resume a previous worker for a fix when the harness supports it and the worker's role and directory still match. Supply the new findings and refs explicitly. Otherwise dispatch a fresh worker with the implementation report and persisted findings. Verification and review use independent contexts from the builder and fixer.
+Resume a previous worker for a fix when the harness supports it and the worker's role and directory still match. Supply the new findings and refs explicitly. Otherwise dispatch a fresh worker with the implementation report and persisted findings. Delegated verification and review use independent contexts from the builder and fixer; the workflow decides when verification needs delegation.
 
 For a cross-harness process, close stdin (`</dev/null`) and set its timeout from the remaining deadline. For a native asynchronous API, wait for completion within that deadline and cancel on expiry. Confirm timed-out work has stopped before returning control to a workflow that may start another writer. Return an unconfirmed stop as a blocker; the directory remains occupied.
 

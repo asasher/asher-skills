@@ -1,6 +1,6 @@
 interface:
   display_name: "Prove Your Work"
-  short_description: "Assemble reproducible evidence that a change works and post it on the PR for the merge decision"
+  short_description: "Publish current-revision proof and media on the PR"
   default_prompt: "Use $prove-your-work to evidence this PR."
 
 policy:

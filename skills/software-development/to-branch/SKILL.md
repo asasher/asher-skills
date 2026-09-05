@@ -13,6 +13,8 @@ It commits via a temporary index: read the branch tip's tree (forking from `HEAD
 
 Rules:
 
+- Before publication on another machine, fetch the remote artifact branch. Create its local ref from the remote tip without checking it out, or reconcile a behind/diverged local ref while preserving unique commits. The script reads local refs; a missing local ref must not restart an existing remote history.
+
 - **Publish at record time.** Draft as untracked scratch files; a commit lands here only when the result is written to its record (an issue comment, the conversation). Publish and link are one move, and every commit on the branch is a revision somebody was shown.
-- The printed hash is the revision's identity: projections and blessings bind to it.
+- The printed hash is the revision's identity: projections and approvals bind to it.
 - Never force-update: the script refuses a non-fast-forward ref move; a conflict means someone else published, so read the branch tip first.

@@ -1,46 +1,35 @@
 ---
 name: shape
-description: Shape one GitHub issue into a blessed spec on its own branch, and split it into child issues when the approved spec recommends it. Use before implementation or to resume shaping from the issue record.
+description: Shape one GitHub ticket into an approved spec, or resume shaping from its tracker record.
 metadata:
-  requires: [domain-modeling, interview, principle-codebase-design, principle-experience-first, principle-type-system-discipline, prototype, research, technical-writing, to-branch, to-slices, to-spec, to-subagent, to-web, worktree, writing-for-humans]
-  optional: [capture, typescript-best-practices]
+  requires: [capture, domain-modeling, interview, principle-codebase-design, principle-experience-first, principle-type-system-discipline, prototype, research, to-branch, to-slices, to-spec, to-subagent, to-thread, to-web]
+  optional: [technical-writing, typescript-best-practices, writing-for-humans]
 ---
 
 # Shape
 
-If given several issues, identify the approved canonical issue before creating a branch or changing records. Consolidation must preserve the agreed scope; an unresolved choice returns to the subject owner.
+Shape **one ticket**. If none is identified, establish the ticket through `capture` before shaping; combine work that must be decided together into that ticket with the user's approval.
 
-Use the `worktree` skill to prepare or inspect a worktree on the issue's work branch (`<issue>-<slug>`, from the base branch recorded in `docs/agents/environment.md`). The branch carries continuity across sessions and machines; the worktree may be reused or recreated. Commit and push project context changes on this branch as they land. The later build continues on it and opens the issue's single PR.
+Read the ticket, comments, artifact links, and environment playbook. If this session is on the primary checkout or wrong branch, dispatch `shape <ticket>` through `to-thread` in a worktree on `<ticket>-<slug>`, then hand off before editing. Reuse an owned worktree and pushed branch when they exist. Keep the primary checkout's branch unchanged.
 
-Read the issue (`gh issue view <n> --comments`), its linked artifacts, the project instruction file, and the project context files (`CONTEXT.md`, `PRODUCT.md`, `DESIGN.md`, ADRs). Reconstruct the design frontier from the issue record. Re-ask nothing the record settles.
+## Settle the decisions
 
-Separate the desired outcome from proposed solutions and claimed requirements. For each claimed requirement, identify its source and why it exists. Keep explicit decisions in the record settled unless new evidence creates a conflict. Treat inherited process, current structure, and solution language as open design material.
+Read the project instruction file, `CONTEXT.md`, `PRODUCT.md`, `DESIGN.md`, and relevant ADRs. Reconstruct open decisions from the ticket; re-ask nothing it settles. Run `interview` here, with `domain-modeling` recording resolved terminology. Use the writing standards when available.
 
-Use `writing-for-humans` for questions and `technical-writing` for issue prose. Run `interview` inline, with `principle-experience-first` setting the target and `domain-modeling` tightening the language and recording terms as they settle.
+Work in order, using `principle-experience-first` to question requirements and remove unnecessary behavior:
 
-At each level, question, subtract, then simplify. A step, choice, state, rule, or interface earns its place when removing it would worsen an affected user's observable experience or violate a supported constraint.
+1. **Users and experience.** Select affected user types and their changed journey. Create or update `PRODUCT.md` using [its format](PRODUCT-FORMAT.md) when needed.
+2. **System behavior.** Settle observable rules, states, and failure paths.
+3. **Implementation.** Apply the codebase and type-system principles to ownership, interfaces, and test seams; use TypeScript guidance when relevant. Record scope, migration constraints, verification risk, and each criterion's durable-test or temporary-check choice.
 
-Work the design tree in order:
+Offer a pause before implementation design. Research precise fact questions through `research`, or resolve uncertain mechanisms and alternatives through `prototype`, via `to-subagent` when useful. Independent questions may run together; decisions wait only on their prerequisites.
 
-1. **Users**: select the affected user types from `PRODUCT.md`. Add a new type there when the work introduces one. If the file does not exist, create it from [PRODUCT-FORMAT](./PRODUCT-FORMAT.md).
-2. **Experience**: map the affected part of the current core loop. Remove or merge steps, choices, and states that have not earned their place. Then settle what changes in what each affected user sees, touches, and does.
-3. **System behavior**: inspect the current process, states, and rules. Remove or merge behavior that has not earned its place. Then settle observable behavior shared across users or experienced indirectly.
-4. **Implementation**: design the coherent target as if every retained requirement had existed from the first version. Record migration, compatibility, rollout, and temporary-coexistence constraints separately. Apply `principle-codebase-design` to settle module ownership, interfaces, seams, and tests at those seams. For a statically typed target, apply `principle-type-system-discipline` to settle domain states, semantic identifiers, authoritative schemas, and parsing at external and network boundaries. For a TypeScript target, also use `typescript-best-practices` when available. Settle, per acceptance criterion, which checks become durable guards in the suite and which are throwaway verification scripts. Record the verification risk and rationale: light only without executable or operational effects, normal for behavior changes, high for auth, money, destructive data, or interactions across surfaces. Name the failure paths and data-safety claims the risk requires.
+## Record and approve
 
-Settle every decision at one level before deciding the next. A precise fact question for a later level may be researched early when it does not assume an unsettled decision. Collect independent questions into one bounded dispatch batch via `to-subagent`; await its returns before dependent decisions. When users, experience, and system behavior are settled, say: "Experience is settled. Implementation is next. This is a handoff point." The user may continue or park the issue.
+Record decisions as they settle. Commit and push coherent context changes before publishing their ticket record and before every handoff or pause. A later machine continues from the remote, not this session's memory.
 
-For a question that needs source-backed investigation, dispatch the `research` skill via `to-subagent`. For a question that needs an artifact to settle it, dispatch the `prototype` skill via `to-subagent`. Give each fresh subagent one question and only the context it needs. A dispatched question blocks only the decisions that depend on it.
+Publish specs and research as HTML. Keep runtime prototypes in their useful format, with a published HTML explanation of the result and launch recipe. Commit and push artifact sources to `artifact/<ticket>` via `to-branch --push`, then publish through `to-web`. The ticket records the question, result, URL, and revision. Evidence media goes only to the bucket.
 
-Research dossiers and specs are self-contained HTML. Preserve prototypes in the format that answers their question, including runtime probes or an existing app route; record the source revision and launch recipe, with an HTML summary when needed for presentation. Each published artifact lives in two places. For each returned dossier or prototype, commit it to the issue's artifact branch `artifact/<issue>` via `to-branch` with `--push`, publish that committed revision via `to-web`, then comment a projection on the issue: the question, the concise result, the durable URL, and the commit hash. Present prototypes to the user and record the resulting decision on the issue. The artifact branch never merges; it is deleted when the issue closes.
+When decisions are settled, run `to-spec` from the complete record; delegate synthesis only when useful. Resolve blocking Notes before requesting approval. Record the user's approval against the published spec's commit hash. A later spec revision requires new approval.
 
-Record settled decisions on the issue as they land. Offer work outside this issue to the `capture` skill; absent it, list the items at the close.
-
-When the design frontier is empty, persist any settled decisions still held only in conversation, then dispatch `to-spec` via `to-subagent` with the issue record, settled decisions, and supporting artifacts. Keep publication and the user's approval in this session. For a revision, also pass the previous approved spec so its acceptance-criterion identifiers remain stable. If synthesis returns a blocking Note, record it on the issue and reopen that part of the design frontier. Otherwise publish the returned HTML spec through the same `to-branch` then `to-web` sequence and comment its projection on the issue.
-
-After the user approves a published revision, close the session in this order:
-
-1. Record the approved commit hash on the issue: that hash is the blessing, and a later commit on the artifact branch invalidates it. Push and verify the work branch before a split can release children.
-2. When the spec recommends a split, present the recommendation and ask. On yes, run `to-slices` inline against this issue: it creates the children unreleased, wires and reads back the graph, relabels this issue `spec`, then releases readiness.
-3. Push the work branch. Swap `shaping` for `ready-for-agent` on this issue. A split issue is now ready and blocked, and unblocks when its last child closes.
-
-Before pausing without approval, push the work branch and record every open frontier item on the issue.
+If the approved spec recommends splitting, obtain approval for the split and run `to-slices`. Otherwise mark the ticket `ready-for-agent`. Push the work branch before releasing any ticket. Leave partial publication in `shaping`; before pausing, record open decisions and the next action. Capture unrelated work separately.

@@ -4,7 +4,7 @@ Two-axis review against pinned head and base revisions: **Standards** covers doc
 
 ## Dependency surface
 
-Composes with the optional `to-subagent` sibling for axis dispatch; reads the issue with `gh` and the spec from the issue's artifact branch at its blessed hash; the smell baseline and structural bar are bundled under `reference/`.
+Composes with the optional `to-subagent` sibling for axis dispatch; reads the issue with `gh` and the spec from the issue's artifact branch at its approved hash; the smell baseline and structural bar are bundled under `reference/`.
 
 ## Provenance
 
