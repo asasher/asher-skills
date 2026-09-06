@@ -7,7 +7,7 @@ Focusing Step 5 as a session. Run on a card's review date (lead with this on `re
 Fill **Actual** next to **Predicted** and score the _prediction_, not the effort. Ask for the number first, stories second. Then the pre-committed decision:
 
 - **adopt** — prediction held; the change becomes standing policy (write it into Plan as adopted, checked).
-- **adapt** — mechanism looks right, size or shape wrong; revise the card (new prediction, new date), don't stack a second change onto it.
+- **adapt** — mechanism looks right, size or shape wrong; revise the card with one change, a new prediction, and a new date.
 - **abandon** — prediction failed and the mechanism story died with it. One-line epitaph on the card, `data-state="abandoned"`. Say it plainly: a clean kill that saves a quarter of misdirected effort is a _win_, and it's evidence about where the constraint isn't.
 - **elevate** — exploit + subordinate ran honestly and the constraint still binds: open the elevate gate in Plan, test the option with ΔT vs ΔI+ΔOE, and card the elevation itself (an expensive change needs a prediction most of all).
 - **re-identify** — results say the diagnosis was wrong (see interpretation traps below). Downgrade the verdict's mark, reopen Find, and take the strongest surviving suspect. Not a failure — the experiment did its job as the test of the diagnosis.
@@ -28,7 +28,7 @@ Run the movement checks whether or not cards succeeded:
 **Moved** → celebrate for one sentence, then close the cycle:
 
 1. Prepend a `.cycle` entry to **Loop**: the constraint that was, cycle dates, what broke it (which cards), what the throughput metric did, and where the constraint went.
-2. **Inertia sweep** — the step everyone skips, so never skip it: walk every subordination rule, buffer, priority policy, and metric adopted this cycle and ask _"does this still serve the new constraint?"_ Retire what doesn't, in Plan and in the cycle entry. Yesterday's protective rule is today's policy constraint; unretired leftovers go on next cycle's suspects board first.
+2. **Inertia sweep** — walk every subordination rule, buffer, priority policy, and metric adopted this cycle and ask _"does this still serve the new constraint?"_ Retire what doesn't, in Plan and in the cycle entry. Yesterday's protective rule is today's policy constraint; unretired leftovers go on next cycle's suspects board first.
 3. Reset for the new cycle: increment the dashboard cycle counter; set Find `active` (Plan and Experiments revert to `active` as they're reworked — adopted-and-still-serving policies stay listed as standing). The Goal and Map survive; re-annotate the map's queue counts and move the `:::constraint` tag when the new verdict lands. Then run [find.md](find.md) — with the map warm, second hunts are fast.
 
 ## 3 — close the session

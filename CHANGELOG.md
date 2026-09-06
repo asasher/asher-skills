@@ -2,6 +2,14 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-06 — remove redundant negations from skill instructions
+
+Reviewed all 47 authored skills, removing speculative prohibitions, repeated exclusions, and instructions already expressed by adjacent positive requirements. Concrete approval, evidence, privacy, and recovery contracts remain. Supporting references and templates use the same wording discipline.
+
+Changed: `adversarial-review`, `agent-ready-codebase`, `backlog`, `bare-minimum-design`, `bayes`, `capture`, `code-review`, `codex-imagegen`, `constraints`, `deliver`, `diagnosing-bugs`, `diagram-design`, `dissolve`, `domain-modeling`, `goodwork`, `handoff`, `implement`, `interview`, `learn-anything`, `maquette`, `merge`, `principle-experience-first`, `prototype`, `prove-your-work`, `relay`, `research`, `retro`, `shadixfy`, `shape`, `skill-loop`, `staffing`, `tdd`, `technical-writing`, `to-branch`, `to-slices`, `to-spec`, `to-subagent`, `to-tailnet`, `to-thread`, `to-web`, `unslop`, `verify-your-work`, `watch-video`.
+
+Reconcile: refresh the changed skills in your installed set. Invocation policies, dependency declarations, and the README install set are unchanged. Existing playbooks remain valid. The instruction-review document records this editorial pass, a separate command-recipe audit, and a staffing proposal; the latter two are not implemented in this entry. No behavioral evals were added.
+
 ## 2026-09-05 — ticket-based shaping and a simpler build owner
 
 Groom reads all open tickets before consolidation and routing. Shape works on one ticket and records an **approved spec**. Shaping and builds preserve the primary checkout, attach existing local or remote branches in secondary worktrees, and push coherent progress for recovery on another machine.

@@ -2,13 +2,13 @@
 
 Load this file when the user asks to run diagnostics, health checks, or first-run troubleshooting, or when they invoke `/diagram-design:doctor` or `/doctor`.
 
-The goal is a one-shot report that checks local readiness for Diagram Design import/export and command routing, without mutating user files or installing dependencies.
+Produce a read-only report on local readiness for Diagram Design import/export and command routing. Report remediation commands for the user to run.
 
-Resolve the Diagram Design installation from this loaded reference, not from the user's current working directory. A normal project directory is the expected place to invoke the doctor and must not be treated as a repository-path error.
+Resolve the Diagram Design installation from this loaded reference. Support invocation from any project directory.
 
 Use two diagnostic modes:
 
-- **Installed-skill mode** (default): check the runtime and the resolved skill installation. Do not require maintainer-only repository files.
+- **Installed-skill mode** (default): check the runtime and the resolved skill installation.
 - **Maintainer-checkout mode**: use this only when the resolved installation root contains `CONTRIBUTING.md`, `.github/workflows/ci.yml`, and `scripts/verify-plugin-package.py`. Add the repository integrity checks below.
 
 ## Inputs
@@ -37,7 +37,6 @@ Run all checks in this order and report each as `pass`, `warn`, or `fail`.
 - Check whether Chromium is installed for Playwright (`playwright install --help` availability is sufficient for command presence; prefer also checking browser cache when practical).
 - If missing, mark `warn` and print exact setup hint:
   - `pip install playwright && playwright install chromium`
-- Never auto-install dependencies.
 
 3. Expected script presence (maintainer-checkout mode only)
 
@@ -67,11 +66,11 @@ Run all checks in this order and report each as `pass`, `warn`, or `fail`.
 
 5. Common path mistakes
 
-- Verify `SKILL.md` beneath the resolved installation root. Do not search for it relative to the user's current project and do not instruct users to enter the maintainer repository.
+- Verify `SKILL.md` beneath the resolved installation root.
 - Detect Windows path quoting risk when paths contain spaces and the provided command examples omit quotes.
 - Detect references to local installed skill paths that do not exist (if command output includes one).
 - Mark these as `warn` with a precise fix suggestion.
-- A missing resolved `SKILL.md` should suggest reinstalling or updating Diagram Design, not changing into a repository checkout.
+- A missing resolved `SKILL.md` should suggest reinstalling or updating Diagram Design.
 
 ## Output contract
 
@@ -93,11 +92,10 @@ Always print:
 
 - `status`, `counts`, `checks[]` (`name`, `status`, `message`, `fix` optional), `timestamp`.
 
-## Safety and behavior rules
+## Reporting rules
 
-- Read-only diagnostics only: do not modify files, do not install packages, do not run destructive git commands.
 - If any command fails unexpectedly, capture stderr and continue remaining checks.
-- Never claim a check passed unless verified directly in this run.
+- Mark a check as passed only after verifying it in this run.
 - Prefer explicit, copy-pastable remediation commands.
 
 ## Example result

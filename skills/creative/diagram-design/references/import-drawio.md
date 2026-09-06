@@ -12,7 +12,7 @@ Load this file when the user points at a `.drawio`, `.drawio.xml`, `.drawio.png`
 
 ## Step 1 — Extract the IR
 
-Never read a `.drawio` file with Read. Most are deflate+base64 payloads, and even the readable ones are 10× more XML than signal. Run the extractor:
+Read `.drawio` structure through the extractor, which decodes deflate+base64 payloads and condenses XML:
 
 ```bash
 python3 <skill-dir>/scripts/drawio_extract.py <file> [--page N|NAME|all]
@@ -105,7 +105,7 @@ Source color is a _signal about role_, not a color to keep. Six fill colors in t
 | `text` (floating label) | Drop, or fold into a zone label |
 
 - **Reroute every connector.** Source waypoints are dead weight — the digest reports a waypoint count so you know how tangled the original was, not so you can reproduce it. Rounded orthogonal elbows, fanned attach points, no overlaps: SKILL.md §6 rules 1–5, no exceptions for imported content.
-- **Set the `viewBox` from the size preset**, then lay out inside it — don't draw first and crop after.
+- **Set the `viewBox` from the size preset**, then lay out inside it.
 
 ## Step 6 — Deliver
 
@@ -141,7 +141,7 @@ Default is page 0. When the file has several pages:
 
 - **Ask which page** unless the user named one. List them from the digest header — names and node counts.
 - `--page all` when they want everything: one HTML file per page, named `<base>-<page-name>.html`, each independently type-selected. Pages in one draw.io file are frequently different diagram types.
-- Don't merge pages into one canvas unless asked. A 3-page file merged is a 40-node fail.
+- Keep one output per source page unless the user asks to combine them; combined pages must fit the complexity budget.
 
 ## Edge cases
 

@@ -18,7 +18,7 @@ Ask for an explicit verdict and block on it. Three outcomes:
 
 - **Approve** — proceed to the next phase.
 - **Approve with nits** — apply the noted changes, then proceed without a re-review round.
-- **Request changes** — revise the deliverable, reply in chat with how each note was addressed (`changed`, `kept` with the reason, or no longer applicable), and re-present. Never silently drop a note.
+- **Request changes** — revise the deliverable, reply in chat with how each note was addressed (`changed`, `kept` with the reason, or no longer applicable), and re-present.
 
 Silence, a topic change, or "looks interesting" is not a verdict. If the turn ends without one, resume by re-asking, not by building.
 
@@ -28,4 +28,4 @@ Record the approval where the pipeline can find it later: a dated `Approved` lin
 
 ## Demo distribution is separate
 
-Sign-off gates cover documents; showing the built maquette is a different act. The demo runs locally by default. When the user wants a shareable link, use the static deploy mode (e.g. Vercel) described in [architecture](architecture.md) — optional, on request, never a gate requirement.
+Sign-off gates cover documents; showing the built maquette is a different act. The demo runs locally by default. When the user wants a shareable link, use the static deploy mode (e.g. Vercel) described in [architecture](architecture.md).

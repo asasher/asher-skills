@@ -4,7 +4,7 @@ The profile is the state of the whole project: everything else — assets, scout
 
 ## Schema
 
-1. **Snapshot** — who this person is and what good work means to them, in their words; current status (employed / searching / redesigning); date last updated. Their own weighting of work that _feels good_ (energizing), _is good_ (meets their craft standard), and _does good_ (serves something they endorse) — elicited, never assumed.
+1. **Snapshot** — who this person is and what good work means to them, in their words; current status (employed / searching / redesigning); date last updated. Their own weighting of work that _feels good_ (energizing), _is good_ (meets their craft standard), and _does good_ (serves something they endorse) — elicited from the person.
 2. **Track record** — roles and significant projects, chronologically and briefly: what they did, what it produced, what each move revealed about them (what pulled, what pushed, what they refused to give up).
 3. **Strengths & interests** — what they are demonstrably good at (each strength tied to at least one concrete episode), what they are drawn to and keep coming back to, what energizes and what drains (including the things they are good at but find depleting), and **the intersection they own**: one sentence — strength × domain they have lived × who it serves — that assets and opportunity scoring reuse as the positioning line.
 4. **Proof** — the evidence the market can inspect: artifacts, links, repos, publications, metrics, referenceable stories. Plus the proof gap: claims the profile makes that no artifact yet demonstrates, feeding the proof-of-work plan in [assets.md](assets.md).
@@ -24,8 +24,8 @@ The search's activity exists partly to move claims rightward. When advice depend
 
 ## Update discipline
 
-- Update cumulatively; never regenerate from scratch. For each new item (a finished project, an interview debrief, a rejection pattern, a document): **confirm** (upgrade the mark), **contradict** (revise the claim, keep a dated note of what it used to say), or **add** (new entry, marked by source).
-- When new evidence contradicts the profile, say so plainly and ask which is true now. Record the direction of change — a profile that never changes is not being tested.
+- Update cumulatively, preserving history. For each new item (a finished project, an interview debrief, a rejection pattern, a document): **confirm** (upgrade the mark), **contradict** (revise the claim, keep a dated note of what it used to say), or **add** (new entry, marked by source).
+- When new evidence contradicts the profile, say so plainly and ask which is true now. Record the direction of change.
 - Keep a short dated changelog at the bottom.
 
 ## Importing a document

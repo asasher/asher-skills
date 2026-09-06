@@ -22,7 +22,7 @@ Infer choices that are clear from the request (for example, "for my deck" implie
 | `png` | `.png` at `device_scale_factor` | pixels exactly as the browser renders them | vector editability |
 | `html+png` | both | — | — |
 
-Always generate the HTML first — `svg` and `png` are produced _from_ it via [`export.md`](export.md). Never hand-author an SVG file directly; the HTML is the source of truth and the only artifact the taste gate (SKILL.md §9) is written against.
+Always generate the HTML first — `svg` and `png` are produced _from_ it via [`export.md`](export.md). The HTML is the source of truth for the taste gate (SKILL.md §9).
 
 Pick by destination:
 
@@ -55,7 +55,7 @@ The preset sets the SVG `viewBox`. Every value below is divisible by 4, so the g
 
 ### Deriving `fit`
 
-Round the content bounding box **up** to the next multiple of 4, then add the fixed chrome: 40px outer margin on every side, plus 60px at the bottom for the legend strip. Never let the content touch the viewBox edge.
+Round the content bounding box **up** to the next multiple of 4, then add the fixed chrome: 40px outer margin on every side, plus 60px at the bottom for the legend strip.
 
 ### Type ramp per size class
 
@@ -95,12 +95,12 @@ How much of the source survives. This is a _count_ dial — it governs how many 
 
 1. **Zoning is mandatory.** Above 9 nodes, every node belongs to a labeled zone (2–4 zones, hairline-bordered, `paper-2` fill, mono uppercase zone label at top-left). An unzoned 20-node diagram is a wiring diagram, not a schematic.
 2. **Connector rules don't relax.** SKILL.md §6 rules 1–5 still apply at 24 nodes. If you can't route it without overlaps, you're over the real ceiling — split.
-3. **Above 24 nodes, split.** Produce an overview (zones as nodes, `balanced` grammar) plus one detail diagram per zone. Name them `<base>-overview.html`, `<base>-<zone>.html`. Never ship a 40-node single canvas.
-4. **Accent stays at 2.** More nodes never buys more focal elements.
+3. **Above 24 nodes, split.** Produce an overview (zones as nodes, `balanced` grammar) plus one detail diagram per zone. Name them `<base>-overview.html`, `<base>-<zone>.html`.
+4. **Accent stays at 2.**
 
 ### Degrade ladder
 
-When the source has more than the level allows, cut in this order and stop as soon as you're under budget. Never cut ad hoc.
+When the source has more than the level allows, cut in this order and stop as soon as you're under budget.
 
 1. **Decorative cells** — sticky notes, free-floating text, title blocks, watermarks, the source's own legend. (Notes worth keeping become annotation callouts — max 2, see [primitive-annotation.md](primitive-annotation.md).)
 2. **Exact duplicates** — N identical workers/replicas/shards become one node labeled `Worker ×N`.

@@ -6,7 +6,6 @@
 
 - 2×2 grid. Axis lines: 1px ink cross through the center.
 - **Axis labels: Jobs-minimal.** One single word at each arrow tip — no glyphs baked into the label (no `↑` / `→` / `←` / `↓`), no parentheticals, no "HIGH / LOW" modifiers. Geist Mono 9px regular weight, tracked 0.18em, uppercase. Flank the arrow tips — never sit labels on top of the axis line. Shorten the arrow enough (~60–80px inside the viewBox edge) to leave breathing room for the labels beyond the tips.
-- Never label at the midpoint.
 - Items: small labeled dots (`r=4`) positioned in the quadrants. Labels 8–10px away; don't let labels cross axis lines.
 - Accent on the "do first" item (typically top-right).
 - Limit to ~12 items; cluster or split beyond that.
@@ -46,7 +45,7 @@ A **layout variant** of the standard quadrant — same house skin (black paper, 
 
 Both variants use the same Jobs-minimal axis labels: one word at each arrow tip, no glyphs, no parentheticals. The only axis difference is that the consultant variant uses double-ended arrows instead of single-ended.
 
-Everything else — paper, dot pattern, typography, legend strip, 4px grid, complexity budget — is the house default. Don't invent new colors or fonts for this variant.
+Everything else — paper, dot pattern, typography, legend strip, 4px grid, complexity budget — is the house default.
 
 ### Style tokens (in-house)
 
@@ -67,7 +66,7 @@ Everything else — paper, dot pattern, typography, legend strip, 4px grid, comp
 ### Layout conventions
 
 - Four cells, equal size (240×160 or 280×180 are good defaults), arranged with a 40–60px gap from the axis cross.
-- Axis cross passes _between_ the cells, not through them.
+- Axis cross passes _between_ the cells.
 - Arrow tips live ~20–40px outside the outermost cell edge; single-word axis labels sit ~12px beyond each tip (see Axis labels above).
 - Exactly one focal cell. Picking none makes it a placeholder template; picking two erases the signal.
 - Keep the legend strip + horizontal rule at the bottom — same as the standard quadrant. Legend swatches should show both "headline bet" (accent) and "candidate future" (neutral).

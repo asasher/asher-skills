@@ -1,6 +1,6 @@
-# Scheduling — spaced practice for drills, not cards
+# Scheduling — spaced practice for drills
 
-Anki's unit is a fact scored recall/no-recall. Ours is a **drill scored against a performance criterion** — a different data model, and motor decay is slower and sleep-consolidated, so don't Anki-ify the intervals. State lives in each drill file's frontmatter; `status` derives the picture from them. No separate database.
+Anki's unit is a fact scored recall/no-recall. Ours is a **drill scored against a performance criterion** — a different data model, and motor decay is slower and sleep-consolidated, so choose intervals from each drill's score history. State lives in each drill file's frontmatter; `status` derives the picture from them.
 
 ## Per-drill state (frontmatter of `drills/<name>.md`)
 
@@ -26,7 +26,7 @@ A drill is due when any of:
 1. Take the due list; pick **2–4 drills**, favoring a mix of stages and sub-skills over depth in one — interleaving is a scheduling decision as much as an in-session one.
 2. Add **at most one stretch drill** slightly past current level. One; ambition concentrates, sessions scatter.
 3. First reps of the session are the **cold check** on whatever was trained last time — before warm-up flatters the numbers. Log them separately (`cold: 4/10` vs `warm: 8/10`); the cold number is the truth.
-4. Cap total session length at the stop conditions in `reference/session-protocol.md`, not at a target duration. A short clean session logs as a full success.
+4. End the session when the stop conditions in `reference/session-protocol.md` are met. A short clean session logs as a full success.
 
 ## Progression and retirement
 

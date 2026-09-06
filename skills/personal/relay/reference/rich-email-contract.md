@@ -10,6 +10,6 @@ Run `npm run render -- --bag <bag.json> --out <run-dir>`. A successful render cr
 - `rendered-email.txt` — semantically equivalent plain text;
 - `rendered-email-light.html` and `rendered-email-dark.html` — authored forced-theme previews.
 
-Keep structure table-safe and readable without images, custom fonts, classes, or client dark-mode behavior. The default contains no Dunn Harland name, asset, path, or studio-specific copy. The configurable provenance footer is visible and included in both HTML and text.
+Keep structure table-safe and readable without images, custom fonts, classes, or client dark-mode behavior. The configurable provenance footer is visible and included in both HTML and text.
 
 Rendering is complete only when all four files exist, HTML/text carry the same headings and item content, both forced previews are readable, and the run manifest records the selected local renderer/template identity.

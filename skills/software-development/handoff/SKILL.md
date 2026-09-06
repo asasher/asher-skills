@@ -14,6 +14,6 @@ Reference content already captured in other artifacts (specs, plans, ADRs, issue
 
 Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
 
-If arguments were passed, they name the next session's focus — tailor the document to it: include what that session needs, cut what it does not.
+If arguments were passed, they name the next session's focus — tailor the document to what that session needs.
 
 Done when the document is saved and you have replied with its absolute path.

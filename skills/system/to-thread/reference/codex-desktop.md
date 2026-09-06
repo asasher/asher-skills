@@ -12,7 +12,7 @@ Create via the Codex app-server sequence, in order:
 
 ## Liveness before success
 
-Report success only when the sequence completed and the turn is observably running — the named thread visible in the sidebar with its first turn started. A create that succeeded but whose turn never started is a failed dispatch: report it at the command line rather than leaving a dead thread in the user's sidebar.
+Report success only when the sequence completed and the turn is observably running — the named thread visible in the sidebar with its first turn started. Report a created thread whose turn failed to start as a failed dispatch at the command line.
 
 ## Report
 

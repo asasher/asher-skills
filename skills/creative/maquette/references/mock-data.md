@@ -25,7 +25,7 @@ export function mulberry32(seed: number) {
 export const rng = mulberry32(20260706); // one fixed seed for the whole app
 ```
 
-## Relative dates — never hardcode
+## Dates relative to the demo clock
 
 A demo with hardcoded "March 2026" timestamps looks dead by July. Generate every date as an offset from now: `daysAgo(3)`, `hoursAgo(2)`, `inDays(14)`. The demo is perpetually alive.
 
@@ -40,7 +40,7 @@ Rendering caveat: relative-to-now dates cause SSR/client hydration mismatches. R
 - **Volume:** enough rows that lists scroll — ~30–80 for primary entities, a handful for config-like ones. Match intake magnitudes (if they said "200 orders a day", a list of 12 is a tell).
 - **Distribution:** not uniform. Most records normal, some aging, a few outliers: 2 overdue invoices, one order stuck in a weird state, one customer who accounts for 30% of revenue. Skew is what real data looks like.
 - **Precision:** real numbers are ragged — `$1,847.50`, not `$1,000.00`. Quantities, weights, and rates should carry domain-plausible precision and units.
-- **Names:** domain-plausible, varied, culturally mixed. Company names that sound like the industry (freight brokers do not have customers named "Acme Corp"). Use intake's real-world examples as style templates. No lorem ipsum anywhere, ever — placeholder text in a rendered screen fails the build.
+- **Names:** domain-plausible, varied, culturally mixed. Company names that sound like the industry (freight brokers do not have customers named "Acme Corp"). Use intake's real-world examples as style templates. Populate every rendered screen with domain-appropriate copy.
 - **One deliberate edge case per entity type** — a very long name, a zero-quantity line, a cancelled record. They make tables look lived-in and demo how the UI handles mess.
 
 ## Coherence

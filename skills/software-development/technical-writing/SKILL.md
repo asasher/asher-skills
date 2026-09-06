@@ -7,7 +7,7 @@ metadata:
 
 Write artifacts a tired reader understands on the first read. Every rule below serves that reader; when a rule makes a sentence worse, fix the sentence another way.
 
-Apply the `unslop` skill to strip AI patterns (without it, still rewrite anything that sounds machine-made). Skip its voice advice here: an artifact wants uniformity, not personality.
+Apply the `unslop` skill to strip AI patterns (without it, still rewrite anything that sounds machine-made). Use a consistent voice throughout the artifact.
 
 ## Sentences
 

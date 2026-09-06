@@ -8,7 +8,7 @@ metadata:
 
 # To slices
 
-Split settled direction; preserve its decisions. Use `technical-writing` when available. A spec recommendation alone does not authorize publication.
+Split settled direction; preserve its decisions. Use `technical-writing` when available. Publication requires the user's approval of the split.
 
 Follow [slicing](reference/slicing.md) and [the content contract](reference/template-guide.md):
 
@@ -19,4 +19,4 @@ Follow [slicing](reference/slicing.md) and [the content contract](reference/temp
 5. Persist the approved draft and issue mapping. Create tickets in dependency order, each `shaping` with its work-type. Wire native blockers. A split ticket becomes a `spec` parent, with each child both a sub-issue and blocker; its work branch is their integration base and PR target.
 6. Read back the complete graph and confirm the spec branch is pushed. Only then release children and parent as `ready-for-agent`. Partial publication stays `shaping`; resume the existing mapping and inspect uncertain creates before retrying.
 
-Return ticket links, coverage and dependency mapping, and publication status. Capture missing decisions as blockers rather than quietly designing them during the split.
+Return ticket links, coverage and dependency mapping, and publication status. Capture missing decisions as blockers for shaping.

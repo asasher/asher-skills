@@ -15,12 +15,12 @@ Scaffold **after** the pose conversation has produced a sharpened claim — the 
 
 ## The layout of the page
 
-Five arc sections — **Question, Board, Evidence, Trajectory, Resolution** — plus a running **Session log** and **References**. Each arc section carries `data-status="empty|active|done"` and a matching rail chip in the masthead. The masthead dashboard — leading hypothesis, the user's credence, the agent's credence, open cards, next review — must answer "where does this stand?" in one glance. There is **no separate state file**; if it isn't in the HTML, it isn't saved.
+Five arc sections — **Question, Board, Evidence, Trajectory, Resolution** — plus a running **Session log** and **References**. Each arc section carries `data-status="empty|active|done"` and a matching rail chip in the masthead. The masthead dashboard — leading hypothesis, the user's credence, the agent's credence, open cards, next review — must answer "where does this stand?" in one glance. Persist all state in the HTML.
 
 ## Editing rules
 
 - **Edit only between markers.** Every fillable region is bracketed by `<!-- FILL: name -->` … `<!-- /FILL: name -->`. Replace content between them; leave the markers, the `.hint` paragraphs, and the section scaffolding in place.
-- **Keep edits surgical.** Use `Edit` on the specific region, not a full-file rewrite — the page accumulates across sessions; a rewrite risks dropping history.
+- **Keep edits surgical.** Edit the affected region, preserving history accumulated across sessions.
 - **The trajectory is append-only.** Rows in `FILL: trajectory` and bars in `FILL: waterfall` are _never_ edited or deleted — this is the skill's hindsight defense and it is absolute. Corrections (a late-merged cluster, a vetoed posterior) are **new rows** with a note in the last column. Everything else on the page is living material; the trajectory is the sediment.
 - **Drive status from reality.** Section `data-status` and its rail chip `data-s` move to `active`/`done` when the step's done-when (in each command reference) is met. The `.st` chips render text from `data-status` — leave them empty. Update `<b id="updated">` every session.
 - **Keep the dashboard true.** Whenever the leader, either credence, the open-card count, or the review date changes, update the matching `id="d-*"` value. No leader yet → `d-leader` stays "framing…".
@@ -89,4 +89,4 @@ Scale: **1 dB = 2% width**, center at 50%, cap at ±20 dB. Positive (toward the 
 - **Save the evidence.** Screenshots, exports, call notes, links-that-rot → the question's `sources/` folder.
 - **Register it.** Add an `<li>` to `FILL: refs`: what it is, when captured, link.
 - **Cite inline.** `<a class="cite" href="#refs">[3]</a>` on the card's Result and anywhere a number leans on it.
-- **Never inline a wall of data.** The page stays readable; raw material lives in `sources/`.
+- **Keep the page readable.** Store raw material in `sources/` and cite it.

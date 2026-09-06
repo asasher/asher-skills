@@ -9,18 +9,18 @@ Good Work defines what good work is for this person, then runs the search to fin
 
 ## The workspace
 
-`goodwork/` in the project root, created the first time any command needs it — no setup command, no accounts, no connections, no server:
+`goodwork/` in the project root, created the first time any command needs it:
 
 - `PROFILE.md` — the professional profile; canonical, human-readable, cumulative ([reference/profile.md](reference/profile.md)).
 - `opportunities.json` — every opportunity being worked, one array ([reference/opportunities.md](reference/opportunities.md)).
-- `board.html` — the generated presentation; never hand-edited ([reference/board.md](reference/board.md)).
+- `board.html` — the presentation regenerated from the profile and opportunities ([reference/board.md](reference/board.md)).
 
-The agent is the sole writer of all three. `goodwork/` contents are sensitive personal data: update cumulatively, never regenerate from scratch, never share or publish without explicit instruction.
+The agent is the sole writer of all three. `goodwork/` contents are sensitive personal data: preserve the profile and opportunity history through cumulative updates; share or publish only with explicit instruction.
 
 ## Core rules
 
-- The person's definition of good work is elicited, never assumed. Don't moralize: a stable well-paid job funding a rich life is as good as a calling.
-- Speak plainly. The frameworks in the references are for you, not the person: they hear jargon-free questions and plain summaries — never framework names, file names, schemas, or mechanics. Say "waiting for your OK", not "approval pending".
+- Elicit the person's definition of good work and use it as the standard: a stable well-paid job funding a rich life is as good as a calling.
+- Use the frameworks to guide your reasoning. Speak to the person in plain questions and summaries, using their words: "waiting for your OK".
 - Stories beat self-report: after any abstract answer, get a concrete episode. Mark every profile claim **reported**, **evidenced**, or **tested**.
 - If the record (CV, LinkedIn, GitHub, portfolio, prior conversation, workspace files) can answer it, read it instead of asking.
 - Never invent experience, metrics, credentials, or evidence in any outbound artifact.
@@ -44,7 +44,7 @@ The agent is the sole writer of all three. `goodwork/` contents are sensitive pe
 1. **No argument**: if `goodwork/PROFILE.md` exists, summarize its snapshot in plain language, show the board, and suggest the next step. Otherwise recommend starting with `interview`.
 2. **First word matches a command**: load its reference and follow it. Everything after the command name is the detail.
 3. **First word does not match**: infer the best command, state the inferred command, and proceed. "What should I do with my life" infers `interview`; "help me find a job" with a profile infers `scout`.
-4. **Guard**: `scout`, `track`, and `assets` never run against a missing `goodwork/PROFILE.md` — run the short-form interview from [reference/interviewing.md](reference/interviewing.md) first.
+4. **Guard**: `scout`, `track`, and `assets` require `goodwork/PROFILE.md`. If it is missing, run the short-form interview from [reference/interviewing.md](reference/interviewing.md) first.
 
 ## Common workflows
 
@@ -56,6 +56,6 @@ The agent is the sole writer of all three. `goodwork/` contents are sensitive pe
 ## Output standards
 
 - Every session ends with the workspace updated, the board current, and one concrete next action with a time box.
-- The profile records evidence and confidence marks, not horoscope prose; quote the person's own words.
+- The profile records evidence and confidence marks; quote the person's own words.
 - Outreach and application drafts: polished final text first, then rationale.
-- Opportunity lists come ranked with reasons; metrics come with what they imply about targeting, not just effort.
+- Opportunity lists come ranked with reasons; metrics explain what they imply about targeting.

@@ -2,9 +2,9 @@
 
 ## Bindings
 
-Treat profiles as human-readable relationship policy and audience/interest JSON as hash-bound operational derivatives. Each audience declares project IDs, message kind, section recipe, disclosure, cadence, operator-CC override, and recipients with explicit `header: to|cc`. Each interest file declares allowed features and sections. A missing or stale binding blocks that audience; it never falls back to prompt lore.
+Treat profiles as human-readable relationship policy and audience/interest JSON as hash-bound operational derivatives. Each audience declares project IDs, message kind, section recipe, disclosure, cadence, operator-CC override, and recipients with explicit `header: to|cc`. Each interest file declares allowed features and sections. A missing or stale binding blocks that audience.
 
-The repository playbook owns project-specific collection and editorial policy: which provider operations form a complete search, what provider states mean, how source mechanics become recipient-facing language, and which unresolved facts may carry forward. `relay/*.json` holds the structured operational derivatives of those choices. The portable skill supplies the selection and safety mechanics; it does not name a project's trackers, queries, audiences, status mappings, or prose rules.
+The repository playbook owns project-specific collection and editorial policy: which provider operations form a complete search, what provider states mean, how source mechanics become recipient-facing language, and which unresolved facts may carry forward. `relay/*.json` holds the structured operational derivatives of those choices. The portable skill supplies the selection and safety mechanics.
 
 ## Evidence
 
@@ -18,6 +18,6 @@ The default watermark rule excludes facts observed at or before the audience's c
 
 Resolve recipients after selection. Normalize addresses to lowercase, deduplicate within and across headers, and fail if one address appears in both To and CC. For external sends append the operator to CC unless that audience explicitly disables the default. The sender is never inferred as a recipient.
 
-`scripts/select_bags.py` consumes already-normalized evidence and the local binding; it never runs arbitrary provider commands. The agent owns provider gathering, attribution, and normalization before calling it.
+`scripts/select_bags.py` consumes already-normalized evidence and the local binding. The agent owns provider gathering, attribution, and normalization before calling it.
 
 Completion criterion: every eligible audience produces one validated bag or explicit exclusion, every visible item has attributable evidence, every provider collection declared by the playbook is accounted for, and no fact or recipient crosses an audience boundary.

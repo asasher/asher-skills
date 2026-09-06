@@ -38,7 +38,7 @@ Name **one** constraint. Write the verdict block:
 
 Then update the flow map — the constraint node goes `:::constraint` (red) — and the dashboard (`d-constraint`, `d-type`, `d-conf`). The page should now answer "what's the constraint?" in ten seconds flat.
 
-Marking rules ([framework.md](framework.md)): `evidenced` needs at least one observable (queue count, wait time, aging report, calendar load, concrete recent episodes); `validated` needs a moved _system_ metric or a doubling counterfactual that survives scrutiny — usually that means the first exploit experiment, so don't stall here. **An `evidenced` constraint with an experiment beats a `validated` one without.** Say explicitly: "we're treating this as our best hypothesis — the first experiment is also the test of the diagnosis."
+Marking rules ([framework.md](framework.md)): `evidenced` needs at least one observable (queue count, wait time, aging report, calendar load, concrete recent episodes); `validated` needs a moved _system_ metric or a doubling counterfactual that survives scrutiny — usually that means running the first exploit experiment next. **An `evidenced` constraint with an experiment beats a `validated` one without.** Say explicitly: "we're treating this as our best hypothesis — the first experiment is also the test of the diagnosis."
 
 Refuse to name a person. If every path leads to one human, the constraint is the _dependency_ — "all deploy knowledge lives in one head", "every discount needs the founder" — and the page says so in those words.
 

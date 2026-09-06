@@ -30,10 +30,10 @@ Check approval against the latest spec revision. Record a checkpoint on the tick
 1. Validate the worktree's stack, auth, seed, and artifact upload access. Bring up only what is missing. A unit needing a new product decision or a larger split returns to `needs-shaping` with the discovery recorded.
 2. Run `implement` here. Choose undeclared test seams within the ticket's authority and record them. For a split parent, start from merged child work and limit fixes to small integration gaps.
 3. Commit and push coherent changes as they land, before checks are handed off, and before pausing. Open an **ordinary PR**, never a draft, once implementation checks pass. Reuse its existing PR on resume. Use the correct target and `Closes #<ticket>` only for the default branch; other targets need explicit ticket closure after merge.
-4. Run `adversarial-review` here with the criteria, risk, worktree, checkpoint, and deadline. It owns the bounded check/fix loop. A product question, exhausted bound, or incomplete verification is a recorded stop, not permission to restart the budget.
+4. Run `adversarial-review` here with the criteria, risk, worktree, checkpoint, and deadline. It owns the bounded check/fix loop. Record a stop for product questions, exhausted bounds, or incomplete verification; preserve the consumed budget.
 5. Run `prove-your-work` here with the accepted verification report. Evidence or late-CI defects return to the same loop with its remaining budget.
 
-Keep the PR body current: change and rationale, risk and test choices, checks, per-criterion verification, evidence link, and checkpoint. An open PR is not yet a claim that the work is review-ready.
+Keep the PR body current: change and rationale, risk and test choices, checks, per-criterion verification, evidence link, and checkpoint. Mark review-readiness after the finish gates below pass.
 
 ## Finish
 

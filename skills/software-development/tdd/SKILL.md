@@ -29,6 +29,6 @@ Tests verify behavior at **seams** — the public boundaries where you observe b
 
 - **Red before green.** Write the failing test first, then only enough code to pass it. When the test is written after code already exists — a fix, a regression proof — earn the red by reversion: stash the change and watch the test fail against the pre-change code, then restore and watch it pass.
 - **One cycle at a time.** One seam, one test, one minimal implementation — each test responding to what the last cycle taught you.
-- **Refactor outside the loop.** The red → green cycle builds behavior; restructuring what already passes is separate work, done deliberately or not at all.
+- **Refactor outside the loop.** The red → green cycle builds behavior; restructuring what already passes is separate, deliberate work.
 
-The loop ends when every confirmed seam has a passing test for each behavior the issue, spec, or user named at that seam — and nothing beyond them.
+The loop ends when every confirmed seam has a passing test for each behavior the issue, spec, or user named at that seam.

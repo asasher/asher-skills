@@ -15,7 +15,7 @@ Never pass `--ephemeral`; it makes the thread unresumable.
 
 ## Liveness before success
 
-The `thread.started` event in the log is the liveness signal: confirm it appeared and carries a thread id, and that the process is still running, before reporting success. A spawn whose log shows no `thread.started`, or an immediate error, is a failed dispatch reported now — never a name handed to the user for a thread that never lived.
+The `thread.started` event in the log is the liveness signal: confirm it appeared and carries a thread id, and that the process is still running, before reporting success. Report a missing `thread.started` or an immediate error as a failed dispatch.
 
 ## Report
 

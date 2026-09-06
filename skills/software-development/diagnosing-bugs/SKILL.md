@@ -1,6 +1,6 @@
 ---
 name: diagnosing-bugs
-description: Diagnose defects through a tight red-capable feedback loop. Use on an observed symptom — a failure, a flake, or a slowdown. Not for speculative cleanup.
+description: Diagnose defects through a tight red-capable feedback loop. Use on an observed symptom — a failure, a flake, or a slowdown.
 ---
 
 # Diagnosing Bugs

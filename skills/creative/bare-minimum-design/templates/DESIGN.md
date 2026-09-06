@@ -1,7 +1,7 @@
 ---
 # DESIGN.md — design tokens.
 # Format: the open DESIGN.md specification — https://stitch.withgoogle.com/docs/design-md/specification
-# Rules: colors are hex codes, never names; every value concrete; validate with the format's own CLI (see the spec repo).
+# Rules: colors are hex codes; every value concrete; validate with the format's own CLI (see the spec repo).
 colors:
   primary: "" # hex, e.g. "#1A73E8"
   surface: ""
@@ -45,7 +45,7 @@ Radii and shape language, per component class.
 
 ## Components
 
-Per component: the pattern with concrete values — never adjectives without numbers.
+Per component: the pattern with concrete values.
 
 ## Do's and Don'ts
 
@@ -53,4 +53,4 @@ The short list a reviewer checks first. Grows from real review findings, not spe
 
 ## Agent Prompt Guide
 
-Instructions for agents building UI against this system: what to read first, what never to invent, tool-specific notes if any.
+Instructions for agents building UI against this system: what to read first, which decisions need approval, tool-specific notes if any.

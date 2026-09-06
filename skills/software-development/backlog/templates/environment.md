@@ -1,6 +1,6 @@
 # Playbook: Environment
 
-> Project playbook for this repo, and the only one the software development lifecycle skills read: how to run, seed, authenticate to, drive, and prove this application, and where its artifacts live. Read by `backlog build` (the agent-readiness gate), `backlog status` (the teardown sweep), `deliver`, `implement`, `tdd`, `verify-your-work`, `prove-your-work`, `merge`, `to-thread`, and `to-web`. Tailor every section to this codebase. A session that earns a fact this playbook should have carried (a start recipe, an auth path, a runner trap) writes it into the matching section as part of its change. Repo facts accrete here; machine state is never recorded. A capability is checked at use, and a failed check warns and names its fallback.
+> Project playbook for this repo, and the only one the software development lifecycle skills read: how to run, seed, authenticate to, drive, and prove this application, and where its artifacts live. Read by `backlog build` (the agent-readiness gate), `backlog status` (the teardown sweep), `deliver`, `implement`, `tdd`, `verify-your-work`, `prove-your-work`, `merge`, `to-thread`, and `to-web`. Tailor every section to this codebase. A session that earns a fact this playbook should have carried (a start recipe, an auth path, a runner trap) writes it into the matching section as part of its change. Record durable repo facts here; check machine state at use. A capability is checked at use, and a failed check warns and names its fallback.
 
 ## Branching
 
@@ -23,7 +23,7 @@
 - The full gate, exactly as CI runs it: _<command>_. Force-uncached form when the runner caches: _<command, or "no cache layer">_.
 - Formatter, linter, and dead-export check over touched files, run before the full gate: _<commands>_.
 - Test runner traps: _<e.g. the `--` that flips a filtered run into the whole suite; watch mode as the default; DB-gated suites; or "none known">_.
-- Generated files, never hand-edited, each with its regeneration recipe: _<paths and commands; or "none">_.
+- Generated files, updated through their regeneration recipes: _<paths and commands; or "none">_.
 - Conventions the linter does not enforce: _<naming, placement, idioms a newcomer would miss; or "linter is the whole story">_.
 
 ## Agent-readiness
@@ -36,7 +36,7 @@
 4. **Seed**: seed data exists and reaches everything the app offers: _<pass | gap>_.
 5. **Artifacts**: `to-web` uploads HTML and media to the bucket and fetches verified URLs: _<pass | gap>_.
 
-Concurrent builds: **3** by default; tune to the resources each worktree stack needs. Count existing live builds and unresolved spawn reservations before admitting new work. Machine-local admission mechanism: _<one dispatch owner, or a shared lock and its acquisition/release command>_. Runtime capacity is checked at dispatch, not certified here.
+Concurrent builds: **3** by default; tune to the resources each worktree stack needs. Count existing live builds and unresolved spawn reservations before admitting new work. Machine-local admission mechanism: _<one dispatch owner, or a shared lock and its acquisition/release command>_. Check runtime capacity at dispatch.
 
 Shared singletons, one row each. Parallel builds may use a singleton; an issue that changes one is sliced so the change lands first.
 
@@ -69,10 +69,10 @@ Punch list: _<the gaps certification found, each groomable as an issue; or "none
 
 ## Driving the app and capturing evidence
 
-> Verification is code, not improvisation: a browser check is a script whose run is reproducible. Read by `verify-your-work` and `prove-your-work`.
+> Browser verification uses reproducible scripts. Read by `verify-your-work` and `prove-your-work`.
 
 - Surfaces this repo's issues touch: _<CLI | web | mobile | desktop>_.
-- Web driver: Playwright driving Chrome. Scripts live in _<e.g. `e2e/`>_ and run with _<e.g. `npx playwright test`>_. Evidence comes from Playwright's own artifacts (trace, screenshots, video). Headless is checked at use; headed is the fallback. Harness-native browser tools are not verification routes.
+- Web driver: Playwright driving Chrome. Scripts live in _<e.g. `e2e/`>_ and run with _<e.g. `npx playwright test`>_. Evidence comes from Playwright's own artifacts (trace, screenshots, video). Use this scripted driver for verification; check headless at use, with headed as the fallback.
 - Two kinds of check: **guards**, durable tests that protect product behavior and stay in the suite; and **throwaway verification scripts**, written to exercise the change and capture screenshots, dropped before merge, their run kept as evidence. The spec declares which each acceptance criterion gets; an unshaped issue's builder decides and says so in the PR.
 - Other surfaces: _<a simulator and driver for mobile; shell plus the CLI entrypoint; desktop only behind a recorded use case and explicit approval>_.
 - Gaps: _<surfaces the agent cannot drive or capture, and the fallback; or "none">_.

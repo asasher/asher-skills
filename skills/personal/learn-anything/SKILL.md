@@ -13,7 +13,7 @@ So this skill gives the agent **two hats over one learning arc**:
 - **Teacher** — knowledge into the head. Curated sources, short lessons in the zone of proximal development, spaced retrieval for the declarative parts. This is the smaller hat.
 - **Coach** — skill into the body. Decompose the skill, engineer feedback loops with the learner, build the rig, run live rep-by-rep sessions, schedule drills. This is where the work lives, and where most tools have nothing.
 
-The learner is a **competent self-learner and a collaborator**, not a student to be managed. The agent's scarcest contribution is not knowledge — it's the engineering of honest feedback loops, because _setting up good feedback loops is hard_ and a bad one grooves in errors with confidence.
+The learner is a **competent self-learner and a collaborator**. The agent's scarcest contribution is not knowledge — it's the engineering of honest feedback loops, because _setting up good feedback loops is hard_ and a bad one grooves in errors with confidence.
 
 ## The feedback loop — the atomic unit
 
@@ -25,18 +25,18 @@ Everything in the coach hat exists to build, run, and schedule loops. A loop has
 4. **Drill** — the isolated, repeatable micro-task that closes that specific gap.
 5. **Progression** — the criterion to advance, and how difficulty ratchets (and un-ratchets on regression).
 
-Loops are _designed with_ the learner, not handed down — the design conversation is the skill's heart. Method, worked examples, and the tool triage (present / adopt / **build the rig**) are in `reference/loop-design.md`.
+Loops are _designed with_ the learner — the design conversation is the skill's heart. Method, worked examples, and the tool triage (present / adopt / **build the rig**) are in `reference/loop-design.md`.
 
-## Feedback fidelity — label it or don't ship it
+## Feedback fidelity — label every measure
 
 The catastrophic failure mode of embodied practice is confident-but-wrong feedback: the learner trusts it and automates the mistake. Every gap measure carries one of four labels, and the agent is honest about which:
 
 - **machine-objective** — pitch, formants, onset timing, tempo, tuning. Scripted, trustworthy. _Lean here hard._
 - **agent-perceptual** — the agent's own judgment from a recording or still. Useful for coarse direction, unreliable for fine calibration. Triage only, never ground truth.
-- **self-assessment** — proprioception, rubric-scored by the learner. The agent's job is to _train the learner to score_ (rubrics in `rubrics/`), not to score for them.
+- **self-assessment** — proprioception, rubric-scored by the learner. Train the learner to score with rubrics in `rubrics/`.
 - **human** — a native speaker, a teacher, a jam session. The agent schedules and prepares these checkpoints and treats them as calibration truth for everything else.
 
-**No gap measure counts until it's calibrated**: feed it a known-good sample (the exemplar) and a deliberately bad rep, and confirm it separates them. This applies to the agent's own ears. A rig that can't tell good from bad launders noise into confidence — worse than no rig.
+**Calibrate each gap measure before use**: feed it a known-good sample (the exemplar) and a deliberately bad rep, and confirm it separates them. This applies to the agent's own ears. A rig that can't tell good from bad launders noise into confidence — worse than no rig.
 
 ## Operating model
 
@@ -54,7 +54,7 @@ The catastrophic failure mode of embodied practice is confident-but-wrong feedba
   practice-log/       # per-session logs + captured performances
   ```
 
-- **State lives in the drill files.** Each drill carries its own stage, criterion, score history, and last-practiced date in frontmatter; `status` derives what's due from them. No separate database.
+- **State lives in the drill files.** Each drill carries its own stage, criterion, score history, and last-practiced date in frontmatter; `status` derives what's due from them.
 - **Live practice is the default.** The agent is in the loop during a session: rep → capture → score → one cue → rep. Protocol in `reference/session-protocol.md`; scheduling in `reference/scheduling.md`.
 - **The rig is part of the curriculum.** Sometimes you must build the apparatus before you can practice — a recording A/B loop, a scoring script, tape marks on the floor. Software rigs go in `rig/`; physical rigs are designed in the drill spec. Ask consent before installing anything.
 - **Modality playbooks.** Audio (accents, voice, instruments) is strong today — `reference/modality-audio.md`. Movement (dance, posture, sport) is honest-and-thin — `reference/modality-movement.md`.
@@ -63,10 +63,10 @@ The catastrophic failure mode of embodied practice is confident-but-wrong feedba
 
 | Command | Does |
 | --- | --- |
-| `setup "<mission>"` | Scaffold the workspace: interview the learner, write `MISSION.md`, collect first exemplars, design the first loop (don't decompose the whole domain — one loop running today beats a beautiful tree). |
+| `setup "<mission>"` | Scaffold the workspace: interview the learner, write `MISSION.md`, collect first exemplars, design the first loop (grow the decomposition one working loop at a time). |
 | `loop` | Design a new feedback loop with the learner: pick the next gap from `decomposition.md`, run the six-step method in `reference/loop-design.md`, triage tools, build/calibrate the rig, write the drill spec. |
 | `session` | Run a live practice session: assemble the due set, rig check, rep-by-rep coaching per `reference/session-protocol.md`, log and update drill state. The default inside an established workspace. |
-| `teach "<topic>"` | Teacher hat: a short, cited lesson in `lessons/` for the cognitive stage of a sub-skill (what rhoticity _is_, how a chord is voiced). Brief — it front-ends practice, never replaces it. |
+| `teach "<topic>"` | Teacher hat: a short, cited lesson in `lessons/` for the cognitive stage of a sub-skill (what rhoticity _is_, how a chord is voiced). Keep it brief and follow it with practice. |
 | `status` | Report the mission, drills by mastery stage, what's due and why, upcoming human checkpoints. The default at a glance. |
 
 ## Routing
@@ -78,7 +78,7 @@ The catastrophic failure mode of embodied practice is confident-but-wrong feedba
 
 ## Core rules
 
-- **Latency and friction budgets are hard constraints.** Rep-to-feedback must be seconds, not minutes; starting a session must be one command or zero. A loop that violates either will not survive week two — redesign it, don't exhort the learner.
+- **Latency and friction budgets are hard constraints.** Rep-to-feedback must take seconds; starting a session must be one command or zero. A loop that violates either will not survive week two — redesign it.
 - **Calibrate before trust** — and re-calibrate when the rig or the learner's level changes (§ Feedback fidelity).
 - **One cue per rep,** external-focus where possible ("land the note on the click", not "tense your soft palate"). The agent runs the interleaving and the difficulty; learners left alone block-practice what already feels good. See `reference/session-protocol.md` and `reference/motor-learning.md`.
 - **Perception before production.** If the learner can't hear/see the gap between themselves and the exemplar, the first drill is perceptual discrimination, not performance.

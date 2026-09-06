@@ -11,7 +11,7 @@
   ============================================================
   A CONSTRAINT INVESTIGATION - one self-contained page = the
   whole state. The agent edits the marked regions directly;
-  there is no separate state file. Each <section> carries
+  persist all state here. Each <section> carries
   data-status ("empty" | "active" | "done"); on resume, read
   these plus the dashboard to see where the work stands.
   Edit only between the  <!== FILL: name ==>  markers.
@@ -212,7 +212,7 @@ flowchart LR
     <div class="sec-head"><span class="n">3</span><h2>The hunt</h2><span class="st"></span></div>
     <p class="hint">Doubling tests first (capacity ×2? demand ×2?), then the suspects board — evidence against counts
     as much as evidence for. Trees from <em>dig</em> land here. Ends in the verdict: one constraint, typed and
-    confidence-marked. Suspects are never people; they are dependencies.</p>
+    confidence-marked. Name each suspect as a dependency.</p>
     <!-- FILL: find -->
     <table><thead><tr><th>Suspect</th><th>Type</th><th>Evidence for</th><th>Evidence against</th><th>Mark</th></tr></thead>
     <tbody></tbody></table>

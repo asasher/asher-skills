@@ -14,7 +14,7 @@ Read the ticket, comments, artifact links, and environment playbook. If this ses
 
 ## Settle the decisions
 
-Read the project instruction file, `CONTEXT.md`, `PRODUCT.md`, `DESIGN.md`, and relevant ADRs. Reconstruct open decisions from the ticket; re-ask nothing it settles. Run `interview` here, with `domain-modeling` recording resolved terminology. Use the writing standards when available.
+Read the project instruction file, `CONTEXT.md`, `PRODUCT.md`, `DESIGN.md`, and relevant ADRs. Reconstruct open decisions from the ticket and carry settled answers forward. Run `interview` here, with `domain-modeling` recording resolved terminology. Use the writing standards when available.
 
 Work in order, using `principle-experience-first` to question requirements and remove unnecessary behavior:
 
@@ -26,7 +26,7 @@ Offer a pause before implementation design. Research precise fact questions thro
 
 ## Record and approve
 
-Record decisions as they settle. Commit and push coherent context changes before publishing their ticket record and before every handoff or pause. A later machine continues from the remote, not this session's memory.
+Record decisions as they settle. Commit and push coherent context changes before publishing their ticket record and before every handoff or pause. The remote and ticket record must support continuation on another machine.
 
 Publish specs and research as HTML. Keep runtime prototypes in their useful format, with a published HTML explanation of the result and launch recipe. Commit and push artifact sources to `artifact/<ticket>` via `to-branch --push`, then publish through `to-web`. The ticket records the question, result, URL, and revision. Evidence media goes only to the bucket.
 

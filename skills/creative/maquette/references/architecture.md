@@ -42,12 +42,12 @@ export const resetDemo = () => { localStorage.removeItem("maquette-<product>-v1"
 
 ## The api seam
 
-Every component reads and mutates through `lib/api/*.ts`. Async functions, simulated latency, one place to tune feel. Components never touch fixtures or the store's internals directly.
+Every component reads and mutates through `lib/api/*.ts`. Async functions, simulated latency, one place to tune feel.
 
 ```ts
 // lib/api/net.ts
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
-export const latency = async () => sleep(250 + Math.random() * 300);  // 250–550ms: never instant, never slow
+export const latency = async () => sleep(250 + Math.random() * 300);  // 250–550ms simulated latency
 
 // lib/api/orders.ts
 export async function createOrder(input: OrderInput): Promise<Order> {

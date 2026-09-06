@@ -6,17 +6,17 @@ disable-model-invocation: true
 
 # Skill Loop
 
-A loop improves one target skill against one eval harness. Eval signals are the source of truth; do not edit from taste, hunches, or general skill advice unless the signal points there.
+A loop improves one target skill against one eval harness. Tie every edit to an eval signal.
 
 When a signal calls for infrastructure (a review surface, an eval tier, resumable state, harness compat), check the host repo for documented practice before inventing one — a playbook under `docs/agents/`, or a sibling skill that already owns the capability — and adopt the canonical implementation it names rather than building from scratch.
 
 ## Agent execution policy
 
-These evals run model _participants_: the agent under test, a fresh reviewer, an LLM judge. How each participant is produced is not a free choice — it has billing consequences — so it is fixed here. A workspace documents _which_ participants it uses and the exact commands, but **it may not weaken this policy**. If a workspace's own instructions tell you to run a Claude participant via the CLI, treat that as a defect: follow this policy instead and flag the workspace instruction for fixing.
+These evals run model _participants_: the agent under test, a fresh reviewer, an LLM judge. Participant routes follow the billing policy below. A workspace records its participants and commands within that policy. If a workspace's own instructions tell you to run a Claude participant via the CLI, treat that as a defect: follow this policy instead and flag the workspace instruction for fixing.
 
-- **Anthropic / Claude participants → in-session, never the CLI.** Produce them with the orchestrator itself or an Agent-tool subagent. A subagent shares the orchestrator's session quota, context, and prompt cache. Do **not** shell out to `claude -p` / `claude --print` / any nested `claude` process: that authenticates as a separate metered client — per-token API billing when an `ANTHROPIC_API_KEY` is present, otherwise a fragmented, separately-rate-limited subscription session — and is never the right way to get a Claude result inside a loop you are already running.
-- **Non-Anthropic model CLIs → fine when they bill to a subscription.** Running `codex exec` under a ChatGPT plan (or an equivalent subscription-authed CLI) draws from that plan's included allowance, so delegate to it freely — from Claude Code, hold the run in a watched wrapper subagent (the orchestrator-subagent pattern), not a fire-and-forget shell.
-- **Hard-gated exception.** If you are the orchestrator and you are _not_ Claude Code (e.g. you are Codex), you cannot spawn a Claude subagent. If a Claude result is genuinely required and the only path is `claude -p`, **stop, loudly warn the human that this incurs extra usage, and get explicit approval before running it.** Never run it silently. Harnesses encode this gate as an explicit opt-in (e.g. an `ALLOW_CLAUDE_CLI=1` env flag) so it cannot happen by default.
+- **Anthropic / Claude participants → in-session.** Produce them with the orchestrator itself or an Agent-tool subagent, sharing the session quota and prompt cache. A nested Claude CLI authenticates separately: it uses per-token billing with `ANTHROPIC_API_KEY`, otherwise a separate subscription session. That route requires the exception below.
+- **Non-Anthropic model CLIs → fine when they bill to a subscription.** Running `codex exec` under a ChatGPT plan (or an equivalent subscription-authed CLI) draws from that plan's included allowance, so delegate to it freely — from Claude Code, hold the run in a watched wrapper subagent (the orchestrator-subagent pattern).
+- **Hard-gated exception.** If you are the orchestrator and you are _not_ Claude Code (e.g. you are Codex), you cannot spawn a Claude subagent. If a Claude result is genuinely required and the only path is `claude -p`, **stop, loudly warn the human that this incurs extra usage, and get explicit approval before running it.** Harnesses encode this gate as an explicit opt-in (e.g. an `ALLOW_CLAUDE_CLI=1` env flag) so it cannot happen by default.
 
 ## Inputs
 
@@ -27,7 +27,7 @@ The user must provide:
 
 An eval is runnable only when you can run every test case into a fresh `iteration-N/` directory and then grade and aggregate that same directory. If the command or output location is ambiguous, stop and ask for the exact run command.
 
-Do not change eval definitions, assertions, graders, or test cases during the loop unless the human explicitly says the eval is wrong. Changing the eval invalidates comparison with earlier iterations.
+Keep eval definitions, assertions, graders, and test cases fixed for comparable iterations. Changing them requires the human's explicit ruling that the eval is wrong and starts a new comparison baseline.
 
 ## The Loop
 
@@ -37,11 +37,11 @@ Do not change eval definitions, assertions, graders, or test cases during the lo
 
 3. **Ask a fresh reviewer.** Load `reference/reviewer-prompt.md` and adapt it to the packet. Use a separate model context when available, per the Agent execution policy above. If no separate context is available, run the review in your own context but keep the prompt and response explicit in the notes. Completion: the reviewer returns either `NO_CHANGE` or a ranked edit plan with cited eval evidence, exact target regions, expected metric movement, risks, and rejected tempting edits.
 
-4. **Apply only gated edits.** Accept a proposed edit only when it is tied to eval evidence, improves predictability, passes the no-op test, avoids duplication, preserves a single source of truth, and stays within the target skill. Prefer deletion, sharpening, and co-location over adding new prose. Do not rewrite stable sections or unrelated files. Completion: the target `SKILL.md` contains only accepted edits, or the no-change reason is recorded.
+4. **Apply only gated edits.** Accept a proposed edit only when it is tied to eval evidence, improves predictability, passes the no-op test, avoids duplication, preserves a single source of truth, and stays within the target skill. Prefer deletion, sharpening, and co-location over adding new prose. Completion: the target `SKILL.md` contains only accepted edits, or the no-change reason is recorded.
 
-5. **Run the next iteration.** Refresh any skill snapshot the harness uses, such as `conditions/<skill-name>.md`, before running. Create or run into `iteration-(N+1)/`, where `N` is the latest completed iteration. Run the full test matrix, not a subset, for a comparison iteration. Produce each model participant per the Agent execution policy above. Completion: every test case was attempted in the new iteration directory; missing outputs or command failures are preserved as failure evidence.
+5. **Run the next iteration.** Refresh any skill snapshot the harness uses, such as `conditions/<skill-name>.md`, before running. Create or run into `iteration-(N+1)/`, where `N` is the latest completed iteration. Run the full test matrix for each comparison iteration. Produce each model participant per the Agent execution policy above. Completion: every test case was attempted in the new iteration directory; missing outputs or command failures are preserved as failure evidence.
 
-6. **Grade and aggregate.** Run the eval's graders and aggregator for the new iteration. If the eval has manual or visual assertions, fill them only from the eval's stated rubric. Use a blind LLM judge only when the eval defines one; mark those decisions as LLM-graded. Do not overwrite human `feedback.json`; append or create a separate review note if needed. Completion: the new iteration has grading artifacts and an aggregate result.
+6. **Grade and aggregate.** Run the eval's graders and aggregator for the new iteration. If the eval has manual or visual assertions, fill them only from the eval's stated rubric. Use a blind LLM judge only when the eval defines one; mark those decisions as LLM-graded. Preserve human `feedback.json`; add agent judgments in a separate review note. Completion: the new iteration has grading artifacts and an aggregate result.
 
 7. **Compare and review.** Compare the new iteration to the previous iteration and the baseline on the primary metric, regressions, failure count, manual feedback, token cost, and runtime. Show the human the patch summary, metric deltas, fixed failures, regressions, and remaining candidate improvements. Completion: the human chooses continue or stop, or the stop criteria below are met.
 
@@ -67,4 +67,4 @@ After each iteration, report:
 - Aggregate deltas versus the previous iteration and baseline.
 - Remaining failures and whether the next action is continue, stop, or human decision.
 
-Previous `iteration-*` directories are evidence. Do not rewrite them. If a failed run must be repeated because of infrastructure failure, write the rerun into a new iteration directory or record the rerun reason inside the iteration before changing anything.
+Preserve previous `iteration-*` directories as evidence. If a failed run must be repeated because of infrastructure failure, write the rerun into a new iteration directory or record the rerun reason inside the iteration before changing anything.

@@ -7,11 +7,11 @@ metadata:
 
 # Verify your work
 
-Perform a checking pass without fixing the change. Return findings before the owner begins any fix, even when both stages run in this session.
+Check the existing implementation. Return findings before the owner begins any fix, even when both stages run in this session.
 
 ## Pin and prepare
 
-Record head, target base, approved spec revision, environment, and fixture state. Confirm the checkout matches the requested head. A reviewer may read source concurrently; nobody edits code or competes for runtime fixtures during this pass.
+Record head, target base, approved spec revision, environment, and fixture state. Confirm the checkout matches the requested head. Keep code fixed and reserve runtime fixtures for this pass; a reviewer may read source concurrently.
 
 Read the ticket, approved spec, commits, and diff. List every acceptance criterion plus relevant regression, edge-state, seed-coverage, and data-safety claims. Read `docs/agents/environment.md` for commands, drivers, auth, and disposable fixtures. Without it, disclose the gap and use the repo's documented commands. Reset only stores explicitly marked disposable for this ticket.
 
@@ -24,7 +24,7 @@ Choose proof that would fail if the claim were false:
 - For UI work, script the changed journey and relevant empty, loading, error, disabled, and responsive states. Drive the app and capture the result.
 - For destructive data changes, verify preservation and failure paths against representative fixtures.
 
-Honor each criterion's **guard** (durable suite test) or **temporary check** choice. If undeclared, record the gap, use temporary checks, and flag needed durable coverage for the owner. Compilation alone proves no behavior.
+Honor each criterion's **guard** (durable suite test) or **temporary check** choice. If undeclared, record the gap, use temporary checks, and flag needed durable coverage for the owner. Use runtime checks for behavioral claims.
 
 Capture exact commands, outputs, and their own exit codes. Serialize checks sharing mutable state. Inspect every visual result for the claimed content, legibility, and clipping. Preserve temporary scripts and captures outside tracked source; media never enters Git. Remove source-tree probes after preserving their exact contents with the run.
 
@@ -34,4 +34,4 @@ An inaccessible check is **not verified**, with its reason. After three failed a
 
 Use `technical-writing` when available. For every claim, return its id, **passed / failed / pre-existing / not verified**, check kind, command, output or visual evidence, and failure explanation. Include fixture details, playbook deviations, artifact paths, and exact temporary scripts or durable source links so evidence can be reused and published.
 
-Recheck head and base. Moved inputs make the report stale. End with the revisions, verdict totals, and unresolved claims; never turn missing proof into a pass.
+Recheck head and base. Moved inputs make the report stale. End with the revisions, verdict totals, and unresolved claims. Passing verdicts require observed proof.

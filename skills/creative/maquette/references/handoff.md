@@ -11,7 +11,7 @@ Generate it from ground truth, not memory: `lib/schema.ts`, the `lib/api/` surfa
 
 ## What this repo is
 A maquette: a browser-only, high-fidelity prototype. The UX, journeys, screens, and interaction design are
-the approved spec — implement behind them, don't redesign them. BRIEF.md and JOURNEYS.md carry intent.
+the approved spec — implement behind them while preserving their interfaces. BRIEF.md and JOURNEYS.md carry intent.
 
 ## Data model
 lib/schema.ts is the schema of record. Field names follow the domain deliberately. Notes per entity:

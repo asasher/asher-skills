@@ -8,7 +8,7 @@ This type is **parametric**. The diagram is fully determined by a small list of 
 
 ## 1. Inputs — the parameter contract
 
-Before drawing, collect these from the user (or accept them as a YAML/JSON block). Everything in this reference is derived from these inputs. Don't invent geometry on the fly.
+Before drawing, collect these from the user (or accept them as a YAML/JSON block). Everything in this reference is derived from these inputs.
 
 ```yaml
 chevrons:                       # ordered left → right; reserved names auto-promote to vertical
@@ -72,7 +72,7 @@ light: false
 
 ## 2. Layout formulas — deterministic geometry
 
-Every coordinate below is derived from the inputs. **No hardcoded numbers in examples that aren't justified here.**
+Derive every coordinate from the inputs and formulas below.
 
 ### 2.1 Canvas
 
@@ -423,7 +423,7 @@ When `light: true`, swap these tokens:
 
 ## 7. Reproducibility checklist (the taste gate)
 
-Before emitting SVG, verify **every** item. If any fails, fix it — don't ship.
+Before emitting SVG, verify **every** item and fix any failures.
 
 1. Every cluster `node.cx` equals its chevron's `cx` (§2.2 + §2.7). This is what makes the chevron banner a real legend.
 2. Every chevron `width` is a multiple of 4 and ≥ 120.

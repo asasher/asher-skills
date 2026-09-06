@@ -13,7 +13,7 @@ Write `DEMO.md` alongside the code:
 ## Demo controls
 
 - **Persona switcher:** `?persona=dispatcher` (URL-backed) plus a switcher in the demo panel. Switching persona changes current user, permissions shown, and assigned records — no fake login screen unless the login _is_ a demo beat.
-- **Hidden demo panel** on a keyboard shortcut (e.g. `Ctrl+.` — avoid browser-reserved combos): reset to pristine, switch persona, trigger scripted events, time-jump (if built). Invisible otherwise; it must never appear in a buyer's hands.
+- **Hidden demo panel** on a keyboard shortcut (e.g. `Ctrl+.` — avoid browser-reserved combos): reset to pristine, switch persona, trigger scripted events, time-jump (if built). Keep it hidden during the buyer-facing walkthrough.
 - **Scripted events:** each beat that needs the world to act ("an order just came in") is a demo-panel button that injects a fixture through the normal api seam — so the toast, badge, and list update exactly as the real product would.
 - **The agent beat:** rehearse the MCP moment end to end (agent connected, bus relaying, toasts showing the agent's actions). Have the exact prompt to type written in `DEMO.md`. Fallback: the Integrations screen + a canned transcript.
 - **Reset discipline:** reset to pristine before every meeting; bump the localStorage version key on every redeploy so no stale state ever loads.

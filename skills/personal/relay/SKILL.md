@@ -26,8 +26,8 @@ Each command's reference owns its detailed contract; load it before acting. A sc
 ## Run
 
 1. Resolve the repository root, read `docs/agents/relay.md`, and run `scripts/validate_instance.py`. Stop on stale profile hashes, incomplete bindings, an unverified sender, or recipient/disclosure conflict.
-2. Follow the repository playbook's collection contract for every provider bound in `bindings.json`, then normalize the resulting facts. The portable skill does not invent provider queries or local meanings for shipped, paid, committed, or stage-changed.
-3. Produce exactly one validated immutable bag or explicit exclusion per eligible audience; never combine audiences.
+2. Follow the repository playbook's collection contract for every provider bound in `bindings.json`, then normalize the resulting facts. Use that contract's queries and definitions for shipped, paid, committed, and stage-changed.
+3. Produce exactly one validated immutable bag or explicit exclusion per eligible audience.
 4. Render HTML, text, and forced light/dark previews from the same bag, then build the self-contained review sheet with `scripts/build_review_sheet.py`.
 5. Present the sheet's exact content in chat — per message: sender, To, CC, subject and template identity, the full rendered body, evidence summary, and doc hash, plus the `review.html` path for local viewing — and await the user's explicit in-chat approval. On approval, append a hash-bound `chat_approval` event to the run's `review-state/events.jsonl`.
 6. Deliver with `scripts/agentmail_delivery.py`, which independently re-verifies approval before any provider write.

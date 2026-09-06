@@ -167,11 +167,9 @@ Hairline separator at `legend_y_top`. Below the separator, one row of style swat
 
 ---
 
-## 3. Cells, not connectors
+## 3. Cells
 
-A matrix diagram has **no connectors** — there are no arrows between cells, no flow lines. The diagram's information is entirely in the cell content + cell styling. The only "connector-like" element is the focal cell's accent border, which visually "calls out" a specific intersection.
-
-Cells emit **no edges**. Don't add arrows pointing into cells or between cells — they belong in a different diagram type.
+Encode permissions entirely through cell content and styling. Use the focal cell’s accent border to call out a specific intersection.
 
 ---
 

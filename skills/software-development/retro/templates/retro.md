@@ -11,9 +11,9 @@
 | Upstream feedback | **disabled** |
 | Decided by / on | _unset — recorded by `retro setup`_ |
 
-Enabled means retro passes may **draft and propose** upstream feedback issues. It never means
-submit: every submission requires the user's approval of the verbatim text, per issue. Filing is
-pseudonymous, not anonymous — issues are authored by the submitting GitHub account.
+Enabled means retro passes may **draft and propose** upstream feedback issues. Every submission
+requires the user's approval of the verbatim text, per issue. The sanitized issue is attributed
+to the submitting GitHub account.
 
 ## Upstream target
 
@@ -46,5 +46,5 @@ untracked `retro/transcripts.md`, written by setup:
   cwd each session file records.
 
 Locations are verified at use: when `retro/transcripts.md` is missing or a recorded location no
-longer resolves, re-run setup's transcript-binding step rather than guessing. A retro pass reads
+longer resolves, re-run setup's transcript-binding step. A retro pass reads
 only runs since the last pass.

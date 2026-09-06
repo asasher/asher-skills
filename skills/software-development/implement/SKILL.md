@@ -13,7 +13,7 @@ Work in the supplied worktree and branch. If given a ticket from the primary che
 Read the brief, existing changes, and `docs/agents/environment.md` for commands, generated files, and runner traps. Check load-bearing assumptions against the code. Preserve approved decisions; stop and record scope or product contradictions.
 
 - Defects use `diagnosing-bugs`.
-- New behavior uses `tdd` at the agreed public seams. Settled test choices need no repeat confirmation.
+- New behavior uses `tdd` at the agreed public seams. Carry settled test choices forward.
 - Use `principle-codebase-design` for module decisions and `principle-type-system-discipline` for typed boundaries. Apply TypeScript guidance when relevant.
 - Inherit shaping's context commits. Use `domain-modeling` only for new terms or decisions introduced by this work.
 

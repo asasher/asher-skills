@@ -48,4 +48,4 @@ const api = {
 };
 ```
 
-Each mock returns one specific shape — no conditional logic in test setup.
+Each mock returns one specific shape.

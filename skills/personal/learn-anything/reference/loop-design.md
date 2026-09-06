@@ -1,6 +1,6 @@
 # Designing a feedback loop
 
-Read this when running `loop` (or the first loop inside `setup`). The output of one pass is a complete drill spec in `drills/`, a calibrated gap measure, and — when needed — a rig in `rig/` or a physical-rig design in the spec. This is a **conversation with the learner**, not a form to fill; they know things about their body, their gear, and their tolerance for friction that you don't.
+Read this when running `loop` (or the first loop inside `setup`). The output of one pass is a complete drill spec in `drills/`, a calibrated gap measure, and — when needed — a rig in `rig/` or a physical-rig design in the spec. Design through a **conversation with the learner**, using their knowledge of their body, gear, and tolerance for friction.
 
 ## The six steps
 
@@ -12,7 +12,7 @@ Then run the perception check: can the learner _perceive_ the difference between
 
 ### 2. Pick one gap
 
-Decompose _just enough_ to isolate a single measurable sub-skill, and add only that node to `decomposition.md`. "Sound Scottish" is not a gap; "produce a tapped /r/ between vowels" is. Resist mapping the whole domain up front — that's planning-as-procrastination, and the map will be wrong anyway until a few loops have run. One loop running today beats a beautiful tree.
+Decompose _just enough_ to isolate a single measurable sub-skill, and add only that node to `decomposition.md`. "Sound Scottish" is not a gap; "produce a tapped /r/ between vowels" is. Grow the map as working loops reveal the next gaps.
 
 ### 3. Design the loop
 
@@ -31,7 +31,7 @@ For each of trap and gap measure, walk the three tiers **in order** — build on
 - **Adopt** — third-party tools worth installing: `parselmouth`/Praat and `librosa` for phonetics and pitch, a metronome, a slow-downer, ElevenLabs for generating exemplar audio, pose estimation if the movement playbook justifies it. Ask consent before installing; note each adoption in the drill spec.
 - **Build** — the rig tier. Software rigs live in `rig/`: an A/B loopback player (record a rep, instantly hear target-then-you back to back — cheap to build, devastatingly effective), a one-command capture-and-score script, a rubric logger. **Physical rigs count too** — tape marks on the floor, a mirror placement, a cork-between-teeth articulation setup, a capo scheme that makes a passage practicable. The agent designs these even though the learner builds them; the design goes in the drill spec.
 
-Sometimes you must build the rig before you can practice at all. That's not a detour from learning — it _is_ the loop-design work, and it's why this skill exists.
+Sometimes you must build the rig before you can practice at all. Building it is part of loop design.
 
 ### 5. Calibrate before trusting
 
@@ -67,7 +67,7 @@ The spec is a draft until it survives real reps. Run one session; the first one 
 
 ## Failure patterns
 
-- **The loop nobody runs** — latency or friction budget violated. Redesign; never exhort.
+- **The loop nobody runs** — latency or friction budget violated. Redesign the loop to fit the budgets.
 - **The confident bad judge** — an uncalibrated measure (often the agent's ears) grooving in errors. Step 5 exists for this; when in doubt, downgrade the label.
 - **The beautiful tree** — a full decomposition and zero reps. Cap decomposition at the node you're looping.
 - **The dignified drill** — too big to close a gap ("practice the song"). Shrink until a single rep can fail for exactly one reason.

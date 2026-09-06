@@ -13,4 +13,4 @@
 
 ## Rules
 
-This skill doesn't fully own `PRODUCT.md` so only write to `## User types` section unless otherwise instructed.
+Update `## User types`; other sections require user direction.

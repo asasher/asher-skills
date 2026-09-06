@@ -30,7 +30,7 @@ Accents, voice acting, singing, instruments. This is the **strong** playbook: ca
 ## Exemplar generation (adopt tier)
 
 - **ElevenLabs** (or equivalent TTS with accent/voice control) can synthesize exemplars on demand: the same sentence in the target accent, a voice-acting register at three intensities, minimal pairs that no recording of a real speaker happens to contain. Powerful for coverage; **verify authenticity before trusting** — synthesized "Scottish" can be stage-Scottish. Prefer real speakers for the gold standard and synthesis for volume; when they conflict, the human recording wins.
-- Real-speaker sources: film/interview clips, accent archives (e.g. IDEA), instructional recordings. Clip the exact phrase into `exemplars/`, don't cite a 40-minute video.
+- Real-speaker sources: film/interview clips, accent archives (e.g. IDEA), instructional recordings. Clip the exact phrase into `exemplars/`.
 
 ## Protocols that earn their keep
 

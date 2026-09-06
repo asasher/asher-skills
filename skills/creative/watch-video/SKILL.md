@@ -5,9 +5,9 @@ description: Watch a video by reading contact sheets — tiled, timestamped fram
 
 # Watch Video
 
-A vision model reads one image well and a thousand frames badly. So never watch frame-by-frame: work like a photographer at a light table. Build a **contact sheet** — frames shrunk to tiles, timestamps burned in, packed into one image — scan it, mark the **selects**, then **loupe** the keepers at full resolution. One sheet carries minutes of temporal structure in a single image, and because the motion sits side by side, causality reads at a glance.
+Work like a photographer at a light table. Build a **contact sheet** — frames shrunk to tiles, timestamps burned in, packed into one image — scan it, mark the **selects**, then **loupe** the keepers at full resolution. One sheet carries minutes of temporal structure in a single image, and because the motion sits side by side, causality reads at a glance.
 
-`scripts/framesheet.py` (needs ffmpeg + Pillow on PATH) builds every sheet — don't hand-roll ffmpeg tiling; its escaping is a trap and the geometry budget is already tuned.
+Use `scripts/framesheet.py` (needs ffmpeg + Pillow on PATH) to build every sheet with the tuned geometry budget.
 
 ## The drill-down
 
@@ -26,5 +26,5 @@ Three passes, each one sheet-read deep. Stop at the shallowest pass that answers
 ## Blind spots
 
 - **Sub-interval events** — uniform sampling skips moments shorter than one tile interval. Hunting a beat the index didn't surface: `ffmpeg -i VIDEO -vf "select='gt(scene,0.3)',showinfo" -f null - 2>&1 | grep pts_time` lists scene cuts; window around them.
-- **Grid order** — cite tiles by their burned-in timestamp, never by grid position; position guesses transpose.
+- **Grid order** — cite tiles by their burned-in timestamp.
 - **Audio** — a sheet answer to a speech question is wrong by construction; see Probe.

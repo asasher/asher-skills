@@ -40,7 +40,7 @@ For a sequential batch, pass `--batch batch.json --outdir DIR`; the JSON shape i
 
 ## Layered mode: asset-first
 
-Before writing the plan, read [the layered scene and artifact contract](reference/layered-mode.md). Plan the layers before generating. Every movable foreground/subject object gets its own image-generation request on a flat key background; the backdrop is generated separately as a full-bleed image. The composite is derived from those layer assets, never treated as their source.
+Before writing the plan, read [the layered scene and artifact contract](reference/layered-mode.md). Plan the layers before generating. Every movable foreground/subject object gets its own image-generation request on a flat key background; the backdrop is generated separately as a full-bleed image. Derive the composite from those layer assets.
 
 ```bash
 python3 "$SKILL_DIR/scripts/codex_imagegen.py" \
@@ -49,7 +49,7 @@ python3 "$SKILL_DIR/scripts/codex_imagegen.py" \
 
 The output is a versioned directory containing prompts, raw generations, transparent layer PNGs, `manifest.json`, and `composite.png`. A failed run remains on disk with `status: "failed"` so completed layers are retained as evidence.
 
-Do not imply reconstruction fidelity: this mode does not infer hidden pixels, split a flattened source, or use Segment Anything. If the user provides only a flattened image, stop at a flat artifact or ask them to approve a future segmentation/recreation workflow.
+This mode generates planned assets independently; reconstruction from a flattened source is unsupported. If the user provides only a flattened image, stop at a flat artifact or ask them to approve a future segmentation/recreation workflow.
 
 ## Spritesheet mode
 
@@ -75,7 +75,7 @@ Flat transparency, layered foregrounds, and sprite extraction all use `scripts/i
 
 ## Verification
 
-For flat output, inspect subject accuracy and composition, plus every edge when keyed. For layered output, inspect every layer independently, then confirm `manifest.json` is complete and `composite.png` reflects manifest z-order and placement. For spritesheets, use `--validate`, confirm the expected asset count and names, and inspect a contact sheet. A zero exit code alone does not pass verification.
+For flat output, inspect subject accuracy and composition, plus every edge when keyed. For layered output, inspect every layer independently, then confirm `manifest.json` is complete and `composite.png` reflects manifest z-order and placement. For spritesheets, use `--validate`, confirm the expected asset count and names, and inspect a contact sheet.
 
 Common failures:
 

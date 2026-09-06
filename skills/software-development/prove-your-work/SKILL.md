@@ -30,4 +30,4 @@ Use PNG/JPEG for states. For flows, capture MP4 and make a short GIF when inline
 
 Recheck the PR head and target base before posting. A moved input needs renewed verification. Post the package as a PR comment and link it from the body, within the task's existing publication authorization.
 
-Complete when every claim has evidence or an explicit gap, every URL works, every visual was inspected, and the package identifies the current revisions. A published gap is not a passing verification verdict.
+Complete when every claim has evidence or an explicit gap, every URL works, every visual was inspected, and the package identifies the current revisions. Claims with gaps retain their unverified verdict.

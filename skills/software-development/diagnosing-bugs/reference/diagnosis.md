@@ -14,7 +14,7 @@ If no such loop is possible, stop. List what was tried and request the missing r
 
 ## 2. Reproduce and minimise
 
-Run the loop and confirm it shows the reported failure—not a nearby failure. Capture the exact error, output, or timing. Then remove inputs, callers, configuration, data, and steps one at a time, rerunning after each cut.
+Run the loop and confirm it shows the exact reported failure. Capture the exact error, output, or timing. Then remove inputs, callers, configuration, data, and steps one at a time, rerunning after each cut.
 
 **Gate:** the smallest scenario still goes red and every remaining element is load-bearing.
 
@@ -34,7 +34,7 @@ Test one prediction and change one variable at a time. Prefer a debugger or REPL
 
 Before the fix, turn the minimal reproduction into a failing test at a seam that exercises the real bug pattern as it occurs at the call site. Watch it fail, apply the smallest causal fix, watch it pass, then rerun the Phase 1 command against the original unminimised scenario.
 
-If no correct seam exists, record that architectural gap instead of writing a shallow test that cannot catch the bug. The no-seam finding is valid proof only alongside the original loop going red before and green after.
+If no correct seam exists, record that architectural gap. The no-seam finding is valid proof only alongside the original loop going red before and green after.
 
 **Gate:** regression proof passes or the no-seam finding is explicit, and the original loop is green.
 

@@ -11,20 +11,20 @@ Two agents dissolve one question into **one shared** `dissolution.html`. The sec
 
 ## The stance
 
-A debate in service of a dissolution, not a fight to win a side. Each turn:
+Use the debate to trace and resolve the confusion. Each turn:
 
-- **Build on** what your partner got right — don't restate it.
+- **Build on** what your partner got right.
 - **Challenge** the weakest point. The recurring three, worth checking every turn:
   - a **strand assumed as a premise** — a sub-question stated as a background fact ("drinks _despite harm_") instead of split out and tested (see `method.md`, move 3);
   - a **"value" that's really empirical**, or an empirical strand that smuggles a metaphysical residue (e.g. "loss of control" hiding "could not have done otherwise");
   - a **resolution leaning on desert** — settling a value strand by what's _deserved_ rather than by which stance produces better outcomes (see `method.md`, move 5).
-- **Converge honestly.** Don't rubber-stamp. If you still feel a pull, say so in `discussion.md`.
+- **Name residual confusion.** Record any remaining pull in `discussion.md`.
 
 ## Turn discipline
 
 - Act only on your turn. Before editing, **read the whole `dissolution.html` and all of `discussion.md`** — your partner may have moved things.
-- Make real edits to the page, then append your `discussion.md` block. Keep the page the source of truth; keep `discussion.md` to moves and challenges, not a copy of the page.
-- Your partner is a different mind — don't assume they reason or format like you. Be explicit.
+- Make real edits to the page, then append your `discussion.md` block. Keep the page the source of truth; keep `discussion.md` to moves and challenges.
+- Make your reasoning and editing conventions explicit for your partner.
 
 ## Convergence & the gate
 

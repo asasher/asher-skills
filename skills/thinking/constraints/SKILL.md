@@ -12,16 +12,16 @@ The whole state lives in **one self-contained HTML page**, `constraint.html` —
 
 ## Core rules
 
-- **No goal, no constraint.** A constraint only exists relative to a goal with a countable throughput unit. If the goal is vague, every annoyance looks like a constraint — pin the goal before hunting.
+- **Pin the goal first.** A constraint only exists relative to a goal with a countable throughput unit. If the goal is vague, every annoyance looks like a constraint — pin the goal before hunting.
 - **The constraint is a hypothesis, not a verdict.** Every claim carries a confidence mark — _suspected / evidenced / validated_ — and the mark only moves rightward on observables: queue sizes, wait times, aging work, expedite frequency, calendar load, a moved system metric. Convert opinions to observables before recording them ("review is slow" → median review wait, count of PRs older than SLA).
-- **One question at a time, anchored with a hypothesis.** Offer your working read and let the user correct it — corrections are denser than free recall. Never fire a questionnaire.
-- **Exploit before elevate.** Never recommend hiring, buying, or reorganizing until the exploit checklist is visibly exhausted and subordination has been tried. Free capacity is almost always hiding in misuse.
-- **Name the dependency, never the person.** Not "Brent is the bottleneck" but "the system routes everything through one person's knowledge." Not "the founder can't delegate" but "no decision rules exist that let non-founder work move safely." The user's own self-blame gets the same reframe.
+- **One question at a time, anchored with a hypothesis.** Offer your working read and let the user correct it — corrections are denser than free recall.
+- **Exploit before elevate.** Recommend hiring, buying, or reorganizing only after the exploit checklist is visibly exhausted and subordination has been tried. Free capacity is almost always hiding in misuse.
+- **Name the dependency.** Not "Brent is the bottleneck" but "the system routes everything through one person's knowledge." Not "the founder can't delegate" but "no decision rules exist that let non-founder work move safely." The user's own self-blame gets the same reframe.
 - **The system, not the parts.** Refuse local-efficiency wins that don't move system throughput. Before any fix: _if this improves 50%, which system-level number changes?_
-- **Don't let analysis become the constraint.** Timebox the hunt; the aim is the next highest-leverage experiment, not certainty. A suspected-grade constraint with a cheap reversible experiment beats a validated-grade one three sessions from now.
+- **Timebox the hunt.** Aim for the next highest-leverage experiment. A suspected-grade constraint with a cheap reversible experiment beats a validated-grade one three sessions from now.
 - **Know when ToC is the wrong lens.** Contested goal, exploratory work with no repeatable flow, unknown product-market fit, safety/ethics/trust issues — say so, point to a better framing, and stop.
 - **The page stays current.** After every working session: update the affected sections and their `data-status`, the dashboard, the `Updated` date, and prepend a session-log entry. Diagrams re-render on save — keep them true. Mechanics: [reference/artifact.md](reference/artifact.md).
-- **Evidence files go in `sources/`.** Exports, screenshots, metrics snapshots — saved next to the page and cited `[n]`; never pasted as walls of text.
+- **Evidence files go in `sources/`.** Exports, screenshots, metrics snapshots — saved next to the page and cited `[n]`.
 
 ## Commands
 
@@ -46,7 +46,7 @@ The whole state lives in **one self-contained HTML page**, `constraint.html` —
 4. **First word matches a command** → load its reference and run it. Everything after is the detail.
 5. **Aliases**: `goal` → `map`; `hunt`, `bottleneck` → `find`; `crt`, `udes`, `why` → `dig`; `conflict`, `stuck` → `cloud`; `exploit`, `subordinate`, `elevate` → `plan`; `test`, `hypothesis` → `experiment`; `moved`, `check` → `review`.
 6. **First word doesn't match** → infer the step from the request, state the inference, and proceed. "Why aren't we shipping more"-shaped requests infer `find` (via `map` if the page has no flow map yet); "should we hire" infers `plan` (the exploit gate); "did it work" infers `review`.
-7. **Step guards**: `find` needs a goal and flow map — run `map` first if the Goal section is empty. `plan` needs a named constraint. `experiment` needs at least one plan move. Guards are one sentence, then do the prerequisite, not a lecture.
+7. **Step guards**: `find` needs a goal and flow map — run `map` first if the Goal section is empty. `plan` needs a named constraint. `experiment` needs at least one plan move. State the guard in one sentence, then do the prerequisite.
 
 ## The arc
 
@@ -55,7 +55,7 @@ The whole state lives in **one self-contained HTML page**, `constraint.html` —
 ## Output standards
 
 - Every session ends with the page updated and **one concrete next action with a date** — usually an experiment's next measurement or its review.
-- The named constraint is always stated with its **type** (physical / policy / paradigm / market / attention), its **confidence mark**, and the evidence behind the mark — in the dashboard, not buried in prose.
+- The named constraint is always stated with its **type** (physical / policy / paradigm / market / attention), its **confidence mark**, and the evidence behind the mark — in the dashboard.
 - Plans show the exploit moves _before_ any elevate option, and every elevate option carries its throughput- accounting test (ΔT vs ΔI + ΔOE).
 - Experiment cards state a numeric-or-observable prediction and a review date. "Try it and see" is not a card.
 - Diagrams carry the evidence: queue counts annotated on the flow map, confidence chips on suspects, red highlight on the constraint node. Someone opening the page cold should find the constraint in ten seconds.

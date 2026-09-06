@@ -15,10 +15,10 @@ Three questions structure all the work (Goldratt's thinking-process spine):
 ## The Five Focusing Steps
 
 1. **Identify** the constraint. Operational test: _if this one thing had a little more usable capacity or less waiting, would the whole system produce more goal-units now?_
-2. **Exploit** it — get the most from what already exists, spending nothing: never starve it, never feed it defective or low-value work, quality-check before it, offload what doesn't truly need it, kill its interruptions.
+2. **Exploit** it — get the most from what already exists, spending nothing: keep ready, high-value work available, quality-check before it, offload work others can do, and protect its focus.
 3. **Subordinate** everything else — release work at the constraint's pace, cap WIP in front of it, let non-constraints idle rather than pile up queues, change priorities and metrics to protect it.
 4. **Elevate** — only after exploit and subordinate are visibly exhausted: hire, buy, automate, redesign, or (for a market constraint) grow demand. Test any elevation with throughput accounting: does throughput rise enough to justify the added investment and operating expense?
-5. **Repeat** — the constraint moves. Go back to step 1, and _don't let inertia become the constraint_: rules, buffers, and metrics built for yesterday's constraint are prime suspects for today's.
+5. **Repeat** — the constraint moves. Go back to step 1, and _review inherited rules_: rules, buffers, and metrics built for yesterday's constraint are prime suspects for today's.
 
 The two mistakes that dominate practice: **jumping to elevate** (buying/hiring before exploiting — exploit and subordinate usually expose hidden capacity for free) and **inertia at step 5** (still optimizing the old constraint after it moved).
 
@@ -63,7 +63,7 @@ Corollaries worth quoting:
 
 - _An hour lost at the bottleneck is an hour lost for the entire system. An hour saved at a non-bottleneck is a mirage._
 - Local efficiency is the enemy: a non-constraint at 100% utilization mostly manufactures WIP, lead time, and expediting.
-- Don't balance capacity; balance flow. Idle time away from the constraint can be the price of flow.
+- Balance flow. Idle time away from the constraint can be the price of flow.
 - A non-constraint's proper utilization is set by the constraint, not by its own potential.
 
 ## Drum-Buffer-Rope (the operating pattern for `plan`)
@@ -80,7 +80,7 @@ Say so and stop rather than force it:
 - Many **independent value streams** with no shared throughput measure — split into systems first; each may have its own constraint.
 - A solvable **formal optimization** exists and precision matters (stable product-mix/scheduling) — ToC heuristics can lose to the math.
 
-And the standing hedges: treat "the constraint is X" as a hypothesis with a confidence mark, timebox the diagnosis (don't let analysis become the constraint), prefer reversible experiments to reorgs, and re-identify on a cadence.
+And the standing hedges: treat "the constraint is X" as a hypothesis with a confidence mark, timebox the diagnosis, prefer reversible experiments to reorgs, and re-identify on a cadence.
 
 ## The workspace
 
