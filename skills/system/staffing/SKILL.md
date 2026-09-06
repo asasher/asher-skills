@@ -1,29 +1,31 @@
 ---
 name: staffing
-description: Different tasks require different models and how they are used. Use this when choosing a model for a task.
+description: Choose a model and execution route when staffing a task.
+metadata:
+  requires: [codex-imagegen]
 ---
 
 # Staffing
 
-Pick the type of task and its staffed fields from the table below. If a task doesn't match any of the listed types, pick the closest and inform the user.
+Use the closest task row. User-selected models and harnesses take precedence. Routine owner stages stay inline; apply this roster when choosing a worker.
 
-If a route is unavailable report back and stop. Otherwise report the picked model to the user using this format:
+Report the selection:
 
 ```
 🤖 <codex|claude|image> <model-name>[-<effort>] because <reason>
 ```
 
-When a workflow requests independent behavioral verification, use a fresh context independent of the builder. Prefer a different model family: use the behavioral-verification row for a GPT builder, or `gpt-5.6-sol` at high effort via `codex-cli` for a Claude builder. A user-specified model wins; disclose when that removes model-family diversity. Choose the verification model using the builder-specific routing above; use the browser-use row for the driving method.
+If the selected route is unavailable, report the blocker. Independent review and behavioral verification require fresh context separate from the builder; model diversity is optional. Use the browser row for the driving method.
 
 ## Roster
 
-| type of task | model | effort | route | execution |
+| Task | Model | Effort | Route | Execution |
 | --- | --- | --- | --- | --- |
-| judgement, shaping, taste, user-facing ui, copy, codebase-design, architecture, orchestration | claude-fable-5 | high | claude-code | native |
-| implementation, refactoring, bug-fix, performance, long implementation | gpt-5.6-sol | high | codex-cli | native |
-| design-heavy implementation, architecture-bearing refactoring, api-design, adversarial-review, complex code-review | claude-opus-5 | high | claude-code | native |
-| behavioral verification | claude-opus-5 | high | claude-code | native |
-| research | gpt-5.6-terra | high | codex-cli | native |
-| research-synthesis | claude-fable-5 | high | claude-code | native |
-| browser-use, browser-verification, reproduction | gpt-5.6-terra | high | codex-cli | scripted Playwright driving Chrome |
-| imagegen | gpt-image-2 | — | codex-cli | use codex-imagegen skill when available |
+| Planning, shaping, orchestration, architecture | gpt-6-astra | high | codex-cli | native |
+| Implementation, debugging, refactoring, performance, code review | gpt-6-astra | high | codex-cli | native |
+| Taste, frontend design and implementation, visual critique, copy | claude-fable-5-1 | high | claude-code | native |
+| Research synthesis, difficult fact checking | gpt-6-astra | high | codex-cli | native |
+| Bounded source collection | gpt-5.6-terra | high | codex-cli | native |
+| Browser driving, capture, reproduction | gpt-5.6-terra | high | codex-cli | scripted Playwright driving Chrome |
+| Independent behavioral verification | gpt-6-astra | high | codex-cli | fresh context |
+| Image generation | gpt-image-2 | — | codex-imagegen | use the shipped codex-imagegen skill's backend selection |

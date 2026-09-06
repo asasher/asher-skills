@@ -1,28 +1,18 @@
 #!/usr/bin/env python3
-"""Headless raster image generation via the Codex CLI's built-in image_gen tool.
+"""Generate immutable flat, layered, or batch image artifacts.
 
-Recovered recipe (see SKILL.md for the why):
-  - MUST bypass the sandbox: `codex exec --dangerously-bypass-approvals-and-sandbox`,
-    else the image tool no-ops and codex reuses a stale image.
-  - The image is base64 inside ~/.codex/sessions/**/*.jsonl (payload
-    type "image_generation_call"), NOT a file and NOT in --json stdout.
-  - Sequential only; parallel runs corrupt fresh-session detection.
-  - Disambiguate by matching subject keywords against `revised_prompt`, not recency.
-  - Ask for a solid flat key-color background; key it out afterwards (chroma_key.py).
-
-Flat:    codex_imagegen.py --subject "..." --out path.png [--key magenta|green] [--size 1024] [--match "kw kw"]
-Custom:  codex_imagegen.py --prompt-file p.txt --out path.png [--match "kw"]
-Batch:   codex_imagegen.py --batch batch.json --outdir DIR [--new-version] [--key ...] [--size ...]
-Layers:  codex_imagegen.py --layers scene.json --out scene
-         batch.json = [{"name":"oak-tree","subject":"..."}, ...]  (or "prompt" for a raw prompt)
+Backends: configured CLIProxyAPI, native Codex, or explicitly authorized OpenAI API.
+Run --help for options; backend configuration is documented in reference/backends.md.
+Native requests use the bundled Codex/transcript adapter; API requests use stdlib HTTP.
 """
-import argparse, base64, glob, json, os, re, subprocess, sys, time
+import argparse, glob, json, os, re, subprocess, sys, time
 from pathlib import Path
 
+from image_backends import Backend, BackendError, add_backend_arguments, decode_image, request_image, resolve_backend
 from image_key import key_image, trim_transparent
 from output_paths import latest_existing_path, open_output, reserve_output_dir
 
-SESS = os.path.expanduser("~/.codex/sessions")
+SESS = str(Path(os.environ.get("CODEX_HOME", "~/.codex")).expanduser() / "sessions")
 PNG_SIG, JPG_SIG = "iVBORw0KGgo", "/9j/"
 
 KEYS = {
@@ -65,25 +55,51 @@ def walk_strings(o):
             yield from walk_strings(v)
 
 
-def generate(prompt, out, match, timeout=420, effort="low"):
+def generate(prompt, out, match, timeout=420, effort="low", backend=None, size=1024):
     """Run one codex generation and extract the matching image to `out`.
     Returns (ok: bool, note: str, actual_path: Path | None). Sequential use only."""
+    backend = backend or Backend("native")
+    if backend.name != "native":
+        try:
+            raw, dimensions = request_image(backend, prompt, size, timeout)
+            with open_output(out) as (actual_out, handle):
+                handle.write(raw)
+        except BackendError as exc:
+            return False, str(exc), None
+        mismatch = dimensions != (size, size)
+        return True, (
+            f"wrote {actual_out} ({len(raw)}B); backend={backend.name}; model={backend.model}; "
+            f"requested={size}x{size}; actual={dimensions[0]}x{dimensions[1]}; "
+            f"dimension_mismatch={str(mismatch).lower()}; dimensions preserved"
+        ), actual_out
+    try:
+        return _generate_native(prompt, out, match, timeout, effort, size, backend.codex_home)
+    except subprocess.TimeoutExpired:
+        return False, "Native generation timed out; it may have completed. Inspect the session before retrying; no provider switch attempted.", None
+    except OSError:
+        return False, "Native Codex execution unavailable; check the CLI and current session. No provider switch attempted.", None
+
+
+def _generate_native(prompt, out, match, timeout, effort, size, codex_home=None):
     mark = time.time() - 2  # small clock-skew guard
+    native_env = dict(os.environ)
+    if codex_home:
+        native_env["CODEX_HOME"] = codex_home
+    sessions_root = str(Path(codex_home) / "sessions") if codex_home else SESS
     proc = subprocess.run(
         ["codex", "exec", "--dangerously-bypass-approvals-and-sandbox",
          "--skip-git-repo-check", "-c", f"model_reasoning_effort={effort}", "-"],
-        input=prompt, text=True, capture_output=True, timeout=timeout,
+        input=prompt, text=True, capture_output=True, timeout=timeout, env=native_env,
     )
-    tail = (proc.stdout or "")[-200:].strip()
     sessions = sorted(
-        (p for p in glob.glob(os.path.join(SESS, "**", "*.jsonl"), recursive=True)
+        (p for p in glob.glob(os.path.join(sessions_root, "**", "*.jsonl"), recursive=True)
          if os.path.getmtime(p) >= mark),
         key=os.path.getmtime, reverse=True,
     )
     cands = []  # (b64, revised_prompt)
     for s in sessions:
         try:
-            lines = open(s, encoding="utf-8").read().splitlines()
+            lines = Path(s).read_text(encoding="utf-8").splitlines()
         except OSError:
             continue
         for ln in lines:
@@ -100,17 +116,20 @@ def generate(prompt, out, match, timeout=420, effort="low"):
                 if (core.startswith(PNG_SIG) or core.startswith(JPG_SIG)) and len(core) > 8000:
                     cands.append((core, rev))
     if not cands:
-        return False, f"NO_IMAGE (codex exit {proc.returncode}; tail: {tail})", None
+        return False, f"NO_IMAGE (codex exit {proc.returncode}); check native image-tool availability in this session. No provider switch attempted.", None
 
     kw = [w for w in re.split(r"[^a-z0-9]+", match.lower()) if len(w) > 2]
     def score(c):
         return (sum(k in c[1].lower() for k in kw), len(c[0]))
     cands.sort(key=score, reverse=True)
     best, matched = cands[0][0], score(cands[0])[0]
-    raw = base64.b64decode(best + "=" * (-len(best) % 4))
+    try:
+        raw, dimensions = decode_image(best + "=" * (-len(best) % 4))
+    except BackendError as exc:
+        return False, str(exc), None
     with open_output(out) as (actual_out, f):
         f.write(raw)
-    return True, f"wrote {actual_out} ({len(raw)}B); matched_kw={matched}; candidates={len(cands)}", actual_out
+    return True, f"wrote {actual_out} ({len(raw)}B); backend=native; requested={size}x{size}; actual={dimensions[0]}x{dimensions[1]}; dimension_mismatch={str(dimensions != (size, size)).lower()}; dimensions preserved; matched_kw={matched}; candidates={len(cands)}", actual_out
 
 
 def _slug(value):
@@ -137,13 +156,14 @@ def _layer_position(layer, canvas, asset_size):
     raise ValueError(f"unsupported anchor {anchor!r}")
 
 
-def generate_layered(scene_file, requested_out, timeout=420, effort="low"):
+def generate_layered(scene_file, requested_out, timeout=420, effort="low", backend=None):
     """Generate an asset-first scene as a versioned directory artifact."""
     try:
         from PIL import Image
     except ImportError as exc:
         raise RuntimeError("layered mode needs Pillow and numpy; install requirements.txt") from exc
 
+    backend = backend or Backend("native")
     spec = json.loads(Path(scene_file).read_text(encoding="utf-8"))
     layers = spec.get("layers")
     if not isinstance(layers, list) or not layers:
@@ -175,6 +195,8 @@ def generate_layered(scene_file, requested_out, timeout=420, effort="low"):
     layer_dir.mkdir()
     manifest = {
         "mode": "layered",
+        "backend": backend.name,
+        "requested_model": backend.model if backend.name != "native" else None,
         "status": "in_progress",
         "artifact": str(artifact),
         "canvas": {"width": size, "height": size},
@@ -206,6 +228,8 @@ def generate_layered(scene_file, requested_out, timeout=420, effort="low"):
                 layer.get("match") or subject,
                 timeout,
                 effort,
+                backend=backend,
+                size=size,
             )
             print(f"{'OK  ' if good else 'FAIL'} {name}: {note}", flush=True)
             if not good or actual_raw is None:
@@ -213,6 +237,9 @@ def generate_layered(scene_file, requested_out, timeout=420, effort="low"):
                 manifest["error"] = note
                 _write_manifest(manifest_path, manifest)
                 return False, f"layered generation stopped at {name}; partial artifact preserved at {artifact}", artifact
+
+            with Image.open(actual_raw) as opened:
+                raw_size = list(opened.size)
 
             if role == "background":
                 with Image.open(actual_raw) as opened:
@@ -243,6 +270,10 @@ def generate_layered(scene_file, requested_out, timeout=420, effort="low"):
                 "raw": raw_rel,
                 "prompt": prompt,
                 "size": [asset.width, asset.height],
+                "requested_size": [size, size],
+                "raw_size": raw_size,
+                "dimension_mismatch": raw_size != [size, size],
+                "resize_policy": "stretch-to-canvas" if role == "background" else "preserve-scale; trim-transparent-padding",
                 "anchor": anchor,
                 "position": position,
                 "bounds": bounds,
@@ -293,17 +324,26 @@ def main():
     ap.add_argument("--match", help="keywords to disambiguate the image (default: from subject/out)")
     ap.add_argument("--timeout", type=int, default=420)
     ap.add_argument("--effort", default="low")
+    add_backend_arguments(ap)
     a = ap.parse_args()
 
     selected_modes = sum(bool(value) for value in (a.batch, a.layers, a.subject, a.prompt_file))
     if selected_modes != 1:
         ap.error("choose exactly one of --subject, --prompt-file, --batch, or --layers")
 
+    if a.size <= 0 or a.timeout <= 0:
+        ap.error("--size and --timeout must be positive")
+    try:
+        backend = resolve_backend(a)
+    except BackendError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
     if a.layers:
         if not a.out:
             ap.error("--out directory is required for layered generation")
         try:
-            good, note, _ = generate_layered(a.layers, a.out, a.timeout, a.effort)
+            good, note, _ = generate_layered(a.layers, a.out, a.timeout, a.effort, backend=backend)
         except (OSError, ValueError, RuntimeError) as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
@@ -311,7 +351,7 @@ def main():
         return 0 if good else 2
 
     if a.batch:
-        items = json.load(open(a.batch))
+        items = json.loads(Path(a.batch).read_text(encoding="utf-8"))
         os.makedirs(a.outdir, exist_ok=True)
         ok = 0
         for it in items:
@@ -323,8 +363,11 @@ def main():
             prompt = it.get("prompt") or build_prompt(it["subject"], a.key, a.size)
             match = it.get("match") or it.get("subject") or name
             print(f"GEN  {name} …", flush=True)
-            good, note, _ = generate(prompt, out, match, a.timeout, a.effort)
+            good, note, _ = generate(prompt, out, match, a.timeout, a.effort, backend=backend, size=a.size)
             print(f"{'OK  ' if good else 'FAIL'} {name}: {note}", flush=True)
+            if not good:
+                print("BATCH STOPPED; completed artifacts preserved. No retry or provider switch attempted.", flush=True)
+                return 1
             ok += good
         print(f"BATCH DONE {ok}/{len(items)}", flush=True)
         return 0 if ok == len(items) else 1
@@ -332,13 +375,13 @@ def main():
     if not a.out:
         ap.error("--out is required for single generation")
     if a.prompt_file:
-        prompt = open(a.prompt_file).read()
+        prompt = Path(a.prompt_file).read_text(encoding="utf-8")
     elif a.subject:
         prompt = build_prompt(a.subject, a.key, a.size)
     else:
         ap.error("provide --subject or --prompt-file (or --batch)")
     match = a.match or a.subject or os.path.splitext(os.path.basename(a.out))[0].replace("-", " ")
-    good, note, _ = generate(prompt, a.out, match, a.timeout, a.effort)
+    good, note, _ = generate(prompt, a.out, match, a.timeout, a.effort, backend=backend, size=a.size)
     print(note)
     return 0 if good else 2
 

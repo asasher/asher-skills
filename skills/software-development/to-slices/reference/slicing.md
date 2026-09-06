@@ -4,7 +4,7 @@
 
 To-slices splits a direction someone already decided. The input comes in one of these forms; all are read the same way: mine the decided direction, the actors, and the full surface.
 
-- **A spec'd issue** (the primary input): an issue whose projection comment carries the spec's summary, render URL, and approved commit hash, given by id. Read the spec from the `artifact/<issue>` branch **at the approved hash** (`git show <hash>:<path>`), the canonical direction, plus the issue's comment trail for refinements the user made after the projection.
+- **A spec'd issue** (the primary input): an issue whose projection comment carries the spec's summary, render URL, and approved commit hash, given by id. Read the spec from the `artifact/<issue>` branch **at the approved hash**, the canonical direction, plus the issue's comment trail for refinements the user made after the projection.
 - **A spec document**: a spec file given by path. Read it exactly as the branch file.
 - **A plan document**: a per-issue design doc. Read it as direction for a single slice's worth of work, or a small cluster.
 - **The raw current conversation**: when no spec or plan was written, mine the conversation and the codebase understanding built up in it.
@@ -45,7 +45,7 @@ Slices of a spec'd issue land **stacked**: the spec issue's work branch is the s
 
 Once the split is approved, sort the issues into **dependency order, blockers first.** GitHub assigns an id at creation, so an issue can only reference its blocker once that id exists: every blocker must be created before its dependents. Topologically sort the graph; publish in that order.
 
-Wire each dependency as a native `blocked_by` edge: resolve the blocker's database id with `gh api repos/<owner>/<repo>/issues/<blocker> --jq '.id'`, then `gh api -X POST repos/<owner>/<repo>/issues/<blocked>/dependencies/blocked_by -F issue_id=<id>`. `backlog build` reads these edges and skips blocked work.
+Wire each prerequisite as a [native blocking relationship](../../backlog/reference/labels.md#dependencies). `backlog build` reads these edges and skips blocked work.
 
 ## Audit each issue before publication
 
@@ -61,7 +61,7 @@ Fix or drop issues that fail the audit before publication.
 
 ## Publish
 
-Before creating children, place an existing split parent in `shaping` and push its work branch so children will inherit the settled context. Create issues with `gh issue create`, blockers first, each with its title, body per template-guide § A single issue, work-type (`enhancement` or `bug`), and `shaping`. Link each issue to the spec's issue when one exists.
+Before creating children, place an existing split parent in `shaping` and push its work branch so children will inherit the settled context. Create issues, blockers first, each with its title, body per template-guide § A single issue, work-type (`enhancement` or `bug`), and `shaping`. Link each issue to the spec's issue when one exists.
 
 Persist the approved draft and draft-to-issue mapping on the parent, or on the first created issue for a split without a parent. Update that mapping as each issue is created. On an interrupted create, inspect GitHub before retrying; adopt any matching issue. Wire each native blocker after its issue exists. Keep every new issue unreleased until the entire graph and parent relations pass readback.
 
@@ -69,7 +69,7 @@ Persist the approved draft and draft-to-issue mapping on the parent, or on the f
 
 When the input was a spec'd issue, the slices carry the installments but the parent keeps the whole. Finish by parenting it over them:
 
-- **Attach every slice as a sub-issue** of the parent: `gh api -X POST repos/<owner>/<repo>/issues/<parent>/sub_issues -F sub_issue_id=<id>`.
+- **Attach every slice as a native sub-issue** of the parent.
 - **Wire the parent `blocked_by` every slice** with the same dependency verb as § Order and wire. This is the gate: the parent stays out of `backlog build`'s sweep until every child closes, and a child attached later (a capture against the parent, a gap the coverage check files) re-blocks it the same way.
 - **Relabel the parent `spec`**, replacing its previous work-type. The parent's remaining work is the coverage check `deliver` runs when the blockers clear.
 - **Post a pointer comment** on the parent linking every child, so anyone landing on it sees the split. Each child links back to the parent (§ Audit, inherited context links).

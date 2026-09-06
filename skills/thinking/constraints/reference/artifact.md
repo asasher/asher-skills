@@ -4,11 +4,7 @@ How to create and maintain `constraint.html` — the single source of truth for 
 
 ## Scaffolding a new system (`new`)
 
-1. **Slugify** the system into a short kebab-case folder name (`Acme onboarding funnel` → `acme-onboarding`; keep it under ~4 words). If the folder exists, append `-2`.
-2. `mkdir -p <slug>/sources`.
-3. Copy `templates/constraint.html` → `<slug>/constraint.html`.
-4. Replace the placeholders: `{{SYSTEM}}` (the system's name, twice — `<title>` and `<h1>`) and `{{DATE}}` (today, `YYYY-MM-DD`, everywhere it appears).
-5. Open with the goal conversation ([map.md](map.md)).
+Create a unique, short kebab-case folder for the system, with `sources/` and a copy of `templates/constraint.html` named `constraint.html`. Fill the template placeholders with the system name and today’s date (`YYYY-MM-DD`). Begin the goal conversation ([map.md](map.md)).
 
 ## The layout of the page
 

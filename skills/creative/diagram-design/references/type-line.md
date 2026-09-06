@@ -74,9 +74,9 @@ Not for: three or more states (that is the **line chart** above, or a bump chart
 
 #### Honest-data rule
 
-**Both axes must carry the same scale and the same units.** That is the entire claim of the type: if the scales differ, the angle of every line is fiction. `scripts/verify-slopegraph.py` gates it.
+**Both axes must carry the same scale and the same units.** That is the entire claim of the type: if the scales differ, the angle of every line is fiction. Verify both scales against the declared endpoint values.
 
-- **The two axes must never differ from each other** — not in scale, not in origin, not in transform. A shared _origin_ matters as much as a shared scale: shifting one axis tilts every slope by the same amount, so the series still rank correctly against each other while every rate is wrong. That is the harder version to spot by eye, which is why the checker tests slope and origin separately.
+- **The two axes must never differ from each other** — not in scale, not in origin, not in transform. A shared _origin_ matters as much as a shared scale: shifting one axis tilts every slope by the same amount, so the series still rank correctly against each other while every rate is wrong. That is the harder version to spot by eye, so check scale and origin separately.
 - **A domain tighter than zero is fine; an undisclosed one is not.** Both axes sharing a 100–550 window is legitimate, because moving the origin leaves every slope unchanged when both axes move together — this is exactly where a slopegraph differs from a bar chart, whose truncated baseline distorts the ratio between bars. What a tight window does do is magnify all slopes equally, so the bounds go in the source line and the reader calibrates. Log-scaling is a different matter and stays out: it makes the angle mean nothing.
 - **Label both endpoints with actual values.** A slope with no magnitudes is a mood.
 - **Round once, then draw from the rounded number**, so the printed label, the declared metadata and the drawn `y` are three statements of one number rather than three chances to disagree.
@@ -112,15 +112,15 @@ What each binding buys, and what it costs to omit:
 
 | Binding | Without it |
 | --- | --- |
-| `data-from` / `data-to` on the line | The checker would have to read the labels, and a series whose label went missing would drop silently out of the verified set — the exact hole that let a treemap cell ship 50% oversized. |
+| `data-from` / `data-to` on the line | A missing label could leave a series without a stated value to verify. |
 | `data-end` on a value label | A printed number could not be cross-checked against the value it claims to state. |
 | `data-role="name"` on a name label | Two series names could be exchanged between rows, renaming both lines, with every number still correct in isolation. |
 | `data-axis` on a state caption | The captions could be swapped, reversing the direction every slope is read in. |
 | `data-state` on a state caption | Swapping just the two visible strings leaves both captions in place and reverses the figure anyway. |
 
-`scripts/verify-slopegraph.py` requires all of them, cross-checks each visible string against its binding, and reports any label drawn nearer another series' endpoint than its own — a label on the wrong row renames the line.
+Require every binding, cross-check each visible string against it, and check whether a label is nearer another series’ endpoint than its own — a label on the wrong row renames the line.
 
-**No `transform` on any of it.** The checker reads raw `x`/`y` attributes, so a `transform` on a series line, on a bound label, on an ancestor `<g>`, or in a CSS rule moves the rendered mark away from the number that was verified — `transform="translate(0 80)"` on one line slid its endpoint 80px past every green check. Transforms are rejected rather than resolved: a partial implementation of the SVG transform stack looks like coverage without being it. Bake the offset into the coordinates. The rotated value-axis caption is fine — it is neither verified geometry nor a bound label.
+**Keep series geometry and bound labels in raw coordinates.** Bake offsets into `x`/`y`, including offsets otherwise inherited from groups or CSS, so measured coordinates match the rendered values. The rotated value-axis caption is exempt.
 
 **Print one complete number per value label.** A unit suffix is fine (`208ms`); a thousands separator that changes the value is not, and neither is a second number in the same label. Reading only the first numeric fragment let the label `512,000` agree with metadata that said `512`.
 
@@ -165,11 +165,11 @@ The slopegraph's colour section holds here unchanged, with one addition for the 
 
 #### Honest-data rule
 
-**One amplitude on every ridge, stated in the source line.** That is the entire claim of the type: the ridges are stacked so their silhouettes can be compared, and per-ridge normalisation destroys exactly that while rendering beautifully — a rare, flat distribution given its own scale wears the same shape as a tight one. `scripts/verify-ridgeline.py` derives the figure's single amplitude and holds every vertex of every ridge to it.
+**One amplitude on every ridge, stated in the source line.** That is the entire claim of the type: the ridges are stacked so their silhouettes can be compared, and per-ridge normalisation destroys exactly that while rendering beautifully — a rare, flat distribution given its own scale wears the same shape as a tight one. Verify every ridge vertex against the figure’s declared shared amplitude.
 
 - **The baseline never lies.** Each ridge declares the row it rises from, and that row must sit on the stack's fixed pitch with its rule drawn across the full bin run. A baseline nudged up to give one ridge headroom is the same falsification as a private amplitude, told with different arithmetic — and it is the harder one to see, because the silhouette above it is untouched.
 - **Every ridge shares one x-scale.** A peak at one x means one latency on every row, or the column comparison the type exists for is fiction.
-- **State the overlap, and keep it overlap.** Ridges are meant to intrude on the row above — that is how the stack reads as depth. A peak that reaches the row _two_ above is occluded by the peaks it passes, and the fix is more pitch, never a smaller amplitude on one ridge. The checker enforces the ceiling; the source line states the amplitude so the reader can convert a height back into a number.
+- **State the overlap, and keep it overlap.** Ridges are meant to intrude on the row above — that is how the stack reads as depth. A peak that reaches the row _two_ above is occluded by the peaks it passes, and the fix is more pitch, never a smaller amplitude on one ridge. Verify that overlap ceiling; the source line states the amplitude so the reader can convert a height back into a number.
 - **A ridge starts and ends on its own baseline.** The first and last bins are zero, so the outline closes along the baseline. A distribution clipped mid-mass draws a cliff, and a cliff reads as data.
 - **No smoothing beyond what the footnote states.** The shipped grammar smooths nothing at all. If a figure ever does smooth, the footnote names the method and the vertices stay on true values — a spline that invents a second peak is indistinguishable, on the page, from a service that has one.
 - **Height is share, not volume.** Each ridge is normalised to its own series' count before the shared amplitude is applied, so the tallest ridge is the most concentrated, not the busiest. Say so in the source line; a reader who assumes height is traffic reads the figure exactly backwards.
@@ -186,9 +186,9 @@ The binding contract is the slopegraph's, applied to areas: the outline declares
 <text data-tick="2" data-bin="240" x="500" y="400" fill="#a1a1a1" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em" text-anchor="middle">240</text>
 ```
 
-`data-bins` is the basis of every geometric check, and it is this contract's own vocabulary: the slopegraph above binds `data-series` on a `<line>`, this variant binds `data-bins` on a `<path>`, and neither gate reads the other's attribute, so neither claims the other's file. Any further Line variant should take its own attribute for the same reason — a shared name means two checkers holding one figure to two contracts, and the one that loses rejects it for lacking elements it never said it had. `data-baseline` is what makes a moved row detectable; without it the checker would have to infer the zero from the drawing, which is the very thing being falsified. The printed range is cross-checked against the first and last nonzero bin through the figure's own tick scale, so a range widened by a word is a finding. `scripts/verify-ridgeline.py` covers the amplitude, the pitch, the baseline rules, the shared bins, the segment grammar, the overlap ceiling, the focus pairing and every label binding; `scripts/test-verify-ridgeline.py` proves each check in both polarities and pins the scope treaty with the sibling gates.
+Use `data-bins` on each ridge path and `data-baseline` for its declared zero. Verify the shared amplitude, fixed pitch, baseline, shared bins, segment grammar, overlap ceiling, focal pairing, and every label binding. Cross-check each printed range against its first and last nonzero bins using the figure’s tick scale. Preserve these ridge-specific bindings separately from slopegraph `data-series` bindings.
 
-**No `transform` on any of it**, for the reason the slopegraph section gives: the checker reads raw coordinates, so a transform on an outline, a baseline rule, a bound label, an ancestor `<g>` or a CSS rule moves the rendered mark away from the bin that was verified. The rotated amplitude caption is fine — it is neither verified geometry nor a bound label.
+**Keep ridge geometry and bound labels in raw coordinates.** Bake offsets into the outline, baseline, and label coordinates, including offsets otherwise inherited from groups or CSS. The rotated amplitude caption is exempt.
 
 #### Anti-patterns
 

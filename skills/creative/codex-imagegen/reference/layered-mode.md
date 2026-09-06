@@ -58,7 +58,7 @@ forest-clearing/
     └── 02-foreground-fern.png
 ```
 
-The manifest records the exact prompt, raw generation, processed file, z-index, anchor, requested position, and content/canvas bounds for every layer. `composite.png` is regenerated from the listed layers in z-order.
+The manifest records the exact prompt, raw generation, processed file, z-index, anchor, requested position, and content/canvas bounds for every layer. `composite.png` is regenerated from the listed layers in z-order. Every entry records requested size, decoded raw dimensions, mismatch status, and its resize policy. Backdrops are stretched to the planned canvas; foregrounds retain scale while transparent padding is trimmed. Raw images remain available for inspection. The selected backend is shared by every layer.
 
 The artifact is created before generation begins. Its status progresses from `in_progress` to `complete`; generation failure changes it to `failed` and preserves all completed layers. Never overwrite or delete the partial artifact during automatic recovery.
 

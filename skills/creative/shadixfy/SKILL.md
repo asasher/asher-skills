@@ -49,7 +49,7 @@ Style **everything** through shadcn/ui’s semantic variables.
 - Panels: normal (separate surfaces by token — `bg-muted`, `border` — not by floating, not by glass).
 - Toolbars/Footers/Breadcrumbs: normal (simple, standard height, functional only).
 
-Compose components as shipped by `npx shadcn@latest add` or the project’s Figma library. Use sections for landing pages and sidebar + content for dashboards.
+Compose components from the shadcn registry or the project’s Figma library. Use sections for landing pages and sidebar + content for dashboards.
 
 ## Hard No
 

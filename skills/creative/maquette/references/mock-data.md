@@ -10,28 +10,11 @@ Data realism is the single biggest fidelity lever. Buyers don't inspect your ani
 
 ## Seeded generation, not hand-typed rows
 
-Fixtures come from generator functions using a seeded PRNG so every run of the demo is identical.
-
-```ts
-// lib/fixtures/rng.ts
-export function mulberry32(seed: number) {
-  return () => {
-    seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-export const rng = mulberry32(20260706); // one fixed seed for the whole app
-```
+Generate fixtures deterministically from one fixed seed for the app. A reset restores the same records and relationships.
 
 ## Dates relative to the demo clock
 
 A demo with hardcoded "March 2026" timestamps looks dead by July. Generate every date as an offset from now: `daysAgo(3)`, `hoursAgo(2)`, `inDays(14)`. The demo is perpetually alive.
-
-```ts
-export const daysAgo = (n: number) => new Date(Date.now() - n * 864e5);
-```
 
 Rendering caveat: relative-to-now dates cause SSR/client hydration mismatches. Render timestamps inside a hydration guard (mounted-state check) or format deterministically — see web-quality reference.
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Reconcile the backlog family's label colors and descriptions on GitHub.
-Applies the fixed scheme in reference/labels.md. Touches only the family's
+Defines and applies the fixed color and description scheme. Touches only the family's
 labels (by default only ones that already exist); every other label on the
 repo is never modified.
 Usage:
@@ -13,8 +13,8 @@ import json
 import subprocess
 import sys
 
-# label -> (color without '#', description). Canonical source: the Label
-# colors table in reference/labels.md; keep in sync.
+# Canonical label -> (color without '#', description) scheme.
+# Workflow meanings live in reference/labels.md.
 SCHEME = {
     # Readiness: saturated, temperature-coded parked -> flying.
     "needs-shaping": ("D93F0B", "Parked for shaping: unsettled product or scope decisions; never selected by backlog build"),

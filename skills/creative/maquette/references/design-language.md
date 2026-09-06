@@ -15,7 +15,7 @@ Style everything through the semantic variables — `background`/`foreground`, `
 
 ## Keep it normal
 
-Compose registry components as shipped (`npx shadcn add`). Sidebars fixed and flat with a single `border-r`; plain `h1`/`h2` headers; `Button` variants only; `Card` = border + `bg-card`
+Compose registry components as shipped. Sidebars fixed and flat with a single `border-r`; plain `h1`/`h2` headers; `Button` variants only; `Card` = border + `bg-card`
 
 - `shadow-sm` at most; labels above inputs with a real focus ring; centered `Dialog`; left-aligned `Table` with `border-b` rows and `hover:bg-muted/50`; lucide icons 16–20px in `text-muted-foreground`; Tailwind spacing scale (`2/3/4/6/8`); 1px borders; `transition-colors` ~150ms; everything off one `--radius` (`rounded-md`/`rounded-lg`); predictable grid/flex layouts. A dashboard gets sidebar + content.
 

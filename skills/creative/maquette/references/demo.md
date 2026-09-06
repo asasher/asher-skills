@@ -24,7 +24,7 @@ Write `DEMO.md` alongside the code:
 - Console clean: no hydration warnings, no red errors — buyers' engineers open devtools.
 - Projector realities: default to the brief's chosen theme, check contrast and font sizes at 1366×768 and 1920×1080, and check the zoomed-in screen-share case.
 - Nothing depends on wall-clock luck: relative fixture dates verified fresh, no "today at 00:03" weirdness.
-- Runs from a cold `npm run dev` in under a minute; `DEMO.md` prep list tested on the actual presenting laptop.
+- Starts cold using the project’s documented launch command in under a minute; `DEMO.md` prep list tested on the actual presenting laptop.
 
 ## Dead-click sweep (the gate)
 

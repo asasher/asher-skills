@@ -2,6 +2,16 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-06 — outcome instructions, new staffing, and CLIProxyAPI images
+
+- `staffing`: use GPT-6 Astra for planning, orchestration, implementation, research synthesis, and independent verification; Claude Fable 5.1 for taste and frontend work; Terra for bounded collection and browser capture. Fresh context establishes review independence. Retire Fable 5 and the Sol/Opus default assignments.
+- `codex-imagegen`: implement issue #208 with configured CLIProxyAPI → native Codex → explicitly authorized direct OpenAI API. Shared routing covers flat, batch, layered, and generated spritesheet modes. Preserve actual dimensions, immutable outputs, and partial evidence. Bind inferred credentials to their endpoint and remove the external system-skill dependency.
+- Replace routine command recipes with outcomes in `backlog`, `capture`, `code-review`, `merge`, `prove-your-work`, `retro`, `tdd`, `to-branch`, `to-slices`, `to-thread`, `skill-loop`, `diagram-design`, `maquette`, `shadixfy`, `watch-video`, `bayes`, `constraints`, `dissolve`, `learn-anything`, `relay`, and `to-tailnet`. Preserve exact helper interfaces and operational invariants. Diagram checks now use shipped helpers and available browser tooling; label appearance lives in the reconciler.
+
+Reconcile: refresh these skills in your installed set and include `codex-imagegen` wherever `staffing` is installed. The README install set now contains 36 family/support skills. Existing playbooks remain valid; newly authored playbooks link canonical project commands and record additional invocation requirements. Review the updated family guide and manual review order.
+
+Validation: 22 local image-backend tests pass; a visually inspected live proxy smoke preserved and reported its 1254 × 1254 result against a 1024 × 1024 request. Structural, formatting, and rendered-guide checks pass. No new behavioral skill evals were added.
+
 ## 2026-09-06 — remove redundant negations from skill instructions
 
 Reviewed all 47 authored skills, removing speculative prohibitions, repeated exclusions, and instructions already expressed by adjacent positive requirements. Concrete approval, evidence, privacy, and recovery contracts remain. Supporting references and templates use the same wording discipline.

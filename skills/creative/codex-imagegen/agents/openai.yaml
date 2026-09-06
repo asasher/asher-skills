@@ -1,7 +1,7 @@
 interface:
   display_name: "Codex Imagegen"
-  short_description: "Generate flat, layered, or sprite assets"
-  default_prompt: "Use $codex-imagegen to create versioned raster assets in the appropriate flat, layered, or spritesheet mode."
+  short_description: "Generate raster assets through proxy or Codex"
+  default_prompt: "Use $codex-imagegen to create versioned flat, layered, or sprite assets. Prefer configured CLIProxyAPI, then native Codex; direct API keys require explicit permission."
 
 policy:
   allow_implicit_invocation: true

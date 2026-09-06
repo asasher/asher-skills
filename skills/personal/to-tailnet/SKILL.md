@@ -6,14 +6,14 @@ disable-model-invocation: true
 
 # to-tailnet
 
-Serve a local HTML artifact over the tailnet. The consuming repo's `docs/agents/environment.md` records the tailnet host, port ranges, and any reverse-proxy rules where the repo has them — honor them; absent any record, bind to the machine's Tailscale address (`tailscale ip -4`) and report `http://<that-address>:<port>/...`.
+Serve a local HTML artifact over the tailnet. The consuming repo's `docs/agents/environment.md` records the tailnet host, port ranges, and any reverse-proxy rules where the repo has them — honor them; absent any record, bind to the machine's Tailscale address and report the artifact's exact URL.
 
 Serving is **detached**: the server outlives this turn.
 
 ## Serve
 
-Serve the file's directory with a detached stdlib HTTP server on a free port; the reported URL ends in the file's name. Then fetch the URL exactly as reported — the fetch itself proves tailnet reachability — and confirm HTTP 200 returning the artifact's content. The file is served in place, unmodified.
+Serve the unchanged file from its directory through a detached HTTP server on a free port; the reported URL ends in the file's name. Verify that exact URL returns HTTP 200 and the artifact's content. Report where verification ran: a local fetch proves the endpoint responds from the serving machine; remote-device reachability requires a check from another tailnet device.
 
 ## Report
 
-Done when the user has the exact URL and an exact, copy-pasteable stop command (e.g. `kill <pid>` with the server's real PID).
+Done when the user has the exact URL and working, copy-pasteable shutdown instructions for the server.

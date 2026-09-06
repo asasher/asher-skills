@@ -23,27 +23,17 @@ Required on `ready-for-agent`; decides how `deliver` routes the work.
 
 Close consolidated or duplicate tickets as `not planned`, with a comment linking the surviving ticket and explaining the disposition. Include these closure decisions in the groom plan.
 
-## Label colors
+## Label appearance
 
-Applied by `scripts/reconcile-labels.py --repo <owner/name>`, dry-run first, `--create` only with the user's consent. Readiness roles are saturated and temperature-coded from parked to flying; work-types are pastel, `bug` and `spec` the deliberate exceptions.
-
-| Label | Color | Description |
-| --- | --- | --- |
-| `needs-shaping` | `#D93F0B` | Parked for shaping: unsettled product or scope decisions; never selected by backlog build |
-| `shaping` | `#FBCA04` | Shaping or approved split publication owns this issue; builds skip it |
-| `needs-info` | `#D876E3` | Parked, waiting on the reporter |
-| `ready-for-agent` | `#0E8A16` | Released: an agent may work it; requires a work-type |
-| `ready-for-human` | `#5319E7` | Human-only; agents skip. Also the handback target for blockers |
-| `building` | `#1D76DB` | Claimed: a build thread owns it; the claim comment is the dispatch declaration with its deadline |
-| `bug` | `#D73A4A` | Something isn't working |
-| `enhancement` | `#A2EEEF` | New feature or request |
-| `spec` | `#8250DF` | Parent of a split: coverage check and promotion PR once every child is closed |
+The bundled [label reconciler](../scripts/reconcile-labels.py) owns colors and descriptions. [Setup](setup.md) previews and applies that scheme with the user's approval.
 
 ## Dependencies
 
-- **Blocking** uses GitHub's native issue dependency. Read: `gh api repos/<owner>/<repo>/issues/<n> --jq '.issue_dependencies_summary'`, and treat `.blocked_by > 0` as blocked. Write: resolve the blocker's database id with `gh api repos/<owner>/<repo>/issues/<blocker> --jq '.id'`, then `gh api -X POST repos/<owner>/<repo>/issues/<blocked>/dependencies/blocked_by -F issue_id=<id>`. A blocker clears when the blocking issue closes.
-- **Children** use GitHub sub-issues for navigation: `gh api -X POST repos/<owner>/<repo>/issues/<parent>/sub_issues -F sub_issue_id=<id>`; read with `gh api repos/<owner>/<repo>/issues/<n>/sub_issues`. A spec issue's gate comes from `to-slices` wiring it `blocked_by` each child. A child attached later (a capture against the parent, a gap the coverage check files) is wired the same way and re-blocks the parent.
+- **Blocking** uses GitHub's native issue dependency. An issue stays blocked while any blocker is open; closing the blocker satisfies that dependency.
+- **Children** use GitHub sub-issues for navigation. A spec issue's gate comes from `to-slices` wiring it `blocked_by` each child. A child attached later (a capture against the parent, a gap the coverage check files) is wired the same way and re-blocks the parent.
 - `backlog build` skips any issue with an open blocker.
+
+GitHub REST relationship writes take database IDs (`id`), rather than issue numbers: `sub_issue_id` for children and `issue_id` for blockers. Read back both relationships after writing.
 
 ## Claims
 

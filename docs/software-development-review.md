@@ -36,11 +36,12 @@ Are merge selection, safe cleanup, recovery, and feedback clear? Handoff support
 
 Do the reusable standards add guidance without duplicating the lifecycle? Review the positive instructions alongside the concrete safeguards that remain.
 
-[diagnosing-bugs](../skills/software-development/diagnosing-bugs/SKILL.md) → [tdd](../skills/software-development/tdd/SKILL.md) → [principle-codebase-design](../skills/software-development/principle-codebase-design/SKILL.md) → [principle-experience-first](../skills/software-development/principle-experience-first/SKILL.md) → [principle-type-system-discipline](../skills/software-development/principle-type-system-discipline/SKILL.md) → [typescript-best-practices](../skills/software-development/typescript-best-practices/SKILL.md) → [bare-minimum-design](../skills/creative/bare-minimum-design/SKILL.md) → [diagram-design](../skills/creative/diagram-design/SKILL.md) → [technical-writing](../skills/software-development/technical-writing/SKILL.md) → [writing-for-humans](../skills/software-development/writing-for-humans/SKILL.md) → [unslop](../skills/software-development/unslop/SKILL.md)
+[diagnosing-bugs](../skills/software-development/diagnosing-bugs/SKILL.md) → [tdd](../skills/software-development/tdd/SKILL.md) → [principle-codebase-design](../skills/software-development/principle-codebase-design/SKILL.md) → [principle-experience-first](../skills/software-development/principle-experience-first/SKILL.md) → [principle-type-system-discipline](../skills/software-development/principle-type-system-discipline/SKILL.md) → [typescript-best-practices](../skills/software-development/typescript-best-practices/SKILL.md) → [bare-minimum-design](../skills/creative/bare-minimum-design/SKILL.md) → [diagram-design](../skills/creative/diagram-design/SKILL.md) → [codex-imagegen](../skills/creative/codex-imagegen/SKILL.md) → [technical-writing](../skills/software-development/technical-writing/SKILL.md) → [writing-for-humans](../skills/software-development/writing-for-humans/SKILL.md) → [unslop](../skills/software-development/unslop/SKILL.md)
 
 ## References worth reading
 
 - Setup: [environment template](../skills/software-development/backlog/templates/environment.md), [labels and claims](../skills/software-development/backlog/reference/labels.md).
+- Images: [backend selection and credentials](../skills/creative/codex-imagegen/reference/backends.md).
 - Dispatch: [native worktree preparation](../skills/system/to-thread/reference/worktrees.md), then only the harness route you use.
 - Splits: [publication and readback](../skills/software-development/to-slices/reference/slicing.md).
 - Retro: [upstream privacy and submission](../skills/software-development/retro/reference/upstream.md).
@@ -49,8 +50,8 @@ Do the reusable standards add guidance without duplicating the lifecycle? Review
 
 The September 5 rewrite snapshot fell from 24,788 to 15,492 o200k_base tokens (37.5%) against 516f0c6. Scope: 34 prior SDLC/system entrypoints versus 33 current, full SKILL.md including frontmatter; excludes references and design siblings. Some conditional detail moved into references, so this measures entrypoint load, not every possible execution path.
 
-Packaging, dependency closure, local links, formatting, and rendered-document checks establish structural consistency. No skill evals were added for this rewrite. The visual guide lists candidate fixtures and human judgments for evaluation design during this review.
+Packaging, dependency closure, local links, formatting, and rendered-document checks establish structural consistency. No skill evals were added for this rewrite. The image backend has 22 implementation tests and a visually inspected live proxy smoke; see the instruction review for scope and limits. The visual guide lists candidate fixtures and human judgments for evaluation design during this review.
 
 ## September 6 instruction review
 
-See [the instruction review](skill-instruction-review.md) for the completed negation cleanup, command-recipe findings, and proposed staffing roster. The six review groups above still follow the current lifecycle contracts.
+See [the instruction review](skill-instruction-review.md) for the completed negation cleanup, applied command simplifications, image backend routing, and current staffing roster. The six review groups above still follow the current lifecycle contracts.

@@ -53,7 +53,7 @@ Stop the loop when any condition is true:
 - Every reviewer proposal fails the edit gate.
 - The latest full iteration does not improve the primary metric or failure profile, and no new eval-backed edit targets a specific remaining failure.
 - Human review says to stop.
-- The loop reaches `--max N`, when the user supplied a cap.
+- The loop reaches the user-supplied iteration cap.
 
 Continue only when there is at least one remaining failure or human note that is plausibly caused by the skill text and at least one gated edit targets it.
 

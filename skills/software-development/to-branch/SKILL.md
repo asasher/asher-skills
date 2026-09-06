@@ -9,7 +9,7 @@ Publish files to another branch while keeping the current worktree in place. Run
 
     scripts/to-branch.py <branch> <file[:dest]>... -m "<message>" [--push]
 
-It commits via a temporary index: read the branch tip's tree (forking from `HEAD` when the branch is new), add the files, `commit-tree`, `update-ref`, then push when asked, and print the new commit hash. The current worktree's branch, index, and uncommitted files are untouched.
+The helper commits to the target branch, optionally pushes, and returns its SHA while preserving the current checkout, index, and working files. New branches start from `HEAD`.
 
 Rules:
 

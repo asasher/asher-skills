@@ -2,7 +2,7 @@
 
 The portable default is a compact, unbranded React Email template derived from the proven project-section layout: short summary, restrained dividers, small status/visibility labels, and title/detail items. It ships authored light and dark palettes and renders HTML and plain text from the same schema-version-2 bag.
 
-Setup copies the version-pinned renderer into the consumer instance only when missing and validates Node 20+ and npm 10+ before declaring the instance ready. The approval manifest records the local template identity, version, and file hashes. The consumer owns brand name, mark, accent, typography, footer, wording, and extensions; setup preserves edits and emits upgrade candidates instead of overwriting.
+Setup copies the version-pinned renderer into the consumer instance only when missing and validates the runtime requirements in the shipped renderer’s `package.json` before declaring the instance ready. The approval manifest records the local template identity, version, and file hashes. The consumer owns brand name, mark, accent, typography, footer, wording, and extensions; setup preserves edits and emits upgrade candidates instead of overwriting.
 
 Run `npm run render -- --bag <bag.json> --out <run-dir>`. A successful render creates:
 

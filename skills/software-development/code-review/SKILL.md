@@ -11,9 +11,9 @@ Read the change on two axes: **Standards**, whether it meets documented repo rul
 
 ## 1. Pin the inputs
 
-Resolve the named PR base or supplied base ref to a SHA, and record the head SHA. Without a named base, use the default branch; ask only when that is ambiguous. Use immutable refs in `git diff <base-sha>...<head-sha>` and `git log <base-sha>..<head-sha> --oneline`. Confirm refs resolve and the diff is nonempty before starting. When reviewing uncommitted work, capture the staged and unstaged diff too, identify that snapshot in the report, and return findings without granting a committed-head approval.
+Resolve the named PR base or supplied base ref to a SHA, and record the head SHA. Without a named base, use the default branch; ask only when that is ambiguous. Review the changes since the merge base and the commits unique to the head, using those immutable revisions. Confirm the revisions resolve and the change is nonempty before starting. When reviewing uncommitted work, capture the staged and unstaged diff too, identify that snapshot in the report, and return findings without granting a committed-head approval.
 
-Read the issue referenced by the PR or commits with `gh issue view <n> --comments`. When it names an approved spec, read that revision; for a child, retain its narrower acceptance criteria and their parent mapping. Otherwise use the issue text or the supplied spec. With no source, report the Spec axis as unavailable.
+Read the issue referenced by the PR or commits, including its comments. When it names an approved spec, read that revision; for a child, retain its narrower acceptance criteria and their parent mapping. Otherwise use the issue text or the supplied spec. With no source, report the Spec axis as unavailable.
 
 ## 2. Read the standards
 

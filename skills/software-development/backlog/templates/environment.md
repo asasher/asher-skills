@@ -1,6 +1,6 @@
 # Playbook: Environment
 
-> Project playbook for this repo, and the only one the software development lifecycle skills read: how to run, seed, authenticate to, drive, and prove this application, and where its artifacts live. Read by `backlog build` (the agent-readiness gate), `backlog status` (the teardown sweep), `deliver`, `implement`, `tdd`, `verify-your-work`, `prove-your-work`, `merge`, `to-thread`, and `to-web`. Tailor every section to this codebase. A session that earns a fact this playbook should have carried (a start recipe, an auth path, a runner trap) writes it into the matching section as part of its change. Record durable repo facts here; check machine state at use. A capability is checked at use, and a failed check warns and names its fallback.
+> Project playbook for this repo, and the only one the software development lifecycle skills read: how to run, seed, authenticate to, drive, and prove this application, and where its artifacts live. Read by `backlog build` (the agent-readiness gate), `backlog status` (the teardown sweep), `deliver`, `implement`, `tdd`, `verify-your-work`, `prove-your-work`, `merge`, `to-thread`, and `to-web`. Tailor every section to this codebase. A session that earns a fact this playbook should have carried (a start recipe, an auth path, a runner trap) writes it into the matching section as part of its change. Record durable repo facts here; check machine state at use. Link canonical project commands and configuration; record recipes here for additional invocation requirements or facts those sources omit. Check capabilities at use and report failures with their fallback.
 
 ## Branching
 
@@ -14,16 +14,16 @@
 
 ## Running locally
 
-- Start the full dev stack, detached, with output to a log: _<command>_. Stop: _<command>_.
+- Start the full dev stack, detached, with output to a log: _<canonical entrypoint and any detached wrapper>_. Stop: _<canonical entrypoint>_.
 - Services that come up: _<e.g. web, API, Postgres, redis, object store>_. Ports and hostnames: _<add yours>_.
-- Per-worktree bring-up: _<the command or hook that gives one worktree its own stack beside the others>_. Teardown: _<command, or "nothing to tear down">_. Teardown must resolve the same compose project the bring-up resolved (same env files, same project-name derivation, run from inside the worktree) and remove its volumes; a hardcoded compose project or container name fails this twice, since concurrent stacks collide.
+- Per-worktree bring-up and teardown: _<canonical entrypoints or isolation recipe; or "nothing to tear down">_. Teardown must target the same isolated stack and disposable volumes created by bring-up. Record how both resolve that identity.
 
 ## Checks
 
-- The full gate, exactly as CI runs it: _<command>_. Force-uncached form when the runner caches: _<command, or "no cache layer">_.
-- Formatter, linter, and dead-export check over touched files, run before the full gate: _<commands>_.
+- Full gate: _<canonical CI definition and local entrypoint>_. Fresh-run requirements: _<cache overrides needed to execute checks, or "no cache layer">_.
+- Formatter, linter, and dead-export check over touched files, run before the full gate: _<canonical entrypoints>_.
 - Test runner traps: _<e.g. the `--` that flips a filtered run into the whole suite; watch mode as the default; DB-gated suites; or "none known">_.
-- Generated files, updated through their regeneration recipes: _<paths and commands; or "none">_.
+- Generated files: _<generator configuration or canonical recipes; include undocumented requirements here, or "none">_.
 - Conventions the linter does not enforce: _<naming, placement, idioms a newcomer would miss; or "linter is the whole story">_.
 
 ## Agent-readiness
@@ -49,7 +49,7 @@ Punch list: _<the gaps certification found, each groomable as an issue; or "none
 
 ## Seed
 
-- Seed command: _<e.g. `pnpm dev:seed`, or the dataset-load command; or "none, drive the app">_.
+- Seed: _<canonical seed or dataset-loader entrypoint; or "none, drive the app">_.
 - What a freshly seeded stack contains: _<add yours>_.
 - The seed is a maintained artifact: a change that adds a feature extends the seed in the same PR, and the verifier treats "the seed reaches this feature" as a claim.
 - Drive-to-feature paths: from a running, seeded stack, how to reach the state that exercises each feature area (entry route, navigation, precondition state such as a logged-in role or a created record): _<add yours, or "n/a, no app surface">_.
@@ -72,7 +72,7 @@ Punch list: _<the gaps certification found, each groomable as an issue; or "none
 > Browser verification uses reproducible scripts. Read by `verify-your-work` and `prove-your-work`.
 
 - Surfaces this repo's issues touch: _<CLI | web | mobile | desktop>_.
-- Web driver: Playwright driving Chrome. Scripts live in _<e.g. `e2e/`>_ and run with _<e.g. `npx playwright test`>_. Evidence comes from Playwright's own artifacts (trace, screenshots, video). Use this scripted driver for verification; check headless at use, with headed as the fallback.
+- Web driver: Playwright driving Chrome. Scripts live in _<e.g. `e2e/`>_; runner configuration and entrypoint: _<canonical source>_. Evidence comes from Playwright's own artifacts (trace, screenshots, video). Use this scripted driver for verification; check headless at use, with headed as the fallback.
 - Two kinds of check: **guards**, durable tests that protect product behavior and stay in the suite; and **throwaway verification scripts**, written to exercise the change and capture screenshots, dropped before merge, their run kept as evidence. The spec declares which each acceptance criterion gets; an unshaped issue's builder decides and says so in the PR.
 - Other surfaces: _<a simulator and driver for mobile; shell plus the CLI entrypoint; desktop only behind a recorded use case and explicit approval>_.
 - Gaps: _<surfaces the agent cannot drive or capture, and the fallback; or "none">_.
@@ -84,4 +84,4 @@ Punch list: _<the gaps certification found, each groomable as an issue; or "none
 - Provider: _<S3-compatible; reference example: Cloudflare R2>_.
 - Bucket: _<name>_. Base URL: _<e.g. `https://<bucket>.<account>.r2.dev/`>_.
 - Credential environment variable names: _<e.g. `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_ACCOUNT_ID`>_. Names only, never values.
-- Upload command: _<e.g. `aws s3 cp <file> s3://<bucket>/<key> --endpoint-url https://<account>.r2.cloudflarestorage.com`>_.
+- Upload: _<canonical S3-compatible entrypoint or recipe, including any provider endpoint requirement>_.

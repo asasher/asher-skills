@@ -7,7 +7,7 @@ Skills that I made or that I like. This is a single repo that I can use to insta
 Installing is two jobs — mount the skills, then run each one's setup against the repo it landed in — so hand it to an agent. The main point of this repository is the software development lifecycle family; it installs together with its supporting skills, and this command mounts all of it:
 
 ```sh
-npx skills add github:asasher/asher-skills --skill adversarial-review agent-ready-codebase backlog bare-minimum-design capture code-review deliver diagnosing-bugs diagram-design domain-modeling handoff implement interview merge principle-codebase-design principle-experience-first principle-type-system-discipline prototype prove-your-work research retro shape staffing tdd technical-writing to-branch to-slices to-spec to-subagent to-thread to-web typescript-best-practices unslop verify-your-work writing-for-humans
+npx skills add github:asasher/asher-skills --skill adversarial-review agent-ready-codebase backlog bare-minimum-design capture code-review codex-imagegen deliver diagnosing-bugs diagram-design domain-modeling handoff implement interview merge principle-codebase-design principle-experience-first principle-type-system-discipline prototype prove-your-work research retro shape staffing tdd technical-writing to-branch to-slices to-spec to-subagent to-thread to-web typescript-best-practices unslop verify-your-work writing-for-humans
 ```
 
 The other categories — creative, thinking, personal — are the appendix: browse the catalog and install what you want by name.

@@ -1,113 +1,30 @@
 # Environment doctor
 
-Load this file when the user asks to run diagnostics, health checks, or first-run troubleshooting, or when they invoke `/diagram-design:doctor` or `/doctor`.
+Run when the user requests Diagram Design diagnostics, health checks, or first-run troubleshooting, including `/diagram-design:doctor` or `/doctor`.
 
-Produce a read-only report on local readiness for Diagram Design import/export and command routing. Report remediation commands for the user to run.
-
-Resolve the Diagram Design installation from this loaded reference. Support invocation from any project directory.
-
-Use two diagnostic modes:
-
-- **Installed-skill mode** (default): check the runtime and the resolved skill installation.
-- **Maintainer-checkout mode**: use this only when the resolved installation root contains `CONTRIBUTING.md`, `.github/workflows/ci.yml`, and `scripts/verify-plugin-package.py`. Add the repository integrity checks below.
+Resolve the skill directory from this loaded reference so diagnostics work from any project. Keep the user’s project unchanged; use temporary probes and remove them afterward. Report each check as `pass`, `warn`, or `fail`.
 
 ## Inputs
 
-Optional flags:
-
-- `--strict` — treat warnings as failures in the final summary.
-- `--json` — print a machine-readable JSON report in addition to human summary.
-
-If no flags are provided, run in standard mode.
+- `--strict` treats warnings as failures in the final summary.
+- `--json` adds a machine-readable report.
 
 ## Required checks
 
-Run all checks in this order and report each as `pass`, `warn`, or `fail`.
+1. **Python runtime:** resolve a Python interpreter compatible with the shipped helpers (Python 3.10+). Report its path and version; absence or an incompatible version is `fail`.
+2. **Shipped package:** verify `SKILL.md`, `scripts/self_check.py`, `scripts/drawio_extract.py`, and `scripts/mermaid_extract.py` exist beneath the resolved skill directory. Missing files are `fail`. Confirm the import helpers handle valid temporary input and the self-check accepts a valid temporary diagram; report execution failures separately from file presence.
+3. **Browser capture:** discover an available browser connector or runtime. Launch or connect, then capture a temporary SVG probe with known dimensions. Confirm the output exists, has those dimensions, and shows the probe. Package imports, help output, and browser caches establish presence only. A failed or unavailable capture is `warn` with the failed operation and applicable repair instructions.
+4. **Paths and references:** check the active instructions for missing local paths and command quoting problems. Report a precise fix for each finding. A missing resolved `SKILL.md` calls for repairing the skill installation.
+5. **Optional repository wiring:** when running in an authoring or plugin checkout, inspect the manifests and routing files that actually exist. Verify their declared entrypoints and referenced files resolve. Run applicable package checks exposed by that checkout; installed skills require only their shipped package, so absent upstream maintainer tooling is not a failure.
 
-1. Python runtime
+## Output
 
-- Resolve `python3` first, then `python`.
-- Require version >= 3.10.
-- `fail` if no Python interpreter is found.
-- `fail` if version is below 3.10.
+Print a compact summary:
 
-2. Playwright availability for PNG export
+`Doctor summary: <PASS|WARN|FAIL> (<pass_count> pass, <warn_count> warn, <fail_count> fail)`
 
-- Check whether Playwright import works in the active Python interpreter (`import playwright`).
-- Check whether Chromium is installed for Playwright (`playwright install --help` availability is sufficient for command presence; prefer also checking browser cache when practical).
-- If missing, mark `warn` and print exact setup hint:
-  - `pip install playwright && playwright install chromium`
+Follow with one line per check, identifying what was verified, the tool used, and any limitation. Add next actions for warnings and failures, using concrete commands appropriate to the discovered environment when useful.
 
-3. Expected script presence (maintainer-checkout mode only)
+With `--json`, also emit `status`, `counts`, `checks[]` (`name`, `status`, `message`, optional `fix`), and `timestamp`.
 
-- Verify these repository scripts exist:
-  - `scripts/verify-drawio-import.py`
-  - `scripts/verify-mermaid-import.py`
-  - `scripts/verify-motion.py`
-  - `scripts/lint-skin.py`
-  - `scripts/verify-docs-sync.py`
-- Missing scripts are `fail` in maintainer-checkout mode.
-- In installed-skill mode, report that maintainer scripts are not applicable; their absence is not a warning or failure.
-
-4. Plugin wiring surfaces (maintainer-checkout mode only)
-
-- Verify Claude command files exist and point to their references:
-  - `commands/export-diagram.md` -> `references/export.md`
-  - `commands/import-drawio.md` -> `references/import-drawio.md`
-  - `commands/import-mermaid.md` -> `references/import-mermaid.md`
-  - `commands/doctor.md` -> `references/doctor.md`
-- Verify Pi prompt files exist and point to their references:
-  - `prompts/export-diagram.md` -> `references/export.md`
-  - `prompts/import-mermaid.md` -> `references/import-mermaid.md`
-  - `prompts/doctor.md` -> `references/doctor.md`
-- Missing files are `fail`.
-- Mismatched reference routing is `fail`.
-- In installed-skill mode, report that maintainer command/prompt wiring is not applicable; partial or absent repository routing trees are not failures.
-
-5. Common path mistakes
-
-- Verify `SKILL.md` beneath the resolved installation root.
-- Detect Windows path quoting risk when paths contain spaces and the provided command examples omit quotes.
-- Detect references to local installed skill paths that do not exist (if command output includes one).
-- Mark these as `warn` with a precise fix suggestion.
-- A missing resolved `SKILL.md` should suggest reinstalling or updating Diagram Design.
-
-## Output contract
-
-Always print:
-
-1. A compact summary line:
-
-- `Doctor summary: <PASS|WARN|FAIL> (<pass_count> pass, <warn_count> warn, <fail_count> fail)`
-
-2. A checklist with one line per check:
-
-- `[PASS] Python 3.11.9 found at ...`
-- `[WARN] Playwright not installed ...`
-- `[FAIL] Missing scripts/verify-docs-sync.py`
-
-3. A `Next actions` section only when warn/fail exists.
-
-4. If `--json` is present, append JSON object with:
-
-- `status`, `counts`, `checks[]` (`name`, `status`, `message`, `fix` optional), `timestamp`.
-
-## Reporting rules
-
-- If any command fails unexpectedly, capture stderr and continue remaining checks.
-- Mark a check as passed only after verifying it in this run.
-- Prefer explicit, copy-pastable remediation commands.
-
-## Example result
-
-```text
-Doctor summary: WARN (6 pass, 2 warn, 0 fail)
-[PASS] Python 3.11.9 found at /usr/bin/python3
-[WARN] Playwright package not found in active interpreter
-[PASS] scripts/verify-drawio-import.py present
-...
-
-Next actions
-- Install PNG export dependencies: pip install playwright && playwright install chromium
-- Re-run: /diagram-design:doctor --strict
-```
+Capture unexpected failures and continue independent checks. Mark a check passed only after verifying it during this run.

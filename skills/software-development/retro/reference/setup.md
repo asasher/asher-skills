@@ -11,9 +11,8 @@ existing bindings, then seed the skill instance. Steps, in order:
 
 2. **Record the upstream target.** Repo (default `asasher/asher-skills`), label (default
    `feedback`, color `#BFD4F2` where the tracker carries label colors — retro mints this label
-   itself, outside the backlog skill's role axes, so it ships the color too), verb
-   (`gh issue create`). When consent is enabled, verify the route with a cheap read
-   (`gh repo view <target>`); record a dead route as a gap in the playbook.
+   itself, outside the backlog skill's role axes, so it ships the color too), submission route. When consent is enabled, confirm access to the target repository;
+   record a failed route as a gap in the playbook.
 
 3. **Bind the transcripts.** For each harness this repo actually runs under, derive where it keeps
    session transcripts from the playbook's how-to-find notes. Verify each location and write it
@@ -28,8 +27,7 @@ existing bindings, then seed the skill instance. Steps, in order:
      git remote slugs, tracker project keys, product and internal codenames — terms every clone
      of the repo wants scrubbed.
 
-   Derive candidates from the repo itself (`git remote -v`, `git config user.email`, `hostname`,
-   the repo directory name) and show the user the two seeded lists side by side for edits — they
+   Derive candidates from the repository identity and local user/machine identity and show the user the two seeded lists side by side for edits — they
    know their sensitive vocabulary, and which terms are shareable, better than the repo does.
 
 5. **Record the pass-due threshold.** Default: 5 open entries, or 3 entries in one visible cluster.
@@ -46,7 +44,7 @@ Preserve settled playbook answers, especially consent, until the user changes th
 
 ## Migration — the instance is already tracked
 
-When `git ls-files retro/` is non-empty, the instance predates machine-locality. Migrate it forward
+When `retro/` contains tracked files, the instance predates machine-locality. Migrate it forward
 in one commit:
 
 1. Untrack going forward: `git rm -r --cached retro/` — the working-tree files stay in place,
@@ -70,6 +68,6 @@ Two warnings the user hears before the commit lands:
 
 - **Other clones and machines pulling the untracking commit will have git delete their unmodified
   `retro/` working files.** Each machine restores its instance from the pre-untracking commit
-  (e.g. `git show <sha>:retro/ledger.md > retro/ledger.md`) or from a backup taken before pulling.
+  or from a backup taken before pulling.
 - **Previously tracked values remain in history.** This migration untracks future changes;
   hostnames and denylist terms in earlier commits remain reachable.

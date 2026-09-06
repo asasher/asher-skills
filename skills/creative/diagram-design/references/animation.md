@@ -90,7 +90,7 @@ When focus is within the motion root: `ArrowRight` advances, `ArrowLeft` goes ba
 
 Provide visible instructions and a scoped `role="status" aria-live="polite" aria-atomic="true"`. Keep that live region inside the motion root but outside `[data-motion-controls]`, so hiding controls for reduced/static states cannot hide announcements. Announce user actions such as “Step 3 of 5: first divergence”; do not announce every autoplay frame. Controls operate only on their nearest `[data-motion-root]`.
 
-Use [`assets/template-motion.html`](../assets/template-motion.html) rather than inventing another controller. Its inline controller is the executable implementation contract: copy that script body verbatim. The skin linter rejects modified or additional controllers, even when they carry `data-diagram-controls`. Replace diagram content and slug-prefixed IDs, but preserve the controller and its state/control attributes.
+Use [`assets/template-motion.html`](../assets/template-motion.html) rather than inventing another controller. Its inline controller is the executable implementation contract: copy that script body verbatim. Compare the delivered script body with that template and confirm it is the only controller. Replace diagram content and slug-prefixed IDs, but preserve the controller and its state/control attributes.
 
 ## Reduced motion, color, and accessibility
 
@@ -112,15 +112,9 @@ The final-state capture contract is synchronous: `?motion=static`, `<html data-m
 
 PNG and SVG exports are static final-state artifacts unless the user explicitly requests a named step. Before capture, open `?motion=static`, await `document.fonts.ready`, and assert `data-frame="static"`. SVG extraction omits HTML controls and scripts; source-visible semantic markup keeps the result complete.
 
-Run:
+Run the shipped `scripts/self_check.py` on the artifact. Check mode/state declarations, contiguous steps, motion budgets, complete SVG naming, no-JS visibility, decorative accessibility, controls, live status, reduced-motion/print behavior, keyboard handling, page-hide pause, bounded static/test overrides, immediate final-step stop, and canonical-controller identity using source inspection and available browser tools. The self-check covers basic structural rules; the browser checks below establish behavior.
 
-```bash
-python3 scripts/verify-motion.py path/to/animated-diagram.html
-python3 scripts/test-verify-motion.py
-python3 scripts/lint-skin.py path/to/animated-diagram.html
-```
-
-The verifier checks mode/state declarations, contiguous steps, motion budgets, complete SVG naming, no-JS source visibility, decorative accessibility, the full control set, live status, reduced-motion/print CSS, keyboard handling, page-hide pause, bounded static/test overrides, immediate final-step stop, and exact canonical-controller identity. Its adversarial tests mutate the canonical template to prove each failure is rejected.
+When changing the checker or canonical controller, run the relevant available maintainer tests and exercise valid and invalid cases for the changed behavior.
 
 Then verify in a browser:
 

@@ -6,12 +6,7 @@ How to create and maintain `question.html` — the single source of truth for on
 
 Scaffold **after** the pose conversation has produced a sharpened claim — the placeholders want the final wording, and a question that dies in triage never needs a folder.
 
-1. **Slugify** the question into a short kebab-case folder name (`Will Acme deliver by Q4?` → `acme-delivery`; keep it under ~4 words). If the folder exists, append `-2`.
-2. `mkdir -p <slug>/sources`.
-3. Copy `templates/question.html` → `<slug>/question.html`.
-4. Replace the placeholders: `{{QUESTION}}` (the sharpened claim, twice — `<title>` and `<h1>`) and `{{DATE}}` (today, `YYYY-MM-DD`, everywhere it appears).
-5. If the workspace root has no `calibration.md` yet, create it with the header row from [review.md](review.md).
-6. Open with the pose conversation ([pose.md](pose.md)).
+Create a unique, short kebab-case folder for the question, with `sources/` and a copy of `templates/question.html` named `question.html`. Fill the template placeholders with the sharpened claim and today’s date (`YYYY-MM-DD`). Create the workspace’s `calibration.md` from [review.md](review.md) if missing, then continue to Frame in [pose.md](pose.md).
 
 ## The layout of the page
 

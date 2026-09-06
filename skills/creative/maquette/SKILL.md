@@ -57,7 +57,7 @@ Write `lib/schema.ts` (the domain types — this is the future database schema) 
 
 ### 5. Build — load [architecture](references/architecture.md), [design-language](references/design-language.md), [web-quality](references/web-quality.md)
 
-Scaffold per the architecture recipe, then build screens in journey order (demo-critical first). Design language: the client's brand tokens if intake produced them, otherwise stock shadcn/ui. Once every approved journey runs end-to-end from the seeded store with no dead ends, do a dedicated **details pass** with [feel](references/feel.md): motion, typography, depth, perceived latency. **Done when:** every approved journey runs end-to-end and every demo-beat screen has been through the details pass.
+Set up the architecture, then build screens in journey order (demo-critical first). Design language: the client's brand tokens if intake produced them, otherwise stock shadcn/ui. Once every approved journey runs end-to-end from the seeded store with no dead ends, do a dedicated **details pass** with [feel](references/feel.md): motion, typography, depth, perceived latency. **Done when:** every approved journey runs end-to-end and every demo-beat screen has been through the details pass.
 
 ### 6. Demo hardening — load [demo](references/demo.md)
 

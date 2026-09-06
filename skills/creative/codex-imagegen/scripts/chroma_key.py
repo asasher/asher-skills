@@ -4,12 +4,11 @@ key -> despill -> edge feather -> trim to content. Writes an RGBA PNG.
 
 Usage:  chroma_key.py IN OUT [--key auto|magenta|green|#RRGGBB] [--hi 90] [--lo 20] [--pad 4]
 
-Requires numpy + Pillow (pip install numpy pillow). Codex ships an equivalent at
-~/.codex/skills/.system/imagegen/scripts/remove_chroma_key.py if deps are missing.
+Requires NumPy and Pillow from this skill’s requirements.txt; install them in the
+active Python environment before running.
 """
 import argparse, sys
 
-from image_key import key_image, trim_transparent
 from output_paths import open_output
 
 def main():
@@ -24,9 +23,9 @@ def main():
 
     try:
         from PIL import Image
+        from image_key import key_image, trim_transparent
     except ImportError:
-        sys.exit("needs numpy + Pillow: pip install numpy pillow "
-                 "(or use ~/.codex/skills/.system/imagegen/scripts/remove_chroma_key.py)")
+        sys.exit("Missing NumPy or Pillow; install this skill’s requirements.txt in the active Python environment.")
 
     try:
         keyed, _, _ = key_image(Image.open(a.inp), a.key, a.hi, a.lo)

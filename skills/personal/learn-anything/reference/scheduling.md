@@ -2,16 +2,7 @@
 
 Anki's unit is a fact scored recall/no-recall. Ours is a **drill scored against a performance criterion** — a different data model, and motor decay is slower and sleep-consolidated, so choose intervals from each drill's score history. State lives in each drill file's frontmatter; `status` derives the picture from them.
 
-## Per-drill state (frontmatter of `drills/<name>.md`)
-
-```yaml
-stage: cognitive | associative | autonomous
-criterion: "8/10 reps self-scored pass at full tempo"
-history:            # append one line per session
-  - 2026-07-05: 6/10, tempo 80%
-last_practiced: 2026-07-05
-status: active | consolidating | maintenance | retired
-```
+Read each drill’s state using the frontmatter defined in [`templates/drill.md`](../templates/drill.md).
 
 ## What "due" means
 

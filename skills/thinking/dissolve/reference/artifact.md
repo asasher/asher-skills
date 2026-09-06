@@ -4,11 +4,7 @@ How to create and maintain `dissolution.html` — the single source of truth. Re
 
 ## Scaffolding a new dissolution (`new`)
 
-1. **Slugify** the question into a short kebab-case folder name (`Is free will real?` → `free-will`; keep it under ~4 words). If the folder exists, append `-2`.
-2. `mkdir -p <slug>/sources`.
-3. Copy `templates/dissolution.html` → `<slug>/dissolution.html`.
-4. Replace the three placeholders: `{{QUESTION}}` (verbatim question, twice — `<title>` and `<h1>`) and `{{DATE}}` (today, `YYYY-MM-DD`, everywhere it appears).
-5. Open with move 1.
+Create a unique, short kebab-case folder for the question, with `sources/` and a copy of `templates/dissolution.html` named `dissolution.html`. Fill the template placeholders with the verbatim question and today’s date (`YYYY-MM-DD`). Begin move 1.
 
 ## The layout of the page
 

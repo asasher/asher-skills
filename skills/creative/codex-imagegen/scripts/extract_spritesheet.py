@@ -7,6 +7,8 @@ argparse CLI for direct use.
 
 from __future__ import annotations
 
+from image_backends import BackendError, add_backend_arguments, resolve_backend
+
 import argparse
 import json
 import math
@@ -581,15 +583,22 @@ def _imagegen_script() -> Path:
     return Path(__file__).resolve().with_name("codex_imagegen.py")
 
 
-def _run_generator(subject: str, out_path: Path, generator_cmd: str) -> None:
+def _run_generator(subject: str, out_path: Path, generator_cmd: str, backend=None, size=1024, timeout=420) -> None:
+    if generator_cmd == DEFAULT_GENERATOR_CMD:
+        from codex_imagegen import build_prompt, generate
+        if backend is None:
+            parser = argparse.ArgumentParser()
+            add_backend_arguments(parser)
+            try:
+                backend = resolve_backend(parser.parse_args([]))
+            except BackendError as exc:
+                raise GenerationError(str(exc)) from None
+        good, note, actual = generate(build_prompt(subject, "magenta", size), out_path, subject, timeout=timeout, backend=backend, size=size)
+        print(note, flush=True)
+        if not good or actual != out_path:
+            raise GenerationError(note if not good else "Generated source path changed unexpectedly; partial artifact preserved.")
+        return
     imagegen_script = _imagegen_script()
-    if generator_cmd == DEFAULT_GENERATOR_CMD and not imagegen_script.exists():
-        raise GenerationError(
-            "--generate needs codex-imagegen's bundled generator "
-            f"(looked for {imagegen_script}). "
-            "Repair the skill, pass --in instead, or provide --generator-cmd for a stub/CI generator."
-        )
-
     try:
         command = generator_cmd.format(
             subject=shlex.quote(subject),
@@ -637,6 +646,9 @@ def extract(
     contact_sheet: str | Path | None = None,
     generator_cmd: str = DEFAULT_GENERATOR_CMD,
     print_validation: bool = False,
+    backend=None,
+    generation_size: int = 1024,
+    generation_timeout: int = 420,
 ) -> dict:
     """Extract sprites and return the manifest dict.
 
@@ -681,7 +693,7 @@ def extract(
 
     if generate:
         source = out_path / "source" / "generated-source.png"
-        _run_generator(subject, source, generator_cmd)
+        _run_generator(subject, source, generator_cmd, backend, generation_size, generation_timeout)
     else:
         source = _as_path(source_path)
         if source is None:
@@ -775,6 +787,9 @@ def build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_GENERATOR_CMD,
         help="shell command template for --generate with {subject} and {out} placeholders",
     )
+    add_backend_arguments(parser)
+    parser.add_argument("--size", type=int, default=1024, help="requested generated sheet dimensions (square)")
+    parser.add_argument("--timeout", type=int, default=420, help="generation request timeout in seconds")
     return parser
 
 
@@ -782,6 +797,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
+        if args.size <= 0 or args.timeout <= 0:
+            parser.error("--size and --timeout must be positive")
+        backend = resolve_backend(args) if args.generate and args.generator_cmd == DEFAULT_GENERATOR_CMD else None
         manifest = extract(
             source_path=args.in_path,
             generate=args.generate,
@@ -804,13 +822,16 @@ def main(argv: Sequence[str] | None = None) -> int:
             contact_sheet=args.contact_sheet,
             generator_cmd=args.generator_cmd,
             print_validation=args.validate,
+            backend=backend,
+            generation_size=args.size,
+            generation_timeout=args.timeout,
         )
     except ValidationError as exc:
         if not args.validate:
             _print_validation_report(exc.report)
         print(str(exc), file=sys.stderr)
         return 2
-    except SpriteExtractionError as exc:
+    except (SpriteExtractionError, BackendError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
     print(f"wrote {len(manifest['elements'])} element(s) to {manifest['artifact']}")

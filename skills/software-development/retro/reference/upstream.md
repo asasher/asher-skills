@@ -20,6 +20,6 @@ The privacy discipline for anything that leaves the repo. Every layer applies, i
   account. Say so in the approval ask; it is part of what they are
   approving.
 
-An approved draft is filed with `gh issue create` against the playbook's upstream target, carrying
+File an approved draft through the playbook's submission route and upstream target, carrying
 its recorded label (`feedback`). If `gh` is missing or unauthenticated, state the gap and hand the
 user the ready-to-file draft.
