@@ -1,29 +1,19 @@
 ---
 name: retro
-description: Record skill friction with retro note, triage recurring problems with retro, or bind private records and upstream consent with retro setup.
+description: Review recent local build and shaping transcripts, compare friction with project issues, and propose tracker changes for the user's selection.
 metadata:
-  optional: [capture]
-  setup: reference/setup.md
+  requires: [capture]
 ---
 
 # Retro
 
-Turn skill friction into fixes. Ordinary product work belongs in `capture`.
+Sweep recent work for problems worth fixing in this project. Run the sweep when requested; findings become tracker changes only after the user's selection. Upstream escalation belongs to whoever later resolves the issue.
 
-## note <observation>
+1. Resolve this repository's local transcripts and [checkpoint](reference/checkpoint.md), including sessions from linked worktrees. Use the harness's session index or metadata to select completed build and shaping sessions. First run: the latest three. Later runs: the next three new or updated sessions after the checkpoint, oldest first. A user-specified scope overrides this default. State the selected sessions and any access gaps; read their transcripts before drawing conclusions.
+2. Identify concrete friction: repeated corrections, misunderstood instructions, broken tooling, failed verification, or recovery trouble. Separate observed failures from suspected causes. Group the same problem; one well-supported occurrence can justify a proposal.
+3. Search this project's open and closed issues for each finding. Read likely matches and their comments. Classify it as a new issue, additional evidence for an open issue, already covered, or a possible regression after closure. If tracker access is unavailable, disclose that duplicate checking is incomplete.
+4. Present a compact table with the problem, evidence, matching issue, and proposed action. Offer the exact new issue or comment for selection. Keep credentials and unrelated transcript details private. Wait for the user's decisions; dismissal is a valid outcome.
+5. Use `capture` for selected new issues, scoped to the approved findings. Add only selected comments to existing issues. Verify each tracker write and return its link. Leave implementation and upstream reporting to the resulting work.
+6. After the discussion and selected writes are complete, advance the checkpoint through the reviewed batch, including dismissed findings. If there are no actionable findings, checkpoint the completed review directly. Report remaining sessions and offer another batch.
 
-Append the date, skill, concrete observation, and transcript run tag under `## Open` in `retro/ledger.md`. Keep full local details. Report `noted; N open entries`; mention a pass is due only when the playbook's threshold is crossed. Analysis waits for an invoked pass.
-
-Resolve `retro/` against the primary working tree, using the resolved Git common directory and worktree registrations. All linked worktrees share this machine's one private ledger. Create it on first use and keep it untracked with the root-anchored `/retro/` ignore rule. `denylist.txt` and `transcripts.md` live beside it; shared scrub terms live in tracked `docs/agents/retro-denylist.txt`.
-
-## retro
-
-1. Read `docs/agents/retro.md`, open entries, and their run transcripts. Also inspect runs since the last pass for unrecorded corrections, aborts, and repeated instructions. A missing playbook requires setup; missing or stale transcript bindings require setup's transcript step. Report inaccessible evidence as a gap.
-2. Cluster the same underlying problem across distinct runs, including matches in `## Triaged` from earlier passes. Repeated wording in one run counts once.
-3. Present every cluster in one table: evidence, disposition, proposed action. Use **local fix** for this repo's bindings, **upstream candidate** for a skill defect seen in at least two independent runs, or **noise** with a reason.
-4. Apply small local binding fixes within existing authorization. Capture larger work as tickets. When the playbook enables upstream proposals, follow [upstream feedback](reference/upstream.md); disabled means report the candidate count without drafting or repeated consent requests.
-5. Move handled entries to `## Triaged`, recording the fix, ticket, proposed feedback, or noise reason. Keep unfinished actions explicit and record the transcript watermark so the next pass resumes.
-
-## setup
-
-Follow [setup](reference/setup.md) to record upstream consent and targets, verify transcript locations, seed both denylists, and reconcile [the playbook](templates/retro.md). Setup permits drafting only; each upstream submission still needs approval of its exact text.
+The checkpoint records review coverage; project issues hold accepted findings. An interrupted discussion or failed write leaves the batch pending; check existing issues again before retrying.

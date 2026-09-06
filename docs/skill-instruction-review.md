@@ -1,5 +1,9 @@
 # Skill instruction review
 
+## Retro: updated after review
+
+Retro now sweeps recent local build and shaping transcripts and offers project issues or comments for user selection. An ignored `.retro/checkpoint.json` in the primary checkout tracks coverage. The ledger, upstream workflow, denylists, and setup playbook are retired. The earlier pass descriptions below record the contracts reviewed at that time; [retro](../skills/software-development/retro/SKILL.md) and its [checkpoint reference](../skills/software-development/retro/reference/checkpoint.md) describe the current behavior.
+
 ## Negations: applied
 
 Four reviewers and the owning session reviewed all 47 authored skills and their instructional references. The pass changed 43 packages, removing about 3,400 o200k_base tokens across Markdown sources. The comparison starts from the working files at the beginning of this pass, preserving the existing user edit to `to-web`.

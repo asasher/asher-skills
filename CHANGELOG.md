@@ -2,6 +2,14 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-06 — retro proposes project issues from recent sessions
+
+`retro` now reviews a bounded batch of local build and shaping transcripts, compares findings with open and closed project issues, and offers issue or comment drafts for user selection. Every tracker write follows that selection. Accepted findings stay in the current project; upstream escalation belongs to whoever resolves them.
+
+The first sweep covers the latest three completed sessions; subsequent batches resume from an ignored `.retro/checkpoint.json` in the primary checkout. Worktrees share the checkpoint; machines keep separate copies. Dismissed findings count as reviewed. Pending discussion, failed writes, and unread sessions keep their coverage pending.
+
+Reconcile: refresh `retro` and `backlog`, include `capture` with retro, and retire the old retro setup from installation instructions. The ledger, playbook, denylists, note verb, upstream workflow, scrub helper, and its obsolete dry-run are removed from the skill. Preserve existing consumer records for deliberate cleanup; the new workflow initializes on first use. Update family documentation. No new behavioral evals were added.
+
 ## 2026-09-06 — outcome instructions, new staffing, and CLIProxyAPI images
 
 - `staffing`: use GPT-6 Astra for planning, orchestration, implementation, research synthesis, and independent verification; Claude Fable 5.1 for taste and frontend work; Terra for bounded collection and browser capture. Fresh context establishes review independence. Retire Fable 5 and the Sol/Opus default assignments.

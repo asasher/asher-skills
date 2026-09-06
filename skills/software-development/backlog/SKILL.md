@@ -39,5 +39,5 @@ A takeover requires the prior worker to be stopped. Record a superseding claim, 
 
 - **capture** → `capture` on the current conversation.
 - **merge** → `merge review` for a read-only PR shortlist. Pass explicit merge selections through unchanged.
-- **retro** → `retro` on the local friction ledger.
+- **retro** → `retro` over recent local build and shaping sessions, proposing project issues for user selection.
 - **setup** → [setup](reference/setup.md), reconciling [the environment template](templates/environment.md).

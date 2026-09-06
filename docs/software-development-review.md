@@ -28,7 +28,7 @@ Can the owner finish routine work while independent checks and current evidence 
 
 ## 5. Merge and learn
 
-Are merge selection, safe cleanup, recovery, and feedback clear? Handoff supports a pause when a context transfer is needed.
+Are merge selection, safe cleanup, recovery, and user-selected retro issues clear? Handoff supports a pause when a context transfer is needed.
 
 [merge](../skills/software-development/merge/SKILL.md) → [retro](../skills/software-development/retro/SKILL.md) → [handoff](../skills/software-development/handoff/SKILL.md)
 
@@ -44,7 +44,7 @@ Do the reusable standards add guidance without duplicating the lifecycle? Review
 - Images: [backend selection and credentials](../skills/creative/codex-imagegen/reference/backends.md).
 - Dispatch: [native worktree preparation](../skills/system/to-thread/reference/worktrees.md), then only the harness route you use.
 - Splits: [publication and readback](../skills/software-development/to-slices/reference/slicing.md).
-- Retro: [upstream privacy and submission](../skills/software-development/retro/reference/upstream.md).
+- Retro: [local checkpoint and bounded coverage](../skills/software-development/retro/reference/checkpoint.md).
 
 ## Validation boundary
 

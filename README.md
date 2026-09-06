@@ -26,8 +26,8 @@ Install Asher's skills into this repository, and finish the job.
    too so the set is closed.
 2. For each installed skill, read its SKILL.md. If it declares a setup, run that
    setup now: backlog's setup writes docs/agents/environment.md, certifies the
-   repo against agent-ready-codebase, and creates the labels, so it goes first;
-   retro's setup asks for consent. A setup writes and reconciles this
+   repo against agent-ready-codebase, and creates the labels, so it goes first.
+   Retro initializes its local checkpoint on its first sweep. A setup reconciles this
    repository's playbooks — the files under docs/agents/ the skills read at
    runtime — so work from what this repository actually does, edit an existing
    playbook rather than replacing it, and ask me when a setup needs a decision
