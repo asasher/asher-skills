@@ -45,7 +45,7 @@ Slices of a spec'd issue land **stacked**: the spec issue's work branch is the s
 
 Once the split is approved, sort the issues into **dependency order, blockers first.** GitHub assigns an id at creation, so an issue can only reference its blocker once that id exists: every blocker must be created before its dependents. Topologically sort the graph; publish in that order.
 
-Wire each prerequisite as a [native blocking relationship](../../backlog/reference/labels.md#dependencies). `backlog build` reads these edges and skips blocked work.
+Wire each prerequisite as a native GitHub issue blocking relationship. `backlog build` reads these edges and skips blocked work.
 
 ## Audit each issue before publication
 
@@ -61,7 +61,7 @@ Fix or drop issues that fail the audit before publication.
 
 ## Publish
 
-Before creating children, place an existing split parent in `shaping` and push its work branch so children will inherit the settled context. Create issues, blockers first, each with its title, body per template-guide § A single issue, work-type (`enhancement` or `bug`), and `shaping`. Link each issue to the spec's issue when one exists. Inherit its milestone, resolving conflicts under [milestone grouping](../../backlog/reference/milestones.md).
+Before creating children, place an existing split parent in `shaping` and push its work branch so children will inherit the settled context. Create issues, blockers first, each with its title, body per template-guide § A single issue, work-type (`enhancement` or `bug`), and `shaping`. Link each issue to the spec's issue when one exists. Inherit its milestone; replacing an existing assignment requires the user's approval in the split plan.
 
 Persist the approved draft and draft-to-issue mapping on the parent, or on the first created issue for a split without a parent. Update that mapping as each issue is created. On an interrupted create, inspect GitHub before retrying; adopt any matching issue. Wire each native blocker after its issue exists. Keep every new issue unreleased until the entire graph and parent relations pass readback.
 

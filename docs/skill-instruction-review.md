@@ -1,5 +1,11 @@
 # Skill instruction review
 
+## Skill boundaries: cross-package paths removed
+
+A scan of all 47 authored skill packages found five runtime cross-package file links: three in capture's entrypoint and README, and two in to-slices' slicing reference. Each reached into backlog's internal milestone or dependency references. The steps now state their own publication outcomes, preserving native relationships, milestone inheritance, conflicting-assignment approval, and migration readback.
+
+Sibling composition uses skill names. Each skill owns access to its internal files. Local package references and provenance citations remain; the full review inventory links source files for human inspection. The boundary is recorded in SKILL-MECHANICS.md.
+
 ## Milestones: testing batches
 
 Requested testing batches now use milestones. Capture keeps one issue per finding; groom preserves membership during consolidation and checks linked replacement work before proposing closure. Approved splits inherit the milestone while retaining their spec integration branches. [The milestone contract](../skills/software-development/backlog/reference/milestones.md) owns the rules, including migration from organizational parents.

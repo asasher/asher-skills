@@ -34,7 +34,7 @@ A collection of skills by Asher. Skills are organized into families with main fo
 
 **Skill instance**: The project-owned materialization an installed package creates or maintains — an editable directory of scaffold, configuration, and artifacts, including the skill's mutable data: checkpoints, queues, decisions, resume artifacts. Project material, not a mount or a workspace; a package reinstall preserves it.
 
-**Sibling skill**: Another skill in this repo relied on by name — a plain-language runtime pointer resolved by the installed skill set, never a file import. Example: `implement` routes defects through the `diagnosing-bugs` sibling.
+**Sibling skill**: Another skill in this repo relied on by name — a plain-language runtime pointer resolved by the installed skill set. Its references, templates, scripts, and other package files are private to that skill; the owner resolves them. Example: `implement` routes defects through the `diagnosing-bugs` sibling.
 
 **Reference skill**: An all-reference sibling cited by name and never run as a workflow: `unslop` (AI tells), `writing-for-humans` (conversation), `technical-writing` (durable artifacts), `agent-ready-codebase` (repo readiness), `principle-experience-first` (shaping target), `staffing` (roster and resolution). A reference skill stays model-invoked with a tight description, or siblings cannot cite it.
 

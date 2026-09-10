@@ -13,7 +13,7 @@ Not for splitting a spec (`to-slices`), not for routing or readiness (grooming),
 
 ## Shape
 
-Sweep, confirm, publish, readback. One compact list (title, work-type, context note), and nothing publishes before the user approves. A requested batch uses a milestone. With an approved spec parent argument, each captured gap is attached as its sub-issue and blocker. [Milestone grouping](../backlog/reference/milestones.md) covers inheritance, conflicting assignments, and migration from organizational parents.
+Sweep, confirm, publish, readback. One compact list (title, work-type, context note), and nothing publishes before the user approves. A requested batch uses a milestone. With an approved spec parent argument, each captured gap is attached as its sub-issue and blocker. The capture plan includes milestone inheritance, conflicting assignments, and any proposed migration from an organizational parent.
 
 ## Provenance
 

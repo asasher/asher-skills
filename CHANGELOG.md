@@ -2,6 +2,12 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-10 — respect skill package boundaries
+
+Removed five cross-skill file links from `capture` and `to-slices`. Their steps now carry the required publication outcomes without reaching into backlog's internal files. Native blockers, milestone inheritance, conflict approval, and migration readback remain explicit.
+
+Reconcile: refresh `capture` and `to-slices`. No setup or dependency changes. The audit covered all 47 authored skill packages; internal package references, named sibling composition, and provenance citations remain. Authoring rules and review documents now make this boundary explicit.
+
 ## 2026-09-10 — group testing batches with milestones
 
 `capture` groups requested batches in GitHub milestones, keeping one ticket per finding. Spec parents remain the integration mechanism for approved implementation splits. `backlog groom` preserves batch membership through consolidation and proposes completed milestone closures; `status` reports progress and closure candidates. `to-slices` inherits and reads back milestone assignments.

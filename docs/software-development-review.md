@@ -4,7 +4,7 @@ The full review covers **36 skills and all 382 tracked files in their packages**
 
 Read each entrypoint, then finish its package inventory before marking that skill reviewed. Diagram Design has 210 files; inspect its type references and rendered examples in their own review sitting. Existing tests are evidence to assess, not an instruction to run live services.
 
-For each skill, record **accept**, **change**, or **needs behavioral evidence**, with the exact source sentence or file. Check the trigger, inputs, owner, approval boundary, output, recovery, and whether each instruction adds useful guidance. A linked file is inventoried; it is not yet manually approved.
+For each skill, record **accept**, **change**, or **needs behavioral evidence**, with the exact source sentence or file. Check the trigger, inputs, owner, approval boundary, output, recovery, and whether each instruction adds useful guidance. Sibling composition uses skill names; runtime file references stay inside the owning package. The source links in this review inventory are for human inspection. A linked file is inventoried; it is not yet manually approved.
 
 ## 1. Intake and grooming
 
