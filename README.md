@@ -62,7 +62,7 @@ Reconcile Asher's skills in this repository from the changelog.
 
 There is no first-party installer and no install-state file — the changelog is the record, and `npx skills add` is the mount tool.
 
-Read the [visual family guide](docs/software-development.html) and [manual review order](docs/software-development-review.md) for the lifecycle and its supporting skills.
+Read the [visual family guide](docs/software-development.html) and [manual review order](docs/software-development-review.md) for the lifecycle and its supporting skills. Run `bun review:serve` to read them locally at `http://127.0.0.1:8791/docs/software-development.html#review`. The reader renders linked Markdown, preserves internal links and heading anchors, and adds navigation between skills. `REVIEW_PORT` selects another local port; share that loopback service through Tailscale Serve for mobile review.
 
 ## Catalog
 

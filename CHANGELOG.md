@@ -2,6 +2,12 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-10 — mobile review reader
+
+Authoring tooling: `bun review:serve` serves the family guide and renders linked Markdown at its original path. The reader preserves relative links and heading anchors, links named skills in the presentation, and provides previous/next navigation, metadata disclosure, and raw source. It binds to loopback for sharing through Tailscale Serve.
+
+`diagram-design`: correct the internal quadrant-variant heading link. Reconcile this skill for that link fix; the reader and its development dependencies stay in the authoring repo. Validation covered the mobile reading journey, all 382 indexed package files, 2,021 local links and anchors, raw-source fidelity, and access from another tailnet machine.
+
 ## 2026-09-10 — respect skill package boundaries
 
 Removed five cross-skill file links from `capture` and `to-slices`. Their steps now carry the required publication outcomes without reaching into backlog's internal files. Native blockers, milestone inheritance, conflict approval, and migration readback remain explicit.
