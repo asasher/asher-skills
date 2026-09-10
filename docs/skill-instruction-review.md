@@ -1,5 +1,9 @@
 # Skill instruction review
 
+## Milestones: testing batches
+
+Requested testing batches now use milestones. Capture keeps one issue per finding; groom preserves membership during consolidation and checks linked replacement work before proposing closure. Approved splits inherit the milestone while retaining their spec integration branches. [The milestone contract](../skills/software-development/backlog/reference/milestones.md) owns the rules, including migration from organizational parents.
+
 ## Retro: updated after review
 
 Retro now sweeps recent local build and shaping transcripts and offers project issues or comments for user selection. An ignored `.retro/checkpoint.json` in the primary checkout tracks coverage. The ledger, upstream workflow, denylists, and setup playbook are retired. The earlier pass descriptions below record the contracts reviewed at that time; [retro](../skills/software-development/retro/SKILL.md) and its [checkpoint reference](../skills/software-development/retro/reference/checkpoint.md) describe the current behavior.

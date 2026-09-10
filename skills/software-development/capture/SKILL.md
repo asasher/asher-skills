@@ -1,6 +1,6 @@
 ---
 name: capture
-description: Capture conversation follow-ups as minimal GitHub tickets, optionally blocking a named parent. Use to establish a ticket before shaping; use to-slices for an approved split.
+description: Capture conversation follow-ups as GitHub tickets, grouping requested batches in milestones or attaching gaps to a named spec parent. Use to establish a ticket before shaping; use to-slices for an approved split.
 metadata:
   optional: [to-slices, technical-writing]
 ---
@@ -10,7 +10,7 @@ metadata:
 Preserve loose work so each ticket survives a cold read at grooming. Use `technical-writing` when available. Splitting settled direction belongs in `to-slices`; if unavailable, retain one ticket and report the gap.
 
 1. Sweep the whole conversation for bugs, enhancements, and committed follow-ups. Exclude already-tracked work, this task's settled scope, and idle musing. When establishing this task's shaping ticket, include its full known intent.
-2. Present titles, work-types (`bug` or `enhancement`), and the context each ticket will carry. Publish the confirmed list; existing approval counts.
+2. Present titles, work-types (`bug` or `enhancement`), and the context each ticket will carry. For a requested batch, include the milestone under [milestone grouping](../backlog/reference/milestones.md). Publish the confirmed plan; existing approval counts.
 3. Create one ticket per confirmed item. Preserve reported symptoms, reproduction, intent, and artifact links. Keep it self-contained and at the level of the report; defer investigation and implementation planning. Apply its work-type and no readiness label. Groom decides readiness.
-4. With `capture <parent>`, attach each child as a sub-issue and make the parent blocked by it. Use [native tracker relationships](../backlog/reference/labels.md#dependencies).
-5. Read back every ticket and relation. Each confirmed item must map to exactly one ticket with the expected work-type and no readiness label. Inspect uncertain creates and adopt matching tickets before retrying. Return links after repairing any mismatch.
+4. With `capture <parent>`, verify that the parent is an approved `spec` split, then attach each gap as a sub-issue and blocker. Inherit its milestone under the grouping contract. For an organizational parent, propose milestone grouping instead. Use [native tracker relationships](../backlog/reference/labels.md#dependencies).
+5. Read back every ticket, milestone assignment, and relation. Each confirmed item must map to exactly one ticket with the expected work-type and no readiness label. Inspect uncertain creates and adopt matching tickets before retrying. Return links after repairing any mismatch.

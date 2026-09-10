@@ -4,7 +4,7 @@ Start with [the visual guide](software-development.html). The sources below are 
 
 ## 1. Groom and route
 
-Does groom read everything, consolidate deliberately, and send only clear work straight to ready?
+Does groom read everything, preserve milestone batches through consolidation and splitting, and send only clear work straight to ready?
 
 [backlog](../skills/software-development/backlog/SKILL.md) → [capture](../skills/software-development/capture/SKILL.md)
 
@@ -40,6 +40,7 @@ Do the reusable standards add guidance without duplicating the lifecycle? Review
 
 ## References worth reading
 
+- Batches: [milestone grouping, inheritance, and completion](../skills/software-development/backlog/reference/milestones.md).
 - Setup: [environment template](../skills/software-development/backlog/templates/environment.md), [labels and claims](../skills/software-development/backlog/reference/labels.md).
 - Images: [backend selection and credentials](../skills/creative/codex-imagegen/reference/backends.md).
 - Dispatch: [native worktree preparation](../skills/system/to-thread/reference/worktrees.md), then only the harness route you use.

@@ -27,6 +27,10 @@ Close consolidated or duplicate tickets as `not planned`, with a comment linking
 
 The bundled [label reconciler](../scripts/reconcile-labels.py) owns colors and descriptions. [Setup](setup.md) previews and applies that scheme with the user's approval.
 
+## Milestones
+
+For batch capture, consolidation, splitting, or completion, use [milestone grouping](milestones.md). Milestones organize tickets; native dependencies and approved spec splits govern execution.
+
 ## Dependencies
 
 - **Blocking** uses GitHub's native issue dependency. An issue stays blocked while any blocker is open; closing the blocker satisfies that dependency.
@@ -57,7 +61,7 @@ Every claim carries a deadline as an absolute timestamp. Size it to the expected
 
 ## Branches
 
-- **Base branch**: recorded in `docs/agents/environment.md` § Branching (usually `main`). Worktrees and work branches fork from it; PRs target it, except a child's PR.
+- **Base branch**: recorded in `docs/agents/environment.md` § Branching (usually `main`). Worktrees and work branches fork from it; PRs target it, except an approved spec split child's PR.
 - **Work branch**: `<issue>-<slug>`, created and used in its secondary worktree, preserving the primary checkout's branch. Shaping commits context changes on it; the later build continues on it and opens the issue's single PR. Pushed as commits land: the remote supports recovery; publication also requires a linked record.
 - **Spec branch**: a spec issue's work branch. Children branch from it and PR into it; the spec issue's own PR is the promotion from the spec branch to the base branch, carrying `Closes #<spec issue>`.
 - **Artifact branch**: `artifact/<issue>`, one per issue, holding every research dossier, prototype, and spec revision as commits. Permanently unmerged by intent; the approved hash pins the spec revision; deleted when the issue closes. Build selection ignores the `artifact/` prefix; status inspects it for recovery and cleanup.

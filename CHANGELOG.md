@@ -2,6 +2,14 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-10 — group testing batches with milestones
+
+`capture` groups requested batches in GitHub milestones, keeping one ticket per finding. Spec parents remain the integration mechanism for approved implementation splits. `backlog groom` preserves batch membership through consolidation and proposes completed milestone closures; `status` reports progress and closure candidates. `to-slices` inherits and reads back milestone assignments.
+
+The shared milestone contract covers conflicting assignments, cross-batch duplicates, and deliberate migration from organizational parent issues. Milestone membership supplies neither readiness nor branching dependencies.
+
+Reconcile: refresh `capture`, `backlog`, and `to-slices`. Existing organizational parents migrate only when selected by the user; preserve their context and real dependencies. No labels, setup, or install-set changes are required. The family guide and manual review order now include testing batches. Validation is structural and editorial; no behavioral evals were added.
+
 ## 2026-09-06 — retro proposes project issues from recent sessions
 
 `retro` now reviews a bounded batch of local build and shaping transcripts, compares findings with open and closed project issues, and offers issue or comment drafts for user selection. Every tracker write follows that selection. Accepted findings stay in the current project; upstream escalation belongs to whoever resolves them.

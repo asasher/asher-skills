@@ -40,6 +40,8 @@ A collection of skills by Asher. Skills are organized into families with main fo
 
 **External skill**: A skill whose canonical source lives outside this repo, installed as a package for authoring-side use only. The family ships from this repo: an external skill our skills need is brought in — copied wholesale or rewritten as our own version, with README credits — pinning the version we reviewed rather than an evolving copy upstream controls. Standing example: `writing-for-agents` (mattpocock/skills). _Avoid_: external requirement.
 
+**Milestone**: A repository batch of related tickets, such as findings from a user-testing session. It carries shared context and completion tracking. Each ticket follows its own readiness and dependency gates; approved spec splits determine integration branches.
+
 **Playbook**: A repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup. The lifecycle family reads one, `environment.md` (run, seed, authenticate, drive, checks, agent-readiness, artifact store); `retro` uses an ignored local checkpoint for transcript coverage. The platform is fixed — GitHub issues and PRs via `gh`, git, an S3-compatible bucket — so no playbook binds it. Repo-owned once written — setups reconcile it, never overwrite it.
 
 **Project agent instruction files**: The instruction files a project's harnesses read: `AGENTS.md` (the harness-neutral base) and `CLAUDE.md` (an `@AGENTS.md` import plus Claude Code deltas — Claude Code never reads `AGENTS.md` on its own). Skill prose says "the project instruction file" for whichever file the running harness reads.

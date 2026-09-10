@@ -20,6 +20,7 @@ Keep every field at the altitude of direction so a fresh agent can pick up the w
 One scratch document, drafted before the confirmation gate and revised through it, a justified recommendation the user edits, containing:
 
 - **Source**: what direction this split came from: the spec'd issue and the approved spec hash the slices were cut from, a document path, or "this conversation". Recorded so a reader can trace issues back, and so a later approval at a new hash shows the split is stale. When the source is a spec'd issue, say that on publish it becomes the `spec` parent: every issue below attaches as its sub-issue and blocker.
+- **Milestone**: inherit the source ticket's batch; show any conflicting assignment for a decision.
 - **Landing**: the stacked landing in one sentence (slicing § How slices land), so the user sees children branching from the spec branch and the promotion PR at the end.
 - **Ordered issues**: the issues in dependency order, blockers first, each carrying the content above plus its rationale, numbered locally (T1, T2, and so on) since ids do not exist until publish.
 - **Edge list**: the dependency graph as a compact list (`T2 depends on T1: the schema T2 reads lands in T1`), each edge justified in words so the user can judge the blocking structure. On publish, local labels become issue ids and each edge is wired.

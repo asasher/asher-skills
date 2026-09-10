@@ -61,7 +61,7 @@ Fix or drop issues that fail the audit before publication.
 
 ## Publish
 
-Before creating children, place an existing split parent in `shaping` and push its work branch so children will inherit the settled context. Create issues, blockers first, each with its title, body per template-guide § A single issue, work-type (`enhancement` or `bug`), and `shaping`. Link each issue to the spec's issue when one exists.
+Before creating children, place an existing split parent in `shaping` and push its work branch so children will inherit the settled context. Create issues, blockers first, each with its title, body per template-guide § A single issue, work-type (`enhancement` or `bug`), and `shaping`. Link each issue to the spec's issue when one exists. Inherit its milestone, resolving conflicts under [milestone grouping](../../backlog/reference/milestones.md).
 
 Persist the approved draft and draft-to-issue mapping on the parent, or on the first created issue for a split without a parent. Update that mapping as each issue is created. On an interrupted create, inspect GitHub before retrying; adopt any matching issue. Wire each native blocker after its issue exists. Keep every new issue unreleased until the entire graph and parent relations pass readback.
 
@@ -78,7 +78,7 @@ Parenting applies when the source is an existing issue.
 
 ## Release after readback
 
-Read back every created issue, work-type, dependency, and parent relation against the approved draft. Verify that the spec branch exists remotely before releasing children that target it. Once the whole graph matches, replace `shaping` with `ready-for-agent` on the children and then the parent. Read the labels back and record completion on the mapping's issue. A release interrupted halfway is safe to resume because all dependencies already exist; preserve labels and claims a builder has since advanced.
+Read back every created issue, work-type, milestone assignment, dependency, and parent relation against the approved draft. Verify that the spec branch exists remotely before releasing children that target it. Once the whole graph matches, replace `shaping` with `ready-for-agent` on the children and then the parent. Read the labels back and record completion on the mapping's issue. A release interrupted halfway is safe to resume because all dependencies already exist; preserve labels and claims a builder has since advanced.
 
 An incomplete graph stays `shaping`, with its missing edges and next action recorded. Recovery finishes the existing graph before releasing any remaining issue.
 
