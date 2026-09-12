@@ -2,6 +2,17 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-13 — simplify instructions and retire Relay
+
+- `backlog`: trim the environment template to project facts and demonstrated capability results; simplify certification instructions.
+- `to-thread`: shorten the T3 reference while retaining launch verification, provider traps, and recovery. The helper stays.
+- `diagram-design`: shorten the discovery description and replace the routine planning pause with reasonable defaults and material clarifications.
+- `verify-your-work`, `agent-ready-codebase`, `prove-your-work`, `to-spec`, `staffing`: default UI checks to headless Playwright. Alternatives must demonstrate isolated control and capture on the execution host. Concurrent runs use separate browser sessions, auth state, fixtures, and output paths. A headed fallback needs an isolated display or explicit approval to use the user's session. Temporary scripts are conditional; reproducible actions and evidence remain required.
+- `writing-for-humans`: quote the description so its colon parses as YAML text; wording and invocation are unchanged.
+- Retire `relay`: remove its entire package and catalog entry. Historical source and authoring records remain in Git.
+
+Reconcile: refresh these skills in the installed set and remove Relay mounts. Reconcile existing environment playbooks to project facts, preserving operational knowledge; demonstrate browser isolation before certifying UI work. Staffing now declares `verify-your-work`, already in the unchanged 36-skill family install set. Preserve consumer-owned Relay records for deliberate cleanup. No behavioral skill evals were added.
+
 ## 2026-09-12 — label setup from a table
 
 `backlog`: replace the 102-line label reconciler with nine rows in `reference/labels.md`. Setup compares repository labels, presents changes, applies the approved plan, and reads back the result. Label names, colors, and workflow meanings remain; descriptions are shorter.

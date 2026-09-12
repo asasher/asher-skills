@@ -19,7 +19,7 @@ Use the `technical-writing` skill for the spec.
    - Implementation decisions, including the constraint or accepted cost when the record gives one.
    - Acceptance criteria with stable `AC-N` identifiers and observable pass-or-fail outcomes.
    - Verification risk and rationale when settled, including the named failure paths and data-safety obligations.
-   - Testing contract when settled: the highest existing public seams and, for each applicable AC, the recorded durable-suite or throwaway-script choice.
+   - Testing contract when settled: the highest existing public seams and, for each applicable AC, the recorded durable-test or temporary-check choice.
    - Scope and exclusions, assumptions, Supporting artifacts, Notes, and a Recommended split when shaping settled one. Omit empty optional sections.
 3. **Keep the direction durable.** Stay above file-by-file instructions. A concrete path or prototype-validated fragment is allowed only when it is the reliable pointer to an established pattern or a decision that prose cannot preserve. For each Supporting artifact, record its kind, the question it answered, its one-line takeaway, and its durable pointer; state plainly when evidence exists only in the conversation.
 4. **Make review aids earn their space.** Add the smallest useful diagram only when it materially clarifies the direction. Use the `diagram-design` sibling in embedded mode and verify both its fragment and the completed spec. When that sibling is absent, use prose or a table and report the missing diagram support if it materially reduced clarity.

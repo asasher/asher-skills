@@ -1,6 +1,6 @@
 # Software development family: full manual review
 
-The full review covers **36 skills and all 381 tracked files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the label-table change and further candidates.
+The full review covers **36 skills and all 381 tracked files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the applied setup, dispatch, diagram, and browser changes and Relay retirement.
 
 Read each entrypoint, then finish its package inventory before marking that skill reviewed. Diagram Design has 210 files; inspect its type references and rendered examples in their own review sitting. Existing tests are evidence to assess, not an instruction to run live services.
 
@@ -28,13 +28,13 @@ Follow one ticket from unsettled intent to an approved, recoverable build brief.
 
 ## 3. Building and proving
 
-Check who owns the build, what independent checks establish, and when the PR is ready.
+Check who owns the build, what independent checks establish, and when the PR is ready. For UI verification, review headless defaults, isolated alternatives, parallel sessions, user-desktop protection, and temporary-check retention.
 
 - [ ] **11. [deliver](../skills/software-development/deliver/SKILL.md)**: The owner runs the full build; correct branch target, checkpoints, and finish gates.
 - [ ] **12. [implement](../skills/software-development/implement/SKILL.md)**: Implementation scope, project conventions, and appropriate tests.
 - [ ] **13. [adversarial-review](../skills/software-development/adversarial-review/SKILL.md)**: Independent verdicts, bounded fixes, refreshed evidence, and explicit stops.
 - [ ] **14. [code-review](../skills/software-development/code-review/SKILL.md)**: Pinned inputs, review scope, actionable findings, and approval criteria.
-- [ ] **15. [verify-your-work](../skills/software-development/verify-your-work/SKILL.md)**: Risk-appropriate runtime checks, independent verification, and truthful claim verdicts.
+- [ ] **15. [verify-your-work](../skills/software-development/verify-your-work/SKILL.md)**: Risk-appropriate runtime checks, isolated concurrent browser sessions, reproducible evidence, and truthful claim verdicts.
 - [ ] **16. [prove-your-work](../skills/software-development/prove-your-work/SKILL.md)**: Inspected screenshots or recordings, current evidence, and published URLs.
 
 ## 4. Merging and learning
@@ -49,7 +49,7 @@ Check human selection, cleanup, interrupted work, and proposed issues from recen
 
 Check the infrastructure that makes the lifecycle possible in a fresh repository or on another machine.
 
-- [ ] **20. [agent-ready-codebase](../skills/software-development/agent-ready-codebase/SKILL.md)**: Demonstrated capability to run, seed, authenticate, isolate, verify, and publish.
+- [ ] **20. [agent-ready-codebase](../skills/software-development/agent-ready-codebase/SKILL.md)**: Demonstrated capability to run, seed, authenticate, isolate concurrent browser checks on the execution host, and publish.
 - [ ] **21. [to-web](../skills/software-development/to-web/SKILL.md)**: Artifact destinations, immutable uploads, verified reachability, and media outside Git.
 - [ ] **22. [to-thread](../skills/system/to-thread/SKILL.md)**: Worktree preparation, all supported harness routes, permissions, and confirmed session liveness.
 - [ ] **23. [to-subagent](../skills/system/to-subagent/SKILL.md)**: Bounded assignments, fresh context, deadlines, recovery, and returned results.

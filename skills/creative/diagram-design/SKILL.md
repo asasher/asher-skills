@@ -1,6 +1,6 @@
 ---
 name: diagram-design
-description: Create branded architecture, IT current-state, flowchart, sequence, state machine, ER/data model, timeline, swimlane, quadrant, radar/spider, polar chart (polar/radial lollipop), loop/flywheel, nested, tree, org chart, layer stack, Venn, pyramid/funnel, treemap, bar, line, Gantt and scatter charts, high-level, process, medallion, data flow, DP integration, DP security matrix, Sankey, fishbone, Wardley map, kanban, user journey, deployment, dependency graph, UML class, story map, or database schema diagrams as standalone HTML/SVG/PNG or inline figures in a self-contained HTML artifact. Redraw .drawio/.drawio.png/.drawio.svg or Mermaid .mmd sources at a chosen size/detail; use a project's DESIGN.md when available and add semantic patterns, callouts, accessible motion, or sketchy/hand-drawn styling.
+description: Create diagrams, charts, and visual explanations as standalone HTML/SVG/PNG or embedded figures. Redraw Mermaid and draw.io sources. Apply the project's design system or the shipped defaults, with motion or sketch styling when useful.
 ---
 
 # Diagram Design
@@ -117,9 +117,9 @@ Rules of thumb:
 
 **Always load the chosen type reference linked in the guide before drawing.** When routed above, also load `semantic-patterns.md`; when animation is chosen, load `animation.md`.
 
-### Confirm before drawing
+### Choose defaults
 
-Before rendering, state the plan in one short message: the chosen visual type (and semantic pattern, if routed), the output mode, the size preset, and anything the complexity budget (§7) will force out. If the user is reachable, let them redirect before you draw; if not, proceed and note the assumptions beside the deliverable. Skip the pause only when the request already pins type, output mode, size, and content exactly.
+Honor the user's visual choices; otherwise choose the type, output mode, and size that fit the material and proceed. Ask when missing information materially changes the meaning or usefulness of the result.
 
 ---
 

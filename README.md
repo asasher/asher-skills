@@ -114,7 +114,6 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | software-development | `verify-your-work` | model | primitive |
 | software-development | `writing-for-humans` | model | reference |
 | personal | `learn-anything` | user | primitive |
-| personal | `relay` | model | primitive |
 | personal | `to-tailnet` | user | primitive |
 | in-progress | `goodwork` | model | primitive |
 

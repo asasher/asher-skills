@@ -2,7 +2,7 @@
 name: staffing
 description: Choose a model and execution route when staffing a task.
 metadata:
-  requires: [codex-imagegen]
+  requires: [codex-imagegen, verify-your-work]
 ---
 
 # Staffing
@@ -15,7 +15,7 @@ Report the selection:
 🤖 <codex|claude|image> <model-name>[-<effort>] because <reason>
 ```
 
-If the selected route is unavailable, report the blocker. Independent review and behavioral verification require fresh context separate from the builder; model diversity is optional. Use the browser row for the driving method.
+If the selected route is unavailable, report the blocker. Independent review and behavioral verification require fresh context separate from the builder; model diversity is optional. Browser verification follows `verify-your-work`.
 
 ## Roster
 
@@ -26,6 +26,6 @@ If the selected route is unavailable, report the blocker. Independent review and
 | Taste, frontend design and implementation, visual critique, copy | claude-fable-5-1 | high | claude-code | native |
 | Research synthesis, difficult fact checking | gpt-6-astra | high | codex-cli | native |
 | Bounded source collection | gpt-5.6-terra | high | codex-cli | native |
-| Browser driving, capture, reproduction | gpt-5.6-terra | high | codex-cli | scripted Playwright driving Chrome |
+| Browser driving, capture, reproduction | gpt-5.6-terra | high | codex-cli | isolated headless browser; default Playwright |
 | Independent behavioral verification | gpt-6-astra | high | codex-cli | fresh context |
 | Image generation | gpt-image-2 | — | codex-imagegen | use the shipped codex-imagegen skill's backend selection |

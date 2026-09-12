@@ -1,6 +1,6 @@
 ---
 name: writing-for-humans
-description: The communication standard for conversation. Apply when replying to a person: responses, questions, plans discussed in chat, review comments.
+description: "The communication standard for conversation. Apply when replying to a person: responses, questions, plans discussed in chat, review comments."
 metadata:
   requires: [unslop]
 ---

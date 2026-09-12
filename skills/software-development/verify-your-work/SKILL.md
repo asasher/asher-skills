@@ -21,17 +21,21 @@ Choose proof that would fail if the claim were false:
 
 - Run touched tests, typecheck/build, and the full suite for behavioral changes.
 - Exercise the real entry point: CLI, HTTP, browser, or the recorded app driver.
-- For UI work, script the changed journey and relevant empty, loading, error, disabled, and responsive states. Drive the app and capture the result.
+- For UI work, exercise the changed journey and relevant empty, loading, error, disabled, and responsive states. Drive the app and capture the result.
 - For destructive data changes, verify preservation and failure paths against representative fixtures.
+
+Use headless Playwright by default. An alternative browser tool must demonstrate app access, control, and capture on the execution host in an isolated session. Give concurrent runs separate browser contexts/profiles, auth state, fixtures, and output paths. Preserve the user's browser and desktop; a headed fallback needs an isolated display or explicit approval to use the user's session. If neither is available, report the affected claims as not verified.
+
+Reuse existing tests and helpers. Write temporary scripts when repetition or complex setup warrants them; direct tool checks record reproducible actions and observations. Keep temporary checks with the run evidence, outside the maintained suite; add durable regression coverage where the testing contract requires it.
 
 Honor each criterion's **guard** (durable suite test) or **temporary check** choice. If undeclared, record the gap, use temporary checks, and flag needed durable coverage for the owner. Use runtime checks for behavioral claims.
 
-Capture exact commands, outputs, and their own exit codes. Serialize checks sharing mutable state. Inspect every visual result for the claimed content, legibility, and clipping. Preserve temporary scripts and captures outside tracked source; media never enters Git. Remove source-tree probes after preserving their exact contents with the run.
+Capture exact tool actions and observations, plus commands, outputs, and exit codes for script runs. Serialize checks sharing mutable state. Inspect every visual result for the claimed content, legibility, and clipping. Preserve temporary scripts and captures outside tracked source; media never enters Git. Remove source-tree probes after preserving their exact contents with the run.
 
 An inaccessible check is **not verified**, with its reason. After three failed attempts at an environment seam, return a partial report for its affected claims. Prove a **pre-existing** failure with the same check against the base in an isolated checkout; distinguish it from a regression.
 
 ## Report
 
-Use `technical-writing` when available. For every claim, return its id, **passed / failed / pre-existing / not verified**, check kind, command, output or visual evidence, and failure explanation. Include fixture details, playbook deviations, artifact paths, and exact temporary scripts or durable source links so evidence can be reused and published.
+Use `technical-writing` when available. For every claim, return its id, **passed / failed / pre-existing / not verified**, check kind, command or tool steps, output or visual evidence, and failure explanation. Include fixture details, playbook deviations, artifact paths, and exact temporary scripts or durable source links so evidence can be reused and published.
 
 Recheck head and base. Moved inputs make the report stale. End with the revisions, verdict totals, and unresolved claims. Passing verdicts require observed proof.
