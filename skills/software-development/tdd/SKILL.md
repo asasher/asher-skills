@@ -17,7 +17,7 @@ See [tests](reference/tests.md) for good/bad test examples and [mocking](referen
 
 ## Seams — where tests go
 
-Tests verify behavior at **seams** — the public boundaries where you observe behavior without reaching inside. **Test only at pre-agreed seams.** Before writing any test, write down the seams under test and confirm them — asking the user "which seams should we test?" when present, else against the issue or spec's named seams. Agreeing the seams up front is how testing effort lands on the critical paths and complex logic instead of every edge case.
+Tests verify behavior at **seams** — the public boundaries where you observe behavior without reaching inside. Before the first test, identify the seams from the issue, spec, or settled discussion. Select any remaining seams within delegated implementation authority and record the choice. Ask only when a material unresolved choice exceeds that authority. Focus testing on the named behavior, critical paths, and complex logic.
 
 ## Anti-patterns
 
@@ -31,4 +31,4 @@ Tests verify behavior at **seams** — the public boundaries where you observe b
 - **One cycle at a time.** One seam, one test, one minimal implementation — each test responding to what the last cycle taught you.
 - **Refactor outside the loop.** The red → green cycle builds behavior; restructuring what already passes is separate, deliberate work.
 
-The loop ends when every confirmed seam has a passing test for each behavior the issue, spec, or user named at that seam.
+The loop ends when every selected seam has a passing test for each behavior the issue, spec, or user named at that seam.

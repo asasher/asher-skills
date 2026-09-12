@@ -11,6 +11,8 @@ Ground truth: the installed `codex` — flags drift between releases, so recheck
 
 2. Name it with `scripts/name-codex-thread.py <uuid> "<name>"`.
 
+Naming has a 30-second reply deadline. On failure, keep the UUID and report `codex resume <uuid>`; the worker's liveness check still applies.
+
 Never pass `--ephemeral`; it makes the thread unresumable.
 
 ## Liveness before success

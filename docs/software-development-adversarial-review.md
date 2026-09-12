@@ -1,10 +1,35 @@
 # Adversarial review and evaluation plan
 
-Reviewed revision **7fc50c1**, September 13, 2026. **Review only: no skill fixes applied.** Four Astra reviewers and three Fable 5.1 reviewers examined the family independently. Two additional Astra analysts designed evals and inspected the five proposed pilot repositories. All three Fable runs reported `claude-fable-5-1`, completed successfully, and had no tool-permission denials.
+Original review: revision **7fc50c1**, September 13, 2026. **The approved corrections and pruning are now applied on PR #201.** Four Astra reviewers and three Fable 5.1 reviewers examined the family independently. Two additional Astra analysts designed evals and inspected the five proposed pilot repositories. All three Fable runs reported `claude-fable-5-1`, completed successfully, and had no tool-permission denials.
 
-I would fix the dispatch, dependency, integration, and evidence failures below before broad unattended use. Most useful pruning removes duplicated authority or arbitrary process. Some apparent repetition protects a skill when invoked on its own and should stay.
+The patch repairs dispatch, dependency, integration, and evidence failures. Pruning removes duplicated authority and arbitrary process while retaining standalone worktree protection, independent review, bounded recovery, and human merge selection.
 
 This is a static adversarial review with focused offline reproductions, not a lifecycle certification. Diagram Design's 210-file package was sampled. The complete reviewer reports retain coverage limits and proposals I rejected or downgraded.
+
+## Applied changes
+
+| Contract | What changed | Evidence still needed |
+| --- | --- | --- |
+| Tickets and shaping | Consolidation transfers native prerequisites and dependents before closure. Shape claims its ticket, holds affected split work during revisions, and releases only a reconciled approved graph. Capture recovery preserves advanced owners. | Agent fixtures for concurrent claims, partial publication, and re-approval. |
+| Build and merge | Deliver accepts its own launch reservation and records stopped outcomes. Checks identify the tested integration tree. Merge requires applicable server protection, current authority, and risk-appropriate independent proof. | Conflict-free integration failure and a disposable GitHub test of base movement during merge. |
+| Runtime recovery | Artifact publication rejects occupied and symbolic target refs. T3 preserves identity and unknown liveness through ambiguous responses or failed credential cleanup. Naming and authentication waits are bounded. | Live harness compatibility and failure injection. |
+| Image provenance | Native output belongs to the returned session and a completed typed image result. Sprite generation and extraction share one resolved chroma key. | Live native-format compatibility; unsupported formats stop safely. |
+| Retro | Save the selected session versions before discussion. Resume that batch without advancing completed coverage; historical reviews preserve normal progress. | Interrupted sweep with new arrivals and selected tracker-write recovery. |
+| Simpler instructions | Six diagram output checks replace the duplicated checklist. Resolved project tokens govern visuals. Diagnosis uses a trustworthy bounded reproduction. Interview and TDD reuse settled decisions. Specs show approval deltas; published reports own detailed proof. | Human comparison of clarity, question quality, diagrams, and proof on the same fixtures. |
+
+Embedded motion figures share one canonical controller in the host; isolated checker fixtures include that controller once. The fixes include direct approval propagation for ticket-based splits, inspectable prototype comparisons, context-document registration, and explicit human waiver provenance. Routine verification may reuse matching recorded checks; an independent verifier runs its own checks. No automatic review-budget reset was added.
+
+### Validation status
+
+The final offline suites pass: **6 artifact-branch tests, 32 dispatch/naming tests, and 34 image-backend tests (72 total)**. Sprite acceptance covers 14 criteria plus bounds sanity; the versioning dry run passes. New regressions were demonstrated failing against the prior helpers. Nine offline diagram cases cover valid fragments, host separation, rejected unsafe fragments, and shipped templates. A headless browser check confirms two motion figures step independently with one shared controller.
+
+Three fresh independent review contexts found and closed additional gaps: symbolic target refs, malformed T3/auth responses, merge during shaping holds, publication ownership for unchanged builders, and repeated embedded motion initialization. These follow-up reviews used source inspection and focused reproductions.
+
+Structural checks pass for 46 authored skills and the 36-skill install closure, with no runtime cross-package file links. The mobile reader exposes all 384 family package files; 2,032 local links and anchors resolve. Mobile and desktop rendering checks found no page overflow or browser errors. These checks establish narrower facts than a lifecycle run.
+
+**The 16-run agent fixture batch and repository pilots remain unexecuted.** No skills have been installed into the pilot repositories, and no pilot build or live tracker mutation is part of this patch. The evaluation sequence below is the next confidence gate.
+
+The following findings describe the **original reviewed revision**. Their line numbers and failure descriptions are historical; source links open the corrected files. Original reviewer reports remain unchanged.
 
 ## First fixes to review
 
@@ -61,7 +86,7 @@ A mocked failed “robot” request returned an unrelated “sunset landscape”
 
 ## Further corrections
 
-These are separate from the six first fixes. Source-traced scenarios still need behavioral tests where noted.
+These corrections are applied alongside F1–F6. The table preserves the original finding and proposed test; source-traced scenarios still need behavioral tests where noted.
 
 | Area | Finding and smallest proposed correction | Targeted eval |
 | --- | --- | --- |
@@ -78,7 +103,7 @@ These are separate from the six first fixes. Source-traced scenarios still need 
 | [Context ownership](../skills/software-development/domain-modeling/SKILL.md) | Context/product owners omit the index registration required by CONTEXT.md; shape reads DESIGN.md without naming its creation owner. Restore owner-level discovery/creation contracts. | Fresh project acquires one glossary term, user type, and durable visual decision; each document gets one usable pointer. |
 | [Split-parent delivery, line 31](../skills/software-development/deliver/SKILL.md) | Other packages describe coverage-gap child creation, but deliver only specifies small integration fixes and broader stops. Clarify whole-spec coverage and propose missing slice work through the approved capture path. | All children closed but one AC missing: report the gap and obtain the required tracker decision; no silent feature expansion. |
 
-## Pruning worth considering
+## Applied pruning
 
 | Candidate | Suggested simplification | What must survive |
 | --- | --- | --- |
@@ -87,8 +112,8 @@ These are separate from the six first fixes. Source-traced scenarios still need 
 | Evidence surfaces | PR body: summary, checkpoint, current evidence link. Published report: per-claim detail. Ticket: pointer and outcome. | A reviewer can find current evidence without guessing which copy is authoritative. |
 | Diagram rules | Delete the universal grid/last-digit tests and hardcoded font/color overrides. Use resolved project tokens. Let evidence determine fishbone causes. | Legibility, correct semantics, accessible output, and the user's design. A style budget cannot invent or merge root causes. |
 | Diagnosis quotas and duplicate policy | Drop the fixed 3–5 hypothesis minimum. Keep one ADR qualification gate. Remove the stale staffing README preference for model diversity. | Ranked falsifiable explanations where uncertainty exists; the actual ADR gate; independent review context. |
-| Parentless slicing | Prefer limiting to-slices to approved spec tickets, matching the ticket-based lifecycle, instead of maintaining contradictory parentless and unconditional spec-branch paths. | This is a scope choice for manual approval, not an applied deletion. |
-| Repeated test runs | Evaluate reuse of captured normal-risk implementation checks when code, integration tree, environment, and fixtures match. | Independent checks where required, claim-specific runtime proof, invalidation on changed inputs. Measure on the real repos before editing. |
+| Parentless slicing | Prefer limiting to-slices to approved spec tickets, matching the ticket-based lifecycle, instead of maintaining contradictory parentless and unconditional spec-branch paths. | Applied after approval: slicing starts from an approved spec ticket. |
+| Repeated test runs | Evaluate reuse of captured normal-risk implementation checks when code, integration tree, environment, and fixtures match. | Independent checks where required, claim-specific runtime proof, invalidation on changed inputs. Measure reuse on the real repositories before claiming a speed improvement. |
 | UI prototype comparison | Publish an inspectable comparison when alternatives need human judgment; screenshots or a reachable preview can replace a launch recipe alone. | The prototype answers its question. Avoid adding a screenshot quota when an already-published artifact is sufficient. |
 
 I rejected automatic review-budget resets after sibling merges, removal of standalone worktree guards, removal of media rules from every pre-publication stage, and replacing prelaunch reservations with a single postlaunch record. These would weaken bounded recovery, independent invocation, or concurrency protection. I also would not add an instruction merely to teach an agent that “accept these recommendations” counts as an answer.
@@ -99,7 +124,7 @@ I rejected automatic review-budget resets after sibling merges, removal of stand
 
 Run metadata/dependency/package-link checks and retained helper tests. Add deterministic regression cases for the demonstrated helper defects. They run without an agent and belong beside the helper they exercise. Keep the skill instruction tests separate: valid packaging is not evidence of correct execution.
 
-Current evidence: prior structural checks passed at this revision; this review ran 14 existing image backend-selection/native tests offline. Four defect classes were reproduced with disposable Git or mocks: artifact ref movement, image provenance, spritesheet key mismatch, and embedded-host checking. No live image service, T3 failure injection, or lifecycle agent eval was run.
+Original review evidence: structural checks had passed at the reviewed revision; the initial review ran 14 existing image backend-selection/native tests offline. Four defect classes were reproduced with disposable Git or mocks: artifact ref movement, image provenance, spritesheet key mismatch, and embedded-host checking. No live image service, T3 failure injection, or lifecycle agent eval was run.
 
 ### 2. Start with eight short agent fixtures
 
@@ -155,6 +180,6 @@ Three clean repetitions are a smoke screen, not a reliability estimate. Run thre
 
 ## Decision for this review
 
-Approve a small correction batch around F1–F6, then freeze and run the first fixtures before expanding. Review the pruning candidates separately so lower token counts cannot conceal changed guarantees. Start the real-repo path with the integrations-v2 local smoke and the pipelines isolated lifecycle pilot. Keep broader autonomous rollout gated on truthful proof and recovery results.
+The approved correction and pruning batch is applied. Freeze the candidate revision and run the first fixtures before expanding. Compare behavior as well as instruction size. Start the real-repo path with the integrations-v2 local smoke and the pipelines isolated lifecycle pilot. Keep broader autonomous rollout gated on truthful proof and recovery results.
 
-[Read the complete reviewer reports](software-development-reviewer-reports.md). Those reports contain additional suggestions, exact source citations, reproduction details, and each reviewer's coverage limits. The recommendations above are the owning review's adjudication; no source fixes have been applied.
+[Read the complete reviewer reports](software-development-reviewer-reports.md). Those reports contain additional suggestions, exact source citations, reproduction details, and each reviewer's coverage limits. The original recommendations were adjudicated before implementation; the applied-status section above describes the resulting patch.

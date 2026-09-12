@@ -7,10 +7,10 @@ The fixed conventions every backlog verb and verb skill shares. `backlog setup` 
 One per open issue once groomed; none means "not yet groomed".
 
 - `needs-shaping`: parked for shaping. Product, design, or scope decisions need resolution or delegation, or a build found the approved spec contradicted by the code. Build eligibility starts at `ready-for-agent`.
-- `shaping`: a shaping thread or an approved split publication owns it. Set at dispatch, or while a split is being wired, so grooming reads it as active context and building skips it. Cleared when the spec is approved and any split graph has passed readback; abandonment returns it to `needs-shaping` after recovery.
+- `shaping`: a shaping thread or an approved split publication owns it. Set at dispatch, standalone shaping intake, or while a split is being wired, so grooming reads it as active context and building skips it. Cleared when the spec is approved and any split graph has passed readback; abandonment returns it to `needs-shaping` after recovery.
 - `ready-for-agent`: released. Groom sets it for an issue whose decisions are settled; `shape` sets it when the spec is approved; `to-slices` sets it on the children of an approved split. Requires a work-type.
 - `building`: reserved or claimed. The provisional claim reserves capacity until a build thread is verified alive; the claim comment is the dispatch declaration. Set by `backlog build`, replacing `ready-for-agent`. Superseded by closure, by a reclaim comment, or by the human-confirmed orphan reset.
-- `ready-for-human`: only a human may work it. Also the handback target for a build that hits an environment blocker or a verification cap: the comment names why only a human can act on what remains. Route blockers a repo change can clear as work.
+- `ready-for-human`: only a human may act on what remains. `deliver` owns build handback routing and records the blocker and next action.
 - `needs-info`: parked, waiting on the reporter.
 
 ## Work-type labels
@@ -21,7 +21,7 @@ Required on `ready-for-agent`; decides how `deliver` routes the work.
 - `enhancement`: new or changed behavior. The default for anything that is not a bug.
 - `spec`: a split parent. Set by `to-slices` when an approved spec's split creates children; replaces the previous work-type. The issue holds the spec its children deliver in installments; when the last child closes it unblocks, and `deliver` runs the coverage check and opens the promotion PR. Every shaped issue has a spec; only a split parent carries the `spec` label.
 
-Close consolidated or duplicate tickets as `not planned`, with a comment linking the surviving ticket and explaining the disposition. Include these closure decisions in the groom plan.
+Before consolidation, re-read claims on all affected tickets. Preserve live or uncertain ownership; wait for those owners to finish or a confirmed stop and handoff. Resolve self-edges and cycles in the approved plan, including existing survivor edges. Transfer the approved true prerequisites and dependents to the survivor as native dependencies. Keep sources open until every required edge and ownership check passes readback. Then close sources as `not planned`, linking the survivor and the approved disposition.
 
 ## Label appearance
 

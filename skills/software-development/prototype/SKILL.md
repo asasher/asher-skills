@@ -15,7 +15,7 @@ Use `technical-writing` for the artifact and returned prose.
 
 1. **State the question.** Record one question and what settles it with the artifact. For logic and mechanism claims, name the claim the artifact can falsify. For UI and other alternatives, name the choices and the decision they settle.
 2. **Build and expose it.** Make the artifact launchable, show its relevant state, and open or drive it directly. Iterate only to settle the stated question.
-3. **Return the result.** Return the artifact path, what it demonstrates, and any choice that still needs human judgment.
+3. **Return the result.** Return the artifact path, what it demonstrates, and any choice that still needs human judgment. For a human choice, provide comparable, inspectable alternatives through the artifact, a reachable preview, or captures of the relevant states. Identify any access gap that prevents comparison.
 
 ## Formats
 

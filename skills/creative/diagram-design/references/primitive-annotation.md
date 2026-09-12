@@ -17,7 +17,7 @@ Use for editorial asides — the "italic pointer" that marks a detail without co
 
 ## Rules
 
-- Italic + serif together signal "editorial voice" against the diagram's sans/mono body. Don't substitute italic sans or italic mono — the combination is load-bearing.
+- Use the resolved `callout` typography. The shipped default is italic serif; project typography takes precedence, with spacing and the dashed leader distinguishing the aside.
 - Dashed path (`stroke-dasharray="4,3"`) distinguishes the callout leader from primary arrows (which are solid).
 - Place callouts in margins (top-right, bottom-left). Never inside the active diagram area.
 - Max 2 callouts per diagram. More becomes commentary, not signal.
@@ -33,6 +33,5 @@ Use for editorial asides — the "italic pointer" that marks a detail without co
 ## Anti-patterns
 
 - Solid arrow leader (reads as a flow arrow).
-- Italic sans or italic mono — the serif is load-bearing.
 - Callouts crossing primary arrows / lifelines — offset to a clear margin.
 - Using a callout to label something the diagram should label directly — put the label on the element.

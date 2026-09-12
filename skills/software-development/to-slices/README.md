@@ -1,13 +1,12 @@
 # To-Slices
 
-Splits a decided direction into ready tracer-bullet GitHub issues with blocking edges, only on the user's explicit call. Its primary input is a spec'd issue (the spec read from the `artifact/<issue>` branch at the approved hash); it also accepts a spec document, a plan document, or the raw current conversation. It drafts vertical slices and presents the split as a justified recommendation the user edits, then, on approval, creates unreleased issues in dependency order, wires and reads back the graph, then releases the issues. The persisted draft-to-issue mapping supports recovery after interruption. A split parent becomes the `spec` issue over its slices: each slice a sub-issue and a blocker, so the parent unblocks when the last child closes.
+Splits one ticket's approved spec into ready tracer-bullet GitHub issues with native blocking edges. Read the source at its approved hash, draft vertical slices, and obtain approval of the concrete split. Prior approval counts when it covers that exact revision and plan. Changed direction needs a revised approved spec.
+
+Create or reconcile unreleased issues in dependency order, wire and read back the complete graph, then release the held tickets. The parent retains the approved draft and issue mapping for recovery. Each child is a sub-issue and blocker of the `spec` parent, whose work branch is their integration base.
 
 ## When to use
 
-- **At the close of shaping**: `shape` runs it inline when the approved spec recommends a split and the user says yes.
-- **From a plan or a live conversation**: when no spec was written, split a plan or the current conversation the same way.
-
-Not for writing the direction itself; that is `to-spec`. Not for loose capture; that is `capture`.
+At the close of shaping, or on an existing ticket with an approved published spec. Documents, plans, and conversations first need that ticket and approval. Use `to-spec` to write direction and `capture` to establish a ticket.
 
 ## Layout
 

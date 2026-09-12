@@ -19,7 +19,7 @@ Resolve the effective tokens for each diagram in this order:
 2. When the project root contains `DESIGN.md`, read it and map its visual system through [`references/project-design.md`](references/project-design.md).
 3. Fill the remaining roles from [`references/style-guide.md`](references/style-guide.md), which supplies the shipped defaults.
 
-Resolution is complete when every color, typography, spacing, and radius role used by the selected diagram has a concrete value.
+Resolution is complete when every color, typography, spacing, and radius role used by the selected diagram has a concrete value. This precedence applies throughout the package: literal fonts, colors, radii, and spacing in examples and type references are shipped defaults, not overrides. Use opaque masks matching the resolved surface beneath them.
 
 ---
 
@@ -123,14 +123,13 @@ Honor the user's visual choices; otherwise choose the type, output mode, and siz
 
 ---
 
-## 4. Universal Anti-patterns
+## 4. Design pitfalls
 
-These mark "AI slop" schematics of any type:
+Apply the resolved visual system from §0. These are pitfalls in the shipped editorial defaults:
 
 | Anti-pattern | Why it fails |
 | --- | --- |
 | Glow, gradients, or neon halos on the dark paper | Looks "technical" without design decisions; the skin lifts surfaces with hairlines, not light |
-| JetBrains Mono as blanket "dev" font | Mono is for _technical_ content — ports, commands, URLs. Names go in Geist sans. |
 | Identical boxes for every node | Erases hierarchy |
 | Legend floating inside the diagram area | Collides with nodes |
 | Arrow labels with no masking rect | Bleeds through the line |
@@ -150,47 +149,7 @@ Type-specific anti-patterns live in each type reference linked in the guide.
 
 The effective design system comes from §0. [`references/style-guide.md`](references/style-guide.md) defines the semantic roles (`paper`, `ink`, `muted`, `accent`, `link`, …) and supplies their shipped values. A project `DESIGN.md` maps into those roles for the current artifact.
 
-> When specs below or in type references mention "ink", "accent", "muted", etc., use the effective value resolved through §0.
-
-### Semantic roles (at a glance)
-
-| Role                    | Purpose                                   |
-| ----------------------- | ----------------------------------------- |
-| `paper`, `paper-2`      | Page bg and container bg                  |
-| `ink`                   | Primary text / stroke                     |
-| `muted`, `soft`         | Secondary text, default arrows, sublabels |
-| `rule`, `rule-solid`    | Hairline borders                          |
-| `accent`, `accent-tint` | 1–2 focal elements per diagram            |
-| `link`                  | HTTP/API calls, external arrows           |
-
-**Focal rule:** `accent` goes on 1–2 elements max. Everything else is `ink` / `muted` / `soft`. If you're tempted to accent 4 things, you haven't decided what's focal yet.
-
-### Node type → treatment
-
-| Type                     | Fill            | Stroke                       |
-| ------------------------ | --------------- | ---------------------------- |
-| **Focal** (1–2 max)      | `accent-tint`   | `accent`                     |
-| **Backend / API / Step** | `paper-2`       | `ink`                        |
-| **Store / State**        | `ink @ 0.05`    | `muted`                      |
-| **External / Cloud**     | `ink @ 0.03`    | `ink @ 0.30`                 |
-| **Input / User**         | `muted @ 0.10`  | `soft`                       |
-| **Optional / Async**     | `ink @ 0.02`    | `ink @ 0.20` dashed `4,3`    |
-| **Security / Boundary**  | `accent @ 0.05` | `accent @ 0.50` dashed `4,4` |
-
-### Typography (summary — full spec in style-guide.md)
-
-- **Title** — Instrument Serif, 1.75rem, 400 — H1 only
-- **Node name** — Geist (sans), 12px, 600 — human-readable labels
-- **Sublabel** — Geist Mono, 9px — ports, URLs, field types
-- **Eyebrow / tag** — Geist Mono, 7–8px, uppercase, tracked — type tags, axis labels
-- **Arrow label** — Geist Mono, 8px — annotation on arrows
-- **Editorial aside** — Instrument Serif _italic_, 14px — callouts only
-
-**Mono is for technical content only** — never as a blanket "dev" font, and never JetBrains Mono.
-
-```html
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-```
+Use the resolved roles throughout the SVG, including text, markers, masks, and summary cards. Typography, node treatments, and default token values live in the style guide. Choose focal emphasis for the explanation; use explicit labels for evidence status so an accent budget cannot change the claims.
 
 ---
 
@@ -209,7 +168,7 @@ Universal building blocks. Type-specialized primitives (lifeline, activation bar
 **Default: clean paper, no dot pattern.** Single `<rect>` filled with `paper`. Don't wrap the diagram in a secondary container background — the diagram sits directly on the page.
 
 ```svg
-<rect width="100%" height="100%" fill="#0a0a0a"/>
+<rect width="100%" height="100%" fill="var(--paper)"/>
 ```
 
 **Optional: dotted paper variant.** When a long-form editorial diagram benefits from textured ground (essays, hero diagrams on a dedicated page), opt in by adding the `dots` pattern and a second rect:
@@ -220,31 +179,31 @@ Universal building blocks. Type-specialized primitives (lifeline, activation bar
     <circle cx="1" cy="1" r="0.9" fill="rgba(237,237,237,0.12)"/>
   </pattern>
 </defs>
-<rect width="100%" height="100%" fill="#0a0a0a"/>
+<rect width="100%" height="100%" fill="var(--paper)"/>
 <rect width="100%" height="100%" fill="url(#dots)" opacity="0.6"/>
 ```
 
 Don't use the dot pattern when the diagram sits inside a product page, slide, or card — the texture compounds with surrounding chrome and reads as noise.
 
-### Arrow markers (define all three, always)
+### Arrow markers (define the ones used)
 
 ```svg
 <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#a1a1a1"/>
+  <polygon points="0 0, 8 3, 0 6" fill="var(--muted)"/>
 </marker>
 <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#52a8ff"/>
+  <polygon points="0 0, 8 3, 0 6" fill="var(--accent)"/>
 </marker>
 <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-  <polygon points="0 0, 8 3, 0 6" fill="#0072f5"/>
+  <polygon points="0 0, 8 3, 0 6" fill="var(--link)"/>
 </marker>
 ```
 
 | Arrow | Stroke | When |
 | --- | --- | --- |
-| Default | muted `#a1a1a1` | Internal, generic |
-| Accent | accent `#52a8ff` | Primary / highlighted / headline |
-| Link-blue | `#0072f5` | HTTP/API calls, external systems |
+| Default | `muted` | Internal, generic |
+| Accent | `accent` | Primary / highlighted / headline |
+| Link | `link` | HTTP/API calls, external systems |
 | Dashed | `stroke-dasharray="5,4"` + any color | Optional, passive, return, async |
 
 **Draw arrows before boxes** so z-order puts lines behind nodes.
@@ -279,7 +238,7 @@ These six rules are **non-negotiable**. Run the pre-output checklist (§9) to ve
 
 ```svg
 <!-- 1. Opaque paper mask — prevents arrows bleeding through transparent fills -->
-<rect x="X" y="Y" width="W" height="H" rx="6" fill="#0a0a0a"/>
+<rect x="X" y="Y" width="W" height="H" rx="6" fill="var(--paper)"/>
 <!-- 2. Styled box -->
 <rect x="X" y="Y" width="W" height="H" rx="6" fill="FILL" stroke="STROKE" stroke-width="1"/>
 <!-- 3. Rectangular type tag (rx=2, NOT a pill) -->
@@ -287,10 +246,10 @@ These six rules are **non-negotiable**. Run the pre-output checklist (§9) to ve
 <text x="X+22" y="Y+15" fill="STROKE@0.8" font-size="7" font-family="'Geist Mono', monospace"
       text-anchor="middle" letter-spacing="0.08em">API</text>
 <!-- 4. Node name (Geist sans — human-readable) -->
-<text x="CX" y="CY+2" fill="#ededed" font-size="12" font-weight="600"
+<text x="CX" y="CY+2" fill="var(--ink)" font-size="12" font-weight="600"
       font-family="'Geist', sans-serif" text-anchor="middle">Node Name</text>
 <!-- 5. Technical sublabel (Geist Mono) -->
-<text x="CX" y="CY+18" fill="#a1a1a1" font-size="9"
+<text x="CX" y="CY+18" fill="var(--muted)" font-size="9"
       font-family="'Geist Mono', monospace" text-anchor="middle">tech:port</text>
 ```
 
@@ -300,8 +259,8 @@ Give every arrow label an opaque mask and the 6–10px connector gap from rule 2
 
 ```svg
 <!-- Mask sits 14px above the arrow (8px text height + 6px gap). Stroke is at ARROW_Y. -->
-<rect x="MID_X-18" y="ARROW_Y-20" width="36" height="12" rx="2" fill="#0a0a0a"/>
-<text x="MID_X" y="ARROW_Y-11" fill="#878787" font-size="8"
+<rect x="MID_X-18" y="ARROW_Y-20" width="36" height="12" rx="2" fill="var(--paper)"/>
+<text x="MID_X" y="ARROW_Y-11" fill="var(--soft)" font-size="8"
       font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">WRITE</text>
 ```
 
@@ -319,7 +278,7 @@ Place the legend in a horizontal strip below all nodes, with a hairline separato
 ```svg
 <line x1="30" y1="LEGEND_Y-8" x2="VIEWBOX_W-30" y2="LEGEND_Y-8"
       stroke="rgba(237,237,237,0.10)" stroke-width="0.8"/>
-<text x="30" y="LEGEND_Y+8" fill="#a1a1a1" font-size="8" font-family="'Geist Mono', monospace"
+<text x="30" y="LEGEND_Y+8" fill="var(--muted)" font-size="8" font-family="'Geist Mono', monospace"
       letter-spacing="0.14em">LEGEND</text>
 <!-- Items — horizontal row, ~160px apart -->
 ```
@@ -330,22 +289,9 @@ Expand SVG `viewBox` height by ~60px.
 
 ## 7. Layout & Spacing
 
-### 4px grid
+### Alignment and spacing
 
-**All values — font sizes, padding, node dimensions, gaps, x/y coords — divisible by 4.** Non-negotiable.
-
-| Category | Allowed values |
-| --- | --- |
-| Font sizes | 8, 12, 16, 20, 24, 28, 32, 40 |
-| Node width / height | 80, 96, 112, 120, 128, 140, 144, 160, 180, 200, 240, 320 |
-| x / y coordinates | multiples of 4 |
-| Gap between nodes | 20, 24, 32, 40, 48 |
-| Padding inside boxes | 8, 12, 16 |
-| Border radius | 4, 6, 8 |
-
-Exempt: stroke widths (0.8, 1, 1.2), opacity values, and the 22×22 dot-pattern.
-
-Quick check: if a coordinate ends in 1, 2, 3, 5, 6, 7, 9 — fix it.
+Use the resolved project spacing scale; the shipped default is a 4px rhythm for layout. Align related elements and keep gaps consistent where meaning permits. Typography, geometry, and data coordinates use the values needed for legibility and accuracy; no divisibility test applies.
 
 ### Complexity budget (per diagram)
 
@@ -396,10 +342,10 @@ If you exceed, split into two diagrams (overview + detail).
 
 ### Page layout
 
-1. **Header** — eyebrow (Geist Mono), title (Instrument Serif), optional subtitle (Geist muted).
+1. **Header** — eyebrow, title, and optional subtitle using the resolved typography roles.
 2. **Diagram container** — default: **clean, borderless**, no background — the SVG sits directly on the page paper. Optional _framed_ variant (for card-heavy layouts or hero placements): `paper-2` bg + 1px `rule` border + 8px radius + `1.5rem` padding + `overflow-x: auto`.
 3. **Summary cards** — 2–3 col grid with _varied_ widths (e.g., `1.1fr 1fr 0.9fr`).
-4. **Footer** — colophon in Geist Mono, muted, hairline top border.
+4. **Footer** — optional colophon using the resolved technical-label family, muted, with a hairline top border.
 
 ---
 
@@ -420,75 +366,28 @@ Vary the summary cards’ treatment:
 
 Rules:
 
-- `background: #1a1a1a` (`paper-2`, not paper — the border carries the lift, no shadow)
-- `border: 1px solid rgba(237,237,237,0.14)`
-- `border-radius: 6px`, `padding: 1.25rem`
+- Background uses `paper-2`.
+- Border uses `rule` and the resolved stroke width.
+- Radius and padding use the resolved tokens (defaults: `6px`, `1.25rem`).
 - **No `box-shadow`**
 - Card dots: 7px, `border-radius: 50%` — ink / muted / accent / link / soft variants
 
 ---
 
-## 9. Pre-Output Checklist (Taste Gate)
+## 9. Pre-output check
 
-Run before producing any diagram.
-
-**Type fit:**
-
-- [ ] If behavior matters, did I choose one semantic pattern before the visual type and load `semantic-patterns.md`?
-- [ ] Right visual type for the layout? (§3 visual-type guide)
-- [ ] Stated type, pattern, output mode, size preset, and planned cuts before drawing — confirmed, or assumptions noted? (§3)
-- [ ] Would a table / paragraph do the same job? (If yes — don't draw.)
-- [ ] Loaded the matching type reference linked in the visual-type guide?
-- [ ] If this is an import — format, size, detail level, and audience set? `viewBox` and type ramp match the size preset? (§11, [output-spec.md §6](references/output-spec.md))
-- [ ] If this is an import — fidelity ledger ready to report? (§11)
-
-**Remove test:**
-
-- [ ] Can I remove any node? (Would a reader still understand?)
-- [ ] Can I merge any two nodes? (Do they always travel together?)
-- [ ] Can I remove any arrow? (Is the relationship obvious from layout?)
-- [ ] Can I remove any label? (Does color or shape already signal it?)
-
-**Signal:**
-
-- [ ] Accent used on ≤2 elements? If more, which actually deserve focal status?
-- [ ] Legend covers every type used — and nothing extra?
-- [ ] Within the type's complexity budget (§7)?
-
-**Technical:**
-
-- [ ] Diagram `<svg>` has `role="img"` and `aria-labelledby` resolving to its `<title>` and `<desc>`?
-- [ ] `<title>` is the first child of `<svg>` (before `<defs>`) and both `<title>` and `<desc>` are filled in?
-- [ ] `<title>` / `<desc>` IDs are prefixed for this diagram and variant — never bare `title` / `desc`?
-- [ ] Arrows drawn before boxes?
-- [ ] **Every connector between off-axis nodes uses a rounded right-angle elbow (`r=8`)? No diagonal `<line>` slants?**
-- [ ] **Every arrow label has a visible 6–10px gap above its connector? (Mask rect not touching the stroke.)**
-- [ ] **No two connectors overlap, share a stroke path, or run on top of each other? Crossings use the bridge/hop primitive?**
-- [ ] **When several connectors enter or exit the same edge of a box, each has its own attach point (≥12px apart)? No connector hides another?**
-- [ ] **No connector passes behind a non-endpoint box, except the unavoidable-intervening-box case (§6 rule 5) — and in that case, the stroke is dashed and the label sits at the visible end?**
-- [ ] **No label mask overlaps a node drawn after it? (Node fill would clip the text — §6 rule 6. Check the rendered bounds and visible text.)**
-- [ ] Every arrow label has an opaque `fill="#0a0a0a"` rect behind it?
-- [ ] Legend is a horizontal bottom strip, not floating?
-- [ ] No vertical `writing-mode` text?
-- [ ] `viewBox` expanded for the legend strip (~60px)?
-- [ ] Every font size, coord, width, height, gap divisible by 4?
-- [ ] From the installed skill directory, did `python3 scripts/self_check.py <file>` pass? (Accessible-SVG contract, single-file safety, motion basics; ships with the skill.)
-- [ ] If animated, does the complete static/no-JS frame work, does reduced motion hide/disable playback, and is the controller copied verbatim from `assets/template-motion.html`? Follow the browser verification in [animation.md](references/animation.md), including print and static-query states, in addition to the shipped self-check.
-
-**Typography:**
-
-- [ ] Brand match uses exact public families/weights, verified via `getComputedStyle`; fallbacks disclosed?
-- [ ] Human-readable names in Geist sans, not Geist Mono?
-- [ ] Technical sublabels (ports, commands, URLs) in Geist Mono?
-- [ ] Page title in Instrument Serif?
-- [ ] Annotation callouts (if any) in _italic_ Instrument Serif? (see [primitive-annotation.md](references/primitive-annotation.md))
-- [ ] No JetBrains Mono anywhere?
+- Confirm the chosen type and any semantic pattern fit the meaning. Use the relevant references and complexity budget; remove redundant content without changing claims. Diagram choices follow §3 defaults and need no routine approval.
+- Inspect the rendered figure at its intended width: readable labels, sufficient contrast, clear connector routes under §6 and the type's exceptions, unclipped text and masks, and space for any necessary legend.
+- Verify the resolved project typography and colors, including mask surfaces. For exact brand matching, inspect computed font families/weights and disclose fallbacks.
+- Run `python3 scripts/self_check.py <file>` from the skill directory on the standalone diagram or isolated embedded fragment. It checks accessible SVG, diagram safety, and motion structure. For embedded output, verify host integration separately under [embedded-output.md](references/embedded-output.md).
+- For imports, check the size preset and type ramp, and report the fidelity ledger under [output-spec.md](references/output-spec.md).
+- For motion, verify the complete static/no-JS frame, reduced-motion and print states, and controls under [animation.md](references/animation.md). Use the canonical controller from `assets/template-motion.html` when controls are needed.
 
 ---
 
 ## 10. Templates & Variants
 
-Every diagram ships in three variants (see `assets/`). The `example-<type>.html` and `example-<type>-dark.html` files predate the current skin: read them for layout, not color.
+Choose one variant for the artifact (see `assets/`). The `example-<type>.html` and `example-<type>-dark.html` files predate the current skin: read them for layout, not color.
 
 | Variant | File pattern | When to use |
 | --- | --- | --- |
@@ -509,7 +408,7 @@ Every diagram ships in three variants (see `assets/`). The `example-<type>.html`
 2. If behavior is load-bearing, choose a semantic pattern; then load the matching type reference linked in the visual-type guide.
 3. Replace the eyebrow, h1, and SVG body. Replace `[diagram-slug]` with the file slug and fill `<title>` / `<desc>`.
 4. If motion is requested, load `animation.md`; otherwise keep mode `none` and no script.
-5. Run the §9 taste gate.
+5. Run the §9 pre-output check.
 
 ---
 

@@ -5,6 +5,7 @@ Record this repository's demonstrated capabilities, configuration pointers, and 
 ## Branching
 
 - Base branch: _<e.g. `main`>_. Worktree root: _<e.g. sibling `<repo-name>-worktrees/`>_.
+- Merge protection: _<target-branch rules, strict up-to-date required checks or merge-group verification/review gate, actor bypass behavior, and configuration gaps>_.
 - PR result: _<preview deployment or other output>_.
 - Merge result and promotion path: _<deployment targets and how changes reach production>_.
 - Deploy constraints: _<runtime, packaging, asset limits>_.
@@ -17,7 +18,7 @@ Record this repository's demonstrated capabilities, configuration pointers, and 
 
 ## Checks
 
-- Full gate: _<CI definition and local entrypoint>_. Fresh-run requirements: _<cache overrides or other requirements>_.
+- Full gate: _<CI definition, checked integration tree, and local entrypoint>_. Fresh-run requirements: _<cache overrides or other requirements>_.
 - Focused checks: _<formatter, linter, typecheck, tests, and other applicable entrypoints>_.
 - Runner traps: _<watch defaults, filtering, gated suites, or none known>_.
 - Generated files: _<generator configuration and additional invocation requirements>_.

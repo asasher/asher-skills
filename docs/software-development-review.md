@@ -1,6 +1,8 @@
 # Software development family: full manual review
 
-The full review covers **36 skills and all 381 tracked files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the applied setup, dispatch, diagram, and browser changes and Relay retirement.
+The full review covers **36 skills and all 384 files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the applied setup, dispatch, diagram, and browser changes and Relay retirement.
+
+The accepted September 13 [adversarial corrections](software-development-adversarial-review.md) are applied. Review ownership and dependency recovery, approval-bound revisions, tested integration trees and server merge gates, attributable runtime results, and the reduced interview, testing, diagram, and evidence ceremony. Focused helper regressions and offline checks are separate from lifecycle behavioral evaluations, which remain pending. The original findings and evaluation plan remain available for comparison.
 
 Read each entrypoint, then finish its package inventory before marking that skill reviewed. Diagram Design has 210 files; inspect its type references and rendered examples in their own review sitting. Existing tests are evidence to assess, not an instruction to run live services.
 
@@ -10,39 +12,39 @@ For each skill, record **accept**, **change**, or **needs behavioral evidence**,
 
 Check how findings become tickets, how milestones survive consolidation, and who decides readiness.
 
-- [ ] **01. [capture](../skills/software-development/capture/SKILL.md)**: One ticket per finding; confirmed publication; milestone grouping and spec-parent gaps.
-- [ ] **02. [backlog](../skills/software-development/backlog/SKILL.md)**: All open issues read; approved consolidation and routing; bounded dispatch, recovery, and milestone completion.
+- [ ] **01. [capture](../skills/software-development/capture/SKILL.md)**: One ticket per finding; confirmed publication; recovery preserves advanced labels and claims; milestone grouping and spec-parent gaps.
+- [ ] **02. [backlog](../skills/software-development/backlog/SKILL.md)**: All open issues read; native dependencies transferred before consolidation closes sources; bounded dispatch and recovery.
 
 ## 2. Shaping and splitting
 
 Follow one ticket from unsettled intent to an approved, recoverable build brief.
 
-- [ ] **03. [shape](../skills/software-development/shape/SKILL.md)**: One ticket and worktree; settled decisions, approval, artifacts, and release.
-- [ ] **04. [interview](../skills/software-development/interview/SKILL.md)**: Useful questions, carried answers, and when the conversation is complete.
+- [ ] **03. [shape](../skills/software-development/shape/SKILL.md)**: One ticket and worktree; shaping ownership, held children during revisions, approval deltas, artifacts, and release.
+- [ ] **04. [interview](../skills/software-development/interview/SKILL.md)**: Material unresolved questions, carried answers, delegated choices, and when the conversation is complete.
 - [ ] **05. [research](../skills/software-development/research/SKILL.md)**: Bounded fact questions, sources, uncertainty, and reusable results.
-- [ ] **06. [prototype](../skills/software-development/prototype/SKILL.md)**: Which uncertainty an experiment resolves and how its evidence reaches the ticket.
-- [ ] **07. [domain-modeling](../skills/software-development/domain-modeling/SKILL.md)**: Consistent vocabulary and ownership of context and architecture decisions.
-- [ ] **08. [to-spec](../skills/software-development/to-spec/SKILL.md)**: Observable acceptance, delegated choices, verification risk, and the approved revision.
-- [ ] **09. [to-slices](../skills/software-development/to-slices/SKILL.md)**: Coverage, vertical boundaries, milestone inheritance, blockers, and complete publication before readiness.
-- [ ] **10. [to-branch](../skills/software-development/to-branch/SKILL.md)**: Artifact commits, preserved checkout state, remote history, and pushed revisions.
+- [ ] **06. [prototype](../skills/software-development/prototype/SKILL.md)**: Which uncertainty an experiment resolves; inspectable alternatives when human judgment is needed; evidence on the ticket.
+- [ ] **07. [domain-modeling](../skills/software-development/domain-modeling/SKILL.md)**: Consistent vocabulary, context-document discovery, and one qualification gate for architecture decisions.
+- [ ] **08. [to-spec](../skills/software-development/to-spec/SKILL.md)**: Observable acceptance, delegated choices, verification risk, and deltas from the approved revision.
+- [ ] **09. [to-slices](../skills/software-development/to-slices/SKILL.md)**: An approved ticket-bound spec, concrete split approval, vertical coverage, and graph readback before readiness.
+- [ ] **10. [to-branch](../skills/software-development/to-branch/SKILL.md)**: Artifact commits, refusal of checked-out or symbolic target branches, preserved checkout state, remote history, and pushed revisions.
 
 ## 3. Building and proving
 
 Check who owns the build, what independent checks establish, and when the PR is ready. For UI verification, review headless defaults, isolated alternatives, parallel sessions, user-desktop protection, and temporary-check retention.
 
-- [ ] **11. [deliver](../skills/software-development/deliver/SKILL.md)**: The owner runs the full build; correct branch target, checkpoints, and finish gates.
+- [ ] **11. [deliver](../skills/software-development/deliver/SKILL.md)**: The owner adopts its launch reservation; whole-spec coverage, checkpointed stops, correct targets, and finish gates.
 - [ ] **12. [implement](../skills/software-development/implement/SKILL.md)**: Implementation scope, project conventions, and appropriate tests.
 - [ ] **13. [adversarial-review](../skills/software-development/adversarial-review/SKILL.md)**: Independent verdicts, bounded fixes, refreshed evidence, and explicit stops.
 - [ ] **14. [code-review](../skills/software-development/code-review/SKILL.md)**: Pinned inputs, review scope, actionable findings, and approval criteria.
-- [ ] **15. [verify-your-work](../skills/software-development/verify-your-work/SKILL.md)**: Risk-appropriate runtime checks, isolated concurrent browser sessions, reproducible evidence, and truthful claim verdicts.
-- [ ] **16. [prove-your-work](../skills/software-development/prove-your-work/SKILL.md)**: Inspected screenshots or recordings, current evidence, and published URLs.
+- [ ] **15. [verify-your-work](../skills/software-development/verify-your-work/SKILL.md)**: Checks on the intended integration tree, risk-appropriate independence, valid normal-risk reuse, and truthful claim evidence.
+- [ ] **16. [prove-your-work](../skills/software-development/prove-your-work/SKILL.md)**: One published report owns per-claim evidence; inspected visuals, revision identity, and current PR/ticket links.
 
 ## 4. Merging and learning
 
 Check human selection, cleanup, interrupted work, and proposed issues from recent runs.
 
-- [ ] **17. [merge](../skills/software-development/merge/SKILL.md)**: Required checks, verified revisions, atomic merge, dependent branches, and safe cleanup.
-- [ ] **18. [retro](../skills/software-development/retro/SKILL.md)**: Bounded transcript sweep, duplicate checking, user-selected tracker writes, and local checkpoint coverage.
+- [ ] **17. [merge](../skills/software-development/merge/SKILL.md)**: Shaping holds, risk and waiver authority, verified integration, server-enforced freshness, dependent branches, and safe cleanup.
+- [ ] **18. [retro](../skills/software-development/retro/SKILL.md)**: Persisted pending transcript versions, bounded sweeps, selected tracker writes, and completed checkpoint coverage.
 - [ ] **19. [handoff](../skills/software-development/handoff/SKILL.md)**: Enough durable context for another session to resume without losing decisions or unfinished work.
 
 ## 5. Setup and dispatch
@@ -51,7 +53,7 @@ Check the infrastructure that makes the lifecycle possible in a fresh repository
 
 - [ ] **20. [agent-ready-codebase](../skills/software-development/agent-ready-codebase/SKILL.md)**: Demonstrated capability to run, seed, authenticate, isolate concurrent browser checks on the execution host, and publish.
 - [ ] **21. [to-web](../skills/software-development/to-web/SKILL.md)**: Artifact destinations, immutable uploads, verified reachability, and media outside Git.
-- [ ] **22. [to-thread](../skills/system/to-thread/SKILL.md)**: Worktree preparation, all supported harness routes, permissions, and confirmed session liveness.
+- [ ] **22. [to-thread](../skills/system/to-thread/SKILL.md)**: Worktree preparation, bounded protocol waits, preserved thread identity, and explicit uncertain liveness.
 - [ ] **23. [to-subagent](../skills/system/to-subagent/SKILL.md)**: Bounded assignments, fresh context, deadlines, recovery, and returned results.
 - [ ] **24. [staffing](../skills/system/staffing/SKILL.md)**: Astra, Fable, Terra, and image model assignments; owner stages and independent contexts.
 
@@ -59,18 +61,18 @@ Check the infrastructure that makes the lifecycle possible in a fresh repository
 
 Review every supporting skill, including its conditional branches and packaged tooling.
 
-- [ ] **25. [diagnosing-bugs](../skills/software-development/diagnosing-bugs/SKILL.md)**: Reproduction, competing causes, and evidence before a fix.
-- [ ] **26. [tdd](../skills/software-development/tdd/SKILL.md)**: Meaningful red/green checks, test seams, and appropriate mocking.
+- [ ] **25. [diagnosing-bugs](../skills/software-development/diagnosing-bugs/SKILL.md)**: The fastest trustworthy bounded reproduction, falsifiable candidates without a quota, and evidence before a fix.
+- [ ] **26. [tdd](../skills/software-development/tdd/SKILL.md)**: Meaningful red/green checks at settled or delegated seams, with appropriate mocking.
 - [ ] **27. [principle-codebase-design](../skills/software-development/principle-codebase-design/SKILL.md)**: Ownership boundaries, interfaces, and maintenance cost.
 - [ ] **28. [principle-experience-first](../skills/software-development/principle-experience-first/SKILL.md)**: User journeys, questioned assumptions, and necessary behavior.
 - [ ] **29. [principle-type-system-discipline](../skills/software-development/principle-type-system-discipline/SKILL.md)**: Domain states, impossible states, and type boundaries.
 - [ ] **30. [typescript-best-practices](../skills/software-development/typescript-best-practices/SKILL.md)**: Project-compatible TypeScript rules that improve implementation choices.
 - [ ] **31. [bare-minimum-design](../skills/creative/bare-minimum-design/SKILL.md)**: Product visual defaults, notifications, and the DESIGN.md template.
-- [ ] **32. [diagram-design](../skills/creative/diagram-design/SKILL.md)**: Visual semantics, style, every supported diagram type, imports, exports, motion, and packaged examples.
-- [ ] **33. [codex-imagegen](../skills/creative/codex-imagegen/SKILL.md)**: Backend priority and permissions, actual dimensions, versioned assets, layers, sprites, and recovery.
+- [ ] **32. [diagram-design](../skills/creative/diagram-design/SKILL.md)**: Project-token precedence, fragment safety and host integration, evidence-based semantics, imports, exports, motion, and examples.
+- [ ] **33. [codex-imagegen](../skills/creative/codex-imagegen/SKILL.md)**: Backend priority, attributable native results, consistent spritesheet keys, dimensions, versioned assets, and recovery.
 - [ ] **34. [technical-writing](../skills/software-development/technical-writing/SKILL.md)**: Readable durable tickets, specs, reports, and PR descriptions.
 - [ ] **35. [writing-for-humans](../skills/software-development/writing-for-humans/SKILL.md)**: Clear conversation and review communication.
-- [ ] **36. [unslop](../skills/software-development/unslop/SKILL.md)**: Concrete language, positive guidance, and retained useful safeguards.
+- [ ] **36. [unslop](../skills/software-development/unslop/SKILL.md)**: Concrete language and retained useful instructions, including standards shared across projects.
 
 ## Full package inventory
 
@@ -115,7 +117,7 @@ Expand each package and account for every file. The checklist above records the 
 </details>
 
 <details>
-<summary>03. shape: 4 files</summary>
+<summary>03. shape: 5 files</summary>
 
 ### Entrypoint
 
@@ -124,6 +126,7 @@ Expand each package and account for every file. The checklist above records the 
 ### Instructional references
 
 - [PRODUCT-FORMAT.md](../skills/software-development/shape/PRODUCT-FORMAT.md)
+- [reference/revisions.md](../skills/software-development/shape/reference/revisions.md)
 
 ### Packaging and provenance
 
@@ -236,7 +239,7 @@ Expand each package and account for every file. The checklist above records the 
 </details>
 
 <details>
-<summary>10. to-branch: 4 files</summary>
+<summary>10. to-branch: 5 files</summary>
 
 ### Entrypoint
 
@@ -245,6 +248,10 @@ Expand each package and account for every file. The checklist above records the 
 ### Executable helpers
 
 - [scripts/to-branch.py](../skills/software-development/to-branch/scripts/to-branch.py)
+
+### Existing tests and fixtures
+
+- [tests/test_to_branch.py](../skills/software-development/to-branch/tests/test_to_branch.py)
 
 ### Packaging and provenance
 
@@ -429,7 +436,7 @@ Expand each package and account for every file. The checklist above records the 
 </details>
 
 <details>
-<summary>22. to-thread: 12 files</summary>
+<summary>22. to-thread: 13 files</summary>
 
 ### Entrypoint
 
@@ -451,6 +458,7 @@ Expand each package and account for every file. The checklist above records the 
 
 ### Existing tests and fixtures
 
+- [evals/test_name_codex_thread.py](../skills/system/to-thread/evals/test_name_codex_thread.py)
 - [evals/test_t3_thread.py](../skills/system/to-thread/evals/test_t3_thread.py)
 
 ### Packaging and provenance

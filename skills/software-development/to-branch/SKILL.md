@@ -18,3 +18,4 @@ Rules:
 - **Publish at record time.** Draft as untracked scratch files; a commit lands here only when the result is written to its record (an issue comment, the conversation). Publish and link are one move, and every commit on the branch is a revision somebody was shown.
 - The printed hash is the revision's identity: projections and approvals bind to it.
 - Use fast-forward updates. The script rejects a conflicting ref move; read the branch tip and reconcile concurrent publication before retrying.
+- The target branch must be unchecked in every registered worktree. The helper refuses a checked-out target; choose an unused artifact branch or release that checkout before publishing.

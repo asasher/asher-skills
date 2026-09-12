@@ -1,5 +1,20 @@
 # Skill instruction review
 
+## Corrections and pruning after adversarial review
+
+Applied September 13 after approval. The [adversarial report](software-development-adversarial-review.html) separates the original findings, applied changes, and remaining evaluation work.
+
+- **Ticket authority:** consolidation preserves native dependencies; standalone shaping claims ownership; revised splits hold affected work until approval and graph reconciliation. Capture adopts interrupted creates without resetting advanced state. Splitting requires an approved spec ticket and carries an already-approved concrete plan.
+- **Build and proof:** deliver accepts its own prelaunch reservation, accounts for whole-spec coverage, and records stopped routing. Verification and review identify the integration tree. Normal-risk check reuse requires matching inputs and provenance; independent verifiers run their own checks. Merge honors shaping holds and applicable server-enforced freshness protection. Human waivers retain named claims, head, and authorization.
+- **Recovery helpers:** artifact commits reject checked-out and symbolic targets. T3 preserves known identity and uncertain liveness through response/cleanup failures. Auth and naming waits are bounded. Native image output must belong to its launched session; sprite generation and extraction use one key.
+- **Less repeated instruction:** diagram entrypoint drops 101 lines before formatting, replacing the duplicated checklist with six output checks. Project tokens govern examples; geometry has no universal divisibility rule; fishbone causes follow evidence. Interview/TDD reuse settled choices; diagnosis drops the hypothesis quota and seconds-only reproduction requirement. ADR qualification and staffing independence each keep one policy source.
+- **Clearer artifacts:** revised specs show a delta; prototypes provide an inspectable comparison where needed. The published proof owns detailed claims, the PR owns its summary and current link, and the ticket records the outcome. Context documents register their discovery pointers.
+- **Bounded retro:** persist the selected session versions before review. Resume the pending batch before selecting new arrivals, preserving normal coverage during historical sweeps. Tracker writes remain user-selected.
+
+The family still ships 36 skills. `shape` now declares `bare-minimum-design`; `deliver` declares `capture`. Both dependencies were already in the install set. Added recovery references and helper tests are included in the full review inventory.
+
+The final 72 helper tests pass, along with sprite acceptance and versioning checks. Three fresh independent reviews closed the additional runtime, authority, and embedded-motion gaps they found. Headless browser checks cover two independently controlled motion figures and the mobile review reader. The eight decision fixtures, 16-run initial agent batch, overlapping-browser exercise, and real repository pilots remain pending; no lifecycle reliability claim follows from token reduction or unit tests.
+
 ## Simplification review
 
 Applied after manual discussion on September 13. Prefer compact instructions for occasional work the agent can derive from available tools. Keep helpers for repeated transformations, fragile protocols, and exact state transitions. Behavioral skill evals remain pending.

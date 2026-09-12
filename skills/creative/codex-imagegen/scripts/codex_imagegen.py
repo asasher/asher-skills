@@ -5,15 +5,12 @@ Backends: configured CLIProxyAPI, native Codex, or explicitly authorized OpenAI 
 Run --help for options; backend configuration is documented in reference/backends.md.
 Native requests use the bundled Codex/transcript adapter; API requests use stdlib HTTP.
 """
-import argparse, glob, json, os, re, subprocess, sys, time
+import argparse, json, os, re, subprocess, sys
 from pathlib import Path
 
 from image_backends import Backend, BackendError, add_backend_arguments, decode_image, request_image, resolve_backend
-from image_key import key_image, trim_transparent
+from image_key import key_image, parse_key, trim_transparent
 from output_paths import latest_existing_path, open_output, reserve_output_dir
-
-SESS = str(Path(os.environ.get("CODEX_HOME", "~/.codex")).expanduser() / "sessions")
-PNG_SIG, JPG_SIG = "iVBORw0KGgo", "/9j/"
 
 KEYS = {
     "magenta": ("#FF00FF", "pure magenta (#FF00FF)"),
@@ -36,7 +33,8 @@ Dimensions: {size}x{size}. Fill the entire canvas. Do not include any foreground
 
 
 def build_prompt(subject, key, size):
-    _, keyname = KEYS[key]
+    color = "#{:02X}{:02X}{:02X}".format(*parse_key(key))
+    keyname = KEYS[key][1] if key in KEYS else color
     return PROMPT_TMPL.format(subject=subject, size=size, keyname=keyname)
 
 
@@ -44,19 +42,8 @@ def build_background_prompt(subject, size):
     return BACKGROUND_PROMPT_TMPL.format(subject=subject, size=size)
 
 
-def walk_strings(o):
-    if isinstance(o, str):
-        yield o
-    elif isinstance(o, dict):
-        for v in o.values():
-            yield from walk_strings(v)
-    elif isinstance(o, list):
-        for v in o:
-            yield from walk_strings(v)
-
-
-def generate(prompt, out, match, timeout=420, effort="low", backend=None, size=1024):
-    """Run one codex generation and extract the matching image to `out`.
+def generate(prompt, out, match=None, timeout=420, effort="low", backend=None, size=1024):
+    """Run one generation and save its attributable image to `out`.
     Returns (ok: bool, note: str, actual_path: Path | None). Sequential use only."""
     backend = backend or Backend("native")
     if backend.name != "native":
@@ -73,63 +60,54 @@ def generate(prompt, out, match, timeout=420, effort="low", backend=None, size=1
             f"dimension_mismatch={str(mismatch).lower()}; dimensions preserved"
         ), actual_out
     try:
-        return _generate_native(prompt, out, match, timeout, effort, size, backend.codex_home)
+        return _generate_native(prompt, out, timeout, effort, size, backend.codex_home)
     except subprocess.TimeoutExpired:
         return False, "Native generation timed out; it may have completed. Inspect the session before retrying; no provider switch attempted.", None
     except OSError:
         return False, "Native Codex execution unavailable; check the CLI and current session. No provider switch attempted.", None
 
 
-def _generate_native(prompt, out, match, timeout, effort, size, codex_home=None):
-    mark = time.time() - 2  # small clock-skew guard
+def _generate_native(prompt, out, timeout, effort, size, codex_home=None):
     native_env = dict(os.environ)
     if codex_home:
         native_env["CODEX_HOME"] = codex_home
-    sessions_root = str(Path(codex_home) / "sessions") if codex_home else SESS
+    sessions_root = Path(native_env.get("CODEX_HOME", "~/.codex")).expanduser() / "sessions"
     proc = subprocess.run(
-        ["codex", "exec", "--dangerously-bypass-approvals-and-sandbox",
+        ["codex", "exec", "--json", "--dangerously-bypass-approvals-and-sandbox",
          "--skip-git-repo-check", "-c", f"model_reasoning_effort={effort}", "-"],
         input=prompt, text=True, capture_output=True, timeout=timeout, env=native_env,
     )
-    sessions = sorted(
-        (p for p in glob.glob(os.path.join(sessions_root, "**", "*.jsonl"), recursive=True)
-         if os.path.getmtime(p) >= mark),
-        key=os.path.getmtime, reverse=True,
-    )
-    cands = []  # (b64, revised_prompt)
-    for s in sessions:
-        try:
-            lines = Path(s).read_text(encoding="utf-8").splitlines()
-        except OSError:
-            continue
-        for ln in lines:
-            if PNG_SIG not in ln and JPG_SIG not in ln:
-                continue
-            try:
-                obj = json.loads(ln)
-            except ValueError:
-                continue
-            m = re.search(r'"revised_prompt"\s*:\s*"([^"]{0,400})', ln)
-            rev = m.group(1) if m else ""
-            for st in walk_strings(obj):
-                core = st.split(",", 1)[1] if st.startswith("data:") else st
-                if (core.startswith(PNG_SIG) or core.startswith(JPG_SIG)) and len(core) > 8000:
-                    cands.append((core, rev))
-    if not cands:
-        return False, f"NO_IMAGE (codex exit {proc.returncode}); check native image-tool availability in this session. No provider switch attempted.", None
-
-    kw = [w for w in re.split(r"[^a-z0-9]+", match.lower()) if len(w) > 2]
-    def score(c):
-        return (sum(k in c[1].lower() for k in kw), len(c[0]))
-    cands.sort(key=score, reverse=True)
-    best, matched = cands[0][0], score(cands[0])[0]
+    if proc.returncode != 0:
+        return False, f"Native Codex failed (exit {proc.returncode}); session evidence preserved. No provider switch attempted.", None
     try:
-        raw, dimensions = decode_image(best + "=" * (-len(best) % 4))
-    except BackendError as exc:
-        return False, str(exc), None
-    with open_output(out) as (actual_out, f):
-        f.write(raw)
-    return True, f"wrote {actual_out} ({len(raw)}B); backend=native; requested={size}x{size}; actual={dimensions[0]}x{dimensions[1]}; dimension_mismatch={str(dimensions != (size, size)).lower()}; dimensions preserved; matched_kw={matched}; candidates={len(cands)}", actual_out
+        events = [json.loads(line) for line in proc.stdout.splitlines() if line.strip()]
+        ids = [event["thread_id"] for event in events if event.get("type") == "thread.started"]
+        if len(ids) != 1 or not re.fullmatch(r"[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}", ids[0]):
+            raise ValueError("missing or ambiguous session identity")
+        session_id = ids[0]
+        if any(event.get("type") in ("error", "turn.failed") for event in events) or sum(event.get("type") == "turn.completed" for event in events) != 1:
+            raise ValueError("native turn did not complete successfully")
+        # Only the exact launched thread can supply results. Never rank other
+        # sessions by timestamps, prompt words, or image size.
+        transcripts = list(sessions_root.glob(f"**/rollout-*-{session_id}.jsonl"))
+        if len(transcripts) != 1:
+            raise ValueError("missing or ambiguous transcript for launched session")
+        records = [json.loads(line) for line in transcripts[0].read_text(encoding="utf-8").splitlines() if line.strip()]
+        identities = [record.get("payload", {}).get("id") for record in records if record.get("type") == "session_meta"]
+        if identities != [session_id]:
+            raise ValueError("transcript identity does not match launched session")
+        results = [record["payload"] for record in records if record.get("type") == "response_item" and record.get("payload", {}).get("type") == "image_generation_call"]
+        if len(results) != 1 or results[0].get("status") != "completed":
+            raise ValueError("expected one completed image-generation result")
+        result = results[0]
+        if not isinstance(result.get("id"), str) or not result["id"]:
+            raise ValueError("image-generation result has no identity")
+        raw, dimensions = decode_image(result.get("result"))
+    except (ValueError, KeyError, TypeError, AttributeError, OSError, BackendError):
+        return False, "Native image result is missing, failed, ambiguous, or unattributable; inspect the launched session. Session evidence preserved; no provider switch attempted.", None
+    with open_output(out) as (actual_out, handle):
+        handle.write(raw)
+    return True, f"wrote {actual_out} ({len(raw)}B); backend=native; session={session_id}; result={result['id']}; requested={size}x{size}; actual={dimensions[0]}x{dimensions[1]}; dimension_mismatch={str(dimensions != (size, size)).lower()}; dimensions preserved", actual_out
 
 
 def _slug(value):
@@ -225,9 +203,8 @@ def generate_layered(scene_file, requested_out, timeout=420, effort="low", backe
             good, note, actual_raw = generate(
                 prompt,
                 requested_raw,
-                layer.get("match") or subject,
-                timeout,
-                effort,
+                timeout=timeout,
+                effort=effort,
                 backend=backend,
                 size=size,
             )
@@ -319,9 +296,9 @@ def main():
         action="store_true",
         help="in batch mode, generate the next version instead of skipping completed names",
     )
-    ap.add_argument("--key", choices=list(KEYS), default="magenta")
+    ap.add_argument("--key", type=lambda value: "#{:02X}{:02X}{:02X}".format(*parse_key(value)), default="magenta", help="background key: magenta, green, or #RRGGBB")
     ap.add_argument("--size", type=int, default=1024)
-    ap.add_argument("--match", help="keywords to disambiguate the image (default: from subject/out)")
+    ap.add_argument("--match", help="legacy option, ignored; native results are bound to the launched session")
     ap.add_argument("--timeout", type=int, default=420)
     ap.add_argument("--effort", default="low")
     add_backend_arguments(ap)
@@ -361,9 +338,8 @@ def main():
             if not a.new_version and latest and latest.stat().st_size > 50_000:
                 print(f"SKIP {name} (exists: {latest})", flush=True); ok += 1; continue
             prompt = it.get("prompt") or build_prompt(it["subject"], a.key, a.size)
-            match = it.get("match") or it.get("subject") or name
             print(f"GEN  {name} …", flush=True)
-            good, note, _ = generate(prompt, out, match, a.timeout, a.effort, backend=backend, size=a.size)
+            good, note, _ = generate(prompt, out, timeout=a.timeout, effort=a.effort, backend=backend, size=a.size)
             print(f"{'OK  ' if good else 'FAIL'} {name}: {note}", flush=True)
             if not good:
                 print("BATCH STOPPED; completed artifacts preserved. No retry or provider switch attempted.", flush=True)
@@ -380,8 +356,7 @@ def main():
         prompt = build_prompt(a.subject, a.key, a.size)
     else:
         ap.error("provide --subject or --prompt-file (or --batch)")
-    match = a.match or a.subject or os.path.splitext(os.path.basename(a.out))[0].replace("-", " ")
-    good, note, _ = generate(prompt, a.out, match, a.timeout, a.effort, backend=backend, size=a.size)
+    good, note, _ = generate(prompt, a.out, timeout=a.timeout, effort=a.effort, backend=backend, size=a.size)
     print(note)
     return 0 if good else 2
 

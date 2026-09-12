@@ -4,6 +4,7 @@ import base64
 from contextlib import contextmanager, redirect_stdout, redirect_stderr
 import io
 import json
+import shlex
 from pathlib import Path
 import subprocess
 import sys
@@ -278,20 +279,149 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(len(calls), 1)
             self.assertTrue((Path(manifest["artifact"]) / manifest["source"]["path"]).exists())
 
-    def test_native_still_extracts_session_image_and_uses_selected_home(self):
-        with tempfile.TemporaryDirectory() as folder:
-            root = Path(folder)
-            (root / "sessions").mkdir()
-            encoded = base64.b64encode(png((100, 100), noise=True)).decode()
-            def native_call(*args, **kwargs):
-                self.assertEqual(kwargs["env"]["CODEX_HOME"], str(root))
-                (root / "sessions" / "new.jsonl").write_text(json.dumps({"revised_prompt": "robot portrait", "image": encoded}) + "\n")
-                return subprocess.CompletedProcess(args[0], 0, "", "")
-            with patch.object(generator.subprocess, "run", side_effect=native_call):
-                good, note, path = generator.generate("robot", root / "robot.png", "robot", backend=backends.Backend("native", codex_home=str(root)), size=100)
-            self.assertTrue(good)
-            self.assertIn("backend=native", note)
-            self.assertTrue(path.exists())
+    def test_generation_auto_key_resolves_before_prompt_and_extraction(self):
+        with tempfile.TemporaryDirectory() as folder, gateway([(200, result(png((32, 16))))]) as (url, calls), redirect_stdout(io.StringIO()):
+            manifest = sprites.extract(generate="two items", out_dir=Path(folder) / "sprites", cols=2, rows=1, key="auto", pad=1, validate=True, expect=2, backend=backends.Backend("cliproxyapi", url, "key"))
+            self.assertIn("SOLID #FF00FF", calls[0][2]["prompt"])
+            self.assertEqual(manifest["key"], {"color": "#FF00FF", "method": "supplied"})
+
+    def test_custom_generator_receives_resolved_key(self):
+        with tempfile.TemporaryDirectory() as folder, gateway([(200, result(png((32, 16))))]) as (url, calls), redirect_stdout(io.StringIO()):
+            command = shlex.quote(sys.executable) + " {imagegen} --subject {subject} --key {key} --out {out} --backend cliproxyapi --proxy-url " + url + " --proxy-key-env TEST_GATEWAY_KEY"
+            with patch.dict(generator.os.environ, {"TEST_GATEWAY_KEY": "local-test-key"}):
+                manifest = sprites.extract(generate="two items", out_dir=Path(folder) / "sprites", cols=2, rows=1, key="auto", pad=1, validate=True, expect=2, generator_cmd=command)
+            self.assertIn("SOLID #FF00FF", calls[0][2]["prompt"])
+            self.assertEqual(manifest["key"]["color"], "#FF00FF")
+
+    def test_invalid_generation_key_stops_before_request_or_output(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(sprites, "_run_generator") as call:
+            out = Path(folder) / "sprites"
+            for key in ("none", "unknown"):
+                with self.assertRaises(sprites.SpriteExtractionError):
+                    sprites.extract(generate="robot", out_dir=out, cols=1, rows=1, key=key)
+            call.assert_not_called()
+            self.assertFalse(out.exists())
+
+    def test_green_sheet_prompt_and_extraction_retain_magenta_subject(self):
+        source = Image.new("RGB", (16, 16), "#00FF00")
+        ImageDraw.Draw(source).rectangle((4, 5, 10, 12), fill="#FF00FF")
+        buffer = io.BytesIO()
+        source.save(buffer, "PNG")
+        with tempfile.TemporaryDirectory() as folder, gateway([(200, result(buffer.getvalue()))]) as (url, calls), redirect_stdout(io.StringIO()):
+            for key in ("green", "#00FF00"):
+                manifest = sprites.extract(generate="one magenta robot", out_dir=Path(folder) / "sprites", cols=1, rows=1, names="robot", key=key, pad=1, validate=True, expect=1, backend=backends.Backend("cliproxyapi", url, "key"), generation_size=16)
+                self.assertIn("SOLID #00FF00", calls[-1][2]["prompt"])
+                self.assertEqual(manifest["key"]["color"], "#00FF00")
+                with Image.open(Path(manifest["artifact"]) / manifest["elements"][0]["asset"]) as opened:
+                    pixels = np.asarray(opened.convert("RGBA"))
+                self.assertEqual(np.count_nonzero(pixels[..., 3]), 7 * 8)
+                self.assertTrue(np.all(pixels[pixels[..., 3] > 0] == [255, 0, 255, 255]))
+                self.assertTrue(np.any(pixels[..., 3] == 0))
+
+
+class NativeTests(unittest.TestCase):
+    session_id = "11111111-2222-3333-4444-555555555555"
+    other_id = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.backend = backends.Backend("native", codex_home=str(self.root))
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def transcript(self, identity=None, results=None, metadata=None):
+        identity = identity or self.session_id
+        path = self.root / "sessions" / "2026" / f"rollout-stub-{identity}.jsonl"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        records = [{"type": "session_meta", "payload": {"id": metadata or identity}}]
+        if results is None:
+            results = [{"id": "ig_own", "type": "image_generation_call", "status": "completed", "result": base64.b64encode(png()).decode()}]
+        records.extend({"type": "response_item", "payload": item} for item in results)
+        path.write_text("".join(json.dumps(record) + "\n" for record in records))
+        return path
+
+    def process(self, code=0, events=None):
+        if events is None:
+            events = [{"type": "thread.started", "thread_id": self.session_id}, {"type": "turn.completed"}]
+        return subprocess.CompletedProcess([], code, "".join(json.dumps(event) + "\n" for event in events), "")
+
+    def generate(self, proc=None, callback=None):
+        def native_call(command, **kwargs):
+            self.assertIn("--json", command)
+            self.assertEqual(kwargs["env"]["CODEX_HOME"], str(self.root))
+            if callback:
+                callback()
+            return proc if proc is not None else self.process()
+        with patch.object(generator.subprocess, "run", side_effect=native_call):
+            return generator.generate("robot", self.root / "robot.png", "robot", backend=self.backend, size=16)
+
+    def test_explicit_session_result_preserves_dimensions_and_version(self):
+        transcript = self.transcript()
+        evidence = transcript.read_bytes()
+        (self.root / "robot.png").write_bytes(b"old artifact")
+        good, note, path = self.generate()
+        self.assertTrue(good, note)
+        self.assertEqual(path.name, "robot-v2.png")
+        self.assertIn("session=" + self.session_id + "; result=ig_own", note)
+        self.assertIn("requested=16x16; actual=32x20; dimension_mismatch=true", note)
+        with Image.open(path) as opened:
+            self.assertEqual(opened.size, (32, 20))
+        self.assertEqual((self.root / "robot.png").read_bytes(), b"old artifact")
+        self.assertEqual(transcript.read_bytes(), evidence)
+
+    def test_concurrent_unrelated_session_cannot_supply_image(self):
+        self.transcript(results=[])
+        good, note, path = self.generate(callback=lambda: self.transcript(self.other_id))
+        self.assertFalse(good)
+        self.assertIsNone(path)
+        self.assertFalse((self.root / "robot.png").exists())
+
+    def test_concurrent_unrelated_result_cannot_replace_owned_result(self):
+        self.transcript()
+        foreign = {"id": "ig_foreign", "type": "image_generation_call", "status": "completed", "revised_prompt": "robot robot robot", "result": base64.b64encode(png((100, 100), noise=True)).decode()}
+        good, note, path = self.generate(callback=lambda: self.transcript(self.other_id, [foreign]))
+        self.assertTrue(good, note)
+        with Image.open(path) as opened:
+            self.assertEqual(opened.size, (32, 20))
+        self.assertIn("result=ig_own", note)
+
+    def test_failed_process_rejects_even_completed_image(self):
+        self.transcript()
+        good, note, path = self.generate(self.process(code=1))
+        self.assertFalse(good)
+        self.assertIsNone(path)
+        self.assertFalse((self.root / "robot.png").exists())
+
+    def test_empty_process_output_rejects_fresh_transcript(self):
+        self.transcript()
+        good, note, path = self.generate(self.process(events=[]))
+        self.assertFalse(good)
+        self.assertIsNone(path)
+
+    def test_metadata_mismatch_rejects_filename_match(self):
+        self.transcript(metadata=self.other_id)
+        self.assertFalse(self.generate()[0])
+
+    def test_failed_or_ambiguous_image_results_are_rejected(self):
+        image = {"id": "ig_one", "type": "image_generation_call", "status": "completed", "result": base64.b64encode(png()).decode()}
+        for results in ([dict(image, status="failed")], [image, dict(image, id="ig_two")], [dict(image, result="bad")], [dict(image, id=None)]):
+            with self.subTest(results=[(item["id"], item["status"]) for item in results]):
+                self.transcript(results=results)
+                self.assertFalse(self.generate()[0])
+                self.assertFalse((self.root / "robot.png").exists())
+
+    def test_input_images_and_untyped_blobs_are_not_results(self):
+        self.transcript(results=[{"type": "message", "role": "user", "image": base64.b64encode(png()).decode()}])
+        self.assertFalse(self.generate()[0])
+
+    def test_failed_or_ambiguous_turn_identity_is_rejected(self):
+        self.transcript()
+        started = {"type": "thread.started", "thread_id": self.session_id}
+        for events in ([started, {"type": "turn.failed"}], [started], [started, started, {"type": "turn.completed"}], [{"type": "thread.started", "thread_id": "../*"}, {"type": "turn.completed"}]):
+            with self.subTest(events=events):
+                self.assertFalse(self.generate(self.process(events=events))[0])
 
 
 if __name__ == "__main__":

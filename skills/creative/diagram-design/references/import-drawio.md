@@ -74,7 +74,7 @@ Work from the digest, not from coordinates. In order:
 
 ## Step 5 — Redraw
 
-Fresh layout on the 4px grid, per the type reference and SKILL.md §6–§7. Explicitly:
+Fresh layout using the resolved spacing, per the type reference and SKILL.md §6–§7. Explicitly:
 
 - **Discard source coordinates.** draw.io positions are hand-dragged and land on odd pixels. Lay out from scratch: dominant flow left→right (or top→bottom), zones aligned, even gaps.
 - **Discard source colors.** Map them to semantic roles instead:
@@ -110,7 +110,7 @@ Source color is a _signal about role_, not a color to keep. Six fill colors in t
 ## Step 6 — Deliver
 
 1. Write the `.html`.
-2. Run the SKILL.md §9 taste gate **and** the [`output-spec.md` §6](output-spec.md) checklist.
+2. Run the SKILL.md §9 pre-output check **and** the [`output-spec.md` §6](output-spec.md) checklist.
 3. Produce `svg` / `png` if the format dial asked for them — via [`export.md`](export.md), from the HTML.
 4. Report the fidelity ledger ([`output-spec.md` §5](output-spec.md)). Every import gets one; the user knows the source and will notice what's gone.
 
@@ -160,7 +160,7 @@ Default is page 0. When the file has several pages:
 
 | Anti-pattern | Why it fails |
 | --- | --- |
-| Reproducing source coordinates | Imports draw.io's hand-dragged layout — off-grid, uneven gaps, the exact thing this skill exists to fix |
+| Reproducing source coordinates | Carries over uneven spacing and routing instead of laying out the content for this output |
 | Keeping the source palette | Six pastel fills read as six meanings; the design system has one accent |
 | One-to-one node mapping regardless of budget | A 30-node canvas is a wiring diagram nobody reads |
 | Keeping every edge because it was in the source | Source graphs carry edges layout already implies |

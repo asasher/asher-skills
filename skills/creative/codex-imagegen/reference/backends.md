@@ -36,7 +36,9 @@ The stdlib HTTP client calls `/images/generations` directly and decodes `data[0]
 
 ## Native Codex
 
-The bundled adapter invokes the authenticated Codex CLI with its image tool, then extracts the matching image from session transcripts. Its sandbox bypass and prompt matching are empirical compatibility requirements; use the adapter for this route. Requests remain sequential because fresh-session matching is shared. `--codex-home` applies to both the subprocess and transcript lookup. The session determines its native image model; `--image-model` and `--quality` configure API backends only.
+The bundled adapter runs `codex exec --json` and requires a successful process and completed turn. It reads only the rollout filename containing the returned thread ID, then verifies the transcript's `session_meta.payload.id`. Extraction requires exactly one `response_item` containing a completed `image_generation_call` with an ID and base64 `result`. Missing identity, unsupported transcript formats, failed results, and multiple results stop the run; session evidence remains available. Successful output reports the session and result IDs.
+
+`--codex-home` applies to both the subprocess and transcript lookup. The adapter retains its CLI sandbox bypass. The session determines its native image model; `--image-model` and `--quality` configure API backends only. `--match` remains accepted for older callers but has no effect.
 
 ## Dimensions and evidence
 

@@ -8,7 +8,7 @@ Spend disproportionate effort on one tight pass/fail signal for the reporter's e
 
 Tighten the loop: make it faster, assert the precise symptom, and remove nondeterminism by pinning time, randomness, filesystem, and network. For a flaky bug, raise and record the reproduction rate with repetition, stress, or narrowed timing windows until the signal is useful.
 
-**Gate:** name one unattended command already run at least once, with captured output, that drives the actual bug path, can go red on this exact symptom and green after the fix, is deterministic — or, for a flaky symptom, carries a recorded reproduction rate and the repetition count that makes a red run trustworthy — and runs in seconds rather than minutes.
+**Gate:** name one unattended command already run at least once, with captured output, that drives the actual bug path and can go red on this exact symptom and green after the fix. Use the fastest trustworthy reproduction, record its measured duration, and set a suitable timeout. Aim for seconds; retain a slower bounded loop when reducing it loses the symptom. The command is deterministic or, for a flaky symptom, carries a recorded reproduction rate and the repetition count that makes a red run trustworthy.
 
 If no such loop is possible, stop. List what was tried and request the missing reproducing environment, captured artifact, or permission for temporary instrumentation. Hypotheses begin only after a loop goes red.
 
@@ -20,7 +20,7 @@ Run the loop and confirm it shows the exact reported failure. Capture the exact 
 
 ## 3. Rank falsifiable hypotheses
 
-Write 3–5 hypotheses before testing any. Rank them. Each names a prediction: “If X is the cause, changing Y will make the symptom disappear or changing Z will make it worse.” Discard or sharpen any claim without a prediction. Put the ranked list in the durable work record; in an attended run, show it to the user — their domain knowledge may re-rank it; in an unattended run, proceed on your own ranking.
+Write the plausible hypotheses supported by the symptom and available evidence; one may suffice. Rank competing explanations. Each names a prediction: “If X is the cause, changing Y will make the symptom disappear or changing Z will make it worse.” Discard or sharpen any claim without a prediction. Put the candidates in the durable work record; in an attended run, show them to the user — their domain knowledge may re-rank them; in an unattended run, proceed on your own ranking. Add candidates when observations expose another plausible explanation.
 
 **Gate:** every candidate is ranked and falsifiable.
 

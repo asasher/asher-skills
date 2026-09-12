@@ -34,3 +34,5 @@ another object, no pure green inside any bottle
 ## Key Choice
 
 Use magenta for green/brown/gray subjects such as foliage, terrain, stone, and wood. Use green only when the subjects contain no greens and no green fringe would be plausible. If validation reports key remnants or keyed holes, regenerate on the other key color or pass an explicit `--key #RRGGBB`.
+
+For `--generate`, pass `--key green`, `--key magenta`, or an exact `--key "#RRGGBB"`. The generator uses that color for both the prompt and extraction. `--key auto` selects magenta before generation; `none` is available only with an existing source. Custom `--generator-cmd` templates can use `{key}` to receive the resolved hex color.

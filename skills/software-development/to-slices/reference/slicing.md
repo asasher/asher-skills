@@ -1,15 +1,10 @@
 # Slicing — the method
 
-## Read the direction — one treatment for every input
+## Read the approved ticket
 
-To-slices splits a direction someone already decided. The input comes in one of these forms; all are read the same way: mine the decided direction, the actors, and the full surface.
+Require a ticket whose record links the published spec and approval of its exact commit hash. Read that spec from `artifact/<issue>` at the approved hash, plus the complete ticket history. A standalone document, plan, or conversation first needs a ticket and approved published spec.
 
-- **A spec'd issue** (the primary input): an issue whose projection comment carries the spec's summary, render URL, and approved commit hash, given by id. Read the spec from the `artifact/<issue>` branch **at the approved hash**, the canonical direction, plus the issue's comment trail for refinements the user made after the projection.
-- **A spec document**: a spec file given by path. Read it exactly as the branch file.
-- **A plan document**: a per-issue design doc. Read it as direction for a single slice's worth of work, or a small cluster.
-- **The raw current conversation**: when no spec or plan was written, mine the conversation and the codebase understanding built up in it.
-
-Preserve the source spec verbatim. Publish the split as child issues and parent relations.
+The approved revision is the direction. Later comments may refine slice boundaries within it; changes to requirements, acceptance, or exclusions need a revised approved spec before slicing. Preserve the source spec verbatim and record the approved hash on the split and children.
 
 ## Draft vertical slices — the default shape
 
@@ -33,11 +28,11 @@ The trigger is both conditions: the change is mechanical (little per-site judgem
 
 ## How slices land
 
-Slices of a spec'd issue land **stacked**: the spec issue's work branch is the spec branch, already carrying the shaping commits (`CONTEXT.md` terms, ADRs). Each slice's build branches from the spec branch and opens its PR into it, inheriting the language from birth. When a child's PR merges, the `merge` skill closes the child issue, which clears one of the spec issue's blockers. When the last child closes, the spec issue unblocks, `deliver` runs the coverage check on the spec branch, and the promotion PR carries the whole direction to the base branch at once. Include the landing sequence in the draft.
+Slices land **stacked**: the spec issue's work branch is the spec branch, already carrying the shaping commits (`CONTEXT.md` terms, ADRs). Each slice's build branches from the spec branch and opens its PR into it, inheriting the language from birth. When a child's PR merges, the `merge` skill closes the child issue, which clears one of the spec issue's blockers. When the last child closes, the spec issue unblocks, `deliver` runs the coverage check on the spec branch, and the promotion PR carries the whole direction to the base branch at once. Include the landing sequence in the draft.
 
 ## Present the recommendation — the confirmation gate
 
-**To-slices recommends; the user edits.** Present the split draft (template-guide § The split draft). The user reacts to reasons, moving a boundary or cutting an edge, and the draft is revised and re-presented until they approve.
+**To-slices recommends; the user edits.** Present the split draft (template-guide § The split draft). Carry existing approval when it covers the exact source revision, slices, graph, and landing plan. Present only changed or unapproved parts; resolve boundary edits within the approved direction.
 
 **Approval gates publication.** That approval is also the readiness decision: the approved slices become `ready-for-agent` after the complete graph passes readback.
 
@@ -61,24 +56,22 @@ Fix or drop issues that fail the audit before publication.
 
 ## Publish
 
-Before creating children, place an existing split parent in `shaping` and push its work branch so children will inherit the settled context. Create issues, blockers first, each with its title, body per template-guide § A single issue, work-type (`enhancement` or `bug`), and `shaping`. Link each issue to the spec's issue when one exists. Inherit its milestone; replacing an existing assignment requires the user's approval in the split plan.
+Before publication, re-read the parent's and existing children's claims. Establish publication ownership for the parent and child records being changed, accepting this session's shaping claim. Changing another live or uncertain owner's records or authority requires a confirmed stop and handoff. Hold the parent and open children whose contracts change in `shaping`, then push the work branch so children inherit settled context. Reconcile existing children against the approved draft, including their source hashes and coverage of completed work. Create missing issues, blockers first, each with its title, body per template-guide § A single issue, work-type (`enhancement` or `bug`), and `shaping`. Link each child to the parent. Inherit its milestone; replacing an existing assignment requires the user's approval in the split plan.
 
-Persist the approved draft and draft-to-issue mapping on the parent, or on the first created issue for a split without a parent. Update that mapping as each issue is created. On an interrupted create, inspect GitHub before retrying; adopt any matching issue. Wire each native blocker after its issue exists. Keep every new issue unreleased until the entire graph and parent relations pass readback.
+Persist the approved draft, approval record, and draft-to-issue mapping on the parent. Update that mapping as each issue is created. On an interrupted create, inspect GitHub before retrying; adopt any matching issue. Wire each native blocker after its issue exists. Keep every new issue unreleased until the entire graph and parent relations pass readback.
 
 ## Parent the slices
 
-When the input was a spec'd issue, the slices carry the installments but the parent keeps the whole. Finish by parenting it over them:
+The slices carry the installments and the parent keeps the whole. Finish by parenting it over them:
 
 - **Attach every slice as a native sub-issue** of the parent.
 - **Wire the parent `blocked_by` every slice** with the same dependency verb as § Order and wire. This is the gate: the parent stays out of `backlog build`'s sweep until every child closes, and a child attached later (a capture against the parent, a gap the coverage check files) re-blocks it the same way.
 - **Relabel the parent `spec`**, replacing its previous work-type. The parent's remaining work is the coverage check `deliver` runs when the blockers clear.
 - **Post a pointer comment** on the parent linking every child, so anyone landing on it sees the split. Each child links back to the parent (§ Audit, inherited context links).
 
-Parenting applies when the source is an existing issue.
-
 ## Release after readback
 
-Read back every created issue, work-type, milestone assignment, dependency, and parent relation against the approved draft. Verify that the spec branch exists remotely before releasing children that target it. Once the whole graph matches, replace `shaping` with `ready-for-agent` on the children and then the parent. Read the labels back and record completion on the mapping's issue. A release interrupted halfway is safe to resume because all dependencies already exist; preserve labels and claims a builder has since advanced.
+Read back every created issue, work-type, milestone assignment, dependency, and parent relation against the approved draft. Verify that the spec branch exists remotely before releasing children that target it. Once the whole graph matches, replace `shaping` with `ready-for-agent` on held open children and then the parent. Read the labels back and record completion on the mapping's issue. A release interrupted halfway resumes the existing graph; preserve labels and claims a builder has since advanced. Read back unchanged records without taking ownership of their live builders.
 
 An incomplete graph stays `shaping`, with its missing edges and next action recorded. Recovery finishes the existing graph before releasing any remaining issue.
 

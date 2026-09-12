@@ -8,15 +8,23 @@ Store `.retro/checkpoint.json` in the primary checkout, resolved through Git's c
   "cursor": {
     "updated_at": "2026-09-06T11:45:00Z",
     "session_id": "harness:session-id"
+  },
+  "pending": {
+    "scope": "incremental",
+    "sessions": [
+      { "updated_at": "2026-09-07T09:00:00Z", "session_id": "harness:next-session" }
+    ]
   }
 }
 ```
 
-`last_sweep_at` records when the review finished. The cursor identifies the last reviewed session version, ordered by its latest completed-turn timestamp and harness-qualified session ID. Use session metadata to discover candidates; read transcript bodies only for the selected batch. A resumed session becomes eligible again when it has newer completed work. Active sessions wait until their work completes.
+`last_sweep_at` records completed review time. The cursor identifies the last reviewed session version, ordered by latest completed-turn timestamp and harness-qualified session ID. `pending` holds only the selected batch and its scope (`initial`, `incremental`, or `historical`); omit it after completion. Before any completed sweep, the time and cursor are null. Use metadata to select versions; read transcript bodies only for that batch. Active sessions wait until their work completes.
 
-On first use, review the latest three eligible sessions in chronological order and state that older history is outside this initial scope. Thereafter, review candidates after the cursor oldest first, three at a time. Use the timestamp observed when selecting the batch so new work during the review remains eligible. If a harness cannot reliably identify completion or ordering, report the gap and leave its coverage unresolved.
+On first use, select the latest three eligible sessions in chronological order and state that older history is outside this initial scope. Thereafter select candidates after the cursor oldest first, three at a time. Atomically persist `pending` before reading or discussing the batch, preserving the completed cursor. On resume, use those saved versions before selecting new sessions. Read only through each selected completed-turn boundary; newer completed work remains eligible. If completion, ordering, or the saved version cannot be recovered reliably, report the gap and keep it pending.
 
-Advance only through a contiguous reviewed batch; inaccessible sessions stay pending. An explicitly requested historical review preserves the normal cursor, and a broader review advances it only through covered candidates. Replace the checkpoint atomically after the discussion and selected tracker writes finish. Serialize sweeps sharing this file so one cannot overwrite another's progress. A missing or unreadable checkpoint returns to the stated first-run scope, with the loss of coverage disclosed.
+Advance only through contiguous reviewed versions whose discussion and selected tracker writes have finished, including dismissals. Atomically update the cursor and remove only that completed prefix from `pending`; inaccessible versions and unfinished writes retain the remainder. Check existing tracker records before retrying selected writes. A historical review preserves the normal cursor. When a normal selection is already pending, leave that checkpoint unchanged and report historical coverage separately. Otherwise a historical selection may use `pending` and clear it without advancing the normal cursor. A broader scope advances only through covered candidates and retains unresolved normal coverage.
+
+Serialize sweeps sharing this file so one cannot overwrite another's selection or progress. A missing or unreadable checkpoint returns to the stated first-run scope, with the loss of coverage disclosed. The checkpoint holds a cursor and pending selection; accepted findings remain on project issues.
 
 ## Earlier installs
 

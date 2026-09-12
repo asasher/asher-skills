@@ -15,7 +15,7 @@ Report the selection:
 🤖 <codex|claude|image> <model-name>[-<effort>] because <reason>
 ```
 
-If the selected route is unavailable, report the blocker. Independent review and behavioral verification require fresh context separate from the builder; model diversity is optional. Browser verification follows `verify-your-work`.
+If the selected route is unavailable, report the blocker. Delegated review and verification use context separate from the builder/fixer; model diversity is optional. Browser verification follows `verify-your-work`.
 
 ## Roster
 

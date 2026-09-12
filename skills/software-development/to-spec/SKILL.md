@@ -13,6 +13,7 @@ Use the `technical-writing` skill for the spec.
 
 1. **Reconcile the record.** Start with the shaping record, then include settled decisions from the current conversation and sweep each decision-informing artifact into Supporting artifacts. The latest explicit ruling wins. Omit superseded requirements, discarded options, and discussion that did not become direction. When revising a spec, read the previous approved revision and preserve each `AC-N` identifier's meaning; amend in place, append, or retire without reusing its identifier.
 2. **Write one self-contained HTML spec** in this order:
+   - For revisions, a concise delta from the last approved hash: changed decisions, added/amended/retired ACs, and their effect on scope or the split.
    - Problem and decided direction.
    - Affected users and their changed experience.
    - Shared system behavior.

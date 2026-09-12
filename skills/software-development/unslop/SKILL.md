@@ -35,7 +35,7 @@ Edit text to remove AI patterns. Scan for the patterns below, rewrite while pres
 
 ## Plain speech
 
-- Name the mechanism or the number ("`.toSQL()` returns the exact string sent to the database"). If a sentence cannot be restated as a concrete instruction, fact, or question, cut it. If it could appear unchanged in another project, it says nothing about this one; cut it too.
+- Name the mechanism or the number ("`.toSQL()` returns the exact string sent to the database"). If a sentence cannot be restated as a concrete instruction, fact, or question, cut it.
 - One idea per sentence. Split anything the reader must backtrack to parse.
 - Active voice with a named actor: "the compiler validates queries", not "queries are validated". Passive only when the actor is unknown or irrelevant.
 - An adverb propping up a weak verb means the verb is wrong: "significantly improves" becomes the measured delta.

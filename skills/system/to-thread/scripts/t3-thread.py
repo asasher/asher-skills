@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import http.client
 import json
 import os
 import subprocess
@@ -19,6 +20,8 @@ from typing import NoReturn, Sequence
 
 class T3ThreadError(RuntimeError):
     """A user-actionable T3 dispatch failure."""
+
+    result: dict[str, object] | None = None
 
 
 class T3RequestError(T3ThreadError):
@@ -42,6 +45,7 @@ KNOWN_INTERACTION_MODES = ("default", "plan")
 # driver ignores ids it does not read, so a wrong id fails nowhere — the
 # thread silently runs at the driver's default effort.
 EFFORT_OPTION_IDS = {"claudeAgent": "effort", "codex": "reasoningEffort"}
+AUTH_TIMEOUT_SECONDS = 30
 
 
 class RefuseRedirects(urllib.request.HTTPRedirectHandler):
@@ -153,13 +157,20 @@ def auth_command(
 def run_auth(command: list[str]) -> subprocess.CompletedProcess[str]:
     environment = os.environ.copy()
     environment["ELECTRON_RUN_AS_NODE"] = "1"
-    return subprocess.run(
-        command,
-        check=False,
-        text=True,
-        capture_output=True,
-        env=environment,
-    )
+    try:
+        # run() kills and reaps the child when its timeout expires.
+        return subprocess.run(
+            command,
+            check=False,
+            text=True,
+            capture_output=True,
+            env=environment,
+            timeout=AUTH_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired:
+        fail(f"T3 auth command timed out after {AUTH_TIMEOUT_SECONDS}s; child was stopped")
+    except (OSError, UnicodeError) as error:
+        fail(f"could not run T3 auth command: {error}")
 
 
 def issue_session(
@@ -235,20 +246,22 @@ def http_json(
         },
     )
     try:
-        opener = urllib.request.build_opener(RefuseRedirects)
-        with opener.open(request, timeout=30) as response:
-            value = json.load(response)
-    except urllib.error.HTTPError as error:
-        if 300 <= error.code < 400:
-            raise T3RequestError(f"T3 refused an HTTP redirect at {path}", status=error.code)
-        body = error.read().decode(errors="replace").strip()
-        label = payload.get("type") if payload else path
-        raise T3RequestError(
-            f"{label} failed with HTTP {error.code}: {body or 'empty body'}",
-            status=error.code,
-            body=body,
-        )
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as error:
+        try:
+            opener = urllib.request.build_opener(RefuseRedirects)
+            with opener.open(request, timeout=30) as response:
+                value = json.load(response)
+        except urllib.error.HTTPError as error:
+            with error:
+                if 300 <= error.code < 400:
+                    raise T3RequestError(f"T3 refused an HTTP redirect at {path}", status=error.code)
+                body = error.read().decode(errors="replace").strip()
+            label = payload.get("type") if payload else path
+            raise T3RequestError(
+                f"{label} failed with HTTP {error.code}: {body or 'empty body'}",
+                status=error.code,
+                body=body,
+            )
+    except (OSError, http.client.HTTPException, json.JSONDecodeError, UnicodeError) as error:
         fail(f"T3 request failed at {path}: {error}")
     if not isinstance(value, dict):
         fail(f"T3 returned a non-object response at {path}")
@@ -328,11 +341,11 @@ def shape_drift_message(payload: dict[str, object]) -> str:
 
 
 def rejected_without_effect(error: T3ThreadError) -> bool:
-    """True when T3 refused the command outright, so no state can have changed."""
+    """The observed empty 400 response identifies schema rejection before dispatch."""
     return (
         isinstance(error, T3RequestError)
-        and error.status is not None
-        and 400 <= error.status < 500
+        and error.status == 400
+        and not error.body
     )
 
 
@@ -357,11 +370,11 @@ def delete_thread(origin: str, token: str, thread_id: str) -> int:
 
 
 def orphaned_thread_notice(thread_id: str, name: str, *, created: bool) -> str:
-    """The user-actionable orphan message; `created` says whether the thread definitely exists."""
+    """Recovery notice before any accepted start; `created` means creation was acknowledged."""
     if created:
         return (
-            f"thread {thread_id} ({name!r}) was created and remains in the T3 sidebar without a running turn — "
-            "discard it by deleting the thread from the sidebar"
+            f"thread {thread_id} ({name!r}) was created without a running turn; "
+            "deletion is unconfirmed. If it remains in the T3 sidebar, discard it there"
         )
     return (
         f"thread {thread_id} ({name!r}) may have been left in the T3 sidebar without a running turn — "
@@ -437,6 +450,16 @@ def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str
     created_at = utc_now()
     selection = model_selection(args)
     worktree_path = infer_worktree_path(project_directory, directory)
+    result: dict[str, object] = {
+        "branch": args.branch,
+        "name": args.name,
+        "project_id": project_id,
+        "thread_id": thread_id,
+        "worktree_path": worktree_path,
+        "thread_state": "unknown",
+        "turn_state": "not_started",
+        "ownership": "retained",
+    }
 
     create_payload: dict[str, object] = {
         "type": "thread.create",
@@ -454,18 +477,25 @@ def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str
     try:
         create_sequence = dispatch_command(origin, token, create_payload)
     except T3ThreadError as create_error:
+        create_error.result = result
         if rejected_without_effect(create_error):
+            result["thread_state"] = "not_created"
             # T3 refused the command before applying it: no thread exists, and a
             # compensating delete of a never-created thread can only fail.
             raise
         try:
             delete_thread(origin, token, thread_id)
         except T3ThreadError as delete_error:
-            fail(
+            failure = T3ThreadError(
                 f"{create_error}; the compensating thread.delete also failed ({delete_error}); "
                 f"{orphaned_thread_notice(thread_id, args.name, created=False)}"
             )
+            failure.result = result
+            raise failure
+        result["thread_state"] = "deleted"
         raise create_error
+
+    result.update(thread_state="created", create_sequence=create_sequence)
 
     turn_payload: dict[str, object] = {
         "type": "thread.turn.start",
@@ -485,23 +515,32 @@ def create_thread(args: argparse.Namespace, origin: str, token: str) -> dict[str
     try:
         turn_sequence = dispatch_command(origin, token, turn_payload)
     except T3ThreadError as turn_error:
+        turn_error.result = result
+        if not rejected_without_effect(turn_error):
+            result["turn_state"] = "unknown"
+            failure = T3ThreadError(
+                f"{turn_error}; thread {thread_id} ({args.name!r}) was created; "
+                "turn liveness is unknown. Retain ownership and the worktree; "
+                "inspect this thread before retrying or deleting it"
+            )
+            failure.result = result
+            raise failure
         try:
             delete_thread(origin, token, thread_id)
         except T3ThreadError as delete_error:
-            fail(
+            if not rejected_without_effect(delete_error):
+                result["thread_state"] = "unknown"
+            failure = T3ThreadError(
                 f"{turn_error}; the partial thread could not be deleted ({delete_error}); "
                 f"{orphaned_thread_notice(thread_id, args.name, created=True)}"
             )
+            failure.result = result
+            raise failure
+        result["thread_state"] = "deleted"
         raise turn_error
-    return {
-        "branch": args.branch,
-        "create_sequence": create_sequence,
-        "name": args.name,
-        "project_id": project_id,
-        "thread_id": thread_id,
-        "turn_sequence": turn_sequence,
-        "worktree_path": worktree_path,
-    }
+    result.update(turn_sequence=turn_sequence, turn_state="start_acknowledged")
+    del result["ownership"]
+    return result
 
 
 def parser() -> argparse.ArgumentParser:
@@ -554,21 +593,27 @@ def main(argv: Sequence[str] | None = None) -> int:
         result_payload = create_thread(args, origin, token)
     except T3ThreadError as error:
         failure = error
+        result_payload = error.result
     finally:
         if session_id:
             try:
                 revoke_session(executable, server_entry, base_dir, session_id)
             except T3ThreadError as revoke_error:
+                if result_payload is not None:
+                    result_payload["session_revocation"] = "failed"
+                    result_payload["session_id"] = session_id
+                    result_payload["ownership"] = "retained"
                 failure = (
                     T3ThreadError(f"{failure}; {revoke_error}")
                     if failure
                     else revoke_error
                 )
 
+    if result_payload is not None:
+        print(json.dumps(result_payload, sort_keys=True))
     if failure:
         print(f"t3-thread: {failure}", file=sys.stderr)
         return 2
-    print(json.dumps(result_payload, sort_keys=True))
     return 0
 
 

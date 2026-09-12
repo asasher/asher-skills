@@ -9,10 +9,57 @@
 
 #review-inventory a{overflow-wrap:anywhere}#review-inventory h4{margin-top:24px}#review-inventory ul{font-size:14px;line-height:1.8;padding-left:20px}
 
-main.review-report{max-width:1120px;margin:auto;padding:48px 36px 80px}main.review-report>h2{margin:48px 0 20px;padding-top:24px;border-top:1px solid var(--rule)}main.review-report>h3{margin:32px 0 16px}.review-report p{margin:14px 0;max-width:85ch}.review-report li{margin:12px 0;line-height:1.6}.review-report .finding{margin:16px 0}.review-report .finding p{font-size:16px}.review-report .table-scroll{overflow-x:auto;margin:24px 0}.review-report table{width:100%;border-collapse:collapse;min-width:640px;font-size:15px;line-height:1.6}.review-report td,.review-report th{padding:16px;vertical-align:top;text-align:left;border-bottom:1px solid var(--rule);min-width:140px}.review-report th{font-size:13px;color:var(--muted)}.review-report a{overflow-wrap:anywhere}.review-report code{overflow-wrap:anywhere}.report-nav{display:flex;flex-wrap:wrap;gap:12px 24px;margin:24px 0 32px;font-size:14px}.report-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}.report-overview article{border:1px solid var(--rule);padding:20px;border-radius:8px}.report-overview strong{display:block;font:32px 'Geist Mono',monospace;color:var(--accent)}.report-overview p{font-size:14px}.report-status{border-left:3px solid var(--accent);padding:8px 20px;background:var(--paper-2);margin:24px 0}@media(max-width:760px){main.review-report{padding:32px 20px 60px}.report-overview{grid-template-columns:1fr}.report-overview article{display:flex;gap:20px;align-items:center}.report-overview strong{min-width:48px}.review-report td,.review-report th{padding:12px}.review-report .finding summary{font-size:17px}.review-report .detail-body{padding-left:0;padding-right:0}}@media print{details:not([open])>.detail-body{display:block}.report-nav{display:none}.review-report table{min-width:0}.review-report .table-scroll{overflow:visible}}</style></head><body><header class="topbar"><a href="software-development.html#review">Asher / Skills</a><span class="meta">13 SEP 2026 · REVIEW ONLY</span></header><main class="review-report"><p class="eyebrow">Independent review / before rollout</p><h1>Keep the discipline.<br>Fix the handoffs.</h1><div class="report-status"><p><strong>Proposed fixes remain unapplied.</strong> Start with failures that affect ownership, dependencies, integration, and evidence. Then measure the pruning.</p></div><div class="report-overview"><article><strong>7</strong><p>Independent reviewers<br>4 Astra + 3 Fable 5.1</p></article><article><strong>6</strong><p>Correction groups first<br>Detailed source findings below</p></article><article><strong>16</strong><p>Short initial eval runs<br>Proposed, not yet executed</p></article></div><nav class="report-nav" aria-label="Report sections"><a href="#first-fixes-to-review">First fixes</a><a href="#further-corrections">Further corrections</a><a href="#pruning-worth-considering">Pruning</a><a href="#a-small-evaluation-sequence">Eval sequence</a><a href="#4-pilot-the-actual-repositories-in-stages">Your repositories</a><a href="software-development-reviewer-reports.md">Original reports</a></nav>
-<p>Reviewed revision <strong>7fc50c1</strong>, September 13, 2026. <strong>Review only: no skill fixes applied.</strong> Four Astra reviewers and three Fable 5.1 reviewers examined the family independently. Two additional Astra analysts designed evals and inspected the five proposed pilot repositories. All three Fable runs reported <code>claude-fable-5-1</code>, completed successfully, and had no tool-permission denials.</p>
-<p>I would fix the dispatch, dependency, integration, and evidence failures below before broad unattended use. Most useful pruning removes duplicated authority or arbitrary process. Some apparent repetition protects a skill when invoked on its own and should stay.</p>
+main.review-report{max-width:1120px;margin:auto;padding:48px 36px 80px}main.review-report>h2{margin:48px 0 20px;padding-top:24px;border-top:1px solid var(--rule)}main.review-report>h3{margin:32px 0 16px}.review-report p{margin:14px 0;max-width:85ch}.review-report li{margin:12px 0;line-height:1.6}.review-report .finding{margin:16px 0}.review-report .finding p{font-size:16px}.review-report .table-scroll{overflow-x:auto;margin:24px 0}.review-report table{width:100%;border-collapse:collapse;min-width:640px;font-size:15px;line-height:1.6}.review-report td,.review-report th{padding:16px;vertical-align:top;text-align:left;border-bottom:1px solid var(--rule);min-width:140px}.review-report th{font-size:13px;color:var(--muted)}.review-report a{overflow-wrap:anywhere}.review-report code{overflow-wrap:anywhere}.report-nav{display:flex;flex-wrap:wrap;gap:12px 24px;margin:24px 0 32px;font-size:14px}.report-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}.report-overview article{border:1px solid var(--rule);padding:20px;border-radius:8px}.report-overview strong{display:block;font:32px 'Geist Mono',monospace;color:var(--accent)}.report-overview p{font-size:14px}.report-status{border-left:3px solid var(--accent);padding:8px 20px;background:var(--paper-2);margin:24px 0}@media(max-width:760px){main.review-report{padding:32px 20px 60px}.report-overview{grid-template-columns:1fr}.report-overview article{display:flex;gap:20px;align-items:center}.report-overview strong{min-width:48px}.review-report td,.review-report th{padding:12px}.review-report .finding summary{font-size:17px}.review-report .detail-body{padding-left:0;padding-right:0}}@media print{details:not([open])>.detail-body{display:block}.report-nav{display:none}.review-report table{min-width:0}.review-report .table-scroll{overflow:visible}}</style></head><body><header class="topbar"><a href="software-development.html#review">Asher / Skills</a><span class="meta">13 SEP 2026 · FIXES APPLIED</span></header><main class="review-report"><p class="eyebrow">Independent review / before rollout</p><h1>Keep the discipline.<br>Fix the handoffs.</h1><div class="report-status"><p><strong>Corrections and pruning applied.</strong> Review the changed contracts and regression evidence. Behavioral fixtures and repository pilots are the next gate.</p></div><div class="report-overview"><article><strong>7</strong><p>Independent reviewers<br>4 Astra + 3 Fable 5.1</p></article><article><strong>6</strong><p>Correction groups applied<br>Original findings retained below</p></article><article><strong>16</strong><p>Short initial eval runs<br>Proposed, not yet executed</p></article></div><nav class="report-nav" aria-label="Report sections"><a href="#applied-changes">Applied changes</a><a href="#first-fixes-to-review">Original findings</a><a href="#further-corrections">Further corrections</a><a href="#applied-pruning">Pruning</a><a href="#a-small-evaluation-sequence">Eval sequence</a><a href="#4-pilot-the-actual-repositories-in-stages">Your repositories</a><a href="software-development-reviewer-reports.md">Original reports</a></nav>
+<p>Original review: revision <strong>7fc50c1</strong>, September 13, 2026. <strong>The approved corrections and pruning are now applied on PR #201.</strong> Four Astra reviewers and three Fable 5.1 reviewers examined the family independently. Two additional Astra analysts designed evals and inspected the five proposed pilot repositories. All three Fable runs reported <code>claude-fable-5-1</code>, completed successfully, and had no tool-permission denials.</p>
+<p>The patch repairs dispatch, dependency, integration, and evidence failures. Pruning removes duplicated authority and arbitrary process while retaining standalone worktree protection, independent review, bounded recovery, and human merge selection.</p>
 <p>This is a static adversarial review with focused offline reproductions, not a lifecycle certification. Diagram Design&#39;s 210-file package was sampled. The complete reviewer reports retain coverage limits and proposals I rejected or downgraded.</p>
+<h2 id="applied-changes">Applied changes</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Contract</th>
+<th>What changed</th>
+<th>Evidence still needed</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tickets and shaping</td>
+<td>Consolidation transfers native prerequisites and dependents before closure. Shape claims its ticket, holds affected split work during revisions, and releases only a reconciled approved graph. Capture recovery preserves advanced owners.</td>
+<td>Agent fixtures for concurrent claims, partial publication, and re-approval.</td>
+</tr>
+<tr>
+<td>Build and merge</td>
+<td>Deliver accepts its own launch reservation and records stopped outcomes. Checks identify the tested integration tree. Merge requires applicable server protection, current authority, and risk-appropriate independent proof.</td>
+<td>Conflict-free integration failure and a disposable GitHub test of base movement during merge.</td>
+</tr>
+<tr>
+<td>Runtime recovery</td>
+<td>Artifact publication rejects occupied and symbolic target refs. T3 preserves identity and unknown liveness through ambiguous responses or failed credential cleanup. Naming and authentication waits are bounded.</td>
+<td>Live harness compatibility and failure injection.</td>
+</tr>
+<tr>
+<td>Image provenance</td>
+<td>Native output belongs to the returned session and a completed typed image result. Sprite generation and extraction share one resolved chroma key.</td>
+<td>Live native-format compatibility; unsupported formats stop safely.</td>
+</tr>
+<tr>
+<td>Retro</td>
+<td>Save the selected session versions before discussion. Resume that batch without advancing completed coverage; historical reviews preserve normal progress.</td>
+<td>Interrupted sweep with new arrivals and selected tracker-write recovery.</td>
+</tr>
+<tr>
+<td>Simpler instructions</td>
+<td>Six diagram output checks replace the duplicated checklist. Resolved project tokens govern visuals. Diagnosis uses a trustworthy bounded reproduction. Interview and TDD reuse settled decisions. Specs show approval deltas; published reports own detailed proof.</td>
+<td>Human comparison of clarity, question quality, diagrams, and proof on the same fixtures.</td>
+</tr>
+</tbody></table></div>
+<p>Embedded motion figures share one canonical controller in the host; isolated checker fixtures include that controller once. The fixes include direct approval propagation for ticket-based splits, inspectable prototype comparisons, context-document registration, and explicit human waiver provenance. Routine verification may reuse matching recorded checks; an independent verifier runs its own checks. No automatic review-budget reset was added.</p>
+<h3 id="validation-status">Validation status</h3>
+<p>The final offline suites pass: <strong>6 artifact-branch tests, 32 dispatch/naming tests, and 34 image-backend tests (72 total)</strong>. Sprite acceptance covers 14 criteria plus bounds sanity; the versioning dry run passes. New regressions were demonstrated failing against the prior helpers. Nine offline diagram cases cover valid fragments, host separation, rejected unsafe fragments, and shipped templates. A headless browser check confirms two motion figures step independently with one shared controller.</p>
+<p>Three fresh independent review contexts found and closed additional gaps: symbolic target refs, malformed T3/auth responses, merge during shaping holds, publication ownership for unchanged builders, and repeated embedded motion initialization. These follow-up reviews used source inspection and focused reproductions.</p>
+<p>Structural checks pass for 46 authored skills and the 36-skill install closure, with no runtime cross-package file links. The mobile reader exposes all 384 family package files; 2,032 local links and anchors resolve. Mobile and desktop rendering checks found no page overflow or browser errors. These checks establish narrower facts than a lifecycle run.</p>
+<p><strong>The 16-run agent fixture batch and repository pilots remain unexecuted.</strong> No skills have been installed into the pilot repositories, and no pilot build or live tracker mutation is part of this patch. The evaluation sequence below is the next confidence gate.</p>
+<p>The following findings describe the <strong>original reviewed revision</strong>. Their line numbers and failure descriptions are historical; source links open the corrected files. Original reviewer reports remain unchanged.</p>
 <h2 id="first-fixes-to-review">First fixes to review</h2>
 <details class="finding" id="f1-consolidation-can-unblock-unfinished-work"><summary>F1. Consolidation can unblock unfinished work</summary><div class="detail-body">
 <p><strong>High confidence, source-traced.</strong> <a href="../skills/software-development/backlog/SKILL.md">Backlog line 18</a> preserves intent and links when consolidating tickets. Its <a href="../skills/software-development/backlog/reference/labels.md">label contract</a> closes duplicates and treats a closed blocker as satisfied. No step transfers native dependencies.</p>
@@ -43,7 +90,7 @@ main.review-report{max-width:1120px;margin:auto;padding:48px 36px 80px}main.revi
 <p>A mocked failed “robot” request returned an unrelated “sunset landscape” image from another transcript, with <code>matched_kw=0</code>. This is false evidence, not merely an image-quality issue.</p>
 <p><strong>Smallest change:</strong> accept generated-image output only from the launched session with attributable provenance; report missing or ambiguous output as failure. <strong>Eval:</strong> overlapping sessions, failed subprocess, unrelated image, and zero keyword matches. Keyword similarity alone must never establish ownership.</p>
 </div></details><h2 id="further-corrections">Further corrections</h2>
-<p>These are separate from the six first fixes. Source-traced scenarios still need behavioral tests where noted.</p>
+<p>These corrections are applied alongside F1–F6. The table preserves the original finding and proposed test; source-traced scenarios still need behavioral tests where noted.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -113,7 +160,7 @@ main.review-report{max-width:1120px;margin:auto;padding:48px 36px 80px}main.revi
 <td>All children closed but one AC missing: report the gap and obtain the required tracker decision; no silent feature expansion.</td>
 </tr>
 </tbody></table></div>
-<h2 id="pruning-worth-considering">Pruning worth considering</h2>
+<h2 id="applied-pruning">Applied pruning</h2>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -150,12 +197,12 @@ main.review-report{max-width:1120px;margin:auto;padding:48px 36px 80px}main.revi
 <tr>
 <td>Parentless slicing</td>
 <td>Prefer limiting to-slices to approved spec tickets, matching the ticket-based lifecycle, instead of maintaining contradictory parentless and unconditional spec-branch paths.</td>
-<td>This is a scope choice for manual approval, not an applied deletion.</td>
+<td>Applied after approval: slicing starts from an approved spec ticket.</td>
 </tr>
 <tr>
 <td>Repeated test runs</td>
 <td>Evaluate reuse of captured normal-risk implementation checks when code, integration tree, environment, and fixtures match.</td>
-<td>Independent checks where required, claim-specific runtime proof, invalidation on changed inputs. Measure on the real repos before editing.</td>
+<td>Independent checks where required, claim-specific runtime proof, invalidation on changed inputs. Measure reuse on the real repositories before claiming a speed improvement.</td>
 </tr>
 <tr>
 <td>UI prototype comparison</td>
@@ -167,7 +214,7 @@ main.review-report{max-width:1120px;margin:auto;padding:48px 36px 80px}main.revi
 <h2 id="a-small-evaluation-sequence">A small evaluation sequence</h2>
 <h3 id="1-keep-the-quick-checks-cheap">1. Keep the quick checks cheap</h3>
 <p>Run metadata/dependency/package-link checks and retained helper tests. Add deterministic regression cases for the demonstrated helper defects. They run without an agent and belong beside the helper they exercise. Keep the skill instruction tests separate: valid packaging is not evidence of correct execution.</p>
-<p>Current evidence: prior structural checks passed at this revision; this review ran 14 existing image backend-selection/native tests offline. Four defect classes were reproduced with disposable Git or mocks: artifact ref movement, image provenance, spritesheet key mismatch, and embedded-host checking. No live image service, T3 failure injection, or lifecycle agent eval was run.</p>
+<p>Original review evidence: structural checks had passed at the reviewed revision; the initial review ran 14 existing image backend-selection/native tests offline. Four defect classes were reproduced with disposable Git or mocks: artifact ref movement, image provenance, spritesheet key mismatch, and embedded-host checking. No live image service, T3 failure injection, or lifecycle agent eval was run.</p>
 <h3 id="2-start-with-eight-short-agent-fixtures">2. Start with eight short agent fixtures</h3>
 <p>Use fresh sessions and small stateful tool fixtures. Observe reads, writes, readback, and final state; an agent saying “done” is not the assertion. Keep Git and browser behavior real in later stages rather than simulating everything.</p>
 <div class="table-scroll"><table>
@@ -280,6 +327,6 @@ main.review-report{max-width:1120px;margin:auto;padding:48px 36px 80px}main.revi
 <p><code>e53babb</code> is the parent of the latest simplification; <code>bdc1c60</code> predates both recent simplification commits. These versions intentionally differ in behavior. Compare common contracts separately; the much older token-count baseline is not a clean pruning control. Keep fixtures and grading frozen across a comparison.</p>
 <p>Three clean repetitions are a smoke screen, not a reliability estimate. Run three representative cases first and use measured duration and usage to budget expansion. A single Bun runner, fixture files, tool-event logs, assertions, and a human scorecard are enough initially.</p>
 <h2 id="decision-for-this-review">Decision for this review</h2>
-<p>Approve a small correction batch around F1–F6, then freeze and run the first fixtures before expanding. Review the pruning candidates separately so lower token counts cannot conceal changed guarantees. Start the real-repo path with the integrations-v2 local smoke and the pipelines isolated lifecycle pilot. Keep broader autonomous rollout gated on truthful proof and recovery results.</p>
-<p><a href="software-development-reviewer-reports.md">Read the complete reviewer reports</a>. Those reports contain additional suggestions, exact source citations, reproduction details, and each reviewer&#39;s coverage limits. The recommendations above are the owning review&#39;s adjudication; no source fixes have been applied.</p>
+<p>The approved correction and pruning batch is applied. Freeze the candidate revision and run the first fixtures before expanding. Compare behavior as well as instruction size. Start the real-repo path with the integrations-v2 local smoke and the pipelines isolated lifecycle pilot. Keep broader autonomous rollout gated on truthful proof and recovery results.</p>
+<p><a href="software-development-reviewer-reports.md">Read the complete reviewer reports</a>. Those reports contain additional suggestions, exact source citations, reproduction details, and each reviewer&#39;s coverage limits. The original recommendations were adjudicated before implementation; the applied-status section above describes the resulting patch.</p>
 </main></body></html>

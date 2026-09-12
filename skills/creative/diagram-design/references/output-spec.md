@@ -22,7 +22,7 @@ Infer choices that are clear from the request (for example, "for my deck" implie
 | `png` | `.png` at `device_scale_factor` | pixels exactly as the browser renders them | vector editability |
 | `html+png` | both | — | — |
 
-Always generate the HTML first — `svg` and `png` are produced _from_ it via [`export.md`](export.md). The HTML is the source of truth for the taste gate (SKILL.md §9).
+Always generate the HTML first — `svg` and `png` are produced _from_ it via [`export.md`](export.md). The HTML is the source of truth for the pre-output check (SKILL.md §9).
 
 Pick by destination:
 
@@ -39,7 +39,7 @@ Pick by destination:
 
 ## 2. Size
 
-The preset sets the SVG `viewBox`. Every value below is divisible by 4, so the grid rule in SKILL.md §7 still holds.
+The preset sets the SVG `viewBox`. Use the resolved spacing and typography from SKILL.md §0 within that frame.
 
 | Preset | viewBox | Aspect | PNG @2 | Type ramp | Use |
 | --- | --- | --- | --- | --- | --- |
@@ -167,10 +167,10 @@ The reader of the diagram can't see what's missing. The person who asked for it 
 
 ## 6. Checklist
 
-Run alongside the SKILL.md §9 taste gate.
+Run alongside the SKILL.md §9 pre-output check.
 
 - [ ] All four dials set — explicitly requested, inferred from the destination, or defaulted and stated?
-- [ ] `viewBox` matches the size preset exactly, values divisible by 4?
+- [ ] `viewBox` matches the size preset exactly?
 - [ ] Type ramp matches the size class — not the standard ramp on a slide?
 - [ ] 40px outer margin honoured (64px for `social-og`)?
 - [ ] Node count inside the detail level's ceiling?

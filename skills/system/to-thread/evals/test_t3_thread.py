@@ -4,14 +4,17 @@
 from __future__ import annotations
 
 import base64
+import importlib.util
 import json
 import os
 import subprocess
 import tempfile
+import sys
 import threading
 import unittest
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from unittest import mock
 
 
 SKILL_ROOT = Path(__file__).resolve().parents[1]
@@ -29,11 +32,15 @@ class ApiState:
         self.project_root = project_root
         self.posts: list[dict[str, object]] = []
         self.fail_turn = False
+        self.fail_turn_status = 500
         self.include_other_project = False
         self.include_deleted_same_root = False
         self.snapshot_redirect: str | None = None
         self.bad_create_ack = False
         self.bad_turn_ack = False
+        self.drop_turn_ack = False
+        self.invalid_utf8_turn_ack = False
+        self.truncated_turn_error = False
         self.reject_create_empty_400 = False
         self.reject_turn_empty_400 = False
         self.reject_delete_empty_400 = False
@@ -121,11 +128,27 @@ class Handler(BaseHTTPRequestHandler):
         if payload["type"] == "thread.create" and self.server.state.bad_create_ack:
             self.respond(200, {"error": "command was not acknowledged"})
             return
+        if payload["type"] == "thread.turn.start" and self.server.state.drop_turn_ack:
+            self.close_connection = True
+            return
+        if payload["type"] == "thread.turn.start" and self.server.state.invalid_utf8_turn_ack:
+            self.send_response(200)
+            self.send_header("Content-Length", "1")
+            self.end_headers()
+            self.wfile.write(b"\xff")
+            return
+        if payload["type"] == "thread.turn.start" and self.server.state.truncated_turn_error:
+            self.send_response(400)
+            self.send_header("Content-Length", "10")
+            self.end_headers()
+            self.wfile.write(b"x")
+            self.close_connection = True
+            return
         if payload["type"] == "thread.turn.start" and self.server.state.bad_turn_ack:
             self.respond(200, {"error": "command was not acknowledged"})
             return
         if payload["type"] == "thread.turn.start" and self.server.state.fail_turn:
-            self.respond(500, {"error": "unsupported command shape"})
+            self.respond(self.server.state.fail_turn_status, {"error": "dispatch failed"})
             return
         self.respond(200, {"sequence": len(self.server.state.posts)})
 
@@ -200,7 +223,9 @@ if args[:3] == ["auth", "session", "issue"]:
     raise SystemExit(0)
 if args[:3] == ["auth", "session", "revoke"]:
     pathlib.Path(os.environ["FAKE_T3_REVOKE_LOG"]).write_text(args[3] + "\\n")
-    raise SystemExit(0)
+    if os.environ.get("FAKE_T3_REVOKE_INVALID_BYTES") == "1":
+        sys.stdout.buffer.write(bytes([255]))
+    raise SystemExit(int(os.environ.get("FAKE_T3_REVOKE_FAIL", "0")))
 raise SystemExit(2)
 """
         )
@@ -224,6 +249,8 @@ raise SystemExit(2)
         self,
         *,
         check: bool = True,
+        revoke_fail: bool = False,
+        revoke_invalid_bytes: bool = False,
         derive_server_entry: bool = False,
         token: str | None = None,
         effort: str = "high",
@@ -235,6 +262,8 @@ raise SystemExit(2)
         env["FAKE_T3_TOKEN"] = token or token_for(self.session_id)
         env["FAKE_T3_SESSION_ID"] = self.session_id
         env["FAKE_T3_REVOKE_LOG"] = str(self.revoke_log)
+        env["FAKE_T3_REVOKE_FAIL"] = "1" if revoke_fail else "0"
+        env["FAKE_T3_REVOKE_INVALID_BYTES"] = "1" if revoke_invalid_bytes else "0"
         command = [
                 "python3",
                 str(SCRIPT),
@@ -320,19 +349,64 @@ raise SystemExit(2)
         self.assertEqual(0, result.returncode)
         self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
 
-    def test_revokes_session_when_turn_start_fails(self) -> None:
-        self.state.fail_turn = True
-
-        result = self.run_helper(check=False)
-
+    def assert_unknown_turn(self, result) -> None:
         self.assertNotEqual(0, result.returncode)
-        self.assertIn("thread.turn.start", result.stderr)
         self.assertEqual(
-            ["thread.create", "thread.turn.start", "thread.delete"],
+            ["thread.create", "thread.turn.start"],
             [post["type"] for post in self.state.posts],
         )
-        self.assertEqual(self.state.posts[0]["threadId"], self.state.posts[2]["threadId"])
+        output = json.loads(result.stdout)
+        self.assertEqual(self.state.posts[0]["threadId"], output["thread_id"])
+        self.assertEqual("unknown", output["turn_state"])
+        self.assertEqual("retained", output["ownership"])
+        self.assertEqual(str(self.worktree.resolve()), output["worktree_path"])
+        self.assertIn(output["thread_id"], result.stderr)
+        self.assertIn("liveness is unknown", result.stderr)
+        self.assertNotIn("without a running turn", result.stderr)
         self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+    def test_retains_identity_and_ownership_when_start_returns_500(self) -> None:
+        self.state.fail_turn = True
+        self.assert_unknown_turn(self.run_helper(check=False))
+
+    def test_retains_identity_and_ownership_when_start_response_is_lost(self) -> None:
+        self.state.drop_turn_ack = True
+        self.assert_unknown_turn(self.run_helper(check=False))
+
+    def test_http_timeout_is_ambiguous_even_with_a_4xx_status(self) -> None:
+        self.state.fail_turn = True
+        self.state.fail_turn_status = 408
+        self.assert_unknown_turn(self.run_helper(check=False))
+
+    def test_invalid_utf8_start_ack_preserves_identity_and_ownership(self) -> None:
+        self.state.invalid_utf8_turn_ack = True
+        self.assert_unknown_turn(self.run_helper(check=False))
+
+    def test_truncated_error_body_is_ambiguous_even_with_http_400(self) -> None:
+        self.state.truncated_turn_error = True
+        result = self.run_helper(check=False)
+        self.assert_unknown_turn(result)
+        self.assertNotIn("schema decode", result.stderr)
+
+    def test_success_identity_survives_revoke_failure(self) -> None:
+        result = self.run_helper(check=False, revoke_fail=True)
+        self.assertNotEqual(0, result.returncode)
+        output = json.loads(result.stdout)
+        self.assertEqual(self.state.posts[0]["threadId"], output["thread_id"])
+        self.assertEqual("start_acknowledged", output["turn_state"])
+        self.assertEqual("failed", output["session_revocation"])
+        self.assertEqual(self.session_id, output["session_id"])
+        self.assertEqual(2, len(self.state.posts))
+
+    def test_success_identity_survives_invalid_auth_output_during_revoke(self) -> None:
+        result = self.run_helper(check=False, revoke_invalid_bytes=True)
+        self.assertNotEqual(0, result.returncode)
+        output = json.loads(result.stdout)
+        self.assertEqual(self.state.posts[0]["threadId"], output["thread_id"])
+        self.assertEqual("start_acknowledged", output["turn_state"])
+        self.assertEqual("failed", output["session_revocation"])
+        self.assertEqual("retained", output["ownership"])
+        self.assertEqual(2, len(self.state.posts))
 
     def test_deletes_ambiguous_creation_when_success_ack_is_invalid(self) -> None:
         self.state.bad_create_ack = True
@@ -348,18 +422,9 @@ raise SystemExit(2)
         self.assertEqual(self.state.posts[0]["threadId"], self.state.posts[1]["threadId"])
         self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
 
-    def test_deletes_partial_thread_when_turn_success_ack_is_invalid(self) -> None:
+    def test_retains_identity_and_ownership_when_start_ack_is_invalid(self) -> None:
         self.state.bad_turn_ack = True
-
-        result = self.run_helper(check=False)
-
-        self.assertNotEqual(0, result.returncode)
-        self.assertIn("thread.turn.start", result.stderr)
-        self.assertEqual(
-            ["thread.create", "thread.turn.start", "thread.delete"],
-            [post["type"] for post in self.state.posts],
-        )
-        self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+        self.assert_unknown_turn(self.run_helper(check=False))
 
     def test_reports_shape_drift_without_cleanup_when_create_is_rejected(self) -> None:
         self.state.reject_create_empty_400 = True
@@ -433,7 +498,7 @@ raise SystemExit(2)
         self.assertFalse(self.revoke_log.exists())
 
     def test_names_orphaned_thread_when_partial_delete_fails(self) -> None:
-        self.state.fail_turn = True
+        self.state.reject_turn_empty_400 = True
         self.state.fail_delete = True
 
         result = self.run_helper(check=False)
@@ -447,9 +512,11 @@ raise SystemExit(2)
         self.assertIn(thread_id, result.stderr)
         self.assertIn("shape-driver-payouts", result.stderr)
         self.assertIn("discard", result.stderr)
-        # The turn path knows the thread was created: the notice must state
-        # that plainly, with no "if it appears there" hedge against itself.
-        self.assertIn("was created and remains", result.stderr)
+        # Creation is known, but a lost delete response cannot establish
+        # whether the thread still exists.
+        self.assertIn("was created", result.stderr)
+        self.assertIn("deletion is unconfirmed", result.stderr)
+        self.assertEqual("unknown", json.loads(result.stdout)["thread_state"])
         self.assertNotIn("if it appears there", result.stderr)
         self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
 
@@ -538,6 +605,53 @@ raise SystemExit(2)
         self.assertIn("redirect", result.stderr.lower())
         self.assertEqual([], self.state.posts)
         self.assertEqual(self.session_id, self.revoke_log.read_text().strip())
+
+
+class AuthTimeoutTests(unittest.TestCase):
+    def test_silent_auth_child_is_killed_and_reaped(self) -> None:
+        spec = importlib.util.spec_from_file_location("t3_thread", SCRIPT)
+        helper = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(helper)
+        children = []
+        popen = subprocess.Popen
+
+        def launch(*args, **kwargs):
+            child = popen(*args, **kwargs)
+            children.append(child)
+            return child
+
+        with mock.patch.object(helper, "AUTH_TIMEOUT_SECONDS", 0.1, create=True), mock.patch.object(
+            helper.subprocess, "Popen", side_effect=launch
+        ):
+            with self.assertRaisesRegex(helper.T3ThreadError, "timed out"):
+                helper.run_auth([sys.executable, "-c", "import time; time.sleep(1)"])
+        self.assertEqual(1, len(children))
+        self.assertIsNotNone(children[0].returncode)
+        self.assertNotEqual(0, children[0].returncode)
+
+    def test_revoke_timeout_preserves_success_identity(self) -> None:
+        spec = importlib.util.spec_from_file_location("t3_thread", SCRIPT)
+        helper = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(helper)
+        import contextlib
+        import io
+        stdout = io.StringIO()
+        with mock.patch.object(helper, "validate_dispatch_arguments"), mock.patch.object(
+            helper, "discover_executable", return_value=Path("fake")
+        ), mock.patch.object(helper, "discover_server_entry", return_value=Path("fake")), mock.patch.object(
+            helper, "load_json", return_value={"origin": "http://localhost:1"}
+        ), mock.patch.object(helper, "issue_session", return_value=("token", "sid")), mock.patch.object(
+            helper, "create_thread", return_value={"thread_id": "known-uuid", "turn_state": "start_acknowledged"}
+        ), mock.patch.object(helper, "run_auth", side_effect=helper.T3ThreadError("auth timed out")), contextlib.redirect_stdout(
+            stdout
+        ), contextlib.redirect_stderr(io.StringIO()):
+            status = helper.main([
+                "--name", "worker", "--prompt", "work", "--project-directory", ".",
+                "--directory", ".", "--branch", "branch", "--model", "model",
+                "--effort", "high", "--runtime-mode", "approval-required",
+            ])
+        self.assertEqual(2, status)
+        self.assertEqual("known-uuid", json.loads(stdout.getvalue())["thread_id"])
 
 
 if __name__ == "__main__":

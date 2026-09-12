@@ -59,7 +59,7 @@ When the user states how something works, check whether the code agrees. If you 
 
 ### Update CONTEXT.md inline
 
-When a term is resolved, update `CONTEXT.md` immediately. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
+When a term is resolved, update `CONTEXT.md` immediately. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md). At creation, register one link under `## Context documents` in the project instruction file, stating its glossary purpose and when to read it. For multiple contexts, register the context map and maintain its links to each glossary.
 
 `CONTEXT.md` is the domain glossary. Put requirements in specs and implementation decisions in ADRs when they meet the criteria below.
 

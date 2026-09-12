@@ -20,6 +20,23 @@ def git(*args, env=None, capture=True):
     return (result.stdout or "").strip()
 
 
+def check_target(ref):
+    symbolic = subprocess.run(
+        ["git", "symbolic-ref", "-q", ref], text=True, capture_output=True
+    )
+    if symbolic.returncode == 0:
+        sys.exit(f"target branch is a symbolic ref: {ref} -> {symbolic.stdout.strip()}")
+    if symbolic.returncode != 1:
+        sys.exit(f"could not inspect target branch: {symbolic.stderr.strip()}")
+    # NUL framing also handles worktree paths containing newlines.
+    records = git("worktree", "list", "--porcelain", "-z").split("\0\0")
+    for record in records:
+        fields = record.split("\0")
+        if f"branch {ref}" in fields:
+            location = next(field[9:] for field in fields if field.startswith("worktree "))
+            sys.exit(f"target branch is checked out in registered worktree: {location}")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("branch")
@@ -30,6 +47,7 @@ def main():
     args = parser.parse_args()
 
     ref = f"refs/heads/{args.branch}"
+    check_target(ref)
     parent = subprocess.run(
         ["git", "rev-parse", "-q", "--verify", ref], text=True, capture_output=True
     ).stdout.strip()
@@ -55,8 +73,9 @@ def main():
         else:
             cmd += ["-p", base]
         commit = git(*cmd, env=env)
+        check_target(ref)
         # refuse non-fast-forward: update only if the ref still points where we read it
-        git("update-ref", ref, commit, parent or "")
+        git("update-ref", "--no-deref", ref, commit, parent or "")
     finally:
         if os.path.exists(index):
             os.unlink(index)

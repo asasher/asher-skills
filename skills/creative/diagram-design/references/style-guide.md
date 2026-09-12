@@ -84,7 +84,7 @@ A self-contained palette for the terminal-window primitive (see [primitive-termi
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 ```
 
-**Load-bearing rule:** Mono is for _technical_ content (ports, commands, URLs, field types). Names go in Geist sans. Page title is Instrument Serif. Italic Instrument Serif is reserved for annotation callouts (see [primitive-annotation.md](primitive-annotation.md)). **Never JetBrains Mono** as a blanket "dev" font.
+These are default families: Geist for names, Geist Mono for technical content, and Instrument Serif for titles and annotation callouts. Use the user's or project's resolved typography wherever specified, including an all-sans system or a different monospace family.
 
 ---
 
@@ -98,7 +98,7 @@ A self-contained palette for the terminal-window primitive (see [primitive-termi
 | `radius-sm` | `4` | Small tags |
 | `radius-md` | `6` | Node boxes |
 | `radius-lg` | `8` | Containers, rings |
-| `grid` | `4` | Every coord, size, and gap is divisible by 4 (hard rule) |
+| `grid` | `4` | Default layout rhythm; typography and geometry need not snap to it |
 
 ---
 
@@ -118,12 +118,14 @@ Semantic role combinations — reference these by name in type specs.
 
 ---
 
-## Constraints
+## Legibility and default styling
+
+Contrast is required for the resolved palette. The remaining styling choices below describe the shipped skin and yield to explicit user choices and `DESIGN.md`.
 
 - **Contrast**: `ink` must hit WCAG AA on `paper`. `muted` must hit AA on `paper` for 11px+ text.
 - **One accent**: pick one color for `accent`. Two accents erases the focal signal.
 - **No rainbow palette**: if your brand ships 8 colors, pick 3 (paper, ink, accent). The rest become `muted` variants.
-- **Serif + sans + mono**: three families, not more. If brand typography is all sans, keep Instrument Serif for `title` and `callout` anyway — the contrast is load-bearing.
+- **Typography hierarchy**: distinguish titles, node names, and technical labels through the resolved families, weights, and sizes. An all-sans project can use weight and scale for this hierarchy.
 - **Paper is near-black, never pure black, and the lift is the border**: `paper-2` sits one step above `paper`, so a raised surface reads through its hairline `rule` and a small fill step, not through a jump in contrast. No gradients, no glow, no shadow. In the light variant, paper is off-white and `paper-2` is white.
 - **Easy on tired eyes**: never put pure white on pure black; `ink` on `paper` is 16.9:1 by design, not 21:1. The accent is a text-step blue, not a saturated fill. Hairlines stay at 14% alpha. Reach for `muted` before `ink` on anything that is not a name.
 - **Dot pattern is optional, not default**: the 22×22 dot pattern is an opt-in "dotted paper" variant (good for long-form editorial hero diagrams). The default background is a clean `paper` fill, no pattern. When the pattern is enabled, it should sit at ~10% opacity of `ink` on `paper` — visible but quiet.

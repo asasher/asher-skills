@@ -2,6 +2,16 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-13 — repair lifecycle handoffs and prune instructions
+
+- `backlog`, `capture`, `shape`, `to-slices`: preserve native dependencies and active owners, claim standalone shaping, recover revised splits under the approved source, and preserve advanced state after interrupted publication.
+- `deliver`, `adversarial-review`, `code-review`, `verify-your-work`, `prove-your-work`, `merge`: admit the assigned launch, verify the integration tree, enforce human waiver authority and merge freshness, honor shaping holds, record stopped routing, and keep detailed proof on one published surface.
+- `to-branch`, `to-thread`, `codex-imagegen`: guard artifact targets, retain ambiguous worker identity, bound protocol waits, bind images to the launched session, and share sprite chroma keys. Add offline regressions for these helpers.
+- `diagram-design`, `interview`, `tdd`, `diagnosing-bugs`, `domain-modeling`, `to-spec`, `prototype`, `unslop`, `staffing`: remove duplicated or arbitrary rules, use resolved design tokens, carry settled decisions, publish inspectable comparisons and approval deltas, and register context documents.
+- `retro`: save pending session versions before discussion and preserve normal coverage during historical reviews.
+
+Reconcile: refresh these packages and include the new shape revision reference and helper tests. `shape → bare-minimum-design` and `deliver → capture` add dependency declarations within the unchanged 36-skill install set. Record the repository's actual merge protection in its environment playbook; missing protection blocks merging, separately from build readiness. Existing checkpoints gain `pending` when the next batch is selected. No live tracker settings or pilot repositories were changed. Behavioral agent evaluations remain pending.
+
 ## 2026-09-13 — simplify instructions and retire Relay
 
 - `backlog`: trim the environment template to project facts and demonstrated capability results; simplify certification instructions.
