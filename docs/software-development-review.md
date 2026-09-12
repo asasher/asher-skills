@@ -1,6 +1,6 @@
 # Software development family: full manual review
 
-The full review covers **36 skills and all 382 tracked files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits.
+The full review covers **36 skills and all 381 tracked files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the label-table change and further candidates.
 
 Read each entrypoint, then finish its package inventory before marking that skill reviewed. Diagram Design has 210 files; inspect its type references and rendered examples in their own review sitting. Existing tests are evidence to assess, not an instruction to run live services.
 
@@ -91,7 +91,7 @@ Expand each package and account for every file. The checklist above records the 
 </details>
 
 <details>
-<summary>02. backlog: 8 files</summary>
+<summary>02. backlog: 7 files</summary>
 
 ### Entrypoint
 
@@ -106,10 +106,6 @@ Expand each package and account for every file. The checklist above records the 
 ### Templates and visual assets
 
 - [templates/environment.md](../skills/software-development/backlog/templates/environment.md)
-
-### Executable helpers
-
-- [scripts/reconcile-labels.py](../skills/software-development/backlog/scripts/reconcile-labels.py)
 
 ### Packaging and provenance
 

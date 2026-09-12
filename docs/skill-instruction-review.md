@@ -1,5 +1,35 @@
 # Skill instruction review
 
+## Simplification review
+
+Reviewed the shipped helper inventory and the setup, dispatch, verification, and diagram instructions that use it. This is an editorial assessment; these recommendations have no behavioral eval results yet. Prefer a compact instruction for occasional work the agent can derive from available tools. A helper earns its maintenance when it handles a repeated transformation, fragile protocol, or exact state transition.
+
+### Applied: label setup
+
+Removed the 102-line label reconciler, including its rename, color, and description override interface. The fixed nine-label scheme is now a [table](../skills/software-development/backlog/reference/labels.md#label-appearance). [Setup](../skills/software-development/backlog/reference/setup.md) compares repository labels, presents changes, applies the approved plan, and reads back the result while preserving unrelated labels. Names, colors, and workflow meanings remain; descriptions are shorter. No live tracker labels were changed.
+
+### Further candidates, in review order
+
+| Where | Unnecessary machinery | Proposed replacement |
+| --- | --- | --- |
+| [Environment template](../skills/software-development/backlog/templates/environment.md) | Copies family policy into every consumer repo: PR rules, continuity, the five readiness definitions, verification categories, and media rules. Each copy can drift as skills change. | Keep project facts, capability results, exceptions, and command/configuration pointers. Let the skills own the general workflow. Retain headings consumed by the family and evidence that readiness was demonstrated. |
+| [UI verification](../skills/software-development/verify-your-work/SKILL.md#check-each-claim) and the environment template | Every UI journey requires a script, and the template fixes Playwright driving Chrome. This forces temporary code even when a browser tool can directly exercise a small change. | Let the agent choose the available browser driver. Require reproducible steps, fixtures, observed results, and captures. Use scripts for repetition, complex setup, or durable regression coverage; preserve any scripts used. This changes the verification contract, so review it explicitly. |
+| [T3 dispatch reference](../skills/system/to-thread/reference/t3.md) | Narrates helper internals: runtime discovery, payload creation, error formatting, and compensating deletion. The implementation already owns those mechanics. | Keep the invocation, inputs the agent must resolve, known provider traps, observed liveness, model/effort confirmation, and recovery obligations. Let helper errors describe failed operations and orphan IDs. Keep the protocol helper. |
+| [Diagram description](../skills/creative/diagram-design/SKILL.md) | Lists all 39 visual types in the always-loaded description, then repeats the catalog in the body. Every session pays for the full enumeration. | Use a short trigger covering diagrams, charts, visual explanations, and redraws of Mermaid/draw.io sources. Keep detailed selection in the body. Check invocation coverage when evals begin. |
+| [Diagram planning pause](../skills/creative/diagram-design/SKILL.md#confirm-before-drawing) | Requires a plan and an opportunity to redirect unless type, mode, size, and content are all specified. Routine visual work inherits another interaction step. | Choose reasonable defaults and draw. Ask when a missing decision materially affects the result. Preserve the user's chosen design, size, and content. |
+| [Relay setup discovery](../skills/personal/relay/scripts/setup_instance.py), outside the family | A one-time discovery engine guesses source files from filename keywords, caps traversal and results, and writes a discovery report. The agent still has to interpret the guesses. | Let the agent inspect the repo and propose explicit bindings. Retain consumer-edit preservation, credential handling, validation, and exact delivery approval. Evaluate the discovery portion separately from the rest of the 220-line setup helper. |
+
+The strongest next edits are the environment template, T3 narration, and diagram description. Browser verification and the diagram pause change how work runs; the table makes those choices visible for manual review. Relay is a separate package and a lower priority for this family.
+
+### Helpers that earn their place
+
+- [to-branch](../skills/software-development/to-branch/scripts/to-branch.py): isolates Git's index and checks the expected ref while publishing artifact history. That supports the stable-checkout contract.
+- [T3 dispatch](../skills/system/to-thread/scripts/t3-thread.py) and [Codex naming](../skills/system/to-thread/scripts/name-codex-thread.py): implement protocol handshakes and process handling. Occasional use alone is insufficient reason to replace fragile protocol code with prose.
+- Image decoding, sprite extraction, chroma keying, diagram import parsers, and video contact sheets: perform transformations the agent would otherwise have to reimplement.
+- Relay approval hashes, validation, and delivery state: bind approval to exact recipients and content and support delivery recovery. Keep those guarantees.
+
+Retro's small local cursor and dispatch ownership also have concrete jobs: bounded coverage and avoiding duplicate workers. Neither needs a new framework. The diagram checker had one stale docstring naming unshipped tools; that text was corrected in this pass.
+
 ## Skill boundaries: cross-package paths removed
 
 A scan of all 47 authored skill packages found five runtime cross-package file links: three in capture's entrypoint and README, and two in to-slices' slicing reference. Each reached into backlog's internal milestone or dependency references. The steps now state their own publication outcomes, preserving native relationships, milestone inheritance, conflicting-assignment approval, and migration readback.

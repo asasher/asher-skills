@@ -2,6 +2,12 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-12 — label setup from a table
+
+`backlog`: replace the 102-line label reconciler with nine rows in `reference/labels.md`. Setup compares repository labels, presents changes, applies the approved plan, and reads back the result. Label names, colors, and workflow meanings remain; descriptions are shorter.
+
+Reconcile: refresh backlog and remove its retired `scripts/reconcile-labels.py`. No live tracker changes are part of this authoring change. `diagram-design` also drops a stale checker docstring pointing to unshipped repository tools. The family review lists 381 package files and distinguishes further simplification recommendations from applied changes.
+
 ## 2026-09-10 — mobile review reader
 
 Authoring tooling: `bun review:serve` serves the family guide and renders linked Markdown at its original path. The reader preserves relative links and heading anchors, links named skills in the presentation, and provides previous/next navigation, metadata disclosure, and raw source. It binds to loopback for sharing through Tailscale Serve.

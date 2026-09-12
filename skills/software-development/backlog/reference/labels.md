@@ -25,7 +25,19 @@ Close consolidated or duplicate tickets as `not planned`, with a comment linking
 
 ## Label appearance
 
-The bundled [label reconciler](../scripts/reconcile-labels.py) owns colors and descriptions. [Setup](setup.md) previews and applies that scheme with the user's approval.
+Use this table for repository label colors and descriptions. The sections above define workflow behavior; [setup](setup.md) applies the table.
+
+| Label | Color | Description |
+| --- | --- | --- |
+| `needs-shaping` | `D93F0B` | Product, design, or scope decisions need shaping |
+| `shaping` | `FBCA04` | Active shaping or approved split publication |
+| `needs-info` | `D876E3` | Waiting on the reporter |
+| `ready-for-agent` | `0E8A16` | Released for agent work; requires a work-type |
+| `ready-for-human` | `5319E7` | Human action required, including unresolved build blockers |
+| `building` | `1D76DB` | Reserved or claimed for a build; claim comment records ownership and deadline |
+| `bug` | `D73A4A` | Expected behavior is broken |
+| `enhancement` | `A2EEEF` | New or changed behavior |
+| `spec` | `8250DF` | Split parent: coverage check and promotion PR after all children close |
 
 ## Milestones
 
