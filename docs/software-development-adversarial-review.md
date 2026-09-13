@@ -11,13 +11,15 @@ This is a static adversarial review with focused offline reproductions, not a li
 | Contract | What changed | Evidence still needed |
 | --- | --- | --- |
 | Tickets and shaping | Consolidation transfers native prerequisites and dependents before closure. Shape claims its ticket, holds affected split work during revisions, and releases only a reconciled approved graph. Capture recovery preserves advanced owners. | Agent fixtures for concurrent claims, partial publication, and re-approval. |
-| Build and merge | Deliver accepts its own launch reservation and records stopped outcomes. Checks identify the tested integration tree. Merge requires applicable server protection, current authority, and risk-appropriate independent proof. | Conflict-free integration failure and a disposable GitHub test of base movement during merge. |
+| Build and merge | Deliver accepts its own launch reservation and records stopped outcomes. Checks identify the tested integration tree. Merge requires current authority and risk-appropriate independent proof. It honors optional branch protection, rechecks head/base, and verifies an unexpected merged tree before dependent work continues. | Conflict-free integration failure and a disposable GitHub test of base movement during merge. |
 | Runtime recovery | Artifact publication rejects occupied and symbolic target refs. T3 preserves identity and unknown liveness through ambiguous responses or failed credential cleanup. Naming and authentication waits are bounded. | Live harness compatibility and failure injection. |
 | Image provenance | Native output belongs to the returned session and a completed typed image result. Sprite generation and extraction share one resolved chroma key. | Live native-format compatibility; unsupported formats stop safely. |
 | Retro | Save the selected session versions before discussion. Resume that batch without advancing completed coverage; historical reviews preserve normal progress. | Interrupted sweep with new arrivals and selected tracker-write recovery. |
 | Simpler instructions | Six diagram output checks replace the duplicated checklist. Resolved project tokens govern visuals. Diagnosis uses a trustworthy bounded reproduction. Interview and TDD reuse settled decisions. Specs show approval deltas; published reports own detailed proof. | Human comparison of clarity, question quality, diagrams, and proof on the same fixtures. |
 
 Embedded motion figures share one canonical controller in the host; isolated checker fixtures include that controller once. The fixes include direct approval propagation for ticket-based splits, inspectable prototype comparisons, context-document registration, and explicit human waiver provenance. Routine verification may reuse matching recorded checks; an independent verifier runs its own checks. No automatic review-budget reset was added.
+
+The user made branch protection optional. The original F4 finding below still explains the base-movement race; current merge behavior reports that limit and checks the resulting tree instead of blocking unprotected repositories.
 
 ### Validation status
 

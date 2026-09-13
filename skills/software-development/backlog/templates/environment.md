@@ -5,7 +5,7 @@ Record this repository's demonstrated capabilities, configuration pointers, and 
 ## Branching
 
 - Base branch: _<e.g. `main`>_. Worktree root: _<e.g. sibling `<repo-name>-worktrees/`>_.
-- Merge protection: _<target-branch rules, strict up-to-date required checks or merge-group verification/review gate, actor bypass behavior, and configuration gaps>_.
+- Merge protection: _<target-branch rules, required checks or merge-queue behavior, actor bypass behavior, and any absent protections>_.
 - PR result: _<preview deployment or other output>_.
 - Merge result and promotion path: _<deployment targets and how changes reach production>_.
 - Deploy constraints: _<runtime, packaging, asset limits>_.

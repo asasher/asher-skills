@@ -2,7 +2,7 @@
 
 The full review covers **36 skills and all 385 files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the applied setup, dispatch, diagram, and browser changes and Relay retirement.
 
-The accepted September 13 [adversarial corrections](software-development-adversarial-review.md) are applied. Review ownership and dependency recovery, approval-bound revisions, tested integration trees and server merge gates, attributable runtime results, and the reduced interview, testing, diagram, and evidence ceremony. Focused helper regressions and offline checks are separate from behavioral assessment through real repository work, which follows installation and reconciliation. The original findings and evaluation plan remain available for comparison.
+The accepted September 13 [adversarial corrections](software-development-adversarial-review.md) are applied. Review ownership and dependency recovery, approval-bound revisions, tested integration trees and merge freshness checks, attributable runtime results, and the reduced interview, testing, diagram, and evidence ceremony. Focused helper regressions and offline checks are separate from behavioral assessment through real repository work, which follows installation and reconciliation. The original findings and evaluation plan remain available for comparison.
 
 Read each entrypoint, then finish its package inventory before marking that skill reviewed. Diagram Design has 210 files; inspect its type references and rendered examples in their own review sitting. Existing tests are evidence to assess, not an instruction to run live services.
 
@@ -45,7 +45,7 @@ Check who owns the build, what independent checks establish, and when the PR is 
 
 Check human selection, cleanup, interrupted work, and proposed issues from recent runs.
 
-- [ ] **17. [merge](../skills/software-development/merge/SKILL.md)**: Shaping holds, risk and waiver authority, verified integration, server-enforced freshness, dependent branches, and safe cleanup.
+- [ ] **17. [merge](../skills/software-development/merge/SKILL.md)**: Shaping holds, risk and waiver authority, verified integration, optional branch protection, post-merge tree comparison, dependent branches, and safe cleanup.
 - [ ] **18. [retro](../skills/software-development/retro/SKILL.md)**: Persisted pending transcript versions, bounded sweeps, selected tracker writes, and completed checkpoint coverage.
 - [ ] **19. [handoff](../skills/software-development/handoff/SKILL.md)**: Enough durable context for another session to resume without losing decisions or unfinished work.
 

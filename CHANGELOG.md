@@ -2,6 +2,12 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-13 — optional branch protection
+
+`merge` honors configured protections but their absence is not a blocker. Require current review, verification, and passing checks; re-read head/base immediately before the head-guarded merge. Compare the resulting tree with the tested tree and verify an unexpected result before dependent work continues. Server rules determine whether base freshness is atomic.
+
+Reconcile: refresh `merge` and `backlog` setup guidance. `merge` now declares `verify-your-work`, already in the unchanged install set. This supersedes the earlier requirement for branch protection; no repository protection settings are changed.
+
 ## 2026-09-13 — build frontiers, specs, and milestones in waves
 
 `backlog build` drains the ready, unblocked frontier selected at invocation under the repository-wide concurrency limit. A single approved spec ticket (or `build spec <ticket>`) selects that spec through integration and promotion. `build milestone <name-or-number>` advances its tickets and approved split descendants in successive waves.
