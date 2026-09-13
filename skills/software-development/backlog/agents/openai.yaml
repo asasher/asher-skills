@@ -1,7 +1,7 @@
 interface:
   display_name: "Backlog"
-  short_description: "Groom all tickets; dispatch builds; inspect PRs and progress"
-  default_prompt: "Use $backlog <verb> to run one dispatcher verb over this repo's issues."
+  short_description: "Groom tickets; build frontiers, specs, and milestone waves"
+  default_prompt: "Use $backlog <verb> to run one lifecycle verb over this repo's issues."
 
 policy:
   allow_implicit_invocation: false

@@ -1,5 +1,11 @@
 # Skill instruction review
 
+## Build scopes and successive waves
+
+`backlog build` now drains its initial eligible frontier, even when that requires several capacity-limited launches. A selected approved spec or milestone advances through later frontiers as blockers clear. The conditional [wave reference](../skills/software-development/backlog/reference/build-waves.md) owns scope, human merge waits, completion, and recovery. No new orchestration service, script, or repository ledger was added.
+
+The coordinator stays with runnable work and reports a resumable wait when the next action belongs elsewhere. Worker checkpoints, global capacity reservations, branch targets, and existing review budgets remain authoritative. The user selected real repository work to assess these scopes; synthetic agent fixtures are no longer a rollout gate.
+
 ## Corrections and pruning after adversarial review
 
 Applied September 13 after approval. The [adversarial report](software-development-adversarial-review.html) separates the original findings, applied changes, and remaining evaluation work.
@@ -13,7 +19,7 @@ Applied September 13 after approval. The [adversarial report](software-developme
 
 The family still ships 36 skills. `shape` now declares `bare-minimum-design`; `deliver` declares `capture`. Both dependencies were already in the install set. Added recovery references and helper tests are included in the full review inventory.
 
-The final 72 helper tests pass, along with sprite acceptance and versioning checks. Three fresh independent reviews closed the additional runtime, authority, and embedded-motion gaps they found. Headless browser checks cover two independently controlled motion figures and the mobile review reader. The eight decision fixtures, 16-run initial agent batch, overlapping-browser exercise, and real repository pilots remain pending; no lifecycle reliability claim follows from token reduction or unit tests.
+The final 72 helper tests pass, along with sprite acceptance and versioning checks. Three fresh independent reviews closed the additional runtime, authority, and embedded-motion gaps they found. Headless browser checks cover two independently controlled motion figures and the mobile review reader. Behavioral assessment will use actual pilot repository work after installation and reconciliation. The synthetic agent batch is retired as a rollout gate; no lifecycle reliability claim follows from token reduction or unit tests.
 
 ## Simplification review
 

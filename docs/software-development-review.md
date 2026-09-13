@@ -1,8 +1,8 @@
 # Software development family: full manual review
 
-The full review covers **36 skills and all 384 files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the applied setup, dispatch, diagram, and browser changes and Relay retirement.
+The full review covers **36 skills and all 385 files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the applied setup, dispatch, diagram, and browser changes and Relay retirement.
 
-The accepted September 13 [adversarial corrections](software-development-adversarial-review.md) are applied. Review ownership and dependency recovery, approval-bound revisions, tested integration trees and server merge gates, attributable runtime results, and the reduced interview, testing, diagram, and evidence ceremony. Focused helper regressions and offline checks are separate from lifecycle behavioral evaluations, which remain pending. The original findings and evaluation plan remain available for comparison.
+The accepted September 13 [adversarial corrections](software-development-adversarial-review.md) are applied. Review ownership and dependency recovery, approval-bound revisions, tested integration trees and server merge gates, attributable runtime results, and the reduced interview, testing, diagram, and evidence ceremony. Focused helper regressions and offline checks are separate from behavioral assessment through real repository work, which follows installation and reconciliation. The original findings and evaluation plan remain available for comparison.
 
 Read each entrypoint, then finish its package inventory before marking that skill reviewed. Diagram Design has 210 files; inspect its type references and rendered examples in their own review sitting. Existing tests are evidence to assess, not an instruction to run live services.
 
@@ -13,7 +13,9 @@ For each skill, record **accept**, **change**, or **needs behavioral evidence**,
 Check how findings become tickets, how milestones survive consolidation, and who decides readiness.
 
 - [ ] **01. [capture](../skills/software-development/capture/SKILL.md)**: One ticket per finding; confirmed publication; recovery preserves advanced labels and claims; milestone grouping and spec-parent gaps.
-- [ ] **02. [backlog](../skills/software-development/backlog/SKILL.md)**: All open issues read; native dependencies transferred before consolidation closes sources; bounded dispatch and recovery.
+- [ ] **02. [backlog](../skills/software-development/backlog/SKILL.md)**: All open issues read; native dependencies preserved through consolidation; initial frontier draining and spec/milestone waves with human merge waits.
+
+For build, trace three scopes: a frontier larger than capacity, a spec that needs a human merge between waves, and a milestone with independent and blocked work. Check selection, truthful waits, completion, and resume from tracker state.
 
 ## 2. Shaping and splitting
 
@@ -93,7 +95,7 @@ Expand each package and account for every file. The checklist above records the 
 </details>
 
 <details>
-<summary>02. backlog: 7 files</summary>
+<summary>02. backlog: 8 files</summary>
 
 ### Entrypoint
 
@@ -101,6 +103,7 @@ Expand each package and account for every file. The checklist above records the 
 
 ### Instructional references
 
+- [reference/build-waves.md](../skills/software-development/backlog/reference/build-waves.md)
 - [reference/labels.md](../skills/software-development/backlog/reference/labels.md)
 - [reference/milestones.md](../skills/software-development/backlog/reference/milestones.md)
 - [reference/setup.md](../skills/software-development/backlog/reference/setup.md)
@@ -952,7 +955,7 @@ After the package review, trace these journeys through the sources. Record contr
 
 Packaging, dependency closure, links, formatting, and rendered-guide checks establish structural consistency. They do not establish lifecycle behavior. The image backend has 22 passing implementation tests and a visually inspected live proxy smoke, recorded in [the instruction review](skill-instruction-review.md). Other tests listed in the inventory are existing assets; inclusion does not claim a current passing run.
 
-Behavioral evaluation remains a separate gate. The visual guide lists candidate fixtures and human judgments. No new behavioral evals were added for this checklist.
+The user selected real repository work for behavioral assessment. Observe actual lifecycle outcomes after installation and reconciliation; synthetic agent fixtures are no longer a rollout gate. Helper regressions remain useful for concrete code defects.
 
 The September 5 rewrite snapshot fell from 24,788 to 15,492 o200k_base tokens (37.5%) against 516f0c6. That historical entrypoint measurement excludes references and design siblings; the current review covers the full packages.
 

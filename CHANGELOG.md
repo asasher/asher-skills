@@ -2,6 +2,14 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-13 — build frontiers, specs, and milestones in waves
+
+`backlog build` drains the ready, unblocked frontier selected at invocation under the repository-wide concurrency limit. A single approved spec ticket (or `build spec <ticket>`) selects that spec through integration and promotion. `build milestone <name-or-number>` advances its tickets and approved split descendants in successive waves.
+
+The coordinator observes worker outcomes, recomputes blockers after confirmed merges, and pauses when progress requires outside action. Human merge selection, shaping gates, existing branch targets, ownership reservations, deadlines, and consumed review budgets remain. Scope and orchestration progress stay in the thread; worker checkpoints stay on tickets/PRs. Completion distinguishes review-ready PRs from merged delivery and milestone closure.
+
+Reconcile: refresh `backlog`, including `reference/build-waves.md` and the updated sidecar. Dependencies and the 36-skill install set are unchanged; the full review now covers 385 package files. Assess frontier draining, spec waves, and milestone waves through actual pilot repository work. The user retired synthetic agent fixtures as a rollout gate; helper regressions remain.
+
 ## 2026-09-13 — repair lifecycle handoffs and prune instructions
 
 - `backlog`, `capture`, `shape`, `to-slices`: preserve native dependencies and active owners, claim standalone shaping, recover revised splits under the approved source, and preserve advanced state after interrupted publication.

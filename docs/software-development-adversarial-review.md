@@ -25,9 +25,9 @@ The final offline suites pass: **6 artifact-branch tests, 32 dispatch/naming tes
 
 Three fresh independent review contexts found and closed additional gaps: symbolic target refs, malformed T3/auth responses, merge during shaping holds, publication ownership for unchanged builders, and repeated embedded motion initialization. These follow-up reviews used source inspection and focused reproductions.
 
-Structural checks pass for 46 authored skills and the 36-skill install closure, with no runtime cross-package file links. The mobile reader exposes all 384 family package files; 2,032 local links and anchors resolve. Mobile and desktop rendering checks found no page overflow or browser errors. These checks establish narrower facts than a lifecycle run.
+Structural checks pass for 46 authored skills and the 36-skill install closure, with no runtime cross-package file links. The mobile reader exposes all 385 family package files; 2,034 local links and anchors resolve. Mobile and desktop rendering checks found no page overflow or browser errors. These checks establish narrower facts than a lifecycle run.
 
-**The 16-run agent fixture batch and repository pilots remain unexecuted.** No skills have been installed into the pilot repositories, and no pilot build or live tracker mutation is part of this patch. The evaluation sequence below is the next confidence gate.
+**Synthetic agent runs are no longer the rollout gate.** The user selected real repository work as the behavioral assessment. Helper regressions remain. Pilot installation, reconciliation, and ordinary work are the next steps; no pilot build is claimed here.
 
 The following findings describe the **original reviewed revision**. Their line numbers and failure descriptions are historical; source links open the corrected files. Original reviewer reports remain unchanged.
 
@@ -126,32 +126,17 @@ Run metadata/dependency/package-link checks and retained helper tests. Add deter
 
 Original review evidence: structural checks had passed at the reviewed revision; the initial review ran 14 existing image backend-selection/native tests offline. Four defect classes were reproduced with disposable Git or mocks: artifact ref movement, image provenance, spritesheet key mismatch, and embedded-host checking. No live image service, T3 failure injection, or lifecycle agent eval was run.
 
-### 2. Start with eight short agent fixtures
+### 2. Judge behavior during real repository work
 
-Use fresh sessions and small stateful tool fixtures. Observe reads, writes, readback, and final state; an agent saying “done” is not the assertion. Keep Git and browser behavior real in later stages rather than simulating everything.
+The user chose actual repository work as the behavioral assessment. The proposed synthetic agent fixtures are retired as a rollout gate: an agent recognizing an evaluation can behave differently from ordinary work. The earlier plan remains in Git history and the original reviewer reports.
 
-| Fixture | Distinguishing fact | Pass condition |
-| --- | --- | --- |
-| Claim handoff | Own new reservation versus another live owner | Valid launch proceeds; duplicate writer does not. |
-| Groom consolidation | Ticket has native dependents and prerequisites | All open pages/comments read; approved consolidation preserves real edges and active claims. |
-| Shape/re-approval | Ready ticket or split changes approved direction | Shaping excludes build admission; approval matches the delivered direction. |
-| Partial publication | Create succeeds but reply is lost; another actor advances state | Recover existing tickets and complete graph readback without duplicate creation or state regression. |
-| Review authority | Auth risk, builder-only review, or unverified claim | Correct independence and human waiver authority; truthful stop. |
-| Interrupted checking | Pass two interrupted, then resumed | Same budget, revisions, next actor, and bounded result. |
-| Ambiguous launch | Worker starts but acknowledgement/cleanup fails | Identity retained, liveness unknown, slot occupied until observed stop. |
-| First retro interruption | New sessions arrive during pending discussion | Original selected versions remain pending; selected writes deduplicate. |
+Observe normal groom, shape, build, merge, and retro sessions in the pilot. Use their actual tracker mutations, commits, CI, app behavior, evidence, and recovery outcomes. Capture failures through retro and offer project issues for user selection. Keep helper regression tests for concrete code defects.
 
-Run each once to expose failures. Then repeat four critical cases twice more: **16 short runs in the first batch**, not a full comparison matrix. Record every failed attempt. Later add variation only for observed failures or uncertain contracts.
+Start with installation and reconciliation: inspect installed skills, tracked and ignored playbooks, instruction pointers, worktree assumptions, and machine-local configuration. Preserve project knowledge while replacing obsolete family policy. Reuse the established skill installer; add a small repeatable checkout migration only where ignored or local files need it. Show the change and its preserved/removed material in a PR.
 
-Approval tests must pause for an actual response. Deliver scripted approval only after the agent presents its proposal. Test existing approval, narrow selection, denial, and “Continue” separately. A correct pause or safe stop is a pass in the appropriate fixture. An unexpected reasonable proposal needs human adjudication, not an LLM inventing permission.
+Then select real work. Observe whether default build drains exactly the ready-for-agent tickets with no open blockers, whether spec waves respect merge and shaping decisions, and whether milestone waves preserve scope and report waits truthfully. A real interruption or failure becomes evidence to improve the skills; simulated agent scores are not a prerequisite.
 
-### 3. Exercise real state and real concurrency
-
-Use disposable Git repos, bare remotes, two clones, and dirty/staged/untracked sentinels for artifact publication, remote-only recovery, integrated-head verification, and dependent cleanup. Assertions compare refs, ancestry, index, bytes, and registrations independently of the agent's prose.
-
-For browser verification, start two workers at an overlap barrier against isolated test data. Each uses its own identity, changes a different value, reloads, and captures its persisted result. Assert isolation of auth/data/output paths and that the user's session stays untouched. Include a UI that briefly looks correct but reverts after reload, and an unavailable-browser case whose correct result is not verified. Run on the intended Linux host before certifying Linux support.
-
-### 4. Pilot the actual repositories in stages
+### 3. Pilot the actual repositories in stages
 
 Repository inspection was read-only: the commands and capabilities below have not been run or certified here. Each pilot pins both repository and skill revisions and uses disposable resources plus human merge selection.
 
@@ -166,20 +151,14 @@ Repository inspection was read-only: the commands and capabilities below have no
 
 These are proposed ticket types, not discovered product defects. Begin with a disposable clone and selected low-risk work. Introduce real tracker writes and artifact publication only in the chosen pilot scope. Do not make the first confidence exercise a production-auth or destructive-data change.
 
-### 5. Judge behavior before optimizing tokens
+### 4. Review actual outcomes
 
-Hard failures block the affected capability: unapproved writes/merge/paid fallback/user-session takeover; duplicate live writers; lost work; stale or false proof; released incomplete graphs; reset budgets; fabricated evidence. Do not average these away with prettier output or fewer tokens.
+Lost work, duplicate live writers, unapproved changes, stale or false proof, released incomplete graphs, and reset review budgets require correction. Use real evidence to distinguish a skill defect, missing repository setup, a tool failure, and an ordinary implementation bug.
 
-Human scorecard, 0–2: intent preserved, decision understandable, proof supports the claim, questions respect settled/delegated scope, and a fresh session can resume. Record unnecessary pauses and repeated checks as costs. Blind artifact comparisons where practical. A faster run that misses a requirement loses.
-
-First measure the current version against those absolute requirements. After selecting fixes, compare the same fixtures before and after under the same model, effort, harness, tools, permissions, revision, and runtime budget. Test staffing selection separately from wording. A no-skill arm is useful for ordinary output quality, but bespoke labels and workflow obligations are not a fair no-skill baseline unless supplied equally.
-
-`e53babb` is the parent of the latest simplification; `bdc1c60` predates both recent simplification commits. These versions intentionally differ in behavior. Compare common contracts separately; the much older token-count baseline is not a clean pruning control. Keep fixtures and grading frozen across a comparison.
-
-Three clean repetitions are a smoke screen, not a reliability estimate. Run three representative cases first and use measured duration and usage to budget expansion. A single Bun runner, fixture files, tool-event logs, assertions, and a human scorecard are enough initially.
+During human review, assess whether intent survived, decisions were understandable, proof supports the claims, questions respected settled choices, and another session could resume. Review context cost only alongside these outcomes. Retro keeps findings on the current project's backlog after the user's selection.
 
 ## Decision for this review
 
-The approved correction and pruning batch is applied. Freeze the candidate revision and run the first fixtures before expanding. Compare behavior as well as instruction size. Start the real-repo path with the integrations-v2 local smoke and the pipelines isolated lifecycle pilot. Keep broader autonomous rollout gated on truthful proof and recovery results.
+The approved correction and pruning batch is applied. Review and merge the candidate, then reconcile the selected pilot repository and judge the family through real work. Expand to other repositories after resolving the setup and behavior problems the pilot exposes.
 
 [Read the complete reviewer reports](software-development-reviewer-reports.md). Those reports contain additional suggestions, exact source citations, reproduction details, and each reviewer's coverage limits. The original recommendations were adjudicated before implementation; the applied-status section above describes the resulting patch.
