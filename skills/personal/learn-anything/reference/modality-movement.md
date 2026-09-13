@@ -1,6 +1,6 @@
 # Modality playbook — movement
 
-Dance, posture, sport technique, stagecraft. This is the **honest-and-thin** playbook: machine-objective measures are scarce and high-friction, so the center of gravity shifts to _trained self-assessment_, _physical rigs_, and _human checkpoints_. Say that plainly in loop design rather than promising precision the tooling can't deliver.
+Dance, posture, sport technique, stagecraft. This is the **honest-and-thin** playbook: machine-objective measures are scarce and high-friction, so the center of gravity shifts to _trained self-assessment_, _physical rigs_, and _human checkpoints_. State the available precision plainly in loop design.
 
 ## Capture (the trap)
 

@@ -39,7 +39,7 @@ def install_codex_stub(bin_dir, home):
         raise AssertionError("Pillow is required to build the image-generation stub") from exc
 
     stub = bin_dir / "codex"
-    session = home / ".codex" / "sessions" / "stub" / "session.jsonl"
+    sessions = home / ".codex" / "sessions" / "stub"
     image = Image.new("RGB", (256, 256), "#ff00ff")
     rng = random.Random(42)
     pixels = image.load()
@@ -49,22 +49,27 @@ def install_codex_stub(bin_dir, home):
     buffer = BytesIO()
     image.save(buffer, "PNG")
     png = buffer.getvalue()
-    check(len(png) > 8_000, "stub PNG is too small for transcript candidate detection")
     payload = json.dumps(
         {
+            "id": "ig_stub",
             "type": "image_generation_call",
+            "status": "completed",
             "revised_prompt": "oak tree generated image",
             "result": base64.b64encode(png).decode("ascii"),
         }
     )
     stub.write_text(
         f"#!{sys.executable}\n"
-        "import os\n"
+        "import json, os, uuid\n"
         "from pathlib import Path\n"
         "if os.environ.get('CODEX_STUB_NO_IMAGE'):\n    raise SystemExit(1)\n"
-        f"session = Path({str(session)!r})\n"
+        "identity = str(uuid.uuid4())\n"
+        f"session = Path({str(sessions)!r}) / f'rollout-stub-{{identity}}.jsonl'\n"
         "session.parent.mkdir(parents=True, exist_ok=True)\n"
-        f"with session.open('a', encoding='utf-8') as handle:\n    handle.write({payload!r} + '\\n')\n",
+        f"records = [{{'type': 'session_meta', 'payload': {{'id': identity}}}}, {{'type': 'response_item', 'payload': json.loads({payload!r})}}]\n"
+        "session.write_text(''.join(json.dumps(record) + '\\n' for record in records))\n"
+        "print(json.dumps({'type': 'thread.started', 'thread_id': identity}))\n"
+        "print(json.dumps({'type': 'turn.completed'}))\n",
         encoding="utf-8",
     )
     stub.chmod(0o755)
@@ -76,7 +81,9 @@ def exercise_generation(root):
     bin_dir.mkdir()
     install_codex_stub(bin_dir, home)
     env = os.environ.copy()
-    env["HOME"] = str(home)
+    env["CODEX_HOME"] = str(home / ".codex")
+    for variable in ("CLIPROXYAPI_BASE_URL", "OPENAI_BASE_URL"):
+        env.pop(variable, None)
     env["PATH"] = f"{bin_dir}{os.pathsep}{env['PATH']}"
 
     asset_dir = root / "assets"
@@ -174,8 +181,6 @@ def exercise_generation(root):
 
     failed_scene = root / "failed-scene.json"
     failed_scene.write_text(scene_file.read_text(), encoding="utf-8")
-    session = home / ".codex/sessions/stub/session.jsonl"
-    os.utime(session, (1, 1))
     failed_env = env.copy()
     failed_env["CODEX_STUB_NO_IMAGE"] = "1"
     failed = subprocess.run(

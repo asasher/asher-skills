@@ -1,4 +1,3 @@
-# Relay predeployment eval workspace
+# Retired Relay workspace
 
-Read `skills/personal/relay/evals/AGENTS.md`. Store each immutable executor answer, grading table, aggregate,
-and reviewer note in a new `iteration-N/` directory. Do not rewrite completed iterations.
+Relay was retired on 2026-09-13. Preserve completed evaluation records. For an explicitly requested historical review, consult the [last shipped eval contract](https://github.com/asasher/asher-skills/tree/e53babb/skills/personal/relay/evals/AGENTS.md).

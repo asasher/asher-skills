@@ -1,50 +1,32 @@
 ---
 name: adversarial-review
-description: Converge a change request to LGTM through driver-sequenced bounded passes — a reviewer that re-reviews until a pass finds nothing new, and a fixer that addresses findings until LGTM lands. Use once a change request exists and needs review pressure without a human in the loop.
-argument-hint: "<change request>"
-user-invocable: true
+description: Run one bounded verification, review, and fix loop on a PR; preserve its state across interruptions.
 metadata:
-  invocation: model
-  execution: orchestrator
-  requires: [code-review, to-subagent]
-  optional: [diagnosing-bugs]
+  requires: [code-review, implement, to-subagent, verify-your-work]
 ---
 
-# Adversarial Review
+# Adversarial review
 
-Two roles converge on one change request: a reviewer that re-reviews until a pass finds nothing new, and a fixer that addresses findings until LGTM lands. The change request is their only shared state — findings, fixes, and the verdict all live in its comments and commits, so any pass can die and the loop resumes from that record.
+Run the loop in the owning session. The owner verifies routine work and makes fixes; code review uses an independent context. Use [conduct](reference/conduct.md) for findings and fix discipline.
 
-The session running this skill is the **driver**. Each role runs as one bounded pass dispatched via the `to-subagent` skill; a pass is a harness-tracked child, so its return is the wake that moves the loop — the roles never wait on each other, and nothing in the loop waits across a turn boundary.
+## State and risk
 
-Both briefs — comment conduct, the LGTM bar, iteration state, the product-semantics ruling — are in [conduct](reference/conduct.md); each dispatch carries it.
+Read the PR's latest state: head/base and tested integration tree, claims, risk, reports, consumed passes, deadline, and next actor. Default to three checking passes and one hour, bounded by the supplied deadline. Preserve counts and stops across resumes. Persist before dispatch and after each return.
 
-## The loop
+- **Light:** no executable or operational effect. Relevant checks plus independent review; record why behavioral verification does not apply.
+- **Normal:** verify behavior here with `verify-your-work`, then obtain independent review.
+- **High:** auth, money, destructive data, or cross-surface interactions. Dispatch `verify-your-work` and review in separate contexts via `to-subagent`; run them together only when runtime state is isolated.
 
-Alternate bounded passes until a verdict:
+The brief may require stronger independence. Assess risk by behavioral and operational impact. A standalone code-only review explicitly reports that behavior was not verified.
 
-1. **Review pass.** Dispatch the reviewer against the current head (conduct § Reviewer): it runs the `code-review` skill, posts each finding as an anchored change-request comment, persists its state, and returns its verdict — `LGTM` naming the head it covers, or the open findings.
-2. On `LGTM`, the loop is converged: report it, naming the covered head.
-3. **Fix pass.** Dispatch the fixer with the open findings (conduct § Fixer): it addresses every one — fix commit or reasoned pushback — pushes, replies to each comment, persists its state, and returns.
-4. Review again, from step 1.
+## Loop
 
-## Turn discipline
+1. Pin the pushed head and target base; verification and review must cover their intended integration tree. Run verification in the context required by the risk level, and dispatch one independent `code-review` pass via `to-subagent`. Review reads source; the verifier owns runtime fixtures. Finish every checking pass before editing.
+2. Join findings, including evidence or CI failures supplied after a prior convergence. Reject stale reports. Product questions and missing slice-sized work stop for a human ruling. Unverified claims stop unless the human explicitly authorized a waiver for the named claims at this head; retain the authorization record, including approval given in chat.
+3. With no blocking findings, current verification, and a current-head LGTM, report convergence and CI status. Optional suggestions can remain. Otherwise run `implement` here on the findings, push the fix, and repeat only when budget remains for another checking pass.
 
-The driver holds the loop for its whole life and returns only with an outcome: **converged** (`LGTM`, the covered head SHA) or **stopped at a bound** (the open findings and which bound). Between dispatching a pass and reading its return there is nothing to watch and no poll to keep alive — the tracked child's completion is the wake. Ending the turn with the loop unconverged and unreported is a contract violation — a state comment records the loop's position, it does not keep the loop alive.
+Each dispatched checking round consumes one pass, even if interrupted. Resume at the recorded next actor; inspect an interrupted fix and retain the consumed budget. Every fix or head/base movement invalidates both verdicts; sibling merges retain the same consumed budget. A late evidence or CI defect reopens this same loop.
 
-A pass that has returned is complete: act on its report. No confirmation follows a return — waiting for one blocks on a message that cannot arrive.
+At the bound, stop with findings. The owner may record a finite extension only when findings are resolving and narrowing, within the outer deadline; product questions still require a human ruling. Confirm timed-out workers stopped before any further writer.
 
-## Bounds
-
-An iteration cap (default: three full review passes) and a timeout (named by whoever dispatched the review, defaulting to one hour), both enforced by the driver on the passes it dispatches. On the timeout, stop and report the open findings as unresolved; at the cap, do the same unless the § Cap exhaustion ruling below authorizes a bounded extension — either way a stuck convergence is a reported outcome, not an endless loop.
-
-The driver names each pass's own bound at its dispatch, and treats a pass that outlives that bound as one that died. A pass that dies without returning is re-dispatched from the change request's persisted state (conduct § Shared rules), picking up at the next expected action.
-
-## Cap exhaustion
-
-Cap exhaustion on a substantive change is the bound doing its job: it forces an explicit driver ruling instead of an unbounded loop — a reported decision point, not a fault. Exhaustion never lowers the LGTM bar (conduct owns that rule); it puts one of three rulings in front of the driver:
-
-- **Extend** when convergence is visibly progressing — each pass resolves the prior findings and the new ones are fewer or narrower. An extension is a named number of additional passes, recorded in a state comment with its rationale; each further extension takes the same fresh ruling — never an open-ended "keep going".
-- **Stop with findings open** when convergence is not visible — findings holding steady, recurring, or widening — or when the residue needs rework beyond review-scale fixes, such as a change that wants splitting. Report the open findings as unresolved per the bound-stop rule above; the caller owns what happens next.
-- **Surface a product question and stop** when a remaining finding hinges on what the behavior should be — more passes cannot answer it. Route it to a human ruling per conduct's product-semantics ruling.
-
-Whoever dispatches the review may size the cap to the change: the default suits a contained change; a large or multi-surface change warrants naming a larger cap at dispatch rather than planning on extensions.
+Return and persist **converged**, **stopped at a bound**, **product question**, or **verification incomplete**, with revisions, reports, consumed budget, deadline, and next action. Required CI still gates review-readiness and merge.

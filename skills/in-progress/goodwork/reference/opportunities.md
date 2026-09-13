@@ -1,6 +1,6 @@
 # Opportunities — `goodwork/opportunities.json`
 
-One JSON array, one object per opportunity the person is working or watching. The agent is the sole writer. No sources file, no leads bench, no separate target list, no inbound-channel integration — the person forwards or pastes what arrives, and the agent records it.
+One JSON array, one object per opportunity the person is working or watching. The agent is the sole writer. The person forwards or pastes incoming opportunities; the agent records them in this array.
 
 ## Schema
 
@@ -25,7 +25,7 @@ One JSON array, one object per opportunity the person is working or watching. Th
 
 Stages: `watching` → `outreach` → `applied` → `interviewing` → `offer` → `closed`. Not every opportunity takes every stage. `closed` always carries a `closed_reason` in plain words ("no response after two follow-ups", "comp below floor", "took another offer") — repeated reasons are profile evidence; route them to `profile`.
 
-Every **open** opportunity has a `next_action` with a date. A missing next action is a decision waiting to be made — flag it at `checkin`. `history` is dated one-liners that read as the story of the pursuit, not bookkeeping; it is what the board shows.
+Every **open** opportunity has a `next_action` with a date. A missing next action is a decision waiting to be made — flag it at `checkin`. `history` tells the story of the pursuit in dated one-liners; it is what the board shows.
 
 ## Scout — finding and scoring
 
@@ -43,9 +43,9 @@ New finds enter at `watching`, ranked with reasons. Adding is cheap; pursuing is
 ## Track — working an opportunity
 
 - **Warmth before applications.** Cold-applying to a top-choice company wastes it — it files the person into the portal pile before a human could route them. Default order: a conversation or intro first, the application with or after it.
-- **Outreach drafts**: one specific true reason for contacting this person, one small clear ask, no CV attached, never mass-personalized. Polished final text first, then rationale.
+- **Outreach drafts**: one specific true reason for contacting this person, one small clear ask, no CV attached, written for that recipient. Polished final text first, then rationale.
 - **Application packages**: mirror the posting's real keywords only where true evidence exists; simple formatting; tailoring is selection and emphasis from the same verified evidence base, never invention.
-- **Follow-up cadence, pre-decided**: no reply → follow up after ~3 business days → once more ~7 days later → close with reason. Never more; anxiety doesn't get to improvise.
+- **Follow-up cadence, pre-decided**: no reply → follow up after ~3 business days → once more ~7 days later → close with reason. Limit the sequence to those two follow-ups.
 - **Volume**: 5–10 high-fit applications a week beats 50 sprayed.
 - Every send: final text approved in chat, sent verbatim, logged to `history`, next action set.
 

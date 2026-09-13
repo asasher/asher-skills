@@ -10,28 +10,11 @@ Data realism is the single biggest fidelity lever. Buyers don't inspect your ani
 
 ## Seeded generation, not hand-typed rows
 
-Fixtures come from generator functions using a seeded PRNG so every run of the demo is identical.
+Generate fixtures deterministically from one fixed seed for the app. A reset restores the same records and relationships.
 
-```ts
-// lib/fixtures/rng.ts
-export function mulberry32(seed: number) {
-  return () => {
-    seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-export const rng = mulberry32(20260706); // one fixed seed for the whole app
-```
-
-## Relative dates — never hardcode
+## Dates relative to the demo clock
 
 A demo with hardcoded "March 2026" timestamps looks dead by July. Generate every date as an offset from now: `daysAgo(3)`, `hoursAgo(2)`, `inDays(14)`. The demo is perpetually alive.
-
-```ts
-export const daysAgo = (n: number) => new Date(Date.now() - n * 864e5);
-```
 
 Rendering caveat: relative-to-now dates cause SSR/client hydration mismatches. Render timestamps inside a hydration guard (mounted-state check) or format deterministically — see web-quality reference.
 
@@ -40,7 +23,7 @@ Rendering caveat: relative-to-now dates cause SSR/client hydration mismatches. R
 - **Volume:** enough rows that lists scroll — ~30–80 for primary entities, a handful for config-like ones. Match intake magnitudes (if they said "200 orders a day", a list of 12 is a tell).
 - **Distribution:** not uniform. Most records normal, some aging, a few outliers: 2 overdue invoices, one order stuck in a weird state, one customer who accounts for 30% of revenue. Skew is what real data looks like.
 - **Precision:** real numbers are ragged — `$1,847.50`, not `$1,000.00`. Quantities, weights, and rates should carry domain-plausible precision and units.
-- **Names:** domain-plausible, varied, culturally mixed. Company names that sound like the industry (freight brokers do not have customers named "Acme Corp"). Use intake's real-world examples as style templates. No lorem ipsum anywhere, ever — placeholder text in a rendered screen fails the build.
+- **Names:** domain-plausible, varied, culturally mixed. Company names that sound like the industry (freight brokers do not have customers named "Acme Corp"). Use intake's real-world examples as style templates. Populate every rendered screen with domain-appropriate copy.
 - **One deliberate edge case per entity type** — a very long name, a zero-quantity line, a cancelled record. They make tables look lived-in and demo how the UI handles mess.
 
 ## Coherence

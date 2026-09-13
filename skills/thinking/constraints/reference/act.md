@@ -10,8 +10,8 @@ Order is doctrine: **exploit → subordinate → (only then) elevate.** Free cap
 
 Walk the checklist against _this_ constraint with the user; record keepers as an unchecked task list in Plan:
 
-- **Never starved:** does the constraint ever idle waiting for input, decisions, access, materials? Why?
-- **Never poisoned:** does defective, ambiguous, or premature work consume its time? Put the quality/readiness check _in front of_ it (definition-of-ready, pre-review lint, qualified-lead criteria).
+- **Ready input:** does the constraint ever idle waiting for input, decisions, access, materials? Why?
+- **Quality input:** does defective, ambiguous, or premature work consume its time? Put the quality/readiness check _in front of_ it (definition-of-ready, pre-review lint, qualified-lead criteria).
 - **Only constraint-work:** what does it do that something/someone else could? Offload prep, admin, formatting, status reporting, routine approvals.
 - **Best work first:** are its priorities explicit and visible, or does the loudest voice win? Give it one queue, sequenced by throughput value.
 - **Interruptions:** what fragments it? Batch the requests, protect the focus block, route around it.
@@ -25,10 +25,10 @@ The counterintuitive half; warn the user it will _feel_ wrong. Write 2–4 expli
 
 - A **release rule** (the rope): start new work only at the pace the constraint absorbs — cap WIP in front of it.
 - A **priority rule**: constraint work beats local utilization; non-constraints may idle, help, prep, or quality-check rather than produce queue.
-- A **buffer**: a small stock of ready work so variation never starves the constraint — with buffer state (green/amber/red) as the expedite signal, not stakeholder volume.
+- A **buffer**: a small stock of ready work so variation never starves the constraint — with buffer state (green/amber/red) as the expedite signal.
 - A **metric change**: stop rewarding whatever local efficiency currently manufactures the pile-up.
 
-If a subordination rule triggers real resistance ("but the team can't just sit idle!"), that's a conflict — run `cloud` ([trees.md](trees.md)) on it rather than winning the argument.
+If a subordination rule triggers real resistance ("but the team can't just sit idle!"), that's a conflict — run `cloud` ([trees.md](trees.md)) to surface the needs and assumptions behind it.
 
 ### Elevate — behind the gate
 

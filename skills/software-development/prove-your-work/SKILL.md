@@ -1,34 +1,33 @@
 ---
 name: prove-your-work
-description: Assemble the evidence that a change works — claims, the proof each passed, what wasn't verified — and post it where the merge decision happens. Use when a change request is ready and the decider won't be watching the work live.
-argument-hint: "<the change request or branch to evidence>"
-user-invocable: true
+description: Publish reproducible, current-revision evidence on a PR so a human can review the change without watching the build.
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
+  requires: [to-web]
+  optional: [technical-writing]
 ---
 
-# Prove Your Work
+# Prove your work
 
-Assemble the evidence package for a finished change. The audience is whoever decides to merge without having watched the work happen: the package must let them decide from the evidence alone.
+Read the accepted verification report. Reuse tool steps, commands, scripts, outputs, and captures only when head, base, tested integration tree, spec revision, environment, and relevant fixtures match. Inspect reused visuals yourself. Recapture missing or stale proof; a defect returns to the existing review loop before packaging continues.
 
-## What the package carries
+## Package
 
-- **What changed and why** — one paragraph, in the ticket's terms, naming the head SHA the evidence was captured at — that's how a decider checks the artifacts still describe the code being merged.
-- **The proof per claim** — each thing the change claims to do, keyed to the ticket's acceptance-criterion ids where they exist, with the check that demonstrated it: the exact command and its trimmed output, or for UI work the artifacts of whatever drives that surface — a browser driver's trace, screenshots, recording; an emulator or app driver's equivalent for mobile — from the scripted check, captured per the environment playbook (`docs/agents/environment.md`) when the repo has one. A visual artifact goes into the package **looked at**: it shows the content the claim names, legibly and without clipping — existence is not proof. A destructive data operation (migration, cast, backfill) carries its data-safety argument and the evidence behind it. Proof is reproducible: a reader must be able to run the same command and see the same result.
-- **What it cost to produce** — the per-stage token ledger the invoking workflow kept (the `build` skill hands one over): one row per stage — implement, each verify and fix pass, each review pass, evidence — with the tokens that stage consumed and the harness quota percentage at that point where the harness exposes one. This step closes the ledger with its own row before posting. A number no surface reported stays `unreported` — an estimated or reconstructed figure is padding, not accounting. With no ledger handed over, say so and carry the rows this session can observe.
-- **What was not verified, and why** — named plainly. An honest gap outranks a padded package; hiding an unverified claim is the one unforgivable move here.
+Use `technical-writing` when available. Include:
 
-A defect discovered while assembling the proof stops the package: report it to whoever owns the changes — the package resumes after the fix lands and re-enters review.
+- What changed and why, naming the source head/base and tested integration commit/tree.
+- Every claim or acceptance criterion with its verdict, exact check, useful output, and evidence.
+- Reproduction details, including fixture setup, browser actions and observations, and the exact contents or durable source of removed temporary scripts.
+- Data-safety evidence for destructive operations.
+- Each unverified claim, pre-existing failure, and human-authorized head-specific waiver with its reason and authorization record.
 
-A capture surface that can't be reached — an auth-gated preview, a vanished fixture — steps down one rung: capture the same claim on the local stack, labeled as such; failing that too, the claim lands in the not-verified section with the reason. The ladder is capture mechanics; the honest-gap rule above already covers the reporting.
+For UI claims, include inspected screenshots of static states and recordings or GIFs when motion or interaction proves the criterion. Images must show the claimed result legibly without clipping. If a preview is unavailable, use a labeled local run; if that too is inaccessible, record the verification gap.
 
-## Where it goes
+## Publish
 
-Post the package on the change request, through the platform verbs recorded in `docs/agents/platform.md`. A repo with an evidence playbook (`docs/agents/evidence.md`) sets the format and bar; honor it when present.
+Upload the HTML report and media through `to-web`. Keep evidence images, screenshots, MP4s, and GIFs out of Git; failed publication leaves the package incomplete. Preserve tool steps, commands, and any script text in the published report so temporary branches can later be deleted.
 
-## Obligation scales with absence
+Use PNG/JPEG for states. For flows, capture MP4 and make a short GIF when inline playback helps. See [media](reference/media.md) for conversion and embedding. Link videos; embed images and GIFs. Fetch every URL and verify its content type; visually inspect each embed's source.
 
-The less the decider saw, the more the package carries. Work done while they watched and steered may compress to the checks and their results; work done fully AFK carries the complete package — every claim, every command, every gap.
+Recheck the PR head and target base before posting. A moved input needs renewed verification. Keep per-claim detail in the published report. Post its current link and a short verdict summary as a PR comment, and update the body's evidence pointer within the task's publication authorization.
+
+Complete when every claim has evidence or an explicit gap, every URL works, every visual was inspected, and the package identifies the current revisions. Claims with gaps retain their unverified verdict.

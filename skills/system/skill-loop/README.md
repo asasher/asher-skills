@@ -11,11 +11,7 @@
 
 ## Usage
 
-```bash
-npx skills add <repo-url> --skill skill-loop
-```
-
-Invoke it with a skill and eval target:
+Authoring-side tooling: it runs from this repo's `skills/` tree and stays out of the family install. Invoke it with a skill and eval target:
 
 ```text
 skill-loop skills/creative/shadixfy/SKILL.md shadixfy-workspace

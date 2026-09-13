@@ -1,14 +1,7 @@
 ---
 name: dissolve
 description: Dissolve a malformed question via two-agent debate — taboo the loaded word, unbundle the sub-questions — instead of answering it.
-argument-hint: "[debate \"<question>\"] | [new \"<question>\"] | [resume] | [list]"
-user-invocable: true
 disable-model-invocation: true
-metadata:
-  invocation: user
-  execution: orchestrator
-  requires: []
-  optional: []
 ---
 
 # Dissolve
@@ -32,9 +25,9 @@ The moves are a loop, not a staircase — tabooing often exposes a new sub-quest
 ## Operating model
 
 - **One workspace, one folder per question.** The skill is installed once at a **dissolve workspace** root. Each question is its own folder — the _dissolution_ — holding `dissolution.html` (state + artifact) and `sources/`. Folders are siblings; a question is self-contained, shareable, and deletable on its own.
-- **The HTML is the state.** There is no separate state file. `dissolution.html` _is_ the single source of truth: its five sections carry the thinking and each carries a `data-status` (`empty`/`active`/`done`) that tells you, on resume, exactly where the work stands. Edit it directly. Mechanics — section markers, precise edits, diagrams, the session log, and citations — are in `reference/artifact.md`.
+- **The HTML is the state.** `dissolution.html` _is_ the single source of truth: its five sections carry the thinking and each carries a `data-status` (`empty`/`active`/`done`) that tells you, on resume, exactly where the work stands. Edit it directly. Mechanics — section markers, precise edits, diagrams, the session log, and citations — are in `reference/artifact.md`.
 - **Two agents, one page.** Dissolving defaults to a debate: this agent plus a second (a different model/CLI, or a spawned subagent) work the _same_ `dissolution.html`, alternating and challenging each other's taboo-rewrites, cuts, and verdicts. Each turn: read the partner's last move, push on its weakest point (a strand assumed as a premise, a "value" that's really empirical, a resolution leaning on desert), then update the page. Converge when neither can sharpen the cut further **and** the gate passes. The turn log is a sibling `discussion.md` — **scratch, not state**; the HTML stays the single source of truth. Full protocol: `reference/debate.md`.
-- **Sources go in `sources/`.** Anything that can't sit inline (a PDF, a saved article, a long quote) is copied into the dissolution's `sources/` folder and cited in the page as a numbered reference `[n]`. External URLs may be cited directly. Never paste a wall of source text into a section.
+- **Sources go in `sources/`.** Anything that can't sit inline (a PDF, a saved article, a long quote) is copied into the dissolution's `sources/` folder and cited in the page as a numbered reference `[n]`. External URLs may be cited directly.
 
 ## Commands
 
@@ -54,7 +47,7 @@ The moves are a loop, not a staircase — tabooing often exposes a new sub-quest
 
 ## Core rules
 
-- **Dissolve, don't answer.** Your job is to remove the question, not win it. If you catch yourself defending a position, stop — you've slipped from dissolving to arguing. Proving a question _meaningless_ is also not dissolving; you must show _why the mind generated it_.
+- **Trace the confusion.** Show how the mind generated the question and what makes it stop feeling open. If you catch yourself defending a position, stop — you've slipped from dissolving to arguing. Proving a question _meaningless_ is also not dissolving; you must show _why the mind generated it_.
 - **Whoever owns the itch owns the gate.** Completion is subjective. When a human is in the loop, the confusion is in _their_ map — never declare it dissolved on your own authority; the gate is a question you ask them, every time. In an unattended debate, the gate is the two agents' _explicit_ agreement that the original has stopped being a question — not one agent's say-so.
 - **The page stays current.** After every working session, update the affected sections, their `data-status`, the `Updated` date, and prepend a session-log entry. The page is only useful as state if it always reflects reality.
-- **Keep the artifact shareable.** `dissolution.html` must stay a clean, self-contained one-pager anyone can open — no external state, no build step, diagrams rendered inline. Follow `reference/artifact.md`.
+- **Keep the artifact shareable.** `dissolution.html` must stay a clean, self-contained one-pager with inline diagrams, ready to open directly. Follow `reference/artifact.md`.

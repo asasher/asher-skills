@@ -1,44 +1,43 @@
 ---
 name: verify-your-work
-description: Verify a named set of changes actually does what it claims — pick the proof that would catch it failing, run it, and report findings with evidence. Use after building and before a change request exists.
-argument-hint: "<the changes to verify: branch, diff, or description>"
-user-invocable: true
+description: Verify a change against its claims and report per-claim evidence, after building, during PR review, or after merge.
 metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
+  optional: [technical-writing]
 ---
 
-# Verify Your Work
+# Verify your work
 
-Verify that a named set of changes does what it claims. The deliverable is a findings report — verified claims with their proof, failures with their evidence. **Never fix anything**: a verifier that edits the work stops being a verifier, and the fix belongs to whoever owns the changes.
+Check the existing implementation. Return findings before the owner begins any fix, even when both stages run in this session.
 
-## Establish the claims
+## Pin and prepare
 
-Read what the change says it does — the ticket, the commit messages, the diff itself. When the ticket carries acceptance criteria (`AC-1`, `AC-2`, …), each criterion is a claim and the report keys its verdict to the id. Each claim is a thing that must be demonstrably true, including the implicit ones: nothing that worked before broke, and the change behaves at its edges, not just its happy path. A change that performs a destructive data operation — a migration, a cast, a backfill — implicitly claims no existing data is lost or mangled; that claim needs evidence like any other.
+Pin head, target base, approved spec, environment, and fixture state. Verify the intended integration: use head when it contains the target base, otherwise an isolated tentative merge of those pinned revisions. Return conflicts to the owner. Record the tested commit and tree hash, then keep that tree fixed and reserve fixtures for the pass. Post-merge verification tests the recorded merged revision.
 
-## Read the environment contract
+Read the ticket, approved spec, commits, and diff. List every acceptance criterion plus relevant regression, edge-state, seed-coverage, and data-safety claims. Read `docs/agents/environment.md` for commands, drivers, auth, and disposable fixtures. Without it, disclose the gap and use the repo's documented commands. Reset only stores explicitly marked disposable for this ticket.
 
-`docs/agents/environment.md`, when the repo has one, records how to run the stack, seed data, reach a feature, authenticate, and which driver exercises each surface. Honor it — a verifier that improvises around the recorded contract produces evidence nobody can reproduce. Absent the playbook, say so and verify what the repo's own commands reach. `docs/agents/codebase.md`, where it exists, records the canonical check commands and their invocation traps — run the recorded forms.
+## Check each claim
 
-The contract also bounds what state is yours: create and seed what a check needs per the playbook's fixture rules, and point destructive verbs (reset, drop, wipe) only at resources the playbook marks per-ticket-disposable — a shared store is never yours to reset.
+Choose proof that would fail if the claim were false:
 
-## Pick the proof that could fail
+- Run touched tests, typecheck/build, and the full suite for behavioral changes.
+- Exercise the real entry point: CLI, HTTP, browser, or the recorded app driver.
+- For UI work, exercise the changed journey and relevant empty, loading, error, disabled, and responsive states. Drive the app and capture the result.
+- For destructive data changes, verify preservation and failure paths against representative fixtures.
 
-For each claim, choose the check that would go red if the claim were false:
+Use headless Playwright by default. An alternative browser tool must demonstrate app access, control, and capture on the execution host in an isolated session. Give concurrent runs separate browser contexts/profiles, auth state, fixtures, and output paths. Preserve the user's browser and desktop; a headed fallback needs an isolated display or explicit approval to use the user's session. If neither is available, report the affected claims as not verified.
 
-- the tests the change added or touched, then the full suite;
-- typecheck and build;
-- the changed surface exercised directly — a CLI invocation, an HTTP call, a script against the real entry point;
-- for UI work, a check **written as a script** with the repo's recorded driver for that surface — a browser driver for web, an emulator or app driver for mobile — walking the changed journey through the states named in the ticket (empty, loading, error, disabled), not just the golden path — and left in the tree where the repo keeps such specs.
+For normal-risk owner verification, reuse captured check results only when head/base, tested tree, commands, environment, and relevant fixture state match. Record their provenance; rerun stale or uncertain checks. Independently required verification runs its own checks. Exercise claims missing from the prior run.
 
-A check that cannot fail is not proof. "It compiles" verifies nothing about behavior.
+Reuse existing tests and helpers. Write temporary scripts when repetition or complex setup warrants them; direct tool checks record reproducible actions and observations. Keep temporary checks with the run evidence, outside the maintained suite; add durable regression coverage where the testing contract requires it.
 
-## Run and capture
+Honor each criterion's **guard** (durable suite test) or **temporary check** choice. If undeclared, record the gap, use temporary checks, and flag needed durable coverage for the owner. Use runtime checks for behavioral claims.
 
-Run each check and capture the exact command, its output, and its own exit status — read directly, not through a pipeline whose tail masks it. A check whose output is a visual artifact — a screenshot, an export, a rendered document — is judged by **looking at it**: the content the claim names, legible, at sane dimensions, without clipping. A file existing at nonzero bytes proves nothing. A check you couldn't run (missing environment, no browser, absent fixture) is reported as _not verified_, with the reason — never silently skipped, never guessed at. An environment seam that keeps failing — auth, seeding, a launcher — earns a bounded number of attempts (three, unless the recorded contract says otherwise), then its claims go to _not verified_ with the reason: a stuck seam converts to a partial report, not a longer loop.
+Capture exact tool actions and observations, plus commands, outputs, and exit codes for script runs. Serialize checks sharing mutable state. Inspect every visual result for the claimed content, legibility, and clipping. Preserve temporary scripts and captures outside tracked source; media never enters Git. Remove source-tree probes after preserving their exact contents with the run.
+
+An inaccessible check is **not verified**, with its reason. After three failed attempts at an environment seam, return a partial report for its affected claims. Prove a **pre-existing** failure with the same check against the base in an isolated checkout; distinguish it from a regression.
 
 ## Report
 
-Per claim — keyed to its criterion id where the ticket has them: what was checked, the command, pass or fail, and for failures the evidence quoted — the failing output, the wrong screen, the broken state. A failure also present before the change, proven by the same check against the base commit, is reported as **pre-existing** — a distinct verdict from a failure the change caused. Log any deviation from the recorded environment contract alongside the checks it touched. End with the one-line verdict: which claims stand, which fell, which went unverified.
+Use `technical-writing` when available. For every claim, return its id, **passed / failed / pre-existing / not verified**, check kind, command or tool steps, output or visual evidence, and failure explanation. Include fixture details, playbook deviations, artifact paths, and exact temporary scripts or durable source links so evidence can be reused and published.
+
+Recheck head and base. Moved inputs make the report stale. End with the source revisions, tested commit/tree, verdict totals, and unresolved claims. Passing verdicts require observed proof.

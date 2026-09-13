@@ -1,18 +1,11 @@
-# Setup — project playbooks
+# Setup — the environment playbook and the labels
 
-Install or reconcile the project playbooks from `templates/` — the shared `common/` baselines plus a per-domain pack, `software/` being the shipped default:
+Setup records durable repo environment facts and creates the fixed labels. Check machine state at use. Reconcile an existing playbook section by section.
 
-- `docs/agents/platform.md` — platform bindings, with each verb verified live.
-- `docs/agents/backlog-policy.md` — label roles, dependency edges, the readiness decision.
-- `docs/agents/environment.md` — run/seed/check.
-- `docs/agents/codebase.md` — how the code is written and checked: seeded from the repo's own docs, accreting what sessions learn.
-- `docs/agents/evidence.md` — the evidence bar.
-- `docs/agents/change-description.md` — the change-request body outline.
+Confirm authenticated tracker access to the intended repository; report a failure as a setup blocker.
 
-Reconcile with what exists — a repo-owned playbook is edited, never blindly overwritten.
+1. **Environment playbook** → `docs/agents/environment.md`, from [templates/environment.md](../templates/environment.md). Fill every section from what this repo actually does: the base branch and observed merge protections, how the stack starts detached and logs, per-worktree bring-up and teardown, the canonical CI check definitions, the seed, how an agent authenticates to the app, the drivers for each surface, and the artifact store (bucket, base URL, credential variable names, upload command; ask the owner for the store facts, and record names, never values). Link existing project command definitions and record additional invocation requirements. Verify the resolved commands headlessly: a start command that only works in a terminal gets its detached wrapper recorded instead. Reconcile an existing playbook section by section; a row naming a command, branch, or tool this repo does not use is a defect to fix.
 
-Classify every machine fact per [machine facts](machine-facts.md): verify-at-use facts get their probe command, not their result; every recorded machine fact goes to the gitignored `docs/agents/local/` overlays — one per tracked playbook, regenerated here, opening with its machine-record stamp, with the `.gitignore` entry ensured and each overlay declared in its tracked playbook by the machine-local pointer marker. A tracked file never records a machine fact.
+2. **Certification** → invoke `agent-ready-codebase` and record its demonstrated results in the playbook's § Agent-readiness. Include the concurrent-build limit, admission mechanism, shared singletons, and gaps. Default to three builds and one dispatch owner until the repo demonstrates another capacity and admission mechanism. Each gap is groomable work; re-certify when setup changes. Record observed merge protection; its absence blocks neither build readiness nor merging.
 
-Verify the label roles exist in the tracker; create missing ones with the user's consent.
-
-Finish by running `scripts/check-machine-facts.py` against the repo and resolving what it names.
+3. **Labels** → compare all repository labels with the table in [labels.md](labels.md). Present missing labels and differences, apply the approved changes, then read back the result. Preserve unrelated labels.

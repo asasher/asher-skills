@@ -4,20 +4,16 @@ How to create and maintain `dissolution.html` — the single source of truth. Re
 
 ## Scaffolding a new dissolution (`new`)
 
-1. **Slugify** the question into a short kebab-case folder name (`Is free will real?` → `free-will`; keep it under ~4 words). If the folder exists, append `-2`.
-2. `mkdir -p <slug>/sources`.
-3. Copy `templates/dissolution.html` → `<slug>/dissolution.html`.
-4. Replace the three placeholders: `{{QUESTION}}` (verbatim question, twice — `<title>` and `<h1>`) and `{{DATE}}` (today, `YYYY-MM-DD`, everywhere it appears).
-5. Open with move 1.
+Create a unique, short kebab-case folder for the question, with `sources/` and a copy of `templates/dissolution.html` named `dissolution.html`. Fill the template placeholders with the verbatim question and today’s date (`YYYY-MM-DD`). Begin move 1.
 
 ## The layout of the page
 
-The page is both the state and the artifact. Its five sections mirror the five moves, plus a running **Session log** and a **References** list. Each move-section carries `data-status="empty|active|done"` and a matching rail chip at the top — this is how `resume` reads where the work stands. There is **no separate state file**; if it isn't in the HTML, it isn't saved.
+The page is both the state and the artifact. Its five sections mirror the five moves, plus a running **Session log** and a **References** list. Each move-section carries `data-status="empty|active|done"` and a matching rail chip at the top — this is how `resume` reads where the work stands. Persist all state in the HTML.
 
 ## Editing rules
 
 - **Edit only between markers.** Every fillable region is bracketed by `<!-- FILL: name -->` … `<!-- /FILL: name -->`. Replace the content between them; leave the markers, the `.hint` paragraphs, and the section scaffolding in place. The hints are authoring guidance and stay for the next session.
-- **Keep edits surgical.** Use `Edit` on the specific region, not a full-file rewrite — the page accumulates across sessions and a rewrite risks dropping earlier thinking.
+- **Keep edits surgical.** Edit the affected region, preserving earlier thinking accumulated across sessions.
 - **Drive status from reality.** When a move becomes active, set its `<section data-status>` **and** its rail chip `data-s` to `active`; when its _done-when_ signal is met, set both to `done`. Update the `<b id="updated">` date and, once move 5's gate passes, `<b id="overall">` to `dissolved`.
 - **Every session leaves a log entry.** Prepend a new `.log-entry` (newest on top) to the `FILL: log` region: the date, what moved, what the human reported, and the pick-up point for next time.
 
@@ -39,4 +35,4 @@ This is where references live when they can't be inline:
 - **Save the source.** Copy files (PDFs, saved articles, screenshots) into the dissolution's `sources/` folder.
 - **Register it.** Add an `<li>` to the `FILL: refs` ordered list: author/title, and a link — `sources/paper.pdf` for a local file, or the URL for an external one.
 - **Cite inline.** Reference it in the thinking with a superscript anchor: `<a class="cite" href="#refs">[3]</a>`. The number is the source's position in the References list.
-- **Never inline a wall of text.** A long quote goes to `sources/` (or a `<blockquote>` trimmed to the load- bearing sentence) and is cited — the page stays readable and shareable.
+- **Keep source excerpts concise.** Store long quotes in `sources/`, cite them, and trim inline `<blockquote>` excerpts to the essential sentence.

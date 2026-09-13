@@ -1,18 +1,13 @@
 ---
 name: maquette
 description: Build a sellable, high-fidelity, browser-only maquette of a greenfield product — every journey clickable, realistic mock data, a live MCP demo surface, and a handoff contract an agent can implement from. Use to pitch a product before it exists. Not for MVPs, real backends, or changes to existing products.
-argument-hint: "[product idea or brief]"
-user-invocable: true
 metadata:
-  invocation: model
-  execution: thread
   requires: [interview]
-  optional: []
 ---
 
 # Maquette
 
-A maquette is the architect's scale model: built entirely to sell the building before it exists, precise enough that engineering can start from it. That is the deliverable — **not an MVP**. No real auth, no database, no external services. A Next.js app that runs locally (and deploys statically) and is indistinguishable from a finished product for the length of a sales meeting.
+A maquette is the architect's scale model: built entirely to sell the building before it exists, precise enough that engineering can start from it. It simulates auth, persistence, and integrations in the browser. The deliverable is a Next.js app that runs locally (and deploys statically) and is indistinguishable from a finished product for the length of a sales meeting.
 
 One build produces three artifacts wearing one trench coat:
 
@@ -24,17 +19,17 @@ Every decision below serves all three at once. When two goals conflict, the demo
 
 ## Non-negotiables
 
-- **The seam.** Every screen talks to `lib/api/*.ts` — async functions with simulated latency over one client-side store seeded from typed fixtures. Components never import fixture data directly. Real implementation later = replace `lib/api/` and keep the types. See [architecture](references/architecture.md).
-- **No dead clicks.** Every rendered control either works or does not exist. A button that does nothing is worse than no button.
+- **The seam.** Every screen talks to `lib/api/*.ts` — async functions with simulated latency over one client-side store seeded from typed fixtures. Real implementation later = replace `lib/api/` and keep the types. See [architecture](references/architecture.md).
+- **Working controls.** Render only controls with an implemented behavior.
 - **Session-coherent state.** Create a record on one screen and it appears everywhere it should — counts, lists, feeds, detail pages. This is the line between a clickable Figma and a maquette.
 - **Data realism is the #1 fidelity lever.** Domain-correct names, believable volumes and distributions, cross-referenced entities, dates relative to now. See [mock data](references/mock-data.md). "John Doe, $100.00, March 2025" kills a demo faster than any missing feature.
 - **Every faked behavior carries a greppable `@mock` marker** with a one-line note on what the real implementation needs. The handoff doc is generated from these.
 - **Demo-first prioritization.** The intake identifies the beats that close the deal; those get the fidelity budget. Everything else can be shallower — but still clickable.
-- **Human sign-off happens in chat.** Present the deliverable, await the user's explicit verdict, and record how each note was addressed; maquette carries no review server. See [sign-off](references/sign-off.md).
+- **Human sign-off happens in chat.** Present the deliverable, await the user's explicit verdict, and record how each note was addressed. See [sign-off](references/sign-off.md).
 
 ## Pipeline
 
-Run the phases in order. Each phase names the reference to load — load it when you enter the phase, not before. Phases 1 and 3 end in explicit user sign-off gates in chat; see [sign-off](references/sign-off.md). Do not build past an unapproved gate, because everything downstream is expensive to redo.
+Run the phases in order. Each phase names the reference to load — load it when you enter the phase. Phases 1 and 3 end in explicit user sign-off gates in chat; see [sign-off](references/sign-off.md). Proceed after each gate’s explicit approval.
 
 ### 1. Intake interview — load [intake](references/intake.md)
 
@@ -62,7 +57,7 @@ Write `lib/schema.ts` (the domain types — this is the future database schema) 
 
 ### 5. Build — load [architecture](references/architecture.md), [design-language](references/design-language.md), [web-quality](references/web-quality.md)
 
-Scaffold per the architecture recipe, then build screens in journey order (demo-critical first). Design language: the client's brand tokens if intake produced them, otherwise stock shadcn/ui — never invent a third option. Once every approved journey runs end-to-end from the seeded store with no dead ends, do a dedicated **details pass** with [feel](references/feel.md): motion, typography, depth, perceived latency. Fidelity is an explicit pass, not an ambient hope. **Done when:** every approved journey runs end-to-end and every demo-beat screen has been through the details pass.
+Set up the architecture, then build screens in journey order (demo-critical first). Design language: the client's brand tokens if intake produced them, otherwise stock shadcn/ui. Once every approved journey runs end-to-end from the seeded store with no dead ends, do a dedicated **details pass** with [feel](references/feel.md): motion, typography, depth, perceived latency. **Done when:** every approved journey runs end-to-end and every demo-beat screen has been through the details pass.
 
 ### 6. Demo hardening — load [demo](references/demo.md)
 
@@ -74,8 +69,8 @@ Generate `HANDOFF.md` from the schema, the api seam, the `@mock` inventory, and 
 
 ## Operating rules
 
-- The user's product copy rules apply to everything rendered: never leak build guidance, internal names, or acceptance criteria into user-facing copy ([ux-rules](references/ux-rules.md)).
+- Apply the user’s product copy rules to everything rendered ([ux-rules](references/ux-rules.md)).
 - Small scope is fine. A maquette can be four screens. Depth of believability beats breadth of surface.
 - If the user arrives mid-pipeline (has a brief, has journeys), enter at the matching phase — but confirm the earlier gates' outputs exist and were explicitly approved by the user before building.
-- The demo runs locally by default. When the user wants a shareable link, deploy the static build (e.g. Vercel) per the deployment modes in [architecture](references/architecture.md) — optional, never required.
-- Keep `BRIEF.md`, `JOURNEYS.md`, and `HANDOFF.md` in the repo root of the prototype. They are deliverables, not scratch.
+- The demo runs locally by default. When the user wants a shareable link, deploy the static build (e.g. Vercel) per the deployment modes in [architecture](references/architecture.md).
+- Keep `BRIEF.md`, `JOURNEYS.md`, and `HANDOFF.md` in the repo root of the prototype.

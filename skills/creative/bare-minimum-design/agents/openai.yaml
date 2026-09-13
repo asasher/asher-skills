@@ -1,0 +1,7 @@
+interface:
+  display_name: "Bare Minimum Design"
+  short_description: "Asher's design baseline; owns the project's DESIGN.md"
+  default_prompt: "Use $bare-minimum-design to review this app against the baseline and the project's DESIGN.md."
+
+policy:
+  allow_implicit_invocation: true

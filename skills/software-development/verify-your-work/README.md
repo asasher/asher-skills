@@ -1,16 +1,8 @@
-# Verify Your Work
+# Verify your work
 
-The verification discipline for freshly built changes: establish the claims (explicit and implicit), pick the proof that would catch each one failing, run it, capture command and output, and report findings — verified / failed-with-evidence / not-verified-with-reason. The verifier never fixes; the fix belongs to whoever owns the changes.
+Check every explicit and relevant implicit claim against the real changed surface. The pass records commands, outputs, inspected visuals, fixtures, and revision-specific verdicts. It makes no fixes during checking; the owner fixes after receiving the report. Normal work can be verified by its owner; high-risk builds require independent verification.
 
-## When to use
-
-- Changes exist and need checking before a change request is created — typically run by a fresh pair of eyes so the builder's assumptions don't verify themselves.
-
-## Dependency surface
-
-- **Bundled:** `SKILL.md` only.
-- **Project:** `docs/agents/environment.md` when present — run/seed/auth and the recorded driver per surface.
-- **Siblings:** none.
+`technical-writing` is optional. Media stays outside Git; the evidence publisher receives the report and captures for upload.
 
 ## Provenance
 

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Retro"
+  short_description: "Review recent sessions and propose project issues"
+  default_prompt: "Use $retro to review recent local build and shaping sessions, check existing project issues, and propose issues or comments for my selection."
+
+policy:
+  allow_implicit_invocation: true

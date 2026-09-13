@@ -1,12 +1,12 @@
 # The evidence loop
 
-Where a question spends most of its life: **hunt** (pre-register the next look) ⇄ **update** (score what came back). A typical session does both — score the cards the user returned with, then write the card they leave with. Never the reverse order: returned evidence is scored _before_ new looks are planned, so the plan reflects the updated board.
+Where a question spends most of its life: **hunt** (pre-register the next look) ⇄ **update** (score what came back). A typical session does both — score the cards the user returned with, then write the card they leave with. This order keeps the plan aligned with the updated board.
 
 ## Hunt — choose the look, write the card
 
 ### Choosing what to look at
 
-Scan the board and ask: **which cheap observation would most separate the current leaders?** Not "what would support the leader" — what would _split_ the top hypotheses, or best threaten the leader. Offer 2–3 candidate looks with your read on their diagnostic value; the user picks by what they can actually get (access, cost, time). Rough guide: expected movement per unit effort. A look both leaders predict equally is decoration, however easy — say so and strike it.
+Scan the board and ask: **which cheap observation would most separate the current leaders?** Offer 2–3 candidate looks with your read on their diagnostic value; the user picks by what they can actually get (access, cost, time). Rough guide: expected movement per unit effort. A look both leaders predict equally is decoration, however easy — say so and strike it.
 
 Every few cycles, make one hunt a deliberate **disconfirmation round**: "what's the cheapest observation that would cut your confidence in ⟨leader⟩ in half?" If neither of you can name one, treat that as an alarm — unfalsifiable leads are how motivated reasoning wins.
 

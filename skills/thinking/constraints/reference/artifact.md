@@ -4,20 +4,16 @@ How to create and maintain `constraint.html` — the single source of truth for 
 
 ## Scaffolding a new system (`new`)
 
-1. **Slugify** the system into a short kebab-case folder name (`Acme onboarding funnel` → `acme-onboarding`; keep it under ~4 words). If the folder exists, append `-2`.
-2. `mkdir -p <slug>/sources`.
-3. Copy `templates/constraint.html` → `<slug>/constraint.html`.
-4. Replace the placeholders: `{{SYSTEM}}` (the system's name, twice — `<title>` and `<h1>`) and `{{DATE}}` (today, `YYYY-MM-DD`, everywhere it appears).
-5. Open with the goal conversation ([map.md](map.md)).
+Create a unique, short kebab-case folder for the system, with `sources/` and a copy of `templates/constraint.html` named `constraint.html`. Fill the template placeholders with the system name and today’s date (`YYYY-MM-DD`). Begin the goal conversation ([map.md](map.md)).
 
 ## The layout of the page
 
-The page is both the state and the artifact. Six arc sections — **Goal, Map, Find, Plan, Experiments, Loop** — plus a running **Session log** and **References**. Each arc section carries `data-status="empty|active|done"` and a matching rail chip in the masthead; this is how `resume` reads where the work stands. The masthead also carries the **dashboard** — current constraint, type, confidence, cycle number, next review date — which must answer "what's the constraint?" in one glance. There is **no separate state file**; if it isn't in the HTML, it isn't saved.
+The page is both the state and the artifact. Six arc sections — **Goal, Map, Find, Plan, Experiments, Loop** — plus a running **Session log** and **References**. Each arc section carries `data-status="empty|active|done"` and a matching rail chip in the masthead; this is how `resume` reads where the work stands. The masthead also carries the **dashboard** — current constraint, type, confidence, cycle number, next review date — which must answer "what's the constraint?" in one glance. Persist all state in the HTML.
 
 ## Editing rules
 
 - **Edit only between markers.** Every fillable region is bracketed by `<!-- FILL: name -->` … `<!-- /FILL: name -->`. Replace content between them; leave the markers, the `.hint` paragraphs, and the section scaffolding in place. Hints are authoring guidance and stay for the next session.
-- **Keep edits surgical.** Use `Edit` on the specific region, not a full-file rewrite — the page accumulates across sessions and cycles; a rewrite risks dropping history.
+- **Keep edits surgical.** Edit the affected region, preserving history accumulated across sessions and cycles.
 - **Drive status from reality.** When a step becomes active, set its `<section data-status>` **and** its rail chip `data-s` to `active`; when its done-when signal (defined in each command reference) is met, set both to `done`. The section-header chip text renders itself from `data-status` — leave those `.st` spans empty. Update `<b id="updated">` every session.
 - **Keep the dashboard true.** Whenever the named constraint, its type, its confidence mark, the cycle number, or the next review date changes, update the corresponding `id="d-*"` value in the masthead. The dashboard lies to nobody: no named constraint yet → `d-constraint` stays "hunting…".
 - **Every session leaves a log entry.** Prepend a `.log-entry` (newest on top) to `FILL: log`: the date, what moved, what the user reported or decided, the pick-up point for next time.
@@ -65,4 +61,4 @@ The status chip text renders from `data-state` automatically. `Decision` is fill
 - **Save the evidence.** Metric exports, screenshots, queue snapshots, logs → the system's `sources/` folder.
 - **Register it.** Add an `<li>` to `FILL: refs`: what it is, when captured, and a link (`sources/file.png` or an external URL).
 - **Cite inline.** `<a class="cite" href="#refs">[3]</a>` wherever the number backs a claim — especially in the scan table and suspects board, where the marks depend on it.
-- **Never inline a wall of data.** The page stays readable; raw data lives in `sources/`.
+- **Keep the page readable.** Store raw data in `sources/` and cite it.

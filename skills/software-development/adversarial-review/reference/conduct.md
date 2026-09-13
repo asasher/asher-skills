@@ -1,26 +1,15 @@
-# Reviewer and fixer conduct
+# Review and fix conduct
 
-The briefs both dispatched roles carry. The change request is the only shared state; these rules are what make that enough.
+## Review
 
-## Shared rules
+Supply the PR, issue/spec, immutable head/base and intended integration tree, prior findings, and deadline. The reviewer reads source and returns findings; the verifier owns runtime checks and the owner makes fixes.
 
-- Before any work: identify the change request, its ticket, branch, current head SHA, and the latest recorded reviewer state.
-- Each dispatch is one bounded pass: do the pass's work, persist state, return the report to the driver. No role watches for the other — the driver sequences the passes.
-- After each pass, persist state on the change request via the platform's comment verb: role, iteration count, last-seen SHA, status, next expected actor. Either side can die and be respawned from this record alone. Every SHA in a comment is read at writing time — `git rev-parse HEAD`, or the platform's own read — never retyped from another comment or from memory.
-- A report that cannot reach the driver is posted on the change request instead — the outcome lands where the next reader looks, never only in a return value.
-- The loop's stops — `LGTM`, the iteration cap, the timeout — are the driver's to enforce and report, each an explicitly reported outcome; a pass ends by returning its report.
+Every blocking finding names the changed location, violated requirement or standard, and a concrete failure scenario or maintenance cost. Label optional suggestions. Classify design preferences as optional unless they violate a requirement or standard.
 
-## Reviewer
+LGTM names the reviewed head/base and integration tree. Clear prior findings through a verified fix, accepted pushback, or an explicit ruling. State required CI status: failed checks withhold LGTM; pending checks remain a completion gate.
 
-- **Never edits code.**
-- Each pass runs the `code-review` skill — both axes — against the current head. Rank findings by severity; every finding carries file, line, and a concrete failure scenario or cost, not a vibe.
-- Comment conduct: one comment per finding, anchored to its location; no restating the diff; judgement calls labelled as judgement calls.
-- **The LGTM bar:** a full pass yields no new findings **and** every prior finding is fixed or answered. Nothing else lowers the bar — not effort spent, not iteration fatigue, not the cap approaching. A cap reached with findings open is reported as unresolved, never converted to approval.
-- **The verdict names its head:** LGTM states the SHA the pass reviewed — the approval covers that head and nothing after it. The platform's required checks are part of the pass: their status at verdict time is stated, and a failing required check holds the LGTM back; a pending one is named so the merge gate knows what it's waiting on.
-- **Product-semantics ruling:** when a finding reveals a real product question — what the behavior _should_ be, not whether the code does it — stop without resolving it and surface the question plus evidence on the change request for a human ruling. Only an explicit ruling goes onward. Neither role invents behavior.
+If deciding the finding requires choosing product behavior, return the conflicting requirements and evidence for a human ruling.
 
-## Fixer
+## Fix
 
-- Each pass addresses every actionable finding it was dispatched with: a fix commit, or an explicit non-fix reply with the reason it's wrong. Disagreement is addressed; silence is not.
-- A behavior finding is reproduced as a failing check before the fix commit — red first, on the surface where the reviewer saw it. A finding reproducible only at runtime routes through the `diagnosing-bugs` skill rather than a patch argued from the diff; absent that sibling, say so and apply the same discipline in place — reproduce live before fixing.
-- Push, reply to each comment with what was done, persist state, and return the pass report — the driver decides whether a re-review follows.
+Address every blocking finding with a fix or evidence-backed pushback. Reproduce behavior failures on the surface where they appeared before patching. Use the implementation discipline for checks, diagnosis, commits, and pushes. Remove temporary probe residue; retain the run for evidence. The subsequent checking pass grants the verdict.

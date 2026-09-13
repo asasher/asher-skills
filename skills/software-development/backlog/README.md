@@ -1,23 +1,9 @@
 # Backlog
 
-Dispatcher for the tracker, with two dispatch shapes. `groom` sweeps no-readiness-role and needs-shaping tickets (a captured ticket arrives work-typed but unrouted), routes the already-settled and parked ones, groups the rest into subjects (interlocked tickets together) and batches (related subjects, one thread's worth), and — **after the user confirms the batch plan** — fans one interactive shaping thread per batch, each seeded to run the `shape` skill, its tickets marked shaping and running in one project-owned worktree. A single batch follows the same threaded path; nothing shapes in the primary checkout. Threads belong to the outermost harness and the user attends, and nothing reports back. `build` fans ready, unblocked tickets with no open children into worktree-isolated **subagents**, each running the `build` skill, marked building so nothing dispatches twice — building is autonomous, so the dispatcher babysits: completion wakes it and it relays each outcome. One project-owned worktree covers a build's implementation, verification, review, fixes, and evidence; the harness does not create another.
+Reads all open tickets before proposing duplicates, consolidation, relationships, and routing. Selected shaping tickets and ready, unblocked builds each get their own worktree and thread. Groom exits after confirmed launches. Build drains its initial frontier; a selected spec or milestone continues in waves until complete or waiting for outside action. Tracker records carry worker progress.
 
-Platform-bound, not bound-to-GitHub: _ticket_, _label_, and _change request_ are roles, bound per repo by `docs/agents/platform.md` and `backlog-policy.md`.
+Commands: `backlog groom`, `backlog build [ids]`, `backlog build spec <ticket>`, `backlog build milestone <name-or-number>`, `backlog status`, `backlog merge`, `backlog capture`, `backlog retro`, `backlog setup`. Groom always reads the full open backlog, even when the user names a focus. Merge without named selections produces a read-only shortlist.
 
-## Use
+The skill declares its dependency surface in SKILL.md. Setup reconciles the environment playbook, labels, and five readiness capabilities, including artifact publication.
 
-```bash
-backlog groom            # sweep no-readiness-role + needs-shaping tickets into confirmed batches, then threads
-backlog groom 42 51      # just these tickets, grouped if their decisions interlock
-backlog build            # sweep ready, unblocked tickets into supervised build subagents
-backlog build 42         # just this ticket
-backlog setup            # install or reconcile the project playbooks
-```
-
-Merging the change requests that builds produce stays a separate, explicit human authorization — the `merge-changes` skill.
-
-## Dependency surface
-
-- **Bundled:** `reference/setup.md` — the setup procedure (declared as `metadata.setup`, so installers report it); `templates/` — the playbook baselines `setup` installs (shared `common/` plus per-domain packs; `software/` is the shipped default).
-- **Project playbooks:** `docs/agents/platform.md` (platform bindings, verbs verified live), `backlog-policy.md` (label roles, dependency edges, readiness), `environment.md` (run/seed/check), `codebase.md` (how the code is written and checked), `evidence.md` (the evidence bar) — owned by the repo once written; `setup` reconciles, never blindly overwrites.
-- **Siblings (required, by name):** `worktree` (prepare, inspect, remove), `to-thread` (grooming threads), `to-subagent` (build dispatch), `shape` (what a grooming thread runs), `build` (what a build subagent runs).
+A frontier is the ready, unblocked work at invocation, drained under the repository-wide concurrency limit. Scoped runs discover later frontiers after confirmed merges, preserve approval and recovery gates, and report PR review waits truthfully. Human merge selection remains required.

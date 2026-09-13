@@ -22,9 +22,9 @@ Inputs:
 
 Rules:
 - Treat eval evidence as the source of truth.
-- Do not suggest changes to evals, graders, test cases, or unrelated files.
+- Keep proposals within the target skill; eval definitions and graders stay fixed.
 - Prefer smaller edits: delete, sharpen, co-locate, or replace weak wording before adding sections.
-- Reject no-ops: if the model would already do it by default, do not propose it.
+- Each edit must change behavior the model would otherwise default to.
 - Reject duplication: each meaning must have one source of truth.
 - Keep a proposed edit only when it names the failure it targets and the behavior it should change.
 - If the evidence does not support a skill edit, return NO_CHANGE.

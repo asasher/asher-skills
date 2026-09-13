@@ -1,0 +1,7 @@
+interface:
+  display_name: "Constraints"
+  short_description: "Find and work the one constraint limiting a system, Theory-of-Constraints style, on a shared visual HTML page"
+  default_prompt: "Use $constraints to find the limiting constraint in this system."
+
+policy:
+  allow_implicit_invocation: false

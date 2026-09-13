@@ -1,0 +1,7 @@
+interface:
+  display_name: "Writing for Humans"
+  short_description: "Conversation with a human voice"
+  default_prompt: "Use $writing-for-humans when replying to a person."
+
+policy:
+  allow_implicit_invocation: true

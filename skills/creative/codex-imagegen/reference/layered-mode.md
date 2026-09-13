@@ -40,7 +40,7 @@ Layered mode starts from a scene plan. It does not segment or reconstruct an exi
 
 `size` is a positive square canvas dimension. When a layer omits `prompt`, `art_direction` is appended to its generated subject to improve visual coherence. There may be at most one `background`; other roles are keyed transparent assets. Supported anchors are `bottom-center`, `center`, and `top-left`. Position defaults to bottom-center at the canvas bottom.
 
-Each layer needs a stable `name` and a `subject`. Optional fields are `role`, `z`, `key`, `prompt`, `match`, `pad`, `anchor`, `x`, and `y`. A custom `prompt` replaces the generated prompt, so include both the shared art direction and the flat-key constraint there for non-background layers. Use `match` only to supply distinctive transcript-selection words when the subject is too generic.
+Each layer needs a stable `name` and a `subject`. Optional fields are `role`, `z`, `key`, `prompt`, `pad`, `anchor`, `x`, and `y`. A custom `prompt` replaces the generated prompt, so include both the shared art direction and the flat-key constraint there for non-background layers.
 
 ## Artifact
 
@@ -58,7 +58,7 @@ forest-clearing/
     └── 02-foreground-fern.png
 ```
 
-The manifest records the exact prompt, raw generation, processed file, z-index, anchor, requested position, and content/canvas bounds for every layer. `composite.png` is regenerated from the listed layers in z-order.
+The manifest records the exact prompt, raw generation, processed file, z-index, anchor, requested position, and content/canvas bounds for every layer. `composite.png` is regenerated from the listed layers in z-order. Every entry records requested size, decoded raw dimensions, mismatch status, and its resize policy. Backdrops are stretched to the planned canvas; foregrounds retain scale while transparent padding is trimmed. Raw images remain available for inspection. The selected backend is shared by every layer.
 
 The artifact is created before generation begins. Its status progresses from `in_progress` to `complete`; generation failure changes it to `failed` and preserves all completed layers. Never overwrite or delete the partial artifact during automatic recovery.
 

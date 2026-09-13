@@ -1,38 +1,25 @@
 ---
 name: shadixfy
 description: Pin generated frontend UI to the shadcn/ui visual language and tokens, stripping the default AI aesthetic. Use whenever generating or restyling any frontend UI.
-metadata:
-  invocation: model
-  execution: thread
-  requires: []
-  optional: []
 ---
 
 # Shadixfy
 
-A shadcn-pegged fork of Uncodixfy. Same job — strip the default AI aesthetic out of generated UI — but the blueprint is not "vibes of Linear/Raycast." The blueprint is **shadcn/ui**: Radix primitives, Tailwind utility classes, and a small set of semantic CSS variables. If a choice isn't expressible in shadcn's token vocabulary, it's probably the wrong choice.
+A shadcn-pegged fork of Uncodixfy. Build from shadcn/ui: Radix primitives, Tailwind utilities, and semantic CSS variables. Every surface maps to a token, radius derives from one variable, and components come from the registry. Use one neutral base plus a restrained accent.
 
-Codex UI is the default AI aesthetic: soft gradients, floating glass panels, eyebrow labels, decorative copy, hero sections inside dashboards, oversized rounded corners, transform animations, dramatic shadows, and layouts that try too hard to look premium. It screams "an AI made this" because it follows the path of least resistance.
+## Build With The Tokens
 
-shadcn/ui is the opposite by construction. Every surface maps to a token (`background`, `card`, `muted`, `border`, `ring`). Radius comes from one variable. Color is one neutral base plus a restrained accent. Components are copied from a fixed registry, not invented. Your job: recognize the Codex patterns, refuse them, and reach for the shadcn primitive instead.
-
-This is how you Shadixfy.
-
-## Build With The Tokens, Not Around Them
-
-shadcn/ui's whole system is a handful of semantic variables. Style **everything** through them — never hardcode a hex when a token exists.
+Style **everything** through shadcn/ui’s semantic variables.
 
 - `background` / `foreground` — the page and its text.
 - `card` / `card-foreground`, `popover` / `popover-foreground` — raised surfaces.
 - `primary` / `primary-foreground` — the one solid action color.
 - `secondary` / `secondary-foreground` — quieter solid actions.
 - `muted` / `muted-foreground` — subdued surfaces and secondary text.
-- `accent` / `accent-foreground` — hover/active surface, NOT a brand pop color.
+- `accent` / `accent-foreground` — hover/active surface.
 - `destructive` — danger only.
 - `border`, `input`, `ring` — hairlines, field borders, focus ring.
 - `--radius` — one radius variable everything derives from (`0.5rem` base; `calc()` for `sm`/`md`/`lg`).
-
-If you're reaching for a value that has no token, stop — you're probably decorating.
 
 ## Keep It Normal (shadcn Standard)
 
@@ -50,7 +37,7 @@ If you're reaching for a value that has no token, stop — you're probably decor
 - Tabs: normal (underline or `bg-muted` track with one active segment; no sliding animation).
 - Badges: normal (shadcn `Badge` variants, small, only when they carry state).
 - Avatars: normal (`Avatar` circle with fallback initials, no status ring unless functional).
-- Switches: normal (`Switch` track/thumb, functional state only). In single-file HTML, use utility classes such as `rounded-full`; do not handwrite `border-radius: 9999px`.
+- Switches: normal (`Switch` track/thumb, functional state only). In single-file HTML, use utility classes such as `rounded-full`.
 - Icons: normal (lucide-react, 16–20px, `text-muted-foreground` or `currentColor`, no icon background tiles).
 - Typography: normal (Geist or the project's existing sans; clear hierarchy; body 14–16px; no serif/sans mixing).
 - Spacing: normal (Tailwind scale — `2/3/4/6/8`; no random gaps, no overpadding).
@@ -62,15 +49,11 @@ If you're reaching for a value that has no token, stop — you're probably decor
 - Panels: normal (separate surfaces by token — `bg-muted`, `border` — not by floating, not by glass).
 - Toolbars/Footers/Breadcrumbs: normal (simple, standard height, functional only).
 
-Build it like you'd `npx shadcn@latest add` the component and use it as-is. Don't redesign the primitive — compose it.
-
-- A landing page still gets its sections; a dashboard still gets sidebar + content. Use the standard layout, do not invent one.
-- In your internal reasoning, list every decorative move you'd normally make, then DON'T make it.
-- Replicate registry/Figma components. Do not invent your own.
+Compose components from the shadcn registry or the project’s Figma library. Use sections for landing pages and sidebar + content for dashboards.
 
 ## Hard No
 
-Everything you reflexively reach for and treat as an automatic "yes." Refuse all of it:
+Use the token and component rules above to correct these recurring visual failures:
 
 - Oversized decorative radii — the 20–32px range across everything, or the same fat rounded rectangle repeated on sidebar, cards, buttons, and panels. One `--radius`, derived consistently.
 - Glass, glow, and haze as decoration: floating glassmorphism shells as the default language, frosted panels, blur haze, random glows, conic-gradient donuts.
@@ -93,7 +76,7 @@ Everything you reflexively reach for and treat as an automatic "yes." Refuse all
 - Tables that slap a colored tag badge on every row. Trend indicators as colored text classes (`trend-up`, `trend-flat`).
 - Sticky headers/top bars that copy shadcn block glass (`bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60`). Even if a registry block ships it, use solid `bg-background` with `border-b` instead.
 
-No headlines-with-eyebrow blocks of any sort. `<small>` eyebrow headers are not allowed; rounded decorative `span`s are not allowed:
+Replace decorative eyebrow headers with a plain heading. Example to simplify:
 
 ```html
 <div class="headline">
@@ -103,7 +86,7 @@ No headlines-with-eyebrow blocks of any sort. `<small>` eyebrow headers are not 
 </div>
 ```
 
-This card structure is the biggest no:
+Remove cards whose only content is decorative advice:
 
 ```html
 <div class="team-note">
@@ -114,16 +97,14 @@ This card structure is the biggest no:
 
 ## Color
 
-If a UI choice feels like a default AI move, ban it and pick the cleaner option. Colors can exist, but they must behave like shadcn tokens, not decoration. Start neutral, add one restrained accent when it helps the product, and keep everything wired through CSS variables.
-
-You are bad at picking colors. Follow this priority:
+Resolve color tokens in this order:
 
 1. **Highest priority:** use the existing tokens from the user's project if present (read `globals.css` / `tailwind.config` / `components.json` and reuse the `--background`, `--primary`, … they already define).
 2. If the project has none, **adopt one of the shadcn base palettes** verbatim. Copy it from [references/palettes.md](references/palettes.md) — **Zinc** (default), **Neutral** (pure gray), or **Stone** (warm gray).
-3. For new standalone UIs with no existing brand tokens, choose exactly one non-blue accent family from the shadcn/Tailwind color library by default. Map it to `--primary`, `--primary-foreground`, `--ring`, and chart/status tokens. Do not leave `--primary` black unless the user explicitly asks for a monochrome UI or the existing project already uses monochrome tokens. Keep `--accent` as the muted hover/active surface.
-4. Do **not** invent random color combinations. Do not use gradients or colored shadows to make the accent feel bigger. Everything still sits on the neutral ramp.
+3. For new standalone UIs with no existing brand tokens, choose exactly one non-blue accent family from the shadcn/Tailwind color library by default. Map it to `--primary`, `--primary-foreground`, `--ring`, and chart/status tokens. Black `--primary` is reserved for an explicitly requested monochrome UI or an existing monochrome project. Keep `--accent` as the muted hover/active surface.
+4. Keep surfaces on the neutral ramp and use solid accent fills.
 
-The shadcn v3 color library is the source for palette values: Tailwind colors in HSL, RGB, HEX, and OKLCH formats. Use those values directly. Prefer warm or organic accents for generic products: **orange**, **amber**, **green**, **emerald**, **teal**, **rose**, or **purple**. Use **blue**, **sky**, **cyan**, or **indigo** only when the product domain calls for a cool color; never as the default AI SaaS reflex.
+The shadcn v3 color library is the source for palette values: Tailwind colors in HSL, RGB, HEX, and OKLCH formats. Use those values directly. Prefer warm or organic accents for generic products: **orange**, **amber**, **green**, **emerald**, **teal**, **rose**, or **purple**. Use **blue**, **sky**, **cyan**, or **indigo** only when the product domain calls for a cool color.
 
 Good accent examples from shadcn v3 HSL values:
 
@@ -145,6 +126,6 @@ Good accent examples from shadcn v3 HSL values:
 --ring: 271.5 81.3% 55.9%;
 ```
 
-For charts, use 2–4 shadcn palette stops plus neutral grid/text tokens. For status, use semantic color only when the status exists (`destructive`, success, warning); do not color every badge or row just because a palette is available.
+For charts, use 2–4 shadcn palette stops plus neutral grid/text tokens. For status, use semantic color only when the status exists (`destructive`, success, warning).
 
-Avoid **Slate** and **Gray** as generic bases — they lean cool/blue. If the product needs color, change only the semantic accent tokens (`--primary`, `--primary-foreground`, `--ring`, and chart/status variables) and leave the neutral ramp intact.
+If the product needs color, change only the semantic accent tokens (`--primary`, `--primary-foreground`, `--ring`, and chart/status variables) and leave the neutral ramp intact.

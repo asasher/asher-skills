@@ -1,0 +1,7 @@
+interface:
+  display_name: "Bayes"
+  short_description: "Work a big uncertain question honestly — Bayesian updating across sessions, the agent carrying the discipline and the math"
+  default_prompt: "Use $bayes to work this uncertain question."
+
+policy:
+  allow_implicit_invocation: false

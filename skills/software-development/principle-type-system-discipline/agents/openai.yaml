@@ -1,0 +1,7 @@
+interface:
+  display_name: "Type System Discipline Principle"
+  short_description: "Model valid states and parse typed boundaries"
+  default_prompt: "Use $principle-type-system-discipline when designing types and network boundaries."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,18 +1,16 @@
 # Implement
 
-Thin routing composite: one ticket in, committed changes out. Defects run through `diagnosing-bugs` (feedback loop, then fix plus regression test); new behavior runs through `tdd` at pre-agreed seams. Typecheck and touched tests regularly, full suite once at the end, commit to the current branch.
+Thin routing composite: one issue or spec'd work in, committed changes out on the current branch.
 
 ## When to use
 
-- A single ticket or spec'd slice needs building in the current checkout.
+- A single issue or spec'd work needs building in the current checkout.
 
 ## Dependency surface
 
-- **Bundled:** `SKILL.md` only.
-- **Project:** `docs/agents/codebase.md` when present — conventions, check commands, generated-artifact recipes.
-- **Siblings (required, by name):** `diagnosing-bugs`, `tdd`.
+Routes defects to the `diagnosing-bugs` sibling and new behavior to `tdd`. Applies the `principle-codebase-design` and `principle-type-system-discipline` siblings, with `typescript-best-practices` for TypeScript when available. Uses `domain-modeling` when unshaped work introduces terms or decisions. Reads `docs/agents/environment.md` § Checks when present. Returns the resulting SHA and implementation report for later fixes.
 
 ## Provenance
 
 - **Source:** route structure inspired by Matt Pocock's MIT-licensed [`implement`](https://github.com/mattpocock/skills/tree/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/implement). License in `THIRD_PARTY_LICENSES.md`.
-- **Local changes:** explicit bug/enhancement routing; review is separate work downstream.
+- **Local changes:** explicit defect/new-behavior routing; review is separate work downstream.

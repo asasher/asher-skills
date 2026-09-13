@@ -1,0 +1,7 @@
+interface:
+  display_name: "Diagram Design"
+  short_description: "Create polished, accessible editorial diagrams"
+  default_prompt: "Use $diagram-design to choose and render the clearest diagram for this material."
+
+policy:
+  allow_implicit_invocation: true

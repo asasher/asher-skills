@@ -1,6 +1,6 @@
 # map — pin the goal, draw the flow, gather the evidence
 
-You are opening the investigation. The deliverables are the **Goal** and **Map** sections of `constraint.html`. This is a conversation, not a form: one question at a time, anchored with your working hypothesis, and anything the record already shows (a repo, a dashboard, a linked doc, an earlier session) is read, not asked.
+You are opening the investigation. The deliverables are the **Goal** and **Map** sections of `constraint.html`. Ask one question at a time, anchored with your working hypothesis. Read existing records (a repo, dashboard, linked doc, earlier session) to answer what they already cover.
 
 ## Part 1 — the goal (section: Goal)
 

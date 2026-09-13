@@ -1,0 +1,7 @@
+interface:
+  display_name: "Capture"
+  short_description: "Preserve conversation follow-ups as trackable tickets"
+  default_prompt: "Use $capture to capture the items this conversation has surfaced as issues."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,6 +1,6 @@
 # trees — the thinking processes (dig · cloud)
 
-Goldratt's logic tools, for the two moments plain hunting isn't enough: **`dig`** when symptoms are scattered or the constraint smells like a policy/belief (find the _core problem_), and **`cloud`** when a needed change is blocked by a conflict (find the _injection_). Both are built **with** the user, one link at a time, on the page — never delivered as a finished diagram. Reading a causal link aloud and asking "is that actually true here?" is the method; the diagram is the record.
+Goldratt's logic tools, for the two moments plain hunting isn't enough: **`dig`** when symptoms are scattered or the constraint smells like a policy/belief (find the _core problem_), and **`cloud`** when a needed change is blocked by a conflict (find the _injection_). Build both **with** the user, one link at a time, on the page. Reading a causal link aloud and asking "is that actually true here?" is the method; the diagram is the record.
 
 Diagram conventions (node classes, directions) are in [artifact.md](artifact.md). Trees land in the **Find** section; clouds land in **Plan**.
 

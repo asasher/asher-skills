@@ -7,6 +7,8 @@ argparse CLI for direct use.
 
 from __future__ import annotations
 
+from image_backends import BackendError, add_backend_arguments, resolve_backend
+
 import argparse
 import json
 import math
@@ -21,12 +23,12 @@ from typing import Iterable, Sequence
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-from image_key import key_image
+from image_key import key_image, parse_key
 from output_paths import next_output_path, reserve_output_dir
 
 
 DEFAULT_GENERATOR_CMD = (
-    "python3 {imagegen} --subject {subject} --key magenta --out {out}"
+    "python3 {imagegen} --subject {subject} --key {key} --out {out}"
 )
 ALPHA_THRESHOLD = 10
 
@@ -581,18 +583,26 @@ def _imagegen_script() -> Path:
     return Path(__file__).resolve().with_name("codex_imagegen.py")
 
 
-def _run_generator(subject: str, out_path: Path, generator_cmd: str) -> None:
+def _run_generator(subject: str, out_path: Path, generator_cmd: str, backend=None, size=1024, timeout=420, key="magenta") -> None:
+    if generator_cmd == DEFAULT_GENERATOR_CMD:
+        from codex_imagegen import build_prompt, generate
+        if backend is None:
+            parser = argparse.ArgumentParser()
+            add_backend_arguments(parser)
+            try:
+                backend = resolve_backend(parser.parse_args([]))
+            except BackendError as exc:
+                raise GenerationError(str(exc)) from None
+        good, note, actual = generate(build_prompt(subject, key, size), out_path, timeout=timeout, backend=backend, size=size)
+        print(note, flush=True)
+        if not good or actual != out_path:
+            raise GenerationError(note if not good else "Generated source path changed unexpectedly; partial artifact preserved.")
+        return
     imagegen_script = _imagegen_script()
-    if generator_cmd == DEFAULT_GENERATOR_CMD and not imagegen_script.exists():
-        raise GenerationError(
-            "--generate needs codex-imagegen's bundled generator "
-            f"(looked for {imagegen_script}). "
-            "Repair the skill, pass --in instead, or provide --generator-cmd for a stub/CI generator."
-        )
-
     try:
         command = generator_cmd.format(
             subject=shlex.quote(subject),
+            key=shlex.quote(key),
             out=shlex.quote(str(out_path)),
             imagegen=shlex.quote(str(imagegen_script)),
         )
@@ -637,6 +647,9 @@ def extract(
     contact_sheet: str | Path | None = None,
     generator_cmd: str = DEFAULT_GENERATOR_CMD,
     print_validation: bool = False,
+    backend=None,
+    generation_size: int = 1024,
+    generation_timeout: int = 420,
 ) -> dict:
     """Extract sprites and return the manifest dict.
 
@@ -660,6 +673,11 @@ def extract(
     generated_source = False
     subject = None
     if generate:
+        key = "magenta" if key == "auto" else key
+        try:
+            key = "#{:02X}{:02X}{:02X}".format(*parse_key(key))
+        except ValueError as exc:
+            raise SpriteExtractionError("Generated sheets require magenta, green, or #RRGGBB; auto selects magenta.") from exc
         subject = generate
         generated_source = True
         if out_dir is None:
@@ -681,7 +699,7 @@ def extract(
 
     if generate:
         source = out_path / "source" / "generated-source.png"
-        _run_generator(subject, source, generator_cmd)
+        _run_generator(subject, source, generator_cmd, backend, generation_size, generation_timeout, key)
     else:
         source = _as_path(source_path)
         if source is None:
@@ -760,7 +778,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--tile", type=_parse_size, metavar="WxH", help="grid tile size, such as 256x256")
     parser.add_argument("--margin", type=lambda value: _parse_pair(value, "--margin"), default=(0, 0), metavar="L,T", help="outer grid offset")
     parser.add_argument("--spacing", type=lambda value: _parse_pair(value, "--spacing"), default=(0, 0), metavar="X,Y", help="gutter between grid cells")
-    parser.add_argument("--key", default="auto", help="background key: auto, none, or #RRGGBB")
+    parser.add_argument("--key", default="auto", help="background key: auto, none, magenta, green, or #RRGGBB; generation auto selects magenta")
     parser.add_argument("--key-hi", type=float, default=90.0, help="distance at/above which pixels are fully opaque")
     parser.add_argument("--key-lo", type=float, default=20.0, help="distance at/below which pixels are fully transparent")
     parser.add_argument("--names", help="comma-separated names or a file with one name per line")
@@ -773,8 +791,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--generator-cmd",
         default=DEFAULT_GENERATOR_CMD,
-        help="shell command template for --generate with {subject} and {out} placeholders",
+        help="shell command template for --generate with {subject}, {key}, and {out} placeholders",
     )
+    add_backend_arguments(parser)
+    parser.add_argument("--size", type=int, default=1024, help="requested generated sheet dimensions (square)")
+    parser.add_argument("--timeout", type=int, default=420, help="generation request timeout in seconds")
     return parser
 
 
@@ -782,6 +803,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
+        if args.size <= 0 or args.timeout <= 0:
+            parser.error("--size and --timeout must be positive")
+        backend = resolve_backend(args) if args.generate and args.generator_cmd == DEFAULT_GENERATOR_CMD else None
         manifest = extract(
             source_path=args.in_path,
             generate=args.generate,
@@ -804,13 +828,16 @@ def main(argv: Sequence[str] | None = None) -> int:
             contact_sheet=args.contact_sheet,
             generator_cmd=args.generator_cmd,
             print_validation=args.validate,
+            backend=backend,
+            generation_size=args.size,
+            generation_timeout=args.timeout,
         )
     except ValidationError as exc:
         if not args.validate:
             _print_validation_report(exc.report)
         print(str(exc), file=sys.stderr)
         return 2
-    except SpriteExtractionError as exc:
+    except (SpriteExtractionError, BackendError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
     print(f"wrote {len(manifest['elements'])} element(s) to {manifest['artifact']}")

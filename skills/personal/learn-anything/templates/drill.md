@@ -30,5 +30,5 @@ status: active          # active | consolidating | maintenance | retired
 
 ## Revision log
 
-<!-- One line per design change: what about THIS LOOP'S DESIGN was wrong and what changed — not learner
-     progress (that's history/practice-log). Format: - YYYY-MM-DD: <what was wrong> → <what changed> -->
+<!-- One line per loop-design change. Record learner progress in history/practice-log.
+     Format: - YYYY-MM-DD: <what was wrong> → <what changed> -->

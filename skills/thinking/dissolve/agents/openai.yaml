@@ -1,0 +1,7 @@
+interface:
+  display_name: "Dissolve"
+  short_description: "Dissolve a malformed question via two-agent debate — taboo the loaded word, unbundle the sub-questions — instead of answering it"
+  default_prompt: "Use $dissolve to unbundle this question."
+
+policy:
+  allow_implicit_invocation: false

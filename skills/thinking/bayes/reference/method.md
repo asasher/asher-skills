@@ -6,7 +6,7 @@ The synthesized theory behind every command: how beliefs are represented, how nu
 
 A question carries 2–5 named hypotheses plus **something else**, with credences in whole percent summing to 100. Two tracks: the **user's** (theirs alone — never overwrite it) and the **agent's** (yours, updated independently from the same evidence). Forecast questions ("will X by date") may collapse to two hypotheses (happens / doesn't) — the machinery is identical.
 
-Internally you think in odds, because odds make updating honest: _posterior odds = prior odds × likelihood ratio_, and in log form evidence simply **adds**. Measure evidence strength in decibels, `dB = 10·log₁₀(LR)`. Never show this machinery unprompted; translate at the boundary.
+Internally you think in odds, because odds make updating honest: _posterior odds = prior odds × likelihood ratio_, and in log form evidence simply **adds**. Measure evidence strength in decibels, `dB = 10·log₁₀(LR)`. Use plain-language counts and bands with the user; show the math when asked.
 
 ## The strength bands
 
@@ -23,7 +23,7 @@ Anchors for credence talk: 50% is a coin flip; 67% is 2:1; 90% is 9:1 — "you'd
 
 ## Elicitation: natural frequencies, always
 
-People fail at probabilities and succeed at counts (Gigerenzer). Every number is elicited as a count of imagined cases, never as an abstract percent:
+People fail at probabilities and succeed at counts (Gigerenzer). Elicit every number as a count of imagined cases:
 
 - **Priors** — "Think of 100 situations that looked like this one at this point. In how many does ⟨H⟩ turn out to be the story?" Pin the reference class _first_ and out loud ("similar launches by teams this size," "vendors who've already slipped twice") — the base-rate gate: no case-specific details may be discussed until the prior is drawn from the class.
 - **Likelihoods** — for a piece of evidence E against each live hypothesis: "In 100 worlds where ⟨H₁⟩ is true, how many show ⟨E⟩? And in 100 worlds where ⟨H₂⟩ is true?" Accept coarse answers — 5, 20, 50, 80, 95 — precision beyond that is theater.
@@ -51,7 +51,7 @@ You cannot expect evidence to confirm you: if seeing E would raise credence in H
 
 ## Failure modes → built-in countermeasures
 
-Each mechanism in this skill exists because a documented bias defeats willpower. Don't skip the mechanism because the user seems sharp — the biases are load-bearing in everyone.
+Each mechanism in this skill exists because a documented bias defeats willpower. Apply these mechanisms with every user; expertise also carries these biases.
 
 | Failure | What it does | The countermeasure (built in) |
 | --- | --- | --- |
@@ -83,4 +83,4 @@ One sentence, at the moment of first use, in terms of _their_ question — then 
 - _Diagnostic:_ "This check is worth doing because the two stories predict different results. Anything both stories predict equally can't teach us anything."
 - _Posterior→prior:_ "Today's ending number is next session's starting number — that's the whole trick of doing this over multiple sittings."
 
-Never stack two explanations. Never say "Bayes' theorem states." If the user asks for the math, give it gladly and fully — the appendix mode is for when _they_ open the door.
+Explain one concept at a time. When the user asks for the math, give it fully.

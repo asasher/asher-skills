@@ -2,7 +2,7 @@
 
 Run the conversation through the **`interview` sibling skill**: it owns the conduct — one question at a time, hypothesis-anchored questions the person corrects rather than answering cold, dependency-ordered exploration, persistent findings. This reference supplies what the `interview` skill cannot know: the career-domain question map, and the frameworks that tell you what to listen for. If the `interview` skill is absent, state the gap and apply those conduct rules directly.
 
-**Language rule.** The frameworks below are for you. The person hears plain questions — never "odyssey plans", "job crafting", "niche hypothesis", "prototype ladder", or any schema talk. You think in frameworks; they have a conversation.
+**Language rule.** Use these frameworks to choose plain questions in the person's own language.
 
 **Show the profile as it builds.** Write `goodwork/PROFILE.md` cumulatively as sections land, and at natural milestones regenerate the board and show it ([board.md](board.md)). Watching the profile take shape is the reinforcement that keeps a tiring, personal interview going — reflect progress back: "here's what I've got so far — this already explains a lot."
 
@@ -12,8 +12,8 @@ Coverage map, not script. Open from the record: read the CV/LinkedIn/portfolio f
 
 1. **History** — walk the career briefly. Per move: what pulled, what pushed, what it revealed. Listen for what they refused to give up, and for roles that went well but they still wanted to leave.
 2. **Energy** — three recent episodes of being absorbed and energized, three of being drained: the actual activity, setting, people. The highest-yield question: "what are you good at that leaves you flat?"
-3. **Tradeoffs & parameters** — force choices, don't collect wishes: more autonomy or more security? More pay, or more mission? Verify against history ("you chose mission — but in 2023 you took the corporate role; what was true then?"). Then the search parameters: location, visa, compensation floor, dealbreakers, runway, urgency.
-4. **Playback** — draft the snapshot in their words, read it back section by section, revise until they say it sounds like them — not merely impressive.
+3. **Tradeoffs & parameters** — elicit tradeoffs: more autonomy or more security? More pay, or more mission? Verify against history ("you chose mission — but in 2023 you took the corporate role; what was true then?"). Then the search parameters: location, visa, compensation floor, dealbreakers, runway, urgency.
+4. **Playback** — draft the snapshot in their words, read it back section by section, revise until they say it sounds like them.
 
 **Short form** (urgent searchers, one pass, ~10 questions): best-of episode, drained-despite-competent episode, forced tradeoffs, dealbreakers, parameters. Mark the profile short-form; deepen later via `profile`.
 

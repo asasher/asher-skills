@@ -1,4 +1,3 @@
-# Relay workspace
+# Retired Relay workspace
 
-Author-side predeployment eval evidence for the published Relay source. The shipped eval contract and answer
-key live under `skills/personal/relay/evals/`; immutable run artifacts live here.
+Historical author-side evaluation records for Relay, retired on 2026-09-13. The [last shipped evals](https://github.com/asasher/asher-skills/tree/e53babb/skills/personal/relay/evals) remain available in Git history.

@@ -1,0 +1,21 @@
+---
+name: to-branch
+description: Commit files to another branch while preserving the current worktree, and return the commit hash. Use when publishing an artifact (a spec, prototype, or dossier) to an issue's artifact branch from a worktree that must stay on its own branch.
+---
+
+# To Branch
+
+Publish files to another branch while keeping the current worktree in place. Run the bundled script:
+
+    scripts/to-branch.py <branch> <file[:dest]>... -m "<message>" [--push]
+
+The helper commits to the target branch, optionally pushes, and returns its SHA while preserving the current checkout, index, and working files. New branches start from `HEAD`.
+
+Rules:
+
+- Before publication on another machine, fetch the remote artifact branch. Create its local ref from the remote tip without checking it out, or reconcile a behind/diverged local ref while preserving unique commits. The script reads local refs, so establish the existing remote history locally first.
+
+- **Publish at record time.** Draft as untracked scratch files; a commit lands here only when the result is written to its record (an issue comment, the conversation). Publish and link are one move, and every commit on the branch is a revision somebody was shown.
+- The printed hash is the revision's identity: projections and approvals bind to it.
+- Use fast-forward updates. The script rejects a conflicting ref move; read the branch tip and reconcile concurrent publication before retrying.
+- The target branch must be unchecked in every registered worktree. The helper refuses a checked-out target; choose an unused artifact branch or release that checkout before publishing.

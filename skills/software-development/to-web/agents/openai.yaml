@@ -1,0 +1,7 @@
+interface:
+  display_name: "To Web"
+  short_description: "Upload HTML and media; return verified permanent URLs"
+  default_prompt: "Use $to-web to give this file a durable URL."
+
+policy:
+  allow_implicit_invocation: true
