@@ -1,5 +1,7 @@
 # Relighting options for the recurring OBS setup
 
+Status: deferred by Asher. Retained for a later version; no relighting work is required for the current voice and motion-graphics scope.
+
 Researched September 15, 2026. This is a shortlist from primary documentation and released source, not a benchmark on Asher's footage. No footage was uploaded, models installed, or paid jobs started.
 
 Asher wants a consistent studio-lit look and expects broadly similar recording conditions. Prefer a method with explicit light controls and reusable settings. Compare its output in motion across recordings before choosing the implementation.
