@@ -1,0 +1,517 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-09-15",
+  "status": "fixture inventory; no candidate run or human verdict yet",
+  "roots": {
+    "raw": "~/Movies/OBS",
+    "historical": "~/Projects/random"
+  },
+  "baseline_kind": "historical ad hoc edits; not a controlled no-skill experiment",
+  "cases": [
+    {
+      "id": "sdlc",
+      "purpose": "long-form regression",
+      "thread_id": "01a07b87-0467-7561-9c52-6edfaba85be3",
+      "raw": [
+        {
+          "path": "2026-09-07 14-48-08 Program.mp4",
+          "bytes": 325813821,
+          "sha256": "a0ef63d07414efd8864446930f26519dbe05d9799060d7587029e0cb21713a90",
+          "take": "2026-09-07 14-48-08",
+          "role": "program"
+        },
+        {
+          "path": "2026-09-07 14-48-08 Camera.mp4",
+          "bytes": 1195800467,
+          "sha256": "2416e09d40f89d51ef79cdb811d7335530b12294d8df5208fc67f93a653a6322",
+          "take": "2026-09-07 14-48-08",
+          "role": "camera"
+        },
+        {
+          "path": "2026-09-07 14-48-08 Screen.mp4",
+          "bytes": 130925190,
+          "sha256": "a2d08ddf82fcac102f66dbf27481c474045468026ef4767802d686b3ce34d7dd",
+          "take": "2026-09-07 14-48-08",
+          "role": "screen"
+        }
+      ],
+      "historical_export": {
+        "path": "sdlc-video-edit/sdlc-workflow-youtube.mp4",
+        "bytes": 323590351,
+        "sha256": "da845ee026f1acbffb812afc183dfc66c3273bed45b0b0bf0131782d418af06c"
+      },
+      "export_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          },
+          {
+            "codec_type": "subtitle",
+            "r_frame_rate": "0/0"
+          },
+          {
+            "codec_type": "data",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "256.967000"
+        }
+      },
+      "edit_records": [
+        {
+          "path": "sdlc-video-edit/edit-decision-list.json",
+          "bytes": 14406,
+          "sha256": "0244738038678fa22759194e2925e4b65bea94310ebf25fffeedcfaef388e205"
+        }
+      ],
+      "render_sources": [
+        {
+          "path": "sdlc-video-edit/align.py",
+          "bytes": 669,
+          "sha256": "3026fbc09d26ef2840b8652da003c1ea35a9b857c0b89a44ef070901fc342d43"
+        },
+        {
+          "path": "sdlc-video-edit/caption_chapters.py",
+          "bytes": 1278,
+          "sha256": "689adcd299c0e17dc4910f40928fd2b75c26f44a44e3ec04efbbfe9de7beb282"
+        },
+        {
+          "path": "sdlc-video-edit/finalize_captions.py",
+          "bytes": 1649,
+          "sha256": "bad8f46cbd6d27ae719657c04e5cecd087598f5b7a97b47e940d4325da0c2841"
+        },
+        {
+          "path": "sdlc-video-edit/make_animations.py",
+          "bytes": 6294,
+          "sha256": "eba1ec9a965d7830fd906bdd0bae302fade5e6a967ca3e82eb259b2ead176780"
+        },
+        {
+          "path": "sdlc-video-edit/package_upload.py",
+          "bytes": 2930,
+          "sha256": "7f2a528a11be812c10b1f602956538d6802cc026d4b82aba3ade0608bff5e6d2"
+        },
+        {
+          "path": "sdlc-video-edit/prepare_edit.py",
+          "bytes": 4700,
+          "sha256": "f123c25b98629df5c9bd5abc7b7063b582eb11eb5e1c7a769fb8a5522410c6f5"
+        },
+        {
+          "path": "sdlc-video-edit/render_base.py",
+          "bytes": 1531,
+          "sha256": "510af31ed22dfe1e0004e8968cb463d36710a78ecbe6ade2bbcc723fae5cff17"
+        },
+        {
+          "path": "sdlc-video-edit/render_final.py",
+          "bytes": 2339,
+          "sha256": "f054fa5759a4370031e3945bc8651790032a3f0e29c74f00fff287ea1cbbae40"
+        },
+        {
+          "path": "sdlc-video-edit/transcribe.py",
+          "bytes": 599,
+          "sha256": "3cd588172ab0cf1eee97882a96071ed9293d1fb0542d9e02159009d823a524e1"
+        },
+        {
+          "path": "sdlc-video-edit/verify_transcript.py",
+          "bytes": 645,
+          "sha256": "3a78c3d50583c5162817d6ee59856e32ae112fa3741415049f51d904a9ebb3ae"
+        }
+      ]
+    },
+    {
+      "id": "harness",
+      "purpose": "diagram and framing",
+      "thread_id": "01a0819f-b141-7f02-a71e-500fae75d2d3",
+      "raw": [
+        {
+          "path": "2026-09-08 19-18-27 Program.mp4",
+          "bytes": 154525425,
+          "sha256": "2cfbb969ed0dd48707dfc06195b65b74050ff7b38ec3ae3fadd0ee8ee012e561",
+          "take": "2026-09-08 19-18-27",
+          "role": "program"
+        },
+        {
+          "path": "2026-09-08 19-18-27 Camera.mp4",
+          "bytes": 270175998,
+          "sha256": "5f23a130fdc7aaa1d0568b9cea746ae7fcc62f853a7dbfe3938dd1253826bab3",
+          "take": "2026-09-08 19-18-27",
+          "role": "camera"
+        },
+        {
+          "path": "2026-09-08 19-18-27 Screen.mp4",
+          "bytes": 49823070,
+          "sha256": "e94f9ee7443dff796f8eb2d37d6696240aceae748b5d16d9f1d3598a92891c31",
+          "take": "2026-09-08 19-18-27",
+          "role": "screen"
+        }
+      ],
+      "historical_export": {
+        "path": "harness-ai-short/deliverables/harness-vs-model-short.mp4",
+        "bytes": 18860735,
+        "sha256": "8e809002d7e723038017f75f395f1b808ef4c9e23d633d96a14c4439e0e881e6"
+      },
+      "export_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "51.000000"
+        }
+      },
+      "edit_records": [
+        {
+          "path": "harness-ai-short/edit-decision-list.json",
+          "bytes": 2302,
+          "sha256": "9c8a0e46c2679504f54611307402cb0d2866cbe7fe98b318ecf0f0d5c80b21ae"
+        },
+        {
+          "path": "harness-ai-short/pacing-edits.json",
+          "bytes": 876,
+          "sha256": "de36f1b2f1cee74787069445ff6435a48dfa65c2a80c94c39f9aa5033a9c84ac"
+        }
+      ],
+      "render_sources": [
+        {
+          "path": "harness-ai-short/edit.py",
+          "bytes": 3411,
+          "sha256": "d4724168033c6ef9e72724a9caa73267c730fcb2e19879634e84c3d1a2a1a3bd"
+        },
+        {
+          "path": "harness-ai-short/finalize.py",
+          "bytes": 3897,
+          "sha256": "a63f46697cb8cecea1e8a5e801c22f3dc6148b2b87a6cbec78c671eedcab0c2e"
+        },
+        {
+          "path": "harness-ai-short/make_thumbnail.py",
+          "bytes": 2382,
+          "sha256": "ac4997281f7d23e7ef21a4c8cbbf197224d0767781d5212e69f657265859fd27"
+        },
+        {
+          "path": "harness-ai-short/polish.py",
+          "bytes": 1235,
+          "sha256": "bc6f3f865dc70b14a8f879fe525026ad2907465015afebff821eac9f04d30411"
+        }
+      ]
+    },
+    {
+      "id": "unroll",
+      "purpose": "motion semantics",
+      "thread_id": "01a08795-7841-74b3-826d-7450cf470a06",
+      "raw": [
+        {
+          "path": "2026-09-09 23-03-47 Program.mp4",
+          "bytes": 186129534,
+          "sha256": "07e14623e364e3b330de4a6e8be234e7f16106d2464efd5c516089ec9d5c81ef",
+          "take": "2026-09-09 23-03-47",
+          "role": "program"
+        },
+        {
+          "path": "2026-09-09 23-03-47 Camera.mp4",
+          "bytes": 347473483,
+          "sha256": "aa1cfc067ed114f275b8b09795cb0581fd0e3300d66f179dd48e7cf30077947c",
+          "take": "2026-09-09 23-03-47",
+          "role": "camera"
+        },
+        {
+          "path": "2026-09-09 23-03-47 Screen.mp4",
+          "bytes": 86114432,
+          "sha256": "4ce81b1a4c0e074f47fdcc9f8b10593de1c53703e424cd27f5f36496d29a4e2b",
+          "take": "2026-09-09 23-03-47",
+          "role": "screen"
+        }
+      ],
+      "historical_export": {
+        "path": "skill-video-short/deliverables/watch-video-short.mp4",
+        "bytes": 19235801,
+        "sha256": "3c868e7f00e6d160ebc1a7b3244c2c21b9ff81d4a5e349ec3be73d3cead4d475"
+      },
+      "export_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "53.400000"
+        }
+      },
+      "edit_records": [
+        {
+          "path": "skill-video-short/edit-decision-list.json",
+          "bytes": 1999,
+          "sha256": "d56a654f1d9ff5d3215c97a3b62e80cdf6e56153b9a2edcbed59908b126d4683"
+        }
+      ],
+      "render_sources": [
+        {
+          "path": "skill-video-short/captions.py",
+          "bytes": 3871,
+          "sha256": "a933f107eaf2d521926361a3241e6e20825718212cd0324797696d34000088a7"
+        },
+        {
+          "path": "skill-video-short/edit.py",
+          "bytes": 1716,
+          "sha256": "b4faf89fdb19883e0e1f8243a3b4197960deb1c2e9b906cff273b0f48011eb95"
+        },
+        {
+          "path": "skill-video-short/finalize.py",
+          "bytes": 1628,
+          "sha256": "8ec34722906ed886c5f14e6af359c46bb941e3ec33943fa757cde5de0c704901"
+        },
+        {
+          "path": "skill-video-short/graphics.py",
+          "bytes": 3990,
+          "sha256": "0acca7bbf81b2b844f43d9ca998ee179747613fbe7c55a296deb29e83243e19d"
+        },
+        {
+          "path": "skill-video-short/transcribe.py",
+          "bytes": 568,
+          "sha256": "509226459885c95fa4af4567bf6e3c954ef928e95f943be0bec1e58c8b4b0433"
+        }
+      ]
+    },
+    {
+      "id": "terms",
+      "purpose": "multi-take regression",
+      "thread_id": "01a08a3d-4bc0-7393-8c8b-93173497d65b",
+      "raw": [
+        {
+          "path": "2026-09-10 11-09-22 Program.mp4",
+          "bytes": 262938800,
+          "sha256": "e758484cd35a7231e66361a952cf2ad7ce9bb51238d25b38582abc5c00c6e3d9",
+          "take": "2026-09-10 11-09-22",
+          "role": "program"
+        },
+        {
+          "path": "2026-09-10 11-09-22 Camera.mp4",
+          "bytes": 698609214,
+          "sha256": "efbc038422aa8393d83639fa7cc29b20a47dd27462025f38e47ddca98ffcb8ab",
+          "take": "2026-09-10 11-09-22",
+          "role": "camera"
+        },
+        {
+          "path": "2026-09-10 11-09-22 Screen.mp4",
+          "bytes": 29261608,
+          "sha256": "5d5403dae6c40e5b2f523f4e44775e98fce871c8a3ddc011fe76ce6003aad0c1",
+          "take": "2026-09-10 11-09-22",
+          "role": "screen"
+        },
+        {
+          "path": "2026-09-10 11-30-35 Program.mp4",
+          "bytes": 122394694,
+          "sha256": "bb577084316494e6873b131136842b86bc0236b4817d0d4616d367d09d8f7fd4",
+          "take": "2026-09-10 11-30-35",
+          "role": "program"
+        },
+        {
+          "path": "2026-09-10 11-30-35 Camera.mp4",
+          "bytes": 322209583,
+          "sha256": "c5924c9f127b8c6dfad9fb8424ec2473567342262a33a102904d60ed4c07f983",
+          "take": "2026-09-10 11-30-35",
+          "role": "camera"
+        },
+        {
+          "path": "2026-09-10 11-30-35 Screen.mp4",
+          "bytes": 13370181,
+          "sha256": "49847360f76bddd600376880465561c123734e98c9eb14f2cbf2fdc5c93f31d7",
+          "take": "2026-09-10 11-30-35",
+          "role": "screen"
+        }
+      ],
+      "historical_export": {
+        "path": "obs-short-sep10/deliverables/ai-terms-speed-run.mp4",
+        "bytes": 84382507,
+        "sha256": "1b1bff925dc4107c6ca3f47563a7554ecd4abc7aea29ba53f702fa0c19b334a8"
+      },
+      "export_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "117.700000"
+        }
+      },
+      "edit_records": [
+        {
+          "path": "obs-short-sep10/edit-decision-list.json",
+          "bytes": 4154,
+          "sha256": "52d156e8e56dca8bdc288fef7947715f54502b625dbebd14406bb3a15ce5b2a4"
+        }
+      ],
+      "render_sources": [
+        {
+          "path": "obs-short-sep10/captions.py",
+          "bytes": 3305,
+          "sha256": "77c0f9045ab589a372ef0f6dd29a0a56afaea398c5c9435bc30caff6c95b11da"
+        },
+        {
+          "path": "obs-short-sep10/edit.py",
+          "bytes": 4655,
+          "sha256": "5671e088c913da2a5e7d3c87846bf36c358b5aae81c0ccc76349a4f0cab4562a"
+        },
+        {
+          "path": "obs-short-sep10/finalize.py",
+          "bytes": 1429,
+          "sha256": "8a3010130d5afb4697958d5da6f000dd635be24ac2b7044e934a36872b746e84"
+        },
+        {
+          "path": "obs-short-sep10/thumbnail.py",
+          "bytes": 1191,
+          "sha256": "a0559b9348c20eddc10d9c064a995dd866815d64c4ec07dfbca8f7107241fb18"
+        },
+        {
+          "path": "obs-short-sep10/transcribe.py",
+          "bytes": 550,
+          "sha256": "65c7eb4b4b3a7f04364901e4988dc594de57c28792e430110df928a7b246d33d"
+        }
+      ]
+    },
+    {
+      "id": "recap",
+      "purpose": "audio selection and lighting",
+      "thread_id": "01a0a191-06e8-7521-8012-dab3dd7dbaf4",
+      "raw": [
+        {
+          "path": "2026-09-14 16-56-45 Program.mp4",
+          "bytes": 100093806,
+          "sha256": "06dc1c9563b9af5649b4a423cc2e4842df2ffe84e4fcc4b596e9ddf2b7bd900f",
+          "take": "2026-09-14 16-56-45",
+          "role": "program"
+        },
+        {
+          "path": "2026-09-14 16-56-45 Camera.mp4",
+          "bytes": 245919538,
+          "sha256": "653df3759b28e8791c241ffee271f0b3fc9c7b7559f477d6f4817af03e85c216",
+          "take": "2026-09-14 16-56-45",
+          "role": "camera"
+        },
+        {
+          "path": "2026-09-14 16-56-45 Screen.mp4",
+          "bytes": 11126567,
+          "sha256": "b45f806996cbcbe5ee5254998eb1b0a17b5f8f76761a17303c83721688b0b1cc",
+          "take": "2026-09-14 16-56-45",
+          "role": "screen"
+        },
+        {
+          "path": "2026-09-14 17-17-48 Program.mp4",
+          "bytes": 65318270,
+          "sha256": "a7cd93014053840175d8a4b6d9e19ba3c1387f1694e32e03c1522c23e66cf44b",
+          "take": "2026-09-14 17-17-48",
+          "role": "program"
+        },
+        {
+          "path": "2026-09-14 17-17-48 Camera.mp4",
+          "bytes": 88522906,
+          "sha256": "19964051484b8fd6697cf42645469a0d71b020ba1b8acdae90e65df3d591d399",
+          "take": "2026-09-14 17-17-48",
+          "role": "camera"
+        },
+        {
+          "path": "2026-09-14 17-17-48 Screen.mp4",
+          "bytes": 51589416,
+          "sha256": "d7e6bb9e3601276c1a74959a36e5ae872635b6f326a31b6dd4cfc714fe04c3c8",
+          "take": "2026-09-14 17-17-48",
+          "role": "screen"
+        }
+      ],
+      "historical_export": {
+        "path": "backlog-feature-short/deliverables/backlog-recap-short.mp4",
+        "bytes": 30835301,
+        "sha256": "635a3f02cafe8846febfab39e82f145bff9c497be466c692fea53e4c56899944"
+      },
+      "export_probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "54.400000"
+        }
+      },
+      "edit_records": [
+        {
+          "path": "backlog-feature-short/edit-decision-list.json",
+          "bytes": 2138,
+          "sha256": "39279e2e8f400634e04977b3c8806e51ef1558f8696f63a0e5e099d4c61a8d37"
+        }
+      ],
+      "render_sources": [
+        {
+          "path": "backlog-feature-short/captions.py",
+          "bytes": 2102,
+          "sha256": "c1a5bb559b3bba33b08b408466bca1c4a7ef379f0ecb38cddc6835785f440da9"
+        },
+        {
+          "path": "backlog-feature-short/edit.py",
+          "bytes": 4083,
+          "sha256": "d0f190bf7b1ddf42a5e08a2a15b83b334c067d78c5432e72a6ef5532e3891418"
+        },
+        {
+          "path": "backlog-feature-short/finalize.py",
+          "bytes": 1398,
+          "sha256": "2e64f80b2bd50a29f02f6235a024ec9c1fd9d8a587409683eb17012c82cd7d2e"
+        },
+        {
+          "path": "backlog-feature-short/thumbnail.py",
+          "bytes": 1579,
+          "sha256": "d88a0c3b10329dda4e356957cdbf842c93e8585796ce4505f4f3c5a6b4e8ba9f"
+        },
+        {
+          "path": "backlog-feature-short/transcribe.py",
+          "bytes": 550,
+          "sha256": "65c7eb4b4b3a7f04364901e4988dc594de57c28792e430110df928a7b246d33d"
+        }
+      ]
+    }
+  ]
+}
