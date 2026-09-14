@@ -24,7 +24,7 @@ For recap, trace a release containing older merges, a split awaiting promotion, 
 Follow one ticket from unsettled intent to an approved, recoverable build brief.
 
 - [ ] **03. [shape](../skills/software-development/shape/SKILL.md)**: One ticket and worktree; shaping ownership, held children during revisions, approval deltas, artifacts, and release.
-- [ ] **04. [interview](../skills/software-development/interview/SKILL.md)**: Every frontier question delivered together in one tool call or numbered message; answers incorporated before computing the next wave. Check carried answers, delegated choices, and when the conversation is complete.
+- [ ] **04. [interview](../skills/software-development/interview/SKILL.md)**: Every frontier question delivered together in one numbered chat message, with the harness's question tool unused even when available; answers incorporated before computing the next wave. Check carried answers, delegated choices, and when the conversation is complete.
 - [ ] **05. [research](../skills/software-development/research/SKILL.md)**: Bounded fact questions, sources, uncertainty, and reusable results.
 - [ ] **06. [prototype](../skills/software-development/prototype/SKILL.md)**: Which uncertainty an experiment resolves; inspectable alternatives when human judgment is needed; evidence on the ticket.
 - [ ] **07. [domain-modeling](../skills/software-development/domain-modeling/SKILL.md)**: Consistent vocabulary, context-document discovery, and one qualification gate for architecture decisions.

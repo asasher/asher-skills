@@ -13,9 +13,9 @@ Resolve material decisions with the user. Map the work as a **design tree**: eac
 
 Work the tree in **frontier waves**. The **frontier** contains material unresolved decisions needing the user's judgment whose prerequisites are already settled. Assemble every question in the current frontier before asking. Present the entire frontier together, wait for the user's answers to that wave, then incorporate them and recompute the frontier. Questions that depend on those answers belong to a later wave.
 
-**Question delivery.** When using a question tool, put every frontier question in a single call. If the tool is unavailable or its question limit cannot fit the entire frontier, present the whole wave in one numbered message. A one-question wave is appropriate only when the frontier contains exactly one question.
+**Question delivery.** Present the whole wave in one numbered chat message. Do not use the harness's built-in question tool for this interview, even when available. A one-question wave is appropriate only when the frontier contains exactly one question.
 
-**Question format.** Give each question a number, title, body, multiple-choice options where choices genuinely exist, and your recommended answer. Use the tool's fields when available. In a message, use ❓ before the **bold number** and **bold title**, then the body, then ➡️ before the recommendation. User-facing text follows the `writing-for-humans` sibling. Absent it, write plainly and say the standard was not loaded.
+**Question format.** Use ❓ before each question's **bold number** and **bold title**, then the body, then ➡️ before your recommended answer. Include multiple-choice options in the message where choices genuinely exist. User-facing text follows the `writing-for-humans` sibling. Absent it, write plainly and say the standard was not loaded.
 
 Find **facts** in the environment. When a frontier question needs a fact from the environment (filesystem, tools, docs), dispatch a lookup via the `to-subagent` skill (absent it, look it up in-session). A running lookup is an unsettled prerequisite: only its downstream questions wait for the subagent to report — ask the rest of the frontier now. Record consequential delegated choices with their rationale so the user can review them.
 
