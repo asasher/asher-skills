@@ -12,7 +12,7 @@ Own one ticket through implementation, proof, and a review-ready PR. Perform rou
 
 ## Start or resume
 
-Read the ticket and comments, existing PR, and `docs/agents/environment.md`. Failed reads or an unready environment are blockers. Require an approved direction or a clear ticket with delegated implementation choices. Require no open blocker. Admit either a `ready-for-agent` ticket with no live owner, or a newly reserved `building` ticket whose dispatch claim identifies this launch. Adopt that reservation rather than treating it as a prior worker. A resume uses its ownership checkpoint after confirming the prior worker stopped; expiry alone is insufficient. Record ownership before editing.
+Read the ticket and comments, existing PR, and `docs/agents/environment.md`. Failed reads or an unready environment are blockers. Require an approved direction or a clear ticket with delegated implementation choices. Require no open blocker. Admit either a `ready-for-agent` ticket with no live owner, or a `building` ticket whose dispatch claim identifies this launch. Adopt that claim as this session's ownership. A resume uses its ownership checkpoint after confirming the prior worker stopped; expiry alone is insufficient. Record ownership before editing.
 
 Use the ticket's worktree. From the primary checkout or wrong branch, dispatch `deliver <ticket>` through `to-thread`, requesting the correct branch and worktree, then hand off before editing. Resume existing local or remote work; keep the primary checkout stable.
 
@@ -39,6 +39,6 @@ Keep the PR body current: change and rationale, risk and test choices, check sum
 
 Require verification, independent review, evidence, and required CI for the current head and reviewed base. Disclose the human's authorization for each named, head-specific verification waiver. Input movement reopens the existing loop with its remaining budget.
 
-On a stop, record its reason, remaining budget, next actor, and worker liveness. Product decisions or an unapproved split return to `needs-shaping`; environment failures, exhausted bounds, and incomplete verification requiring human action return to `ready-for-human`. Published coverage gaps return the parent to `ready-for-agent` behind the verified blockers; an unresolved publication decision returns it to `ready-for-human`. Change routing only after writers have stopped; uncertain liveness retains `building` and its reservation.
+On a stop, record its reason, remaining budget, next actor, and worker liveness. Product decisions or an unapproved split return to `needs-shaping`; environment failures, exhausted bounds, and incomplete verification requiring human action return to `ready-for-human`. Published coverage gaps return the parent to `ready-for-agent` behind the verified blockers; an unresolved publication decision returns it to `ready-for-human`. Change routing only after writers have stopped; uncertain liveness retains `building` and the ticket claim.
 
 Post the PR pointer and outcome on the ticket. Preserve stopped work and its next action for another machine. Merging waits for the human's named selection. Use `technical-writing` for durable records when available.

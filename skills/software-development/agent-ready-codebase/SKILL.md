@@ -17,4 +17,4 @@ Certify the repository by demonstrating each capability, then record commands an
 
 Pass only demonstrated items; explain genuinely inapplicable app capabilities. An absent artifact bucket is a readiness gap. Record shared singletons and what changes would collide. Issues changing shared state precede only the work that truly depends on that change.
 
-Check current access and capacity at dispatch; re-certify when setup changes.
+Check current access at dispatch; re-certify when setup changes.

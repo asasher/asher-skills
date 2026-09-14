@@ -28,7 +28,6 @@ Record this repository's demonstrated capabilities, configuration pointers, and 
 
 Record the `agent-ready-codebase` assessment: _<date, capabilities demonstrated with evidence, gaps, and justified inapplicable items>_.
 
-- Concurrent-build limit: _<tested capacity>_. Admission mechanism: _<dispatch owner or shared lock and how to acquire/release it>_.
 - Shared singletons: _<resource, what use or change collides, and isolation or serialization required>_.
 - Punch list: _<gaps and issue links, or none>_.
 

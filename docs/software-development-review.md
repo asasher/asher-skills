@@ -15,7 +15,7 @@ Check how findings become tickets, how milestones survive consolidation, and who
 - [ ] **01. [capture](../skills/software-development/capture/SKILL.md)**: One ticket per finding; confirmed publication; recovery preserves advanced labels and claims; milestone grouping and spec-parent gaps.
 - [ ] **02. [backlog](../skills/software-development/backlog/SKILL.md)**: All open issues read; native dependencies preserved through consolidation; initial frontier draining and spec/milestone waves with human merge waits.
 
-For build, trace three scopes: a frontier larger than capacity, a spec that needs a human merge between waves, and a milestone with independent and blocked work. Check selection, truthful waits, completion, and resume from tracker state.
+For build, trace three scopes: a frontier of several eligible tickets, a spec that needs a human merge between waves, and a milestone with independent and blocked work. Check selection, truthful waits, completion, and resume from tracker state. For shaping and building, check dispatch with no concurrency limit and with an explicit operator limit. An uncertain owner holds only its ticket; setup creates no concurrency policy.
 
 ## 2. Shaping and splitting
 
@@ -34,7 +34,7 @@ Follow one ticket from unsettled intent to an approved, recoverable build brief.
 
 Check who owns the build, what independent checks establish, and when the PR is ready. For UI verification, review headless defaults, isolated alternatives, parallel sessions, user-desktop protection, and temporary-check retention.
 
-- [ ] **11. [deliver](../skills/software-development/deliver/SKILL.md)**: The owner adopts its launch reservation; whole-spec coverage, checkpointed stops, correct targets, and finish gates.
+- [ ] **11. [deliver](../skills/software-development/deliver/SKILL.md)**: The owner adopts its dispatch claim; whole-spec coverage, checkpointed stops, correct targets, and finish gates.
 - [ ] **12. [implement](../skills/software-development/implement/SKILL.md)**: Implementation scope, project conventions, and appropriate tests.
 - [ ] **13. [adversarial-review](../skills/software-development/adversarial-review/SKILL.md)**: Independent verdicts, bounded fixes, refreshed evidence, and explicit stops.
 - [ ] **14. [code-review](../skills/software-development/code-review/SKILL.md)**: Pinned inputs, review scope, actionable findings, and approval criteria.

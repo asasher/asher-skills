@@ -9,7 +9,7 @@ One per open issue once groomed; none means "not yet groomed".
 - `needs-shaping`: parked for shaping. Product, design, or scope decisions need resolution or delegation, or a build found the approved spec contradicted by the code. Build eligibility starts at `ready-for-agent`.
 - `shaping`: a shaping thread or an approved split publication owns it. Set at dispatch, standalone shaping intake, or while a split is being wired, so grooming reads it as active context and building skips it. Cleared when the spec is approved and any split graph has passed readback; abandonment returns it to `needs-shaping` after recovery.
 - `ready-for-agent`: released. Groom sets it for an issue whose decisions are settled; `shape` sets it when the spec is approved; `to-slices` sets it on the children of an approved split. Requires a work-type.
-- `building`: reserved or claimed. The provisional claim reserves capacity until a build thread is verified alive; the claim comment is the dispatch declaration. Set by `backlog build`, replacing `ready-for-agent`. Superseded by closure, by a reclaim comment, or by the human-confirmed orphan reset.
+- `building`: claimed for a build. The claim comment identifies the intended owner before launch; verified thread identity confirms the dispatch. Set by `backlog build`, replacing `ready-for-agent`. Superseded by closure, by a reclaim comment, or by the human-confirmed orphan reset.
 - `ready-for-human`: only a human may act on what remains. `deliver` owns build handback routing and records the blocker and next action.
 - `needs-info`: parked, waiting on the reporter.
 
@@ -34,7 +34,7 @@ Use this table for repository label colors and descriptions. The sections above 
 | `needs-info` | `D876E3` | Waiting on the reporter |
 | `ready-for-agent` | `0E8A16` | Released for agent work; requires a work-type |
 | `ready-for-human` | `5319E7` | Human action required, including unresolved build blockers |
-| `building` | `1D76DB` | Reserved or claimed for a build; claim comment records ownership and deadline |
+| `building` | `1D76DB` | Claimed for a build; claim comment records ownership and deadline |
 | `bug` | `D73A4A` | Expected behavior is broken |
 | `enhancement` | `A2EEEF` | New or changed behavior |
 | `spec` | `8250DF` | Split parent: coverage check and promotion PR after all children close |
@@ -56,8 +56,8 @@ GitHub REST relationship writes take database IDs (`id`), rather than issue numb
 The claim comment is the provisional dispatch declaration, one event with two readers: the human reads a statement, the next runner reads the claim. It carries the issue digest, the work branch, the worktree path, the model, effort, and harness, the thread name, the dispatcher's identity, and the deadline as an absolute timestamp.
 
 - Claims are attributed: posted by the runner's own GitHub account, naming the branch. Preserve other actors' claims, including expired ones; record takeovers as superseding notes.
-- Serialize admission for concurrent dispatchers on the same machine through one dispatch owner or a shared lock covering capacity check, claim, and verified spawn. Count live builds and unresolved reservations against the configured limit. Re-read the issue before claiming; a duplicate claim stops before a second worker starts.
-- Record the verified thread id on spawn success. On failure, post a failed-dispatch outcome and release the claim only after the worker is confirmed stopped or never started. Retain the reservation while worker liveness is uncertain.
+- Re-read ownership before claiming and again before starting the worker. A competing live or uncertain claim holds that ticket until ownership is resolved.
+- Record the verified thread id on spawn success. On failure, post a failed-dispatch outcome and release the claim only after the worker is confirmed stopped or never started. Retain the ticket claim while worker liveness is uncertain.
 - A reclaim of your own expired claim is a new claim comment superseding the old, resuming from the branch so nothing is discarded. The ledger stays event-shaped: claim, outcome, reclaim.
 - **Orphan sweep**: a `building` issue whose branch no longer exists, or whose claim has gone quiet past the quiet horizon of seven days, is surfaced by `backlog status` as a candidate reset to `ready-for-agent`. Require human confirmation for a reset, preserving any unmerged work.
 
