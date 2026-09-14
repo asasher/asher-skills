@@ -1,0 +1,616 @@
+commit 10f388ac6b97fbd11360a88ce94e1d460dcfc304
+Author:     Asher <as.asher.anjum@gmail.com>
+AuthorDate: Mon Sep 14 17:32:54 2026 +0400
+Commit:     Asher <as.asher.anjum@gmail.com>
+CommitDate: Mon Sep 14 17:32:54 2026 +0400
+
+    refine recap and specs for quick human review
+
+commit 7e2e8f62bd1e5b10bab0a3fc89a59999b02e9a8b
+Author:     Asher <as.asher.anjum@gmail.com>
+AuthorDate: Mon Sep 14 17:12:38 2026 +0400
+Commit:     Asher <as.asher.anjum@gmail.com>
+CommitDate: Mon Sep 14 17:12:38 2026 +0400
+
+    fix(interview): deliver frontier waves in chat only
+
+commit 73c4947967b6eb6a7f8b3c0b584fdcb62309f1b2
+Author:     Asher <as.asher.anjum@gmail.com>
+AuthorDate: Mon Sep 14 17:08:26 2026 +0400
+Commit:     Asher <as.asher.anjum@gmail.com>
+CommitDate: Mon Sep 14 17:08:26 2026 +0400
+
+    fix(interview): batch all frontier questions in each wave
+
+commit 94b8f8676fb1132183ab18e31e65540417ab95ab
+Author:     Asher <as.asher.anjum@gmail.com>
+AuthorDate: Mon Sep 14 16:24:24 2026 +0400
+Commit:     Asher <as.asher.anjum@gmail.com>
+CommitDate: Mon Sep 14 16:24:24 2026 +0400
+
+    Add backlog recap for readable shipped-work HTML reports
+
+commit 6929b7911e1f37c392f4e61ef5e643a21ef29ca4
+Author:     Asher <as.asher.anjum@gmail.com>
+AuthorDate: Mon Sep 14 13:17:47 2026 +0400
+Commit:     Asher <as.asher.anjum@gmail.com>
+CommitDate: Mon Sep 14 13:17:47 2026 +0400
+
+    Document operator-controlled concurrency reconciliation
+
+commit 8c1162cc08004e6c2321ee3c4f873ce76adbb168
+Author:     Asher <as.asher.anjum@gmail.com>
+AuthorDate: Mon Sep 14 12:01:48 2026 +0400
+Commit:     Asher <as.asher.anjum@gmail.com>
+CommitDate: Mon Sep 14 12:01:48 2026 +0400
+
+    Remove lifecycle concurrency limits and slot bookkeeping
+
+commit d828cbf38f7d855fa391e69e366c79693f33579a
+Author:     Asher Anjum <as.asher.anjum@gmail.com>
+AuthorDate: Sun Sep 13 11:51:08 2026 +0400
+Commit:     GitHub <noreply@github.com>
+CommitDate: Sun Sep 13 11:51:08 2026 +0400
+
+    Simplify the development skill family, refresh staffing, and add CLIProxyAPI images (#201)
+    
+    * prove-your-work: drop the caller name from the ledger clause
+    
+    The layer law says a skill names only skills below its own layer, and
+    prove-your-work declares no siblings — yet its ledger clause named
+    `build`, its caller. The edge already lives where it belongs: build's
+    pipeline says it hands the ledger over. The clause now says "the
+    invoking workflow hands over", so any workflow can invoke this skill
+    without the text implying one.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Spec location has one home: to-spec's contract, resolved via the registered index
+    
+    to-spec's fallback contract said docs/specs/<name>.md; to-slices' copy
+    had drifted to .html (introduced in the #137 rename), and code-review
+    hunted the path independently — three statements of one contract, two
+    of them disagreeing.
+    
+    to-spec stays the producer authority and already registers the specs
+    location in the project instruction file's ## Context documents index.
+    Consumers now resolve through that registration instead of restating
+    path and format: to-slices reads the fallback per to-spec's contract,
+    code-review's search order names the registered specs location. The
+    retired 'superseding' wording in synthesis.md becomes the capstone
+    parentage CONTEXT.md defines. code-review probe P3's search-order
+    paraphrase reconciled; its quoted key text is unchanged.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * backlog: the claim gate lives where its knobs are set
+    
+    The build paragraph restated § Build concurrency and § Quota awareness
+    near-verbatim — queue semantics, unknown-never-estimated, the no-
+    downgrade rule — so every gate change (#186, #191) was a three-surface
+    synchronized edit. The policy playbook is the declared home of the
+    knobs and already carries every rule; SKILL.md now carries the reading
+    discipline instead: at each entry into the mark-prepare-dispatch
+    sequence, apply those two sections. The outcome-accounting restatement
+    shrinks to its pointer the same way.
+    
+    Probes P22-P24 re-key to the policy template's own sentences — the
+    surface consumer repos actually install and dispatched sessions
+    actually read — with the template named in-context per the probe
+    header's bundled-reference rule.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * One wake ladder: supervision defers to to-subagent's contract by name
+    
+    Understanding a silent build took three modules: to-subagent owns the
+    wake ladder, the bounded watch, and the audit-before-redispatch
+    Recovery invariant; backlog paraphrased the ledger and the audit in
+    its own words, and watch-until restated the never-poll rung as its
+    own doctrine. The invariants now have one home. backlog's supervision
+    keeps what is genuinely its own — tracker-as-ledger events, deadline
+    sizing, resume reconciliation — and names to-subagent's Recovery
+    contract for silence and death; watch-until's rung 1 keeps its
+    behavior and cites the never-poll rule instead of restating it.
+    Probe keys P8 (backlog) and P3 (watch-until) re-keyed to the new
+    sentences.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Teardown order has one owner: worktree Remove; callers keep the when
+    
+    The environment-then-working-copy order, the from-inside rule, and
+    dirty refusal are worktree Remove's — enforced by its script and
+    probed in its own evals — yet backlog restated them at both teardown
+    sites and merge-changes step 7 restated the full order with its own
+    rationale. Callers now keep only what is theirs: when teardown
+    happens (abort, merge, sweep), the user-confirmation judgment on
+    dirty trees, and branch disposition (deletion after working-copy
+    removal, verified by query — merge-changes' own capability, since
+    worktree leaves the branch to its lifecycle owner). The order's
+    rationale keeps its playbook home in the environment template's
+    teardown row. Probe keys P9 (backlog) and P4 (merge-changes)
+    re-keyed; the order-violation fail conditions now bind through the
+    worktree seam.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * interview deepens with an engine mode; shape shrinks to routing
+    
+    shape needed a non-interactive interview, and since interview's
+    interface only offered the interactive loop, shape re-implemented the
+    frontier mechanics in its own text — compute-the-frontier, tagged
+    questions, recommended answers: interview's implementation vocabulary
+    restated across the seam. interview now carries the mode itself:
+    record in, tagged frontier out as the deliverable, answers back in,
+    empty-frontier as the engine's done with confirmation left to the
+    dispatching thread. shape keeps only what is its own — dispatching
+    engines, combining frontiers into one round, routing answers back —
+    and its loop bullet stops glossing interview's method. shape probe P9
+    re-keyed to the new sentences.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * AC-id contract: to-spec's statement is canonical, the copy says so
+    
+    The criterion-id semantics — stable ids, amend in place, append never
+    renumber, the builder/verifier/reviewer/evidence keying — lived as
+    unmarked near-verbatim twins in to-spec's and to-slices' template
+    guides, so a semantics change was a hand-synchronized edit nobody's
+    tooling knew about. Per the copy-a-technique convention the to-slices
+    copy now carries its Adapted-from provenance naming to-spec's
+    statement as canonical, making the sync deliberate. The consumers
+    (verify-your-work, code-review, prove-your-work) already key by thin
+    one-line references and are untouched — the audit of real runs found
+    the semantics themselves sound, so nothing semantic moves. Also
+    de-names to-slices in to-spec's ordering note ('downstream splitters'),
+    its one consumer-naming seal break.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * serve-via-tailnet: drop the annotated serve; plain viewing is the whole skill
+    
+    The annotation surface (review-server, review-await, chrome, hub) was rarely
+    used and is no longer needed. The skill now serves an artifact in place for
+    viewing and reports the URL with its stop command — nothing bundled. Playbook
+    and convention examples that pointed at review-server.py now point at the
+    worktree skill's script; the site manifest and probes follow.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * serve-via-tailnet: model-invocable; the guardrail is the default, not the caller
+    
+    The skill can now trigger implicitly in both harnesses (invocation: model,
+    allow_implicit_invocation: true). What survives everywhere it's mentioned is
+    the real rule — never the default presentation path — with the caller
+    restriction dropped from the playbooks and templates that stated it.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Checkpoint: backlog-family refactor review docs + pre-session branch state
+    
+    The review doc (catalog form) is the spec: 15 settled decisions, 3 follow-ups.
+    The detail doc carries full rationale and before/after tables.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Rename skills: build→build-change, merge-changes→merge-change, serve-via-tailnet→to-tailnet
+    
+    Names follow the object of the work: shape a subject, build a change, merge a change.
+    build-change also clears the npx skills add directory-name skip.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Central files: changelog-driven install, installer deleted, AGENTS.md for the pull-model family
+    
+    - README: npx skills add install prompt + changelog reconcile prompt; catalog updated (renames, new skills, kind column)
+    - CHANGELOG.md: the reconcile ledger, first entry covering the v3 refactor
+    - AGENTS.md: pull-model family, reference-skill vocabulary, bars-then-cheapest staffing, artifact branches, main-carries-only-what-must-stay-true
+    - tools/install.py + catalog.py + install.json deleted; skills-lock.json removed
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * New reference skills: plain-language and agent-ready-codebase
+    
+    The communication standard and the repo-readiness standard, cited by name; both model-invoked so siblings can reach them.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * staffing: bars-then-cheapest resolution, runtime-only checks
+    
+    State the intelligence/taste bars, filter, take the cheapest survivor; escalate when cheaper output misses the bar. Machine audit, overlay, self-heal, succession lists, and per-provider variants deleted; setup is a template fill. Harness command shapes survive as one harness-neutral reference.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Dispatch spine: synchronous-only to-subagent, five-route to-thread
+    
+    to-subagent: dispatch declaration, blocking calls only (parallel = several per turn), deliverable validated before success, cross-harness = foreground subprocess. to-thread: shared contract inline, outermost-harness detection with ask-user fallback, five route files (T3, Claude CLI, Claude Desktop, Codex CLI, Codex Desktop), liveness before success.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Build cluster: build-change contract, spec-declared test split, to-web evidence, merge-change ladder
+    
+    - to-web (new): upload to the bound store, durable unguessable hash-keyed URLs; evidence home + artifact preview deploys
+    - build-change: one unit of work (ticket or ticketless), synchronous stages, one worktree
+    - verify-your-work: executes the spec-declared durable-vs-scaffolding split
+    - prove-your-work: media via to-web, embedded by URL, never committed
+    - merge-change: delivered on slice merges, three-rung conflict ladder
+    - implement: lands the context delta when unsplit; diagnosing-bugs templates pruned to flaky surfaces and seams
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * backlog: pull-model dispatcher — groom merges and fans, build claims and exits, status derives
+    
+    - groom: merge judgment (absorption), confirmation gate kept, width question (default 3), fan shape threads via to-thread
+    - build: declaration-as-claim with absolute deadline, closed-or-delivered gate, idempotent re-run, no cap, no quota, no wakes
+    - status (new): finished / stalled / abandoned (derived, never written) / orphans; teardown action arm
+    - policy template: spec + delivered roles, deadlines section; concurrency and quota sections deleted
+    - environment template: agent-readiness answers replace verdict modes and lanes
+    - platform template: artifact-store binding, delivered mechanics; usage surface and machine-facts apparatus deleted
+    - check-machine-facts.py and machine-facts.md deleted
+    
+    Known follow-up: evals/probes.md still keys on deleted machinery.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Shaping cluster: artifact-branch specs, blessed hashes, simplified research and prototype
+    
+    - shape: one subject per thread; shaping change request deleted — the spec on its artifact branch, blessed at a commit hash, is the exit
+    - to-spec: branch file canonical; ticket projection = summary + render URL + hash; context delta and test split declared
+    - to-slices: justified recommendation, landing shapes (stacked default), capstone→spec rename
+    - interview: question template; engine mode deleted
+    - domain-modeling: is vs will-be — shaping writes the context delta, builds land it
+    - research: three rules + as-of boundary + claim audit; setup and playbook deleted
+    - prototype: two concrete artifact formats; placement playbook deleted
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Cross-reference sweep: retire the last capstone/serve-via-tailnet/build-skill references
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Layer hygiene: primitives and reference skills stop naming their callers
+    
+    A skill names what it dispatches or reads — composition points downward. Fifteen files rewritten so plain-language, to-web, agent-ready-codebase, staffing, to-slices, to-backlog, to-spec, and worktree describe their triggers by situation kind instead of caller vocabulary; opportunistic unnecessary-negation rewrites in the touched sentences.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * plain-language: the dictionary is a role — the project's glossary — with CONTEXT.md as the conventional binding and a stated degradation
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Dependency surface prune: frontmatter is the record, degradation lives inline
+    
+    The convention (AGENTS.md): a Dependency surface section exists only where it indexes what the body scatters. Sections deleted across the family with degradations moved to their points of use; three survive as genuine indexes (shape, to-slices, to-thread). Three body-wins frontmatter corrections (to-web, to-backlog, shape). READMEs shrunk to one-line composition summaries.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Rename plain-language → writing-for-humans: the symmetric pair with writing-for-agents
+    
+    One standard per audience: writing-for-agents (external) for text agents execute, writing-for-humans for text humans read. All pointer lines, tables, and the changelog entry updated; ordinary-English 'plain language' phrases preserved.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Adversarial writing-for-agents prune: 659 findings fixed across 28 skills, net -158 lines
+    
+    Per-skill review→edit→re-review loops (3-round cap): confusing terms, unnecessary negation, leading-word compression, duplication, sprawl, weak completion criteria. handoff converged clean in 2 rounds; the other 27 hit the cap with each round's findings applied. Cross-skill consistency pass: terminology already uniform, zero stray retired names, prettier clean.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md: land the refactor's context delta
+    
+    Orchestrator/dispatcher entries describe the pull model (fan out and exit, tracker as ledger, blocking stage calls); Shaping records branch-canonical specs with projections and blessed hashes; Subject replaces Subject/batch — absorption merges, per-subject threads and readiness. Completes the glossary updates the prune started (spec work-type, blocking-call dispatch language).
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * New reference skill: outside-in — the shaping decision-ordering standard
+    
+    Users → experience → system behavior → implementation, worked as a gradient: the user-type roster as a context-file fact, the tree law (implementation enters the frontier only under settled behavior), the seam as a named handoff point, recommend-don't-ask in the implementation register, register skipping, per-register blessing against the spec hash. Wired into shape (tree building, seam, per-register blessing), to-spec (register-ordered sections), and backlog groom (routing partially blessed subjects). Interview stays sealed — the doctrine lives at the shaping layer.
+    
+    Also: the push-early discipline — commits on work/feature/artifact branches reach the remote as they land (AGENTS.md convention + platform template binding); pushing is backup, publication is the change request.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Rename outside-in → experience-first
+    
+    The name is the rule: every affected user type's experience, then system behavior, then implementation. Wide enough for operators and API consumers where UX-first would re-narrow to screens.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Blessing invalidation is per covered text, not per commit
+    
+    A later commit reopens a blessing only when it changes the text that blessing covers — the register's sections for a register blessing, the whole spec otherwise; the check is a diff between the blessed hash and the head. Without this, every implementation commit would reopen the experience blessing and per-register blessing would be useless.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Context files get owners: bare-minimum-design owns DESIGN.md, experience-first owns PRODUCT.md
+    
+    - bare-minimum-ux → bare-minimum-design: reference skill; baseline rules unchanged; owns DESIGN.md in the open format (ships the skeleton, lazy-created, index-registered); impeccable dependency dropped to a README recommendation
+    - experience-first: owns PRODUCT.md — strategy + user-type roster, no visuals; ships the skeleton adapted from impeccable's init; lazy-created, index-registered; roster changes via the context delta
+    - domain-modeling keeps CONTEXT.md (already carried the pattern)
+    - CONTEXT.md glossary: three files, three owners, one index line each
+    - maquette's copied ux-rules source pointers follow the rename
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md: settle project vs authoring repo
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md round 2: merge packaging terms, fold skill state into skill instance
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md round 3: split instruction files global/project, trim repo context files
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md round 4: drop worktree-primitive/layer-law/redundant-negation, rename external skill
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md round 5: fold persistence axis into stateful skill, drop agent-decision-vs-shipped-script
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md round 6: skill-domain vocabulary moves out — the skills carry their own concepts
+    
+    The shaping/backlog pipeline terms (shaping, slice/tracer bullet, spec
+    work-type, capture, subject, shaping registers, needs-shaping) were
+    implementation details of the skills leaking into the authoring repo's
+    glossary. Each concept is documented in its owner skill; CONTEXT.md keeps
+    only authoring-side vocabulary.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Snapshot the authoring-repo refactor for review
+    
+    Authored skills are used directly from skills/ — the self-install mounts,
+    marketplace manifest, installer, changelog, and lock file go; only external
+    installs remain under .agents/ and .claude/ (writing-for-agents,
+    improve-codebase-architecture, wait-what). docs/agents/ reduces to the
+    authoring docs (GIVING_CREDIT, SKILL-MECHANICS); consumer-run residue
+    (playbooks, evidence/, plans/, research/, site/) is dropped. Skill sources
+    slim their frontmatter and pick up agents/ sidecars.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Essential external skills ship from this repo
+    
+    Copied wholesale with credits or rewritten as our own — pinning the
+    version we reviewed rather than an evolving copy upstream controls.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Branch carries everything: context delta deleted, to-branch primitive publishes artifacts
+    
+    Shaping commits context files directly on the ticket's work branch; build-change continues on it — the change request carries them to main. Specs/prototypes/dossiers draft on the desk and publish at record time via the new to-branch primitive (commit to a branch with no checkout; smoke-tested). Stacked landing: the work branch is the feature branch. Direct: first slice inherits the shaping commits.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * WIP
+    
+    * Delete capture-to-inbox; external skills ship from this repo in CONTEXT.md
+    
+    The skill was the only consumer of the metadata.external mechanism, so
+    the external-skill vocabulary entry, the README's external-skill note,
+    and SKILL-MECHANICS' metadata key list drop it too.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Drop capture-to-inbox from relay's discovery exclusions
+    
+    The skill no longer exists, so relay's setup has no sibling instance
+    directory to skip. The published-surface eval also catches up with the
+    dropped-defaults frontmatter rule: relay's standalone status now shows
+    as no requires key at all, not requires: [].
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Move to-subagent and to-thread into system; slim staffing to a roster table
+    
+    Staffing drops the playbook/setup machinery (reference docs, templates,
+    evals) for a single task-type roster with separate model/effort/harness/
+    execution fields. to-subagent picks up the staffed-fields mapping and a
+    cross-harness stdin gotcha found by smoke test: close stdin (</dev/null)
+    on backgrounded shell-outs or codex exec waits forever on the open pipe.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Fix staffing routes from cross-harness smoke tests
+    
+    * Refine staffing roles across the core model roster
+    
+    * Clarify shaping artifact ownership
+    
+    * Tighten spec synthesis and subagent dispatch
+    
+    * Add diagram design sibling
+    
+    * Remove diagram profile state
+    
+    * Add engineering principles and human voice
+    
+    * Remove provider-specific argument hints
+    
+    * Sharpen shaping and remove synthetic probe evals
+    
+    * Refine research and prototype contracts
+    
+    * Refine staffing fallbacks and routes
+    
+    * Add pinned unslop skill
+    
+    * Restructure writing-for-humans into unslop-style passes
+    
+    Adopt the pass ordering and learnings from Cursor pstack's unslop
+    (reviewed commit bdf7aa3, unchanged upstream): clear base, then a
+    concrete tell scan, then soul, closing on the self-audit question.
+    Widen the README credit to cover the pass structure.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Split the writing standard: unslop, writing-for-humans, technical-writing
+    
+    writing-for-humans straddled two registers with conflicting rules:
+    conversational voice (vary rhythm, let mess in) and artifact uniformity
+    (STE-style discipline). Split by register instead:
+    
+    - unslop: the shared AI-tell scan, our pinned rewrite of Cursor pstack's
+    - writing-for-humans: conversation only; voice plus the Provost rhythm
+      quote (em dash edited to a comma per our punctuation rule)
+    - technical-writing: durable artifacts; distills ASD-STE100 and Google
+      developer style, adapted from Cursor pstack's technical-writing
+    
+    Both standards require unslop and degrade in one line without it.
+    AGENTS.md and CONTEXT.md now route by register; sibling skills still
+    cite writing-for-humans and get re-routed in a follow-up.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Route siblings by register, drop external unslop, sync install docs
+    
+    Nine skills whose prose lands in files, trackers, or change requests now
+    cite technical-writing (research, prototype, to-spec, to-slices,
+    build-change, prove-your-work, verify-your-work); shape and backlog cite
+    both registers. Chat-register skills (interview, merge-change,
+    to-thread) keep writing-for-humans. requires/optional records updated to
+    match, so consumer installs discover the right discipline.
+    
+    The installed external unslop is removed: the family now ships its own
+    copy in skills/, and AGENTS.md routes to it.
+    
+    README install instructions now mount the entire family via one
+    copy-paste command, the agent prompt points at it, and AGENTS.md gains
+    the rule that keeps those lists in sync with skills/. Catalog gains
+    unslop and technical-writing rows and drops the stale
+    writing-technical-docs row.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Add changelog with the writing-standard split as its first entry
+    
+    The README's Reconcile flow reads CHANGELOG.md; the file did not exist.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Sweep dangling skill symlinks and stale catalog rows
+    
+    All 26 .claude/skills symlinks from the August install pointed at
+    removed .agents/skills targets - authored skills run from skills/
+    directly, so the mounts were dead. The catalog loses four personal
+    skills whose directories no longer exist (manage-notes,
+    manage-opportunities, manage-tasks, review-opportunities).
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Scope the install command to the SDLC family and its supporting skills
+    
+    The install command mounts software-development and system, plus the
+    creative siblings SDLC skills name (bare-minimum-design,
+    diagram-design). Creative, thinking, and personal skills are the
+    appendix: discoverable in the catalog, installed by name. The AGENTS.md
+    sync rule now records that boundary.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Restructure the lifecycle family around GitHub, one playbook, and verb skills
+    
+    Fix the platform to GitHub issues and PRs via gh, git, and an S3-compatible
+    bucket, and collapse the playbooks to docs/agents/environment.md. Backlog
+    becomes a thin dispatcher whose verbs (capture, groom, build, retro, status,
+    setup) each fan one run of a verb skill per unit: capture (was to-backlog),
+    shape, deliver (was build-change), retro (promoted from in-progress), with
+    merge (was merge-change) as the human gate. Labels, claims, deadlines, and
+    branch names are fixed in backlog/reference/labels.md.
+    
+    Shape commits every artifact to one artifact/<issue> branch and runs
+    to-slices at the close; to-slices publishes ready sub-issues that block the
+    spec issue; deliver gains the four issue kinds and the spec issue's coverage
+    check and promotion PR; merge closes children at their spec-branch merge and
+    folds in watch-until. Verification splits checks into guards and throwaway
+    scripts and treats the seed as a claim; the stage ledger is dropped.
+    
+    skill-loop leaves the install, to-tailnet moves to personal, watch-until is
+    removed. Sidecars, READMEs, the catalog, CONTEXT.md, AGENTS.md, and the
+    changelog follow.
+    
+    Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+    
+    * Ship a dark, Vercel-inspired default skin for diagram-design
+    
+    The shipped visual system flips to dark by default: true-black paper,
+    near-white ink, a neutral gray ramp for muted, soft, and rules, and one
+    blue accent (#0070f3) with a low-saturation blue for link arrows. Light
+    is now the alternate variant. style-guide.md defines both columns and
+    the inversion rule; every type reference, primitive, and template
+    carries the new hex values, the "Dark mode" sections become "Light
+    mode", and the tint alphas sit higher on the dark column. The semantic
+    override palette lists the dark-legible hexes and light mode darkens
+    them (C_dark), reversing the old C_light rule. Contrast figures cited
+    in the bar, line, scatter, and treemap references are recomputed for
+    the new tokens.
+    
+    template-dark.html becomes template-light.html; the variant slug suffix
+    is -light. The pre-baked example assets keep the upstream skin and are
+    documented as layout references only. Credits and changelog record the
+    reskin.
+    
+    Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+    
+    * Read the diagram-design skin off Vercel's Geist scales
+    
+    Replace the guessed dark tokens with values from the published Geist
+    color scales: paper is background-100 (#0a0a0a) not pure black, raised
+    node and card surfaces are gray-100 (#1a1a1a), hairlines stay at the
+    gray-alpha-400 alpha, and text keeps gray-900/1000. The accent moves
+    from the saturated blue-700 button fill to the blue-900 text step
+    (#52a8ff dark, #0068d6 light), which is what Geist uses for text,
+    icons, and strokes, and link arrows take blue-700 so they sit below
+    the focal element in brightness. The series and semantic override
+    palettes use each hue's 900 step with light-mode counterparts, and the
+    light variant takes those steps instead of darkening arithmetically.
+    
+    Chip text drops from weight 700 to 600, contrast figures cited in the
+    bar, line, scatter, and treemap references are recomputed for the new
+    paper, and the style guide gains a reading-comfort rule.
+    
+    Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+    
+    * Unify lifecycle convergence and preserve state across interrupted runs
+    
+    * Add visual lifecycle review with branching evidence and eval plan
+    
+    * Simplify ticket lifecycle skills and native worktree dispatch
+    
+    * Document the lifecycle visually and order manual skill review
+    
+    * Prune redundant skill negations and record command-recipe review
+    
+    * Use outcome instructions, refresh staffing, and add CLIProxyAPI image backend
+    
+    * Make retro a bounded transcript sweep with user-selected project issues
+    
+    * Group testing batches in milestones across capture, groom, and slicing
+    
+    * Index the complete software development family for manual review
+    
+    * Remove cross-skill file access and document package boundaries
+    
+    * Serve the mobile family review with linked Markdown readers
+    
+    * Simplify label setup and document further overengineering candidates
+    
+    * Simplify family instructions, isolate browser checks, and retire Relay
+    
+    * Document independent family review and staged repository eval plan
+    
+    * Fix lifecycle handoffs and prune skill instructions
+    
+    * Build selected specs and milestones in successive waves
+    
+    * Treat branch protection as optional during reviewed merges
+    
+    ---------
+    
+    Co-authored-by: Claude Fable 5 <noreply@anthropic.com>

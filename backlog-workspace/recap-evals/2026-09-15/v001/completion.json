@@ -1,0 +1,30 @@
+{
+  "report": "/Users/asher/Projects/asher-skills/backlog-workspace/recap-evals/2026-09-15/v001/report.html",
+  "sha256": "258aa61ae6ff017791c31bc8ca7799a9fc787a316812bf94b5c1a6f5295a079b",
+  "period": "[2026-09-08T00:02:04+04:00, 2026-09-15T00:02:04+04:00)",
+  "timezone": "Asia/Dubai",
+  "resolved_at": "2026-09-14T20:02:04Z",
+  "observed_revision": "10f388ac6b97fbd11360a88ce94e1d460dcfc304",
+  "completed_at": "2026-09-14T20:14:53+00:00",
+  "metrics": {
+    "shipped_outcome_groups": 4,
+    "merged_prs": 1,
+    "direct_main_commits": 6,
+    "successful_pages_deployments": 7
+  },
+  "coverage": "Paginated GitHub releases, deployments/statuses, events, merged PRs, PR #201 commits/files/discussion/reviews, linked issue #208, and fixed-revision source/Git history. Includes work authored before period and shipped through PR #201.",
+  "limitations": [
+    "GitHub event feed omits two exact push timestamps; matching main deployments bound their availability.",
+    "Existing-install adoption and live behavior in each target project were not measured. PR-reported validation is attributed and not rerun.",
+    "No chart was needed; diagram checks do not apply to absent figures."
+  ],
+  "checks": [
+    "249-word primary account",
+    "1280px, 390px, and 320px isolated headless Chrome rendering, collapsed and expanded",
+    "7 details sections visible in print without JavaScript; print PDF preserved",
+    "56 links checked for local targets and IDs; 24 unique external links return HTTP 200",
+    "Metrics reconciled to delivery-ledger.json",
+    "No tracked source diff"
+  ],
+  "blockers": []
+}

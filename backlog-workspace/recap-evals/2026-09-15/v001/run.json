@@ -1,0 +1,35 @@
+{
+  "version": "v001",
+  "status": "completed",
+  "human_review": "pending",
+  "repository": "asasher/asher-skills",
+  "repository_revision": "10f388ac6b97fbd11360a88ce94e1d460dcfc304",
+  "skill_revision": "10f388ac6b97fbd11360a88ce94e1d460dcfc304",
+  "skill_path": "skills/software-development/backlog/SKILL.md",
+  "reporting_interval": {
+    "start_inclusive": "2026-09-08T00:02:04+04:00",
+    "end_exclusive": "2026-09-15T00:02:04+04:00",
+    "timezone": "Asia/Dubai"
+  },
+  "resolved_at": "2026-09-14T20:02:04Z",
+  "deadline": "2026-09-14T20:22:04Z",
+  "participant": {
+    "agent": "/root/recap_v001",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "harness": "codex",
+    "route": "native subagent",
+    "context": "fresh; no conversation history"
+  },
+  "prompt_file": "prompt.txt",
+  "report_file": "report.html",
+  "completion_file": "completion.json",
+  "source_and_render_manifest": "manifest.json",
+  "report_sha256": "258aa61ae6ff017791c31bc8ca7799a9fc787a316812bf94b5c1a6f5295a079b",
+  "parent_modified_report": false,
+  "observed_output": {
+    "main_view_words": 249,
+    "expandable_sections": 7,
+    "diagram_figures": 0
+  }
+}

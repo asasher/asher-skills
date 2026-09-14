@@ -1,0 +1,49 @@
+# Asher Skills
+
+A collection of skills by Asher. Skills are organized into families with main focus being the software development lifecycle skills.
+
+## Language
+
+**Ticket**: One GitHub issue, the unit of shaping and building. Groom reads all open tickets and consolidates work that needs shaping together before routing. Related work may remain separate.
+
+**Approved spec**: A published HTML spec whose exact revision the human approved on its ticket. A newer spec needs new approval; unrelated artifact commits do not invalidate it. Shaping context lives on the pushed work branch, artifact sources on a temporary artifact branch, and published HTML and evidence in the bucket.
+
+**Project**: The repo a skill is installed into and runs in — the bare word in skill prose, and the only project a sealed skill can name, since an install carries no authoring context. This repo is itself a project for the skills installed into it. _Avoid_: consumer project, host repo.
+
+**Authoring repo**: This repository, where skill sources live and every install derives from. Its own docs say "this repo"; "authoring repo" is the name when the dual role needs distinguishing — authoring a skill vs running one. _Avoid_: this project, skills repo.
+
+**Primitive skill**: The bottom of the composition axis, and **sealed**: it names no other skill and never addresses "the caller" — its text reads complete to an agent that knows nothing about what composed it. It reads what is handed to it plus the environment (repo playbooks are environment, project instruction files, not caller), and classifies what it cannot settle instead of naming who settles it. Example: `domain-modeling`. Citing a reference skill (`unslop`, `technical-writing`) does not break the seal; naming a skill that runs does. _Avoid_: a primitive that names a running sibling, an upper layer, or "whoever composed this" — all three break the seal.
+
+**Composite skill**: Composes named lower-layer skills by their name, declares them in its dependency surface, and degrades explicitly when one is absent. All composition knowledge lives here: the composite knows its parts' contracts, the parts know nothing back. Example: `shape` (composes `interview` and `domain-modeling`, dispatching `research` and `prototype` through `to-subagent`). Even a thin edge makes a composite: `interview` names only `to-subagent` for fact lookups, and that one edge moves it off the primitive rung.
+
+**Orchestrator skill**: Runs a loop over many units of work, owning dispatch and lifecycle state. A **dispatcher** is the thin case: it fans units out and exits — outcomes land on the tracker (the run ledger), and a later `status` read derives liveness instead of a supervising session holding it. Human-in-the-loop work goes to threads the user attends (`to-thread` — no result flows back); autonomous work goes to threads too, unattended, each owner performing routine stages inline and using `to-subagent` for independent review or bounded specialist work. Examples: `backlog groom` dispatches a `shape` thread per selected ticket and exits. `backlog build` coordinates a `deliver` thread per eligible issue. The human operator chooses any concurrency limit for shaping and building. The default build drains the current ready, unblocked frontier; a selected spec or milestone advances through successive frontiers until complete or waiting on outside action. Human merge selection gates dependent waves.
+
+**Verb skill**: The per-unit skill a `backlog` verb fans: `capture`, `shape`, `deliver`, `merge`, `retro`. Each works on exactly one unit (a conversation, an issue, a recent session batch) and runs on its own with nothing from the dispatcher; `backlog <verb>` only decides which units and when. `merge` is the human gate beside them, never fanned. Verb skills carry bare verb names; a `to-` name marks a transformer or adapter a verb skill calls by name (`to-spec`, `to-slices`, `to-branch`, `to-web`, `to-subagent`, `to-thread`). The installer skips directories named `build`, `dist`, `node_modules`, `.git`, and `__pycache__`, which is why the build verb's skill is `deliver`.
+
+**Dispatch adapter**: A thin composite owning _how_ work is dispatched, not what the work is: `to-thread` spawns named, interactive sessions the user attends through the outermost dispatching harness; `to-subagent` issues blocking calls to non-interactive subagents that return the result, deliverable validated before acceptance. `to-thread` prepares or attaches a secondary worktree when shaping or building needs one. Both pass the resolved directory without additional harness-native isolation. Native Git handles worktrees; no standalone worktree skill is required. `to-subagent` may additionally compose `staffing` for model and effort resolution. Every other skill reaches subagent dispatch solely by saying "via `to-subagent`".
+
+**Stateful skill**: The top of the persistence axis — pure (writes nothing durable, e.g. `interview`) → effectful (durable artifacts, no resume state, e.g. `to-slices`) → stateful: its durable artifacts double as resume state, so a bare invocation reads them and continues exactly where the last session stopped — no human recap. State lives with the work, never in chat context or memory files; a session's last act is updating it. Examples: `backlog`, `shape`, `deliver` (issue/PR checkpoints), and `adversarial-review` (PR comments preserving revisions, pass budgets, and deadlines). Stateful skills need a real resume-after-a-gap run because mistakes compound across sessions.
+
+**Repo context files**: The repo-owned strategic context a shaping session reads at intake, three files with three owners: `CONTEXT.md` (the domain glossary — `domain-modeling`), `PRODUCT.md` (strategy and the user-type roster — `shape`), `DESIGN.md` (the visual system — `bare-minimum-design`). Each is one line in the project instruction file's `## Context documents` index; creation and skeleton mechanics live with the owner skill. They carry domain and direction; playbooks under `docs/agents/` carry operational bindings — a shaping decision consults the former, a build step the latter.
+
+**Skill source**: `skills/<category>/<name>/` — the canonical skill this repo exists to publish. All authoring happens here; every install derives from it.
+
+**Skill workspace**: `<name>-workspace/` at the repo root — the author-side space for the work _around_ a skill: evals, research, drafts, scratch artifacts. The shipped files live in the source; the workspace is never part of an install.
+
+**Installed skill package**: The replaceable copy of a skill source a harness loads, installed with `npx skills add` — mounted at `.agents/skills/<name>` (always a real copied directory), with harness paths such as `.claude/skills/<name>` symlinked to it; no per-provider variants. A build product: an edit made in place is lost on the next refresh — the change belongs in the skill source, merged and reconciled from the changelog.
+
+**Skill instance**: The project-owned materialization an installed package creates or maintains — an editable directory of scaffold, configuration, and artifacts, including the skill's mutable data: checkpoints, queues, decisions, resume artifacts. Project material, not a mount or a workspace; a package reinstall preserves it.
+
+**Sibling skill**: Another skill in this repo relied on by name — a plain-language runtime pointer resolved by the installed skill set. Its references, templates, scripts, and other package files are private to that skill; the owner resolves them. Example: `implement` routes defects through the `diagnosing-bugs` sibling.
+
+**Reference skill**: An all-reference sibling cited by name and never run as a workflow: `unslop` (AI tells), `writing-for-humans` (conversation), `technical-writing` (durable artifacts), `agent-ready-codebase` (repo readiness), `principle-experience-first` (shaping target), `staffing` (roster and resolution). A reference skill stays model-invoked with a tight description, or siblings cannot cite it.
+
+**External skill**: A skill whose canonical source lives outside this repo, installed as a package for authoring-side use only. The family ships from this repo: an external skill our skills need is brought in — copied wholesale or rewritten as our own version, with README credits — pinning the version we reviewed rather than an evolving copy upstream controls. Standing example: `writing-for-agents` (mattpocock/skills). _Avoid_: external requirement.
+
+**Milestone**: A repository batch of related tickets, such as findings from a user-testing session. It carries shared context and completion tracking. Each ticket follows its own readiness and dependency gates; approved spec splits determine integration branches.
+
+**Playbook**: A repo-tuned markdown file under `docs/agents/`, written by an installed skill's setup. The lifecycle family reads one, `environment.md` (run, seed, authenticate, drive, checks, agent-readiness, artifact store); `retro` uses an ignored local checkpoint for transcript coverage. The platform is fixed — GitHub issues and PRs via `gh`, git, an S3-compatible bucket — so no playbook binds it. Repo-owned once written — setups reconcile it, never overwrite it.
+
+**Project agent instruction files**: The instruction files a project's harnesses read: `AGENTS.md` (the harness-neutral base) and `CLAUDE.md` (an `@AGENTS.md` import plus Claude Code deltas — Claude Code never reads `AGENTS.md` on its own). Skill prose says "the project instruction file" for whichever file the running harness reads.
+
+**Global agent instruction files**: Machine-level instruction files such as `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` — retired on this machine (asher-skills#114); do not recreate them. A machine truth belongs to the skill that owns it or to `docs/agents/environment.md`.

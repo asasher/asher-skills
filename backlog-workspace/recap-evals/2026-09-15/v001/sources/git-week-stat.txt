@@ -1,0 +1,1747 @@
+commit 10f388ac6b97fbd11360a88ce94e1d460dcfc304
+Author: Asher <as.asher.anjum@gmail.com>
+Date:   Mon Sep 14 17:32:54 2026 +0400
+
+    refine recap and specs for quick human review
+
+ docs/software-development-review.md                | 10 ++++---
+ docs/software-development.html                     |  5 ++--
+ skills/software-development/backlog/README.md      |  2 +-
+ skills/software-development/backlog/SKILL.md       |  8 +++---
+ .../backlog/reference/recap.md                     | 32 +++++++++++++---------
+ skills/software-development/to-spec/README.md      |  4 +--
+ skills/software-development/to-spec/SKILL.md       | 10 ++++---
+ 7 files changed, 41 insertions(+), 30 deletions(-)
+
+commit 7e2e8f62bd1e5b10bab0a3fc89a59999b02e9a8b
+Author: Asher <as.asher.anjum@gmail.com>
+Date:   Mon Sep 14 17:12:38 2026 +0400
+
+    fix(interview): deliver frontier waves in chat only
+
+ docs/software-development-review.md            | 2 +-
+ docs/software-development.html                 | 2 +-
+ skills/software-development/interview/SKILL.md | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 73c4947967b6eb6a7f8b3c0b584fdcb62309f1b2
+Author: Asher <as.asher.anjum@gmail.com>
+Date:   Mon Sep 14 17:08:26 2026 +0400
+
+    fix(interview): batch all frontier questions in each wave
+
+ docs/software-development-review.md            | 2 +-
+ docs/software-development.html                 | 2 +-
+ skills/software-development/interview/SKILL.md | 6 ++++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+commit 94b8f8676fb1132183ab18e31e65540417ab95ab
+Author: Asher <as.asher.anjum@gmail.com>
+Date:   Mon Sep 14 16:24:24 2026 +0400
+
+    Add backlog recap for readable shipped-work HTML reports
+
+ CHANGELOG.md                                       |  6 ++++
+ README.md                                          |  4 +++
+ docs/software-development-review.md                | 10 ++++--
+ docs/software-development.html                     |  5 +--
+ skills/software-development/backlog/README.md      |  4 ++-
+ skills/software-development/backlog/SKILL.md       |  8 +++--
+ .../backlog/agents/openai.yaml                     |  4 +--
+ .../backlog/reference/recap.md                     | 42 ++++++++++++++++++++++
+ 8 files changed, 73 insertions(+), 10 deletions(-)
+
+commit 6929b7911e1f37c392f4e61ef5e643a21ef29ca4
+Author: Asher <as.asher.anjum@gmail.com>
+Date:   Mon Sep 14 13:17:47 2026 +0400
+
+    Document operator-controlled concurrency reconciliation
+
+ CHANGELOG.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+commit 8c1162cc08004e6c2321ee3c4f873ce76adbb168
+Author: Asher <as.asher.anjum@gmail.com>
+Date:   Mon Sep 14 12:01:48 2026 +0400
+
+    Remove lifecycle concurrency limits and slot bookkeeping
+
+ CONTEXT.md                                                 |  2 +-
+ docs/software-development-review.md                        |  4 ++--
+ docs/software-development.html                             | 14 +++++++-------
+ skills/software-development/agent-ready-codebase/SKILL.md  |  2 +-
+ skills/software-development/backlog/README.md              |  2 +-
+ skills/software-development/backlog/SKILL.md               | 13 +++++++------
+ .../software-development/backlog/reference/build-waves.md  |  4 ++--
+ skills/software-development/backlog/reference/labels.md    |  8 ++++----
+ skills/software-development/backlog/reference/setup.md     |  2 +-
+ .../software-development/backlog/templates/environment.md  |  1 -
+ skills/software-development/deliver/SKILL.md               |  4 ++--
+ 11 files changed, 28 insertions(+), 28 deletions(-)
+
+commit d828cbf38f7d855fa391e69e366c79693f33579a
+Author: Asher Anjum <as.asher.anjum@gmail.com>
+Date:   Sun Sep 13 11:51:08 2026 +0400
+
+    Simplify the development skill family, refresh staffing, and add CLIProxyAPI images (#201)
+    
+    * prove-your-work: drop the caller name from the ledger clause
+    
+    The layer law says a skill names only skills below its own layer, and
+    prove-your-work declares no siblings — yet its ledger clause named
+    `build`, its caller. The edge already lives where it belongs: build's
+    pipeline says it hands the ledger over. The clause now says "the
+    invoking workflow hands over", so any workflow can invoke this skill
+    without the text implying one.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Spec location has one home: to-spec's contract, resolved via the registered index
+    
+    to-spec's fallback contract said docs/specs/<name>.md; to-slices' copy
+    had drifted to .html (introduced in the #137 rename), and code-review
+    hunted the path independently — three statements of one contract, two
+    of them disagreeing.
+    
+    to-spec stays the producer authority and already registers the specs
+    location in the project instruction file's ## Context documents index.
+    Consumers now resolve through that registration instead of restating
+    path and format: to-slices reads the fallback per to-spec's contract,
+    code-review's search order names the registered specs location. The
+    retired 'superseding' wording in synthesis.md becomes the capstone
+    parentage CONTEXT.md defines. code-review probe P3's search-order
+    paraphrase reconciled; its quoted key text is unchanged.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * backlog: the claim gate lives where its knobs are set
+    
+    The build paragraph restated § Build concurrency and § Quota awareness
+    near-verbatim — queue semantics, unknown-never-estimated, the no-
+    downgrade rule — so every gate change (#186, #191) was a three-surface
+    synchronized edit. The policy playbook is the declared home of the
+    knobs and already carries every rule; SKILL.md now carries the reading
+    discipline instead: at each entry into the mark-prepare-dispatch
+    sequence, apply those two sections. The outcome-accounting restatement
+    shrinks to its pointer the same way.
+    
+    Probes P22-P24 re-key to the policy template's own sentences — the
+    surface consumer repos actually install and dispatched sessions
+    actually read — with the template named in-context per the probe
+    header's bundled-reference rule.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * One wake ladder: supervision defers to to-subagent's contract by name
+    
+    Understanding a silent build took three modules: to-subagent owns the
+    wake ladder, the bounded watch, and the audit-before-redispatch
+    Recovery invariant; backlog paraphrased the ledger and the audit in
+    its own words, and watch-until restated the never-poll rung as its
+    own doctrine. The invariants now have one home. backlog's supervision
+    keeps what is genuinely its own — tracker-as-ledger events, deadline
+    sizing, resume reconciliation — and names to-subagent's Recovery
+    contract for silence and death; watch-until's rung 1 keeps its
+    behavior and cites the never-poll rule instead of restating it.
+    Probe keys P8 (backlog) and P3 (watch-until) re-keyed to the new
+    sentences.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Teardown order has one owner: worktree Remove; callers keep the when
+    
+    The environment-then-working-copy order, the from-inside rule, and
+    dirty refusal are worktree Remove's — enforced by its script and
+    probed in its own evals — yet backlog restated them at both teardown
+    sites and merge-changes step 7 restated the full order with its own
+    rationale. Callers now keep only what is theirs: when teardown
+    happens (abort, merge, sweep), the user-confirmation judgment on
+    dirty trees, and branch disposition (deletion after working-copy
+    removal, verified by query — merge-changes' own capability, since
+    worktree leaves the branch to its lifecycle owner). The order's
+    rationale keeps its playbook home in the environment template's
+    teardown row. Probe keys P9 (backlog) and P4 (merge-changes)
+    re-keyed; the order-violation fail conditions now bind through the
+    worktree seam.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * interview deepens with an engine mode; shape shrinks to routing
+    
+    shape needed a non-interactive interview, and since interview's
+    interface only offered the interactive loop, shape re-implemented the
+    frontier mechanics in its own text — compute-the-frontier, tagged
+    questions, recommended answers: interview's implementation vocabulary
+    restated across the seam. interview now carries the mode itself:
+    record in, tagged frontier out as the deliverable, answers back in,
+    empty-frontier as the engine's done with confirmation left to the
+    dispatching thread. shape keeps only what is its own — dispatching
+    engines, combining frontiers into one round, routing answers back —
+    and its loop bullet stops glossing interview's method. shape probe P9
+    re-keyed to the new sentences.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * AC-id contract: to-spec's statement is canonical, the copy says so
+    
+    The criterion-id semantics — stable ids, amend in place, append never
+    renumber, the builder/verifier/reviewer/evidence keying — lived as
+    unmarked near-verbatim twins in to-spec's and to-slices' template
+    guides, so a semantics change was a hand-synchronized edit nobody's
+    tooling knew about. Per the copy-a-technique convention the to-slices
+    copy now carries its Adapted-from provenance naming to-spec's
+    statement as canonical, making the sync deliberate. The consumers
+    (verify-your-work, code-review, prove-your-work) already key by thin
+    one-line references and are untouched — the audit of real runs found
+    the semantics themselves sound, so nothing semantic moves. Also
+    de-names to-slices in to-spec's ordering note ('downstream splitters'),
+    its one consumer-naming seal break.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * serve-via-tailnet: drop the annotated serve; plain viewing is the whole skill
+    
+    The annotation surface (review-server, review-await, chrome, hub) was rarely
+    used and is no longer needed. The skill now serves an artifact in place for
+    viewing and reports the URL with its stop command — nothing bundled. Playbook
+    and convention examples that pointed at review-server.py now point at the
+    worktree skill's script; the site manifest and probes follow.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * serve-via-tailnet: model-invocable; the guardrail is the default, not the caller
+    
+    The skill can now trigger implicitly in both harnesses (invocation: model,
+    allow_implicit_invocation: true). What survives everywhere it's mentioned is
+    the real rule — never the default presentation path — with the caller
+    restriction dropped from the playbooks and templates that stated it.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Checkpoint: backlog-family refactor review docs + pre-session branch state
+    
+    The review doc (catalog form) is the spec: 15 settled decisions, 3 follow-ups.
+    The detail doc carries full rationale and before/after tables.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Rename skills: build→build-change, merge-changes→merge-change, serve-via-tailnet→to-tailnet
+    
+    Names follow the object of the work: shape a subject, build a change, merge a change.
+    build-change also clears the npx skills add directory-name skip.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Central files: changelog-driven install, installer deleted, AGENTS.md for the pull-model family
+    
+    - README: npx skills add install prompt + changelog reconcile prompt; catalog updated (renames, new skills, kind column)
+    - CHANGELOG.md: the reconcile ledger, first entry covering the v3 refactor
+    - AGENTS.md: pull-model family, reference-skill vocabulary, bars-then-cheapest staffing, artifact branches, main-carries-only-what-must-stay-true
+    - tools/install.py + catalog.py + install.json deleted; skills-lock.json removed
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * New reference skills: plain-language and agent-ready-codebase
+    
+    The communication standard and the repo-readiness standard, cited by name; both model-invoked so siblings can reach them.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * staffing: bars-then-cheapest resolution, runtime-only checks
+    
+    State the intelligence/taste bars, filter, take the cheapest survivor; escalate when cheaper output misses the bar. Machine audit, overlay, self-heal, succession lists, and per-provider variants deleted; setup is a template fill. Harness command shapes survive as one harness-neutral reference.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Dispatch spine: synchronous-only to-subagent, five-route to-thread
+    
+    to-subagent: dispatch declaration, blocking calls only (parallel = several per turn), deliverable validated before success, cross-harness = foreground subprocess. to-thread: shared contract inline, outermost-harness detection with ask-user fallback, five route files (T3, Claude CLI, Claude Desktop, Codex CLI, Codex Desktop), liveness before success.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Build cluster: build-change contract, spec-declared test split, to-web evidence, merge-change ladder
+    
+    - to-web (new): upload to the bound store, durable unguessable hash-keyed URLs; evidence home + artifact preview deploys
+    - build-change: one unit of work (ticket or ticketless), synchronous stages, one worktree
+    - verify-your-work: executes the spec-declared durable-vs-scaffolding split
+    - prove-your-work: media via to-web, embedded by URL, never committed
+    - merge-change: delivered on slice merges, three-rung conflict ladder
+    - implement: lands the context delta when unsplit; diagnosing-bugs templates pruned to flaky surfaces and seams
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * backlog: pull-model dispatcher — groom merges and fans, build claims and exits, status derives
+    
+    - groom: merge judgment (absorption), confirmation gate kept, width question (default 3), fan shape threads via to-thread
+    - build: declaration-as-claim with absolute deadline, closed-or-delivered gate, idempotent re-run, no cap, no quota, no wakes
+    - status (new): finished / stalled / abandoned (derived, never written) / orphans; teardown action arm
+    - policy template: spec + delivered roles, deadlines section; concurrency and quota sections deleted
+    - environment template: agent-readiness answers replace verdict modes and lanes
+    - platform template: artifact-store binding, delivered mechanics; usage surface and machine-facts apparatus deleted
+    - check-machine-facts.py and machine-facts.md deleted
+    
+    Known follow-up: evals/probes.md still keys on deleted machinery.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Shaping cluster: artifact-branch specs, blessed hashes, simplified research and prototype
+    
+    - shape: one subject per thread; shaping change request deleted — the spec on its artifact branch, blessed at a commit hash, is the exit
+    - to-spec: branch file canonical; ticket projection = summary + render URL + hash; context delta and test split declared
+    - to-slices: justified recommendation, landing shapes (stacked default), capstone→spec rename
+    - interview: question template; engine mode deleted
+    - domain-modeling: is vs will-be — shaping writes the context delta, builds land it
+    - research: three rules + as-of boundary + claim audit; setup and playbook deleted
+    - prototype: two concrete artifact formats; placement playbook deleted
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Cross-reference sweep: retire the last capstone/serve-via-tailnet/build-skill references
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Layer hygiene: primitives and reference skills stop naming their callers
+    
+    A skill names what it dispatches or reads — composition points downward. Fifteen files rewritten so plain-language, to-web, agent-ready-codebase, staffing, to-slices, to-backlog, to-spec, and worktree describe their triggers by situation kind instead of caller vocabulary; opportunistic unnecessary-negation rewrites in the touched sentences.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * plain-language: the dictionary is a role — the project's glossary — with CONTEXT.md as the conventional binding and a stated degradation
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Dependency surface prune: frontmatter is the record, degradation lives inline
+    
+    The convention (AGENTS.md): a Dependency surface section exists only where it indexes what the body scatters. Sections deleted across the family with degradations moved to their points of use; three survive as genuine indexes (shape, to-slices, to-thread). Three body-wins frontmatter corrections (to-web, to-backlog, shape). READMEs shrunk to one-line composition summaries.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Rename plain-language → writing-for-humans: the symmetric pair with writing-for-agents
+    
+    One standard per audience: writing-for-agents (external) for text agents execute, writing-for-humans for text humans read. All pointer lines, tables, and the changelog entry updated; ordinary-English 'plain language' phrases preserved.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Adversarial writing-for-agents prune: 659 findings fixed across 28 skills, net -158 lines
+    
+    Per-skill review→edit→re-review loops (3-round cap): confusing terms, unnecessary negation, leading-word compression, duplication, sprawl, weak completion criteria. handoff converged clean in 2 rounds; the other 27 hit the cap with each round's findings applied. Cross-skill consistency pass: terminology already uniform, zero stray retired names, prettier clean.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md: land the refactor's context delta
+    
+    Orchestrator/dispatcher entries describe the pull model (fan out and exit, tracker as ledger, blocking stage calls); Shaping records branch-canonical specs with projections and blessed hashes; Subject replaces Subject/batch — absorption merges, per-subject threads and readiness. Completes the glossary updates the prune started (spec work-type, blocking-call dispatch language).
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * New reference skill: outside-in — the shaping decision-ordering standard
+    
+    Users → experience → system behavior → implementation, worked as a gradient: the user-type roster as a context-file fact, the tree law (implementation enters the frontier only under settled behavior), the seam as a named handoff point, recommend-don't-ask in the implementation register, register skipping, per-register blessing against the spec hash. Wired into shape (tree building, seam, per-register blessing), to-spec (register-ordered sections), and backlog groom (routing partially blessed subjects). Interview stays sealed — the doctrine lives at the shaping layer.
+    
+    Also: the push-early discipline — commits on work/feature/artifact branches reach the remote as they land (AGENTS.md convention + platform template binding); pushing is backup, publication is the change request.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Rename outside-in → experience-first
+    
+    The name is the rule: every affected user type's experience, then system behavior, then implementation. Wide enough for operators and API consumers where UX-first would re-narrow to screens.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Blessing invalidation is per covered text, not per commit
+    
+    A later commit reopens a blessing only when it changes the text that blessing covers — the register's sections for a register blessing, the whole spec otherwise; the check is a diff between the blessed hash and the head. Without this, every implementation commit would reopen the experience blessing and per-register blessing would be useless.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Context files get owners: bare-minimum-design owns DESIGN.md, experience-first owns PRODUCT.md
+    
+    - bare-minimum-ux → bare-minimum-design: reference skill; baseline rules unchanged; owns DESIGN.md in the open format (ships the skeleton, lazy-created, index-registered); impeccable dependency dropped to a README recommendation
+    - experience-first: owns PRODUCT.md — strategy + user-type roster, no visuals; ships the skeleton adapted from impeccable's init; lazy-created, index-registered; roster changes via the context delta
+    - domain-modeling keeps CONTEXT.md (already carried the pattern)
+    - CONTEXT.md glossary: three files, three owners, one index line each
+    - maquette's copied ux-rules source pointers follow the rename
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md: settle project vs authoring repo
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md round 2: merge packaging terms, fold skill state into skill instance
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md round 3: split instruction files global/project, trim repo context files
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md round 4: drop worktree-primitive/layer-law/redundant-negation, rename external skill
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md round 5: fold persistence axis into stateful skill, drop agent-decision-vs-shipped-script
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * CONTEXT.md round 6: skill-domain vocabulary moves out — the skills carry their own concepts
+    
+    The shaping/backlog pipeline terms (shaping, slice/tracer bullet, spec
+    work-type, capture, subject, shaping registers, needs-shaping) were
+    implementation details of the skills leaking into the authoring repo's
+    glossary. Each concept is documented in its owner skill; CONTEXT.md keeps
+    only authoring-side vocabulary.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Snapshot the authoring-repo refactor for review
+    
+    Authored skills are used directly from skills/ — the self-install mounts,
+    marketplace manifest, installer, changelog, and lock file go; only external
+    installs remain under .agents/ and .claude/ (writing-for-agents,
+    improve-codebase-architecture, wait-what). docs/agents/ reduces to the
+    authoring docs (GIVING_CREDIT, SKILL-MECHANICS); consumer-run residue
+    (playbooks, evidence/, plans/, research/, site/) is dropped. Skill sources
+    slim their frontmatter and pick up agents/ sidecars.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Essential external skills ship from this repo
+    
+    Copied wholesale with credits or rewritten as our own — pinning the
+    version we reviewed rather than an evolving copy upstream controls.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Branch carries everything: context delta deleted, to-branch primitive publishes artifacts
+    
+    Shaping commits context files directly on the ticket's work branch; build-change continues on it — the change request carries them to main. Specs/prototypes/dossiers draft on the desk and publish at record time via the new to-branch primitive (commit to a branch with no checkout; smoke-tested). Stacked landing: the work branch is the feature branch. Direct: first slice inherits the shaping commits.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * WIP
+    
+    * Delete capture-to-inbox; external skills ship from this repo in CONTEXT.md
+    
+    The skill was the only consumer of the metadata.external mechanism, so
+    the external-skill vocabulary entry, the README's external-skill note,
+    and SKILL-MECHANICS' metadata key list drop it too.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Drop capture-to-inbox from relay's discovery exclusions
+    
+    The skill no longer exists, so relay's setup has no sibling instance
+    directory to skip. The published-surface eval also catches up with the
+    dropped-defaults frontmatter rule: relay's standalone status now shows
+    as no requires key at all, not requires: [].
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Move to-subagent and to-thread into system; slim staffing to a roster table
+    
+    Staffing drops the playbook/setup machinery (reference docs, templates,
+    evals) for a single task-type roster with separate model/effort/harness/
+    execution fields. to-subagent picks up the staffed-fields mapping and a
+    cross-harness stdin gotcha found by smoke test: close stdin (</dev/null)
+    on backgrounded shell-outs or codex exec waits forever on the open pipe.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Fix staffing routes from cross-harness smoke tests
+    
+    * Refine staffing roles across the core model roster
+    
+    * Clarify shaping artifact ownership
+    
+    * Tighten spec synthesis and subagent dispatch
+    
+    * Add diagram design sibling
+    
+    * Remove diagram profile state
+    
+    * Add engineering principles and human voice
+    
+    * Remove provider-specific argument hints
+    
+    * Sharpen shaping and remove synthetic probe evals
+    
+    * Refine research and prototype contracts
+    
+    * Refine staffing fallbacks and routes
+    
+    * Add pinned unslop skill
+    
+    * Restructure writing-for-humans into unslop-style passes
+    
+    Adopt the pass ordering and learnings from Cursor pstack's unslop
+    (reviewed commit bdf7aa3, unchanged upstream): clear base, then a
+    concrete tell scan, then soul, closing on the self-audit question.
+    Widen the README credit to cover the pass structure.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Split the writing standard: unslop, writing-for-humans, technical-writing
+    
+    writing-for-humans straddled two registers with conflicting rules:
+    conversational voice (vary rhythm, let mess in) and artifact uniformity
+    (STE-style discipline). Split by register instead:
+    
+    - unslop: the shared AI-tell scan, our pinned rewrite of Cursor pstack's
+    - writing-for-humans: conversation only; voice plus the Provost rhythm
+      quote (em dash edited to a comma per our punctuation rule)
+    - technical-writing: durable artifacts; distills ASD-STE100 and Google
+      developer style, adapted from Cursor pstack's technical-writing
+    
+    Both standards require unslop and degrade in one line without it.
+    AGENTS.md and CONTEXT.md now route by register; sibling skills still
+    cite writing-for-humans and get re-routed in a follow-up.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Route siblings by register, drop external unslop, sync install docs
+    
+    Nine skills whose prose lands in files, trackers, or change requests now
+    cite technical-writing (research, prototype, to-spec, to-slices,
+    build-change, prove-your-work, verify-your-work); shape and backlog cite
+    both registers. Chat-register skills (interview, merge-change,
+    to-thread) keep writing-for-humans. requires/optional records updated to
+    match, so consumer installs discover the right discipline.
+    
+    The installed external unslop is removed: the family now ships its own
+    copy in skills/, and AGENTS.md routes to it.
+    
+    README install instructions now mount the entire family via one
+    copy-paste command, the agent prompt points at it, and AGENTS.md gains
+    the rule that keeps those lists in sync with skills/. Catalog gains
+    unslop and technical-writing rows and drops the stale
+    writing-technical-docs row.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Add changelog with the writing-standard split as its first entry
+    
+    The README's Reconcile flow reads CHANGELOG.md; the file did not exist.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Sweep dangling skill symlinks and stale catalog rows
+    
+    All 26 .claude/skills symlinks from the August install pointed at
+    removed .agents/skills targets - authored skills run from skills/
+    directly, so the mounts were dead. The catalog loses four personal
+    skills whose directories no longer exist (manage-notes,
+    manage-opportunities, manage-tasks, review-opportunities).
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Scope the install command to the SDLC family and its supporting skills
+    
+    The install command mounts software-development and system, plus the
+    creative siblings SDLC skills name (bare-minimum-design,
+    diagram-design). Creative, thinking, and personal skills are the
+    appendix: discoverable in the catalog, installed by name. The AGENTS.md
+    sync rule now records that boundary.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    
+    * Restructure the lifecycle family around GitHub, one playbook, and verb skills
+    
+    Fix the platform to GitHub issues and PRs via gh, git, and an S3-compatible
+    bucket, and collapse the playbooks to docs/agents/environment.md. Backlog
+    becomes a thin dispatcher whose verbs (capture, groom, build, retro, status,
+    setup) each fan one run of a verb skill per unit: capture (was to-backlog),
+    shape, deliver (was build-change), retro (promoted from in-progress), with
+    merge (was merge-change) as the human gate. Labels, claims, deadlines, and
+    branch names are fixed in backlog/reference/labels.md.
+    
+    Shape commits every artifact to one artifact/<issue> branch and runs
+    to-slices at the close; to-slices publishes ready sub-issues that block the
+    spec issue; deliver gains the four issue kinds and the spec issue's coverage
+    check and promotion PR; merge closes children at their spec-branch merge and
+    folds in watch-until. Verification splits checks into guards and throwaway
+    scripts and treats the seed as a claim; the stage ledger is dropped.
+    
+    skill-loop leaves the install, to-tailnet moves to personal, watch-until is
+    removed. Sidecars, READMEs, the catalog, CONTEXT.md, AGENTS.md, and the
+    changelog follow.
+    
+    Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+    
+    * Ship a dark, Vercel-inspired default skin for diagram-design
+    
+    The shipped visual system flips to dark by default: true-black paper,
+    near-white ink, a neutral gray ramp for muted, soft, and rules, and one
+    blue accent (#0070f3) with a low-saturation blue for link arrows. Light
+    is now the alternate variant. style-guide.md defines both columns and
+    the inversion rule; every type reference, primitive, and template
+    carries the new hex values, the "Dark mode" sections become "Light
+    mode", and the tint alphas sit higher on the dark column. The semantic
+    override palette lists the dark-legible hexes and light mode darkens
+    them (C_dark), reversing the old C_light rule. Contrast figures cited
+    in the bar, line, scatter, and treemap references are recomputed for
+    the new tokens.
+    
+    template-dark.html becomes template-light.html; the variant slug suffix
+    is -light. The pre-baked example assets keep the upstream skin and are
+    documented as layout references only. Credits and changelog record the
+    reskin.
+    
+    Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+    
+    * Read the diagram-design skin off Vercel's Geist scales
+    
+    Replace the guessed dark tokens with values from the published Geist
+    color scales: paper is background-100 (#0a0a0a) not pure black, raised
+    node and card surfaces are gray-100 (#1a1a1a), hairlines stay at the
+    gray-alpha-400 alpha, and text keeps gray-900/1000. The accent moves
+    from the saturated blue-700 button fill to the blue-900 text step
+    (#52a8ff dark, #0068d6 light), which is what Geist uses for text,
+    icons, and strokes, and link arrows take blue-700 so they sit below
+    the focal element in brightness. The series and semantic override
+    palettes use each hue's 900 step with light-mode counterparts, and the
+    light variant takes those steps instead of darkening arithmetically.
+    
+    Chip text drops from weight 700 to 600, contrast figures cited in the
+    bar, line, scatter, and treemap references are recomputed for the new
+    paper, and the style guide gains a reading-comfort rule.
+    
+    Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+    
+    * Unify lifecycle convergence and preserve state across interrupted runs
+    
+    * Add visual lifecycle review with branching evidence and eval plan
+    
+    * Simplify ticket lifecycle skills and native worktree dispatch
+    
+    * Document the lifecycle visually and order manual skill review
+    
+    * Prune redundant skill negations and record command-recipe review
+    
+    * Use outcome instructions, refresh staffing, and add CLIProxyAPI image backend
+    
+    * Make retro a bounded transcript sweep with user-selected project issues
+    
+    * Group testing batches in milestones across capture, groom, and slicing
+    
+    * Index the complete software development family for manual review
+    
+    * Remove cross-skill file access and document package boundaries
+    
+    * Serve the mobile family review with linked Markdown readers
+    
+    * Simplify label setup and document further overengineering candidates
+    
+    * Simplify family instructions, isolate browser checks, and retire Relay
+    
+    * Document independent family review and staged repository eval plan
+    
+    * Fix lifecycle handoffs and prune skill instructions
+    
+    * Build selected specs and milestones in successive waves
+    
+    * Treat branch protection as optional during reviewed merges
+    
+    ---------
+    
+    Co-authored-by: Claude Fable 5 <noreply@anthropic.com>
+
+ .agents/asher-skills/install.json                  |   93 -
+ .agents/skills/adversarial-review/README.md        |   18 -
+ .agents/skills/adversarial-review/SKILL.md         |   50 -
+ .../adversarial-review/THIRD_PARTY_LICENSES.md     |    9 -
+ .../skills/adversarial-review/agents/openai.yaml   |    7 -
+ .agents/skills/adversarial-review/evals/probes.md  |   47 -
+ .../skills/adversarial-review/reference/conduct.md |   26 -
+ .agents/skills/backlog/README.md                   |   23 -
+ .agents/skills/backlog/SKILL.md                    |   47 -
+ .agents/skills/backlog/agents/openai.yaml          |    7 -
+ .agents/skills/backlog/evals/probes.md             |   95 -
+ .agents/skills/backlog/reference/machine-facts.md  |   30 -
+ .agents/skills/backlog/reference/setup.md          |   18 -
+ .../skills/backlog/scripts/check-machine-facts.py  |  142 -
+ .../backlog/templates/common/backlog-policy.md     |   94 -
+ .../backlog/templates/common/change-description.md |   20 -
+ .../skills/backlog/templates/common/environment.md |   92 -
+ .../skills/backlog/templates/common/platform.md    |   72 -
+ .../templates/skill-authoring/environment.md       |   61 -
+ .../backlog/templates/skill-authoring/evidence.md  |   36 -
+ .../skills/backlog/templates/software/codebase.md  |   30 -
+ .../skills/backlog/templates/software/evidence.md  |   55 -
+ .agents/skills/build/README.md                     |   17 -
+ .agents/skills/build/SKILL.md                      |   47 -
+ .agents/skills/build/agents/openai.yaml            |    7 -
+ .agents/skills/build/evals/probes.md               |   41 -
+ .agents/skills/code-review/README.md               |   18 -
+ .agents/skills/code-review/SKILL.md                |   53 -
+ .agents/skills/code-review/THIRD_PARTY_LICENSES.md |    9 -
+ .agents/skills/code-review/agents/openai.yaml      |    7 -
+ .agents/skills/code-review/evals/probes.md         |   35 -
+ .agents/skills/code-review/reference/smells.md     |   16 -
+ .agents/skills/code-review/reference/structure.md  |   26 -
+ .agents/skills/diagnosing-bugs/README.md           |   13 -
+ .agents/skills/diagnosing-bugs/SKILL.md            |   35 -
+ .agents/skills/diagnosing-bugs/agents/openai.yaml  |    7 -
+ .agents/skills/diagnosing-bugs/evals/answer-key.md |   14 -
+ .agents/skills/diagnosing-bugs/evals/probes.md     |   25 -
+ .../skills/diagnosing-bugs/reference/diagnosis.md  |   48 -
+ .agents/skills/diagnosing-bugs/reference/setup.md  |   12 -
+ .../diagnosing-bugs/templates/diagnosing-bugs.md   |   10 -
+ .../templates/skill-authoring/diagnosing-bugs.md   |   11 -
+ .agents/skills/domain-modeling/README.md           |   26 -
+ .agents/skills/domain-modeling/SKILL.md            |   47 -
+ .agents/skills/domain-modeling/agents/openai.yaml  |    7 -
+ .agents/skills/domain-modeling/evals/probes.md     |   29 -
+ .agents/skills/handoff/README.md                   |   17 -
+ .agents/skills/handoff/SKILL.md                    |   24 -
+ .agents/skills/handoff/agents/openai.yaml          |    7 -
+ .agents/skills/handoff/evals/probes.md             |   26 -
+ .agents/skills/implement/README.md                 |   18 -
+ .agents/skills/implement/SKILL.md                  |   34 -
+ .agents/skills/implement/agents/openai.yaml        |    7 -
+ .agents/skills/implement/evals/probes.md           |   26 -
+ .../improve-codebase-architecture/HTML-REPORT.md   |  123 +
+ .../skills/improve-codebase-architecture/SKILL.md  |   71 +
+ .../agents/openai.yaml                             |    5 +
+ .agents/skills/interview/README.md                 |   24 -
+ .agents/skills/interview/SKILL.md                  |   27 -
+ .agents/skills/interview/agents/openai.yaml        |    7 -
+ .agents/skills/interview/evals/probes.md           |   35 -
+ .agents/skills/merge-changes/README.md             |    7 -
+ .agents/skills/merge-changes/SKILL.md              |   38 -
+ .agents/skills/merge-changes/agents/openai.yaml    |    6 -
+ .agents/skills/merge-changes/evals/probes.md       |   35 -
+ .agents/skills/prototype/README.md                 |   27 -
+ .agents/skills/prototype/SKILL.md                  |   36 -
+ .agents/skills/prototype/agents/openai.yaml        |    7 -
+ .agents/skills/prototype/evals/probes.md           |   29 -
+ .agents/skills/prototype/reference/prototyping.md  |   54 -
+ .agents/skills/prove-your-work/README.md           |   17 -
+ .agents/skills/prove-your-work/SKILL.md            |   34 -
+ .agents/skills/prove-your-work/agents/openai.yaml  |    7 -
+ .agents/skills/prove-your-work/evals/probes.md     |   32 -
+ .agents/skills/research/README.md                  |    7 -
+ .agents/skills/research/SKILL.md                   |   40 -
+ .agents/skills/research/agents/openai.yaml         |    7 -
+ .agents/skills/research/evals/probes.md            |   29 -
+ .../skills/research/reference/research-contract.md |   83 -
+ .agents/skills/research/reference/setup.md         |   12 -
+ .agents/skills/research/templates/researching.md   |   26 -
+ .agents/skills/retro/README.md                     |   61 -
+ .agents/skills/retro/SKILL.md                      |  152 -
+ .agents/skills/retro/agents/openai.yaml            |    7 -
+ .agents/skills/retro/evals/key.md                  |   65 -
+ .agents/skills/retro/evals/probes.md               |   74 -
+ .agents/skills/retro/evals/scrub-dryrun.sh         |   77 -
+ .agents/skills/retro/reference/setup.md            |   80 -
+ .agents/skills/retro/scripts/scrub.py              |   90 -
+ .agents/skills/retro/templates/retro.md            |   50 -
+ .agents/skills/serve-via-tailnet/README.md         |   16 -
+ .agents/skills/serve-via-tailnet/SKILL.md          |   32 -
+ .../skills/serve-via-tailnet/agents/openai.yaml    |    7 -
+ .agents/skills/serve-via-tailnet/evals/probes.md   |   29 -
+ .../reference/annotation-contract.md               |   51 -
+ .../skills/serve-via-tailnet/reference/scripts.md  |   79 -
+ .../serve-via-tailnet/reference/surface-and-hub.md |   33 -
+ .../serve-via-tailnet/scripts/pages/chrome.css     |   79 -
+ .../serve-via-tailnet/scripts/pages/chrome.js      |  246 --
+ .../serve-via-tailnet/scripts/review-await.py      |   70 -
+ .../serve-via-tailnet/scripts/review-server.py     |  607 ----
+ .agents/skills/shape/README.md                     |   18 -
+ .agents/skills/shape/SKILL.md                      |   69 -
+ .agents/skills/shape/agents/openai.yaml            |    7 -
+ .agents/skills/shape/evals/probes.md               |   50 -
+ .agents/skills/skill-loop/README.md                |   25 -
+ .agents/skills/skill-loop/SKILL.md                 |   77 -
+ .../skills/skill-loop/reference/reviewer-prompt.md |   48 -
+ .agents/skills/staffing/README.md                  |   37 -
+ .agents/skills/staffing/SKILL.md                   |   56 -
+ .agents/skills/staffing/agents/openai.yaml         |    7 -
+ .agents/skills/staffing/reference/harness.md       |   40 -
+ .../staffing/reference/install-and-reconcile.md    |   38 -
+ .agents/skills/staffing/reference/machine-audit.md |   97 -
+ .../staffing/reference/rankings-and-routing.md     |   75 -
+ .../staffing/reference/roles-and-fallback.md       |   33 -
+ .agents/skills/staffing/reference/setup.md         |   13 -
+ .../staffing/templates/instruction-trigger.md      |   14 -
+ .../skills/staffing/templates/seed/provider.txt    |    1 -
+ .../skills/staffing/templates/seed/roster-seed.md  |   44 -
+ .agents/skills/tdd/README.md                       |   17 -
+ .agents/skills/tdd/SKILL.md                        |   43 -
+ .agents/skills/tdd/THIRD_PARTY_LICENSES.md         |    9 -
+ .agents/skills/tdd/agents/openai.yaml              |    7 -
+ .agents/skills/tdd/evals/probes.md                 |   29 -
+ .agents/skills/tdd/reference/mocking.md            |   60 -
+ .agents/skills/tdd/reference/tests.md              |   77 -
+ .agents/skills/to-backlog/README.md                |   30 -
+ .agents/skills/to-backlog/SKILL.md                 |   42 -
+ .agents/skills/to-backlog/agents/openai.yaml       |    7 -
+ .agents/skills/to-backlog/evals/probes.md          |   38 -
+ .agents/skills/to-slices/README.md                 |   39 -
+ .agents/skills/to-slices/SKILL.md                  |   47 -
+ .agents/skills/to-slices/THIRD_PARTY_LICENSES.md   |    9 -
+ .agents/skills/to-slices/agents/openai.yaml        |    7 -
+ .agents/skills/to-slices/evals/probes.md           |   38 -
+ .agents/skills/to-slices/reference/slicing.md      |   85 -
+ .../skills/to-slices/reference/template-guide.md   |   28 -
+ .agents/skills/to-spec/README.md                   |   36 -
+ .agents/skills/to-spec/SKILL.md                    |   46 -
+ .agents/skills/to-spec/THIRD_PARTY_LICENSES.md     |    9 -
+ .agents/skills/to-spec/agents/openai.yaml          |    7 -
+ .agents/skills/to-spec/evals/probes.md             |   50 -
+ .agents/skills/to-spec/reference/synthesis.md      |   80 -
+ .agents/skills/to-spec/reference/template-guide.md |   26 -
+ .agents/skills/to-subagent/README.md               |   18 -
+ .agents/skills/to-subagent/SKILL.md                |   60 -
+ .agents/skills/to-subagent/agents/openai.yaml      |    7 -
+ .agents/skills/to-subagent/evals/probes.md         |   74 -
+ .agents/skills/to-thread/README.md                 |   12 -
+ .agents/skills/to-thread/SKILL.md                  |   84 -
+ .agents/skills/to-thread/evals/probes.md           |   47 -
+ .agents/skills/to-thread/evals/test_t3_thread.py   |  503 ----
+ .../skills/to-thread/scripts/name-codex-thread.py  |   61 -
+ .agents/skills/to-thread/scripts/t3-thread.py      |  551 ----
+ .agents/skills/verify-your-work/README.md          |   17 -
+ .agents/skills/verify-your-work/SKILL.md           |   44 -
+ .agents/skills/verify-your-work/agents/openai.yaml |    7 -
+ .agents/skills/verify-your-work/evals/probes.md    |   38 -
+ .agents/skills/wait-what/SKILL.md                  |    7 +
+ .agents/skills/wait-what/agents/openai.yaml        |    5 +
+ .agents/skills/watch-until/README.md               |   17 -
+ .agents/skills/watch-until/SKILL.md                |   29 -
+ .agents/skills/watch-until/agents/openai.yaml      |    7 -
+ .agents/skills/watch-until/evals/probes.md         |   29 -
+ .agents/skills/worktree/README.md                  |   13 -
+ .agents/skills/worktree/SKILL.md                   |   52 -
+ .agents/skills/worktree/agents/openai.yaml         |    7 -
+ .agents/skills/worktree/evals/probes.md            |   35 -
+ .agents/skills/worktree/evals/test_worktree.py     |  655 ----
+ .agents/skills/worktree/scripts/worktree.py        |  508 ----
+ .../skills/writing-for-agents/SKILL-MECHANICS.md   |   22 +
+ .agents/skills/writing-for-agents/SKILL.md         |   81 +
+ .../skills/writing-for-agents/agents/openai.yaml   |    3 +
+ .agents/skills/writing-great-skills/GLOSSARY.md    |  181 --
+ .agents/skills/writing-great-skills/SKILL.md       |   82 -
+ .claude-plugin/marketplace.json                    |  101 -
+ .claude/skills/adversarial-review                  |    1 -
+ .claude/skills/backlog                             |    1 -
+ .claude/skills/build                               |    1 -
+ .claude/skills/code-review                         |    1 -
+ .claude/skills/diagnosing-bugs                     |    1 -
+ .claude/skills/domain-modeling                     |    1 -
+ .claude/skills/handoff                             |    1 -
+ .claude/skills/implement                           |    1 -
+ .../improve-codebase-architecture/HTML-REPORT.md   |  123 +
+ .../skills/improve-codebase-architecture/SKILL.md  |   71 +
+ .../agents/openai.yaml                             |    5 +
+ .claude/skills/interview                           |    1 -
+ .claude/skills/merge-changes                       |    1 -
+ .claude/skills/prototype                           |    1 -
+ .claude/skills/prove-your-work                     |    1 -
+ .claude/skills/research                            |    1 -
+ .claude/skills/retro                               |    1 -
+ .claude/skills/serve-via-tailnet                   |    1 -
+ .claude/skills/shape                               |    1 -
+ .claude/skills/skill-loop                          |    1 -
+ .claude/skills/staffing/README.md                  |   37 -
+ .claude/skills/staffing/SKILL.md                   |   56 -
+ .claude/skills/staffing/agents/openai.yaml         |    7 -
+ .claude/skills/staffing/reference/harness.md       |   37 -
+ .../staffing/reference/install-and-reconcile.md    |   38 -
+ .claude/skills/staffing/reference/machine-audit.md |   97 -
+ .../staffing/reference/rankings-and-routing.md     |   75 -
+ .../staffing/reference/roles-and-fallback.md       |   33 -
+ .claude/skills/staffing/reference/setup.md         |   13 -
+ .../staffing/templates/instruction-trigger.md      |   14 -
+ .../skills/staffing/templates/seed/provider.txt    |    1 -
+ .../skills/staffing/templates/seed/roster-seed.md  |   45 -
+ .claude/skills/tdd                                 |    1 -
+ .claude/skills/to-backlog                          |    1 -
+ .claude/skills/to-slices                           |    1 -
+ .claude/skills/to-spec                             |    1 -
+ .claude/skills/to-subagent                         |    1 -
+ .claude/skills/to-thread                           |    1 -
+ .claude/skills/verify-your-work                    |    1 -
+ .claude/skills/wait-what/SKILL.md                  |    7 +
+ .claude/skills/wait-what/agents/openai.yaml        |    5 +
+ .claude/skills/watch-until                         |    1 -
+ .claude/skills/worktree                            |    1 -
+ .../skills/writing-for-agents/SKILL-MECHANICS.md   |   22 +
+ .claude/skills/writing-for-agents/SKILL.md         |   81 +
+ .../skills/writing-for-agents/agents/openai.yaml   |    3 +
+ .claude/skills/writing-great-skills                |    1 -
+ AGENTS.md                                          |  148 +-
+ CHANGELOG.md                                       |  149 +
+ CLAUDE.md                                          |    8 -
+ CONTEXT.md                                         |   50 +-
+ README.md                                          |  205 +-
+ .../audits/2026-09-05-family-review.html           | 2612 ++++++++++++++++
+ .../eval-runs/2026-07-26-teardown-sweep/prompt.md  |  158 -
+ .../eval-runs/2026-07-26-teardown-sweep/results.md |   41 -
+ .../2026-07-26-teardown-sweep/run-claude-sonnet.md |   42 -
+ .../run-codex-gpt-5.6-sol.txt                      |  333 --
+ .../2026-07-26-teardown-sweep/run-codex.sh         |    5 -
+ .../restructure/orchestration-tree.html            |  402 +++
+ bin/asher-skills.mjs                               |   42 -
+ bun.lock                                           |   25 +
+ capture-to-inbox-workspace/README.md               |    5 -
+ .../legacy/2026-07-09/Queue to Inbox-174320.xml    |  474 ---
+ .../legacy/2026-07-09/Queue to Inbox-174926.xml    |  474 ---
+ .../legacy/2026-07-09/Queue to Inbox-182436.xml    |  486 ---
+ .../legacy/2026-07-09/Queue to Inbox-182747.xml    |  520 ----
+ .../legacy/2026-07-09/Queue to Inbox-183115.xml    |  662 ----
+ .../legacy/build_shortcut.py                       |  307 --
+ ...-project-file-is-the-sole-staffing-authority.md |   21 -
+ docs/adr/0002-project-owns-worktree-lifecycle.md   |   23 -
+ docs/agents/GIVING-CREDIT.md                       |    3 +
+ docs/agents/SKILL-MECHANICS.md                     |    7 +
+ docs/agents/backlog-policy.md                      |   91 -
+ docs/agents/change-description.md                  |   20 -
+ docs/agents/codebase.md                            |   49 -
+ docs/agents/diagnosing-bugs.md                     |   10 -
+ docs/agents/environment.md                         |  112 -
+ docs/agents/evidence.md                            |   61 -
+ docs/agents/platform.md                            |   81 -
+ docs/agents/probe-evals.md                         |   49 -
+ docs/agents/prototyping.md                         |    9 -
+ docs/agents/researching.md                         |   20 -
+ docs/agents/retro-denylist.txt                     |    7 -
+ docs/agents/retro.md                               |   39 -
+ docs/agents/staffing.md                            |   38 -
+ docs/skill-instruction-review.md                   |  134 +
+ docs/software-development-adversarial-review.html  |  279 ++
+ docs/software-development-adversarial-review.md    |  166 +
+ docs/software-development-review.md                |  962 ++++++
+ docs/software-development-reviewer-reports.md      |  696 +++++
+ docs/software-development.html                     |   82 +
+ evidence/1-extract-staffing/gpt55-transcript.md    |   31 -
+ evidence/1-extract-staffing/opus-transcript.md     |   31 -
+ evidence/1-extract-staffing/verdict-table.md       |   25 -
+ evidence/10-to-sprites/c12-contact-sheet.png       |  Bin 27935 -> 0 bytes
+ evidence/10-to-sprites/gpt55-probe-transcript.md   |   56 -
+ evidence/10-to-sprites/opus-probe-transcript.md    |   38 -
+ evidence/10-to-sprites/probe-eval.md               |   46 -
+ evidence/10-to-sprites/selfcheck-transcript.txt    |   25 -
+ evidence/10-to-sprites/spritesheet.json            |  702 -----
+ evidence/114-global-staffing-retirement/README.md  |   30 -
+ .../backup/claude/CLAUDE.md                        |    4 -
+ .../backup/claude/staffing.md                      |   65 -
+ .../backup/codex/AGENTS.md                         |    4 -
+ .../backup/codex/staffing.md                       |   66 -
+ .../after-claude.md                                |   35 -
+ .../after-codex.txt                                |  270 --
+ .../before-claude.md                               |   23 -
+ .../before-codex.txt                               |  204 --
+ .../132-adversarial-review-loop-driver/verdicts.md |   29 -
+ .../16-review-await-watcher/c1-c9-file-checks.txt  |   38 -
+ .../c10-c11-probe-results.md                       |   21 -
+ evidence/16-review-await-watcher/c7-c8-runtime.txt |    6 -
+ evidence/166-staffing-self-heal/README.md          |   10 -
+ .../166-staffing-self-heal/claude-leg-P28-P33.md   |   15 -
+ .../166-staffing-self-heal/codex-leg-P28-P33.txt   |  520 ----
+ .../claude-subagent-transcript.md                  |   42 -
+ .../codex-sol-transcript.txt                       |  618 ----
+ .../174-opus5-seed-recalibration/verdict-table.md  |   15 -
+ evidence/178-stage-ledger/claude-build-P9.md       |   41 -
+ evidence/178-stage-ledger/claude-prove-P6.md       |   31 -
+ evidence/178-stage-ledger/codex-build-P9.txt       |  104 -
+ evidence/178-stage-ledger/codex-prove-P6.txt       |   77 -
+ evidence/178-stage-ledger/verdicts.md              |   14 -
+ .../artifact-agnostic-serve.txt                    |   16 -
+ evidence/2-extract-review-loop/probe-eval.md       |   23 -
+ evidence/2-extract-review-loop/runtime-checks.txt  |   15 -
+ .../gpt55-executor-transcript.md                   |   13 -
+ evidence/27-harden-setup-audit/verification.md     |   42 -
+ .../3-maquette-review-loop/ac6-serve-dry-run.txt   |   30 -
+ evidence/3-maquette-review-loop/probe-eval.md      |   32 -
+ evidence/31-phase4-install-guard/probe-gpt5.5.txt  |   10 -
+ evidence/31-phase4-install-guard/probe-opus.txt    |   22 -
+ .../32-setup-domain-packs/transcript-gpt56sol.md   |  131 -
+ evidence/32-setup-domain-packs/transcript-opus.md  |   91 -
+ evidence/32-setup-domain-packs/verdicts.md         |   32 -
+ evidence/33-draft-work-type/README.md              |   29 -
+ evidence/33-draft-work-type/claude-opus-p1-p4.md   |   29 -
+ evidence/33-draft-work-type/claude-opus-p5.md      |   16 -
+ evidence/33-draft-work-type/codex-gpt5.5-p1-p4.md  |   26 -
+ evidence/33-draft-work-type/codex-gpt5.5-p5.md     |   15 -
+ .../33-draft-work-type/file-checks-ac1-ac6.txt     |   34 -
+ evidence/34/README.md                              |   33 -
+ evidence/34/dry-run-probe-scenario.md              |   52 -
+ evidence/34/dry-run-probe-transcript.md            |  100 -
+ evidence/35-skill-authoring-pack/static-checks.txt |   48 -
+ .../transcript-claude-probes.md                    |   90 -
+ .../transcript-codex-probes.md                     |  198 --
+ evidence/35-skill-authoring-pack/verdicts.md       |   35 -
+ .../transcript-claude-probes.md                    |   56 -
+ .../transcript-codex-probes.md                     |  659 ----
+ .../transcript-consumer-run.md                     |  173 --
+ evidence/37-selfhost-mount-spec/verdicts.md        |  110 -
+ .../4-extract-plan/c7-plan-skeleton-render.png     |  Bin 87273 -> 0 bytes
+ evidence/4-extract-plan/file-checks.txt            |   52 -
+ evidence/4-extract-plan/probe-eval.md              |   64 -
+ evidence/44-compactness-dossier.md                 |   63 -
+ evidence/44-provenance-audit.md                    |   24 -
+ evidence/44-sibling-harness-dispatch.md            |   47 -
+ evidence/44-source-layout-and-install.md           |   30 -
+ .../codex-gpt55-probe-transcript.md                |   11 -
+ .../5-prototype-composer/opus-probe-transcript.md  |   20 -
+ evidence/5-prototype-composer/verdict-table.md     |   36 -
+ evidence/57-detached-review-boundary.md            |   26 -
+ .../6-slim-backlog/c1-c11-verification-log.txt     |   41 -
+ evidence/6-slim-backlog/c9-c10-probe-eval.md       |   30 -
+ evidence/7-setup-asher-skills/probe-eval-codex.txt |   49 -
+ evidence/7-setup-asher-skills/probe-eval-opus.md   |   41 -
+ evidence/7-setup-asher-skills/structure-checks.txt |   49 -
+ evidence/7-setup-asher-skills/verdict-table.md     |   36 -
+ evidence/8-to-spec/codex-probe-transcript.md       |   41 -
+ evidence/8-to-spec/opus-probe-transcript.md        |   31 -
+ evidence/80-decouple-planning/probe-eval.md        |   26 -
+ evidence/84-interview-skills/probe-eval.md         |   21 -
+ evidence/9-to-tickets/probe-eval-codex.txt         |   23 -
+ evidence/9-to-tickets/probe-eval-opus.md           |   35 -
+ evidence/9-to-tickets/verdict-table.md             |   39 -
+ evidence/sdlc-lifecycle/probe-eval.md              |   19 -
+ .../backlog-runstate-residue-20260724.tar.gz       |  Bin 4643 -> 0 bytes
+ .../drained-v1-state/review-state-20260724.tar.gz  |  Bin 13876 -> 0 bytes
+ .../migration-inventories.json                     | 1525 ----------
+ evidence/v2-consumer-migration/migration-maps.json | 1455 ---------
+ evidence/v2-consumer-migration/migration-maps.md   |  925 ------
+ evidence/v2-consumer-migration/migration-plan.md   |  172 --
+ .../v2-fix-verification/backlog-sol-transcript.md  |  101 -
+ .../v2-fix-verification/build-sol-transcript.md    |   22 -
+ evidence/v2-fix-verification/probe-verdicts.md     |   70 -
+ .../to-subagent-sol-transcript.md                  |   38 -
+ .../verify-your-work-sol-transcript.md             |   23 -
+ evidence/v2-probe-runs/transcript-claude-opus.md   |  140 -
+ evidence/v2-probe-runs/transcript-codex-sol.md     |  299 --
+ evidence/v2-probe-runs/verdicts.md                 |   34 -
+ external-dependencies.lock.json                    |   12 -
+ .../evals/2026-07-29-probes-claude-subagent.md     |   32 -
+ .../evals/2026-07-29-probes-gpt-5.6-sol.md         |  106 -
+ goodwork-workspace/evals/2026-07-29-verdicts.md    |   36 -
+ manage-communications-workspace/probe-verdict.md   |   30 -
+ package.json                                       |   20 +-
+ plans/1-extract-staffing.html                      |  246 --
+ plans/10-sprite-sheet-extractor.html               |  311 --
+ plans/16-review-await-watcher.html                 |  230 --
+ plans/2-extract-review-loop.html                   |  249 --
+ plans/27-harden-setup-audit.html                   |  207 --
+ plans/3-maquette-review-loop.html                  |  164 -
+ plans/31-phase4-install-guard.html                 |  225 --
+ plans/32-setup-domain-packs.html                   |  218 --
+ plans/33-draft-work-type.html                      |  207 --
+ plans/34-harden-setup-existing-code-projects.html  |  232 --
+ plans/35-skill-authoring-pack.html                 |  250 --
+ plans/4-extract-plan.html                          |  235 --
+ ...44-backlog-decomposition-and-run-hardening.html |  972 ------
+ plans/5-prototype-composer.html                    |  203 --
+ plans/6-slim-backlog.html                          |  227 --
+ ...harness-specific-skills-and-global-context.html |  805 -----
+ plans/7-setup-asher-skills.html                    |  282 --
+ ...73-orchestration-liveness-staffing-browser.html |  470 ---
+ plans/8-to-spec.html                               |  235 --
+ plans/9-to-tickets.html                            |  278 --
+ plans/relay-agentmail-orchestration.html           |   36 -
+ plans/until-zero-skill-migration.html              |  330 --
+ relay-workspace/AGENTS.md                          |    5 +-
+ relay-workspace/README.md                          |    5 +-
+ relay-workspace/iteration-1/benchmark.json         |   24 -
+ relay-workspace/iteration-1/executor-a.md          |   97 -
+ relay-workspace/iteration-1/executor-b.md          |   99 -
+ relay-workspace/iteration-1/grading.md             |   26 -
+ relay-workspace/iteration-1/reviewer.md            |   14 -
+ relay-workspace/iteration-2/benchmark.json         |   27 -
+ relay-workspace/iteration-2/executor-a.md          |   24 -
+ relay-workspace/iteration-2/executor-b.md          |  117 -
+ relay-workspace/iteration-2/grading.md             |   36 -
+ relay-workspace/iteration-2/probe-task.md          |   65 -
+ relay-workspace/iteration-3/benchmark.json         |   22 -
+ relay-workspace/iteration-3/executor-a.md          |   24 -
+ relay-workspace/iteration-3/executor-b.md          |  128 -
+ relay-workspace/iteration-3/grading.md             |   30 -
+ relay-workspace/iteration-3/probe-task.md          |   65 -
+ relay-workspace/iteration-3/reviewer.md            |   17 -
+ research/afk-spec-ticket-lifecycle/brief.md        |   52 -
+ research/afk-spec-ticket-lifecycle/findings.md     |  174 --
+ .../lifecycle-design.html                          |  592 ----
+ .../review-state/server.log                        | 2627 ----------------
+ .../review-surface/.registry.lock                  |    0
+ .../review-surface/index.html                      |   30 -
+ .../review-surface/registry.json                   |    4 -
+ research/authoring-context-leakage/findings.md     |   46 -
+ research/cold-read-sdlc/findings.md                |   49 -
+ research/cold-read-sdlc/raw-reports.md             |  747 -----
+ research/site-diagram-stack/findings.md            |   78 -
+ research/skill-verbosity-audit/findings.md         |   53 -
+ research/skill-verbosity-audit/raw-reports.md      |  718 -----
+ research/wayfinder-research.html                   | 1620 ----------
+ site/MAINTENANCE.md                                |   28 -
+ site/app.js                                        |  822 -----
+ site/check.py                                      |  145 -
+ site/index.html                                    |  183 --
+ site/vendor/markdown-it.LICENSE                    |   22 -
+ site/vendor/markdown-it.min.js                     |    2 -
+ site/vendor/x6.LICENSE                             |   21 -
+ site/vendor/x6.min.js                              |    1 -
+ site/views/backlog.json                            |  327 --
+ site/views/journey.json                            |  180 --
+ site/views/sdlc.json                               | 1060 -------
+ site/views/sequence.json                           |  343 ---
+ site/views/tickets.json                            |  150 -
+ skills-lock.json                                   |   12 +
+ skills/creative/bare-minimum-design/README.md      |    9 +
+ skills/creative/bare-minimum-design/SKILL.md       |   30 +
+ .../bare-minimum-design/agents/openai.yaml         |    7 +
+ .../references/notifications.md                    |   10 +
+ .../bare-minimum-design/templates/DESIGN.md        |   56 +
+ skills/creative/bare-minimum-ux/README.md          |    7 -
+ skills/creative/bare-minimum-ux/SKILL.md           |   29 -
+ skills/creative/bare-minimum-ux/agents/openai.yaml |    7 -
+ skills/creative/bare-minimum-ux/evals/probes.md    |   14 -
+ .../bare-minimum-ux/references/notifications.md    |   10 -
+ skills/creative/codex-imagegen/README.md           |   19 +-
+ skills/creative/codex-imagegen/SKILL.md            |   99 +-
+ skills/creative/codex-imagegen/agents/openai.yaml  |    4 +-
+ .../codex-imagegen/evals/probe-answer-key.md       |    9 -
+ skills/creative/codex-imagegen/evals/probes.md     |   23 -
+ .../codex-imagegen/evals/versioning_dryrun.py      |   21 +-
+ .../codex-imagegen/reference/api-key-path.md       |   14 +-
+ .../creative/codex-imagegen/reference/backends.md  |   51 +
+ .../codex-imagegen/reference/layered-mode.md       |    4 +-
+ .../reference/spritesheet-prompts.md               |    2 +
+ .../creative/codex-imagegen/scripts/chroma_key.py  |    9 +-
+ .../codex-imagegen/scripts/codex_imagegen.py       |  194 +-
+ .../codex-imagegen/scripts/extract_spritesheet.py  |   55 +-
+ .../codex-imagegen/scripts/image_backends.py       |  259 ++
+ .../creative/codex-imagegen/tests/test_backends.py |  428 +++
+ .../creative/diagram-design}/LICENSE               |    2 +-
+ skills/creative/diagram-design/README.md           |   16 +
+ skills/creative/diagram-design/SKILL.md            |  473 +++
+ .../diagram-design/THIRD_PARTY_LICENSES.md         |   43 +
+ skills/creative/diagram-design/agents/openai.yaml  |    7 +
+ .../assets/example-architecture-dark.html          |  182 ++
+ .../assets/example-architecture-full.html          |  194 ++
+ .../assets/example-architecture.html               |  183 ++
+ .../diagram-design/assets/example-bar-dark.html    |  129 +
+ .../diagram-design/assets/example-bar-full.html    |  105 +
+ .../diagram-design/assets/example-bar.html         |  129 +
+ .../diagram-design/assets/example-bubble-dark.html |  147 +
+ .../diagram-design/assets/example-bubble-full.html |  177 ++
+ .../diagram-design/assets/example-bubble.html      |  147 +
+ .../assets/example-data-flow-dark.html             |  143 +
+ .../assets/example-data-flow-full.html             |  185 ++
+ .../diagram-design/assets/example-data-flow.html   |  143 +
+ .../assets/example-datalake-dark.html              |  243 ++
+ .../assets/example-datalake-full.html              |  248 ++
+ .../diagram-design/assets/example-datalake.html    |  269 ++
+ .../assets/example-db-schema-dark.html             |  302 ++
+ .../assets/example-db-schema-full.html             |  305 ++
+ .../diagram-design/assets/example-db-schema.html   |  302 ++
+ .../assets/example-dependency-dark.html            |  224 ++
+ .../assets/example-dependency-full.html            |  227 ++
+ .../diagram-design/assets/example-dependency.html  |  224 ++
+ .../assets/example-deployment-dark.html            |  190 ++
+ .../assets/example-deployment-full.html            |  202 ++
+ .../diagram-design/assets/example-deployment.html  |  190 ++
+ .../assets/example-dp-integration-dark.html        |   80 +
+ .../assets/example-dp-integration-full.html        |   90 +
+ .../assets/example-dp-integration.html             |   80 +
+ .../assets/example-dp-security-matrix-dark.html    |   31 +
+ .../assets/example-dp-security-matrix-full.html    |   32 +
+ .../assets/example-dp-security-matrix.html         |   88 +
+ .../diagram-design/assets/example-er-dark.html     |  202 ++
+ .../diagram-design/assets/example-er-full.html     |  205 ++
+ .../creative/diagram-design/assets/example-er.html |  202 ++
+ .../assets/example-fishbone-dark.html              |  152 +
+ .../assets/example-fishbone-full.html              |  146 +
+ .../diagram-design/assets/example-fishbone.html    |  152 +
+ .../assets/example-flowchart-dark.html             |  156 +
+ .../assets/example-flowchart-full.html             |  159 +
+ .../diagram-design/assets/example-flowchart.html   |  156 +
+ .../diagram-design/assets/example-gantt-dark.html  |  137 +
+ .../diagram-design/assets/example-gantt-full.html  |  127 +
+ .../diagram-design/assets/example-gantt.html       |  137 +
+ .../assets/example-high-level-dark.html            |  251 ++
+ .../assets/example-high-level-full.html            |  247 ++
+ .../assets/example-high-level-vertical-dark.html   |  274 ++
+ .../assets/example-high-level-vertical-full.html   |  252 ++
+ .../assets/example-high-level-vertical.html        |  325 ++
+ .../diagram-design/assets/example-high-level.html  |  301 ++
+ .../assets/example-import-drawio.html              |  185 ++
+ .../assets/example-import-mermaid.html             |   70 +
+ .../assets/example-it-state-dark.html              |   90 +
+ .../assets/example-it-state-full.html              |   69 +
+ .../diagram-design/assets/example-it-state.html    |  128 +
+ .../assets/example-journey-dark.html               |  148 +
+ .../assets/example-journey-full.html               |  142 +
+ .../diagram-design/assets/example-journey.html     |  148 +
+ .../diagram-design/assets/example-kanban-dark.html |  174 ++
+ .../diagram-design/assets/example-kanban-full.html |  178 ++
+ .../diagram-design/assets/example-kanban.html      |  174 ++
+ .../diagram-design/assets/example-layers-dark.html |  123 +
+ .../diagram-design/assets/example-layers-full.html |  126 +
+ .../diagram-design/assets/example-layers.html      |  123 +
+ .../diagram-design/assets/example-line-dark.html   |  111 +
+ .../diagram-design/assets/example-line-full.html   |  105 +
+ .../diagram-design/assets/example-line.html        |  111 +
+ .../diagram-design/assets/example-loop-dark.html   |  100 +
+ .../diagram-design/assets/example-loop-full.html   |  137 +
+ .../assets/example-loop-terminal.html              |  347 +++
+ .../diagram-design/assets/example-loop.html        |  100 +
+ .../assets/example-medallion-dark.html             |  159 +
+ .../assets/example-medallion-full.html             |  201 ++
+ .../diagram-design/assets/example-medallion.html   |  159 +
+ .../diagram-design/assets/example-nested-dark.html |  132 +
+ .../diagram-design/assets/example-nested-full.html |  135 +
+ .../diagram-design/assets/example-nested.html      |  136 +
+ .../assets/example-org-chart-dark.html             |   45 +
+ .../assets/example-org-chart-full.html             |   45 +
+ .../diagram-design/assets/example-org-chart.html   |   45 +
+ .../assets/example-paved-road-animated.html        |  546 ++++
+ .../diagram-design/assets/example-polar-dark.html  |  116 +
+ .../diagram-design/assets/example-polar-full.html  |  147 +
+ .../diagram-design/assets/example-polar.html       |  116 +
+ .../assets/example-policy-trace-animated.html      |  490 +++
+ .../assets/example-process-dark.html               |   64 +
+ .../assets/example-process-full.html               |   74 +
+ .../diagram-design/assets/example-process.html     |   64 +
+ .../assets/example-pyramid-dark.html               |  119 +
+ .../assets/example-pyramid-full.html               |  122 +
+ .../diagram-design/assets/example-pyramid.html     |  119 +
+ .../assets/example-quadrant-consultant.html        |  166 +
+ .../assets/example-quadrant-dark.html              |  135 +
+ .../assets/example-quadrant-full.html              |  138 +
+ .../diagram-design/assets/example-quadrant.html    |  135 +
+ .../assets/example-queue-animated.html             |  577 ++++
+ .../diagram-design/assets/example-radar-dark.html  |  139 +
+ .../diagram-design/assets/example-radar-full.html  |  135 +
+ .../diagram-design/assets/example-radar.html       |  139 +
+ .../assets/example-ridgeline-dark.html             |  104 +
+ .../assets/example-ridgeline-full.html             |  134 +
+ .../diagram-design/assets/example-ridgeline.html   |  104 +
+ .../diagram-design/assets/example-sankey-dark.html |  150 +
+ .../diagram-design/assets/example-sankey-full.html |  151 +
+ .../diagram-design/assets/example-sankey.html      |  150 +
+ .../assets/example-scatter-dark.html               |  141 +
+ .../assets/example-scatter-full.html               |  116 +
+ .../diagram-design/assets/example-scatter.html     |  141 +
+ .../assets/example-sequence-dark.html              |  222 ++
+ .../assets/example-sequence-full.html              |  388 +++
+ .../assets/example-sequence-oauth-dark.html        |  188 ++
+ .../assets/example-sequence-oauth-full.html        |  350 +++
+ .../assets/example-sequence-oauth.html             |  227 ++
+ .../diagram-design/assets/example-sequence.html    |  222 ++
+ .../assets/example-slopegraph-dark.html            |  119 +
+ .../assets/example-slopegraph-full.html            |  149 +
+ .../diagram-design/assets/example-slopegraph.html  |  119 +
+ .../diagram-design/assets/example-state-dark.html  |  147 +
+ .../diagram-design/assets/example-state-full.html  |  150 +
+ .../diagram-design/assets/example-state.html       |  147 +
+ .../assets/example-story-map-dark.html             |  184 ++
+ .../assets/example-story-map-full.html             |  188 ++
+ .../diagram-design/assets/example-story-map.html   |  184 ++
+ .../assets/example-swimlane-dark.html              |  172 ++
+ .../assets/example-swimlane-full.html              |  175 ++
+ .../diagram-design/assets/example-swimlane.html    |  172 ++
+ .../assets/example-timeline-dark.html              |  135 +
+ .../assets/example-timeline-full.html              |  138 +
+ .../diagram-design/assets/example-timeline.html    |  135 +
+ .../diagram-design/assets/example-tree-dark.html   |  173 ++
+ .../diagram-design/assets/example-tree-full.html   |  176 ++
+ .../diagram-design/assets/example-tree.html        |  173 ++
+ .../assets/example-treemap-dark.html               |  107 +
+ .../assets/example-treemap-full.html               |  134 +
+ .../diagram-design/assets/example-treemap.html     |  107 +
+ .../assets/example-uml-class-dark.html             |  188 ++
+ .../assets/example-uml-class-full.html             |  191 ++
+ .../diagram-design/assets/example-uml-class.html   |  188 ++
+ .../diagram-design/assets/example-venn-dark.html   |  132 +
+ .../diagram-design/assets/example-venn-full.html   |  135 +
+ .../diagram-design/assets/example-venn.html        |  110 +
+ .../assets/example-wardley-dark.html               |  153 +
+ .../assets/example-wardley-full.html               |  146 +
+ .../diagram-design/assets/example-wardley.html     |  153 +
+ skills/creative/diagram-design/assets/icons.html   |  230 ++
+ skills/creative/diagram-design/assets/index.html   |  470 +++
+ .../diagram-design/assets/template-full.html       |  413 +++
+ .../diagram-design/assets/template-light.html      |   86 +
+ .../diagram-design/assets/template-motion.html     |  434 +++
+ .../diagram-design/assets/template-terminal.html   |  173 ++
+ .../creative/diagram-design/assets/template.html   |   86 +
+ .../diagram-design/references/animation.md         |  135 +
+ .../creative/diagram-design/references/doctor.md   |   30 +
+ .../diagram-design/references/embedded-output.md   |   26 +
+ .../creative/diagram-design/references/export.md   |   43 +
+ .../diagram-design/references/import-drawio.md     |  171 ++
+ .../diagram-design/references/import-mermaid.md    |  126 +
+ .../diagram-design/references/output-spec.md       |  182 ++
+ .../references/primitive-annotation.md             |   37 +
+ .../diagram-design/references/primitive-icons.md   |  914 ++++++
+ .../diagram-design/references/primitive-sketchy.md |   46 +
+ .../references/primitive-terminal.md               |   76 +
+ .../diagram-design/references/project-design.md    |   37 +
+ .../diagram-design/references/semantic-patterns.md |  122 +
+ .../diagram-design/references/style-guide.md       |  132 +
+ .../diagram-design/references/type-architecture.md |   82 +
+ .../creative/diagram-design/references/type-bar.md |  106 +
+ .../diagram-design/references/type-data-flow.md    |  374 +++
+ .../diagram-design/references/type-db-schema.md    |   48 +
+ .../diagram-design/references/type-dependency.md   |   44 +
+ .../diagram-design/references/type-deployment.md   |   45 +
+ .../references/type-dp-integration.md              |  415 +++
+ .../references/type-dp-security-matrix.md          |  384 +++
+ .../creative/diagram-design/references/type-er.md  |   28 +
+ .../diagram-design/references/type-fishbone.md     |   75 +
+ .../diagram-design/references/type-flowchart.md    |   26 +
+ .../diagram-design/references/type-gantt.md        |   45 +
+ .../diagram-design/references/type-high-level.md   |  468 +++
+ .../diagram-design/references/type-it-state.md     |  472 +++
+ .../diagram-design/references/type-journey.md      |   52 +
+ .../diagram-design/references/type-kanban.md       |   49 +
+ .../diagram-design/references/type-layers.md       |   29 +
+ .../diagram-design/references/type-line.md         |  216 ++
+ .../diagram-design/references/type-loop.md         |  223 ++
+ .../diagram-design/references/type-medallion.md    |  362 +++
+ .../diagram-design/references/type-nested.md       |   25 +
+ .../diagram-design/references/type-org-chart.md    |   49 +
+ .../diagram-design/references/type-polar.md        |  136 +
+ .../diagram-design/references/type-process.md      |  499 +++
+ .../diagram-design/references/type-pyramid.md      |   37 +
+ .../diagram-design/references/type-quadrant.md     |   83 +
+ .../diagram-design/references/type-radar.md        |   80 +
+ .../diagram-design/references/type-sankey.md       |   73 +
+ .../diagram-design/references/type-scatter.md      |  121 +
+ .../diagram-design/references/type-sequence.md     |  138 +
+ .../diagram-design/references/type-state.md        |   24 +
+ .../diagram-design/references/type-story-map.md    |   46 +
+ .../diagram-design/references/type-swimlane.md     |   23 +
+ .../diagram-design/references/type-timeline.md     |   23 +
+ .../diagram-design/references/type-tree.md         |   27 +
+ .../diagram-design/references/type-treemap.md      |   66 +
+ .../diagram-design/references/type-uml-class.md    |   64 +
+ .../diagram-design/references/type-venn.md         |   29 +
+ .../diagram-design/references/type-wardley.md      |   38 +
+ .../diagram-design/scripts/drawio_extract.py       |  897 ++++++
+ .../diagram-design/scripts/mermaid_extract.py      | 1351 +++++++++
+ .../creative/diagram-design/scripts/self_check.py  |  387 +++
+ skills/creative/maquette/README.md                 |    4 +-
+ skills/creative/maquette/SKILL.md                  |   23 +-
+ skills/creative/maquette/agents/openai.yaml        |    7 +
+ skills/creative/maquette/evals/build-eval.md       |    2 +-
+ skills/creative/maquette/evals/probes.md           |   48 -
+ .../creative/maquette/references/architecture.md   |   97 +-
+ skills/creative/maquette/references/demo.md        |    4 +-
+ .../maquette/references/design-language.md         |   13 +-
+ skills/creative/maquette/references/handoff.md     |    6 +-
+ skills/creative/maquette/references/intake.md      |    8 +-
+ skills/creative/maquette/references/mock-data.md   |   25 +-
+ skills/creative/maquette/references/sign-off.md    |    4 +-
+ skills/creative/maquette/references/ux-rules.md    |   16 +-
+ skills/creative/shadixfy/SKILL.md                  |   49 +-
+ skills/creative/shadixfy/agents/openai.yaml        |    7 +
+ skills/creative/watch-video/SKILL.md               |   19 +-
+ skills/creative/watch-video/agents/openai.yaml     |    7 +
+ skills/in-progress/goodwork/README.md              |    4 +-
+ skills/in-progress/goodwork/SKILL.md               |   20 +-
+ skills/in-progress/goodwork/evals/key.md           |   23 -
+ skills/in-progress/goodwork/evals/probes.md        |   29 -
+ skills/in-progress/goodwork/reference/assets.md    |    4 +-
+ skills/in-progress/goodwork/reference/board.md     |    8 +-
+ .../in-progress/goodwork/reference/interviewing.md |    6 +-
+ .../goodwork/reference/opportunities.md            |    8 +-
+ skills/in-progress/goodwork/reference/profile.md   |    6 +-
+ skills/in-progress/retro/README.md                 |   61 -
+ skills/in-progress/retro/SKILL.md                  |  152 -
+ skills/in-progress/retro/agents/openai.yaml        |    7 -
+ skills/in-progress/retro/evals/key.md              |   65 -
+ skills/in-progress/retro/evals/probes.md           |   74 -
+ skills/in-progress/retro/evals/scrub-dryrun.sh     |   77 -
+ skills/in-progress/retro/reference/setup.md        |   80 -
+ skills/in-progress/retro/scripts/scrub.py          |   90 -
+ skills/in-progress/retro/templates/retro.md        |   50 -
+ .../in-progress/writing-technical-docs/README.md   |   26 -
+ skills/in-progress/writing-technical-docs/SKILL.md |  106 -
+ .../writing-technical-docs/agents/openai.yaml      |    7 -
+ .../writing-technical-docs/evals/key.md            |   42 -
+ .../writing-technical-docs/evals/probes.md         |   27 -
+ .../evals/test_check_prose.py                      |   78 -
+ .../reference/artifact-patterns.md                 |   90 -
+ .../writing-technical-docs/reference/asd-ste100.md |   38 -
+ .../writing-technical-docs/scripts/check_prose.py  |  268 --
+ skills/personal/capture-to-inbox/README.md         |    7 -
+ skills/personal/capture-to-inbox/SKILL.md          |   36 -
+ .../personal/capture-to-inbox/agents/openai.yaml   |    6 -
+ .../capture-to-inbox/assets/capture-api/README.md  |   23 -
+ .../assets/capture-api/package.json                |   13 -
+ .../assets/capture-api/railway.json                |   13 -
+ .../capture-to-inbox/assets/capture-api/src/app.js |  337 ---
+ .../assets/capture-api/src/server.js               |    8 -
+ .../assets/capture-api/test/capture.test.js        |  130 -
+ .../evals/test_capture_to_inbox.py                 |  308 --
+ .../capture-to-inbox/reference/deployment.md       |   15 -
+ .../personal/capture-to-inbox/reference/setup.md   |   26 -
+ .../reference/shortcut-contract.md                 |   21 -
+ .../scripts/drain_capture_queue.py                 |  435 ---
+ .../capture-to-inbox/scripts/setup_instance.py     |  341 ---
+ skills/personal/learn-anything/SKILL.md            |   25 +-
+ skills/personal/learn-anything/agents/openai.yaml  |    7 +
+ .../learn-anything/reference/loop-design.md        |    8 +-
+ .../learn-anything/reference/modality-audio.md     |    2 +-
+ .../learn-anything/reference/modality-movement.md  |    2 +-
+ .../learn-anything/reference/scheduling.md         |   17 +-
+ skills/personal/learn-anything/templates/drill.md  |    4 +-
+ skills/personal/manage-notes/README.md             |    9 -
+ skills/personal/manage-notes/SKILL.md              |   50 -
+ skills/personal/manage-notes/agents/openai.yaml    |    7 -
+ skills/personal/manage-notes/evals/probes.md       |   15 -
+ .../manage-notes/reference/capture-sources.md      |   21 -
+ skills/personal/manage-notes/reference/ingest.md   |   13 -
+ .../personal/manage-notes/reference/query-lint.md  |   24 -
+ skills/personal/manage-opportunities/README.md     |    9 -
+ skills/personal/manage-opportunities/SKILL.md      |   45 -
+ .../manage-opportunities/agents/openai.yaml        |    7 -
+ .../Opportunities/Duplicate Task.md                |   42 -
+ .../evals/fixtures/duplicate-next-action/TODO.md   |    5 -
+ .../invalid-stage/Opportunities/Bad Stage.md       |   41 -
+ .../Opportunities/Missing Task.md                  |   42 -
+ .../valid-active/Opportunities/Acme Renewal.md     |   43 -
+ .../evals/fixtures/valid-active/TODO.md            |    1 -
+ .../personal/manage-opportunities/evals/probes.md  |   17 -
+ .../evals/test_validate_opportunities.py           |  144 -
+ .../manage-opportunities/reference/lifecycle.md    |   40 -
+ .../reference/opportunity-contract.md              |   94 -
+ .../manage-opportunities/reference/promotion.md    |   15 -
+ .../manage-opportunities/reference/query.md        |    7 -
+ .../manage-opportunities/reference/setup.md        |   19 -
+ .../scripts/validate_opportunities.py              |  469 ---
+ .../templates/opportunities.md                     |   21 -
+ skills/personal/manage-tasks/README.md             |    9 -
+ skills/personal/manage-tasks/SKILL.md              |   53 -
+ skills/personal/manage-tasks/agents/openai.yaml    |    7 -
+ skills/personal/manage-tasks/evals/probes.md       |   15 -
+ .../manage-tasks/reference/project-note-shape.md   |   29 -
+ .../manage-tasks/reference/task-contract.md        |   65 -
+ skills/personal/relay/README.md                    |    5 -
+ skills/personal/relay/SKILL.md                     |   55 -
+ skills/personal/relay/agents/openai.yaml           |    7 -
+ skills/personal/relay/evals/AGENTS.md              |   15 -
+ skills/personal/relay/evals/answer-key.md          |   20 -
+ skills/personal/relay/evals/probes.md              |   51 -
+ skills/personal/relay/evals/test_relay.py          |  502 ----
+ .../personal/relay/evals/test_renderer_runtime.py  |   49 -
+ .../personal/relay/reference/lifecycle-ledgers.md  |   18 -
+ .../personal/relay/reference/provider-adapter.md   |   17 -
+ skills/personal/relay/reference/relay-bag.md       |   40 -
+ .../relay/reference/review-and-approval.md         |    9 -
+ .../relay/reference/rich-email-contract.md         |   15 -
+ skills/personal/relay/reference/selection.md       |   23 -
+ skills/personal/relay/reference/setup.md           |   26 -
+ .../personal/relay/scripts/agentmail_delivery.py   |  236 --
+ .../personal/relay/scripts/build_review_sheet.py   |   65 -
+ .../relay/scripts/ingest_agentmail_events.py       |   96 -
+ .../relay/scripts/provision_agentmail_key.py       |  158 -
+ skills/personal/relay/scripts/relay_common.py      |  213 --
+ skills/personal/relay/scripts/relay_status.py      |   52 -
+ skills/personal/relay/scripts/select_bags.py       |  129 -
+ skills/personal/relay/scripts/setup_instance.py    |  220 --
+ skills/personal/relay/scripts/validate_instance.py |  208 --
+ .../personal/relay/scripts/validate_relay_bag.py   |  210 --
+ skills/personal/relay/templates/instance/README.md |    3 -
+ .../relay/templates/instance/bindings.json         |   19 -
+ .../relay/templates/instance/capabilities.json     |   19 -
+ .../relay/templates/instance/package-lock.json     | 3175 --------------------
+ .../personal/relay/templates/instance/package.json |   27 -
+ .../personal/relay/templates/instance/policy.json  |   22 -
+ .../relay/templates/instance/runs/README.md        |    1 -
+ .../templates/instance/scripts/render-email.tsx    |   35 -
+ .../relay/templates/instance/state/delivery.jsonl  |    0
+ .../relay/templates/instance/state/replies.jsonl   |    0
+ .../relay/templates/instance/state/schema.json     |   16 -
+ .../templates/instance/state/watermarks.jsonl      |    0
+ .../relay/templates/instance/state/workflow.jsonl  |    0
+ .../relay/templates/instance/template-config.json  |    7 -
+ .../templates/fixtures/internal-digest.json        |   18 -
+ .../templates/fixtures/project-update.json         |   21 -
+ .../templates/instance/templates/src/base.tsx      |   62 -
+ .../instance/templates/src/internal-digest.tsx     |   23 -
+ .../instance/templates/src/project-update.tsx      |   24 -
+ .../templates/instance/templates/src/types.ts      |   39 -
+ .../relay/templates/instance/tsconfig.json         |   14 -
+ skills/personal/relay/templates/relay.md           |   19 -
+ skills/personal/review-opportunities/README.md     |    7 -
+ skills/personal/review-opportunities/SKILL.md      |   29 -
+ .../review-opportunities/agents/openai.yaml        |    7 -
+ .../personal/review-opportunities/evals/probes.md  |   15 -
+ .../reference/review-contract.md                   |   29 -
+ skills/personal/to-tailnet/README.md               |    8 +
+ skills/personal/to-tailnet/SKILL.md                |   19 +
+ .../to-tailnet}/agents/openai.yaml                 |    4 +-
+ .../adversarial-review/README.md                   |   14 +-
+ .../adversarial-review/SKILL.md                    |   52 +-
+ .../adversarial-review/agents/openai.yaml          |    4 +-
+ .../adversarial-review/evals/probes.md             |   47 -
+ .../adversarial-review/reference/conduct.md        |   27 +-
+ .../agent-ready-codebase/README.md                 |    7 +
+ .../agent-ready-codebase/SKILL.md                  |   20 +
+ .../agent-ready-codebase/agents/openai.yaml        |    7 +
+ skills/software-development/backlog/README.md      |   22 +-
+ skills/software-development/backlog/SKILL.md       |   56 +-
+ .../backlog/agents/openai.yaml                     |    4 +-
+ .../software-development/backlog/evals/probes.md   |   95 -
+ .../backlog/reference/build-waves.md               |   11 +
+ .../backlog/reference/labels.md                    |   79 +
+ .../backlog/reference/machine-facts.md             |   30 -
+ .../backlog/reference/milestones.md                |   21 +
+ .../backlog/reference/setup.md                     |   19 +-
+ .../backlog/scripts/check-machine-facts.py         |  142 -
+ .../backlog/templates/common/backlog-policy.md     |   94 -
+ .../backlog/templates/common/change-description.md |   20 -
+ .../backlog/templates/common/environment.md        |   92 -
+ .../backlog/templates/common/platform.md           |   72 -
+ .../backlog/templates/environment.md               |   64 +
+ .../templates/skill-authoring/environment.md       |   61 -
+ .../backlog/templates/skill-authoring/evidence.md  |   36 -
+ .../backlog/templates/software/codebase.md         |   30 -
+ .../backlog/templates/software/evidence.md         |   55 -
+ skills/software-development/build/README.md        |   17 -
+ skills/software-development/build/SKILL.md         |   47 -
+ .../software-development/build/agents/openai.yaml  |    7 -
+ skills/software-development/build/evals/probes.md  |   41 -
+ skills/software-development/capture/README.md      |   20 +
+ skills/software-development/capture/SKILL.md       |   16 +
+ .../capture/agents/openai.yaml                     |    7 +
+ skills/software-development/code-review/README.md  |   12 +-
+ skills/software-development/code-review/SKILL.md   |   49 +-
+ .../code-review/agents/openai.yaml                 |    2 +-
+ .../code-review/evals/probes.md                    |   35 -
+ .../code-review/reference/smells.md                |    2 +-
+ .../code-review/reference/structure.md             |   29 +-
+ skills/software-development/deliver/README.md      |   11 +
+ skills/software-development/deliver/SKILL.md       |   44 +
+ .../deliver/agents/openai.yaml                     |    7 +
+ .../software-development/diagnosing-bugs/README.md |    6 +-
+ .../software-development/diagnosing-bugs/SKILL.md  |   22 +-
+ .../diagnosing-bugs/evals/answer-key.md            |   14 -
+ .../diagnosing-bugs/evals/probes.md                |   25 -
+ .../diagnosing-bugs/reference/diagnosis.md         |   18 +-
+ .../diagnosing-bugs/reference/setup.md             |   12 -
+ .../diagnosing-bugs/templates/diagnosing-bugs.md   |   10 -
+ .../templates/skill-authoring/diagnosing-bugs.md   |   11 -
+ .../domain-modeling/ADR-FORMAT.md                  |   10 +-
+ .../domain-modeling/CONTEXT-FORMAT.md              |   14 +-
+ .../software-development/domain-modeling/README.md |   23 +-
+ .../software-development/domain-modeling/SKILL.md  |   81 +-
+ .../domain-modeling/agents/openai.yaml             |    6 +-
+ .../domain-modeling/evals/probes.md                |   29 -
+ .../domain-modeling/reference/adr-format.md        |   37 -
+ .../domain-modeling/reference/context-format.md    |   52 -
+ skills/software-development/handoff/README.md      |    9 +-
+ skills/software-development/handoff/SKILL.md       |   15 +-
+ .../software-development/handoff/evals/probes.md   |   26 -
+ skills/software-development/implement/README.md    |   10 +-
+ skills/software-development/implement/SKILL.md     |   34 +-
+ .../implement/agents/openai.yaml                   |    4 +-
+ .../software-development/implement/evals/probes.md |   26 -
+ skills/software-development/interview/README.md    |   14 +-
+ skills/software-development/interview/SKILL.md     |   23 +-
+ .../interview/agents/openai.yaml                   |    2 +-
+ .../software-development/interview/evals/probes.md |   35 -
+ .../software-development/merge-changes/README.md   |    7 -
+ skills/software-development/merge-changes/SKILL.md |   38 -
+ .../merge-changes/agents/openai.yaml               |    6 -
+ .../merge-changes/evals/probes.md                  |   35 -
+ skills/software-development/merge/README.md        |    7 +
+ skills/software-development/merge/SKILL.md         |   28 +
+ .../software-development/merge/agents/openai.yaml  |    7 +
+ .../principle-codebase-design/README.md            |    9 +
+ .../principle-codebase-design/SKILL.md             |   29 +
+ .../THIRD_PARTY_LICENSES.md                        |    0
+ .../principle-codebase-design/agents/openai.yaml   |    7 +
+ .../principle-experience-first/README.md           |    8 +
+ .../principle-experience-first/SKILL.md            |   16 +
+ .../principle-experience-first/agents/openai.yaml  |    6 +
+ .../principle-type-system-discipline/README.md     |    9 +
+ .../principle-type-system-discipline/SKILL.md      |   30 +
+ .../THIRD_PARTY_LICENSES.md                        |    2 +-
+ .../agents/openai.yaml                             |    7 +
+ skills/software-development/prototype/README.md    |   19 +-
+ skills/software-development/prototype/SKILL.md     |   35 +-
+ .../prototype/agents/openai.yaml                   |    4 +-
+ .../software-development/prototype/evals/probes.md |   29 -
+ .../prototype/reference/prototyping.md             |   54 -
+ .../software-development/prove-your-work/README.md |   14 +-
+ .../software-development/prove-your-work/SKILL.md  |   39 +-
+ .../prove-your-work/agents/openai.yaml             |    4 +-
+ .../prove-your-work/evals/probes.md                |   32 -
+ .../prove-your-work/reference/media.md             |    5 +
+ skills/software-development/research/README.md     |    6 +-
+ skills/software-development/research/SKILL.md      |   36 +-
+ .../software-development/research/evals/probes.md  |   29 -
+ .../research/reference/research-contract.md        |   89 +-
+ .../research/reference/setup.md                    |   12 -
+ .../research/templates/researching.md              |   26 -
+ skills/software-development/retro/README.md        |    9 +
+ skills/software-development/retro/SKILL.md         |   19 +
+ .../software-development/retro/agents/openai.yaml  |    7 +
+ .../retro/reference/checkpoint.md                  |   31 +
+ .../serve-via-tailnet/README.md                    |   16 -
+ .../serve-via-tailnet/SKILL.md                     |   32 -
+ .../serve-via-tailnet/evals/probes.md              |   29 -
+ .../reference/annotation-contract.md               |   51 -
+ .../serve-via-tailnet/reference/scripts.md         |   79 -
+ .../serve-via-tailnet/reference/surface-and-hub.md |   33 -
+ .../serve-via-tailnet/scripts/pages/chrome.css     |   79 -
+ .../serve-via-tailnet/scripts/pages/chrome.js      |  246 --
+ .../serve-via-tailnet/scripts/review-await.py      |   70 -
+ .../serve-via-tailnet/scripts/review-server.py     |  607 ----
+ .../software-development/shape/PRODUCT-FORMAT.md   |   16 +
+ skills/software-development/shape/README.md        |   16 +-
+ skills/software-development/shape/SKILL.md         |   68 +-
+ .../software-development/shape/agents/openai.yaml  |    4 +-
+ skills/software-development/shape/evals/probes.md  |   50 -
+ .../shape/reference/revisions.md                   |    7 +
+ skills/software-development/tdd/README.md          |    9 +-
+ skills/software-development/tdd/SKILL.md           |   31 +-
+ skills/software-development/tdd/evals/probes.md    |   29 -
+ .../software-development/tdd/reference/mocking.md  |   17 +-
+ skills/software-development/tdd/reference/tests.md |   24 +-
+ .../technical-writing/README.md                    |    9 +
+ .../technical-writing/SKILL.md                     |   33 +
+ .../technical-writing}/THIRD_PARTY_LICENSES.md     |    2 +-
+ .../technical-writing/agents/openai.yaml           |    7 +
+ skills/software-development/to-backlog/README.md   |   30 -
+ skills/software-development/to-backlog/SKILL.md    |   42 -
+ .../to-backlog/agents/openai.yaml                  |    7 -
+ .../to-backlog/evals/probes.md                     |   38 -
+ skills/software-development/to-branch/README.md    |    7 +
+ skills/software-development/to-branch/SKILL.md     |   21 +
+ .../to-branch/agents/openai.yaml                   |    7 +
+ .../to-branch/scripts/to-branch.py                 |   89 +
+ .../to-branch/tests/test_to_branch.py              |  126 +
+ skills/software-development/to-slices/README.md    |   30 +-
+ skills/software-development/to-slices/SKILL.md     |   51 +-
+ .../to-slices/agents/openai.yaml                   |    4 +-
+ .../software-development/to-slices/evals/probes.md |   38 -
+ .../to-slices/reference/slicing.md                 |   91 +-
+ .../to-slices/reference/template-guide.md          |   37 +-
+ skills/software-development/to-spec/README.md      |   34 +-
+ skills/software-development/to-spec/SKILL.md       |   66 +-
+ .../to-spec/agents/openai.yaml                     |    4 +-
+ .../software-development/to-spec/evals/probes.md   |   50 -
+ .../to-spec/reference/synthesis.md                 |   80 -
+ .../to-spec/reference/template-guide.md            |   26 -
+ skills/software-development/to-subagent/README.md  |   18 -
+ skills/software-development/to-subagent/SKILL.md   |   60 -
+ .../to-subagent/evals/probes.md                    |   74 -
+ skills/software-development/to-thread/README.md    |   12 -
+ skills/software-development/to-thread/SKILL.md     |   84 -
+ .../to-thread/agents/openai.yaml                   |    7 -
+ .../software-development/to-thread/evals/probes.md |   47 -
+ .../to-thread/scripts/name-codex-thread.py         |   61 -
+ skills/software-development/to-web/README.md       |    5 +
+ skills/software-development/to-web/SKILL.md        |   14 +
+ .../software-development/to-web/agents/openai.yaml |    7 +
+ .../typescript-best-practices/README.md            |    9 +
+ .../typescript-best-practices/SKILL.md             |   18 +
+ .../THIRD_PARTY_LICENSES.md                        |    2 +-
+ .../typescript-best-practices/agents/openai.yaml   |    7 +
+ skills/software-development/unslop/README.md       |    7 +
+ skills/software-development/unslop/SKILL.md        |   41 +
+ .../unslop}/THIRD_PARTY_LICENSES.md                |    2 +-
+ .../software-development/unslop/agents/openai.yaml |    7 +
+ .../verify-your-work/README.md                     |   14 +-
+ .../software-development/verify-your-work/SKILL.md |   47 +-
+ .../verify-your-work/agents/openai.yaml            |    2 +-
+ .../verify-your-work/evals/probes.md               |   38 -
+ skills/software-development/watch-until/README.md  |   17 -
+ skills/software-development/watch-until/SKILL.md   |   29 -
+ .../watch-until/agents/openai.yaml                 |    7 -
+ .../watch-until/evals/probes.md                    |   29 -
+ skills/software-development/worktree/README.md     |   13 -
+ skills/software-development/worktree/SKILL.md      |   52 -
+ .../worktree/agents/openai.yaml                    |    7 -
+ .../software-development/worktree/evals/probes.md  |   35 -
+ .../worktree/evals/test_worktree.py                |  655 ----
+ .../worktree/scripts/worktree.py                   |  508 ----
+ .../writing-for-humans/README.md                   |    9 +
+ .../writing-for-humans/SKILL.md                    |   22 +
+ .../writing-for-humans/THIRD_PARTY_LICENSES.md     |    9 +
+ .../writing-for-humans/agents/openai.yaml          |    7 +
+ skills/system/skill-loop/README.md                 |    6 +-
+ skills/system/skill-loop/SKILL.md                  |   31 +-
+ skills/system/skill-loop/agents/openai.yaml        |    7 +
+ .../system/skill-loop/reference/reviewer-prompt.md |    4 +-
+ skills/system/staffing/README.md                   |   29 +-
+ skills/system/staffing/SKILL.md                    |   63 +-
+ skills/system/staffing/agents/openai.yaml          |    4 +-
+ .../staffing/evals/fixtures/self-heal-overlay.md   |   11 -
+ skills/system/staffing/evals/probes.md             |  144 -
+ .../system/staffing/evals/test_provider_pilot.py   |  159 -
+ .../system/staffing/evals/token-measurements.json  |   12 -
+ skills/system/staffing/reference/harness.md        |    3 -
+ .../staffing/reference/install-and-reconcile.md    |   38 -
+ skills/system/staffing/reference/machine-audit.md  |   97 -
+ .../staffing/reference/rankings-and-routing.md     |   75 -
+ .../staffing/reference/roles-and-fallback.md       |   33 -
+ skills/system/staffing/reference/setup.md          |   13 -
+ .../staffing/templates/instruction-trigger.md      |   14 -
+ .../staffing/variants/claude/reference/harness.md  |   37 -
+ .../variants/claude/templates/seed/provider.txt    |    1 -
+ .../variants/claude/templates/seed/roster-seed.md  |   45 -
+ .../staffing/variants/codex/reference/harness.md   |   40 -
+ .../variants/codex/templates/seed/provider.txt     |    1 -
+ .../variants/codex/templates/seed/roster-seed.md   |   44 -
+ skills/system/to-subagent/README.md                |   12 +
+ skills/system/to-subagent/SKILL.md                 |   20 +
+ .../to-subagent/agents/openai.yaml                 |    2 +-
+ skills/system/to-thread/README.md                  |    9 +
+ skills/system/to-thread/SKILL.md                   |   32 +
+ .../system}/to-thread/agents/openai.yaml           |    2 +-
+ .../to-thread/evals/test_name_codex_thread.py      |   77 +
+ .../to-thread/evals/test_t3_thread.py              |  205 +-
+ skills/system/to-thread/reference/claude-cli.md    |   18 +
+ .../system/to-thread/reference/claude-desktop.md   |   19 +
+ skills/system/to-thread/reference/codex-cli.md     |   24 +
+ skills/system/to-thread/reference/codex-desktop.md |   19 +
+ skills/system/to-thread/reference/t3.md            |   32 +
+ skills/system/to-thread/reference/worktrees.md     |   10 +
+ .../system/to-thread/scripts/name-codex-thread.py  |   96 +
+ .../to-thread/scripts/t3-thread.py                 |  150 +-
+ skills/thinking/bayes/SKILL.md                     |   21 +-
+ skills/thinking/bayes/agents/openai.yaml           |    7 +
+ skills/thinking/bayes/reference/artifact.md        |   13 +-
+ skills/thinking/bayes/reference/evidence.md        |    4 +-
+ skills/thinking/bayes/reference/method.md          |    8 +-
+ skills/thinking/bayes/reference/pose.md            |    2 +-
+ skills/thinking/constraints/SKILL.md               |   23 +-
+ skills/thinking/constraints/agents/openai.yaml     |    7 +
+ skills/thinking/constraints/reference/act.md       |    8 +-
+ skills/thinking/constraints/reference/artifact.md  |   12 +-
+ skills/thinking/constraints/reference/find.md      |    2 +-
+ skills/thinking/constraints/reference/framework.md |    8 +-
+ skills/thinking/constraints/reference/map.md       |    2 +-
+ skills/thinking/constraints/reference/review.md    |    4 +-
+ skills/thinking/constraints/reference/trees.md     |    2 +-
+ .../thinking/constraints/templates/constraint.html |    4 +-
+ skills/thinking/dissolve/SKILL.md                  |   15 +-
+ skills/thinking/dissolve/agents/openai.yaml        |    7 +
+ skills/thinking/dissolve/reference/artifact.md     |   12 +-
+ skills/thinking/dissolve/reference/debate.md       |   10 +-
+ .../evals/2026-07-29-probes-claude-subagent.md     |   17 -
+ .../evals/2026-07-29-probes-gpt-5.6-sol.md         |   45 -
+ to-backlog-workspace/evals/2026-07-29-verdicts.md  |   25 -
+ .../evals/2026-07-29-probes-claude-subagent.md     |   17 -
+ .../evals/2026-07-29-probes-gpt-5.6-sol.md         |   54 -
+ to-slices-workspace/evals/2026-07-29-verdicts.md   |   26 -
+ tools/catalog.py                                   |  598 ----
+ tools/install.py                                   |  551 ----
+ tools/review-server.ts                             |  188 ++
+ tools/test_catalog.py                              |  454 ---
+ tools/test_install.py                              |  672 -----
+ watch-video-workspace/eval/ANSWER-KEY.md           |   72 -
+ watch-video-workspace/eval/BRIEF-execution.md      |   43 -
+ watch-video-workspace/eval/BRIEF-invocation.md     |   43 -
+ watch-video-workspace/eval/FINDINGS.md             |   36 -
+ watch-video-workspace/eval/codex-execution.log     |   44 -
+ watch-video-workspace/eval/codex-invocation.log    |    9 -
+ 1098 files changed, 45966 insertions(+), 63530 deletions(-)

@@ -1,0 +1,4 @@
+import {chromium} from 'playwright-core';
+import path from 'node:path';
+const out=path.dirname(new URL(import.meta.url).pathname);const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+const context=await browser.newContext({viewport:{width:1280,height:1000}});const page=await context.newPage();await page.goto('file://'+path.resolve(out,'../report.html'));await page.locator('#delivery summary').click();await page.locator('#delivery').screenshot({path:path.join(out,'desktop-delivery-detail.png')});await page.locator('#delivery summary').click();await page.emulateMedia({media:'print'});await page.locator('#workflow').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'print-detail-screen.png')});await browser.close();

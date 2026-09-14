@@ -1,0 +1,17 @@
+from pathlib import Path
+import json,hashlib,datetime,subprocess
+D=Path(__file__).parent; R=D/'rendering'; now=datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds')
+c=json.loads((R/'checks.json').read_text());links=json.loads((R/'external-link-checks.json').read_text());assert all(x.get('status')==200 for x in links['links']);assert not c['consoleErrors'];assert not c['links']['missingLocal'];assert not c['links']['duplicateIds'];assert c['print']['visibleDetailBodies']==7
+assert all(x['collapsed']['width']==x['collapsed']['scrollWidth'] and x['expanded']['width']==x['expanded']['scrollWidth'] for x in c['checks'])
+c['externalLinks']={'checked':len(links['links']),'allHTTP200':True,'record':'external-link-checks.json'}
+c['visualReview']={'reviewed_at':now,'images':['desktop-collapsed.png','mobile-collapsed.png','desktop-delivery-detail.png','print-detail-screen.png'],'result':'Readable headings, prose, source labels, metrics, and expanded delivery table. No clipping or page overflow. The delivery table scrolls within its own container at 320px; the document remains viewport-wide.'}
+c['integrity']={'revision':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'trackedDiff':subprocess.check_output(['git','diff','--stat'],text=True),'mutations':'Report and supporting files only; no tracker writes, publication, commits, pushes, or skill-source edits.'}
+c['formatting']={'scope':'HTML report only','note':'Repo format:fix targets every Markdown file; it was not run because this task prohibits source changes and changes no Markdown sources. Artifact HTML formatting was invoked through bun.'}
+(R/'checks.json').write_text(json.dumps(c,indent=2))
+reporthash=hashlib.sha256((D/'report.html').read_bytes()).hexdigest()
+summary={'report':str(D/'report.html'),'sha256':reporthash,'period':'[2026-09-08T00:02:04+04:00, 2026-09-15T00:02:04+04:00)','timezone':'Asia/Dubai','resolved_at':'2026-09-14T20:02:04Z','observed_revision':c['integrity']['revision'],'completed_at':now,'metrics':{'shipped_outcome_groups':4,'merged_prs':1,'direct_main_commits':6,'successful_pages_deployments':7},'coverage':'Paginated GitHub releases, deployments/statuses, events, merged PRs, PR #201 commits/files/discussion/reviews, linked issue #208, and fixed-revision source/Git history. Includes work authored before period and shipped through PR #201.','limitations':['GitHub event feed omits two exact push timestamps; matching main deployments bound their availability.','Existing-install adoption and live behavior in each target project were not measured. PR-reported validation is attributed and not rerun.','No chart was needed; diagram checks do not apply to absent figures.'],'checks':['249-word primary account','1280px, 390px, and 320px isolated headless Chrome rendering, collapsed and expanded','7 details sections visible in print without JavaScript; print PDF preserved','56 links checked for local targets and IDs; 24 unique external links return HTTP 200','Metrics reconciled to delivery-ledger.json','No tracked source diff'],'blockers':[]}
+(D/'completion.json').write_text(json.dumps(summary,indent=2))
+manifest={str(p.relative_to(D)):{'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size} for root in [D/'sources',D/'rendering'] for p in root.rglob('*') if p.is_file() and 'node_modules' not in p.parts}
+manifest['report.html']={'sha256':reporthash,'bytes':(D/'report.html').stat().st_size}
+(D/'manifest.json').write_text(json.dumps(manifest,indent=2))
+print(json.dumps(summary,indent=2))

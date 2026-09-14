@@ -1,0 +1,231 @@
+{
+  "generatedAt": "2026-09-14T20:12:30.333Z",
+  "browser": "153.0.8010.36",
+  "checks": [
+    {
+      "name": "desktop",
+      "collapsed": {
+        "width": 1280,
+        "scrollWidth": 1280,
+        "headings": [
+          "A new ticket workflow, readable reports, and proxy images",
+          "Run ticket batches through review and merge",
+          "Review decisions and shipped work in plain HTML",
+          "Generate images through a configured proxy",
+          "Install and browse one skill family",
+          "Supporting account"
+        ],
+        "mainWords": 249,
+        "details": 7,
+        "scripts": 0,
+        "networkAssets": []
+      },
+      "summaryClickOpens": true,
+      "expanded": {
+        "width": 1280,
+        "scrollWidth": 1280,
+        "overflowingElements": []
+      }
+    },
+    {
+      "name": "mobile",
+      "collapsed": {
+        "width": 390,
+        "scrollWidth": 390,
+        "headings": [
+          "A new ticket workflow, readable reports, and proxy images",
+          "Run ticket batches through review and merge",
+          "Review decisions and shipped work in plain HTML",
+          "Generate images through a configured proxy",
+          "Install and browse one skill family",
+          "Supporting account"
+        ],
+        "mainWords": 249,
+        "details": 7,
+        "scripts": 0,
+        "networkAssets": []
+      },
+      "summaryClickOpens": true,
+      "expanded": {
+        "width": 390,
+        "scrollWidth": 390,
+        "overflowingElements": []
+      }
+    },
+    {
+      "name": "narrow",
+      "collapsed": {
+        "width": 320,
+        "scrollWidth": 320,
+        "headings": [
+          "A new ticket workflow, readable reports, and proxy images",
+          "Run ticket batches through review and merge",
+          "Review decisions and shipped work in plain HTML",
+          "Generate images through a configured proxy",
+          "Install and browse one skill family",
+          "Supporting account"
+        ],
+        "mainWords": 249,
+        "details": 7,
+        "scripts": 0,
+        "networkAssets": []
+      },
+      "summaryClickOpens": true,
+      "expanded": {
+        "width": 320,
+        "scrollWidth": 320,
+        "overflowingElements": [
+          {
+            "tag": "TABLE",
+            "text": "Success time\nAsia/Dubai\tRevision\tChanges carried\tDelivery ev",
+            "width": 318.015625
+          },
+          {
+            "tag": "THEAD",
+            "text": "Success time\nAsia/Dubai\tRevision\tChanges carried\tDelivery ev",
+            "width": 318.015625
+          },
+          {
+            "tag": "TR",
+            "text": "Success time\nAsia/Dubai\tRevision\tChanges carried\tDelivery ev",
+            "width": 318.015625
+          },
+          {
+            "tag": "TH",
+            "text": "Delivery evidence",
+            "width": 71.921875
+          },
+          {
+            "tag": "TBODY",
+            "text": "13 Sep 11:51:36\td828cbf\tFamily rewrite, image backend, insta",
+            "width": 318.015625
+          },
+          {
+            "tag": "TR",
+            "text": "13 Sep 11:51:36\td828cbf\tFamily rewrite, image backend, insta",
+            "width": 318.015625
+          },
+          {
+            "tag": "TD",
+            "text": "Successful deployment",
+            "width": 71.921875
+          },
+          {
+            "tag": "A",
+            "text": "Successful deployment",
+            "width": 56.8125
+          },
+          {
+            "tag": "TR",
+            "text": "14 Sep 12:03:01\t8c1162c\tOperator chooses concurrency\tSuccess",
+            "width": 318.015625
+          },
+          {
+            "tag": "TD",
+            "text": "Successful deployment",
+            "width": 71.921875
+          },
+          {
+            "tag": "A",
+            "text": "Successful deployment",
+            "width": 56.8125
+          },
+          {
+            "tag": "TR",
+            "text": "14 Sep 13:18:17\t6929b79\tConcurrency upgrade guidance\tSuccess",
+            "width": 318.015625
+          },
+          {
+            "tag": "TD",
+            "text": "Successful deployment",
+            "width": 71.921875
+          },
+          {
+            "tag": "A",
+            "text": "Successful deployment",
+            "width": 56.8125
+          },
+          {
+            "tag": "TR",
+            "text": "14 Sep 16:24:56\t94b8f86\tBacklog recap added\tSuccessful deplo",
+            "width": 318.015625
+          },
+          {
+            "tag": "TD",
+            "text": "Successful deployment",
+            "width": 71.921875
+          },
+          {
+            "tag": "A",
+            "text": "Successful deployment",
+            "width": 56.8125
+          },
+          {
+            "tag": "TR",
+            "text": "14 Sep 17:09:35\t73c4947\tInterview batches the whole question",
+            "width": 318.015625
+          },
+          {
+            "tag": "TD",
+            "text": "Successful deployment",
+            "width": 71.921875
+          },
+          {
+            "tag": "A",
+            "text": "Successful deployment",
+            "width": 56.8125
+          },
+          {
+            "tag": "TR",
+            "text": "14 Sep 17:13:13\t7e2e8f6\tInterview delivers the wave in chat\t",
+            "width": 318.015625
+          },
+          {
+            "tag": "TD",
+            "text": "Successful deployment",
+            "width": 71.921875
+          },
+          {
+            "tag": "A",
+            "text": "Successful deployment",
+            "width": 56.8125
+          },
+          {
+            "tag": "TR",
+            "text": "14 Sep 17:33:42\t10f388a\tRecap and spec review refined\tSucces",
+            "width": 318.015625
+          },
+          {
+            "tag": "TD",
+            "text": "Successful deployment",
+            "width": 71.921875
+          }
+        ]
+      }
+    }
+  ],
+  "consoleErrors": [],
+  "print": {
+    "visibleDetailBodies": 7,
+    "expected": 7,
+    "contentVisibility": [
+      "visible",
+      "visible",
+      "visible",
+      "visible",
+      "visible",
+      "visible",
+      "visible"
+    ]
+  },
+  "links": {
+    "total": 56,
+    "missingLocal": [],
+    "duplicateIds": []
+  },
+  "diagram": {
+    "figures": 0,
+    "reason": "No chart or relationship diagram needed; simple metric totals chosen under diagram-design simpler-format guidance.",
+    "palette": "Default dark semantic tokens; Arial/Georgia/monospace system fallbacks; no remote fonts."
+  }
+}
