@@ -3,14 +3,14 @@ name: backlog
 description: Groom tickets, build frontiers or spec and milestone waves, inspect progress, recap what shipped in HTML, and run setup or retro.
 disable-model-invocation: true
 metadata:
-  requires: [capture, shape, deliver, merge, retro, to-thread, agent-ready-codebase, to-web]
-  optional: [technical-writing, writing-for-humans]
+  requires: [capture, shape, deliver, merge, retro, to-thread, agent-ready-codebase, to-web, writing-for-humans, diagram-design]
+  optional: [technical-writing]
   setup: reference/setup.md
 ---
 
 # Backlog
 
-The tracker is the ledger. Groom dispatches selected shaping threads; build coordinates one owning thread per ticket. For recap, go directly to its reference below. For other verbs, read `docs/agents/environment.md` and [labels and claims](reference/labels.md); run setup if the playbook is missing. Use `technical-writing` for tracker records and reports and `writing-for-humans` for conversation when available.
+The tracker is the ledger. Groom dispatches selected shaping threads; build coordinates one owning thread per ticket. For recap, go directly to its reference below. For other verbs, read `docs/agents/environment.md` and [labels and claims](reference/labels.md); run setup if the playbook is missing. Use `technical-writing` for tracker records when available and `writing-for-humans` for conversation and recap reports.
 
 The human operator controls concurrency for shaping and building. Apply a concurrency limit only when the operator specifies one.
 
@@ -46,7 +46,7 @@ A takeover requires the prior worker to be stopped. Record a superseding claim, 
 
 ## recap
 
-`backlog recap [time range]` creates a standalone HTML report of what shipped, written for someone who does not read code. Accept natural ranges such as `last week`, `last month`, `last 6 months`, or explicit dates; default to the past week. Follow [recap](reference/recap.md) for time boundaries, delivery evidence, plain-language explanations, and the HTML handback. This verb reads project history and writes the report; it requires no setup or readiness certification.
+`backlog recap [time range]` creates a standalone HTML report of what shipped, written for a tired executive. Use `writing-for-humans` and `diagram-design` to make the main view readable in 30–60 seconds, with supporting detail expandable. Accept natural ranges such as `last week`, `last month`, `last 6 months`, or explicit dates; default to the past week. Follow [recap](reference/recap.md) for time boundaries, delivery evidence, visual summaries, and the HTML handback. This verb reads project history and writes the report; it requires no setup or readiness certification.
 
 ## Other verbs
 

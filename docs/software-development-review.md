@@ -13,11 +13,11 @@ For each skill, record **accept**, **change**, or **needs behavioral evidence**,
 Check how findings become tickets, how milestones survive consolidation, and who decides readiness.
 
 - [ ] **01. [capture](../skills/software-development/capture/SKILL.md)**: One ticket per finding; confirmed publication; recovery preserves advanced labels and claims; milestone grouping and spec-parent gaps.
-- [ ] **02. [backlog](../skills/software-development/backlog/SKILL.md)**: All open issues read; native dependencies preserved through consolidation; initial frontier draining and spec/milestone waves with human merge waits. Recap produces a readable HTML report with delivery evidence, exact time boundaries, and explicit coverage gaps.
+- [ ] **02. [backlog](../skills/software-development/backlog/SKILL.md)**: All open issues read; native dependencies preserved through consolidation; initial frontier draining and spec/milestone waves with human merge waits. Recap uses writing-for-humans and diagram-design for a 30–60-second executive overview, expandable detail, and useful metrics and charts. Delivery evidence, exact time boundaries, and coverage gaps remain explicit.
 
 For build, trace three scopes: a frontier of several eligible tickets, a spec that needs a human merge between waves, and a milestone with independent and blocked work. Check selection, truthful waits, completion, and resume from tracker state. For shaping and building, check dispatch with no concurrency limit and with an explicit operator limit. An uncertain owner holds only its ticket; setup creates no concurrency policy.
 
-For recap, trace a release containing older merges, a split awaiting promotion, a rollback, and unavailable release history. Check the resolved period, source coverage, outcome grouping, plain-language reasons and tradeoffs, and local HTML handback without setup.
+For recap, trace a release containing older merges, a split awaiting promotion, a rollback, and unavailable release history. Check that the main view takes 30–60 seconds to read, details expand, metrics distinguish shipments from merged PRs, and charts use verified events and labeled timezones. Preserve exact boundaries, coverage gaps, outcome grouping, and local HTML handback without setup. Include a quiet period where a few numbers suffice and a busy six-month period that needs themes.
 
 ## 2. Shaping and splitting
 
@@ -28,9 +28,11 @@ Follow one ticket from unsettled intent to an approved, recoverable build brief.
 - [ ] **05. [research](../skills/software-development/research/SKILL.md)**: Bounded fact questions, sources, uncertainty, and reusable results.
 - [ ] **06. [prototype](../skills/software-development/prototype/SKILL.md)**: Which uncertainty an experiment resolves; inspectable alternatives when human judgment is needed; evidence on the ticket.
 - [ ] **07. [domain-modeling](../skills/software-development/domain-modeling/SKILL.md)**: Consistent vocabulary, context-document discovery, and one qualification gate for architecture decisions.
-- [ ] **08. [to-spec](../skills/software-development/to-spec/SKILL.md)**: Observable acceptance, delegated choices, verification risk, and deltas from the approved revision.
+- [ ] **08. [to-spec](../skills/software-development/to-spec/SKILL.md)**: A readable visual approval overview before the full contract; substantive specs normally include diagrams. Preserve observable acceptance, delegated choices, visible risks and blocking Notes, and deltas from the approved revision.
 - [ ] **09. [to-slices](../skills/software-development/to-slices/SKILL.md)**: An approved ticket-bound spec, concrete split approval, vertical coverage, and graph readback before readiness.
 - [ ] **10. [to-branch](../skills/software-development/to-branch/SKILL.md)**: Artifact commits, refusal of checked-out or symbolic target branches, preserved checkout state, remote history, and pushed revisions.
+
+For specs, compare a substantive workflow change with a small textual change. Check whether the overview and diagrams make the proposed experience, scope, and key decisions easy to approve. Trace diagram claims to the settled record and confirm that the full acceptance contract survives summarization. Inspect narrow and wide layouts.
 
 ## 3. Building and proving
 
@@ -950,7 +952,7 @@ After the package review, trace these journeys through the sources. Record contr
 - A high-risk build receives independent verification, encounters a defect, refreshes both verdicts, and preserves its remaining review budget.
 - A worker fails during dispatch; later status recovers ownership without duplicating a live build or moving the primary checkout.
 - A reviewed merge cleans up finished branches and worktrees while preserving active work and published artifacts.
-- A non-developer requests `backlog recap last 6 months` and receives an HTML report with confirmed delivery dates, explained behavior changes, and separately labeled unconfirmed releases.
+- A tired executive requests `backlog recap last 6 months` and understands the main shipping story in 30–60 seconds, with useful charts, expandable evidence, confirmed delivery dates, and separately labeled unconfirmed releases.
 - Retro revisits updated sessions, matches existing issues, accepts user dismissals, and advances only through reviewed work.
 
 ## Evidence and sign-off

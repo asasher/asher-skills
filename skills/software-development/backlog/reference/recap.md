@@ -1,6 +1,6 @@
 # Recap what shipped
 
-Create a report someone outside the development team can read and use. Explain changes to people's experience and the system's behavior, with sources for the claims.
+Create a report a tired executive can understand in 30–60 seconds. Use `writing-for-humans` for the prose and `diagram-design` for visual explanations and charts. Lead with what shipped and why it matters; keep the evidence available behind the summary.
 
 ## Resolve the period
 
@@ -17,26 +17,32 @@ Read the environment playbook if present for the base branch and release process
 3. Where only a base-branch merge is verifiable, show the work separately as **Merged; release unconfirmed**, using its merge date. State this limitation prominently. Label a Git-only account as partial when integration dates or release coverage cannot be established. Access failures and truncated history mean incomplete coverage, not an empty period.
 4. Account for rollbacks, removals, fixes, and limited rollouts through the period's end. State who actually received a change and whether it was withdrawn. Label any later information separately with its date. Keep open or unreleased work outside shipped totals.
 
-For each candidate, retain the delivery event and date, affected audience, source links, and enough before/after evidence to explain the outcome. Group related PRs, commits, and tickets by the change people experience. Retain smaller maintenance changes in a compact supporting list. Every included source belongs to an outcome or that list; counts describe outcomes rather than commits or tickets.
+For each candidate, retain the delivery event and date, affected audience, source links, and enough before/after evidence to explain the outcome. Group related PRs, commits, and tickets by the change people experience. Retain smaller maintenance changes in a compact supporting list. Every included source belongs to an outcome or that list. Count shipped outcomes once; report PR or release-event counts as separate, explicitly labeled measures.
 
-## Explain the changes
+## Make the main view a quick read
 
-Lead with a short overview of the most consequential outcomes. For each outcome, answer these questions in plain language, using headings only where they help:
+Keep the main view readable in 30–60 seconds, even for a six-month period. Lead with one sentence about the period, a few useful numbers, and the most consequential shipped outcomes. Group a busy period by theme. Each highlight gets an outcome title and one or two short sentences about who benefits and what they can now do. For example, "Drafts survive a lost connection" communicates more than "Add persistence middleware".
 
-- **What changed for people?** Who is affected, what they could do before, and what they can do now. Mention any action they need to take.
-- **What changed in the system?** Explain observable behavior such as retrying a failed payment, retaining a draft, or restricting access. For internal maintenance, say when there is no direct change to the user's experience.
-- **Why?** Describe the problem and recorded reason for the change. Distinguish intended benefits from measured results.
-- **Why this approach?** Include documented tradeoffs, alternatives declined, and deliberately excluded scope when they explain the outcome. If a material reason is absent, say it was not recorded; keep inference explicitly tentative.
-- **What's the situation now?** Describe availability, rollout limits, reversals, and known remaining issues at the end of the period. Link recorded follow-up work without promising a delivery date.
+Keep required user actions, material rollout limits, reversals, and coverage gaps visible beside the affected claim. Distinguish intended benefits from measured results. Explain necessary technical terms on first use.
 
-Write titles about outcomes: "Drafts survive a lost connection" communicates more than "Add persistence middleware". Explain necessary technical terms on first use. Put descriptive source links beside claims or in expandable details; issue numbers and commit subjects alone are not explanations. Ground motivations, alternatives, adoption, and performance claims in the record.
+Put smaller changes, system behavior, recorded reasons and tradeoffs, follow-ups, and descriptive source links in expandable details. Include these only where they help explain the outcome; each outcome needs no fixed set of explanatory sections. Ground claims in the record and mark inference when necessary. A missing rationale needs mention only when it materially limits understanding. Preserve the full supporting account without making the executive read it to understand what shipped.
+
+## Choose useful metrics and visuals
+
+Select metrics and charts for the period's evidence and story. Useful candidates include confirmed shipped outcomes, merged PRs, a delivery timeline, or activity by day or hour. A few numbers may be enough for a quiet period; use a chart when it makes a pattern easier to see. Use `diagram-design` in embedded mode for charts and visual explanations of related outcomes.
+
+- Define each metric's unit and inclusion rule. Shipped outcomes use the delivery boundary above; merged PRs use their merge timestamps in the resolved interval. Deduplicate PRs by repository and number. A release containing older PRs can increase shipped outcomes without increasing that period's merged-PR count.
+- Label release events, shipped outcomes, and merged PRs separately. Keep unconfirmed releases outside shipped totals. Retain withdrawn or limited outcomes' status alongside the numbers they affect.
+- For activity charts, name the event being counted, the time bucket, and the timezone. Describe "most active" as observed merge or shipment activity; timestamps do not establish hours worked or productivity.
+- Use complete, comparable coverage for trends and comparisons. Label partial metrics and coverage gaps; omit numbers the evidence cannot support. An unavailable count is not zero.
+- Give each chart a takeaway title, readable labels, and a short caption with its measure and source. Prefer a few legible charts over a dashboard of every available statistic.
 
 ## Deliver the HTML
 
-Write one self-contained HTML file with inline CSS and no required network assets or JavaScript. Use the requested output location, or `reports/backlog-recap-<start-date>-<end-date>.html`; choose a unique suffix if that path already exists. Keep the document readable on mobile, desktop, and in print, with semantic headings, sufficient contrast, and descriptive links. For longer periods, group outcomes by theme and provide an in-page contents list.
+Write one self-contained HTML file with inline CSS and no required network assets or JavaScript. Use the requested output location, or `reports/backlog-recap-<start-date>-<end-date>.html`; choose a unique suffix if that path already exists. Keep the document readable on mobile, desktop, and in print, with semantic headings, sufficient contrast, and descriptive links. Use native HTML details for supporting material, keep the main view concise, and make expanded content readable in print. Add navigation when the supporting account needs it.
 
-Include the project, resolved period, overview, outcome explanations, and a source/coverage note. Add separate sections for merged work with unconfirmed releases and material follow-ups when present. An empty period still gets a report stating that no shipped changes were found in the checked sources. If access failed, name the missing coverage and label the report incomplete.
+Include the project, resolved period, executive overview, selected metrics or visuals, expandable outcome details, and a source/coverage note. Keep merged work with unconfirmed releases clearly separate; place routine follow-ups in supporting detail. An empty period still gets a report stating that no shipped changes were found in the checked sources. If access failed, name the missing coverage and label the report incomplete.
 
-Inspect the rendered file at narrow and wide widths when a browser is available; check headings, overflow, and source links. Otherwise inspect the HTML and disclose that visual verification was unavailable. Check every outcome's date, delivery status, and supporting evidence before handback.
+Run the diagram skill's checks on each embedded figure. Inspect the rendered file at narrow and wide widths when a browser is available; check headings, chart labels, overflow, source links, and expandable details. Otherwise inspect the HTML and disclose that visual verification was unavailable. Confirm the main view tells the shipping story without opening details. Check every outcome's date, delivery status, and supporting evidence, and reconcile every metric and chart with its source records before handback.
 
 Return a clickable file link and a short summary of the period and coverage. Tracker state stays unchanged. A request for a report authorizes the local artifact; publish through `to-web` when the user requests publication or a shareable URL, using existing authorization. If publication is unavailable, return the local file and identify that remaining blocker.

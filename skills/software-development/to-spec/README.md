@@ -6,8 +6,8 @@ Synthesizes a conversation or shaping record that already reached a decision int
 
 - Pure synthesis, no interview. Undecided points become classified Notes.
 - The latest explicit ruling wins; discarded and superseded material stays out.
-- Sections follow the shaping order: users and experience before shared behavior and implementation.
-- The spec records the settled test contract and split, and adds a diagram only when it materially helps.
+- A brief visual approval overview comes first, after any revision delta. Full requirements follow: users and experience before shared behavior and implementation. `writing-for-humans` shapes the explanation.
+- Substantive specs normally use `diagram-design` for flows, relationships, or state changes. Small textual changes can remain diagram-free. The settled test contract and split stay intact, with material risks and blocking Notes visible.
 - Stable acceptance-criterion identifiers, Notes classifications, supporting-artifact traceability, and the two-way fidelity audit remain downstream contracts.
 - A recommended split appears only when shaping already settled one.
 
