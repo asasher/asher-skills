@@ -2,6 +2,12 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-14 — operator-controlled concurrency
+
+`backlog`, `deliver`, and `agent-ready-codebase` remove default thread counts, build slots, capacity reservations, and dispatch admission locks. The human operator chooses any concurrency limit for shaping and building. Ticket claims still protect against competing writers and preserve uncertain launches for recovery.
+
+Reconcile: refresh these three skills. Remove inherited concurrency ceilings, capacity certification gates, and dispatch admission locks from environment playbooks. Preserve resource-specific isolation and recovery procedures. Existing worktrees and active sessions keep their work; apply the update through the repository's base branch for future runs. The install set is unchanged.
+
 ## 2026-09-13 — optional branch protection
 
 `merge` honors configured protections but their absence is not a blocker. Require current review, verification, and passing checks; re-read head/base immediately before the head-guarded merge. Compare the resulting tree with the tested tree and verify an unexpected result before dependent work continues. Server rules determine whether base freshness is atomic.
