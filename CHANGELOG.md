@@ -2,6 +2,12 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-14: backlog recap
+
+`backlog recap [time range]` creates a standalone HTML report explaining what shipped for a non-developer. It covers changes to user and system behavior, recorded reasons and tradeoffs, availability, and remaining issues. Natural ranges include last week, last month, and last six months; the default is the past week. Delivery evidence determines the reporting date, with unconfirmed releases and incomplete coverage labeled separately.
+
+Reconcile: refresh `backlog`, including `reference/recap.md` and the sidecar. Recap works without setup and returns a local report; publication is available on request. No setup, dependency, or install-set changes. The family review now covers 386 package files.
+
 ## 2026-09-14 — operator-controlled concurrency
 
 `backlog`, `deliver`, and `agent-ready-codebase` remove default thread counts, build slots, capacity reservations, and dispatch admission locks. The human operator chooses any concurrency limit for shaping and building. Ticket claims still protect against competing writers and preserve uncertain launches for recovery.

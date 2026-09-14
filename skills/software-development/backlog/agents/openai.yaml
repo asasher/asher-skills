@@ -1,7 +1,7 @@
 interface:
   display_name: "Backlog"
-  short_description: "Groom tickets; build frontiers, specs, and milestone waves"
-  default_prompt: "Use $backlog <verb> to run one lifecycle verb over this repo's issues."
+  short_description: "Groom, build, check status, and recap what shipped in HTML"
+  default_prompt: "Use $backlog <verb> to work with this repo's backlog; recap [time range] creates a readable HTML report of what shipped."
 
 policy:
   allow_implicit_invocation: false

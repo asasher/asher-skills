@@ -1,6 +1,6 @@
 # Software development family: full manual review
 
-The full review covers **36 skills and all 385 files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the applied setup, dispatch, diagram, and browser changes and Relay retirement.
+The full review covers **36 skills and all 386 files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the applied setup, dispatch, diagram, and browser changes and Relay retirement.
 
 The accepted September 13 [adversarial corrections](software-development-adversarial-review.md) are applied. Review ownership and dependency recovery, approval-bound revisions, tested integration trees and merge freshness checks, attributable runtime results, and the reduced interview, testing, diagram, and evidence ceremony. Focused helper regressions and offline checks are separate from behavioral assessment through real repository work, which follows installation and reconciliation. The original findings and evaluation plan remain available for comparison.
 
@@ -13,9 +13,11 @@ For each skill, record **accept**, **change**, or **needs behavioral evidence**,
 Check how findings become tickets, how milestones survive consolidation, and who decides readiness.
 
 - [ ] **01. [capture](../skills/software-development/capture/SKILL.md)**: One ticket per finding; confirmed publication; recovery preserves advanced labels and claims; milestone grouping and spec-parent gaps.
-- [ ] **02. [backlog](../skills/software-development/backlog/SKILL.md)**: All open issues read; native dependencies preserved through consolidation; initial frontier draining and spec/milestone waves with human merge waits.
+- [ ] **02. [backlog](../skills/software-development/backlog/SKILL.md)**: All open issues read; native dependencies preserved through consolidation; initial frontier draining and spec/milestone waves with human merge waits. Recap produces a readable HTML report with delivery evidence, exact time boundaries, and explicit coverage gaps.
 
 For build, trace three scopes: a frontier of several eligible tickets, a spec that needs a human merge between waves, and a milestone with independent and blocked work. Check selection, truthful waits, completion, and resume from tracker state. For shaping and building, check dispatch with no concurrency limit and with an explicit operator limit. An uncertain owner holds only its ticket; setup creates no concurrency policy.
+
+For recap, trace a release containing older merges, a split awaiting promotion, a rollback, and unavailable release history. Check the resolved period, source coverage, outcome grouping, plain-language reasons and tradeoffs, and local HTML handback without setup.
 
 ## 2. Shaping and splitting
 
@@ -95,7 +97,7 @@ Expand each package and account for every file. The checklist above records the 
 </details>
 
 <details>
-<summary>02. backlog: 8 files</summary>
+<summary>02. backlog: 9 files</summary>
 
 ### Entrypoint
 
@@ -106,6 +108,7 @@ Expand each package and account for every file. The checklist above records the 
 - [reference/build-waves.md](../skills/software-development/backlog/reference/build-waves.md)
 - [reference/labels.md](../skills/software-development/backlog/reference/labels.md)
 - [reference/milestones.md](../skills/software-development/backlog/reference/milestones.md)
+- [reference/recap.md](../skills/software-development/backlog/reference/recap.md)
 - [reference/setup.md](../skills/software-development/backlog/reference/setup.md)
 
 ### Templates and visual assets
@@ -947,6 +950,7 @@ After the package review, trace these journeys through the sources. Record contr
 - A high-risk build receives independent verification, encounters a defect, refreshes both verdicts, and preserves its remaining review budget.
 - A worker fails during dispatch; later status recovers ownership without duplicating a live build or moving the primary checkout.
 - A reviewed merge cleans up finished branches and worktrees while preserving active work and published artifacts.
+- A non-developer requests `backlog recap last 6 months` and receives an HTML report with confirmed delivery dates, explained behavior changes, and separately labeled unconfirmed releases.
 - Retro revisits updated sessions, matches existing issues, accepts user dismissals, and advances only through reviewed work.
 
 ## Evidence and sign-off

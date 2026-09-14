@@ -1,6 +1,6 @@
 ---
 name: backlog
-description: Groom all open tickets, build a frontier or run spec and milestone waves, inspect progress, and run setup or retro.
+description: Groom tickets, build frontiers or spec and milestone waves, inspect progress, recap what shipped in HTML, and run setup or retro.
 disable-model-invocation: true
 metadata:
   requires: [capture, shape, deliver, merge, retro, to-thread, agent-ready-codebase, to-web]
@@ -10,7 +10,7 @@ metadata:
 
 # Backlog
 
-The tracker is the ledger. Groom dispatches selected shaping threads; build coordinates one owning thread per ticket. Read `docs/agents/environment.md` and [labels and claims](reference/labels.md); run setup if the playbook is missing. Use `technical-writing` for tracker records and `writing-for-humans` for conversation when available.
+The tracker is the ledger. Groom dispatches selected shaping threads; build coordinates one owning thread per ticket. For recap, go directly to its reference below. For other verbs, read `docs/agents/environment.md` and [labels and claims](reference/labels.md); run setup if the playbook is missing. Use `technical-writing` for tracker records and reports and `writing-for-humans` for conversation when available.
 
 The human operator controls concurrency for shaping and building. Apply a concurrency limit only when the operator specifies one.
 
@@ -43,6 +43,10 @@ The default ends when each initial ticket is review-ready, merged, or stopped fo
 Join ticket claims, thread liveness, remote branches, worktree registrations, and PR records. Show each ticket's next action under **active**, **review-ready**, **stopped**, **abandoned**, or **merged**. Keep stalled live workers distinct from dead ones. Inspect unfinished split publications and unexplained working copies too. Report milestone progress and closure candidates under [milestone grouping](reference/milestones.md).
 
 A takeover requires the prior worker to be stopped. Record a superseding claim, then resume from pushed commits and the ticket/PR checkpoint, preserving unresolved decisions and review bounds. Verify liveness even after claim expiry. Report cleanup candidates for a separate cleanup action.
+
+## recap
+
+`backlog recap [time range]` creates a standalone HTML report of what shipped, written for someone who does not read code. Accept natural ranges such as `last week`, `last month`, `last 6 months`, or explicit dates; default to the past week. Follow [recap](reference/recap.md) for time boundaries, delivery evidence, plain-language explanations, and the HTML handback. This verb reads project history and writes the report; it requires no setup or readiness certification.
 
 ## Other verbs
 

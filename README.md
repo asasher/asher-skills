@@ -64,6 +64,10 @@ There is no first-party installer and no install-state file — the changelog is
 
 Read the [visual family guide](docs/software-development.html) and [manual review order](docs/software-development-review.md) for the lifecycle and its supporting skills. Run `bun review:serve` to read them locally at `http://127.0.0.1:8791/docs/software-development.html#review`. The reader renders linked Markdown, preserves internal links and heading anchors, and adds navigation between skills. `REVIEW_PORT` selects another local port; share that loopback service through Tailscale Serve for mobile review.
 
+## Backlog reports
+
+Run `backlog recap last week`, `backlog recap last month`, or `backlog recap last 6 months` to get an HTML report of what shipped. It explains changes to user and system behavior, reasons, tradeoffs, and remaining issues in plain language, with links to the evidence. Exact dates work too; the default is the past week.
+
 ## Catalog
 
 Categories organize source browsing. Skill names, `--skill <name>`, sibling references, and installed directories remain flat and unchanged. Invocation and execution are independent axes. `user` means **explicit-only**: a human, orchestrator, or delegated prompt must name the skill. `model` also permits a working thread to discover the skill when needed. `reference` skills are model-invoked but never run as workflows — siblings cite them by name, and citing one does not make the citer a composite.
