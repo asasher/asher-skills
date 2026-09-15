@@ -1,0 +1,297 @@
+{
+  "date": "2026-09-15",
+  "t3Version": "0.0.40",
+  "desktopCommit": "09e8de9c655a",
+  "interactiveBench": [
+    {
+      "host": "local",
+      "trial": 1,
+      "ms": 573
+    },
+    {
+      "host": "local",
+      "trial": 2,
+      "ms": 538
+    },
+    {
+      "host": "local",
+      "trial": 3,
+      "ms": 541
+    },
+    {
+      "host": "local",
+      "trial": 4,
+      "ms": 542
+    },
+    {
+      "host": "local",
+      "trial": 5,
+      "ms": 543
+    },
+    {
+      "host": "remote-over-ssh",
+      "trial": 1,
+      "ms": 777
+    },
+    {
+      "host": "remote-over-ssh",
+      "trial": 2,
+      "ms": 753
+    },
+    {
+      "host": "remote-over-ssh",
+      "trial": 3,
+      "ms": 694
+    },
+    {
+      "host": "remote-over-ssh",
+      "trial": 4,
+      "ms": 748
+    },
+    {
+      "host": "remote-over-ssh",
+      "trial": 5,
+      "ms": 761
+    }
+  ],
+  "snapshotBench": [
+    {
+      "includeImage": false,
+      "ms": 132,
+      "textChars": 14276,
+      "imageBase64Chars": 0
+    },
+    {
+      "includeImage": true,
+      "ms": 101,
+      "textChars": 14433,
+      "imageBase64Chars": 65656
+    }
+  ],
+  "initialTimings": [
+    {
+      "action": "local navigate",
+      "ms": 115
+    },
+    {
+      "action": "type",
+      "ms": 81
+    },
+    {
+      "action": "click",
+      "ms": 283
+    },
+    {
+      "action": "wait_for",
+      "ms": 65
+    },
+    {
+      "action": "click",
+      "ms": 266
+    },
+    {
+      "action": "wait_for",
+      "ms": 276
+    },
+    {
+      "action": "remote app type",
+      "ms": 109
+    },
+    {
+      "action": "remote app click",
+      "ms": 297
+    },
+    {
+      "action": "remote app wait_for",
+      "ms": 470
+    },
+    {
+      "action": "remote app click",
+      "ms": 283
+    },
+    {
+      "action": "remote app wait_for",
+      "ms": 472
+    }
+  ],
+  "standaloneBench": {
+    "browser": "Chrome 153.0.8010.36",
+    "playwright": "1.60.0",
+    "launchMs": 1271,
+    "local": [
+      246,
+      249,
+      250,
+      250,
+      250
+    ],
+    "remoteOverSsh": [
+      479,
+      414,
+      484,
+      433,
+      418
+    ]
+  },
+  "scenes": {
+    "broken": {
+      "url": "http://localhost:48765/",
+      "visibleText": "T3 browser experiment\n\nServer: Mac\n\nTest cookie: t3_probe_session=demo-session; t3_probe_persistent=demo-persistent\n\nName Sign in to test app\n\nSave failed\n\nSave change",
+      "consoleEntries": [
+        {
+          "level": "error",
+          "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+          "timestamp": "2026-09-15T09:33:25.278Z",
+          "source": "network"
+        },
+        {
+          "level": "error",
+          "text": "Probe save failed: 500",
+          "timestamp": "2026-09-15T09:33:25.279Z",
+          "source": "console"
+        }
+      ],
+      "networkEntries": [
+        {
+          "url": "http://localhost:48765/save",
+          "method": "POST",
+          "status": 500,
+          "failed": true,
+          "timestamp": "2026-09-15T09:33:25.278Z"
+        }
+      ]
+    },
+    "fixed": {
+      "url": "http://localhost:48765/?reload=1",
+      "visibleText": "T3 browser experiment\n\nServer: Mac\n\nTest cookie: t3_probe_session=demo-session; t3_probe_persistent=demo-persistent\n\nName Sign in to test app\n\nSaved successfully\n\nSave change",
+      "consoleEntries": [
+        {
+          "level": "error",
+          "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+          "timestamp": "2026-09-15T09:33:25.278Z",
+          "source": "network"
+        },
+        {
+          "level": "error",
+          "text": "Probe save failed: 500",
+          "timestamp": "2026-09-15T09:33:25.279Z",
+          "source": "console"
+        }
+      ],
+      "networkEntries": [
+        {
+          "url": "http://localhost:48765/save",
+          "method": "POST",
+          "status": 500,
+          "failed": true,
+          "timestamp": "2026-09-15T09:33:25.278Z"
+        }
+      ]
+    },
+    "remoteBroken": {
+      "url": "http://127.0.0.1:48766/",
+      "visibleText": "T3 browser experiment\n\nServer: cx-box\n\nTest cookie: t3_probe_session=demo-session; t3_probe_persistent=demo-persistent\n\nName Sign in to test app\n\nSave failed\n\nSave change",
+      "consoleEntries": [
+        {
+          "level": "error",
+          "text": "Electron sandboxed_renderer.bundle.js script failed to run",
+          "timestamp": "2026-09-15T09:34:58.180Z",
+          "source": "console"
+        },
+        {
+          "level": "error",
+          "text": "TypeError: Cannot destructure property 'preloadScripts' of 'binding.startupData' as it is null.\n    at node:electron/js2c/sandbox_bundle:2:132134\n    at node:electron/js2c/sandbox_bundle:2:133238\n    at ___electron_webpack_init__ (node:electron/js2c/sandbox_bundle:2:133242)\n    at node:electron/js2c/sandbox_bundle:2:133365",
+          "timestamp": "2026-09-15T09:34:58.180Z",
+          "source": "console"
+        },
+        {
+          "level": "error",
+          "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+          "timestamp": "2026-09-15T09:35:30.993Z",
+          "source": "network"
+        },
+        {
+          "level": "error",
+          "text": "Probe save failed: 500",
+          "timestamp": "2026-09-15T09:35:30.993Z",
+          "source": "console"
+        }
+      ],
+      "networkEntries": [
+        {
+          "url": "http://127.0.0.1:48766/save",
+          "method": "POST",
+          "status": 500,
+          "failed": true,
+          "timestamp": "2026-09-15T09:35:30.993Z"
+        }
+      ]
+    },
+    "local-mobile": {
+      "url": "http://localhost:48765/?reload=1",
+      "visibleText": "T3 browser experiment\n\nServer: Mac\n\nTest cookie: t3_probe_session=demo-session; t3_probe_persistent=demo-persistent\n\nName Sign in to test app\n\nSaved successfully\n\nSave change",
+      "consoleEntries": [
+        {
+          "level": "error",
+          "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+          "timestamp": "2026-09-15T09:33:25.278Z",
+          "source": "network"
+        },
+        {
+          "level": "error",
+          "text": "Probe save failed: 500",
+          "timestamp": "2026-09-15T09:33:25.279Z",
+          "source": "console"
+        }
+      ],
+      "networkEntries": [
+        {
+          "url": "http://localhost:48765/save",
+          "method": "POST",
+          "status": 500,
+          "failed": true,
+          "timestamp": "2026-09-15T09:33:25.278Z"
+        }
+      ]
+    },
+    "cxbox-over-ssh": {
+      "url": "http://127.0.0.1:48766/?reload=1",
+      "visibleText": "T3 browser experiment\n\nServer: cx-box\n\nTest cookie: t3_probe_session=demo-session; t3_probe_persistent=demo-persistent\n\nName Sign in to test app\n\nSaved successfully\n\nSave change",
+      "consoleEntries": [
+        {
+          "level": "error",
+          "text": "Electron sandboxed_renderer.bundle.js script failed to run",
+          "timestamp": "2026-09-15T09:34:58.180Z",
+          "source": "console"
+        },
+        {
+          "level": "error",
+          "text": "TypeError: Cannot destructure property 'preloadScripts' of 'binding.startupData' as it is null.\n    at node:electron/js2c/sandbox_bundle:2:132134\n    at node:electron/js2c/sandbox_bundle:2:133238\n    at ___electron_webpack_init__ (node:electron/js2c/sandbox_bundle:2:133242)\n    at node:electron/js2c/sandbox_bundle:2:133365",
+          "timestamp": "2026-09-15T09:34:58.180Z",
+          "source": "console"
+        },
+        {
+          "level": "error",
+          "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+          "timestamp": "2026-09-15T09:35:30.993Z",
+          "source": "network"
+        },
+        {
+          "level": "error",
+          "text": "Probe save failed: 500",
+          "timestamp": "2026-09-15T09:35:30.993Z",
+          "source": "console"
+        }
+      ],
+      "networkEntries": [
+        {
+          "url": "http://127.0.0.1:48766/save",
+          "method": "POST",
+          "status": 500,
+          "failed": true,
+          "timestamp": "2026-09-15T09:35:30.993Z"
+        }
+      ]
+    }
+  }
+}
