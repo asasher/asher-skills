@@ -49,9 +49,11 @@ Check who owns the build, what independent checks establish, and when the PR is 
 
 Check human selection, cleanup, interrupted work, and proposed issues from recent runs.
 
-- [ ] **17. [merge](../skills/software-development/merge/SKILL.md)**: Shaping holds, risk and waiver authority, verified integration, optional branch protection, post-merge tree comparison, dependent branches, and safe cleanup.
+- [ ] **17. [merge](../skills/software-development/merge/SKILL.md)**: Shaping holds, dependency order, conflict resolution against approved tickets and specs, behavioral interactions in clean merges, risk and waiver authority, verified integration, optional branch protection, post-merge tree comparison, and safe cleanup.
 - [ ] **18. [retro](../skills/software-development/retro/SKILL.md)**: Persisted pending transcript versions, bounded sweeps, selected tracker writes, and completed checkpoint coverage.
 - [ ] **19. [handoff](../skills/software-development/handoff/SKILL.md)**: Enough durable context for another session to resume without losing decisions or unfinished work.
+
+For merge, trace a conflict already present in the first selected PR, a dependent branch changed by an earlier merge, and a clean Git merge that changes behavior. Check that resolutions preserve compatible approved requirements from both sides and record their sources and reasoning. Conflicting or unresolved requirements stop the affected merge for a ruling. Changed resolutions require renewed verification and review before merging.
 
 ## 5. Setup and dispatch
 
