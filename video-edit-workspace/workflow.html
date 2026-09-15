@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Video editing · Workflow & tools</title>
+  <style>
+    :root{color-scheme:dark;--bg:#101719;--panel:#182224;--ink:#f3f4ef;--muted:#a8b7b7;--accent:#8edbc6;--line:#304345}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Arial,Helvetica,sans-serif}main{max-width:1100px;margin:auto;padding:48px 32px 32px}h1,h2,h3,p{margin:0}h1{font-size:clamp(32px,5vw,52px);line-height:1.08;letter-spacing:-1.8px;margin:14px 0}h2{font-size:23px;letter-spacing:-.5px;margin-bottom:18px}h3{font-size:16px}p{color:var(--muted)}.eyebrow{font-size:12px;letter-spacing:1.7px;text-transform:uppercase;color:var(--accent)}.intro{max-width:690px;font-size:18px}section{margin-top:38px}.workflow{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(5,1fr);gap:20px}.workflow li{border-top:1px solid var(--line);padding-top:12px;position:relative}.workflow li:not(:last-child)::after{content:'→';position:absolute;right:0;top:9px;color:var(--accent)}.num{font-size:12px;color:var(--accent);display:block;margin-bottom:10px}.workflow p{font-size:14px;margin-top:7px;line-height:1.45}.layout{display:grid;grid-template-columns:1fr 1fr;gap:30px}.format-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px}.switch{display:inline-flex;border:1px solid var(--line);border-radius:7px;padding:3px;gap:3px;margin-bottom:18px}button{font:inherit;font-size:14px;border:0;border-radius:4px;padding:8px 17px;background:transparent;color:var(--muted);cursor:pointer}button[aria-pressed=true]{background:var(--accent);color:var(--bg)}button:focus-visible{outline:2px solid var(--ink);outline-offset:4px}.stage{height:240px;display:flex;justify-content:center;align-items:center;background:var(--bg);border-radius:6px}.canvas{width:118px;aspect-ratio:9/16;border:1px solid #63837d;border-radius:3px;padding:8px;display:grid;gap:6px;grid-template-rows:1fr 17px 1fr;background:#0b1113}.camera,.graphics,.captions{display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px;color:var(--muted);border-radius:2px}.graphics{border:1px solid var(--accent);color:var(--accent);flex-direction:column;gap:6px;background:#172a26}.graphics b{font-size:10px;font-weight:normal}.camera{background:#273337;flex-direction:column;gap:5px}.head{width:20px;height:20px;border-radius:50%;background:#6c8582;position:relative;margin-bottom:7px}.head::after{content:'';position:absolute;width:32px;height:12px;border-radius:12px 12px 0 0;background:#6c8582;top:22px;left:-6px}.captions{font-size:8px;color:var(--ink)}.canvas.landscape{width:100%;max-width:340px;aspect-ratio:16/9;grid-template-columns:1fr 2fr;grid-template-rows:1fr 22px;padding:12px;gap:9px}.landscape .camera{grid-column:1;grid-row:1}.landscape .graphics{grid-column:2;grid-row:1}.landscape .captions{grid-column:1/3;grid-row:2}.format-meta{font-size:14px;margin-top:14px}.format-meta strong{color:var(--ink);display:block;margin-bottom:4px}.language{padding:3px 0}.language p{margin-bottom:16px}.swatches{display:flex;gap:8px;margin-bottom:18px}.swatch{width:34px;height:10px;border-radius:2px;border:1px solid var(--line)}.rules{padding-left:19px;margin:0;color:var(--muted)}.rules li{margin-bottom:10px}.rules strong{color:var(--ink);font-weight:normal}.sample{margin-top:22px;padding:15px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:14px;color:var(--accent)}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th{text-align:left;font-size:11px;color:var(--muted);font-weight:normal;text-transform:uppercase;letter-spacing:1.2px;padding:0 14px 10px 0}td{vertical-align:top;padding:13px 14px 13px 0;border-top:1px solid var(--line)}td:first-child{width:19%;color:var(--ink)}td:nth-child(2){width:29%;color:var(--accent)}td:last-child{color:var(--muted)}.stack-note{margin-top:16px;font-size:14px}.review{display:grid;grid-template-columns:1fr 1fr;gap:32px;border-top:2px solid var(--accent);padding-top:20px}.review p{font-size:15px}.review strong{color:var(--ink)}.review h2{margin-bottom:10px}.deliver{font-size:14px;margin-top:12px;color:var(--accent)}footer{border-top:1px solid var(--line);margin-top:30px;padding-top:15px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:20px}a{color:var(--accent);text-underline-offset:3px}@media(max-width:700px){main{padding:30px 20px}.workflow{grid-template-columns:1fr;gap:13px}.workflow li{display:grid;grid-template-columns:30px 1fr;gap:0 8px;padding-top:10px}.workflow li::after{display:none}.num{grid-row:1/3;margin-top:2px}.workflow p{grid-column:2;margin-top:3px}.layout,.review{grid-template-columns:1fr;gap:24px}section{margin-top:30px}.format-card{padding:18px}td{min-width:105px}td:last-child{min-width:180px}footer{display:block}footer span{display:block;margin-bottom:5px}}@media print{body{background:white;color:#14201f}main{padding:10px;max-width:none}p,.rules,footer,td:last-child{color:#455b56}h1{font-size:32px}.format-card{background:#edf3f0}.stage{background:#101719}.workflow,.layout,.review,table{break-inside:avoid}section{margin-top:24px}button{color:#14201f}.review strong,.rules strong,.format-meta strong,td:first-child{color:#14201f}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Video editing · Proposed stack · v1</div>
+    <h1>From OBS to a finished video.</h1>
+    <p class="intro">Choose landscape or Short. Clean up the voice, edit the story, and explain it with a consistent visual language.</p>
+  </header>
+
+  <section aria-labelledby="workflow-title">
+    <h2 id="workflow-title">The workflow</h2>
+    <ol class="workflow">
+      <li><span class="num">01</span><h3>Choose & inspect</h3><p>Pick the format and takes. Find the clean screen, microphone track, and camera sync.</p></li>
+      <li><span class="num">02</span><h3>Edit the story</h3><p>Transcribe, choose the best takes, and remove repetition. Keep natural breaths and complete words.</p></li>
+      <li><span class="num">03</span><h3>Clean the voice</h3><p>Reduce noise, balance the level, and compare against the original at equal speech loudness.</p></li>
+      <li><span class="num">04</span><h3>Build the visuals</h3><p>Compose camera and screen. Add diagrams, timed motion, and captions for the chosen format.</p></li>
+      <li><span class="num">05</span><h3>Render & review</h3><p>Check the export. You watch and listen, then accept it or mark changes.</p></li>
+    </ol>
+  </section>
+
+  <section class="layout" aria-label="Format and visual language">
+    <div class="format-card">
+      <h2>One style, two formats</h2>
+      <div class="switch" role="group" aria-label="Preview format">
+        <button type="button" aria-pressed="true" data-format="short">Short · 9:16</button>
+        <button type="button" aria-pressed="false" data-format="landscape">Landscape · 16:9</button>
+      </div>
+      <div class="stage" aria-label="Illustrative layout preview">
+        <div class="canvas" id="canvas">
+          <div class="graphics">Screen / diagram<b>Frames → select → detail</b></div>
+          <div class="captions">Readable phrase captions</div>
+          <div class="camera"><span class="head" aria-hidden="true"></span>Camera</div>
+        </div>
+      </div>
+      <p class="format-meta" aria-live="polite"><strong id="dimensions">1080 × 1920 · One focused takeaway</strong><span id="format-description">Stack camera and graphics. Burn in captions and create a portrait cover. Set duration from the brief.</span></p>
+    </div>
+    <div class="language">
+      <h2>The visual language</h2>
+      <p>Refine the style from the existing Unroll video: dark panels, warm white type, and mint for the active idea.</p>
+      <div class="swatches" aria-label="Dark charcoal, warm white, muted grey, and mint palette">
+        <span class="swatch" style="background:#101719"></span><span class="swatch" style="background:#f3f4ef"></span><span class="swatch" style="background:#a8b7b7"></span><span class="swatch" style="background:#8edbc6"></span>
+      </div>
+      <ul class="rules">
+        <li><strong>One type family.</strong> Start with Arial; keep headings, labels, and captions consistent.</li>
+        <li><strong>A small diagram vocabulary.</strong> Objects, groups, connections, selection, and a closer view.</li>
+        <li><strong>Motion follows the explanation.</strong> Reveal, connect, highlight, or zoom when the spoken idea arrives.</li>
+        <li><strong>Layout follows the format.</strong> Reflow diagrams for portrait and give each beat time to read.</li>
+      </ul>
+      <div class="sample">First specimen: a stack of frames unfolds into a grid, then one frame expands for inspection.</div>
+    </div>
+  </section>
+
+  <section aria-labelledby="tools-title">
+    <h2 id="tools-title">What runs each part</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Part</th><th scope="col">Tools</th><th scope="col">Job</th></tr></thead>
+        <tbody>
+          <tr><td>Inspect & transcribe</td><td>FFprobe + MLX Whisper</td><td>Read streams and timing; transcribe locally on the Mac with word timestamps. FFmpeg + Pillow create frame sheets.</td></tr>
+          <tr><td>Plan the edit</td><td>Agent + Python + JSON</td><td>One edit decision list records cuts, source tracks, sync, and graphic cues. All render passes follow that timeline.</td></tr>
+          <tr><td>Improve the voice</td><td>FFmpeg audio filters</td><td>Start with measured denoising, high-pass filtering, gentle compression when needed, and two-pass loudness normalization. Choose strength by listening.</td></tr>
+          <tr><td>Animate diagrams</td><td>HTML / SVG + GSAP<br>Hyperframes renderer</td><td>Build reusable graphic scenes with a shared palette and type scale. Animate against exact timestamps and render them to video.</td></tr>
+          <tr><td>Finish the video</td><td>FFmpeg + ASS / SRT + Pillow</td><td>Combine footage, graphics, and cleaned audio. Add captions and a matching cover. Export H.264/AAC MP4.</td></tr>
+          <tr><td>Compare revisions</td><td>Local HTML review + you</td><td>Replay the same passage, switch A/B versions, and record which is better with timestamped feedback.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="stack-note"><strong>How it connects:</strong> OBS sources → one JSON timeline → audio and graphics passes → FFmpeg composition → MP4 + review page. The skill supplies the editing rules; the project stores the style and presets.</p>
+    <p class="stack-note">These tools build on the previous edits. The reusable skill and comparison runner still need to be built. If FFmpeg cleanup fails the voice comparison, test a neural denoiser before adding it to the stack.</p>
+  </section>
+
+  <section class="review" aria-label="Human review and first run">
+    <div>
+      <h2>How we know it improved</h2>
+      <p>Keep the known raw footage and old exports. After each skill change, rerender the same footage. Compare <strong>voice at equal speech loudness</strong> and <strong>graphics on the same cut</strong>. You choose A, B, tie, or neither. Then review the whole edit.</p>
+    </div>
+    <div>
+      <h2>Start with a Short</h2>
+      <p>Use <strong>Recap</strong> for voice cleanup and <strong>Unroll</strong> for motion. Keep the SDLC landscape video as a regression case. Accept the first treatments before making them defaults.</p>
+      <div class="deliver">Output: video · captions · cover when requested · A/B review</div>
+    </div>
+  </section>
+  <footer><span>Current scope: voice, editing, diagrams, and motion graphics.</span><span>Relighting deferred. Publishing is a separate step.</span></footer>
+</main>
+<script>
+  const canvas = document.getElementById('canvas');
+  const dimensions = document.getElementById('dimensions');
+  const description = document.getElementById('format-description');
+  document.querySelectorAll('[data-format]').forEach(button => {
+    button.addEventListener('click', () => {
+      const landscape = button.dataset.format === 'landscape';
+      document.querySelectorAll('[data-format]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      canvas.classList.toggle('landscape', landscape);
+      dimensions.textContent = landscape ? '1920 × 1080 · A complete explanation' : '1080 × 1920 · One focused takeaway';
+      description.textContent = landscape ? 'Give the screen or diagram room beside the camera. Supply caption files and a landscape thumbnail; burn in captions when requested.' : 'Stack camera and graphics. Burn in captions and create a portrait cover. Set duration from the brief.';
+    });
+  });
+</script>
+</body>
+</html>
