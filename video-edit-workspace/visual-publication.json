@@ -1,0 +1,32 @@
+{
+  "page": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-design-voice/6404c78622d4d76f050a63c6a97390676ab75229a9aadf9641db722beb529fef-095a679b-cbf7-4a92-b41d-02107aee1226/visual-reference.html",
+    "key": "asher-skills/video-design-voice/6404c78622d4d76f050a63c6a97390676ab75229a9aadf9641db722beb529fef-095a679b-cbf7-4a92-b41d-02107aee1226/visual-reference.html",
+    "revision": "feb1ec230a81391c1c06ffb6a3a8ec6600e72e14",
+    "hash": "6404c78622d4d76f050a63c6a97390676ab75229a9aadf9641db722beb529fef"
+  },
+  "audio": {
+    "original": {
+      "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-design-voice/9eef6fc9032cfb26ab51a126cbaf11df63b5735b7f36fcad78042eb1dabe3dac-b6105c39-0067-4d6c-aa4d-74b23948871d/original.wav",
+      "key": "asher-skills/video-design-voice/9eef6fc9032cfb26ab51a126cbaf11df63b5735b7f36fcad78042eb1dabe3dac-b6105c39-0067-4d6c-aa4d-74b23948871d/original.wav",
+      "source_revision": "4f1915318cdbcd9a15df48c6421eec6be742637f",
+      "sha256": "9eef6fc9032cfb26ab51a126cbaf11df63b5735b7f36fcad78042eb1dabe3dac",
+      "verification": "HTTP 200, SHA-256 match"
+    },
+    "gentle": {
+      "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-design-voice/1ba1a8c5e170d14752a4c71eb3d21937b8e79898b056b69394986437ceed326d-d749a6d7-3c79-43fb-8911-5d600e0a7e0c/gentle.wav",
+      "key": "asher-skills/video-design-voice/1ba1a8c5e170d14752a4c71eb3d21937b8e79898b056b69394986437ceed326d-d749a6d7-3c79-43fb-8911-5d600e0a7e0c/gentle.wav",
+      "source_revision": "4f1915318cdbcd9a15df48c6421eec6be742637f",
+      "sha256": "1ba1a8c5e170d14752a4c71eb3d21937b8e79898b056b69394986437ceed326d",
+      "verification": "HTTP 200, SHA-256 match"
+    },
+    "stronger": {
+      "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-design-voice/cb33aa8f651a53bef5171d82a4d0e736af24cdb97867a44781076d3d652a9335-ef3d8bd6-e78e-41ab-9363-ee9c9318cc11/stronger.wav",
+      "key": "asher-skills/video-design-voice/cb33aa8f651a53bef5171d82a4d0e736af24cdb97867a44781076d3d652a9335-ef3d8bd6-e78e-41ab-9363-ee9c9318cc11/stronger.wav",
+      "source_revision": "4f1915318cdbcd9a15df48c6421eec6be742637f",
+      "sha256": "cb33aa8f651a53bef5171d82a4d0e736af24cdb97867a44781076d3d652a9335",
+      "verification": "HTTP 200, SHA-256 match"
+    }
+  },
+  "verification": "All four URLs returned HTTP 200 with matching file content. Browser checks passed for themes, playback controls, audio switching, reduced motion, mobile, static and no-JS states."
+}
