@@ -1,6 +1,6 @@
 # Software development family: full manual review
 
-The full review covers **36 skills and all 386 files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the applied setup, dispatch, diagram, and browser changes and Relay retirement.
+The full review covers **36 skills and all 387 files in their packages**, matching the README install set. Start with [the visual guide](software-development.html#review). The complete file inventory below includes conditional references, templates, scripts, existing tests, sidecars, and credits. See the [simplification review](skill-instruction-review.md#simplification-review) for the applied setup, dispatch, diagram, and browser changes and Relay retirement.
 
 The accepted September 13 [adversarial corrections](software-development-adversarial-review.md) are applied. Review ownership and dependency recovery, approval-bound revisions, tested integration trees and merge freshness checks, attributable runtime results, and the reduced interview, testing, diagram, and evidence ceremony. Focused helper regressions and offline checks are separate from behavioral assessment through real repository work, which follows installation and reconciliation. The original findings and evaluation plan remain available for comparison.
 
@@ -58,7 +58,7 @@ Check human selection, cleanup, interrupted work, and proposed issues from recen
 Check the infrastructure that makes the lifecycle possible in a fresh repository or on another machine.
 
 - [ ] **20. [agent-ready-codebase](../skills/software-development/agent-ready-codebase/SKILL.md)**: Demonstrated capability to run, seed, authenticate, isolate concurrent browser checks on the execution host, and publish.
-- [ ] **21. [to-web](../skills/software-development/to-web/SKILL.md)**: Artifact destinations, immutable uploads, verified reachability, and media outside Git.
+- [ ] **21. [to-web](../skills/software-development/to-web/SKILL.md)**: Artifact destinations, immutable uploads with script-generated UUID4 keys, verified reachability, and media outside Git.
 - [ ] **22. [to-thread](../skills/system/to-thread/SKILL.md)**: Worktree preparation, bounded protocol waits, preserved thread identity, and explicit uncertain liveness.
 - [ ] **23. [to-subagent](../skills/system/to-subagent/SKILL.md)**: Bounded assignments, fresh context, deadlines, recovery, and returned results.
 - [ ] **24. [staffing](../skills/system/staffing/SKILL.md)**: Astra, Fable, Terra, and image model assignments; owner stages and independent contexts.
@@ -430,11 +430,15 @@ Expand each package and account for every file. The checklist above records the 
 </details>
 
 <details>
-<summary>21. to-web: 3 files</summary>
+<summary>21. to-web: 4 files</summary>
 
 ### Entrypoint
 
 - [SKILL.md](../skills/software-development/to-web/SKILL.md)
+
+### Executable helpers
+
+- [scripts/generate-uuid.py](../skills/software-development/to-web/scripts/generate-uuid.py)
 
 ### Packaging and provenance
 
