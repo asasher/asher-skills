@@ -1,6 +1,6 @@
 # Video editing skill: shaping draft
 
-Status: shaping draft, September 15, 2026. Asher chose to refine the existing visual style and focus on voice quality and motion graphics. Relighting is deferred. The conversation review and fixture inventory are complete. The skill, treatment previews, and human eval have not been run. The exact visual tokens and voice treatment remain to be established through examples. Landscape and Short are explicit format choices.
+Status: shaping draft, September 15, 2026. Asher chose to refine the existing visual style and focus on voice quality and motion graphics. Relighting is deferred. The conversation review and fixture inventory are complete. The skill is not implemented. A monochrome Harness specimen and two local DeepFilterNet voice treatments are ready; human verdicts are pending. The exact visual tokens and voice treatment remain to be established through examples. Landscape and Short are explicit format choices.
 
 ## What we are making
 
@@ -146,4 +146,4 @@ Whenever instructions or rendering code change, rerun the affected comparisons a
 4. Keep human A/B review on known raw footage as the acceptance step for instruction changes.
 5. Defer relighting. The [research notes](relighting-research.md) remain available for a later version and do not create current implementation or eval requirements.
 
-Next, create a matched voice sample and the Unroll motion specimen in portrait format. Keep the original cuts and camera treatment fixed for these comparisons. Human feedback determines the first accepted voice treatment and visual tokens. Then exercise both output formats on the known-footage suite. The draft and fixture inventory are not evidence that the proposed treatments already work.
+Next, review the monochrome Harness specimen and the original/gentle/stronger Recap voice samples in `visual-reference.html`. Record the human choices in DESIGN.md and the trial record. Apply those choices to an Unroll motion specimen and then exercise both output formats on the known-footage suite. Successful rendering alone does not establish perceptual improvement.
