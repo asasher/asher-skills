@@ -1,7 +1,7 @@
 {
   "version": "v001",
   "status": "completed",
-  "human_review": "pending",
+  "human_review": "changes_requested",
   "repository": "asasher/asher-skills",
   "repository_revision": "10f388ac6b97fbd11360a88ce94e1d460dcfc304",
   "skill_revision": "10f388ac6b97fbd11360a88ce94e1d460dcfc304",
@@ -31,5 +31,6 @@
     "main_view_words": 249,
     "expandable_sections": 7,
     "diagram_figures": 0
-  }
+  },
+  "human_feedback_file": "feedback.md"
 }

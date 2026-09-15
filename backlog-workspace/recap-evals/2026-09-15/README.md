@@ -2,9 +2,11 @@
 
 This case runs `backlog recap` on asasher/asher-skills. The first report is for September 8–15, 2026, with exact boundaries in its run record. A fresh subagent generates the report; Asher judges whether it works for a tired executive.
 
-| Version | Report                          | Review  |
-| ------- | ------------------------------- | ------- |
-| v001    | [Open report](v001/report.html) | Pending |
+| Version | Report | Review |
+| --- | --- | --- |
+| v001 | [Open report](v001/report.html) | [Changes requested](v001/feedback.md) |
+
+The [v002 Fable brief](v002/fable-brief.md) is prepared. The report has not been generated; the separate Claude CLI route awaits the usage approval required by the eval execution policy. This version will be a redesign using the same evidence, with Fable and an explicit timeline/chart requirement recorded as changed inputs.
 
 Each version keeps the report, exact dispatch prompt, model and skill revision, source records, and available rendering evidence. `run.json` records the period and provenance. Agent checks describe evidence and rendering; they do not substitute for human acceptance.
 
