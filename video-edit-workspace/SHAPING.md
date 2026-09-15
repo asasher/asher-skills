@@ -73,6 +73,8 @@ Validate source quality before expensive treatment. The raw recordings remain th
 
 Aim for recognizably Asher's voice with intelligible consonants, natural breaths, steady level, and less distracting noise.
 
+Start with DeepFilterNet 3 as the local neural denoising candidate. The native Apple Silicon v0.5.6 executable has rendered two strengths on Recap; the human listening verdict is pending. The trial source and hashes are in `voice-trial.json`, and its repeatable script is `scripts/voice-trial.py`. Keep FFmpeg for extraction, timing, loudness, and export.
+
 Choose the microphone track by inspecting and auditioning available tracks. Assess noise during speech as well as pauses. Apply processing to the observed problem: rumble, steady hiss, hum, room reverb, or transient noise need different treatment. Preserve a bypass version.
 
 Try the lightest effective treatment on a representative passage before processing the whole edit. Compare untreated and processed speech at matched speech loudness. Listen for metallic texture, missing consonants, pumping, and abrupt changes in the noise floor at cuts. A quieter waveform or a correct transcript cannot establish natural sound.
@@ -83,9 +85,7 @@ Completion: the chosen track is documented, technical measurements are recorded,
 
 ### Diagrams and motion graphics
 
-Refine the existing dark graphic panels, warm white type, and restrained animation. For the first specimen, use the Unroll colours: dark `#101719`, warm white `#F3F4EF`, muted `#A8B7B7`, and mint `#8EDBC6`. Mint marks the currently discussed element or relationship. Keep these proposed tokens open to feedback. Preserve light captured screens when they communicate clearly.
-
-Use one sans-serif family and a consistent hierarchy for headings, labels, and captions. Prototype with the existing Arial assets so a font change does not confound the first motion comparison. Check text at intended playback size, not only at full export resolution.
+Use [DESIGN.md](DESIGN.md) for the current visual proposal: monochrome light and dark, with an optional blue comparison from diagram-design. Asher rejected the previous teal direction. The interactive reference is `visual-reference.html`.
 
 The visual language must define more than colours:
 

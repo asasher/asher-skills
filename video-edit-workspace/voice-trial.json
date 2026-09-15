@@ -1,0 +1,228 @@
+{
+  "status": "rendered locally; human listening verdict pending",
+  "source": "/Users/asher/Movies/OBS/2026-09-14 16-56-45 Program.mp4",
+  "source_sha256": "06dc1c9563b9af5649b4a423cc2e4842df2ffe84e4fcc4b596e9ddf2b7bd900f",
+  "start": 16,
+  "duration": 14,
+  "stream": "0:a:3",
+  "model_sha256": "c94d91f70911001c946e0fabb4aa9adc37045f45a03b56008cb0c8244cb63616",
+  "binary_sha256": "4601e7f4e4c03e59a4c5b5000216ef3add3e808799cfccd95e14e83ea4611081",
+  "version": "deep_filter 0.5.6",
+  "shared_input_gain_db": 8.27008716662791,
+  "tail_padding_seconds": 0.1,
+  "delay_compensation": true,
+  "sample_rate": 48000,
+  "normalization": "RMS on identical source-transcript word windows; linear gain only",
+  "common_output_gain_db": -7.779708191232383,
+  "speech_windows": [
+    {
+      "start": 0.0,
+      "end": 0.2,
+      "word": " how"
+    },
+    {
+      "start": 0.2,
+      "end": 0.36,
+      "word": " it"
+    },
+    {
+      "start": 0.36,
+      "end": 0.62,
+      "word": " works"
+    },
+    {
+      "start": 0.62,
+      "end": 0.8,
+      "word": " is"
+    },
+    {
+      "start": 0.8,
+      "end": 1.32,
+      "word": " sometimes"
+    },
+    {
+      "start": 1.32,
+      "end": 2.82,
+      "word": " you"
+    },
+    {
+      "start": 2.82,
+      "end": 3.04,
+      "word": " might"
+    },
+    {
+      "start": 3.04,
+      "end": 3.32,
+      "word": " want"
+    },
+    {
+      "start": 3.32,
+      "end": 3.5,
+      "word": " to"
+    },
+    {
+      "start": 3.5,
+      "end": 3.72,
+      "word": " know"
+    },
+    {
+      "start": 3.72,
+      "end": 4.42,
+      "word": " what"
+    },
+    {
+      "start": 4.42,
+      "end": 4.66,
+      "word": " you"
+    },
+    {
+      "start": 4.66,
+      "end": 5.04,
+      "word": " shipped"
+    },
+    {
+      "start": 5.04,
+      "end": 6.14,
+      "word": " in"
+    },
+    {
+      "start": 6.14,
+      "end": 6.26,
+      "word": " the"
+    },
+    {
+      "start": 6.26,
+      "end": 6.64,
+      "word": " last"
+    },
+    {
+      "start": 6.64,
+      "end": 7.86,
+      "word": " however"
+    },
+    {
+      "start": 7.86,
+      "end": 8.28,
+      "word": " much"
+    },
+    {
+      "start": 8.28,
+      "end": 8.64,
+      "word": " time"
+    },
+    {
+      "start": 8.64,
+      "end": 9.3,
+      "word": " like"
+    },
+    {
+      "start": 9.3,
+      "end": 9.7,
+      "word": " week"
+    },
+    {
+      "start": 9.7,
+      "end": 10.18,
+      "word": " month"
+    },
+    {
+      "start": 10.18,
+      "end": 10.82,
+      "word": " six"
+    },
+    {
+      "start": 10.82,
+      "end": 11.08,
+      "word": " months"
+    },
+    {
+      "start": 11.08,
+      "end": 12.72,
+      "word": " this"
+    },
+    {
+      "start": 12.72,
+      "end": 12.82,
+      "word": " is"
+    },
+    {
+      "start": 12.82,
+      "end": 13.12,
+      "word": " especially"
+    },
+    {
+      "start": 13.12,
+      "end": 13.56,
+      "word": " useful"
+    },
+    {
+      "start": 13.56,
+      "end": 13.98,
+      "word": " when"
+    },
+    {
+      "start": 13.98,
+      "end": 14.0,
+      "word": " you"
+    }
+  ],
+  "runs": [
+    {
+      "variant": "gentle",
+      "attenuation_limit_db": 12,
+      "elapsed_seconds": 0.751924832817167,
+      "command": [
+        "/tmp/asher-video-voice-20260915/deep-filter",
+        "-m",
+        "/tmp/asher-video-voice-20260915/DeepFilterNet3_onnx.tar.gz",
+        "-D",
+        "-a",
+        "12",
+        "-o",
+        "/tmp/asher-video-voice-20260915/review/gentle",
+        "/tmp/asher-video-voice-20260915/review/input.wav"
+      ]
+    },
+    {
+      "variant": "stronger",
+      "attenuation_limit_db": 24,
+      "elapsed_seconds": 0.65809066593647,
+      "command": [
+        "/tmp/asher-video-voice-20260915/deep-filter",
+        "-m",
+        "/tmp/asher-video-voice-20260915/DeepFilterNet3_onnx.tar.gz",
+        "-D",
+        "-a",
+        "24",
+        "-o",
+        "/tmp/asher-video-voice-20260915/review/stronger",
+        "/tmp/asher-video-voice-20260915/review/input.wav"
+      ]
+    }
+  ],
+  "outputs": {
+    "original": {
+      "speech_match_gain_db": 12.279708191232384,
+      "sha256": "9eef6fc9032cfb26ab51a126cbaf11df63b5735b7f36fcad78042eb1dabe3dac",
+      "frames": 672000,
+      "peak_dbfs": -1.4999999999999996,
+      "speech_rms_dbfs": -27.779708191232384
+    },
+    "gentle": {
+      "speech_match_gain_db": 13.984836135616337,
+      "sha256": "1ba1a8c5e170d14752a4c71eb3d21937b8e79898b056b69394986437ceed326d",
+      "frames": 672000,
+      "peak_dbfs": -4.916364023293544,
+      "speech_rms_dbfs": -27.779708191232384
+    },
+    "stronger": {
+      "speech_match_gain_db": 14.198497043162723,
+      "sha256": "cb33aa8f651a53bef5171d82a4d0e736af24cdb97867a44781076d3d652a9335",
+      "frames": 672000,
+      "peak_dbfs": -4.788005227852983,
+      "speech_rms_dbfs": -27.77970819123238
+    }
+  },
+  "model_url": "https://raw.githubusercontent.com/Rikorose/DeepFilterNet/v0.5.6/models/DeepFilterNet3_onnx.tar.gz",
+  "binary_url": "https://github.com/Rikorose/DeepFilterNet/releases/download/v0.5.6/deep-filter-0.5.6-aarch64-apple-darwin"
+}
