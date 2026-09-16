@@ -1,0 +1,5 @@
+Fix it on the server, and disable the button while the request is pending.
+
+Debouncing would reduce double-clicks, but clients can also retry after a timeout. Right now, every request creates another invite and sends another email.
+
+I’d give each invite attempt an idempotency key and reuse it for retries. The server should atomically accept that key once, return the same invite for duplicate requests, and queue the email only once. The button change gives people immediate feedback; the server change handles duplicate requests.

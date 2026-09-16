@@ -1,0 +1,23 @@
+{
+  "status": "awaiting-human",
+  "turns": [
+    {
+      "turn": 1,
+      "words": 84
+    },
+    {
+      "turn": 2,
+      "words": 63
+    },
+    {
+      "turn": 3,
+      "words": 43
+    },
+    {
+      "turn": 4,
+      "words": 80
+    }
+  ],
+  "scores": null,
+  "decision": null
+}

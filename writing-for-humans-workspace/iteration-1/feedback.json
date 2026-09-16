@@ -1,0 +1,56 @@
+{
+  "reviewer": null,
+  "source": "human",
+  "decision": null,
+  "overallNotes": "",
+  "turns": [
+    {
+      "turn": 1,
+      "scores": {
+        "economy": null,
+        "clarity": null,
+        "naturalness": null,
+        "usefulness": null
+      },
+      "cutOrRewrite": "",
+      "missing": "",
+      "notes": ""
+    },
+    {
+      "turn": 2,
+      "scores": {
+        "economy": null,
+        "clarity": null,
+        "naturalness": null,
+        "usefulness": null
+      },
+      "cutOrRewrite": "",
+      "missing": "",
+      "notes": ""
+    },
+    {
+      "turn": 3,
+      "scores": {
+        "economy": null,
+        "clarity": null,
+        "naturalness": null,
+        "usefulness": null
+      },
+      "cutOrRewrite": "",
+      "missing": "",
+      "notes": ""
+    },
+    {
+      "turn": 4,
+      "scores": {
+        "economy": null,
+        "clarity": null,
+        "naturalness": null,
+        "usefulness": null
+      },
+      "cutOrRewrite": "",
+      "missing": "",
+      "notes": ""
+    }
+  ]
+}

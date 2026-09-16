@@ -1,0 +1,6 @@
+
+Work observations:
+Work performed: the deliberate-resend test passes and queues a new email. A simulated provider failure leaves the queued job retryable, and the job succeeds on retry. The simultaneous-request test still passes with one email queued. The button re-enables after success or failure. These three automated tests pass. No browser check was performed. The change is local and has not been deployed.
+
+User:
+Cool. Test that and the failure case, then give me the handoff.

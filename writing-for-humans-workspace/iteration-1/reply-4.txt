@@ -1,0 +1,9 @@
+All three automated tests pass:
+
+- Simultaneous requests queue one email.
+- A deliberate resend queues a new email.
+- A provider failure leaves the job retryable, and it succeeds on retry.
+
+The client reuses the idempotency key for retries, and the server claims it through a database unique constraint before queuing email. Invite stays disabled while the request is pending and re-enables after success or failure.
+
+The change is local and hasn’t been deployed. No browser check was performed.

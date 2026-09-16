@@ -1,0 +1,6 @@
+
+Work observations:
+Work performed: the client reuses an idempotency key for retries of the same submission and disables Invite while the request is pending. The server uses a database unique constraint on the idempotency key to claim the request before enqueueing email. The simultaneous-request test passes with one email queued. Still unchecked: behavior when the email provider rejects the queued send.
+
+User:
+Okay, go with the server fix and disable the button while it's sending. Where are we at?

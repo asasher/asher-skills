@@ -1,0 +1,26 @@
+[
+  {
+    "turn": 1,
+    "user": "People sometimes get two invitation emails when they double-click Invite. Should we debounce the button or fix this on the server?",
+    "observations": "The frontend sends POST /invites on each click. The server creates an invite and sends an email for each request. There is no request deduplication. Clients may also retry requests after timeouts.",
+    "assistant": "Fix it on the server, and disable the button while the request is pending.\n\nDebouncing would reduce double-clicks, but clients can also retry after a timeout. Right now, every request creates another invite and sends another email.\n\nI’d give each invite attempt an idempotency key and reuse it for retries. The server should atomically accept that key once, return the same invite for duplicate requests, and queue the email only once. The button change gives people immediate feedback; the server change handles duplicate requests."
+  },
+  {
+    "turn": 2,
+    "user": "Okay, go with the server fix and disable the button while it's sending. Where are we at?",
+    "observations": "Work performed: the client reuses an idempotency key for retries of the same submission and disables Invite while the request is pending. The server uses a database unique constraint on the idempotency key to claim the request before enqueueing email. The simultaneous-request test passes with one email queued. Still unchecked: behavior when the email provider rejects the queued send.",
+    "assistant": "The fix is in place. Invite is disabled while the request is pending, and the client reuses the same idempotency key for retries. A database unique constraint lets the server claim that key once before queuing the email.\n\nThe simultaneous-request test passes: one email queued. I still need to check what happens when the email provider rejects the send before calling this finished."
+  },
+  {
+    "turn": 3,
+    "user": "Hang on, I still need to resend an invite if someone loses the email. Does your fix stop that?",
+    "observations": "A deliberate resend creates a new idempotency key. Retries of the same submission reuse its existing key. The database does not enforce uniqueness on the recipient email. The resend path has not yet been tested.",
+    "assistant": "It should still allow resends. A deliberate resend gets a new idempotency key; only retries of the same submission reuse the existing key. We don’t enforce uniqueness on the recipient’s email.\n\nI haven’t tested the resend path yet, so that still needs verification."
+  },
+  {
+    "turn": 4,
+    "user": "Cool. Test that and the failure case, then give me the handoff.",
+    "observations": "Work performed: the deliberate-resend test passes and queues a new email. A simulated provider failure leaves the queued job retryable, and the job succeeds on retry. The simultaneous-request test still passes with one email queued. The button re-enables after success or failure. These three automated tests pass. No browser check was performed. The change is local and has not been deployed.",
+    "assistant": "All three automated tests pass:\n\n- Simultaneous requests queue one email.\n- A deliberate resend queues a new email.\n- A provider failure leaves the job retryable, and it succeeds on retry.\n\nThe client reuses the idempotency key for retries, and the server claims it through a database unique constraint before queuing email. Invite stays disabled while the request is pending and re-enables after success or failure.\n\nThe change is local and hasn’t been deployed. No browser check was performed."
+  }
+]

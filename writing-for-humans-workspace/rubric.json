@@ -1,0 +1,16 @@
+{
+  "scale": {
+    "1": "Needs a rewrite",
+    "2": "Needs substantial editing",
+    "3": "Usable after trimming or clarification",
+    "4": "Good, with a small edit",
+    "5": "Would want this reply as written"
+  },
+  "dimensions": {
+    "economy": "Does each sentence earn the time it takes to read?",
+    "clarity": "Can you understand the point on the first read?",
+    "naturalness": "Does this sound like a colleague rather than performed personality or a template?",
+    "usefulness": "Does it answer the request and preserve the facts, uncertainty, and next step you need?"
+  },
+  "decision": "The human chooses keep, revise, or stop. Shorter is not automatically better. An improvement must preserve usefulness."
+}

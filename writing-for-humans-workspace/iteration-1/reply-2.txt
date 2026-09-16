@@ -1,0 +1,3 @@
+The fix is in place. Invite is disabled while the request is pending, and the client reuses the same idempotency key for retries. A database unique constraint lets the server claim that key once before queuing the email.
+
+The simultaneous-request test passes: one email queued. I still need to check what happens when the email provider rejects the send before calling this finished.

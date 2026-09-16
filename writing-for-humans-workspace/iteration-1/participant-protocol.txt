@@ -1,0 +1,1 @@
+Do not access files or other agents. Answer this turn only; later turns will arrive in the same session. Deadline: respond within 60 seconds. Deliverable: your reply to the user, with no wrapper.

@@ -1,0 +1,20 @@
+{
+  "created": "2026-09-16T10:26:23.968Z",
+  "participant": "gpt-6-astra",
+  "settings": "Native Codex participant; inherited effort; fresh context at turn 1; same session for later turns; no tools; fixed observations; final replies only",
+  "sourceRevision": "cb741f5a59603ba8aa391f15956831e5b7dd6655",
+  "hashes": {
+    "scenario.json": "a28098a87e9ae80988058427f5b78e8b70e1c1dd0350b2ff7eb09a814fb01fac",
+    "rubric.json": "2ea2c4c23bf38a7eb7e2ad32a2ce93c0aa5f3effb5b3454a7ba4775a5f2ec695",
+    "writing-for-humans.md": "9c1e15f31960d0f75009562ef117043d23896a78e658b4d7834bdce363f7c4b0",
+    "unslop.md": "700ce16b2fec6bd8f55eb60f67d0c6ce3acd86460700d5e6c068b7d78f3a2505",
+    "participant-protocol.txt": "9bb2a778217615840bfeb9a3bb2679e4a65a0419bbcb955757e6f1c47855e421"
+  },
+  "status": "awaiting-human",
+  "participantSession": "/root/writing_baseline",
+  "dispatchInstructions": "Do not access files or other agents. Answer this turn only; later turns will arrive in the same session. Deadline: respond within 60 seconds. Deliverable: your reply to the user, with no wrapper.",
+  "limitations": [
+    "Native participant inherits system/developer instructions; no parent conversation forked.",
+    "Scripted work observations; no actual code execution; final replies only."
+  ]
+}

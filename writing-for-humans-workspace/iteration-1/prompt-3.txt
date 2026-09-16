@@ -1,0 +1,6 @@
+
+Work observations:
+A deliberate resend creates a new idempotency key. Retries of the same submission reuse its existing key. The database does not enforce uniqueness on the recipient email. The resend path has not yet been tested.
+
+User:
+Hang on, I still need to resend an invite if someone loses the email. Does your fix stop that?

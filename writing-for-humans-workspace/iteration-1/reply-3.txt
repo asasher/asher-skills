@@ -1,0 +1,3 @@
+It should still allow resends. A deliberate resend gets a new idempotency key; only retries of the same submission reuse the existing key. We don’t enforce uniqueness on the recipient’s email.
+
+I haven’t tested the resend path yet, so that still needs verification.
