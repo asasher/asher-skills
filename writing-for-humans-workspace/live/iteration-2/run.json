@@ -1,7 +1,7 @@
 {
   "createdAt": "2026-09-17T11:17:30.372Z",
   "name": "Team invitations",
-  "status": "awaiting-human-conversation",
+  "status": "captured",
   "sourceRevision": "901e82822f52316898e6f7b7c1c73916245870e5",
   "sourceBranch": "eval/writing-conversations-2026-09-16",
   "branch": "main",
@@ -25,5 +25,6 @@
     "prompt.txt": "0fa61acc2cc600a71b901db249350835d08662fb582a8f9aa71d4313fafcacb4"
   },
   "threadId": "1e3a5b48-595f-47a3-8167-a3d4c79a67d3",
-  "verifiedProviderDirectory": "/private/tmp/team-app-2N7p5p"
+  "verifiedProviderDirectory": "/private/tmp/team-app-2N7p5p",
+  "latestCapture": "capture-1"
 }

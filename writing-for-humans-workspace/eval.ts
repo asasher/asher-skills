@@ -273,10 +273,18 @@ if (command === "prepare") {
       connection.close();
     }
     if (!evidence.thread) throw new Error("Thread not found");
+    const pendingTurns = evidence.turns.filter(
+      (t: any) => !t.completed_at && !t.started_at,
+    );
+    const acceptIdlePending =
+      process.argv.includes("--include-pending") &&
+      evidence.session?.status === "ready";
     if (
       evidence.session?.active_turn_id ||
       evidence.messages.some((m: any) => m.is_streaming) ||
-      evidence.turns.some((t: any) => !t.completed_at)
+      evidence.turns.some(
+        (t: any) => !t.completed_at && (t.started_at || !acceptIdlePending),
+      )
     )
       throw new Error(
         "Conversation still has an unfinished turn; wait for it to finish before capturing",
@@ -309,6 +317,10 @@ if (command === "prepare") {
       coverage:
         "Stored chat messages including kickoff; tool activity and hidden reasoning are not exported. Attachments remain source references.",
       messages: evidence.messages.length,
+      pendingTurns: pendingTurns.length,
+      captureNote: pendingTurns.length
+        ? "Human accepted the visible conversation as-is. The idle session retains unstarted pending turn metadata; preserve it without assuming those turns completed."
+        : null,
     });
     run.status = "captured";
     run.latestCapture = capture;

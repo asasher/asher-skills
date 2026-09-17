@@ -1,0 +1,10 @@
+{
+  "capturedAt": "2026-09-17T12:41:38.272Z",
+  "threadId": "1e3a5b48-595f-47a3-8167-a3d4c79a67d3",
+  "sha256": "dc7cb688e37762d31660ae012a30e954b16d3eae4e792fad99b7b51dfecf0470",
+  "source": "T3 projection_thread_messages; turn and session metadata",
+  "coverage": "Stored chat messages including kickoff; tool activity and hidden reasoning are not exported. Attachments remain source references.",
+  "messages": 7,
+  "pendingTurns": 1,
+  "captureNote": "Human accepted the visible conversation as-is. The idle session retains unstarted pending turn metadata; preserve it without assuming those turns completed."
+}

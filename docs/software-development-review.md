@@ -79,7 +79,7 @@ Review every supporting skill, including its conditional branches and packaged t
 - [ ] **32. [diagram-design](../skills/creative/diagram-design/SKILL.md)**: Project-token precedence, fragment safety and host integration, evidence-based semantics, imports, exports, motion, and examples.
 - [ ] **33. [codex-imagegen](../skills/creative/codex-imagegen/SKILL.md)**: Backend priority, attributable native results, consistent spritesheet keys, dimensions, versioned assets, and recovery.
 - [ ] **34. [technical-writing](../skills/software-development/technical-writing/SKILL.md)**: Readable durable tickets, specs, reports, and PR descriptions.
-- [ ] **35. [writing-for-humans](../skills/software-development/writing-for-humans/SKILL.md)**: Clear conversation and review communication.
+- [ ] **35. [writing-for-humans](../skills/software-development/writing-for-humans/SKILL.md)**: Clear conversation and review communication; choose prose, tables, diagrams, trees, pseudocode, or diffs to fit the information. Visuals replace the explanation they make unnecessary.
 - [ ] **36. [unslop](../skills/software-development/unslop/SKILL.md)**: Concrete language and retained useful instructions, including standards shared across projects.
 
 ## Full package inventory

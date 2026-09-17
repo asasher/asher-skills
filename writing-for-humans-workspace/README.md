@@ -32,7 +32,7 @@ Only after Asher returns and says the conversation is done:
 bun writing-for-humans-workspace/eval.ts capture iteration-2
 ```
 
-Capture reads only the recorded thread from T3's local database. It refuses unfinished turns or a thread without human follow-up. Each capture gets a new directory, preserving message text, IDs, timestamps, source metadata, and a readable transcript. It exports stored chat messages, not tool activity or hidden reasoning. Attachments remain references to the source thread.
+Capture reads only the recorded thread from T3's local database. It refuses unfinished turns or a thread without human follow-up. If the human accepts the visible conversation as-is and the idle session retains unstarted pending metadata, `capture iteration-N --include-pending` preserves that metadata with an explicit coverage note. Active or streaming turns still block capture. Each capture gets a new directory, preserving message text, IDs, timestamps, source metadata, and a readable transcript. It exports stored chat messages, not tool activity or hidden reasoning. Attachments remain references to the source thread.
 
 ## Discuss and repeat
 
