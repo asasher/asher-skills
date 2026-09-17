@@ -1,6 +1,6 @@
 # Video editing skill: shaping draft
 
-Status: shaping draft, September 15, 2026. Asher chose to refine the existing visual style and focus on voice quality and motion graphics. Relighting is deferred. The conversation review and fixture inventory are complete. The skill is not implemented. A monochrome Harness specimen and two local DeepFilterNet voice treatments are ready; human verdicts are pending. The exact visual tokens and voice treatment remain to be established through examples. Landscape and Short are explicit format choices.
+Status: shaping draft, September 15, 2026. Asher chose to refine the existing visual style and focus on voice quality and motion graphics. Relighting is deferred. The conversation review and fixture inventory are complete. The skill is not implemented. The monochrome Harness specimen and the stronger local DeepFilterNet voice treatment have been human-reviewed. Asher accepted light/dark monochrome without blue and preferred the stronger DeepFilterNet treatment on September 18. Landscape and Short are explicit format choices.
 
 ## What we are making
 
@@ -73,7 +73,7 @@ Validate source quality before expensive treatment. The raw recordings remain th
 
 Aim for recognizably Asher's voice with intelligible consonants, natural breaths, steady level, and less distracting noise.
 
-Start with DeepFilterNet 3 as the local neural denoising candidate. The native Apple Silicon v0.5.6 executable has rendered two strengths on Recap; the human listening verdict is pending. The trial source and hashes are in `voice-trial.json`, and its repeatable script is `scripts/voice-trial.py`. Keep FFmpeg for extraction, timing, loudness, and export.
+Start with DeepFilterNet 3 as the local neural denoising candidate. The native Apple Silicon v0.5.6 executable has rendered two strengths on Recap; Asher preferred the stronger 24 dB attenuation-limit variant on the test excerpt. The trial source and hashes are in `voice-trial.json`, and its repeatable script is `scripts/voice-trial.py`. Keep FFmpeg for extraction, timing, loudness, and export.
 
 Choose the microphone track by inspecting and auditioning available tracks. Assess noise during speech as well as pauses. Apply processing to the observed problem: rumble, steady hiss, hum, room reverb, or transient noise need different treatment. Preserve a bypass version.
 
@@ -85,7 +85,7 @@ Completion: the chosen track is documented, technical measurements are recorded,
 
 ### Diagrams and motion graphics
 
-Use [DESIGN.md](DESIGN.md) for the current visual proposal: monochrome light and dark, with an optional blue comparison from diagram-design. Asher rejected the previous teal direction. The interactive reference is `visual-reference.html`.
+Use [DESIGN.md](DESIGN.md) for the current visual proposal: accepted monochrome light and dark, without a colour accent. The interactive reference is `visual-reference.html`.
 
 The visual language must define more than colours:
 
@@ -146,4 +146,4 @@ Whenever instructions or rendering code change, rerun the affected comparisons a
 4. Keep human A/B review on known raw footage as the acceptance step for instruction changes.
 5. Defer relighting. The [research notes](relighting-research.md) remain available for a later version and do not create current implementation or eval requirements.
 
-Next, review the monochrome Harness specimen and the original/gentle/stronger Recap voice samples in `visual-reference.html`. Record the human choices in DESIGN.md and the trial record. Apply those choices to an Unroll motion specimen and then exercise both output formats on the known-footage suite. Successful rendering alone does not establish perceptual improvement.
+The visual and voice choices are recorded in DESIGN.md and voice-trial.json. The next decision is the skill-family boundary: video understanding, editing, explanatory motion, and optionally independent voice cleanup. The scope now includes motion-led educational videos made from a concept or narration, as well as edited OBS recordings.

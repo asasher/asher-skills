@@ -1,5 +1,5 @@
 {
-  "status": "rendered locally; human listening verdict pending",
+  "status": "human reviewed: stronger variant preferred",
   "source": "/Users/asher/Movies/OBS/2026-09-14 16-56-45 Program.mp4",
   "source_sha256": "06dc1c9563b9af5649b4a423cc2e4842df2ffe84e4fcc4b596e9ddf2b7bd900f",
   "start": 16,
@@ -224,5 +224,13 @@
     }
   },
   "model_url": "https://raw.githubusercontent.com/Rikorose/DeepFilterNet/v0.5.6/models/DeepFilterNet3_onnx.tar.gz",
-  "binary_url": "https://github.com/Rikorose/DeepFilterNet/releases/download/v0.5.6/deep-filter-0.5.6-aarch64-apple-darwin"
+  "binary_url": "https://github.com/Rikorose/DeepFilterNet/releases/download/v0.5.6/deep-filter-0.5.6-aarch64-apple-darwin",
+  "human_review": {
+    "date": "2026-09-18",
+    "reviewer": "Asher",
+    "preferred_variant": "stronger",
+    "feedback": "stronger AI cleanup sounds the best",
+    "scope": "This 14-second Recap excerpt; preferred starting treatment for future trials, not proof for every recording.",
+    "attenuation_limit_db": 24
+  }
 }

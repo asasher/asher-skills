@@ -14,7 +14,7 @@ radii:
 
 ## Overview
 
-Proposed video design system, revision 2. Asher requested minimalist black and white and rejected the teal direction. The light/dark balance, optional blue, and typography await review of `visual-reference.html`. This file is the visual reference for the video work, not a global redesign of this authoring repo.
+Video design system, revision 3. On September 18, 2026, Asher accepted light/dark monochrome without the blue accent. Use either mode consistently within an edit. Typography and motion details can continue to evolve through examples. This file is the visual reference for the video work, not a global redesign of this authoring repo.
 
 ## Visual Theme & Atmosphere
 
@@ -38,7 +38,7 @@ Monochrome editorial graphics: clear labels, open space, thin borders, and one f
 
 Inversion is the strongest emphasis: ink fill with on-accent text. Limit it to one focal node per scene. Use thicker outlines, labels, and spatial grouping for other distinctions. Meaning never depends on hue alone.
 
-Optional comparison only: blue `#0068D6` on light or `#52A8FF` on dark, from diagram-design's current defaults. Use a blue outline and label with the surface fill; do not use on-accent text on blue without a separate contrast check. Green and teal are not part of this proposal.
+Use the monochrome role values above. The blue comparison in the historical HTML was rejected; blue, green, and teal are outside the accepted palette.
 
 ## Typography
 
@@ -80,4 +80,4 @@ The reference uses diagram-design's canonical controls and complete static fallb
 
 ## Agent Prompt Guide
 
-Read this file before creating a video specimen. Apply its explicit roles through diagram-design's project-design mapping. The light, dark, and optional-blue views in the HTML are comparison options, not three styles to mix in one video. Record the user's preference here when it is chosen.
+Read this file before creating a video specimen. Apply its explicit roles through diagram-design's project-design mapping. The historical HTML records the alternatives that were reviewed. Light and dark monochrome are accepted; its blue toggle is not part of the chosen system. Keep one mode stable within a sequence.
