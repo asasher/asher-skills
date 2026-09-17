@@ -1,226 +1,297 @@
+import { Database } from "bun:sqlite";
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
+import { mkdir, readFile, writeFile, readdir } from "node:fs/promises";
+import { homedir } from "node:os";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const workspace = dirname(fileURLToPath(import.meta.url));
 const root = dirname(workspace);
-const skills = ["writing-for-humans", "unslop"];
-const hash = (text: string) => createHash("sha256").update(text).digest("hex");
-const json = async (path: string) => JSON.parse(await readFile(path, "utf8"));
-const save = (path: string, value: unknown) =>
-  writeFile(path, JSON.stringify(value, null, 2) + "\n");
-const [command, name, ...args] = process.argv.slice(2);
-if (!name || !/^iteration-[1-9]\d*$/.test(name)) {
+const [command, name] = process.argv.slice(2);
+if (!name || !/^iteration-[1-9]\d*$/.test(name))
   throw new Error(
-    "Usage: bun writing-for-humans-workspace/eval.ts <prepare|next|record|summarize|compare> iteration-N [arguments]",
+    "Usage: bun writing-for-humans-workspace/eval.ts <prepare|start|status|capture> iteration-N",
   );
+const dir = join(workspace, "live", name);
+const readJSON = async (path: string) =>
+  JSON.parse(await readFile(path, "utf8"));
+const saveJSON = (path: string, value: unknown) =>
+  writeFile(path, JSON.stringify(value, null, 2) + "\n");
+const hash = (text: string) => createHash("sha256").update(text).digest("hex");
+const db = () =>
+  new Database(
+    process.env.WRITING_EVAL_DB || join(homedir(), ".t3/userdata/state.sqlite"),
+    {
+      readonly: true,
+    },
+  );
+function git(...args: string[]) {
+  const result = Bun.spawnSync(["git", ...args], { cwd: root });
+  if (result.exitCode) throw new Error(result.stderr.toString());
+  return result.stdout.toString().trim();
 }
-const dir = join(workspace, name);
+async function verifyInputs(run: any) {
+  for (const [file, digest] of Object.entries(run.hashes))
+    if (hash(await readFile(join(dir, file), "utf8")) !== digest)
+      throw new Error(`Saved input changed: ${file}`);
+}
+function inspect(threadId: string) {
+  const connection = db();
+  try {
+    return {
+      thread: connection
+        .query(
+          "SELECT thread_id, title, model_selection_json, runtime_mode, interaction_mode, deleted_at FROM projection_threads WHERE thread_id = ?",
+        )
+        .get(threadId) as any,
+      session: connection
+        .query(
+          "SELECT status, active_turn_id, last_error, provider_name FROM projection_thread_sessions WHERE thread_id = ?",
+        )
+        .get(threadId) as any,
+      turns: connection
+        .query(
+          "SELECT turn_id, state, started_at, completed_at FROM projection_turns WHERE thread_id = ? ORDER BY requested_at, row_id",
+        )
+        .all(threadId),
+      messages: connection
+        .query(
+          "SELECT message_id, turn_id, role, text, is_streaming, created_at, updated_at, attachments_json FROM projection_thread_messages WHERE thread_id = ? ORDER BY created_at, rowid",
+        )
+        .all(threadId) as any[],
+    };
+  } finally {
+    connection.close();
+  }
+}
 
 if (command === "prepare") {
-  const [participant, ...settingParts] = args;
-  if (!participant || !settingParts.length)
-    throw new Error(
-      "prepare requires a model and quoted harness/settings description",
-    );
-  const inputs: Record<string, string> = {};
-  for (const file of [
-    "scenario.json",
-    "rubric.json",
-    "participant-protocol.txt",
-  ])
-    inputs[file] = await readFile(join(workspace, file), "utf8");
-  for (const skill of skills)
-    inputs[`${skill}.md`] = await readFile(
+  const files: Record<string, string> = {};
+  for (const file of ["topic.md", "settings.json"])
+    files[file] = await readFile(join(workspace, file), "utf8");
+  for (const skill of ["writing-for-humans", "unslop"])
+    files[`${skill}.md`] = await readFile(
       join(root, "skills/software-development", skill, "SKILL.md"),
       "utf8",
     );
-  await mkdir(dir); // An existing iteration is never overwritten.
-  for (const [file, body] of Object.entries(inputs))
-    await writeFile(join(dir, file), body);
-  const revision = Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: root });
-  if (revision.exitCode) throw new Error("Cannot record source revision");
-  await save(join(dir, "run.json"), {
-    created: new Date().toISOString(),
-    participant,
-    settings: settingParts.join(" "),
-    sourceRevision: revision.stdout.toString().trim(),
+  // Record ambient project instructions too; the participant still runs in the real harness.
+  files["project-instructions.md"] = await readFile(
+    join(root, "AGENTS.md"),
+    "utf8",
+  );
+  files["prompt.txt"] =
+    `Apply the two communication skills included below for this conversation. These are the versions to use throughout this thread. The discussion concerns the topic at the end. Work from the facts the human gives you; implementation is outside this conversation's scope. Respond to the opening message and continue the conversation with the human.\n\n${files["writing-for-humans.md"]}\n\n${files["unslop.md"]}\n\nOpening message:\n\n${files["topic.md"]}`;
+  const settings = JSON.parse(files["settings.json"]);
+  if (!settings.model || !settings.effort || !settings.provider)
+    throw new Error("Incomplete participant settings");
+  await mkdir(join(workspace, "live"), { recursive: true });
+  await mkdir(dir); // Never overwrite a run.
+  for (const [file, text] of Object.entries(files))
+    await writeFile(join(dir, file), text);
+  await saveJSON(join(dir, "run.json"), {
+    createdAt: new Date().toISOString(),
+    name: `Writing conversation · ${name}`,
+    status: "prepared",
+    sourceRevision: git("rev-parse", "HEAD"),
+    branch: git("branch", "--show-current"),
+    directory: root,
+    settings,
     hashes: Object.fromEntries(
-      Object.entries(inputs).map(([file, body]) => [file, hash(body)]),
+      Object.entries(files).map(([file, text]) => [file, hash(text)]),
     ),
-    status: "collecting",
-    participantSession: null,
+    threadId: null,
   });
-  await save(join(dir, "transcript.json"), []);
-  const scenario = JSON.parse(inputs["scenario.json"]);
-  const rubric = JSON.parse(inputs["rubric.json"]);
-  await save(join(dir, "feedback.json"), {
-    reviewer: null,
-    source: "human",
-    decision: null,
-    overallNotes: "",
-    turns: scenario.turns.map((_: unknown, i: number) => ({
-      turn: i + 1,
-      scores: Object.fromEntries(
-        Object.keys(rubric.dimensions).map((key) => [key, null]),
-      ),
-      cutOrRewrite: "",
-      missing: "",
-      notes: "",
-    })),
-  });
-  console.log(
-    `Prepared ${name}. Run next to get the first participant prompt.`,
-  );
-} else if (command === "next") {
-  const scenario = await json(join(dir, "scenario.json"));
-  const transcript = await json(join(dir, "transcript.json"));
-  const turn = scenario.turns[transcript.length];
-  if (!turn) throw new Error("All turns have been recorded");
-  let prompt = "";
-  if (!transcript.length) {
-    prompt += `${scenario.context} ${await readFile(join(dir, "participant-protocol.txt"), "utf8")}\nApply these communication skills:\n`;
-    for (const skill of skills)
-      prompt += `\n${await readFile(join(dir, `${skill}.md`), "utf8")}\n`;
-  }
-  prompt += `\nWork observations:\n${turn.observations}\n\nUser:\n${turn.user}\n`;
-  await writeFile(join(dir, `prompt-${transcript.length + 1}.txt`), prompt);
-  console.log(prompt);
-} else if (command === "record") {
-  if (!args[0])
-    throw new Error(
-      "record requires a file containing the participant's verbatim reply",
-    );
-  const scenario = await json(join(dir, "scenario.json"));
-  const transcript = await json(join(dir, "transcript.json"));
-  const turn = scenario.turns[transcript.length];
-  if (!turn) throw new Error("All turns have been recorded");
-  await readFile(join(dir, `prompt-${transcript.length + 1}.txt`), "utf8");
-  const reply = await readFile(resolve(args[0]), "utf8");
-  if (!reply.trim()) throw new Error("An empty reply is not a completed turn");
-  await writeFile(join(dir, `reply-${transcript.length + 1}.txt`), reply, {
-    flag: "wx",
-  });
-  transcript.push({ turn: transcript.length + 1, ...turn, assistant: reply });
-  await save(join(dir, "transcript.json"), transcript);
-  await writeFile(
-    join(dir, "transcript.md"),
-    transcript
-      .map(
-        (t: any) =>
-          `## Turn ${t.turn}\n\n**User**\n\n${t.user}\n\n**Assistant**\n\n${t.assistant}`,
-      )
-      .join("\n\n"),
-  );
-  const run = await json(join(dir, "run.json"));
-  run.status =
-    transcript.length === scenario.turns.length
-      ? "awaiting-human"
-      : "collecting";
-  await save(join(dir, "run.json"), run);
-  console.log(`Recorded turn ${transcript.length}; ${run.status}.`);
-} else if (command === "summarize") {
-  const transcript = await json(join(dir, "transcript.json"));
-  const feedback = await json(join(dir, "feedback.json"));
-  const scenario = await json(join(dir, "scenario.json"));
-  const rubric = await json(join(dir, "rubric.json"));
-  const dimensions = Object.keys(rubric.dimensions);
-  const complete = transcript.length === scenario.turns.length;
-  const validScores =
-    feedback.turns.length === scenario.turns.length &&
-    feedback.turns.every(
-      (t: any, i: number) =>
-        t.turn === i + 1 &&
-        dimensions.every(
-          (key) =>
-            Number.isInteger(t.scores[key]) &&
-            t.scores[key] >= 1 &&
-            t.scores[key] <= 5,
-        ),
-    );
-  const rated =
-    complete &&
-    feedback.source === "human" &&
-    typeof feedback.reviewer === "string" &&
-    feedback.reviewer.trim().length > 0 &&
-    validScores;
-  const summary = {
-    status: rated ? "human-rated" : complete ? "awaiting-human" : "incomplete",
-    turns: transcript.map((t: any) => ({
-      turn: t.turn,
-      words: t.assistant.trim().split(/\s+/).length,
-    })),
-    scores: rated
-      ? Object.fromEntries(
-          dimensions.map((key) => [
-            key,
-            feedback.turns.reduce(
-              (sum: number, t: any) => sum + t.scores[key],
-              0,
-            ) / feedback.turns.length,
-          ]),
-        )
-      : null,
-    decision:
-      rated && ["keep", "revise", "stop"].includes(feedback.decision)
-        ? feedback.decision
-        : null,
-  };
-  await save(join(dir, "benchmark.json"), summary);
-  console.log(JSON.stringify(summary, null, 2));
-} else if (command === "compare") {
-  const other = args[0];
-  if (!other || !/^iteration-[1-9]\d*$/.test(other))
-    throw new Error("compare requires another iteration-N");
-  const otherDir = join(workspace, other);
-  const a = await json(join(dir, "run.json"));
-  const b = await json(join(otherDir, "run.json"));
-  for (const path of [dir, otherDir]) {
-    const run = await json(join(path, "run.json"));
-    for (const [file, expected] of Object.entries(run.hashes)) {
-      if (hash(await readFile(join(path, file), "utf8")) !== expected)
-        throw new Error(`${path}/${file} changed after snapshot`);
-    }
-  }
-  if (
-    ["scenario.json", "rubric.json", "participant-protocol.txt"].some(
-      (key) => a.hashes[key] !== b.hashes[key],
-    ) ||
-    a.participant !== b.participant ||
-    a.settings !== b.settings
-  ) {
-    throw new Error(
-      "Different scenario, rubric, model, or settings: start a new baseline.",
-    );
-  }
-  for (const path of [dir, otherDir]) {
-    const result = Bun.spawnSync([
-      "bun",
-      fileURLToPath(import.meta.url),
-      "summarize",
-      path.split("/").at(-1)!,
-    ]);
-    if (result.exitCode) throw new Error(result.stderr.toString());
-  }
-  const previous = await json(join(dir, "benchmark.json"));
-  const next = await json(join(otherDir, "benchmark.json"));
-  console.log(
-    JSON.stringify(
-      {
-        previous: name,
-        next: other,
-        skillsChanged: skills.filter(
-          (skill) => a.hashes[`${skill}.md`] !== b.hashes[`${skill}.md`],
-        ),
-        scores: { previous: previous.scores, next: next.scores },
-        words: { previous: previous.turns, next: next.turns },
-        decision: next.decision,
-      },
-      null,
-      2,
-    ),
-  );
+  console.log(`Prepared ${dir}`);
 } else {
-  throw new Error(`Unknown command: ${command}`);
+  const run = await readJSON(join(dir, "run.json"));
+  await verifyInputs(run);
+  if (command === "start") {
+    if (run.status !== "prepared" || run.threadId)
+      throw new Error(
+        "Launch already attempted. Use status and inspect dispatch.json before taking any recovery action.",
+      );
+    if (git("branch", "--show-current") !== run.branch)
+      throw new Error("Project branch changed since preparation");
+    if (
+      hash(await readFile(join(root, "AGENTS.md"), "utf8")) !==
+      run.hashes["project-instructions.md"]
+    )
+      throw new Error("Project instructions changed since preparation");
+    const s = run.settings;
+    const args = [
+      "python3",
+      join(root, "skills/system/to-thread/scripts/t3-thread.py"),
+      "--name",
+      run.name,
+      "--prompt",
+      await readFile(join(dir, "prompt.txt"), "utf8"),
+      "--project-directory",
+      root,
+      "--directory",
+      run.directory,
+      "--branch",
+      run.branch,
+      "--provider",
+      s.provider,
+      "--model",
+      s.model,
+      "--effort",
+      s.effort,
+      "--runtime-mode",
+      s.runtimeMode,
+      "--interaction-mode",
+      s.interactionMode,
+    ];
+    if (s.serviceTier) args.push("--service-tier", s.serviceTier);
+    run.status = "launch-attempted";
+    await saveJSON(join(dir, "run.json"), run);
+    const child = Bun.spawn(args, {
+      cwd: root,
+      stdout: "pipe",
+      stderr: "pipe",
+    });
+    const [stdout, stderr, code] = await Promise.all([
+      new Response(child.stdout).text(),
+      new Response(child.stderr).text(),
+      child.exited,
+    ]);
+    await writeFile(join(dir, "dispatch.stdout.txt"), stdout);
+    await writeFile(join(dir, "dispatch.stderr.txt"), stderr);
+    if (stdout.trim()) {
+      const result = JSON.parse(stdout);
+      await saveJSON(join(dir, "dispatch.json"), result);
+      run.threadId = result.thread_id ?? null;
+    }
+    run.status = code ? "launch-needs-inspection" : "launched-unverified";
+    await saveJSON(join(dir, "run.json"), run);
+    if (code)
+      throw new Error(
+        `Launch needs inspection: ${stderr}. Preserve any thread identity in run.json.`,
+      );
+    console.log(
+      `Started ${run.name}: ${run.threadId}. Use status to verify it.`,
+    );
+  } else if (command === "status") {
+    if (!run.threadId)
+      throw new Error("No thread identity recorded; inspect dispatch output");
+    const state = inspect(run.threadId);
+    const selection = state.thread
+      ? JSON.parse(state.thread.model_selection_json)
+      : null;
+    const matches =
+      selection?.instanceId === run.settings.provider &&
+      selection?.model === run.settings.model &&
+      selection?.options?.some(
+        (o: any) =>
+          o.id === "reasoningEffort" && o.value === run.settings.effort,
+      ) &&
+      (!run.settings.serviceTier ||
+        selection?.options?.some(
+          (o: any) =>
+            o.id === "serviceTier" && o.value === run.settings.serviceTier,
+        )) &&
+      state.thread?.runtime_mode === run.settings.runtimeMode &&
+      state.thread?.interaction_mode === run.settings.interactionMode;
+    const live =
+      !state.thread?.deleted_at &&
+      state.turns.some((t: any) => t.started_at) &&
+      !state.session?.last_error;
+    if (!matches || !live)
+      throw new Error(
+        `Thread not verified: ${JSON.stringify({ thread: state.thread, session: state.session, turns: state.turns })}`,
+      );
+    run.status =
+      run.status === "captured" ? "captured" : "awaiting-human-conversation";
+    await saveJSON(join(dir, "run.json"), run);
+    console.log(
+      JSON.stringify(
+        {
+          threadId: run.threadId,
+          title: state.thread.title,
+          selection,
+          session: state.session,
+          messages: state.messages.length,
+          firstAssistant:
+            state.messages.find((m) => m.role === "assistant")?.text ?? null,
+        },
+        null,
+        2,
+      ),
+    );
+  } else if (command === "capture") {
+    // The coordinator invokes this only after the human returns and says they are done.
+    if (!run.threadId) throw new Error("No thread to capture");
+    const connection = db();
+    let evidence: any;
+    try {
+      evidence = connection.transaction(() => ({
+        thread: connection
+          .query(
+            "SELECT thread_id, title, model_selection_json, runtime_mode, interaction_mode FROM projection_threads WHERE thread_id = ?",
+          )
+          .get(run.threadId),
+        session: connection
+          .query(
+            "SELECT status, active_turn_id, last_error FROM projection_thread_sessions WHERE thread_id = ?",
+          )
+          .get(run.threadId),
+        messages: connection
+          .query(
+            "SELECT message_id, turn_id, role, text, is_streaming, created_at, updated_at, attachments_json FROM projection_thread_messages WHERE thread_id = ? ORDER BY created_at, rowid",
+          )
+          .all(run.threadId),
+        turns: connection
+          .query(
+            "SELECT turn_id, state, requested_at, started_at, completed_at FROM projection_turns WHERE thread_id = ? ORDER BY requested_at, row_id",
+          )
+          .all(run.threadId),
+      }))();
+    } finally {
+      connection.close();
+    }
+    if (!evidence.thread) throw new Error("Thread not found");
+    if (
+      evidence.session?.active_turn_id ||
+      evidence.messages.some((m: any) => m.is_streaming) ||
+      evidence.turns.some((t: any) => !t.completed_at)
+    )
+      throw new Error(
+        "Conversation still has an unfinished turn; wait for it to finish before capturing",
+      );
+    if (evidence.messages.filter((m: any) => m.role === "user").length < 2)
+      throw new Error(
+        "Only the runner's opening prompt exists; wait for the human conversation",
+      );
+    const captures = (await readdir(dir)).filter((f) =>
+      /^capture-\d+$/.test(f),
+    );
+    const capture = `capture-${Math.max(0, ...captures.map((f) => Number(f.split("-")[1]))) + 1}`;
+    const target = join(dir, capture);
+    await mkdir(target);
+    const raw = JSON.stringify(evidence, null, 2) + "\n";
+    await writeFile(join(target, "transcript.json"), raw);
+    const messages = evidence.messages.map(
+      (m: any, i: number) =>
+        `## ${i + 1}. ${m.role}${i === 0 ? " (runner kickoff)" : ""}\n\nMessage: ${m.message_id} · ${m.created_at}\n\n${m.text}\n`,
+    );
+    await writeFile(
+      join(target, "transcript.md"),
+      `# ${run.name}\n\nThread: ${run.threadId}\n\n${messages.join("\n")}`,
+    );
+    await saveJSON(join(target, "evidence.json"), {
+      capturedAt: new Date().toISOString(),
+      threadId: run.threadId,
+      sha256: hash(raw),
+      source: "T3 projection_thread_messages; turn and session metadata",
+      coverage:
+        "Stored chat messages including kickoff; tool activity and hidden reasoning are not exported. Attachments remain source references.",
+      messages: evidence.messages.length,
+    });
+    run.status = "captured";
+    run.latestCapture = capture;
+    await saveJSON(join(dir, "run.json"), run);
+    console.log(
+      `Captured ${target}. Discuss the human's experience before proposing skill edits.`,
+    );
+  } else throw new Error(`Unknown command: ${command}`);
 }

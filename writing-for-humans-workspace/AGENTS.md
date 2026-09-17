@@ -1,19 +1,25 @@
-# Conversation eval workspace
+# Live writing eval runner
 
-Read `README.md` for the replay commands and scope. This workspace evaluates the repo sources of `writing-for-humans` and `unslop` together.
+Use this workflow when the human asks to run or continue the writing eval. Read `README.md` and the latest `live/iteration-*/run.json` before acting. The human converses directly with the participant in another attendable thread; the runner stays here to collect evidence and discuss improvements.
 
-## Agent execution
+## Start a conversation
 
-Produce the participant in a fresh native subagent context via `to-subagent`, then resume that participant for later turns. Use the same model and harness settings across iterations. Give it only the generated prompt, the fixed dispatch instructions, and its own conversation history. It receives no rubric, human feedback, candidate diagnosis, or future turns. It uses no tools.
+Snapshot both skill sources, the known topic, project instructions, and participant settings with `prepare`. Use `start` to launch through `to-thread` in the user's T3 harness. Verify the launch with `status`, inspect the first assistant message for provider errors, then give the human the thread name. Keep the participant's context free of eval diagnoses, prior feedback, and desired writing changes. The human supplies every follow-up message.
 
-The coordinator owns files and ratings. Preserve participant replies verbatim, including awkward wording. Record the participant's session reference and any deviations in `run.json`. If the model or harness changes, start a new baseline. Do not substitute a separately billed CLI route silently.
+The participant performs a discussion, not repository edits. The runner owns skill changes. Never substitute a hidden subagent conversation for the human's thread. Preserve model, effort, and permissions from the current harness unless the human selects otherwise. `settings.json` records this experiment's choices.
 
-## Iteration contract
+## Capture and discuss
 
-`prepare` snapshots the inputs. `next` produces one prompt. Dispatch that prompt, then `record` the verbatim response. Repeat for every scenario turn. The full run is complete when every turn is recorded, and its status is `awaiting-human`.
+Wait until the human returns to the runner and says the conversation is finished. Then run `capture` for that iteration. Do not infer completion from an idle thread. Read the saved transcript before making claims about it; cite message IDs for examples. Preserve every captured version and report gaps in coverage.
 
-The human grades with `rubric.json`. Record only ratings the human supplied in `feedback.json`; ambiguous or absent ratings remain null. Preserve their comments verbatim. Agent observations belong in a separate `change.md` or review note.
+Ask about the human's experience in ordinary conversation. Record their words in `feedback.md`. Record analysis, proposed edits, and decisions separately in `review.md`. Do not invent ratings or require a scorecard. Discuss changes before applying them. If the human already selects a concrete change, implement it without another approval loop.
 
-`summarize` aggregates human scores and word counts into `benchmark.json`. `compare` validates comparability and shows both runs. A generated transcript is not a human rating. An iteration is ready for a decision when all turns have human scores. Keep, revise, or stop comes from the human.
+## Repeat
 
-Freeze scenario, rubric, participant settings, and dispatch instructions for each comparison. Only change the target skills in response to recorded evidence. Keep all prior iterations. A failed participant run gets a failure note and a new iteration for retry.
+Keep both skill sources unchanged until the feedback discussion yields an agreed change. Tie each edit to transcript evidence and the human's experience. Record the patch and rationale in the next iteration's `change.md`; update family documentation when contracts change. Snapshot the revised sources and launch a fresh thread on the same topic. The human chats again, then returns here.
+
+A comparable iteration holds the opening topic and participant configuration stable, but allows the human conversation to vary. Describe qualitative improvements and regressions without claiming a controlled replay. Changed topics or harness settings start a new baseline. The human decides whether to continue, keep, or revert.
+
+## Recovery
+
+A launch attempt records its outcome even on failure. Inspect the recorded thread before retrying; an ambiguous launch may already be running. Preserve failed runs. Never write to T3's database directly. The transcript collector uses a read-only transaction restricted to the selected thread.

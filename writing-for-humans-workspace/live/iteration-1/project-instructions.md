@@ -1,0 +1,18 @@
+# Asher Skills
+
+- Use bun as the package manager for this repo
+- The skill family ships from this repo: an external skill our skills depend on gets brought in — copied wholesale with credits, or rewritten as our own version — pinning the version we reviewed rather than an evolving copy upstream controls.
+- Run `bun format:fix` after significant edits
+- Push early and often
+- When lifecycle skills change, update [the family guide](docs/software-development.html) and its [manual review order](docs/software-development-review.md) to match their contracts.
+- When using a skill authored in this authoring repo we don't install it but use it directly from the `skills/` repo. We only install skills into this repo that are external and useful.
+- Keep the README's Install section in sync with `skills/`: the copy-paste command and the agent prompt list the software development lifecycle family and its supporting skills — every skill in `software-development`, the `system` dispatch and staffing skills (`staffing`, `to-subagent`, `to-thread`; `skill-loop` is authoring tooling and stays out), plus siblings in other categories that those skills name (today: `bare-minimum-design`, `diagram-design`, `codex-imagegen`). Creative, thinking, and personal skills are the appendix and stay out of the command. A skill added, renamed, split, or removed means the command changes in the same change.
+
+Read these files when needed:
+
+- [CONTEXT](./CONTEXT.md) is the ubiquitous language for this repo, this is shared vocabulary for you and the user to have a shared understanding as you design and work on this repo.
+- [unslop](./skills/software-development/unslop/SKILL.md) for all user facing text, [writing-for-humans](./skills/software-development/writing-for-humans/SKILL.md) when replying to a person, and [technical-writing](./skills/software-development/technical-writing/SKILL.md) for specs, tickets, change requests, reports, and documentation.
+- [SKILL-MECHANICS](./docs/agents/SKILL-MECHANICS.md) apply when authoring a skill
+- [GIVING-CREDIT](./docs/agents/GIVING-CREDIT.md) when we re-use or are heavily inspired by external content, we should credit the original source.
+- [shape](./skills/software-development/shaping/SKILL.md) when user asks to shape something. If there isn't already an issue for it then create one before proceeding.
+- [to-web](./skills/software-development/to-web/SKILL.md) when user asks for an html, deploy it using this skill and give the user the link
