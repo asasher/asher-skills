@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-09-18",
+  "canvas": {
+    "width": 1080,
+    "height": 1920
+  },
+  "coordinate_convention": "Top-left origin; rectangles use x, y, width, height. Scale x by output_width/1080 and y by output_height/1920. Round exclusion boundaries outward.",
+  "status": "Research-derived ad references. Organic app validation pending; not universal safe-zone guarantees.",
+  "sources": {
+    "youtube_organic": {
+      "url": "https://support.google.com/youtube/answer/16215842?hl=en",
+      "title": "Enhance your Shorts: Use visual guides",
+      "scope": "Organic Shorts editor; dynamic placement guides, no fixed pixel specification."
+    },
+    "youtube_ads": {
+      "url": "https://support.google.com/google-ads/answer/13547298?hl=en",
+      "title": "About video ad specs: Universal safe zones",
+      "scope": "YouTube video ads across formats and screens.",
+      "asset_url": "https://services.google.com/fh/files/misc/youtubesafezoneoverlay_vertical_final.png",
+      "asset_sha256": "56baf502e131f3fe79a61827363f4e262eaca41f094027896afb8a4c3a120717"
+    },
+    "meta_ads": {
+      "url": "https://www.facebook.com/business/help/980593475366490?locale=en_US",
+      "title": "About text overlays and safe zones for ads",
+      "scope": "Meta ads; diagram covers 9:16 placements including Reels. Not an organic Reels specification.",
+      "asset_url": "https://static.xx.fbcdn.net/mci_ab/public/cms/?ab_b=e&ab_page=CMS&ab_entry=26179993448299694&version=1770733604&transcode_extension=webp",
+      "asset_sha256": "e411245434fa8a2be61d6885af9e3b5f3ae96594d2ad39c61ec1c606c76ef669"
+    },
+    "tiktok_ads": {
+      "url": "https://ads.tiktok.com/help/article/tiktok-auction-in-feed-ads?lang=en",
+      "title": "TikTok Auction In-Feed Ads: Safe Zone",
+      "scope": "Spark and Non-Spark ads; varies by dimensions, ad caption length, anchors, and LTR/RTL version. Article updated June 2026.",
+      "asset_url": "https://lf-tt4b.tiktokcdn.com/obj/i18nblog/tt4b_cms/en-US/5jqet0ab9qci-10e7f5Vig4uhAscNP8XPB0.zip",
+      "asset_member": "In-Feed/Feed.png",
+      "asset_sha256": "f85c4d7bd7380435bc3074529f46fa58ff325f864fd3fb69e9f79a82cc9ba0f6"
+    }
+  },
+  "profiles": {
+    "youtube": {
+      "label": "YouTube Shorts",
+      "basis": "YouTube vertical ad template",
+      "source": "youtube_ads",
+      "notes": "For organic Shorts, use the editor’s visual guides to check the current button and description positions. The rectangle here is Google’s broader video-ad reference.",
+      "derivation": "Measured fully transparent rectangle [48, 288, 888, 1248) in the official 1080 × 1920 PNG.",
+      "margins": {
+        "top": 288,
+        "bottom": 672,
+        "left": 48,
+        "right": 192
+      },
+      "extra_masks": []
+    },
+    "instagram": {
+      "label": "Instagram Reels",
+      "basis": "Meta 9:16 ad guidance",
+      "source": "meta_ads",
+      "notes": "The current diagram adds a lower-right inset to the usual margins. Meta also describes cropping on taller devices. Reels ads with disclaimers reserve the full bottom 40%; use that variant when applicable.",
+      "derivation": "Diagram: top 14%, bottom 35%, sides 6%; lower-right notch covers the rightmost 21% over the bottom 40%.",
+      "margins": {
+        "top": 268.8,
+        "bottom": 672,
+        "left": 64.8,
+        "right": 64.8
+      },
+      "extra_masks": [
+        {
+          "x": 853.2,
+          "y": 1152,
+          "width": 226.8,
+          "height": 768,
+          "label": "Lower-right inset"
+        }
+      ]
+    },
+    "tiktok": {
+      "label": "TikTok",
+      "basis": "Standard LTR in-feed ad template",
+      "source": "tiktok_ads",
+      "notes": "This is the standard LTR reference, without an anchor. TikTok supplies separate anchor and Arabic-region RTL files. Longer descriptions and other formats can change the usable area; the live result can differ from the preview.",
+      "derivation": "Template labels use 720 × 1280: top 160, bottom 440, sides 80, extra right inset 120 over the bottom 720. Scale coordinates by 1.5 for 1080 × 1920. Downloaded image is 2880 × 5120.",
+      "margins": {
+        "top": 240,
+        "bottom": 660,
+        "left": 120,
+        "right": 120
+      },
+      "extra_masks": [
+        {
+          "x": 780,
+          "y": 840,
+          "width": 180,
+          "height": 1080,
+          "label": "Right-side control reserve"
+        }
+      ]
+    }
+  },
+  "shared_starting_layout": {
+    "status": "Proposed house layout, not a platform requirement or human-approved composition.",
+    "derivation": "Use a rectangle inside the intersection of these three ad references, then inset 24 px on every edge.",
+    "reference_intersection_rectangle": {
+      "x": 120,
+      "y": 288,
+      "width": 660,
+      "height": 960
+    },
+    "critical_content_rectangle": {
+      "x": 144,
+      "y": 312,
+      "width": 612,
+      "height": 912
+    },
+    "caption_plate": {
+      "x": 168,
+      "y": 1070,
+      "width": 564,
+      "height": 140
+    },
+    "caption_font_px": 48,
+    "caption_line_height_px": 58
+  }
+}

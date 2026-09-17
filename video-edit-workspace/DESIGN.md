@@ -14,7 +14,7 @@ radii:
 
 ## Overview
 
-Video design system, revision 3. On September 18, 2026, Asher accepted light/dark monochrome without the blue accent. Use either mode consistently within an edit. Typography and motion details can continue to evolve through examples. This file is the visual reference for the video work, not a global redesign of this authoring repo.
+Video design system, revision 4. On September 18, 2026, Asher accepted light/dark monochrome without the blue accent. Use either mode consistently within an edit. Typography and motion details can continue to evolve through examples. This file is the visual reference for the video work, not a global redesign of this authoring repo.
 
 ## Visual Theme & Atmosphere
 
@@ -48,7 +48,11 @@ At a 1080-pixel-wide video output, start with 64 px titles, 44 px node names, 32
 
 ## Layout
 
-Landscape: 1920 × 1080, 64 px outer margin, screen or graphic dominant, camera beside it or in an inset. Portrait: 1080 × 1920, 56 px horizontal margin, camera and graphic stacked. Reserve caption and platform-overlay areas per delivery format; verify the actual destination layout rather than treating one safe-area measurement as universal.
+Landscape: 1920 × 1080, 64 px outer margin, screen or graphic dominant, camera beside it or in an inset. Allow for captions and temporary player controls; short-feed exclusion masks do not apply automatically.
+
+Portrait: 1080 × 1920. For Shorts, Reels, or TikTok delivery, read [shorts-delivery.md](shorts-delivery.md) and select a destination profile from `safe-zone-profiles.json`. Those profiles derive from official ad references and still need organic app verification. Keep critical diagram labels, meaningful actions, faces, and the complete caption plate inside the chosen usable area. Background imagery may bleed to the edges. A shared inset layout is proposed in the profile data; it is not an approved universal default.
+
+Place captions in a reserved lane inside the usable area. Keep graphics clear of that lane throughout their motion. Reflow scenes for destination variants instead of shrinking every label. Check cover and feed crops separately from playback overlays.
 
 Keep a graph's entities recognizable between shots. Prefer three to five visible concepts per beat. A dense landscape scene becomes several portrait beats. Captured screens and camera footage retain their source colours; monochrome applies to authored graphic elements.
 
@@ -65,7 +69,7 @@ Use 8 px radii for containers and 4 px for nodes at the reference diagram scale.
 - Entity: name plus an optional short explanation. Focal entities invert fill or gain a stronger outline.
 - Group: named boundary containing only its members. A Harness contains the Model and its tool interface.
 - Relationship: labeled, orthogonal connector when containment or adjacency cannot carry the meaning.
-- Captions: short phrases in the primary sans family. Use a contrasting plate over variable footage; preserve words from the actual speech.
+- Captions: sentence-case phrases in the primary sans family, normally one or two lines. Start at 48 px with 58 px line height on a 1080-wide portrait canvas. Use a contrasting plate over variable footage; preserve actual speech and derive timings from the final edit. Rebreak phrases before shrinking text. Check the whole plate, including padding, against the destination masks. Keep placement stable within each shot. Read `shorts-delivery.md` for timing, native captions, and delivery review.
 - Motion: reveal entities, establish the group or connection, then hold the complete result. Start with 480 ms transitions and 900 ms between beats. Align actual scene cues to speech; these timing values are specimen defaults.
 
 The reference uses diagram-design's canonical controls and complete static fallback. Rendered video uses the same visual rules on the edit timeline; browser controls are not part of the export.

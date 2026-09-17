@@ -1,12 +1,12 @@
 # Video editing skill: shaping draft
 
-Status: shaping draft, September 15, 2026. Asher chose to refine the existing visual style and focus on voice quality and motion graphics. Relighting is deferred. The conversation review and fixture inventory are complete. The skill is not implemented. The monochrome Harness specimen and the stronger local DeepFilterNet voice treatment have been human-reviewed. Asher accepted light/dark monochrome without blue and preferred the stronger DeepFilterNet treatment on September 18. Landscape and Short are explicit format choices.
+Status: shaping draft, updated September 18, 2026. Asher chose to refine the existing visual style and focus on voice quality and motion graphics. Relighting is deferred. The conversation review and fixture inventory are complete. The skill is not implemented. The monochrome Harness specimen and the stronger local DeepFilterNet voice treatment have been human-reviewed. Asher accepted light/dark monochrome without blue and preferred the stronger DeepFilterNet treatment on September 18. Landscape and Short are explicit format choices.
 
 ## What we are making
 
 An agent edits Asher's recorded explanations into coherent videos, with clear natural speech, readable composition, and diagrams that explain the spoken idea. The human judges whether changes improve the finished video.
 
-Start with one creative skill, tentatively `video-edit`. Its main instructions own source selection, the edit timeline, treatment selection, and review. Disclose audio and motion guidance in separate references when those passes apply. Split into independent skills only when another workflow needs one of those capabilities directly.
+Asher accepted the lean three-skill family on September 18, 2026: `watch-video`, `motion-graphics`, and `edit-video`. `watch-video` supplies timestamped understanding and inspection evidence. `motion-graphics` creates explanatory animated scenes from a concept or narration. `edit-video` composes those capabilities and owns story, cuts, voice cleanup, captions, destination layouts, assembly, and export. Keep voice cleanup in an editing reference/helper for this first pass. No separate voice, storyboard, or orchestration skill is planned.
 
 The first scope is voice quality and the visual language for diagrams and motion graphics, with landscape and Short output modes. Relighting is outside this version. Existing editorial work supplies the surrounding workflow and comparison material. Publishing is a separate requested action; eval runs end at local review artifacts.
 
@@ -57,6 +57,8 @@ Resolve the format before selecting the story length or designing the layout. Us
 | Captions | Provide a timed sidecar; burn in captions when the brief calls for them. | Start with readable phrase captions burned in, plus a timed sidecar. Reserve room for platform overlays and the speaker's face. |
 | Cover | A landscape thumbnail when requested. | A portrait cover when requested. |
 
+For Shorts destined for YouTube, Instagram, or TikTok, read [shorts-delivery.md](shorts-delivery.md). Select the platform and placement profile before laying out graphics and captions. Treat ad templates as reference evidence and record organic app verification separately.
+
 Agree on target duration separately from format. A Short does not imply the one-minute constraint from the Unroll brief. Check current destination limits when preparing delivery. Render graphics for the chosen canvas rather than cropping a finished landscape graphic into portrait.
 
 For the first voice and motion comparisons, choose **Short**: the existing Unroll and Recap edits provide compact, familiar review material. Keep the SDLC landscape fixture in the regression set so the skill's other format is covered.
@@ -97,7 +99,7 @@ The visual language must define more than colours:
 
 The first motion specimen should redraw the Unroll passage using the same source frames and spoken timing. The first diagram specimen should redraw the Harness/model relationship. Compare them at actual phone size, including captions and camera.
 
-The existing `diagram-design` skill is a candidate dependency for diagram semantics and styling. Its interactive HTML controls and static fallbacks do not define a rendered video timeline. The eventual video skill must own time-based composition. `watch-video` is a candidate dependency for sampled inspection, with audio and continuous motion explicitly covered elsewhere. If adopted, declare dependencies and missing-skill behavior in the shipped skill.
+The existing `diagram-design` skill is a candidate dependency of `motion-graphics` for diagram semantics and styling. Its interactive HTML controls and static fallbacks do not define a rendered video timeline. `edit-video` supplies output geometry, caption reservations, and destination exclusion masks to `motion-graphics` as inputs. `watch-video` supplies inspection evidence; audio and continuous motion still require explicit review. Declare dependencies and missing-skill behavior when these contracts ship.
 
 Completion: the human can compare specimens against the old edit, judge whether the explanation is clearer, and choose a visual direction. Only then record exact style tokens as approved defaults.
 
@@ -115,7 +117,7 @@ The exports are historical ad hoc baselines. They include iterative feedback and
 | `terms` | Regression after choosing treatments. | Longer Short, all 11 terms, interruption and take transition. |
 | `sdlc` | Long-form regression. | Landscape composition, chapter transitions, repeated graphics. |
 
-The candidate voice passage still needs listening before it becomes the locked review excerpt. Include speech, a pause, and a cut boundary. Add a passage with confirmed noise if this one lacks it. None of these familiar recordings is an unseen holdout; reserve a new recording for a later generalization check.
+The reviewed 14-second voice excerpt and stronger-treatment preference are recorded in `voice-trial.json`. Extend voice eval with representative pauses and cut boundaries, plus other confirmed noise conditions, before generalizing that preference to all footage. None of these familiar recordings is an unseen holdout; reserve a new recording for a later generalization check.
 
 ### Compare one change at a time
 
@@ -146,4 +148,4 @@ Whenever instructions or rendering code change, rerun the affected comparisons a
 4. Keep human A/B review on known raw footage as the acceptance step for instruction changes.
 5. Defer relighting. The [research notes](relighting-research.md) remain available for a later version and do not create current implementation or eval requirements.
 
-The visual and voice choices are recorded in DESIGN.md and voice-trial.json. The next decision is the skill-family boundary: video understanding, editing, explanatory motion, and optionally independent voice cleanup. The scope now includes motion-led educational videos made from a concept or narration, as well as edited OBS recordings.
+The visual and voice choices are recorded in DESIGN.md and voice-trial.json. The lean family boundary is accepted: `watch-video`, `motion-graphics`, and `edit-video`, with voice cleanup inside editing. The scope now includes motion-led educational videos made from a concept or narration, as well as edited OBS recordings.
