@@ -1,0 +1,41 @@
+{
+  "createdAt": "2026-09-17T12:49:23.765Z",
+  "name": "Team invitations",
+  "status": "awaiting-human-conversation",
+  "sourceRevision": "7b248ae1746d005c2ec98e845bb438020d367912",
+  "skillRevision": "40b183c632b523ccc1476484f63e0b5072d56eaf",
+  "invocation": "implicit",
+  "sourceBranch": "eval/writing-conversations-2026-09-16",
+  "branch": "main",
+  "directory": "/private/tmp/team-app-56xJ4O",
+  "context": "Standalone temporary repo with two complete local skill packages. Task-only prompt; no evaluation material or authoring-repo instructions. Normal harness and filesystem permissions still apply.",
+  "settings": {
+    "provider": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "serviceTier": "default",
+    "runtimeMode": "full-access",
+    "interactionMode": "default",
+    "harness": "T3 Code",
+    "runnerThreadId": "d8ace3b9-f989-4450-802f-0a894612e673"
+  },
+  "hashes": {
+    "topic.md": "aff71e79dc497ce07faf16a52ffe167d6d59ff153e94c71dd355ff8bdc9fa182",
+    "settings.json": "f1e34d2e14d7e3f3681ec8a728be2302361ba1b1179113412417d997cec5dcc6",
+    "packages/writing-for-humans/README.md": "37343987e56ddc1b6392a01fa74506a229b211bdc70be7b11a99758f218a39a2",
+    "packages/writing-for-humans/SKILL.md": "9c1e15f31960d0f75009562ef117043d23896a78e658b4d7834bdce363f7c4b0",
+    "packages/writing-for-humans/THIRD_PARTY_LICENSES.md": "ff84c2c2fc417eee9c7716916a64c2e8de0cedd279b7d311b9c2117e2810221e",
+    "packages/writing-for-humans/agents/openai.yaml": "4cbec5ddd47c01162fcc91076775c85e60f3e309633a4a7434d150a9bd6a22a0",
+    "writing-for-humans.md": "9c1e15f31960d0f75009562ef117043d23896a78e658b4d7834bdce363f7c4b0",
+    "packages/unslop/README.md": "da0c8a284aed8368b103a3e1a33746d98fc8aef8eef1d6f3116a1e4ae1dfac1a",
+    "packages/unslop/SKILL.md": "700ce16b2fec6bd8f55eb60f67d0c6ce3acd86460700d5e6c068b7d78f3a2505",
+    "packages/unslop/THIRD_PARTY_LICENSES.md": "ff84c2c2fc417eee9c7716916a64c2e8de0cedd279b7d311b9c2117e2810221e",
+    "packages/unslop/agents/openai.yaml": "a9a984687ac4b041055902e498e4f59f3e17a07952dfbd7003e5a6008bde21a3",
+    "unslop.md": "700ce16b2fec6bd8f55eb60f67d0c6ce3acd86460700d5e6c068b7d78f3a2505",
+    "prompt.txt": "aff71e79dc497ce07faf16a52ffe167d6d59ff153e94c71dd355ff8bdc9fa182"
+  },
+  "threadId": "cadc2a2c-de0d-486b-98cc-7ad8f0727e03",
+  "skillVersion": 1,
+  "comparisonProtocol": "task-only prompt with automatic skill discovery",
+  "verifiedProviderDirectory": "/private/tmp/team-app-56xJ4O"
+}

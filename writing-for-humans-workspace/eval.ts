@@ -17,7 +17,7 @@ const root = dirname(workspace);
 const [command, name] = process.argv.slice(2);
 if (!name || !/^iteration-[1-9]\d*$/.test(name))
   throw new Error(
-    "Usage: bun writing-for-humans-workspace/eval.ts <prepare|start|status|capture> iteration-N",
+    "Usage: bun writing-for-humans-workspace/eval.ts <prepare|start|status|capture> iteration-N [--skill-revision COMMIT]",
   );
 const dir = join(workspace, "live", name);
 const readJSON = async (path: string) =>
@@ -74,15 +74,47 @@ function inspect(threadId: string) {
 
 if (command === "prepare") {
   const files: Record<string, string> = {};
+  const revisionIndex = process.argv.indexOf("--skill-revision");
+  if (revisionIndex >= 0 && !process.argv[revisionIndex + 1])
+    throw new Error("--skill-revision requires a commit");
+  const skillRevision =
+    revisionIndex >= 0
+      ? git(
+          "rev-parse",
+          "--verify",
+          `${process.argv[revisionIndex + 1]}^{commit}`,
+        )
+      : null;
   for (const file of ["topic.md", "settings.json"])
     files[file] = await readFile(join(workspace, file), "utf8");
-  for (const skill of ["writing-for-humans", "unslop"])
-    files[`${skill}.md`] = await readFile(
-      join(root, "skills/software-development", skill, "SKILL.md"),
-      "utf8",
-    );
-  files["prompt.txt"] =
-    `${files["topic.md"].trim()}\n\nUse $writing-for-humans and $unslop.\n`;
+  for (const skill of ["writing-for-humans", "unslop"]) {
+    const prefix = `skills/software-development/${skill}/`;
+    const paths = skillRevision
+      ? git("ls-tree", "-r", "--name-only", skillRevision, "--", prefix).split(
+          "\n",
+        )
+      : git("ls-files", "--", prefix).split("\n");
+    for (const path of paths.filter(Boolean)) {
+      const body = skillRevision
+        ? (() => {
+            const result = Bun.spawnSync(
+              ["git", "show", `${skillRevision}:${path}`],
+              { cwd: root },
+            );
+            if (result.exitCode) throw new Error(result.stderr.toString());
+            return result.stdout.toString();
+          })()
+        : await readFile(join(root, path), "utf8");
+      files[`packages/${skill}/${path.slice(prefix.length)}`] = body;
+    }
+    if (
+      !files[`packages/${skill}/SKILL.md`] ||
+      !files[`packages/${skill}/agents/openai.yaml`]
+    )
+      throw new Error(`Incomplete skill package: ${skill}`);
+    files[`${skill}.md`] = files[`packages/${skill}/SKILL.md`];
+  }
+  files["prompt.txt"] = `${files["topic.md"].trim()}\n`;
   const settings = JSON.parse(files["settings.json"]);
   if (!settings.model || !settings.effort || !settings.provider)
     throw new Error("Incomplete participant settings");
@@ -99,23 +131,33 @@ if (command === "prepare") {
     participantDirectory,
   ]);
   if (init.exitCode) throw new Error(init.stderr.toString());
-  for (const skill of ["writing-for-humans", "unslop"]) {
-    const target = join(participantDirectory, ".agents/skills", skill);
-    await mkdir(target, { recursive: true });
-    await writeFile(join(target, "SKILL.md"), files[`${skill}.md`]);
+  for (const [file, text] of Object.entries(files).filter(([file]) =>
+    file.startsWith("packages/"),
+  )) {
+    const target = join(
+      participantDirectory,
+      ".agents/skills",
+      file.slice("packages/".length),
+    );
+    await mkdir(dirname(target), { recursive: true });
+    await writeFile(target, text);
   }
-  for (const [file, text] of Object.entries(files))
+  for (const [file, text] of Object.entries(files)) {
+    await mkdir(dirname(join(dir, file)), { recursive: true });
     await writeFile(join(dir, file), text);
+  }
   await saveJSON(join(dir, "run.json"), {
     createdAt: new Date().toISOString(),
     name: "Team invitations",
     status: "prepared",
     sourceRevision: git("rev-parse", "HEAD"),
+    skillRevision,
+    invocation: "implicit",
     sourceBranch: git("branch", "--show-current"),
     branch: "main",
     directory: participantDirectory,
     context:
-      "Standalone temporary repo with only the two skill files. No evaluation material or authoring-repo instructions. Normal harness and filesystem permissions still apply.",
+      "Standalone temporary repo with two complete local skill packages. Task-only prompt; no evaluation material or authoring-repo instructions. Normal harness and filesystem permissions still apply.",
     settings,
     hashes: Object.fromEntries(
       Object.entries(files).map(([file, text]) => [file, hash(text)]),
@@ -138,6 +180,16 @@ if (command === "prepare") {
       );
       if (hash(text) !== run.hashes[`${skill}.md`])
         throw new Error(`Participant skill changed before launch: ${skill}`);
+    }
+    for (const [file, digest] of Object.entries(run.hashes).filter(([file]) =>
+      file.startsWith("packages/"),
+    )) {
+      const text = await readFile(
+        join(run.directory, ".agents/skills", file.slice("packages/".length)),
+        "utf8",
+      );
+      if (hash(text) !== digest)
+        throw new Error(`Participant package changed before launch: ${file}`);
     }
     const s = run.settings;
     const args = [
