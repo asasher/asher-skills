@@ -4,7 +4,9 @@ This thread is the eval runner. Each iteration opens a separate T3 thread where 
 
 The transcript and Asher's account of the experience are the evidence. There are no scripted follow-up turns or required numeric ratings.
 
-## First conversation
+## Current conversation
+
+Version 1 is accepted in `live/iteration-2/capture-1/`. Version 2 is the candidate in `live/iteration-3/`, adding guidance on how to present information.
 
 The topic is duplicate invitation emails and deliberate resends. Open **Team invitations** in the asher-skills T3 sidebar. Talk naturally, challenge answers, change direction, or stop whenever you want.
 
@@ -17,9 +19,9 @@ The runner captures the thread, reads the conversation, and discusses your feedb
 From the repo root:
 
 ```sh
-bun writing-for-humans-workspace/eval.ts prepare iteration-2
-bun writing-for-humans-workspace/eval.ts start iteration-2
-bun writing-for-humans-workspace/eval.ts status iteration-2
+bun writing-for-humans-workspace/eval.ts prepare iteration-3
+bun writing-for-humans-workspace/eval.ts start iteration-3
+bun writing-for-humans-workspace/eval.ts status iteration-3
 ```
 
 `prepare` saves the topic, skill sources, model settings, and kickoff prompt under `live/iteration-N/`. It creates a standalone Git repo in a temporary `team-app-*` folder containing only `.agents/skills/writing-for-humans/SKILL.md` and `.agents/skills/unslop/SKILL.md`. These are copies, not links to the authoring repo. The participant prompt is the topic plus "Use $writing-for-humans and $unslop."
@@ -29,7 +31,7 @@ bun writing-for-humans-workspace/eval.ts status iteration-2
 Only after Asher returns and says the conversation is done:
 
 ```sh
-bun writing-for-humans-workspace/eval.ts capture iteration-2
+bun writing-for-humans-workspace/eval.ts capture iteration-3
 ```
 
 Capture reads only the recorded thread from T3's local database. It refuses unfinished turns or a thread without human follow-up. If the human accepts the visible conversation as-is and the idle session retains unstarted pending metadata, `capture iteration-N --include-pending` preserves that metadata with an explicit coverage note. Active or streaming turns still block capture. Each capture gets a new directory, preserving message text, IDs, timestamps, source metadata, and a readable transcript. It exports stored chat messages, not tool activity or hidden reasoning. Attachments remain references to the source thread.
@@ -48,6 +50,6 @@ The participant sees an ordinary task and two local skills. Its folder contains 
 
 A clean working directory isolates project context, not filesystem permissions. The normal harness instructions and global skills still apply, and full-access mode can read outside the folder. The runner verifies the actual provider working directory after launch. Keep the temporary folder until the conversation and evidence capture are complete. The runner owns all eval artifacts and source skill edits.
 
-The first live thread was archived by Asher because its setup exposed the eval. Iteration 2 starts a new baseline with this clean-folder setup. Both writing skills are unchanged.
+The first live thread was archived by Asher because its setup exposed the eval. Iteration 2 starts a new baseline with this clean-folder setup. That run used the original writing skills.
 
 The earlier scripted experiment is preserved in [archive/scripted](archive/scripted). It was rejected as the wrong interaction model on 2026-09-17 and is not the live baseline.

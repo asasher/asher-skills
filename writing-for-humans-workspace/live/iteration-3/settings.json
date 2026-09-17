@@ -1,0 +1,10 @@
+{
+  "provider": "codex",
+  "model": "gpt-6-astra",
+  "effort": "high",
+  "serviceTier": "default",
+  "runtimeMode": "full-access",
+  "interactionMode": "default",
+  "harness": "T3 Code",
+  "runnerThreadId": "d8ace3b9-f989-4450-802f-0a894612e673"
+}
