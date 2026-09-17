@@ -1,0 +1,29 @@
+{
+  "createdAt": "2026-09-17T11:17:30.372Z",
+  "name": "Team invitations",
+  "status": "awaiting-human-conversation",
+  "sourceRevision": "901e82822f52316898e6f7b7c1c73916245870e5",
+  "sourceBranch": "eval/writing-conversations-2026-09-16",
+  "branch": "main",
+  "directory": "/private/tmp/team-app-2N7p5p",
+  "context": "Standalone temporary repo with only the two skill files. No evaluation material or authoring-repo instructions. Normal harness and filesystem permissions still apply.",
+  "settings": {
+    "provider": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "serviceTier": "default",
+    "runtimeMode": "full-access",
+    "interactionMode": "default",
+    "harness": "T3 Code",
+    "runnerThreadId": "d8ace3b9-f989-4450-802f-0a894612e673"
+  },
+  "hashes": {
+    "topic.md": "aff71e79dc497ce07faf16a52ffe167d6d59ff153e94c71dd355ff8bdc9fa182",
+    "settings.json": "f1e34d2e14d7e3f3681ec8a728be2302361ba1b1179113412417d997cec5dcc6",
+    "writing-for-humans.md": "9c1e15f31960d0f75009562ef117043d23896a78e658b4d7834bdce363f7c4b0",
+    "unslop.md": "700ce16b2fec6bd8f55eb60f67d0c6ce3acd86460700d5e6c068b7d78f3a2505",
+    "prompt.txt": "0fa61acc2cc600a71b901db249350835d08662fb582a8f9aa71d4313fafcacb4"
+  },
+  "threadId": "1e3a5b48-595f-47a3-8167-a3d4c79a67d3",
+  "verifiedProviderDirectory": "/private/tmp/team-app-2N7p5p"
+}

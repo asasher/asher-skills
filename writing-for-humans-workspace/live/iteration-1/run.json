@@ -1,7 +1,7 @@
 {
   "createdAt": "2026-09-17T10:31:16.490Z",
-  "name": "Writing conversation · iteration-1",
-  "status": "awaiting-human-conversation",
+  "name": "Writing conversation \u00b7 iteration-1",
+  "status": "archived-by-human",
   "sourceRevision": "97c3fa1bb765f69b1ff3395ff371871ca238b244",
   "branch": "eval/writing-conversations-2026-09-16",
   "directory": "/Users/asher/Projects/asher-skills",
@@ -23,5 +23,6 @@
     "project-instructions.md": "81998f52419916092532f8a3fd7196a4f356cb03b524467f992d0fadc0183602",
     "prompt.txt": "50c4c08d98c5cb3783f697ffd1f08e3db3236e602d788498e4266ed2e7655dd7"
   },
-  "threadId": "1fe3e90d-587a-4d3a-88a6-d229dbd9c7d3"
+  "threadId": "1fe3e90d-587a-4d3a-88a6-d229dbd9c7d3",
+  "supersededReason": "Human rejected the revealing setup prompt and requested a clean temporary working directory."
 }

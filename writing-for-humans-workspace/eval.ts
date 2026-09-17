@@ -1,6 +1,13 @@
 import { Database } from "bun:sqlite";
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile, readdir } from "node:fs/promises";
+import {
+  mkdir,
+  mkdtemp,
+  readFile,
+  writeFile,
+  readdir,
+  realpath,
+} from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -41,7 +48,7 @@ function inspect(threadId: string) {
     return {
       thread: connection
         .query(
-          "SELECT thread_id, title, model_selection_json, runtime_mode, interaction_mode, deleted_at FROM projection_threads WHERE thread_id = ?",
+          "SELECT thread_id, title, worktree_path, model_selection_json, runtime_mode, interaction_mode, deleted_at FROM projection_threads WHERE thread_id = ?",
         )
         .get(threadId) as any,
       session: connection
@@ -74,27 +81,41 @@ if (command === "prepare") {
       join(root, "skills/software-development", skill, "SKILL.md"),
       "utf8",
     );
-  // Record ambient project instructions too; the participant still runs in the real harness.
-  files["project-instructions.md"] = await readFile(
-    join(root, "AGENTS.md"),
-    "utf8",
-  );
   files["prompt.txt"] =
-    `Apply the two communication skills included below for this conversation. These are the versions to use throughout this thread. The discussion concerns the topic at the end. Work from the facts the human gives you; implementation is outside this conversation's scope. Respond to the opening message and continue the conversation with the human.\n\n${files["writing-for-humans.md"]}\n\n${files["unslop.md"]}\n\nOpening message:\n\n${files["topic.md"]}`;
+    `${files["topic.md"].trim()}\n\nUse $writing-for-humans and $unslop.\n`;
   const settings = JSON.parse(files["settings.json"]);
   if (!settings.model || !settings.effort || !settings.provider)
     throw new Error("Incomplete participant settings");
   await mkdir(join(workspace, "live"), { recursive: true });
   await mkdir(dir); // Never overwrite a run.
+  // A separate repo has no authoring-repo ancestry, instructions, or remote.
+  const participantDirectory = await realpath(await mkdtemp("/tmp/team-app-"));
+  const init = Bun.spawnSync([
+    "git",
+    "init",
+    "-q",
+    "-b",
+    "main",
+    participantDirectory,
+  ]);
+  if (init.exitCode) throw new Error(init.stderr.toString());
+  for (const skill of ["writing-for-humans", "unslop"]) {
+    const target = join(participantDirectory, ".agents/skills", skill);
+    await mkdir(target, { recursive: true });
+    await writeFile(join(target, "SKILL.md"), files[`${skill}.md`]);
+  }
   for (const [file, text] of Object.entries(files))
     await writeFile(join(dir, file), text);
   await saveJSON(join(dir, "run.json"), {
     createdAt: new Date().toISOString(),
-    name: `Writing conversation · ${name}`,
+    name: "Team invitations",
     status: "prepared",
     sourceRevision: git("rev-parse", "HEAD"),
-    branch: git("branch", "--show-current"),
-    directory: root,
+    sourceBranch: git("branch", "--show-current"),
+    branch: "main",
+    directory: participantDirectory,
+    context:
+      "Standalone temporary repo with only the two skill files. No evaluation material or authoring-repo instructions. Normal harness and filesystem permissions still apply.",
     settings,
     hashes: Object.fromEntries(
       Object.entries(files).map(([file, text]) => [file, hash(text)]),
@@ -110,13 +131,14 @@ if (command === "prepare") {
       throw new Error(
         "Launch already attempted. Use status and inspect dispatch.json before taking any recovery action.",
       );
-    if (git("branch", "--show-current") !== run.branch)
-      throw new Error("Project branch changed since preparation");
-    if (
-      hash(await readFile(join(root, "AGENTS.md"), "utf8")) !==
-      run.hashes["project-instructions.md"]
-    )
-      throw new Error("Project instructions changed since preparation");
+    for (const skill of ["writing-for-humans", "unslop"]) {
+      const text = await readFile(
+        join(run.directory, ".agents/skills", skill, "SKILL.md"),
+        "utf8",
+      );
+      if (hash(text) !== run.hashes[`${skill}.md`])
+        throw new Error(`Participant skill changed before launch: ${skill}`);
+    }
     const s = run.settings;
     const args = [
       "python3",
@@ -191,7 +213,8 @@ if (command === "prepare") {
             o.id === "serviceTier" && o.value === run.settings.serviceTier,
         )) &&
       state.thread?.runtime_mode === run.settings.runtimeMode &&
-      state.thread?.interaction_mode === run.settings.interactionMode;
+      state.thread?.interaction_mode === run.settings.interactionMode &&
+      (state.thread?.worktree_path || root) === run.directory;
     const live =
       !state.thread?.deleted_at &&
       state.turns.some((t: any) => t.started_at) &&

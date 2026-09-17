@@ -1,0 +1,1 @@
+{"branch": "main", "create_sequence": 1421997, "name": "Team invitations", "project_id": "99269fe6-5f49-447b-b3ef-d5c2a0f8141c", "thread_id": "1e3a5b48-595f-47a3-8167-a3d4c79a67d3", "thread_state": "created", "turn_sequence": 1421999, "turn_state": "start_acknowledged", "worktree_path": "/private/tmp/team-app-2N7p5p"}

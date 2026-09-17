@@ -1,0 +1,3 @@
+I maintain a small team-management app. Sometimes people get two invitation emails when they double-click Invite. The frontend sends POST /invites for each click, and the server creates an invite and sends an email for every request. Clients also retry after timeouts.
+
+I want to talk through how invitations and resends should work before implementing anything. Should we debounce the button or fix this on the server?

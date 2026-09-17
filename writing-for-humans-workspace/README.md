@@ -6,9 +6,9 @@ The transcript and Asher's account of the experience are the evidence. There are
 
 ## First conversation
 
-The topic is duplicate invitation emails and deliberate resends. Open **Writing conversation · iteration-1** in the asher-skills T3 sidebar. Talk naturally, challenge answers, change direction, or stop whenever you want.
+The topic is duplicate invitation emails and deliberate resends. Open **Team invitations** in the asher-skills T3 sidebar. Talk naturally, challenge answers, change direction, or stop whenever you want.
 
-Return to the runner and say something like: "I'm done with iteration 1. Use that transcript. It kept repeating the implementation details when I wanted a decision."
+Return to the runner and say something like: "I'm done with Team invitations. Use that transcript. It kept repeating the implementation details when I wanted a decision."
 
 The runner captures the thread, reads the conversation, and discusses your feedback with you. Skill edits follow that discussion. A new iteration starts a fresh thread with the same opening topic and updated skill snapshots.
 
@@ -17,17 +17,19 @@ The runner captures the thread, reads the conversation, and discusses your feedb
 From the repo root:
 
 ```sh
-bun writing-for-humans-workspace/eval.ts prepare iteration-1
-bun writing-for-humans-workspace/eval.ts start iteration-1
-bun writing-for-humans-workspace/eval.ts status iteration-1
+bun writing-for-humans-workspace/eval.ts prepare iteration-2
+bun writing-for-humans-workspace/eval.ts start iteration-2
+bun writing-for-humans-workspace/eval.ts status iteration-2
 ```
 
-`prepare` saves the topic, skill sources, project instructions, model settings, and kickoff prompt under `live/iteration-N/`. `start` launches an attendable thread through the `to-thread` helper. `status` verifies its identity, configuration, and started turn. Inspect its first reply for provider errors before handing it over.
+`prepare` saves the topic, skill sources, model settings, and kickoff prompt under `live/iteration-N/`. It creates a standalone Git repo in a temporary `team-app-*` folder containing only `.agents/skills/writing-for-humans/SKILL.md` and `.agents/skills/unslop/SKILL.md`. These are copies, not links to the authoring repo. The participant prompt is the topic plus "Use $writing-for-humans and $unslop."
+
+`start` launches an attendable thread through the `to-thread` helper, using that temporary repo as its working directory. The thread title and branch describe ordinary project work; iteration IDs and source metadata stay with the runner. `status` verifies its identity, configuration, and started turn. Inspect its first reply for provider errors before handing it over.
 
 Only after Asher returns and says the conversation is done:
 
 ```sh
-bun writing-for-humans-workspace/eval.ts capture iteration-1
+bun writing-for-humans-workspace/eval.ts capture iteration-2
 ```
 
 Capture reads only the recorded thread from T3's local database. It refuses unfinished turns or a thread without human follow-up. Each capture gets a new directory, preserving message text, IDs, timestamps, source metadata, and a readable transcript. It exports stored chat messages, not tool activity or hidden reasoning. Attachments remain references to the source thread.
@@ -42,6 +44,10 @@ Keep the topic, kickoff structure, model, effort, and harness settings stable ac
 
 ## Boundaries
 
-The participant sees the topic and frozen skills, not the runner's diagnosis or feedback. It runs in the real repository's T3 harness and inherits its instructions. Project instructions are recorded, but system prompts and provider behavior may change outside this repo. The participant discusses the topic without implementing code. The runner owns all eval artifacts and skill edits.
+The participant sees an ordinary task and two local skills. Its folder contains no runner records, feedback, source-repo instructions, eval terminology, or links back to this repo. It uses a new session with no conversation history.
+
+A clean working directory isolates project context, not filesystem permissions. The normal harness instructions and global skills still apply, and full-access mode can read outside the folder. The runner verifies the actual provider working directory after launch. Keep the temporary folder until the conversation and evidence capture are complete. The runner owns all eval artifacts and source skill edits.
+
+The first live thread was archived by Asher because its setup exposed the eval. Iteration 2 starts a new baseline with this clean-folder setup. Both writing skills are unchanged.
 
 The earlier scripted experiment is preserved in [archive/scripted](archive/scripted). It was rejected as the wrong interaction model on 2026-09-17 and is not the live baseline.
