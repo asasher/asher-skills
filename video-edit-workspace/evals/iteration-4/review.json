@@ -1,5 +1,5 @@
 {
-  "status": "ready_for_human_review",
+  "status": "changes_requested",
   "candidate_skill_revision": "5ddbbd5bc9ac38990a5697afedbddd34c249a735",
   "video_sha256": "45f835945b82886a99f612ad3d3d029d82932ca9cca8bf98725fe8b2d72e1256",
   "technical_checks": [
@@ -57,11 +57,13 @@
   "human_checks": [
     {
       "check": "The portrait layout keeps a prominent speaker below the motion graphics and uses the frame well",
-      "status": "unverified"
+      "status": "pass",
+      "evidence": "Human: layout is very good; much better than the last edit."
     },
     {
       "check": "One focused takeaway is understandable without the long video and retains necessary qualifications",
-      "status": "unverified"
+      "status": "fail",
+      "evidence": "Human identified half-formed thoughts and half-sentences; requests completeness."
     },
     {
       "check": "Cuts preserve words, natural pacing, and audio/video synchronization",
@@ -73,7 +75,8 @@
     },
     {
       "check": "Motion graphics clarify the idea and remain legible at phone size",
-      "status": "unverified"
+      "status": "unverified",
+      "evidence": "Human praised the graphics. Specific teaching clarity and phone-size legibility were not separately rated."
     },
     {
       "check": "Captions are accurate and do not obstruct important content",
@@ -87,5 +90,7 @@
     "limits": "Continuous perceptual playback, naturalness, pacing and lip sync await human review."
   },
   "comparison_claim": "Corrected composition baseline. Skills, project design and rubric changed together; no skill-text-only causal claim. Raw inputs, prompt, model, effort and toolchain match iteration 3. Participant independently selected audio stream 0:a:3 instead of 0:a:0, so voice outputs are not otherwise identical.",
-  "feedback": "feedback.md"
+  "feedback": "feedback.md",
+  "human_feedback": "feedback.json",
+  "next_iteration": "Keep the project design and voice treatment. Add a paper-edit completeness check to edit-video, then run from raw footage with the same production prompt and environment."
 }

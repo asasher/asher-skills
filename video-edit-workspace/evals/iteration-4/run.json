@@ -1,7 +1,7 @@
 {
   "created_at": "2026-09-19T17:32:25.021556+00:00",
   "name": "OBS September 19 \u00b7 Stacked portrait",
-  "status": "ready_for_human_review",
+  "status": "changes_requested",
   "directory": "/Users/asher/Projects/random/obs-sep19-stacked",
   "branch": "main",
   "source_revision": "5ddbbd5bc9ac38990a5697afedbddd34c249a735",
@@ -275,7 +275,7 @@
   "thread_id": "7c8614d9-5dcb-44c5-9bb5-8a1258c30047",
   "format": "portrait",
   "format_basis": "Explicit user selection: one focused portrait short for YouTube, Instagram, and TikTok.",
-  "human_review": "pending",
+  "human_review": "Layout and graphics praised; unfinished thoughts and half-sentences need correction.",
   "isolation": "Six copied production skills, startup disabling of ambient skills, and project plugin config. Full-access context isolation; actual launch catalog verified.",
   "environment": {
     "python_packages": [

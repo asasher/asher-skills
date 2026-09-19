@@ -2,6 +2,12 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-19: complete spoken thoughts before rendering
+
+Update `edit-video` after human review found unfinished thoughts in the stacked portrait cut. Assemble and review the retained narration before graphics, resolve dangling clauses and missing context, and compare the export against that paper edit. Narrow the takeaway before sacrificing its explanation to duration.
+
+Reconcile: refresh `edit-video`. Visual composition, voice treatment, dependencies and install sets are unchanged.
+
 ## 2026-09-19: portrait composition before UI reservations
 
 Correct `edit-video` portrait guidance after human rejection of a safe-zone-driven inset layout. Preserve the project's full-frame composition and apply controls to individual elements. Ad templates remain scoped references; their intersection is not an organic-video canvas. `motion-graphics` respects the assigned panel when sharing the frame with footage.
