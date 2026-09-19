@@ -1,0 +1,26 @@
+diff --git a/skills/creative/edit-video/SKILL.md b/skills/creative/edit-video/SKILL.md
+index 9d6dc2b..635efc2 100644
+--- a/skills/creative/edit-video/SKILL.md
++++ b/skills/creative/edit-video/SKILL.md
+@@ -26,10 +26,14 @@ Measure camera/screen/audio offsets from shared events or audio where available,
+ 
+ ## Build the story and timeline
+ 
+-Choose the complete explanation, retain qualifications, and remove failed starts, redundant takes, and distracting dead time. For a Short, select one self-contained takeaway with an ending. For a full explanation, keep examples needed to understand the claim.
++Choose one complete explanation, retain qualifications, and remove failed starts, redundant takes, and distracting dead time. A Short needs a self-contained takeaway with its setup and ending. Fit duration by narrowing the takeaway before cutting the words or example that make it understandable.
+ 
+ Write an edit decision list before expensive rendering. Record source file and stream, in/out times, output times, synchronization offsets, and why a take was chosen. Word timings locate candidate cuts; inspect the waveform and surrounding speech to retain consonants, breaths, and natural pacing. Fade only when a boundary needs it; choose the fade from that boundary, not a universal duration.
+ 
++Before rendering graphics, assemble a paper edit: the actual retained spoken words in output order, with source ranges and output times. Read it without the source context or diagrams. Check every join for a completed thought, a clear referent, and the connection to the next sentence. A setup must reach its answer; pronouns and summaries must refer to information established in the cut. Restore context, use a complete alternate take, or drop an incomplete beat. Preserve natural speech while resolving abandoned clauses and missing explanations. Captions, punctuation, or graphic labels cannot supply words missing from the narration. Record any unresolved source gap rather than inventing speech.
++
++Proceed when the assembled narration explains the selected takeaway on its own, every setup reaches its payoff, and each cut preserves the speaker's meaning. Keep this paper edit with the timeline and revisit it after trims.
++
+ Use the final timeline for audio, camera, graphics, and captions. A trim or speed change must update all affected tracks. Keep the timeline and rendering commands reproducible in the project.
+ 
+ ## Treat sound and explanatory scenes
+@@ -48,4 +52,4 @@ Assemble with a local renderer such as FFmpeg, retaining the source timeline and
+ 
+ Use `watch-video` on the rendered video, not just the sources. Inspect titles and captions at full resolution, dense windows around joins and animation beats, and phone-size playback for portrait output. Decode the whole export, compare expected duration, and check sync near the start and end.
+ 
+-Audition processed speech and cut boundaries when playback is available. Measurements and transcripts do not establish voice naturalness; name any unverified listening or motion review. Deliver the video, clean/captioned variants as requested, timed captions, editable scene sources, edit list, and a concise review note with remaining uncertainties. Use `writing-for-humans` when available for the handoff. Publish only when the brief requests publication.
++Compare the rendered narration with the paper edit, checking every join and the final sentence for missing words or unfinished thoughts. Audition processed speech and cut boundaries when playback is available. Measurements and transcripts do not establish voice naturalness; name any unverified listening or motion review. Deliver the video, clean/captioned variants as requested, timed captions, editable scene sources, edit list, and a concise review note with remaining uncertainties. Use `writing-for-humans` when available for the handoff. Publish only when the brief requests publication.

@@ -1,0 +1,11 @@
+{
+  "files_matching_candidate": 236,
+  "changed_files_from_iteration_4": [
+    ".agents/skills/edit-video/SKILL.md"
+  ],
+  "raw_inputs_match": true,
+  "prompt_matches": true,
+  "project_design_matches": true,
+  "rubric_matches": true,
+  "python_dependencies_match": true
+}

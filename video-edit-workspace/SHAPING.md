@@ -167,3 +167,8 @@ The portrait participant delivered a 39.57-second 1080 × 1920 edit. Independent
 ### Human rejection of the portrait composition
 
 The first portrait output was rejected for overcorrecting around safe-zone references. The accepted default is motion graphics above and portrait camera below, filling the frame. Revision 5 of DESIGN.md restores that requirement. Candidate skill guidance preserves composition first and applies relevant UI reservations locally. Voice preference is unchanged and has not been rated on this output. Iteration 4 establishes the corrected composition baseline. Its 44.87-second export uses equal-height graphics and camera panels. The isolated thread finished, and its transcript and 125 artifact hashes are captured. Independent decode, format, loudness and caption-timing checks pass. Human acceptance and actual app previews remain pending. Skills, project design and rubric changed together, so this does not isolate the effect of skill text. See `evals/iteration-4/review.json` and `publication.json` for the review evidence and published artifact links.
+
+
+### Complete narration
+
+The human praised iteration 4's layout and graphics, but found half-formed thoughts and half-sentences. The visual direction stays. Candidate `59e52b7` adds a paper edit and semantic review of every join before rendering, followed by a comparison against the encoded narration. Iteration 5 uses the same raw footage, production prompt, project design, rubric, model, effort and toolchain. Its fresh production workspace receives only the changed skill package and ordinary task context; coordinator observations remain outside it. Human review will determine whether the new narration resolves the problem.

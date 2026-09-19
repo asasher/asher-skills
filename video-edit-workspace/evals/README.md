@@ -7,7 +7,9 @@ The coordinator writes and improves the skills. A separate T3 agent performs ord
 - `iteration-3`: first portrait baseline, skill revision `57fb7fa`. The human rejected its inset composition. Transcript, 125 artifact hashes, exact feedback, and the proposed correction are preserved.
 - `iteration-4`: corrected composition baseline, skill revision `5ddbbd5`. Captured 125 artifact hashes and the completed transcript. The 44.87-second result restores graphics above and portrait camera below, filling the frame. Export checks pass. The human praised the layout and graphics but requested complete thoughts and sentences; actual app previews remain pending. The project design and rubric also changed; footage, prompt, model, effort, and toolchain stayed the same.
 
-The current thread is **OBS September 19 · Stacked portrait**, id `7c8614d9-5dcb-44c5-9bb5-8a1258c30047`, in the asher-skills T3 sidebar. Its project is `~/Projects/random/obs-sep19-stacked`.
+- `iteration-5`: candidate skill revision `59e52b7`, adding narration completeness checks. Only `edit-video/SKILL.md` changes in the 236-file production skill set. Other comparison inputs match iteration 4.
+
+The current thread is **OBS September 19 · Portrait story**, id `371a3e0b-0c55-4bba-9c86-9190804b679a`, in the asher-skills T3 sidebar. Its project is `~/Projects/random/obs-sep19-story`.
 
 Each `run.json` pins the prompt, footage, package hashes, model settings, and initial project revision. `launch-evidence.json` checks the actual provider context. Captures preserve transcripts and media hashes without committing media. Each iteration freezes its rubric. Human feedback and coordinator judgments remain separate.
 

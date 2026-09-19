@@ -1,0 +1,31 @@
+{
+  "t3_thread_id": "371a3e0b-0c55-4bba-9c86-9190804b679a",
+  "provider_thread_id": "01a0baf3-0068-7b71-a906-ad4c3c0889b6",
+  "provider_rollout": "/Users/asher/.codex-t3/cliproxy/sessions/2026/09/19/rollout-2026-09-19T22-34-42-01a0baf3-0068-7b71-a906-ad4c3c0889b6.jsonl",
+  "actual_cwd": "/Users/asher/Projects/random/obs-sep19-story",
+  "context": {
+    "cwd": "/Users/asher/Projects/random/obs-sep19-story",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "approval_policy": "never",
+    "sandbox_policy": {
+      "type": "danger-full-access"
+    }
+  },
+  "available_skill_names": [
+    "diagram-design",
+    "edit-video",
+    "motion-graphics",
+    "unslop",
+    "watch-video",
+    "writing-for-humans"
+  ],
+  "exact_skill_set": true,
+  "observed_skill_calls": [
+    {
+      "call_id": "call_ZVsToStemRD9Q0i80wa6a79i",
+      "tool": "exec",
+      "arguments": "text( await tools.exec_command({cmd:\"pwd && rg --files -g 'AGENTS.md' -g 'DESIGN.md' -g 'TOOLS.md' -g 'SKILL.md' -g '!node_modules' -g '!work' -g '!output' -g '!raw' . .agents\",max_output_tokens:3000}));\ntext(await tools.exec_command({cmd:\"cat .agents/skills/edit-video/SKILL.md .agents/skills/watch-video/SKILL.md .agents/skills/motion-graphics/SKILL.md .agents/skills/unslop/SKILL.md .agents/skills/writing-for-humans/SKILL.md DESIGN.md TOOLS.md\",\"max_output_tokens\":14000}));\ntext(ALL_TOOLS.filter(x=>/file|python|shell|media|video/.test(x.description+\" \"+x.name)).map(x=>({name:x.name,description:x.description.slice(0,140)})).slice(0,100));\n"
+    }
+  ]
+}
