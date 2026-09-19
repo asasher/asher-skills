@@ -5,7 +5,8 @@
     "sha256": "c7808c0041192681bc5ccdc367606e592eb66861bfb750476fc74c98ea1af4d4",
     "bytes": 52286165,
     "source_revision": "59e52b70ebd10cb6d489fa943d98491b3632a2d4",
-    "verification": "HTTP 200 and full SHA-256 match"
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Production skill candidate revision; output identity pinned by SHA-256 and capture-1"
   },
   "clean_master": {
     "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-complete-thoughts/ece842a9820e4dfdd4e32662c8fc59ef8229e84a03f92e7d2f92bf3e49f34750-f7c6b05c-e7b5-4ab8-86b3-5ca47b251ad4/email-agent-clean.mp4",
@@ -13,7 +14,8 @@
     "sha256": "ece842a9820e4dfdd4e32662c8fc59ef8229e84a03f92e7d2f92bf3e49f34750",
     "bytes": 52070071,
     "source_revision": "59e52b70ebd10cb6d489fa943d98491b3632a2d4",
-    "verification": "HTTP 200 and full SHA-256 match"
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Production skill candidate revision; output identity pinned by SHA-256 and capture-1"
   },
   "captions": {
     "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-complete-thoughts/2adbeb718be4193b1dd930a800aff8320898dcc14e694002b847cd063eb38c0c-cb83d7ef-61b1-4b37-adc4-4da104a639eb/email-agent.srt",
@@ -21,7 +23,8 @@
     "sha256": "2adbeb718be4193b1dd930a800aff8320898dcc14e694002b847cd063eb38c0c",
     "bytes": 1945,
     "source_revision": "59e52b70ebd10cb6d489fa943d98491b3632a2d4",
-    "verification": "HTTP 200 and full SHA-256 match"
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Production skill candidate revision; output identity pinned by SHA-256 and capture-1"
   },
   "dry": {
     "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-complete-thoughts/559662f8f18ff7a9ffbf444d32ebb717761756339d1f63a89fbd99689a39baa5-abf6ccf7-5e16-46ed-b5d6-04d8368ecdaf/voice-comparison-dry.wav",
@@ -29,7 +32,8 @@
     "sha256": "559662f8f18ff7a9ffbf444d32ebb717761756339d1f63a89fbd99689a39baa5",
     "bytes": 672044,
     "source_revision": "59e52b70ebd10cb6d489fa943d98491b3632a2d4",
-    "verification": "HTTP 200 and full SHA-256 match"
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Production skill candidate revision; output identity pinned by SHA-256 and capture-1"
   },
   "clean": {
     "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-complete-thoughts/530a3bfa98a5bd0285d59c48f062d101be6fd369f0899caff3d0a98130e46d4a-18ea814a-ca0a-461e-b738-c4fe26503573/voice-comparison-processed.wav",
@@ -37,6 +41,16 @@
     "sha256": "530a3bfa98a5bd0285d59c48f062d101be6fd369f0899caff3d0a98130e46d4a",
     "bytes": 672044,
     "source_revision": "59e52b70ebd10cb6d489fa943d98491b3632a2d4",
-    "verification": "HTTP 200 and full SHA-256 match"
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Production skill candidate revision; output identity pinned by SHA-256 and capture-1"
+  },
+  "page": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-complete-thoughts/58ba4387d104557df4548bbbe4d3e03199f09c0c12e531873b2b66a9be4de9a9-c5a466ff-ccff-497e-80ba-0b50c49e2e60/review.html",
+    "key": "asher-skills/video-complete-thoughts/58ba4387d104557df4548bbbe4d3e03199f09c0c12e531873b2b66a9be4de9a9-c5a466ff-ccff-497e-80ba-0b50c49e2e60/review.html",
+    "sha256": "58ba4387d104557df4548bbbe4d3e03199f09c0c12e531873b2b66a9be4de9a9",
+    "bytes": 10980,
+    "source_revision": "b94a723be91490250a1f9806bfd5aa23f44ca035",
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Committed review HTML source"
   }
 }

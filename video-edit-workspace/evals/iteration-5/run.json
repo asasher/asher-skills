@@ -327,5 +327,6 @@
   "verified_launch": true,
   "last_capture": "video-edit-workspace/evals/iteration-5/capture-1",
   "review": "review.json",
-  "artifact_count": 129
+  "artifact_count": 129,
+  "review_url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-complete-thoughts/58ba4387d104557df4548bbbe4d3e03199f09c0c12e531873b2b66a9be4de9a9-c5a466ff-ccff-497e-80ba-0b50c49e2e60/review.html"
 }

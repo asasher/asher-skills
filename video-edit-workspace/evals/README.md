@@ -20,3 +20,5 @@ After capture, run `python3 video-edit-workspace/inspect-export.py --video VIDEO
 Published URLs and content hashes live in each iteration's `publication.json`. The rejected first portrait review remains available as historical evidence; it is not the current design reference.
 
 [Review the corrected portrait cut](https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-stacked-portrait/389d508c1fa54ba617698666d99c495bcad7bbae732bdabfa0f409a4bf2db48c-537c60dd-65ed-41cf-8a92-179dcdc3fa15/review.html). The page includes paired voice excerpts and downloadable timestamped feedback. URL keys, source revisions and verified content hashes are recorded in `iteration-4/publication.json`.
+
+[Review the narration revision](https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-complete-thoughts/58ba4387d104557df4548bbbe4d3e03199f09c0c12e531873b2b66a9be4de9a9-c5a466ff-ccff-497e-80ba-0b50c49e2e60/review.html). This is the current review page, with the previous cut, voice comparison, caption transcript and timestamped feedback. URL keys, source revisions and verified hashes are recorded in `iteration-5/publication.json`.
