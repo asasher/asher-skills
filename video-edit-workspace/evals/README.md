@@ -16,3 +16,5 @@ See `AGENTS.md` for prepare/start/status/capture commands. Participant projects 
 After capture, run `python3 video-edit-workspace/inspect-export.py --video VIDEO --captions SRT --out video-edit-workspace/evals/iteration-N/inspection` for independent decode, stream, loudness, and caption-timing evidence. Review the full composition before local UI clearance. Ad-template overlaps alone do not establish organic UI failures.
 
 Published URLs and content hashes live in each iteration's `publication.json`. The rejected first portrait review remains available as historical evidence; it is not the current design reference.
+
+[Review the corrected portrait cut](https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-stacked-portrait/389d508c1fa54ba617698666d99c495bcad7bbae732bdabfa0f409a4bf2db48c-537c60dd-65ed-41cf-8a92-179dcdc3fa15/review.html). The page includes paired voice excerpts and downloadable timestamped feedback. URL keys, source revisions and verified content hashes are recorded in `iteration-4/publication.json`.
