@@ -172,3 +172,6 @@ The first portrait output was rejected for overcorrecting around safe-zone refer
 ### Complete narration
 
 The human praised iteration 4's layout and graphics, but found half-formed thoughts and half-sentences. The visual direction stays. Candidate `59e52b7` adds a paper edit and semantic review of every join before rendering, followed by a comparison against the encoded narration. Iteration 5 uses the same raw footage, production prompt, project design, rubric, model, effort and toolchain. Its fresh production workspace receives only the changed skill package and ordinary task context; coordinator observations remain outside it. Human review will determine whether the new narration resolves the problem.
+
+
+Iteration 5 delivered a 62.2-second cut with the full email example, limited reader role, draft/approval handoff and closing permission boundary. Its paper edit precedes graphics work, and independent encoded-audio transcription retains those complete thoughts. The stacked layout remains. Transcript, 129 artifact hashes, technical checks and review evidence are recorded in `evals/iteration-5/`. Human acceptance remains pending.

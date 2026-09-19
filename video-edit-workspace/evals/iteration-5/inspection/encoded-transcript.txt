@@ -1,0 +1,10 @@
+0.00–6.52: a lot of time there's temptation to just get an agent connected to all of your tools and just
+6.52–15.60: set up some schedules and let it run which is a recipe for disaster you implement a very nice
+16.40–22.64: email answering workflow or email follow-up workflow but the agent that you use has access
+22.64–28.12: to your private data and it has access to reply to the email that is where the trouble starts
+28.12–35.12: because these models cannot yet differentiate content from instructions agent that reads the
+35.12–41.56: email only returns whether or not it requires a follow-up and what that follow-up is that's it
+41.56–50.46: after that deterministic code picks up that code takes that email and writes a draft for a human to
+50.46–56.40: approve but the important thing is the agent that is exposed to untrusted content is not the same
+56.40–61.68: agent that has access to sensitive information you can or has access to communicate externally
+61.68–62.18: you

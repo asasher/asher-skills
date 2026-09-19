@@ -1,0 +1,15 @@
+{
+  "tool_calls_inspected": 30,
+  "suspect_coordinator_or_prior_run_path_references": [],
+  "searched_strings": [
+    "asher-skills-video-edit",
+    "video-edit-workspace/evals",
+    "obs-sep19-stacked",
+    "obs-sep19-short",
+    "iteration-4",
+    "iteration-5"
+  ],
+  "provider_rollout": "/Users/asher/.codex-t3/cliproxy/sessions/2026/09/19/rollout-2026-09-19T22-34-42-01a0baf3-0068-7b71-a906-ad4c3c0889b6.jsonl",
+  "provider_rollout_sha256": "2ebf4b01d2e844ea5372b3dfd74614ca92fb57adcd766ffb8a170908634f3846",
+  "limits": "Tool-call text audit only. Full filesystem access was enabled; absence of known coordinator paths does not prove filesystem confinement."
+}

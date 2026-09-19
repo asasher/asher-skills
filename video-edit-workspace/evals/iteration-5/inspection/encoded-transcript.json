@@ -1,0 +1,1294 @@
+{
+  "video": "/Users/asher/Projects/random/obs-sep19-story/output/email-agent-short.mp4",
+  "video_sha256": "c7808c0041192681bc5ccdc367606e592eb66861bfb750476fc74c98ea1af4d4",
+  "model": "mlx-community/whisper-large-v3-turbo",
+  "mlx_whisper_version": "0.4.3",
+  "text": " a lot of time there's temptation to just get an agent connected to all of your tools and just set up some schedules and let it run which is a recipe for disaster you implement a very nice email answering workflow or email follow-up workflow but the agent that you use has access to your private data and it has access to reply to the email that is where the trouble starts because these models cannot yet differentiate content from instructions agent that reads the email only returns whether or not it requires a follow-up and what that follow-up is that's it after that deterministic code picks up that code takes that email and writes a draft for a human to approve but the important thing is the agent that is exposed to untrusted content is not the same agent that has access to sensitive information you can or has access to communicate externally you",
+  "segments": [
+    {
+      "id": 0,
+      "seek": 0,
+      "start": 0.0,
+      "end": 6.52,
+      "text": " a lot of time there's temptation to just get an agent connected to all of your tools and just",
+      "tokens": [
+        50365,
+        257,
+        688,
+        295,
+        565,
+        456,
+        311,
+        30423,
+        281,
+        445,
+        483,
+        364,
+        9461,
+        4582,
+        281,
+        439,
+        295,
+        428,
+        3873,
+        293,
+        445,
+        50693
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.04806582506965188,
+      "compression_ratio": 1.7142857142857142,
+      "no_speech_prob": 1.489849910107921e-12,
+      "words": [
+        {
+          "word": " a",
+          "start": 0.0,
+          "end": 0.16,
+          "probability": 0.6728515625
+        },
+        {
+          "word": " lot",
+          "start": 0.16,
+          "end": 0.58,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " of",
+          "start": 0.58,
+          "end": 0.74,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " time",
+          "start": 0.74,
+          "end": 0.96,
+          "probability": 0.55224609375
+        },
+        {
+          "word": " there's",
+          "start": 0.96,
+          "end": 1.26,
+          "probability": 0.767578125
+        },
+        {
+          "word": " temptation",
+          "start": 1.26,
+          "end": 1.56,
+          "probability": 0.98828125
+        },
+        {
+          "word": " to",
+          "start": 1.56,
+          "end": 1.94,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " just",
+          "start": 1.94,
+          "end": 2.26,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " get",
+          "start": 2.26,
+          "end": 3.72,
+          "probability": 0.9892578125
+        },
+        {
+          "word": " an",
+          "start": 3.72,
+          "end": 3.92,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " agent",
+          "start": 3.92,
+          "end": 4.22,
+          "probability": 0.99462890625
+        },
+        {
+          "word": " connected",
+          "start": 4.22,
+          "end": 4.76,
+          "probability": 0.87841796875
+        },
+        {
+          "word": " to",
+          "start": 4.76,
+          "end": 4.96,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " all",
+          "start": 4.96,
+          "end": 5.14,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " of",
+          "start": 5.14,
+          "end": 5.3,
+          "probability": 0.998046875
+        },
+        {
+          "word": " your",
+          "start": 5.3,
+          "end": 5.44,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " tools",
+          "start": 5.44,
+          "end": 5.8,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " and",
+          "start": 5.8,
+          "end": 6.12,
+          "probability": 0.9658203125
+        },
+        {
+          "word": " just",
+          "start": 6.12,
+          "end": 6.52,
+          "probability": 0.99755859375
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "seek": 0,
+      "start": 6.52,
+      "end": 15.6,
+      "text": " set up some schedules and let it run which is a recipe for disaster you implement a very nice",
+      "tokens": [
+        50693,
+        992,
+        493,
+        512,
+        28078,
+        293,
+        718,
+        309,
+        1190,
+        597,
+        307,
+        257,
+        6782,
+        337,
+        11293,
+        291,
+        4445,
+        257,
+        588,
+        1481,
+        51141
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.04806582506965188,
+      "compression_ratio": 1.7142857142857142,
+      "no_speech_prob": 1.489849910107921e-12,
+      "words": [
+        {
+          "word": " set",
+          "start": 6.52,
+          "end": 6.82,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " up",
+          "start": 6.82,
+          "end": 6.92,
+          "probability": 1.0
+        },
+        {
+          "word": " some",
+          "start": 6.92,
+          "end": 7.08,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " schedules",
+          "start": 7.08,
+          "end": 7.5,
+          "probability": 0.99658203125
+        },
+        {
+          "word": " and",
+          "start": 7.5,
+          "end": 7.98,
+          "probability": 0.9931640625
+        },
+        {
+          "word": " let",
+          "start": 7.98,
+          "end": 9.08,
+          "probability": 0.99658203125
+        },
+        {
+          "word": " it",
+          "start": 9.08,
+          "end": 9.62,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " run",
+          "start": 9.62,
+          "end": 10.46,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " which",
+          "start": 10.46,
+          "end": 11.4,
+          "probability": 0.64599609375
+        },
+        {
+          "word": " is",
+          "start": 11.4,
+          "end": 11.86,
+          "probability": 1.0
+        },
+        {
+          "word": " a",
+          "start": 11.86,
+          "end": 12.2,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " recipe",
+          "start": 12.2,
+          "end": 12.58,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " for",
+          "start": 12.58,
+          "end": 12.92,
+          "probability": 1.0
+        },
+        {
+          "word": " disaster",
+          "start": 12.92,
+          "end": 13.36,
+          "probability": 0.90771484375
+        },
+        {
+          "word": " you",
+          "start": 13.36,
+          "end": 14.02,
+          "probability": 0.78466796875
+        },
+        {
+          "word": " implement",
+          "start": 14.02,
+          "end": 14.4,
+          "probability": 0.99462890625
+        },
+        {
+          "word": " a",
+          "start": 14.4,
+          "end": 14.72,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " very",
+          "start": 14.72,
+          "end": 15.1,
+          "probability": 0.998046875
+        },
+        {
+          "word": " nice",
+          "start": 15.1,
+          "end": 15.6,
+          "probability": 0.99951171875
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "seek": 0,
+      "start": 16.4,
+      "end": 22.64,
+      "text": " email answering workflow or email follow-up workflow but the agent that you use has access",
+      "tokens": [
+        51185,
+        3796,
+        13430,
+        20993,
+        420,
+        3796,
+        1524,
+        12,
+        1010,
+        20993,
+        457,
+        264,
+        9461,
+        300,
+        291,
+        764,
+        575,
+        2105,
+        51497
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.04806582506965188,
+      "compression_ratio": 1.7142857142857142,
+      "no_speech_prob": 1.489849910107921e-12,
+      "words": [
+        {
+          "word": " email",
+          "start": 16.4,
+          "end": 16.8,
+          "probability": 0.998046875
+        },
+        {
+          "word": " answering",
+          "start": 16.8,
+          "end": 17.4,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " workflow",
+          "start": 17.4,
+          "end": 17.96,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " or",
+          "start": 17.96,
+          "end": 18.34,
+          "probability": 0.998046875
+        },
+        {
+          "word": " email",
+          "start": 18.34,
+          "end": 18.62,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " follow",
+          "start": 18.62,
+          "end": 19.04,
+          "probability": 0.9990234375
+        },
+        {
+          "word": "-up",
+          "start": 19.04,
+          "end": 19.2,
+          "probability": 0.98681640625
+        },
+        {
+          "word": " workflow",
+          "start": 19.2,
+          "end": 19.64,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " but",
+          "start": 19.64,
+          "end": 20.28,
+          "probability": 0.98828125
+        },
+        {
+          "word": " the",
+          "start": 20.28,
+          "end": 21.14,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " agent",
+          "start": 21.14,
+          "end": 21.48,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " that",
+          "start": 21.48,
+          "end": 21.64,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " you",
+          "start": 21.64,
+          "end": 21.8,
+          "probability": 1.0
+        },
+        {
+          "word": " use",
+          "start": 21.8,
+          "end": 22.06,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " has",
+          "start": 22.06,
+          "end": 22.32,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " access",
+          "start": 22.32,
+          "end": 22.64,
+          "probability": 1.0
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "seek": 0,
+      "start": 22.64,
+      "end": 28.12,
+      "text": " to your private data and it has access to reply to the email that is where the trouble starts",
+      "tokens": [
+        51497,
+        281,
+        428,
+        4551,
+        1412,
+        293,
+        309,
+        575,
+        2105,
+        281,
+        16972,
+        281,
+        264,
+        3796,
+        300,
+        307,
+        689,
+        264,
+        5253,
+        3719,
+        51773
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.04806582506965188,
+      "compression_ratio": 1.7142857142857142,
+      "no_speech_prob": 1.489849910107921e-12,
+      "words": [
+        {
+          "word": " to",
+          "start": 22.64,
+          "end": 22.82,
+          "probability": 1.0
+        },
+        {
+          "word": " your",
+          "start": 22.82,
+          "end": 22.96,
+          "probability": 1.0
+        },
+        {
+          "word": " private",
+          "start": 22.96,
+          "end": 23.26,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " data",
+          "start": 23.26,
+          "end": 23.62,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " and",
+          "start": 23.62,
+          "end": 24.02,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " it",
+          "start": 24.02,
+          "end": 24.18,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " has",
+          "start": 24.18,
+          "end": 24.42,
+          "probability": 1.0
+        },
+        {
+          "word": " access",
+          "start": 24.42,
+          "end": 24.72,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " to",
+          "start": 24.72,
+          "end": 24.9,
+          "probability": 1.0
+        },
+        {
+          "word": " reply",
+          "start": 24.9,
+          "end": 25.2,
+          "probability": 0.99609375
+        },
+        {
+          "word": " to",
+          "start": 25.2,
+          "end": 25.44,
+          "probability": 1.0
+        },
+        {
+          "word": " the",
+          "start": 25.44,
+          "end": 25.58,
+          "probability": 0.9775390625
+        },
+        {
+          "word": " email",
+          "start": 25.58,
+          "end": 25.9,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " that",
+          "start": 25.9,
+          "end": 26.96,
+          "probability": 0.97412109375
+        },
+        {
+          "word": " is",
+          "start": 26.96,
+          "end": 27.2,
+          "probability": 1.0
+        },
+        {
+          "word": " where",
+          "start": 27.2,
+          "end": 27.42,
+          "probability": 1.0
+        },
+        {
+          "word": " the",
+          "start": 27.42,
+          "end": 27.56,
+          "probability": 1.0
+        },
+        {
+          "word": " trouble",
+          "start": 27.56,
+          "end": 27.8,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " starts",
+          "start": 27.8,
+          "end": 28.12,
+          "probability": 0.99951171875
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "seek": 2812,
+      "start": 28.12,
+      "end": 35.12,
+      "text": " because these models cannot yet differentiate content from instructions agent that reads the",
+      "tokens": [
+        50365,
+        570,
+        613,
+        5245,
+        2644,
+        1939,
+        23203,
+        2701,
+        490,
+        9415,
+        9461,
+        300,
+        15700,
+        264,
+        50713
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.02898527033188764,
+      "compression_ratio": 1.7579908675799087,
+      "no_speech_prob": 1.0118403510894769e-12,
+      "words": [
+        {
+          "word": " because",
+          "start": 28.12,
+          "end": 28.42,
+          "probability": 0.87939453125
+        },
+        {
+          "word": " these",
+          "start": 28.42,
+          "end": 28.82,
+          "probability": 0.99560546875
+        },
+        {
+          "word": " models",
+          "start": 28.82,
+          "end": 29.24,
+          "probability": 0.96337890625
+        },
+        {
+          "word": " cannot",
+          "start": 29.24,
+          "end": 30.62,
+          "probability": 0.99267578125
+        },
+        {
+          "word": " yet",
+          "start": 30.62,
+          "end": 31.08,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " differentiate",
+          "start": 31.08,
+          "end": 31.84,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " content",
+          "start": 31.84,
+          "end": 32.66,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " from",
+          "start": 32.66,
+          "end": 33.0,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " instructions",
+          "start": 33.0,
+          "end": 33.7,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " agent",
+          "start": 33.7,
+          "end": 34.22,
+          "probability": 0.54638671875
+        },
+        {
+          "word": " that",
+          "start": 34.22,
+          "end": 34.44,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " reads",
+          "start": 34.44,
+          "end": 34.92,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " the",
+          "start": 34.92,
+          "end": 35.12,
+          "probability": 0.99951171875
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "seek": 2812,
+      "start": 35.12,
+      "end": 41.56,
+      "text": " email only returns whether or not it requires a follow-up and what that follow-up is that's it",
+      "tokens": [
+        50713,
+        3796,
+        787,
+        11247,
+        1968,
+        420,
+        406,
+        309,
+        7029,
+        257,
+        1524,
+        12,
+        1010,
+        293,
+        437,
+        300,
+        1524,
+        12,
+        1010,
+        307,
+        300,
+        311,
+        309,
+        51033
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.02898527033188764,
+      "compression_ratio": 1.7579908675799087,
+      "no_speech_prob": 1.0118403510894769e-12,
+      "words": [
+        {
+          "word": " email",
+          "start": 35.12,
+          "end": 35.54,
+          "probability": 0.8115234375
+        },
+        {
+          "word": " only",
+          "start": 35.54,
+          "end": 36.32,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " returns",
+          "start": 36.32,
+          "end": 36.84,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " whether",
+          "start": 36.84,
+          "end": 38.12,
+          "probability": 0.99462890625
+        },
+        {
+          "word": " or",
+          "start": 38.12,
+          "end": 38.28,
+          "probability": 0.9599609375
+        },
+        {
+          "word": " not",
+          "start": 38.28,
+          "end": 38.38,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " it",
+          "start": 38.38,
+          "end": 38.52,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " requires",
+          "start": 38.52,
+          "end": 38.9,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " a",
+          "start": 38.9,
+          "end": 39.04,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " follow",
+          "start": 39.04,
+          "end": 39.3,
+          "probability": 0.99951171875
+        },
+        {
+          "word": "-up",
+          "start": 39.3,
+          "end": 39.5,
+          "probability": 0.978515625
+        },
+        {
+          "word": " and",
+          "start": 39.5,
+          "end": 39.84,
+          "probability": 0.998046875
+        },
+        {
+          "word": " what",
+          "start": 39.84,
+          "end": 40.02,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " that",
+          "start": 40.02,
+          "end": 40.2,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " follow",
+          "start": 40.2,
+          "end": 40.5,
+          "probability": 1.0
+        },
+        {
+          "word": "-up",
+          "start": 40.5,
+          "end": 40.66,
+          "probability": 0.98583984375
+        },
+        {
+          "word": " is",
+          "start": 40.66,
+          "end": 40.96,
+          "probability": 1.0
+        },
+        {
+          "word": " that's",
+          "start": 40.96,
+          "end": 41.42,
+          "probability": 0.97998046875
+        },
+        {
+          "word": " it",
+          "start": 41.42,
+          "end": 41.56,
+          "probability": 0.99755859375
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "seek": 2812,
+      "start": 41.56,
+      "end": 50.46,
+      "text": " after that deterministic code picks up that code takes that email and writes a draft for a human to",
+      "tokens": [
+        51061,
+        934,
+        300,
+        15957,
+        3142,
+        3089,
+        16137,
+        493,
+        300,
+        3089,
+        2516,
+        300,
+        3796,
+        293,
+        13657,
+        257,
+        11206,
+        337,
+        257,
+        1952,
+        281,
+        51477
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.02898527033188764,
+      "compression_ratio": 1.7579908675799087,
+      "no_speech_prob": 1.0118403510894769e-12,
+      "words": [
+        {
+          "word": " after",
+          "start": 41.56,
+          "end": 42.46,
+          "probability": 0.98583984375
+        },
+        {
+          "word": " that",
+          "start": 42.46,
+          "end": 42.76,
+          "probability": 1.0
+        },
+        {
+          "word": " deterministic",
+          "start": 42.76,
+          "end": 43.7,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " code",
+          "start": 43.7,
+          "end": 44.0,
+          "probability": 0.93408203125
+        },
+        {
+          "word": " picks",
+          "start": 44.0,
+          "end": 44.32,
+          "probability": 0.9892578125
+        },
+        {
+          "word": " up",
+          "start": 44.32,
+          "end": 44.56,
+          "probability": 0.98681640625
+        },
+        {
+          "word": " that",
+          "start": 44.56,
+          "end": 45.04,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " code",
+          "start": 45.04,
+          "end": 45.34,
+          "probability": 0.9375
+        },
+        {
+          "word": " takes",
+          "start": 45.34,
+          "end": 45.98,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " that",
+          "start": 45.98,
+          "end": 46.22,
+          "probability": 1.0
+        },
+        {
+          "word": " email",
+          "start": 46.22,
+          "end": 46.54,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " and",
+          "start": 46.54,
+          "end": 47.18,
+          "probability": 1.0
+        },
+        {
+          "word": " writes",
+          "start": 47.18,
+          "end": 47.54,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " a",
+          "start": 47.54,
+          "end": 47.88,
+          "probability": 0.97265625
+        },
+        {
+          "word": " draft",
+          "start": 47.88,
+          "end": 48.64,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " for",
+          "start": 48.64,
+          "end": 49.92,
+          "probability": 0.892578125
+        },
+        {
+          "word": " a",
+          "start": 49.92,
+          "end": 50.1,
+          "probability": 0.95751953125
+        },
+        {
+          "word": " human",
+          "start": 50.1,
+          "end": 50.28,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " to",
+          "start": 50.28,
+          "end": 50.46,
+          "probability": 0.99951171875
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "seek": 2812,
+      "start": 50.46,
+      "end": 56.4,
+      "text": " approve but the important thing is the agent that is exposed to untrusted content is not the same",
+      "tokens": [
+        51477,
+        18827,
+        457,
+        264,
+        1021,
+        551,
+        307,
+        264,
+        9461,
+        300,
+        307,
+        9495,
+        281,
+        1701,
+        81,
+        6589,
+        2701,
+        307,
+        406,
+        264,
+        912,
+        51777
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.02898527033188764,
+      "compression_ratio": 1.7579908675799087,
+      "no_speech_prob": 1.0118403510894769e-12,
+      "words": [
+        {
+          "word": " approve",
+          "start": 50.46,
+          "end": 50.76,
+          "probability": 0.99609375
+        },
+        {
+          "word": " but",
+          "start": 50.76,
+          "end": 51.26,
+          "probability": 0.99658203125
+        },
+        {
+          "word": " the",
+          "start": 51.26,
+          "end": 51.38,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " important",
+          "start": 51.38,
+          "end": 51.68,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " thing",
+          "start": 51.68,
+          "end": 51.88,
+          "probability": 1.0
+        },
+        {
+          "word": " is",
+          "start": 51.88,
+          "end": 52.26,
+          "probability": 1.0
+        },
+        {
+          "word": " the",
+          "start": 52.26,
+          "end": 52.84,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " agent",
+          "start": 52.84,
+          "end": 53.12,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " that",
+          "start": 53.12,
+          "end": 53.32,
+          "probability": 1.0
+        },
+        {
+          "word": " is",
+          "start": 53.32,
+          "end": 53.48,
+          "probability": 1.0
+        },
+        {
+          "word": " exposed",
+          "start": 53.48,
+          "end": 54.0,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " to",
+          "start": 54.0,
+          "end": 54.3,
+          "probability": 1.0
+        },
+        {
+          "word": " untrusted",
+          "start": 54.3,
+          "end": 54.9,
+          "probability": 0.99365234375
+        },
+        {
+          "word": " content",
+          "start": 54.9,
+          "end": 55.34,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " is",
+          "start": 55.34,
+          "end": 55.72,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " not",
+          "start": 55.72,
+          "end": 55.98,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " the",
+          "start": 55.98,
+          "end": 56.18,
+          "probability": 1.0
+        },
+        {
+          "word": " same",
+          "start": 56.18,
+          "end": 56.4,
+          "probability": 0.99951171875
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "seek": 5640,
+      "start": 56.4,
+      "end": 61.68,
+      "text": " agent that has access to sensitive information you can or has access to communicate externally",
+      "tokens": [
+        50365,
+        9461,
+        300,
+        575,
+        2105,
+        281,
+        9477,
+        1589,
+        291,
+        393,
+        420,
+        575,
+        2105,
+        281,
+        7890,
+        40899,
+        51065
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.48228531792050316,
+      "compression_ratio": 1.3066666666666666,
+      "no_speech_prob": 3.1393559626891054e-12,
+      "words": [
+        {
+          "word": " agent",
+          "start": 56.4,
+          "end": 56.72,
+          "probability": 0.95556640625
+        },
+        {
+          "word": " that",
+          "start": 56.72,
+          "end": 56.9,
+          "probability": 0.98974609375
+        },
+        {
+          "word": " has",
+          "start": 56.9,
+          "end": 57.12,
+          "probability": 0.998046875
+        },
+        {
+          "word": " access",
+          "start": 57.12,
+          "end": 57.38,
+          "probability": 0.99560546875
+        },
+        {
+          "word": " to",
+          "start": 57.38,
+          "end": 57.56,
+          "probability": 0.998046875
+        },
+        {
+          "word": " sensitive",
+          "start": 57.56,
+          "end": 57.88,
+          "probability": 0.99658203125
+        },
+        {
+          "word": " information",
+          "start": 57.88,
+          "end": 58.48,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " you",
+          "start": 58.48,
+          "end": 58.96,
+          "probability": 0.0640869140625
+        },
+        {
+          "word": " can",
+          "start": 58.96,
+          "end": 59.12,
+          "probability": 0.79296875
+        },
+        {
+          "word": " or",
+          "start": 59.12,
+          "end": 59.68,
+          "probability": 0.951171875
+        },
+        {
+          "word": " has",
+          "start": 59.68,
+          "end": 59.9,
+          "probability": 0.96923828125
+        },
+        {
+          "word": " access",
+          "start": 59.9,
+          "end": 60.16,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " to",
+          "start": 60.16,
+          "end": 60.4,
+          "probability": 1.0
+        },
+        {
+          "word": " communicate",
+          "start": 60.4,
+          "end": 61.34,
+          "probability": 0.99560546875
+        },
+        {
+          "word": " externally",
+          "start": 61.34,
+          "end": 61.68,
+          "probability": 0.99853515625
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "seek": 5640,
+      "start": 61.68,
+      "end": 62.18,
+      "text": " you",
+      "tokens": [
+        51113,
+        291,
+        51117
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.48228531792050316,
+      "compression_ratio": 1.3066666666666666,
+      "no_speech_prob": 3.1393559626891054e-12,
+      "words": [
+        {
+          "word": " you",
+          "start": 61.68,
+          "end": 62.18,
+          "probability": 0.28369140625
+        }
+      ]
+    }
+  ],
+  "limits": "Independent machine transcription checks content, not listening naturalness or sample-accurate cut boundaries."
+}

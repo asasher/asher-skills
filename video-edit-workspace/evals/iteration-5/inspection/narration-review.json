@@ -1,0 +1,50 @@
+{
+  "basis": [
+    "Captured output/project/paper-edit.md and timeline.json",
+    "Independent full encoded-audio transcript",
+    "Independent 50.9\u201362.2-second ending transcript",
+    "Iteration-4 transcript and human feedback"
+  ],
+  "video_sha256": "c7808c0041192681bc5ccdc367606e592eb66861bfb750476fc74c98ea1af4d4",
+  "coordinator_verdict": "Complete thought structure in the retained text; human assessment of natural flow remains pending.",
+  "structure": [
+    {
+      "output_range": [
+        0,
+        13.533
+      ],
+      "observation": "The opening temptation reaches its action and consequence."
+    },
+    {
+      "output_range": [
+        13.533,
+        33.933
+      ],
+      "observation": "An email workflow supplies the concrete example. Private-data and reply permissions lead to the content/instruction distinction."
+    },
+    {
+      "output_range": [
+        33.933,
+        41.767
+      ],
+      "observation": "The email-reader subject reaches the finite verb only returns and both objects: whether a follow-up is needed and what it is. The previous dangling right-way transition is absent."
+    },
+    {
+      "output_range": [
+        41.767,
+        50.9
+      ],
+      "observation": "Code takes over; the draft sentence reaches human approval."
+    },
+    {
+      "output_range": [
+        50.9,
+        62.2
+      ],
+      "observation": "The important-thing setup reaches a complete restriction on sensitive-data and external-communication access."
+    }
+  ],
+  "joins_reviewed": 14,
+  "transcription_uncertainty": "The full ASR added low-confidence you/can near 58.5\u201359.1 seconds and you at the tail. The independently transcribed ending contains neither and recovers the complete final sentence. Opening ASR connected to differs from caption connect it to; exact wording and tiny consonants require listening.",
+  "limits": "Semantic text review does not establish natural audio, pacing, lip sync, caption accuracy, or human acceptance."
+}

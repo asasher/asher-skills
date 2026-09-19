@@ -1,0 +1,100 @@
+{
+  "status": "ready_for_human_review",
+  "candidate_skill_revision": "59e52b70ebd10cb6d489fa943d98491b3632a2d4",
+  "video_sha256": "c7808c0041192681bc5ccdc367606e592eb66861bfb750476fc74c98ea1af4d4",
+  "technical_checks": [
+    {
+      "check": "Participant launch context",
+      "status": "pass",
+      "evidence": "launch-evidence.json confirms expected cwd/model/effort and exact six skills."
+    },
+    {
+      "check": "Inputs and skill packages unchanged",
+      "status": "pass",
+      "evidence": "capture-1 verifies recorded hashes. package-verification.json: all 236 files match candidate; only edit-video/SKILL.md differs from iteration 4."
+    },
+    {
+      "check": "Portrait video and full decode",
+      "status": "pass",
+      "evidence": "inspection/technical.json: H.264 1080x1920, 30 fps, 62.2 seconds, AAC mono 48kHz."
+    },
+    {
+      "check": "Encoded voice levels",
+      "status": "pass",
+      "evidence": "-16.45 LUFS, -1.64 dBTP; within 1 LU of target and below -1.5 dBTP ceiling."
+    },
+    {
+      "check": "Editable sources and paper edit",
+      "status": "pass",
+      "evidence": "capture-1/artifacts.json retains 129 output/work hashes, including timeline, paper edit, scene and rebuild scripts."
+    },
+    {
+      "check": "Caption cue timing",
+      "status": "pass",
+      "evidence": "32 cues, valid durations, ordered, in range, without overlaps."
+    },
+    {
+      "check": "Graphics-above/camera-below composition",
+      "status": "pass",
+      "evidence": "18 full-duration samples and full-resolution 34.5/61.3-second frames. Both panels remain 1080x960; no empty lower footer."
+    },
+    {
+      "check": "Local content placement",
+      "status": "pass",
+      "evidence": "Sampled captions remain near the seam, away from the face and teaching labels. Participant measures maximum plate width about 723 px inside its local 824 px lane."
+    },
+    {
+      "check": "Narration completeness in text",
+      "status": "pass",
+      "evidence": "inspection/narration-review.json checks the 14 joins and complete setup/example/handoff/conclusion. Perceptual quality remains a human check."
+    },
+    {
+      "check": "Reference masks distinguished from actual platforms",
+      "status": "pass",
+      "evidence": "Participant portrait-profile.json and review-notes.md label provisional organic reservations; no mandatory ad-mask intersection."
+    },
+    {
+      "check": "Actual organic app previews",
+      "status": "unverified",
+      "evidence": "YouTube Shorts, Instagram Reels and TikTok previews with intended post copy have not been checked."
+    }
+  ],
+  "human_checks": [
+    {
+      "check": "The portrait layout keeps a prominent speaker below the motion graphics and uses the frame well",
+      "status": "unverified"
+    },
+    {
+      "check": "One focused takeaway is understandable without the long video and retains necessary qualifications",
+      "status": "unverified"
+    },
+    {
+      "check": "Cuts preserve words, natural pacing, and audio/video synchronization",
+      "status": "unverified"
+    },
+    {
+      "check": "The processed voice sounds natural and noise is less distracting",
+      "status": "unverified"
+    },
+    {
+      "check": "Motion graphics clarify the idea and remain legible at phone size",
+      "status": "unverified"
+    },
+    {
+      "check": "Captions are accurate and do not obstruct important content",
+      "status": "unverified"
+    }
+  ],
+  "visual_coverage": {
+    "final_export_samples": 18,
+    "loupe_seconds": [
+      34.5,
+      61.3
+    ],
+    "contact_sheet": "/tmp/video-complete-thoughts/export-index.png",
+    "limits": "Sampled visual checks, not continuous perceptual playback."
+  },
+  "metadata_note": "FFprobe reports full-range yuvj420p (color_range pc). Participant README describes it as yuv420p. The independent ffprobe record is authoritative; destination color handling remains unverified.",
+  "comparison_claim": "Only edit-video/SKILL.md changed among production inputs. Footage, brief, project design, rubric, model, effort and toolchain match iteration 4. The resulting edit is longer and uses different source selections; one run does not establish causality or a general skill improvement. Both runs independently selected audio stream 0:a:3.",
+  "feedback": "feedback.md"
+}

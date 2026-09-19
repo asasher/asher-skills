@@ -1,0 +1,15 @@
+{
+  "desktop": {
+    "overflow": false,
+    "videoWidth": 1080,
+    "duration": 62.2
+  },
+  "mobile": {
+    "overflow": false,
+    "playerWidth": 354
+  },
+  "errors": [],
+  "timestamp_button": "pass",
+  "feedback_download": "pass",
+  "media_metadata_loaded": "pass"
+}
