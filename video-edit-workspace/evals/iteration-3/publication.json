@@ -49,8 +49,8 @@
     "key": "asher-skills/video-portrait-first-trial/dd604bb7f50e39fa20b33eb9d12554682b648d2bbca53b288717b777fb7587dd-cf42e22a-f1fa-4b1c-ba2f-ae368e6a6d65/review.html",
     "sha256": "dd604bb7f50e39fa20b33eb9d12554682b648d2bbca53b288717b777fb7587dd",
     "bytes": 9687,
-    "source_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
+    "source_revision": "8ada12571e66a4371c46c6d91c272e47b87f0141",
     "verification": "HTTP 200 and full SHA-256 match",
-    "source_revision_kind": "Candidate skill package revision; artifact bytes are pinned by SHA-256."
+    "source_revision_kind": "Coordinator revision containing the exact review.html source."
   }
 }
