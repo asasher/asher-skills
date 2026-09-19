@@ -2,6 +2,12 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-19: lean educational-video family
+
+Add `edit-video` for editorial assembly, local voice cleanup, captions, and delivery geometry, and `motion-graphics` for editable explanatory animation. Extend `watch-video` with speech/timing evidence and explicit selected-stream transcription. Source packages include a DFN3 audio helper and a deterministic HTML scene renderer.
+
+Reconcile: install the creative video family when wanted; refresh `watch-video` where already installed. `edit-video` requires `watch-video` and can use `motion-graphics` and `writing-for-humans`; `motion-graphics` can use `diagram-design` and `writing-for-humans`. Include `unslop` with writing-for-humans. The lifecycle install set is unchanged. Projects own visual decisions, media, and output timelines. Behavioral video review is recorded separately from package/helper validation.
+
 ## 2026-09-14: backlog recap
 
 `backlog recap [time range]` creates a standalone HTML report explaining what shipped for a non-developer. It covers changes to user and system behavior, recorded reasons and tradeoffs, availability, and remaining issues. Natural ranges include last week, last month, and last six months; the default is the past week. Delivery evidence determines the reporting date, with unconfirmed releases and incomplete coverage labeled separately.

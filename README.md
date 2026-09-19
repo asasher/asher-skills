@@ -10,7 +10,7 @@ Installing is two jobs — mount the skills, then run each one's setup against t
 npx skills add github:asasher/asher-skills --skill adversarial-review agent-ready-codebase backlog bare-minimum-design capture code-review codex-imagegen deliver diagnosing-bugs diagram-design domain-modeling handoff implement interview merge principle-codebase-design principle-experience-first principle-type-system-discipline prototype prove-your-work research retro shape staffing tdd technical-writing to-branch to-slices to-spec to-subagent to-thread to-web typescript-best-practices unslop verify-your-work writing-for-humans
 ```
 
-The other categories — creative, thinking, personal — are the appendix: browse the catalog and install what you want by name.
+The other categories — creative, thinking, personal — are the appendix: browse the catalog and install what you want by name. For the lean educational-video family, install `edit-video`, `watch-video`, and `motion-graphics`; add `diagram-design`, `writing-for-humans`, and `unslop` for diagram styling and handoffs.
 
 The mount is the easy half; the setups need judgment, so hand the whole job to an agent. Paste this into whichever coding agent you use, in the repository you want the skills in:
 
@@ -81,6 +81,8 @@ Categories organize source browsing. Skill names, `--skill <name>`, sibling refe
 | creative | `bare-minimum-design` | model | reference |
 | creative | `codex-imagegen` | model | primitive |
 | creative | `diagram-design` | model | primitive |
+| creative | `edit-video` | model | composite |
+| creative | `motion-graphics` | model | composite |
 | creative | `maquette` | model | primitive |
 | creative | `shadixfy` | model | primitive |
 | creative | `watch-video` | model | primitive |

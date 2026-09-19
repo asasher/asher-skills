@@ -1,0 +1,7 @@
+interface:
+  display_name: "Edit video"
+  short_description: "Edit educational videos with voice, graphics, and captions"
+  default_prompt: "Use $edit-video to turn these recordings into a finished educational video."
+
+policy:
+  allow_implicit_invocation: true

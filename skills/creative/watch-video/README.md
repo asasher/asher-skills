@@ -13,3 +13,5 @@ Validated two ways before writing the skill:
 
 - `SKILL.md` — the three-pass drill-down (index → window → loupe)
 - `scripts/framesheet.py` — sheet builder: uniform sampling, timestamp stamping, auto grid geometry sized to a ~1.15 MP / 1568 px vision budget (ffmpeg + Pillow)
+
+- `references/speech.md` covers stream selection, local transcription, timestamp provenance, and uncertainty around cut boundaries.

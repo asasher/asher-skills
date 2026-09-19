@@ -1,6 +1,6 @@
 ---
 name: watch-video
-description: Watch a video by reading contact sheets — tiled, timestamped frame grids sized for a vision model. Use when the user shares a video, clip, or screen recording and asks anything about its content (what happens, summarize, find a moment, verify a flow or bug on screen), or when another skill needs to understand video.
+description: Watch a video by reading contact sheets — tiled, timestamped frame grids sized for a vision model. Use when the user shares a video, clip, or screen recording and asks anything about its content (what happens, summarize, find a moment, verify a flow or bug on screen), or inspect a rendered video.
 ---
 
 # Watch Video
@@ -13,7 +13,7 @@ Use `scripts/framesheet.py` (needs ffmpeg + Pillow on PATH) to build every sheet
 
 Three passes, each one sheet-read deep. Stop at the shallowest pass that answers the question; most questions die at 1 or 2.
 
-**0. Probe.** Inspect the file’s duration and resolution; download URL sources with an available tool first. If the question hinges on speech or sound, flag it now — sheets are silent; transcribe the audio track separately if a tool exists, and say plainly when the answer omits audio.
+**0. Probe.** Inspect the file’s duration and resolution; download URL sources with an available tool first. If the question hinges on speech or sound, read [speech and timing evidence](references/speech.md). Sheets are silent; inspect and transcribe the selected audio stream, and state any omitted audio coverage.
 
 **1. Index.** One sheet spanning the whole video: `framesheet.py VIDEO index.png --frames 30` (up to `--frames 80` for busy or fast-cut footage — tiles stay legible down to ~150 px). Past ~25 minutes, build one 80-frame sheet per ~20-minute segment so no tile stands in for more than ~20s. Read the sheet and write the scene map. Done when every stretch of the timeline is accounted for — either irrelevant to the question or a marked select with its timestamp range.
 

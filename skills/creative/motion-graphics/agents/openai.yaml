@@ -1,0 +1,7 @@
+interface:
+  display_name: "Motion graphics"
+  short_description: "Create editable explanatory animated scenes"
+  default_prompt: "Use $motion-graphics to animate this explanation with timed, readable scenes."
+
+policy:
+  allow_implicit_invocation: true
