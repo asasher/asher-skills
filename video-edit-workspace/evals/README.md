@@ -11,3 +11,5 @@ The portrait project is `~/Projects/random/obs-sep19-short`. Open **OBS Septembe
 `run.json` pins the prompt, footage, package hashes, model settings, and initial project revision. `launch-evidence.json` checks the actual provider context. Captures preserve transcripts and media hashes without committing media to Git. Each iteration freezes its review contract in `rubric.json`. The portrait contract includes caption and graphic geometry checks; actual organic app previews remain a separate check. Human feedback and coordinator judgments are recorded separately.
 
 See `AGENTS.md` for prepare/start/status/capture commands and iteration rules. The participant project is kept for inspection and playback; it has no source remote or links to coordinator records.
+
+After capture, run `python3 video-edit-workspace/inspect-export.py --video VIDEO --captions SRT --out video-edit-workspace/evals/iteration-N/inspection` for independent full-decode, stream, encoded-loudness, and caption-timing evidence. Keep subjective judgments separate.
