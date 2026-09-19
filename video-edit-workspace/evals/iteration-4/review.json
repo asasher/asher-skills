@@ -1,0 +1,91 @@
+{
+  "status": "ready_for_human_review",
+  "candidate_skill_revision": "5ddbbd5bc9ac38990a5697afedbddd34c249a735",
+  "video_sha256": "45f835945b82886a99f612ad3d3d029d82932ca9cca8bf98725fe8b2d72e1256",
+  "technical_checks": [
+    {
+      "check": "Participant launch context",
+      "status": "pass",
+      "evidence": "launch-evidence.json: expected cwd, gpt-6-astra, high effort, exact six-skill catalog; observed skill reads retained."
+    },
+    {
+      "check": "Raw inputs and installed packages unchanged",
+      "status": "pass",
+      "evidence": "capture-1 completed hash verification; package-verification.json matches 236 source files."
+    },
+    {
+      "check": "Portrait video fully decodes",
+      "status": "pass",
+      "evidence": "inspection/technical.json: H.264 1080x1920, 30 fps, 44.866667 seconds, AAC 48kHz mono."
+    },
+    {
+      "check": "Encoded audio measurements",
+      "status": "pass",
+      "evidence": "-16.77 LUFS integrated, -1.69 dBTP; within 1 LU of -16 target and below -1.5 dBTP ceiling."
+    },
+    {
+      "check": "Editable sources retained",
+      "status": "pass",
+      "evidence": "capture-1/artifacts.json: scene.html, timeline, captions, render scripts, README and treatment records."
+    },
+    {
+      "check": "Caption cue timing",
+      "status": "pass",
+      "evidence": "25 positive-duration cues, ordered, in range and without overlaps."
+    },
+    {
+      "check": "Graphics above and substantial camera below",
+      "status": "pass",
+      "evidence": "Both panels are 1080x960, assembled with vstack. Fifteen final-export samples show a full-frame stacked layout with camera present."
+    },
+    {
+      "check": "Local caption and content placement",
+      "status": "pass",
+      "evidence": "Sampled final frames show captions above the seam, separate from the face and graphic labels. Longest-caption loupe checked. This is sampled visual evidence, not exhaustive motion review."
+    },
+    {
+      "check": "Safe-zone evidence labels",
+      "status": "pass",
+      "evidence": "Participant review-notes.md distinguishes provisional organic guides from actual app previews. Ad-template intersections do not define pass/fail."
+    },
+    {
+      "check": "Actual organic destination previews",
+      "status": "unverified",
+      "evidence": "No YouTube Shorts, Instagram Reels or TikTok draft preview with final copy/device UI was checked."
+    }
+  ],
+  "human_checks": [
+    {
+      "check": "The portrait layout keeps a prominent speaker below the motion graphics and uses the frame well",
+      "status": "unverified"
+    },
+    {
+      "check": "One focused takeaway is understandable without the long video and retains necessary qualifications",
+      "status": "unverified"
+    },
+    {
+      "check": "Cuts preserve words, natural pacing, and audio/video synchronization",
+      "status": "unverified"
+    },
+    {
+      "check": "The processed voice sounds natural and noise is less distracting",
+      "status": "unverified"
+    },
+    {
+      "check": "Motion graphics clarify the idea and remain legible at phone size",
+      "status": "unverified"
+    },
+    {
+      "check": "Captions are accurate and do not obstruct important content",
+      "status": "unverified"
+    }
+  ],
+  "visual_coverage": {
+    "final_export_samples": 15,
+    "latest_contact_sheet": "/tmp/video-layout-correction/final-v2-index.png",
+    "longest_caption_loupe": "/tmp/video-layout-correction/longest-caption.png",
+    "limits": "Continuous perceptual playback, naturalness, pacing and lip sync await human review."
+  },
+  "comparison_claim": "Corrected composition baseline. Skills, project design and rubric changed together; no skill-text-only causal claim. Raw inputs, prompt, model, effort and toolchain match iteration 3. Participant independently selected audio stream 0:a:3 instead of 0:a:0, so voice outputs are not otherwise identical.",
+  "feedback": "feedback.md"
+}

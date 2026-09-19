@@ -1,19 +1,18 @@
 # OBS educational-video runs
 
-The coordinator writes and improves the skills. A separate T3 agent performs ordinary production work without being told about the eval. Asher reviews the resulting video here.
+The coordinator writes and improves the skills. A separate T3 agent performs ordinary production work without being told about the eval. Asher reviews the resulting video.
 
-- `iteration-1`: preserved setup failure; unrelated global skills leaked into the initial catalog. Interrupted, not scored.
-- `iteration-2`: landscape working assumption, stopped after the user selected a portrait short. Partial work is preserved without scoring.
-- `iteration-3`: first portrait baseline, using the September 19 14:54 OBS group and skill revision `57fb7fa`. One focused 1080 × 1920 short for YouTube, Instagram, and TikTok. Finished at 39.57 seconds; transcript and 125 artifact hashes captured. Human review is pending.
+- `iteration-1`: setup failure. Ambient skills leaked into the catalog; stopped without scoring.
+- `iteration-2`: landscape working assumption, superseded by the user's portrait selection. Partial work preserved without scoring.
+- `iteration-3`: first portrait baseline, skill revision `57fb7fa`. The human rejected its inset composition. Transcript, 125 artifact hashes, exact feedback, and the proposed correction are preserved.
+- `iteration-4`: corrected composition baseline, skill revision `5ddbbd5`. Captured 125 artifact hashes and the completed transcript. The 44.87-second result restores graphics above and portrait camera below, filling the frame. Export checks pass; human quality judgments and actual app previews remain pending. The project design and rubric also changed; footage, prompt, model, effort, and toolchain stayed the same.
 
-The portrait project is `~/Projects/random/obs-sep19-short`. Open **OBS September 19 · Portrait short** in the asher-skills T3 sidebar. Its `run.json` records the thread identity.
+The current thread is **OBS September 19 · Stacked portrait**, id `7c8614d9-5dcb-44c5-9bb5-8a1258c30047`, in the asher-skills T3 sidebar. Its project is `~/Projects/random/obs-sep19-stacked`.
 
-`run.json` pins the prompt, footage, package hashes, model settings, and initial project revision. `launch-evidence.json` checks the actual provider context. Captures preserve transcripts and media hashes without committing media to Git. Each iteration freezes its review contract in `rubric.json`. The portrait contract includes caption and graphic geometry checks; actual organic app previews remain a separate check. Human feedback and coordinator judgments are recorded separately.
+Each `run.json` pins the prompt, footage, package hashes, model settings, and initial project revision. `launch-evidence.json` checks the actual provider context. Captures preserve transcripts and media hashes without committing media. Each iteration freezes its rubric. Human feedback and coordinator judgments remain separate.
 
-See `AGENTS.md` for prepare/start/status/capture commands and iteration rules. The participant project is kept for inspection and playback; it has no source remote or links to coordinator records.
+See `AGENTS.md` for prepare/start/status/capture commands. Participant projects have no source remote or links to coordinator records.
 
-After capture, run `python3 video-edit-workspace/inspect-export.py --video VIDEO --captions SRT --out video-edit-workspace/evals/iteration-N/inspection` for independent full-decode, stream, encoded-loudness, and caption-timing evidence. Keep subjective judgments separate.
+After capture, run `python3 video-edit-workspace/inspect-export.py --video VIDEO --captions SRT --out video-edit-workspace/evals/iteration-N/inspection` for independent decode, stream, loudness, and caption-timing evidence. Review the full composition before local UI clearance. Ad-template overlaps alone do not establish organic UI failures.
 
-[Open the first portrait review](https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-portrait-first-trial/dd604bb7f50e39fa20b33eb9d12554682b648d2bbca53b288717b777fb7587dd-cf42e22a-f1fa-4b1c-ba2f-ae368e6a6d65/review.html). It includes the video, voice comparison, guide toggle, and downloadable timestamped feedback. The baseline output is unchanged; the coordinator records one minor face-edge/reference-mask conflict separately.
-
-The human rejected iteration 3 for its inset composition. Iteration 4 uses the corrected project design (graphics above, camera below), candidate `5ddbbd5`, and a fresh production thread, **OBS September 19 · Stacked portrait** (`7c8614d9-5dcb-44c5-9bb5-8a1258c30047`), in `~/Projects/random/obs-sep19-stacked`. Footage, prompt, model, effort, and toolchain are unchanged. The revised design and rubric start a corrected composition baseline.
+Published URLs and content hashes live in each iteration's `publication.json`. The rejected first portrait review remains available as historical evidence; it is not the current design reference.

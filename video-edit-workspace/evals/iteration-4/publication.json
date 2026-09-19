@@ -1,0 +1,42 @@
+{
+  "video": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-stacked-portrait/45f835945b82886a99f612ad3d3d029d82932ca9cca8bf98725fe8b2d72e1256-cde37cff-fd7d-4936-9cb6-628ad08c792f/ai-permissions-captioned.mp4",
+    "key": "asher-skills/video-stacked-portrait/45f835945b82886a99f612ad3d3d029d82932ca9cca8bf98725fe8b2d72e1256-cde37cff-fd7d-4936-9cb6-628ad08c792f/ai-permissions-captioned.mp4",
+    "sha256": "45f835945b82886a99f612ad3d3d029d82932ca9cca8bf98725fe8b2d72e1256",
+    "bytes": 38180325,
+    "source_revision": "5ddbbd5bc9ac38990a5697afedbddd34c249a735",
+    "verification": "HTTP 200 and full SHA-256 match"
+  },
+  "clean_master": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-stacked-portrait/2659a6dae20337c258ed0452451c134cbc5240bdf26b80a2d40bd07541d5b41c-1dbba432-ae6f-40e7-83f5-63835ae3487b/ai-permissions-clean.mp4",
+    "key": "asher-skills/video-stacked-portrait/2659a6dae20337c258ed0452451c134cbc5240bdf26b80a2d40bd07541d5b41c-1dbba432-ae6f-40e7-83f5-63835ae3487b/ai-permissions-clean.mp4",
+    "sha256": "2659a6dae20337c258ed0452451c134cbc5240bdf26b80a2d40bd07541d5b41c",
+    "bytes": 38168669,
+    "source_revision": "5ddbbd5bc9ac38990a5697afedbddd34c249a735",
+    "verification": "HTTP 200 and full SHA-256 match"
+  },
+  "dry": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-stacked-portrait/9c1b57944fdb44971b89dfe71915a2e11428adc618b78a8a59c5efc3021988a5-61a82a68-0a2b-4804-af0a-7993887d77e7/voice-comparison-dry.wav",
+    "key": "asher-skills/video-stacked-portrait/9c1b57944fdb44971b89dfe71915a2e11428adc618b78a8a59c5efc3021988a5-61a82a68-0a2b-4804-af0a-7993887d77e7/voice-comparison-dry.wav",
+    "sha256": "9c1b57944fdb44971b89dfe71915a2e11428adc618b78a8a59c5efc3021988a5",
+    "bytes": 751724,
+    "source_revision": "5ddbbd5bc9ac38990a5697afedbddd34c249a735",
+    "verification": "HTTP 200 and full SHA-256 match"
+  },
+  "clean": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-stacked-portrait/671fdfe8e17400a03cfea3db6263c257ac99f57ba014dbeb0e2e664c1f4bd7d2-c1e4d213-d018-4ce1-9b5c-fd00f3d2f8bd/voice-comparison-processed.wav",
+    "key": "asher-skills/video-stacked-portrait/671fdfe8e17400a03cfea3db6263c257ac99f57ba014dbeb0e2e664c1f4bd7d2-c1e4d213-d018-4ce1-9b5c-fd00f3d2f8bd/voice-comparison-processed.wav",
+    "sha256": "671fdfe8e17400a03cfea3db6263c257ac99f57ba014dbeb0e2e664c1f4bd7d2",
+    "bytes": 751724,
+    "source_revision": "5ddbbd5bc9ac38990a5697afedbddd34c249a735",
+    "verification": "HTTP 200 and full SHA-256 match"
+  },
+  "captions": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-stacked-portrait/68586c3f80d999d2102c843dfb030a11bea1fdaae871bafaf389ab3e57ec4c82-5accb325-957b-4256-ae1c-0e96c5124d39/ai-permissions.srt",
+    "key": "asher-skills/video-stacked-portrait/68586c3f80d999d2102c843dfb030a11bea1fdaae871bafaf389ab3e57ec4c82-5accb325-957b-4256-ae1c-0e96c5124d39/ai-permissions.srt",
+    "sha256": "68586c3f80d999d2102c843dfb030a11bea1fdaae871bafaf389ab3e57ec4c82",
+    "bytes": 1583,
+    "source_revision": "5ddbbd5bc9ac38990a5697afedbddd34c249a735",
+    "verification": "HTTP 200 and full SHA-256 match"
+  }
+}

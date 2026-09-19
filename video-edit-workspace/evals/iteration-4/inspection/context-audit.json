@@ -1,0 +1,16 @@
+{
+  "tool_calls_inspected": 48,
+  "suspect_coordinator_or_prior_run_path_references": [],
+  "searched_strings": [
+    "asher-skills-video-edit",
+    "video-edit-workspace/evals",
+    "obs-sep19-short",
+    "obs-sep19-edit",
+    "iteration-3",
+    "iteration-4"
+  ],
+  "provider_rollout": "/Users/asher/.codex-t3/cliproxy/sessions/2026/09/19/rollout-2026-09-19T21-32-27-01a0baba-0328-7bc0-bc31-6dd1f0570736.jsonl",
+  "provider_rollout_sha256": "4d2c2800886e5e5346ac6116d25c0ccf116cdfbf5dc3ca2a209796ca55ee8a68",
+  "limits": "Tool-call text inspection found no known coordinator or prior-output paths.",
+  "isolation_limit": "Full filesystem access was enabled. This is context isolation, not proof of filesystem confinement."
+}
