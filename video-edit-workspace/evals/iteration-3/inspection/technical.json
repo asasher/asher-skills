@@ -1,0 +1,64 @@
+{
+  "video": "/Users/asher/Projects/random/obs-sep19-short/output/ai-agent-short.mp4",
+  "video_sha256": "dcae97e2e6bad44dde9c0e606301c7795ebed8b286674de7bf4d31d6607d7cf0",
+  "duration_seconds": 39.566667,
+  "decode": {
+    "exit_code": 0,
+    "pass": true,
+    "command": [
+      "ffmpeg",
+      "-hide_banner",
+      "-nostats",
+      "-xerror",
+      "-i",
+      "/Users/asher/Projects/random/obs-sep19-short/output/ai-agent-short.mp4",
+      "-map",
+      "0:v:0",
+      "-map",
+      "0:a:0",
+      "-af",
+      "loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json",
+      "-f",
+      "null",
+      "-"
+    ]
+  },
+  "video_streams": [
+    {
+      "codec_name": "h264",
+      "width": 1080,
+      "height": 1920,
+      "pix_fmt": "yuv420p",
+      "r_frame_rate": "30/1",
+      "avg_frame_rate": "30/1",
+      "duration": "39.566667"
+    }
+  ],
+  "audio_streams": [
+    {
+      "codec_name": "aac",
+      "sample_rate": "48000",
+      "channels": 1,
+      "duration": "39.566000"
+    }
+  ],
+  "loudness": {
+    "input_i": "-16.87",
+    "input_tp": "-1.76",
+    "input_lra": "3.70",
+    "input_thresh": "-27.41",
+    "output_i": "-16.35",
+    "output_tp": "-1.50",
+    "output_lra": "2.60",
+    "output_thresh": "-26.88",
+    "normalization_type": "dynamic",
+    "target_offset": "0.35"
+  },
+  "caption_timing": {
+    "file": "/Users/asher/Projects/random/obs-sep19-short/output/captions.srt",
+    "count": 22,
+    "errors": [],
+    "pass": true
+  },
+  "limits": "Decode and timing checks do not establish natural speech, audiovisual sync, caption accuracy, motion quality, or destination UI clearance."
+}

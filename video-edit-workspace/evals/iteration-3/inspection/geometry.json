@@ -1,0 +1,14 @@
+{
+  "frames": 1187,
+  "fps": 30,
+  "tested_visible_elements": 13635,
+  "region": {
+    "left": 120,
+    "top": 288,
+    "right": 780,
+    "bottom": 1248
+  },
+  "errors": [],
+  "pass": true,
+  "limits": "Checks authored scene geometry including preview caption plates. Real footage, actual libass rasterization, and organic app UI require separate inspection."
+}

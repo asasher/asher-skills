@@ -1,0 +1,56 @@
+{
+  "video": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-portrait-first-trial/dcae97e2e6bad44dde9c0e606301c7795ebed8b286674de7bf4d31d6607d7cf0-401c5d66-53d7-471b-8d85-8f27ce6fdda5/ai-agent-short.mp4",
+    "key": "asher-skills/video-portrait-first-trial/dcae97e2e6bad44dde9c0e606301c7795ebed8b286674de7bf4d31d6607d7cf0-401c5d66-53d7-471b-8d85-8f27ce6fdda5/ai-agent-short.mp4",
+    "sha256": "dcae97e2e6bad44dde9c0e606301c7795ebed8b286674de7bf4d31d6607d7cf0",
+    "bytes": 5437219,
+    "source_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Candidate skill package revision; artifact bytes are pinned by SHA-256."
+  },
+  "clean_master": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-portrait-first-trial/2e4baa1ef77541e750c41716131dd3ab1ca5d43c602526a27ef73e02ed41d6d1-177a99be-c25e-49b1-aa07-120957e44fe3/ai-agent-short-clean.mp4",
+    "key": "asher-skills/video-portrait-first-trial/2e4baa1ef77541e750c41716131dd3ab1ca5d43c602526a27ef73e02ed41d6d1-177a99be-c25e-49b1-aa07-120957e44fe3/ai-agent-short-clean.mp4",
+    "sha256": "2e4baa1ef77541e750c41716131dd3ab1ca5d43c602526a27ef73e02ed41d6d1",
+    "bytes": 5472033,
+    "source_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Candidate skill package revision; artifact bytes are pinned by SHA-256."
+  },
+  "dry": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-portrait-first-trial/e0613f42d7021dd0a43f5f1d6f3c6f11873045df7fc41db3295bc52765b2d61f-ae361d11-3abf-4e6b-8c8e-53aa19a00063/voice-comparison-dry.wav",
+    "key": "asher-skills/video-portrait-first-trial/e0613f42d7021dd0a43f5f1d6f3c6f11873045df7fc41db3295bc52765b2d61f-ae361d11-3abf-4e6b-8c8e-53aa19a00063/voice-comparison-dry.wav",
+    "sha256": "e0613f42d7021dd0a43f5f1d6f3c6f11873045df7fc41db3295bc52765b2d61f",
+    "bytes": 764844,
+    "source_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Candidate skill package revision; artifact bytes are pinned by SHA-256."
+  },
+  "clean": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-portrait-first-trial/75360706fb2c56c5f304129a7da14f24116acbf6a8e4564d1eebba90fc5ec1fc-40a153cb-4866-4bbc-8cf4-382d135cb63d/voice-comparison-processed.wav",
+    "key": "asher-skills/video-portrait-first-trial/75360706fb2c56c5f304129a7da14f24116acbf6a8e4564d1eebba90fc5ec1fc-40a153cb-4866-4bbc-8cf4-382d135cb63d/voice-comparison-processed.wav",
+    "sha256": "75360706fb2c56c5f304129a7da14f24116acbf6a8e4564d1eebba90fc5ec1fc",
+    "bytes": 764844,
+    "source_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Candidate skill package revision; artifact bytes are pinned by SHA-256."
+  },
+  "captions": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-portrait-first-trial/ce3469d141126b88041b042e30ec0543b73a842bacb8227b6713b6bf6f90a980-207e8cd5-c5d4-48df-a4d5-afa389ddd20e/captions.srt",
+    "key": "asher-skills/video-portrait-first-trial/ce3469d141126b88041b042e30ec0543b73a842bacb8227b6713b6bf6f90a980-207e8cd5-c5d4-48df-a4d5-afa389ddd20e/captions.srt",
+    "sha256": "ce3469d141126b88041b042e30ec0543b73a842bacb8227b6713b6bf6f90a980",
+    "bytes": 1355,
+    "source_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Candidate skill package revision; artifact bytes are pinned by SHA-256."
+  },
+  "page": {
+    "url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-portrait-first-trial/dd604bb7f50e39fa20b33eb9d12554682b648d2bbca53b288717b777fb7587dd-cf42e22a-f1fa-4b1c-ba2f-ae368e6a6d65/review.html",
+    "key": "asher-skills/video-portrait-first-trial/dd604bb7f50e39fa20b33eb9d12554682b648d2bbca53b288717b777fb7587dd-cf42e22a-f1fa-4b1c-ba2f-ae368e6a6d65/review.html",
+    "sha256": "dd604bb7f50e39fa20b33eb9d12554682b648d2bbca53b288717b777fb7587dd",
+    "bytes": 9687,
+    "source_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
+    "verification": "HTTP 200 and full SHA-256 match",
+    "source_revision_kind": "Candidate skill package revision; artifact bytes are pinned by SHA-256."
+  }
+}

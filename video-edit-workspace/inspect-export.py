@@ -37,8 +37,12 @@ for i, (start, end) in enumerate(cues):
         errors.append({'cue': i + 1, 'reason': 'out of range or nonpositive duration'})
     if i and start < cues[i - 1][1]:
         errors.append({'cue': i + 1, 'reason': 'overlaps previous cue'})
+digest = hashlib.sha256()
+with a.video.open('rb') as source:
+    for chunk in iter(lambda: source.read(8 * 1024 * 1024), b''):
+        digest.update(chunk)
 report = {
-    'video': str(a.video), 'video_sha256': hashlib.file_digest(a.video.open('rb'), 'sha256').hexdigest(),
+    'video': str(a.video), 'video_sha256': digest.hexdigest(),
     'duration_seconds': duration,
     'decode': {'exit_code': decode.returncode, 'pass': decode.returncode == 0, 'command': command},
     'video_streams': [{k: s.get(k) for k in ['codec_name', 'width', 'height', 'pix_fmt', 'r_frame_rate', 'avg_frame_rate', 'duration']} for s in video],

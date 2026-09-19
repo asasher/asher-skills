@@ -1,7 +1,7 @@
 {
   "created_at": "2026-09-19T16:29:03.170780+00:00",
   "name": "OBS September 19 \u00b7 Portrait short",
-  "status": "running",
+  "status": "ready_for_human_review",
   "directory": "/Users/asher/Projects/random/obs-sep19-short",
   "branch": "main",
   "source_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
@@ -324,5 +324,10 @@
     "playwright": "1.63.0"
   },
   "verified_launch": true,
-  "rubric_sha256": "32ba67d9235e731a21455056d42aab4c9c2bcff5d72b486219eb35d77b801ff2"
+  "rubric_sha256": "32ba67d9235e731a21455056d42aab4c9c2bcff5d72b486219eb35d77b801ff2",
+  "last_capture": "video-edit-workspace/evals/iteration-3/capture-1",
+  "review": "video-edit-workspace/evals/iteration-3/review.json",
+  "baseline": "First portrait run; earlier landscape run was superseded by user selection.",
+  "review_url": "https://pub-6d5eb34d234d4f3cad4464870d8d0482.r2.dev/asher-skills/video-portrait-first-trial/dd604bb7f50e39fa20b33eb9d12554682b648d2bbca53b288717b777fb7587dd-cf42e22a-f1fa-4b1c-ba2f-ae368e6a6d65/review.html",
+  "publication": "video-edit-workspace/evals/iteration-3/publication.json"
 }

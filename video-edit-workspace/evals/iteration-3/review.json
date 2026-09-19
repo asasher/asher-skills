@@ -1,0 +1,87 @@
+{
+  "status": "ready_for_human_review",
+  "candidate_skill_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
+  "technical_checks": [
+    {
+      "check": "Participant launch context",
+      "status": "pass",
+      "evidence": "launch-evidence.json: exact six skills, expected cwd, model and effort"
+    },
+    {
+      "check": "Raw inputs and installed packages unchanged",
+      "status": "pass",
+      "evidence": "capture-1 completed verification; package-verification.json matches all 236 source files"
+    },
+    {
+      "check": "Portrait video fully decodes",
+      "status": "pass",
+      "evidence": "inspection/technical.json: H.264 1080x1920, 30 fps, 39.566667 seconds, AAC 48kHz mono"
+    },
+    {
+      "check": "Encoded audio measurements",
+      "status": "pass",
+      "evidence": "-16.87 LUFS integrated, -1.76 dBTP; within 1 LU of -16 target and below -1.5 dBTP ceiling"
+    },
+    {
+      "check": "Editable timeline and render sources retained",
+      "status": "pass",
+      "evidence": "capture-1/artifacts.json includes output/project scripts, scene.html, timeline, captions, source voice assets and motion clips"
+    },
+    {
+      "check": "Caption cue timing",
+      "status": "pass",
+      "evidence": "22 cues, positive duration, ordered, in range, no overlaps"
+    },
+    {
+      "check": "Authored graphic and caption geometry",
+      "status": "pass",
+      "evidence": "inspection/geometry.json: 1187 frame states, 13635 visible-element checks; confirmed unchanged source hashes"
+    },
+    {
+      "check": "Face clearance from reference exclusions",
+      "status": "fail",
+      "severity": "minor",
+      "evidence": "At 00:01 the right ear/edge of face extends beyond x=780 below y=840, entering the TikTok reference control reserve. Facial features largely remain clear. This is a reference-mask conflict, not confirmed live UI obstruction."
+    },
+    {
+      "check": "Actual organic destination previews",
+      "status": "unverified",
+      "evidence": "No YouTube, Instagram, or TikTok draft preview was opened; dated ad-reference masks are explicitly labeled"
+    }
+  ],
+  "human_checks": [
+    {
+      "check": "One focused takeaway is understandable without the long video and retains necessary qualifications",
+      "status": "unverified"
+    },
+    {
+      "check": "Cuts preserve words, natural pacing, and audio/video synchronization",
+      "status": "unverified"
+    },
+    {
+      "check": "The processed voice sounds natural and noise is less distracting",
+      "status": "unverified"
+    },
+    {
+      "check": "Motion graphics clarify the idea and remain legible at phone size",
+      "status": "unverified"
+    },
+    {
+      "check": "Captions are accurate and do not obstruct important content",
+      "status": "unverified"
+    }
+  ],
+  "visual_coverage": {
+    "index": "16 samples across the exported duration",
+    "loupe_seconds": [
+      1,
+      13,
+      17,
+      30,
+      34
+    ],
+    "notes": "Titles, caption plates, risk scene and approval state inspected. Continuous perceptual playback and listening remain unverified."
+  },
+  "next_iteration": "Preserve this baseline and collect human feedback on voice, pacing and visual explanation. Include footage/face clearance in the next candidate review. No skill instruction changes have been made from this run yet.",
+  "comparison_claim": "No controlled improvement claim; this is the first portrait baseline."
+}

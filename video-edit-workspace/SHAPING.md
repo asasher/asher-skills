@@ -1,6 +1,6 @@
 # Video editing skill: shaping draft
 
-Status: first skill implementation and production trial, updated September 19, 2026. Asher chose to refine the existing visual style and focus on voice quality and motion graphics. Relighting is deferred. The conversation review and fixture inventory are complete. The lean source packages are implemented at revision `57fb7fa`; the first valid production trial is running. The monochrome Harness specimen and the stronger local DeepFilterNet voice treatment have been human-reviewed. Asher accepted light/dark monochrome without blue and preferred the stronger DeepFilterNet treatment on September 18. Landscape and Short are explicit format choices.
+Status: first skill implementation and production trial, updated September 19, 2026. Asher chose to refine the existing visual style and focus on voice quality and motion graphics. Relighting is deferred. The conversation review and fixture inventory are complete. The lean source packages are implemented at revision `57fb7fa`; the first portrait production trial is captured and ready for human review. The monochrome Harness specimen and the stronger local DeepFilterNet voice treatment have been human-reviewed. Asher accepted light/dark monochrome without blue and preferred the stronger DeepFilterNet treatment on September 18. Landscape and Short are explicit format choices.
 
 ## What we are making
 
@@ -159,3 +159,6 @@ On September 19, Asher requested a fresh separate-thread run on the latest OBS f
 ### Portrait baseline
 
 The user selected one focused portrait short for YouTube, Instagram, and TikTok. The landscape run was interrupted and preserved as superseded. Iteration 3 starts from raw footage in a fresh ordinary production thread with the same skill packages. The portrait rubric adds shared safe-zone and phone-size checks.
+
+
+The portrait participant delivered a 39.57-second 1080 × 1920 edit. Independent decode, loudness, caption timing, and authored-geometry checks passed. A minor face-edge conflict with the right-side reference reserve is recorded at 00:01. Human sound, pacing, and visual-teaching judgments and actual platform previews remain pending. The participant output is preserved unchanged; no candidate skill revision has been made from this run yet.

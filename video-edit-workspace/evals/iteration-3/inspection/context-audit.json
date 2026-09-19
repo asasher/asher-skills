@@ -1,0 +1,7 @@
+{
+  "tool_calls_inspected": 42,
+  "suspect_coordinator_or_prior_run_path_references": [],
+  "provider_rollout": "/Users/asher/.codex-t3/cliproxy/sessions/2026/09/19/rollout-2026-09-19T20-29-05-01a0ba7f-fd0c-7393-8ea0-0b8dba39a37b.jsonl",
+  "provider_rollout_sha256": "a0af49ae2d30611536ea5ed9a4a2140a97d4b1a6a334ad3483ebce970da81f10",
+  "limits": "Inspection of tool-call text found no known coordinator or prior-output paths. Full filesystem access was enabled; this is not a proof of confinement."
+}

@@ -53,6 +53,10 @@ def verify(run):
     for relative, expected in run['package_hashes'].items():
         if sha(project / relative) != expected:
             raise RuntimeError('Participant package changed: ' + relative)
+    for source in run['inputs']:
+        path = project / 'raw' / source['name']
+        if path.stat().st_size != source['bytes'] or sha(path) != source['sha256']:
+            raise RuntimeError('Raw input changed: ' + source['name'])
 
 
 def main():
