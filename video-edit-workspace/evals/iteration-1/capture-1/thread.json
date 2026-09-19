@@ -1,0 +1,49 @@
+{
+  "thread": {
+    "thread_id": "5eaf3863-fba3-48d3-ac30-f07ecf7cd382",
+    "title": "OBS September 19 · Educational edit",
+    "worktree_path": "/Users/asher/Projects/random/obs-sep19-first-cut",
+    "model_selection_json": "{\"instanceId\":\"codex\",\"model\":\"gpt-6-astra\",\"options\":[{\"id\":\"reasoningEffort\",\"value\":\"high\"},{\"id\":\"serviceTier\",\"value\":\"default\"}]}",
+    "runtime_mode": "full-access",
+    "interaction_mode": "default",
+    "deleted_at": null
+  },
+  "session": {
+    "status": "ready",
+    "provider_name": "codex",
+    "provider_instance_id": "codex",
+    "provider_thread_id": null,
+    "active_turn_id": null,
+    "last_error": null
+  },
+  "turns": [
+    {
+      "turn_id": "01a0b968-efc9-74d0-9e6e-0aa017c954d6",
+      "state": "completed",
+      "started_at": "2026-09-19T11:24:16.844Z",
+      "completed_at": "2026-09-19T11:25:38.242Z"
+    }
+  ],
+  "messages": [
+    {
+      "message_id": "c23e5b9b-a411-46d3-aaa5-b3d72a91de2a",
+      "turn_id": null,
+      "role": "user",
+      "text": "I recorded this explanation in OBS today. Please turn the recordings in raw/ into a polished landscape educational video, keeping the complete explanation while removing failed starts, repetition, and unnecessary dead time. Use the project's monochrome visual style, improve the voice with local AI cleanup, and add explanatory motion graphics where they make the idea easier to follow. Use the screen and camera footage appropriately. Deliver the finished 1920 × 1080 video, timed captions, and editable project here for me to review. Don't post it to any social platform.\n",
+      "is_streaming": 0,
+      "created_at": "2026-09-19T11:24:16.844Z",
+      "updated_at": "2026-09-19T11:24:16.844Z",
+      "attachments_json": "[]"
+    },
+    {
+      "message_id": "assistant:msg_028c394f05dbe010016aae70ec1b1c87d0825716fa63a7c4fc",
+      "turn_id": "01a0b968-efc9-74d0-9e6e-0aa017c954d6",
+      "role": "assistant",
+      "text": "I’ll inspect the recordings and project guidance, then build a complete edit with cleaned narration, captions, and motion graphics. I’m using the edit-video, watch-video, motion-graphics, and writing skills for this work.",
+      "is_streaming": 0,
+      "created_at": "2026-09-19T11:24:28.293Z",
+      "updated_at": "2026-09-19T11:24:28.293Z",
+      "attachments_json": null
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+[
+  {
+    "path": "work/2026-09-19 14-54-05 Camera-probe.json",
+    "bytes": 3911,
+    "sha256": "b4ce0a77901455b02659b6b1d3f9dcf01d1ee10a5068d3c48f7d6c1947852958"
+  },
+  {
+    "path": "work/2026-09-19 14-54-05 Program-probe.json",
+    "bytes": 8111,
+    "sha256": "2afed8cbc8fbce171fc9554433e13558ace53ca0a8141e7c4cc75077f364bd74"
+  },
+  {
+    "path": "work/2026-09-19 14-54-05 Screen-probe.json",
+    "bytes": 3911,
+    "sha256": "7666059f1a0baee1a086a7b3466310dcaf50ed31e48ea7f7ee8e97b5f23322c9"
+  },
+  {
+    "path": "work/audio/Camera-a0.wav",
+    "bytes": 12537208,
+    "sha256": "11d1818751c47b407285ad22335eb32a31886f261aa80b2d131d0f9d36809030"
+  },
+  {
+    "path": "work/audio/Program-a0.wav",
+    "bytes": 12544718,
+    "sha256": "32d5d00c7a429cf8ddf8a03cb9dfe580a8c84b91f6ec05a27a6a2a0f3a829d9b"
+  },
+  {
+    "path": "work/audio/Program-a1.wav",
+    "bytes": 12544718,
+    "sha256": "32d5d00c7a429cf8ddf8a03cb9dfe580a8c84b91f6ec05a27a6a2a0f3a829d9b"
+  },
+  {
+    "path": "work/audio/Program-a2.wav",
+    "bytes": 12544718,
+    "sha256": "8b414ad28fe9a8ff8ad7dafc5e1a00b974ed2f55c67a17ac563f7a1044ea14ef"
+  },
+  {
+    "path": "work/audio/Program-a3.wav",
+    "bytes": 12544718,
+    "sha256": "35042d1d55d28c783070d445b35152e96106b56d2486c39a3f9f2a4513ffb708"
+  },
+  {
+    "path": "work/audio/Screen-a0.wav",
+    "bytes": 12536526,
+    "sha256": "3ef143a3274cbfa1b623cd56a9c5d1c790b02e00c6cb6aed1d9a89e921211688"
+  },
+  {
+    "path": "work/inspect_sources.py",
+    "bytes": 875,
+    "sha256": "90981cae879d6f1753c866175c50d793eba9411e39faea9227bc6fd7f86eca99"
+  },
+  {
+    "path": "work/inspection/audio-tracks.json",
+    "bytes": 898,
+    "sha256": "790b1b3f0a7a4a84da3514691b48c117bb130b55d1a672424b1147cf3650ef21"
+  },
+  {
+    "path": "work/inspection/camera-index.jpg",
+    "bytes": 164371,
+    "sha256": "9609c01db0dbaa1d590f79e071088724b25a3b0864dcb02c912a346846ab4c93"
+  },
+  {
+    "path": "work/inspection/program-index.jpg",
+    "bytes": 169491,
+    "sha256": "4c0a015456d98c5e2b76ac0dad771d7bdc66618fdb841f3ad55f16e41bf9279f"
+  },
+  {
+    "path": "work/inspection/screen-index.jpg",
+    "bytes": 143591,
+    "sha256": "79fbe80f4331ca9826e6ffe07271a92137ea911a612c1861a9f00d28c31eaaa7"
+  },
+  {
+    "path": "work/transcribe.py",
+    "bytes": 587,
+    "sha256": "4101db8e8a4787acff3f6bc101a9ab6daefbbe467bdac9cbfd6b6cffa0cfade6"
+  }
+]

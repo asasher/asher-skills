@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "case": "OBS 2026-09-19 14:54 complete landscape explanation",
+  "primary_outcome": "Human accepts the edited explanation or identifies concrete changes; acceptance remains pending until reviewed.",
+  "technical_checks": [
+    "Actual participant cwd, model, effort, and six-skill catalog match the run",
+    "Raw inputs and installed skill packages retain recorded hashes",
+    "A full video decodes and is 1920x1080 with intended audio and timing",
+    "Final audio loudness and true peak are measured, with any deviation explained",
+    "Source/output timeline, captions, graphics sources, and render instructions are retained",
+    "Caption cues are ordered, in range, and free of unintended timing overlaps"
+  ],
+  "human_checks": [
+    "The complete explanation and its qualifications survive the edit",
+    "Cuts preserve words, natural pacing, and audio/video synchronization",
+    "The processed voice sounds natural and noise is less distracting",
+    "Motion graphics clarify the idea and remain legible",
+    "Captions are accurate and do not obstruct important content"
+  ],
+  "judgment_rules": "Use pass, fail, or unverified with cited evidence. Do not convert measurements into human naturalness scores. No controlled skill-improvement claim without comparable runs.",
+  "shorts_coverage": "Not exercised by this landscape case; retain the portrait-profile research and require a separate portrait run."
+}
