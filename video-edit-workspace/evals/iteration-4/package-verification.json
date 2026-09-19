@@ -1,0 +1,14 @@
+{
+  "source_revision": "5ddbbd5bc9ac38990a5697afedbddd34c249a735",
+  "matched_files": 236,
+  "all_packages_match_source": true,
+  "changed_package_files": [
+    ".agents/skills/edit-video/SKILL.md",
+    ".agents/skills/edit-video/references/portrait.md",
+    ".agents/skills/edit-video/references/safe-zone-profiles.json",
+    ".agents/skills/motion-graphics/SKILL.md"
+  ],
+  "same_raw_hashes": true,
+  "same_prompt_hash": true,
+  "same_python_package_versions": true
+}
