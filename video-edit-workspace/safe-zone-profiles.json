@@ -6,7 +6,7 @@
     "height": 1920
   },
   "coordinate_convention": "Top-left origin; rectangles use x, y, width, height. Scale x by output_width/1080 and y by output_height/1920. Round exclusion boundaries outward.",
-  "status": "Research-derived ad references. Organic app validation pending; not universal safe-zone guarantees.",
+  "status": "Dated ad-reference geometry. For matching paid placements or diagnostic comparison only; not a default organic composition or shared safe canvas.",
   "sources": {
     "youtube_organic": {
       "url": "https://support.google.com/youtube/answer/16215842?hl=en",
@@ -97,7 +97,7 @@
     }
   },
   "shared_starting_layout": {
-    "status": "Proposed house layout, not a platform requirement or human-approved composition.",
+    "status": "Rejected as an organic composition default on September 19, 2026. Retained as historical ad-reference geometry only.",
     "derivation": "Use a rectangle inside the intersection of these three ad references, then inset 24 px on every edge.",
     "reference_intersection_rectangle": {
       "x": 120,
@@ -119,5 +119,6 @@
     },
     "caption_font_px": 48,
     "caption_line_height_px": 58
-  }
+  },
+  "usage": "Compose the full portrait frame from project design first. For organic video, use local UI reservations and actual app previews; do not enforce this ad-template intersection as a blanket layout boundary."
 }

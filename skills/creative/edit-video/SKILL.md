@@ -14,7 +14,7 @@ Deliver an editable project and a coherent rendered video. Keep raw sources inta
 
 Use the requested format and destination. If neither the brief nor project context settles the format, ask "Landscape video or Short?" Resolve duration separately. A landscape explanation can need several portrait beats; render each composition intentionally.
 
-For Shorts, Reels, or TikTok, read [portrait delivery](references/portrait.md) before designing scenes. For landscape, use normal project margins, reserve caption clearance, and account for temporary player controls and requested end-screen elements.
+For Shorts, Reels, or TikTok, read [portrait delivery](references/portrait.md) before designing scenes. Preserve the project’s portrait composition, then accommodate destination controls within it. For landscape, use normal project margins, reserve caption clearance, and account for temporary player controls and requested end-screen elements.
 
 ## Understand the sources
 

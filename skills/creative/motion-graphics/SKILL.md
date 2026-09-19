@@ -11,7 +11,7 @@ Make the viewer understand a change. Begin with the concept and what the viewer 
 
 ## Plan the explanation
 
-Resolve canvas, duration or narration cues, output frame rate, and any reserved regions such as captions or platform controls. If these are supplied, treat them as layout inputs. A concept-only request can start with a scene plan; a request for a clip ends with a rendered clip.
+Resolve canvas, duration or narration cues, output frame rate, and any reserved regions such as captions or platform controls. If these are supplied, treat them as layout inputs. When graphics share the frame with footage, compose inside the assigned graphic panel and preserve the project’s camera/graphic arrangement. A concept-only request can start with a scene plan; a request for a clip ends with a rendered clip.
 
 Write a short sequence of beats: establish the objects, show the relationship or transformation, expose its consequence, and hold the result. Use this when it fits the idea rather than imposing four beats on every scene. Keep object identity and spatial continuity across changes. Animate the operation itself instead of replacing it with a sequence of unrelated labels.
 

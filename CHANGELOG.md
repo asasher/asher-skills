@@ -2,6 +2,12 @@
 
 Newest first. Each entry names the changed skills and what a reconcile must do.
 
+## 2026-09-19: portrait composition before UI reservations
+
+Correct `edit-video` portrait guidance after human rejection of a safe-zone-driven inset layout. Preserve the project's full-frame composition and apply controls to individual elements. Ad templates remain scoped references; their intersection is not an organic-video canvas. `motion-graphics` respects the assigned panel when sharing the frame with footage.
+
+Reconcile: refresh `edit-video` and `motion-graphics`. Projects specify their intended portrait arrangement in `DESIGN.md`; this project's default is graphics above and camera below. No dependency or install-set changes.
+
 ## 2026-09-19: lean educational-video family
 
 Add `edit-video` for editorial assembly, local voice cleanup, captions, and delivery geometry, and `motion-graphics` for editable explanatory animation. Extend `watch-video` with speech/timing evidence and explicit selected-stream transcription. Source packages include a DFN3 audio helper and a deterministic HTML scene renderer.

@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "case": "OBS 2026-09-19 14:54 focused portrait short",
   "primary_outcome": "Human accepts the edited explanation or identifies concrete changes; acceptance remains pending until reviewed.",
   "technical_checks": [
@@ -9,10 +9,12 @@
     "Final audio loudness and true peak are measured, with any deviation explained",
     "Source/output timeline, captions, graphics sources, and render instructions are retained",
     "Caption cues are ordered, in range, and free of unintended timing overlaps",
-    "Whole caption plates and important graphics clear the declared shared safe-zone profile throughout motion",
-    "Safe-zone evidence distinguishes reference-mask checks from actual organic app previews"
+    "Default portrait composition keeps graphics above and camera below, with both panels substantial and the full canvas used",
+    "Safe-zone evidence distinguishes reference-mask checks from actual organic app previews",
+    "Caption and key-content checks use reservations scoped to the actual placement; ad references alone do not define organic pass/fail"
   ],
   "human_checks": [
+    "The portrait layout keeps a prominent speaker below the motion graphics and uses the frame well",
     "One focused takeaway is understandable without the long video and retains necessary qualifications",
     "Cuts preserve words, natural pacing, and audio/video synchronization",
     "The processed voice sounds natural and noise is less distracting",

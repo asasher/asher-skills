@@ -162,3 +162,8 @@ The user selected one focused portrait short for YouTube, Instagram, and TikTok.
 
 
 The portrait participant delivered a 39.57-second 1080 × 1920 edit. Independent decode, loudness, caption timing, and authored-geometry checks passed. A minor face-edge conflict with the right-side reference reserve is recorded at 00:01. Human sound, pacing, and visual-teaching judgments and actual platform previews remain pending. The participant output is preserved unchanged; no candidate skill revision has been made from this run yet.
+
+
+### Human rejection of the portrait composition
+
+The first portrait output was rejected for overcorrecting around safe-zone references. The accepted default is motion graphics above and portrait camera below, filling the frame. Revision 5 of DESIGN.md restores that requirement. Candidate skill guidance preserves composition first and applies relevant UI reservations locally. Voice preference is unchanged and has not been rated on this output. A fresh run will establish the corrected composition baseline.

@@ -1,7 +1,7 @@
 {
   "created_at": "2026-09-19T16:29:03.170780+00:00",
   "name": "OBS September 19 \u00b7 Portrait short",
-  "status": "ready_for_human_review",
+  "status": "rejected_by_human",
   "directory": "/Users/asher/Projects/random/obs-sep19-short",
   "branch": "main",
   "source_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
@@ -275,7 +275,7 @@
   "thread_id": "80e1738f-8ff1-48fe-a0e2-d79d3c07694d",
   "format": "portrait",
   "format_basis": "Explicit user selection: one focused portrait short for YouTube, Instagram, and TikTok.",
-  "human_review": "pending",
+  "human_review": "Rejected portrait composition; voice quality not separately rated.",
   "isolation": "Standalone project; task-only prompt; six copied production skills. Provider startup flags disable ambient skills; project config disables unrelated plugins. Actual catalog verified. Full-access remains enabled; this is context isolation, not a filesystem sandbox.",
   "dispatch_exit_code": 0,
   "environment": {

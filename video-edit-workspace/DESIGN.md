@@ -14,7 +14,7 @@ radii:
 
 ## Overview
 
-Video design system, revision 4. On September 18, 2026, Asher accepted light/dark monochrome without the blue accent. Use either mode consistently within an edit. Typography and motion details can continue to evolve through examples. This file is the visual reference for the video work, not a global redesign of this authoring repo.
+Video design system, revision 5. On September 18, 2026, Asher accepted light/dark monochrome without the blue accent. Use either mode consistently within an edit. Typography and motion details can continue to evolve through examples. This file is the visual reference for the video work, not a global redesign of this authoring repo.
 
 ## Visual Theme & Atmosphere
 
@@ -50,9 +50,11 @@ At a 1080-pixel-wide video output, start with 64 px titles, 44 px node names, 32
 
 Landscape: 1920 × 1080, 64 px outer margin, screen or graphic dominant, camera beside it or in an inset. Allow for captions and temporary player controls; short-feed exclusion masks do not apply automatically.
 
-Portrait: 1080 × 1920. For Shorts, Reels, or TikTok delivery, read [shorts-delivery.md](shorts-delivery.md) and select a destination profile from `safe-zone-profiles.json`. Those profiles derive from official ad references and still need organic app verification. Keep critical diagram labels, meaningful actions, faces, and the complete caption plate inside the chosen usable area. Background imagery may bleed to the edges. A shared inset layout is proposed in the profile data; it is not an approved universal default.
+Portrait: 1080 × 1920. **Default: motion graphics in the upper panel, portrait camera footage in the lower panel, visible together.** Fill the canvas. Start near an equal-height split and adjust the seam for the explanation and face framing. Crop the camera to fill its panel without stretching; frame a prominent head-and-shoulders view with natural headroom. Keep the speaker present through graphic sequences unless a particular teaching beat calls for a deliberate exception.
 
-Place captions in a reserved lane inside the usable area. Keep graphics clear of that lane throughout their motion. Reflow scenes for destination variants instead of shrinking every label. Check cover and feed crops separately from playback overlays.
+Compose the upper graphics for that panel. Captions can sit near the seam, with a contrasting plate and clearance from the face and teaching content. Use local text and face positioning to avoid controls. Keep both panels substantial; there is no blank footer reserved for hypothetical UI.
+
+For Shorts, Reels, and TikTok, read [shorts-delivery.md](shorts-delivery.md) for evidence scope and app checks. Ad-template masks are diagnostic references for organic delivery. They do not set the canvas, split, panel sizes, or a mandatory intersection rectangle. Review the full composition without guides first, then adjust specific elements around relevant controls. Mark actual app verification pending when unavailable.
 
 Keep a graph's entities recognizable between shots. Prefer three to five visible concepts per beat. A dense landscape scene becomes several portrait beats. Captured screens and camera footage retain their source colours; monochrome applies to authored graphic elements.
 

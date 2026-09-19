@@ -6,7 +6,7 @@
     "height": 1920
   },
   "coordinate_convention": "Top-left origin; rectangles use x, y, width, height. Scale x by output_width/1080 and y by output_height/1920. Round exclusion boundaries outward.",
-  "status": "Dated ad-reference geometry. Organic app verification required for a destination-specific claim.",
+  "status": "Dated ad-reference geometry. For matching paid placements or diagnostic comparison only; not a default organic composition or shared safe canvas.",
   "sources": {
     "youtube_organic": {
       "url": "https://support.google.com/youtube/answer/16215842?hl=en",
@@ -41,8 +41,8 @@
       "label": "YouTube Shorts",
       "basis": "YouTube vertical ad template",
       "source": "youtube_ads",
-      "notes": "For organic Shorts, use the editor\u2019s visual guides to check the current button and description positions. The rectangle here is Google\u2019s broader video-ad reference.",
-      "derivation": "Measured fully transparent rectangle [48, 288, 888, 1248) in the official 1080 \u00d7 1920 PNG.",
+      "notes": "For organic Shorts, use the editor’s visual guides to check the current button and description positions. The rectangle here is Google’s broader video-ad reference.",
+      "derivation": "Measured fully transparent rectangle [48, 288, 888, 1248) in the official 1080 × 1920 PNG.",
       "margins": {
         "top": 288,
         "bottom": 672,
@@ -78,7 +78,7 @@
       "basis": "Standard LTR in-feed ad template",
       "source": "tiktok_ads",
       "notes": "This is the standard LTR reference, without an anchor. TikTok supplies separate anchor and Arabic-region RTL files. Longer descriptions and other formats can change the usable area; the live result can differ from the preview.",
-      "derivation": "Template labels use 720 \u00d7 1280: top 160, bottom 440, sides 80, extra right inset 120 over the bottom 720. Scale coordinates by 1.5 for 1080 \u00d7 1920. Downloaded image is 2880 \u00d7 5120.",
+      "derivation": "Template labels use 720 × 1280: top 160, bottom 440, sides 80, extra right inset 120 over the bottom 720. Scale coordinates by 1.5 for 1080 × 1920. Downloaded image is 2880 × 5120.",
       "margins": {
         "top": 240,
         "bottom": 660,
@@ -101,5 +101,6 @@
     "y": 288,
     "width": 660,
     "height": 960
-  }
+  },
+  "usage": "Compose the full portrait frame from project design first. For organic video, use local UI reservations and actual app previews; do not enforce this ad-template intersection as a blanket layout boundary."
 }

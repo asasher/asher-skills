@@ -2,7 +2,7 @@
 
 Research reviewed September 18, 2026. This is an authoring reference for the accepted lean family: `watch-video`, `motion-graphics`, and `edit-video`. Voice cleanup, captions, and destination delivery belong inside `edit-video` for the first pass. No new skill packages ship with this research.
 
-## Select a destination before composing
+## Preserve the portrait composition
 
 Resolve landscape or Short, then the destination and placement: YouTube Shorts, Instagram Reels, TikTok, or multiple destinations. Record organic or paid delivery, target locale, and extra UI such as anchors, links, or disclaimers. Use known brief details; ask only for missing decisions that affect the composition.
 
@@ -23,13 +23,13 @@ TikTok supplies separate anchor and Arabic-region RTL templates. Its article say
 
 Meta describes either zooming/cropping or adding a black background on screens taller than 9:16. Keep important content comfortably inside the reference boundary. Neither the frame edge nor a guessed action-rail position guarantees visibility on every device.
 
-The first shared composition can use the rectangle x=120–780, y=288–1248, which fits inside all three reviewed ad references. Inset critical content another 24 px. This is a **proposed house starting layout**, not a platform requirement. It leaves substantial space for background imagery outside the critical area. If it makes the explanation too cramped, create destination-specific variants.
+The proposed shared inset was rejected in human review on September 19: it shrank the edit into a landscape strip with excessive empty space. The accepted default is graphics above and portrait camera below, filling the canvas. Keep these ad measurements as diagnostic evidence, not a house composition. Apply organic control reservations locally to important text, faces, and captions.
 
 ## Compose graphics and captions together
 
 Pass the canvas, chosen exclusion masks, and reserved caption lane to `motion-graphics` before scene construction. The scene should work with those inputs without depending on another skill's private files.
 
-Keep complete labels, equations, meaningful pointer movements, faces, and caption plates clear of the masks. Decorative imagery can extend beyond them. Include padding and outlines in collision bounds. Check moving objects throughout their path, not only at their resting positions.
+Keep complete labels, equations, meaningful pointer movements, faces, and caption plates clear of controls appropriate to the actual placement. Ad masks are advisory for organic exports. Decorative imagery can extend beyond them. Include padding and outlines in collision bounds. Check moving objects throughout their path, not only at their resting positions.
 
 Start portrait speech captions at the project's 48 px sans-serif size and 58 px line height. Use sentence case, short phrases, and normally one or two lines. Rebreak phrases or split a beat before shrinking the type. Keep speaker names, technical terms, negations, and qualifications correct.
 
@@ -48,7 +48,7 @@ Export a clean master and a timed sidecar, plus a burned-in version when request
 5. Record device, app/version when available, placement, date, and screenshot or review evidence. If app access is unavailable, mark platform verification pending; do not claim the layout passed. This review does not authorize public posting.
 6. Inspect cover, profile-grid, and feed crops separately. Playback safety does not imply a cover title survives a different crop.
 
-For a shared cross-platform export, compare against the union of the selected exclusions. When the union compromises teaching clarity, retain the editorial timeline and render separate layouts. Do not automatically center-crop a finished landscape diagram into portrait.
+For a shared organic export, preserve the project’s full-frame stacked composition and accommodate relevant UI locally. Use verified destination differences to decide whether separate layouts are necessary. The union of ad templates is not an organic layout requirement.
 
 Add caption accuracy, plate/UI overlap, important-content overlap, phone-size legibility, and duplicate native captions to human eval. Pin the destination-profile revision with each known-footage run. A changed layout profile is an eval input change.
 

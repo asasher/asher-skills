@@ -1,3 +1,9 @@
 # Human feedback
 
-Pending. No human voice, pacing, or graphics rating has been received for this output.
+## September 19, 2026
+
+Yeah it's horrible. We had a very nice model where you had portrait on the bottom side and motion graphics on the top side. I think in order to try to stay within the safe zone, we have overcorrected and now we have essentially shoehorned landscape portrait into what a reel is supposed to look like. It's kind of horrible 
+
+Overcorrected 
+
+Portrait with video placement on the bottom and motion graphics at the top. That's the default and then we try to just keep it away from the controls but this is horrible

@@ -1,5 +1,5 @@
 {
-  "status": "ready_for_human_review",
+  "status": "rejected_by_human",
   "candidate_skill_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
   "technical_checks": [
     {
@@ -69,6 +69,11 @@
     {
       "check": "Captions are accurate and do not obstruct important content",
       "status": "unverified"
+    },
+    {
+      "check": "Portrait composition matches the user\u2019s intended visual language",
+      "status": "fail",
+      "evidence": "Human feedback: camera belongs in the lower part with motion graphics above; the safe-zone-driven inset composition was rejected."
     }
   ],
   "visual_coverage": {
@@ -82,6 +87,8 @@
     ],
     "notes": "Titles, caption plates, risk scene and approval state inspected. Continuous perceptual playback and listening remain unverified."
   },
-  "next_iteration": "Preserve this baseline and collect human feedback on voice, pacing and visual explanation. Include footage/face clearance in the next candidate review. No skill instruction changes have been made from this run yet.",
-  "comparison_claim": "No controlled improvement claim; this is the first portrait baseline."
+  "next_iteration": "Restore the project\u2019s graphics-above/camera-below default. Correct the skill\u2019s treatment of ad-reference geometry. Run from raw footage in a fresh production workspace; this changes project design and review criteria as well as skill instructions.",
+  "comparison_claim": "No controlled improvement claim; this is the first portrait baseline.",
+  "human_feedback": "feedback.md",
+  "coordinator_correction": "The initial review overemphasized an ad-reference face-edge conflict while missing the major composition failure. Ad geometry was not evidence of an actual organic UI obstruction. Full-frame visual hierarchy must be reviewed before masks."
 }
