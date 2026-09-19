@@ -1,0 +1,382 @@
+[
+  {
+    "path": "output/project/assemble_audio.py",
+    "bytes": 1683,
+    "sha256": "1929cbcdeaa6ee5163cbaa09e567c1ebf2261d26d14f06e3093826adf6aabf26"
+  },
+  {
+    "path": "output/project/assets/permissions.mp4",
+    "bytes": 246307,
+    "sha256": "01e5ce62ed8baf1748b932f316f1749dbebce643e0fa72729d404800bfce299c"
+  },
+  {
+    "path": "output/project/assets/recap.mp4",
+    "bytes": 180644,
+    "sha256": "282265aa88810655f45fb264bf4828424adbf86b30b3e817400736e42f5cc4ce"
+  },
+  {
+    "path": "output/project/assets/workflow.mp4",
+    "bytes": 474898,
+    "sha256": "85669fd7696c29da385d6a3379b9d318124df236c13104e5cfcec4afcc6f9c83"
+  },
+  {
+    "path": "output/project/build_timeline.py",
+    "bytes": 5394,
+    "sha256": "b5acf3c65e8336f5e21b2ff7bf82eaaf9b20eab90042123ce62dfc84a5e8249c"
+  },
+  {
+    "path": "output/project/edit-decisions.csv",
+    "bytes": 5784,
+    "sha256": "cd002bda52477d5efd022eddf55a1feb01a16508798bd2a5b15d15a02fb6dd1b"
+  },
+  {
+    "path": "output/project/render_scenes.mjs",
+    "bytes": 1869,
+    "sha256": "358e6ae77e2743c8029e6a71ed20834b3bc9b5f182d4251653e5910b3be81326"
+  },
+  {
+    "path": "output/project/scenes/scene.html",
+    "bytes": 5860,
+    "sha256": "dd66ddadc5e777759469e4b6c440259c7e0fe07673bce059eccfc08d4a407bc7"
+  },
+  {
+    "path": "output/project/timeline.json",
+    "bytes": 14735,
+    "sha256": "42bbd06aa89f940f4be8201d7b953d4ed798294279d4a1163b16e094eb39bebf"
+  },
+  {
+    "path": "output/project/voice-comparison.json",
+    "bytes": 236,
+    "sha256": "a34f32b6927308fd1ec62e1cd2a4be6db65c8249ff447dcf3ff446c0d9d19f22"
+  },
+  {
+    "path": "output/project/voice-master.wav",
+    "bytes": 29174502,
+    "sha256": "6014253531e35fd378b0a41b137ebc67f51f22d238d89ace5fade14ff8f23626"
+  },
+  {
+    "path": "output/voice-comparison-cleaned.wav",
+    "bytes": 2880044,
+    "sha256": "60e953ffafa83ccea1973edfc2447aee595aa1d1558bb7d0a76e298c5c55ffb1"
+  },
+  {
+    "path": "output/voice-comparison-dry.wav",
+    "bytes": 2880044,
+    "sha256": "cbe8d5af89854e3ee78241331cb114a26b49e515ac6f9e0f0b514254e4d6a2da"
+  },
+  {
+    "path": "work/audio/assembled.wav",
+    "bytes": 19449644,
+    "sha256": "c87abfa0039b82a563a28d49febd49dafbc6ceb1a55040d81c2a95a6f99d550c"
+  },
+  {
+    "path": "work/audio/camera.wav",
+    "bytes": 12537208,
+    "sha256": "11d1818751c47b407285ad22335eb32a31886f261aa80b2d131d0f9d36809030"
+  },
+  {
+    "path": "work/audio/final-silences.log",
+    "bytes": 1982,
+    "sha256": "75b115bb7567ce12348ca5f827adebf9ef0a509639e429b37aedefe321bff984"
+  },
+  {
+    "path": "work/audio/full-24/denoiser.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "work/audio/full-24/dry.wav",
+    "bytes": 37633964,
+    "sha256": "f44913b816b85b498427e93d31515c63d58be0f36cf6bf96a5596ab06ae0d9f3"
+  },
+  {
+    "path": "work/audio/full-24/model-input.wav",
+    "bytes": 37643564,
+    "sha256": "a98f90dfcd6c0f01e80911f9b78c71788b35a7ba9f42d7393e8727bc9767927e"
+  },
+  {
+    "path": "work/audio/full-24/model-output/model-input.wav",
+    "bytes": 37640684,
+    "sha256": "dd1c59a5395aba7aaefa96ce602067be7a764db02db8f703a4854aaed79d88aa"
+  },
+  {
+    "path": "work/audio/full-24/processed.wav",
+    "bytes": 37633964,
+    "sha256": "57b4d4821e2518fc249781b9f345f0f40d744c733efb23b9aebacd8b28876f38"
+  },
+  {
+    "path": "work/audio/full-24/treatment.json",
+    "bytes": 1614,
+    "sha256": "8141ae9a80bef11c07a465f3cd1eb1e1cd7fafac6bc1cae49dd4e91e982ed787"
+  },
+  {
+    "path": "work/audio/loudness-pass1.json",
+    "bytes": 263,
+    "sha256": "85743a1b000a066430430b727719c8ae9d071c0ad162c5946ef84ff0dbfd5436"
+  },
+  {
+    "path": "work/audio/loudness-pass2.log",
+    "bytes": 1642,
+    "sha256": "106ad20442218b41969c5b92bcf70e4539dbd88a673564085ab13100ba7e53ca"
+  },
+  {
+    "path": "work/audio/preview-24/denoiser.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "work/audio/preview-24/dry.wav",
+    "bytes": 2880044,
+    "sha256": "2b67c6dd20913ff2a9bfdac63a6c57ea2c3f2281a63870f60e1ef326078a0d64"
+  },
+  {
+    "path": "work/audio/preview-24/model-input.wav",
+    "bytes": 2889644,
+    "sha256": "8843073aa778ecda6a13a8eee93994a654320fa66a07dfbc20eb83ff5a309de9"
+  },
+  {
+    "path": "work/audio/preview-24/model-output/model-input.wav",
+    "bytes": 2886764,
+    "sha256": "02c15d26edc40e8bc85b121295253dc54b79f2c9d79790456ba804b1212aa218"
+  },
+  {
+    "path": "work/audio/preview-24/processed.wav",
+    "bytes": 2880044,
+    "sha256": "5fda672efca5e6550f8b12840cc53bb2325c4bb034d3d6fbebd50a54e6eb7fc0"
+  },
+  {
+    "path": "work/audio/preview-24/treatment.json",
+    "bytes": 1627,
+    "sha256": "40e760f87d60231d3a925f448a62a7a9c6a289826efe80b047b22097898b6bfb"
+  },
+  {
+    "path": "work/audio/preview-a1.wav",
+    "bytes": 2880078,
+    "sha256": "fd460985b863303ef9cef580ada199bc99b999efa99df9d6947db430dc5053a6"
+  },
+  {
+    "path": "work/audio/program-a0.wav",
+    "bytes": 12544718,
+    "sha256": "32d5d00c7a429cf8ddf8a03cb9dfe580a8c84b91f6ec05a27a6a2a0f3a829d9b"
+  },
+  {
+    "path": "work/audio/program-a1.wav",
+    "bytes": 12544718,
+    "sha256": "32d5d00c7a429cf8ddf8a03cb9dfe580a8c84b91f6ec05a27a6a2a0f3a829d9b"
+  },
+  {
+    "path": "work/audio/program-a2.wav",
+    "bytes": 12544718,
+    "sha256": "8b414ad28fe9a8ff8ad7dafc5e1a00b974ed2f55c67a17ac563f7a1044ea14ef"
+  },
+  {
+    "path": "work/audio/program-a3.wav",
+    "bytes": 12544718,
+    "sha256": "35042d1d55d28c783070d445b35152e96106b56d2486c39a3f9f2a4513ffb708"
+  },
+  {
+    "path": "work/audio/screen.wav",
+    "bytes": 12536526,
+    "sha256": "3ef143a3274cbfa1b623cd56a9c5d1c790b02e00c6cb6aed1d9a89e921211688"
+  },
+  {
+    "path": "work/compare_audio.py",
+    "bytes": 1245,
+    "sha256": "df5f300f8a1cceb602ee0c9fb2961898b95dea63e16f938406554872889ae779"
+  },
+  {
+    "path": "work/final-transcript.json",
+    "bytes": 109305,
+    "sha256": "199051d91f74c1f6801c84f74cc2251eaf5b8f18db10ea43b693b388094f9fbe"
+  },
+  {
+    "path": "work/final-transcript.txt",
+    "bytes": 4084,
+    "sha256": "190868ea763fc2c43f4304f1cf49bae1e8d48f86164fcaa4ab3068d673a4f4e9"
+  },
+  {
+    "path": "work/inspect_audio.py",
+    "bytes": 671,
+    "sha256": "3d4308b86ac04cbbe3598d513ba12a82e2bb213da08d26303bbcecf1a83cdba6"
+  },
+  {
+    "path": "work/inspection/camera-130.png",
+    "bytes": 1341217,
+    "sha256": "0fa84bb68e35774e8ea4e04292ba388f6b61469838cd7053f8c6baa2ecb4592f"
+  },
+  {
+    "path": "work/inspection/camera-index.jpg",
+    "bytes": 164371,
+    "sha256": "9609c01db0dbaa1d590f79e071088724b25a3b0864dcb02c912a346846ab4c93"
+  },
+  {
+    "path": "work/inspection/cut-waveforms.png",
+    "bytes": 29574,
+    "sha256": "3a2146cace78239bc067dd4a5cd03972d102b1fd4baf29d0f13bd667a17df3cf"
+  },
+  {
+    "path": "work/inspection/permissions-0.00.png",
+    "bytes": 39706,
+    "sha256": "e8315b51d94bd5435da6863ea68da3cfe035358b61d1c75af1fa0adcab7e589b"
+  },
+  {
+    "path": "work/inspection/permissions-1.00.png",
+    "bytes": 39871,
+    "sha256": "c8d04712cfd0b89b2b1c06eece1508848f1299183ed76de4cf2e6e4f2604eea1"
+  },
+  {
+    "path": "work/inspection/permissions-14.33.png",
+    "bytes": 65871,
+    "sha256": "f0c8f815d8245d87ac3943c52911a4c98ef847275f0f3d86d18ef92d4a688917"
+  },
+  {
+    "path": "work/inspection/permissions-17.77.png",
+    "bytes": 76529,
+    "sha256": "da9f362e978385ca3c32720e4b13f681da7e3b462a745227ed71421632f9b449"
+  },
+  {
+    "path": "work/inspection/permissions-23.53.png",
+    "bytes": 76529,
+    "sha256": "da9f362e978385ca3c32720e4b13f681da7e3b462a745227ed71421632f9b449"
+  },
+  {
+    "path": "work/inspection/permissions-7.53.png",
+    "bytes": 51670,
+    "sha256": "9712fa0d3b7a100adcc65a9729cf0246702196a7ed98bd9d366f045d54c6efd2"
+  },
+  {
+    "path": "work/inspection/problem-window.jpg",
+    "bytes": 142447,
+    "sha256": "6e811bfa6bbe8c6970515a40a824e9889fa5765baf385708c63d45f4842e37b2"
+  },
+  {
+    "path": "work/inspection/program-130.png",
+    "bytes": 498025,
+    "sha256": "85124205eb60adfc93807a23cd9e23bbdd85d532ed2eccfcef1124cbabc3e199"
+  },
+  {
+    "path": "work/inspection/program-30.png",
+    "bytes": 557474,
+    "sha256": "d7cc099e58f3da3f8566a77cd8ce71affc225a525ef1a45033624089588b5c4c"
+  },
+  {
+    "path": "work/inspection/program-index.jpg",
+    "bytes": 169491,
+    "sha256": "4c0a015456d98c5e2b76ac0dad771d7bdc66618fdb841f3ad55f16e41bf9279f"
+  },
+  {
+    "path": "work/inspection/recap-0.00.png",
+    "bytes": 26604,
+    "sha256": "1535b3f6e76cb358268de840c098fbb930ff46fb15514758d8ffe130b392fd10"
+  },
+  {
+    "path": "work/inspection/recap-11.55.png",
+    "bytes": 64568,
+    "sha256": "db2cb77e3850bfcbe78b5a3cc1302036a6555790eaea54e90ce36c54adb114bd"
+  },
+  {
+    "path": "work/inspection/recap-13.93.png",
+    "bytes": 64568,
+    "sha256": "db2cb77e3850bfcbe78b5a3cc1302036a6555790eaea54e90ce36c54adb114bd"
+  },
+  {
+    "path": "work/inspection/recap-4.25.png",
+    "bytes": 37422,
+    "sha256": "9d921271be139c7aea3c8069795d6d6d9640c3175aa9e12c0fe6ead801e42b7f"
+  },
+  {
+    "path": "work/inspection/recap-7.05.png",
+    "bytes": 46420,
+    "sha256": "6bce172a0a0789b23ffbcef0e6fdf8b2672b75fe9a1b5e6101061e1d1a07eaf9"
+  },
+  {
+    "path": "work/inspection/recap-8.85.png",
+    "bytes": 53308,
+    "sha256": "005756e3eca41554cf58777c9c93ed9bf4c96d0a34761cad38e1aba0d3b408a6"
+  },
+  {
+    "path": "work/inspection/screen-30.png",
+    "bytes": 444249,
+    "sha256": "a07b02d6e763767eccc9b8cc915845d2a37904696a26abe1582c0f0f8929d63c"
+  },
+  {
+    "path": "work/inspection/screen-index.jpg",
+    "bytes": 157804,
+    "sha256": "cfe88c7e63ed8e6ed461c479948210dbe9836d64f0983a9693d4930c8c7cf2bf"
+  },
+  {
+    "path": "work/inspection/workflow-0.00.png",
+    "bytes": 25515,
+    "sha256": "fa420011559701ea4d1c43d6269fea883b70a92d93aab58313bb48fe94888599"
+  },
+  {
+    "path": "work/inspection/workflow-11.71.png",
+    "bytes": 70914,
+    "sha256": "b0af48aba9d12e966d1f70b7e4da246ab633a2bcec76417037ae4509af8b2487"
+  },
+  {
+    "path": "work/inspection/workflow-15.98.png",
+    "bytes": 78206,
+    "sha256": "61417dc87bd21c323a3e60e709cb24f4b1037966ae3e3c9dcc536f3b13b4f99b"
+  },
+  {
+    "path": "work/inspection/workflow-2.81.png",
+    "bytes": 43221,
+    "sha256": "7620818901a9796c8cf58e44e9cb496a8f640b3eea7de368b8e0bf65ab973657"
+  },
+  {
+    "path": "work/inspection/workflow-20.98.png",
+    "bytes": 80657,
+    "sha256": "6bd7cfbb59d8af485b60ed19003c70039192d8420cf95cbd6dce3829915125a3"
+  },
+  {
+    "path": "work/inspection/workflow-29.48.png",
+    "bytes": 88076,
+    "sha256": "962bdf99538e68deb6fadf3e97b6059595de5986c7d6bdae66cf1f87f03d5876"
+  },
+  {
+    "path": "work/inspection/workflow-31.28.png",
+    "bytes": 89737,
+    "sha256": "a58f7af8b75775ec68ccaaba9cc84c69927102141c942aedbe580f5245ca8f67"
+  },
+  {
+    "path": "work/inspection/workflow-37.23.png",
+    "bytes": 89737,
+    "sha256": "a58f7af8b75775ec68ccaaba9cc84c69927102141c942aedbe580f5245ca8f67"
+  },
+  {
+    "path": "work/inspection/workflow-6.05.png",
+    "bytes": 58163,
+    "sha256": "b2e897af858468c64083e0ed1d076b004e1ca4b96529773d2302e0c20bf8e484"
+  },
+  {
+    "path": "work/sync_visual.py",
+    "bytes": 1956,
+    "sha256": "7436176bf039bca6b21542060547301a2a768a58613caa8c777ddcfb426df919"
+  },
+  {
+    "path": "work/timeline-summary.txt",
+    "bytes": 1674,
+    "sha256": "bf7f97a3d996d123baa33e95dcf8ea28dcf2a16db0ca4face0e3a66f5c8704c9"
+  },
+  {
+    "path": "work/transcribe.py",
+    "bytes": 574,
+    "sha256": "ea792b3fa6578d5afbf8e6f4e72e447ecff72d63a3dd16313d13fda4b7d21195"
+  },
+  {
+    "path": "work/transcribe_final.py",
+    "bytes": 592,
+    "sha256": "d57d1dab16108caa1529627fb6f8dde839abea498f9e46101c1d77b5951602ac"
+  },
+  {
+    "path": "work/transcript.json",
+    "bytes": 177398,
+    "sha256": "30adb3e2bbeb0afccdfc550391caa9173ac109d878ed9fb699ad7613ad791e4b"
+  },
+  {
+    "path": "work/transcript.txt",
+    "bytes": 6474,
+    "sha256": "9e8bd5b485af3ad605e6e0639829ae089340cc1d71a17e2e79e13330f58d1b7b"
+  }
+]

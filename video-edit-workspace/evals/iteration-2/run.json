@@ -1,7 +1,7 @@
 {
   "created_at": "2026-09-19T11:28:07.230054+00:00",
   "name": "OBS September 19 \u00b7 Educational edit",
-  "status": "running",
+  "status": "superseded_by_user_format",
   "directory": "/Users/asher/Projects/random/obs-sep19-edit",
   "branch": "main",
   "source_revision": "57fb7fa3b0d2ffbf1d20ace405e5b0a33a7b477e",
@@ -323,5 +323,9 @@
     "bun": "1.3.14",
     "codex": "0.154.0",
     "playwright": "1.63.0"
-  }
+  },
+  "last_capture": "video-edit-workspace/evals/iteration-2/capture-1",
+  "reason": "User selected one focused portrait short after the landscape working assumption. Interrupted without scoring; new portrait baseline starts at iteration-3.",
+  "archived": true,
+  "thread_title": "OBS September 19 \u00b7 Landscape stopped"
 }

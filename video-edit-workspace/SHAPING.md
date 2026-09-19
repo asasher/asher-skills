@@ -1,6 +1,6 @@
 # Video editing skill: shaping draft
 
-Status: shaping draft, updated September 18, 2026. Asher chose to refine the existing visual style and focus on voice quality and motion graphics. Relighting is deferred. The conversation review and fixture inventory are complete. The skill is not implemented. The monochrome Harness specimen and the stronger local DeepFilterNet voice treatment have been human-reviewed. Asher accepted light/dark monochrome without blue and preferred the stronger DeepFilterNet treatment on September 18. Landscape and Short are explicit format choices.
+Status: first skill implementation and production trial, updated September 19, 2026. Asher chose to refine the existing visual style and focus on voice quality and motion graphics. Relighting is deferred. The conversation review and fixture inventory are complete. The lean source packages are implemented at revision `57fb7fa`; the first valid production trial is running. The monochrome Harness specimen and the stronger local DeepFilterNet voice treatment have been human-reviewed. Asher accepted light/dark monochrome without blue and preferred the stronger DeepFilterNet treatment on September 18. Landscape and Short are explicit format choices.
 
 ## What we are making
 
@@ -149,3 +149,13 @@ Whenever instructions or rendering code change, rerun the affected comparisons a
 5. Defer relighting. The [research notes](relighting-research.md) remain available for a later version and do not create current implementation or eval requirements.
 
 The visual and voice choices are recorded in DESIGN.md and voice-trial.json. The lean family boundary is accepted: `watch-video`, `motion-graphics`, and `edit-video`, with voice cleanup inside editing. The scope now includes motion-led educational videos made from a concept or narration, as well as edited OBS recordings.
+
+
+## First production trial
+
+On September 19, Asher requested a fresh separate-thread run on the latest OBS footage, with only relevant skills and no evaluation context exposed to the editing agent. The coordinator records inputs and results in [evals/README.md](evals/README.md). The first valid run uses the 14:54 recording group and a landscape working assumption stated by the coordinator. It does not establish portrait delivery quality or improvement over a controlled no-skill baseline. Voice, visual, and pacing acceptance remain human decisions. The five historical fixtures remain available for later regression coverage.
+
+
+### Portrait baseline
+
+The user selected one focused portrait short for YouTube, Instagram, and TikTok. The landscape run was interrupted and preserved as superseded. Iteration 3 starts from raw footage in a fresh ordinary production thread with the same skill packages. The portrait rubric adds shared safe-zone and phone-size checks.

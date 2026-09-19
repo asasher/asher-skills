@@ -63,13 +63,15 @@ def main():
     p.add_argument('--prompt-file', type=Path)
     p.add_argument('--thread-helper', type=Path)
     p.add_argument('--provider', default='codex')
+    p.add_argument('--format', choices=['portrait', 'landscape'])
+    p.add_argument('--source-revision')
     a = p.parse_args()
     if not a.iteration.startswith('iteration-') or not a.iteration[10:].isdigit():
         p.error('Use iteration-N')
     out = BASE / a.iteration
     if a.command == 'prepare':
-        if not all([a.directory,a.prompt_file,a.thread_helper]):
-            p.error('prepare needs directory, prompt-file, and thread-helper')
+        if not all([a.directory,a.prompt_file,a.thread_helper,a.format,a.source_revision]):
+            p.error('prepare needs directory, prompt-file, thread-helper, format, and source-revision')
         project = a.directory.resolve()
         prompt = a.prompt_file.read_text()
         # Test identities and rubric stay in this coordinator directory.
@@ -84,14 +86,15 @@ def main():
             if src.exists():
                 dest=initial/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(src.read_bytes())
         package_hashes = {str(f.relative_to(project)):sha(f) for f in sorted((project/'.agents/skills').rglob('*')) if f.is_file()}
-        run = {'created_at':now(),'name':'OBS September 19 · Educational edit','status':'prepared','directory':str(project),'branch':'main',
-               'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+        run = {'created_at':now(),'name':'OBS September 19 · Portrait short' if a.format == 'portrait' else 'OBS September 19 · Educational edit','status':'prepared','directory':str(project),'branch':'main',
+               'source_revision':subprocess.check_output(['git','rev-parse',a.source_revision],cwd=ROOT,text=True).strip(),
                'project_initial_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=project,text=True).strip(),
                'settings':{'provider':a.provider,'model':'gpt-6-astra','effort':'high','service_tier':'default','runtime_mode':'full-access','harness':'T3 Code'},
                'thread_helper':str(a.thread_helper.resolve()),'thread_helper_sha256':sha(a.thread_helper),'prompt_sha256':sha(out/'prompt.txt'),
                'package_hashes':package_hashes,'inputs':[{'name':f.name,'bytes':f.stat().st_size,'sha256':sha(f)} for f in sorted((project/'raw').iterdir()) if f.is_file()],
-               'thread_id':None,'format':'landscape','format_basis':'Coordinator stated a landscape working assumption after optional format question; no human format selection received before preparation.',
+               'thread_id':None,'format':a.format,'format_basis':'Explicit user selection: one focused portrait short for YouTube, Instagram, and TikTok.' if a.format == 'portrait' else 'Production brief',
                'human_review':'pending','isolation':'Standalone project; task-only prompt; six copied production skills; workspace-scoped disabling of ambient skills/plugins. Full-access remains enabled; this is context isolation, not a filesystem sandbox.'}
+        (out/'rubric.json').write_bytes((BASE/'rubric.json').read_bytes())
         save(out/'run.json',run)
         print(json.dumps({'status':run['status'],'directory':str(project),'inputs':[i['name'] for i in run['inputs']]}))
         return
